@@ -1,0 +1,1050 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+  type="module"
+  version="3.0"
+  client="site"
+  method="upgrade">
+  <name>FavSlider Responsive Slideshow</name>
+  <author>FavThemes</author>
+  <version>2.1</version>
+  <creationDate>2013</creationDate>
+  <authorUrl>http://www.favthemes.com</authorUrl>
+  <authoremail>hello@favthemes.com</authoremail>
+  <copyright>Copyright (C) FavThemes. All rights reserved.</copyright>
+  <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
+  <description>
+  <![CDATA[
+
+    <a href="http://extensions.favthemes.com/favslider" target="_blank"><strong>FavSlider</strong></a> is a free responsive Joomla! module that can be used to create a slideshow and customize each slide using the 90+ module settings.
+
+    For more info, please see the <a href="http://extensions.favthemes.com/favslider" target="_blank" style="font-weight: bold;">demo and documentation</a> for the FavSlider module.
+    <br/><br/>
+
+    <a href="http://extensions.favthemes.com/favslider" target="_blank">
+      <img src="../modules/mod_favslider/theme/img/favslider.jpg" alt="FavSlider Responsive Module">
+    </a>
+
+    <br/><br/>
+    Copyright &#169; 2012-2017 <a href="http://www.favthemes.com" target="_blank" style="font-weight: bold;">FavThemes</a>.
+    <br/><br/>
+
+    <link rel="stylesheet" href="../modules/mod_favslider/theme/css/admin.css" type="text/css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400" type="text/css" />
+    <script src="../modules/mod_favslider/theme/js/jscolor/jscolor.js" type="text/javascript"></script>
+    <script src="../modules/mod_favslider/theme/js/admin/admin.js" type="text/javascript"></script>
+
+  ]]>
+  </description>
+
+  <files>
+    <filename module="mod_favslider">mod_favslider.php</filename>
+    <filename>mod_favslider.xml</filename>
+    <filename>index.html</filename>
+    <filename>License.txt</filename>
+    <folder>demo</folder>
+    <folder>theme/js</folder>
+    <folder>theme/css</folder>
+    <folder>theme/img</folder>
+    <folder>theme/bootstrap</folder>
+  </files>
+
+  <help key="FavSlider Responsive Slideshow" />
+
+  <config>
+
+    <fields name="params">
+
+      <fieldset name="settings" label="Module Settings">
+
+        <field type="note" label="Slideshow Options" class="favtitle first" />
+
+          <field
+            name="jquery_load"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Load Joomla! jQuery"
+            description="This setting loads Joomla!'s jQuery library. Choose NO if your website loads jQuery from an external source.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+              name="carousel_autorun"
+              type="radio"
+              default="1"
+              class="btn-group"
+              label="Slideshow Autorun"
+              description="Choose to animate the slideshow automatically.">
+                  <option value="1">Yes</option>
+                  <option value="0">No</option>
+          </field>
+
+          <field
+              name="cycling_speed"
+              type="text"
+              default="3000"
+              label="Slideshow Cycling Speed"
+              description="Insert the speed of the slideshow, in milliseconds. Insert only the value, for example: 5000, not 5000ms. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Caption Options" class="favtitle" />
+
+          <field
+            name="caption_color"
+            type="list"
+            default="favslider-caption-dark"
+            label="Caption Color"
+            description="Set the caption color for the slideshow.">
+            <option value="favslider-caption-transparent">Transparent</option>
+            <option value="favslider-caption-dark">Dark</option>
+            <option value="favslider-caption-light">Light</option>
+          </field>
+
+          <field
+            name="show_caption_effect"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Caption Effect"
+            description="Choose if a CSS3 effect for the slideshow caption should be displayed or not. Note that the CSS3 features are not supported by older browsers.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field type="note" label="Title" class="favsubtitle"/>
+
+          <field
+            name="show_title"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Caption Title"
+            description="Choose if the caption title for the slideshow should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+            name="title_color"
+            class="color {required:false}"
+            type="text"
+            default="ffffff"
+            label="Title Color"
+            description="Choose the color for the title of the slideshow. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_font_size"
+            type="text"
+            default="21px"
+            label="Title Font Size"
+            description="Insert the font size for the title using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_line_height"
+            type="text"
+            default="1.3em"
+            label="Title Line Height"
+            description="Insert the line height for the title using pixels or em (for example: 14px or 1.2em, not 14). The line-height property is used to modify the spacing between the lines of text. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_margin"
+            type="text"
+            default="0px 0px 10px 0px"
+            label="Title Margin"
+            description="Insert the margin for the title using pixels or percent (for example: 14px or 10%, not 14). The margin is a CSS property that sets the space around the content, including the padding. The margin can have from 1 to 4 values (top, right, bottom and left). A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Description" class="favsubtitle"/>
+
+          <field
+            name="show_description"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Caption Description"
+            description="Choose if the caption description for the slideshow should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+            name="description_text_color"
+            class="color {required:false}"
+            type="text"
+            default="ffffff"
+            label="Description Text Color"
+            description="Choose the color for the description text. A blank field reverts the setting to the default value." />
+
+          <field
+            name="description_text_font_size"
+            type="text"
+            default="14px"
+            label="Description Font Size"
+            description="Insert the font size for the description text using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value." />
+
+          <field
+            name="description_text_line_height"
+            type="text"
+            default="1.5em"
+            label="Description Line Height"
+            description="Insert the line height for the description text using pixels or em (for example: 14px or 1.2em, not 14). The line-height property is used to modify the spacing between the lines of text. A blank field reverts the setting to the default value." />
+
+          <field
+            name="description_text_margin"
+            type="text"
+            default="0px"
+            label="Description Margin"
+            description="Insert the margin for the description text using pixels or percent (for example: 14px or 10%, not 14). The margin is a CSS property that sets the space around the content, including the padding. The margin can have from 1 to 4 values (top, right, bottom and left). A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Caption on mobile" class="favsubtitle" />
+
+          <field
+            name="show_mobile_title"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Mobile Caption Title"
+            description="Choose if the caption title for the slideshow should be displayed or not on mobile devices.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+            name="show_mobile_description"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Mobile Caption Description"
+            description="Choose if the caption description for the slideshow should be displayed or not on mobile devices.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+            name="caption_hide"
+            class=""
+            type="text"
+            default="0px"
+            label="Mobile Caption Hide"
+            description="Insert the maximum width of the device when the caption is no longer visible using pixels (for example: 420px not 420). For example, when setting the caption hide to 420px, the caption is no longer visible for any device with a width smaller than 420px. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Arrows Options" class="favtitle" />
+
+          <field
+            name="show_arrows"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Arrows"
+            description="Choose if the arrows for the slideshow should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+            name="arrows_color"
+            class="color {required:false}"
+            type="text"
+            default="FFFFFF"
+            label="Arrows Color"
+            description="Choose the color for the carousel navigation arrows. A blank field reverts the setting to the default value." />
+
+          <field
+            name="arrows_bg_color"
+            class="color {required:false}"
+            type="text"
+            default="111"
+            label="Arrows Background Color"
+            description="Choose the background color for the carousel navigation arrows. A blank field reverts the setting to the default value." />
+
+          <field
+            name="arrows_border_radius"
+            type="text"
+            default="0"
+            label="Arrows Border Radius"
+            description="Insert the border-radius for the arrows using pixels or percent (for example: 140px or 80%, not 140). For circle background shapes for arrows, choose the 50% value. Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Indicators Options" class="favtitle" />
+
+          <field
+            name="show_indicators"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Indicators"
+            description="Choose if the bullet indicators for the slideshow should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+            name="indicators_color"
+            type="radio"
+            default="favslider-dark"
+            class="btn-group"
+            label="Indicators Color"
+            description="Choose the color for the bullet indicators. A blank field reverts the setting to the default value.">
+              <option value="favslider-dark">Dark</option>
+              <option value="favslider-light">Light</option>
+          </field>
+
+          <field
+            name="indicators_active_color"
+            class="color {required:false}"
+            type="text"
+            default="0099ff"
+            label="Indicators Active Color"
+            description="Choose the color for the active bullet indicator. A blank field reverts the setting to the default value." />
+
+      </fieldset>
+
+      <fieldset name="content" label="Module Content">
+
+        <field type="note" label="Slide 1 Options" class="favtitle first" />
+
+            <field
+              name="show_slide1"
+              type="radio"
+              default="1"
+              class="btn-group"
+              label="Show Slide 1"
+              description="Choose if this slide should be displayed or not.">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </field>
+
+          <field type="note" label="Image 1" class="favsubtitle"/>
+
+            <field
+              name="upload_image1"
+              type="media"
+              label="Image 1 Upload"
+              description="Upload the image for this slide. To clear the uploaded image, press the clear (X) button." />
+
+            <field
+              name="image_alt1"
+              type="text"
+              default=""
+              label="Image 1 Alt Text"
+              description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+            <field
+              name="image_link1"
+              type="text"
+              default=""
+              label="Image 1 Link"
+              description="Insert the URL for the image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+            <field
+              name="image_link_target1"
+              type="list"
+              default="blank"
+              class="btn-group"
+              label="Image 1 Link Target"
+              description="Choose the target for the URL of the image.">
+                <option value="self">self</option>
+                <option value="blank">blank</option>
+                <option value="parent">parent</option>
+                <option value="top">top</option>
+            </field>
+
+          <field type="note" label="Caption 1" class="favsubtitle"/>
+
+            <field
+              name="title_text1"
+              type="textarea"
+              filter="raw"
+              rows="1"
+              cols="40"
+              default="Simply Amazing"
+              label="Title 1 Text"
+              description="Insert the text for the title inside the caption. A blank field reverts the setting to the default value." />
+
+            <field
+              name="description_text1"
+              type="textarea"
+              filter="raw"
+              rows="10"
+              cols="40"
+              default="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              label="Description 1 Text"
+              description="Insert the text for the description inside the caption. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Slide 2 Options" class="favtitle" />
+
+            <field
+              name="show_slide2"
+              type="radio"
+              default="1"
+              class="btn-group"
+              label="Show Slide 2"
+              description="Choose if this slide should be displayed or not.">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </field>
+
+          <field type="note" label="Image 2" class="favsubtitle"/>
+
+            <field
+              name="upload_image2"
+              type="media"
+              label="Image 2 Upload"
+              description="Upload the image for this slide. To clear the uploaded image, press the clear (X) button." />
+
+            <field
+              name="image_alt2"
+              type="text"
+              default=""
+              label="Image 2 Alt Text"
+              description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+            <field
+              name="image_link2"
+              type="text"
+              default=""
+              label="Image 2 Link"
+              description="Insert the URL for the image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+            <field
+              name="image_link_target2"
+              type="list"
+              default="blank"
+              class="btn-group"
+              label="Image 2 Link Target"
+              description="Choose the target for the URL of the image.">
+                <option value="self">self</option>
+                <option value="blank">blank</option>
+                <option value="parent">parent</option>
+                <option value="top">top</option>
+            </field>
+
+          <field type="note" label="Caption 2" class="favsubtitle"/>
+
+            <field
+              name="title_text2"
+              type="textarea"
+              filter="raw"
+              rows="1"
+              cols="40"
+              default="Simply Amazing"
+              label="Title 2 Text"
+              description="Insert the text for the title inside the caption. A blank field reverts the setting to the default value." />
+
+            <field
+              name="description_text2"
+              type="textarea"
+              filter="raw"
+              rows="10"
+              cols="40"
+              default="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              label="Description 2 Text"
+              description="Insert the text for the description inside the caption. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Slide 3 Options" class="favtitle" />
+
+            <field
+              name="show_slide3"
+              type="radio"
+              default="1"
+              class="btn-group"
+              label="Show Slide 3"
+              description="Choose if this slide should be displayed or not.">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </field>
+
+          <field type="note" label="Image 3" class="favsubtitle"/>
+
+            <field
+              name="upload_image3"
+              type="media"
+              label="Image 3 Upload"
+              description="Upload the image for this slide. To clear the uploaded image, press the clear (X) button." />
+
+            <field
+              name="image_alt3"
+              type="text"
+              default=""
+              label="Image 3 Alt Text"
+              description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+            <field
+              name="image_link3"
+              type="text"
+              default=""
+              label="Image 3 Link"
+              description="Insert the URL for the image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+            <field
+              name="image_link_target3"
+              type="list"
+              default="blank"
+              class="btn-group"
+              label="Image 3 Link Target"
+              description="Choose the target for the URL of the image.">
+                <option value="self">self</option>
+                <option value="blank">blank</option>
+                <option value="parent">parent</option>
+                <option value="top">top</option>
+            </field>
+
+          <field type="note" label="Caption 3" class="favsubtitle"/>
+
+            <field
+              name="title_text3"
+              type="textarea"
+              filter="raw"
+              rows="1"
+              cols="40"
+              default="Simply Amazing"
+              label="Title 3 Text"
+              description="Insert the text for the title inside the caption. A blank field reverts the setting to the default value." />
+
+            <field
+              name="description_text3"
+              type="textarea"
+              filter="raw"
+              rows="10"
+              cols="40"
+              default="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              label="Description 3 Text"
+              description="Insert the text for the description inside the caption. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Slide 4 Options" class="favtitle" />
+
+            <field
+              name="show_slide4"
+              type="radio"
+              default="1"
+              class="btn-group"
+              label="Show Slide 4"
+              description="Choose if this slide should be displayed or not.">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </field>
+
+          <field type="note" label="Image 4" class="favsubtitle"/>
+
+            <field
+              name="upload_image4"
+              type="media"
+              label="Image 4 Upload"
+              description="Upload the image for this slide. To clear the uploaded image, press the clear (X) button." />
+
+            <field
+              name="image_alt4"
+              type="text"
+              default=""
+              label="Image 4 Alt Text"
+              description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+            <field
+              name="image_link4"
+              type="text"
+              default=""
+              label="Image 4 Link"
+              description="Insert the URL for the image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+            <field
+              name="image_link_target4"
+              type="list"
+              default="blank"
+              class="btn-group"
+              label="Image 4 Link Target"
+              description="Choose the target for the URL of the image.">
+                <option value="self">self</option>
+                <option value="blank">blank</option>
+                <option value="parent">parent</option>
+                <option value="top">top</option>
+            </field>
+
+          <field type="note" label="Caption 4" class="favsubtitle"/>
+
+            <field
+              name="title_text4"
+              type="textarea"
+              filter="raw"
+              rows="1"
+              cols="40"
+              default="Simply Amazing"
+              label="Title 4 Text"
+              description="Insert the text for the title inside the caption. A blank field reverts the setting to the default value." />
+
+            <field
+              name="description_text4"
+              type="textarea"
+              filter="raw"
+              rows="10"
+              cols="40"
+              default="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              label="Description 4 Text"
+              description="Insert the text for the description inside the caption. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Slide 5 Options" class="favtitle" />
+
+            <field
+              name="show_slide5"
+              type="radio"
+              default="1"
+              class="btn-group"
+              label="Show Slide 5"
+              description="Choose if this slide should be displayed or not.">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </field>
+
+          <field type="note" label="Image 5" class="favsubtitle"/>
+
+            <field
+              name="upload_image5"
+              type="media"
+              label="Image 5 Upload"
+              description="Upload the image for this slide. To clear the uploaded image, press the clear (X) button." />
+
+            <field
+              name="image_alt5"
+              type="text"
+              default=""
+              label="Image 5 Alt Text"
+              description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+            <field
+              name="image_link5"
+              type="text"
+              default=""
+              label="Image 5 Link"
+              description="Insert the URL for the image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+            <field
+              name="image_link_target5"
+              type="list"
+              default="blank"
+              class="btn-group"
+              label="Image 5 Link Target"
+              description="Choose the target for the URL of the image.">
+                <option value="self">self</option>
+                <option value="blank">blank</option>
+                <option value="parent">parent</option>
+                <option value="top">top</option>
+            </field>
+
+          <field type="note" label="Caption 5" class="favsubtitle"/>
+
+            <field
+              name="title_text5"
+              type="textarea"
+              filter="raw"
+              rows="1"
+              cols="40"
+              default="Simply Amazing"
+              label="Title 5 Text"
+              description="Insert the text for the title inside the caption. A blank field reverts the setting to the default value." />
+
+            <field
+              name="description_text5"
+              type="textarea"
+              filter="raw"
+              rows="10"
+              cols="40"
+              default="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              label="Description 5 Text"
+              description="Insert the text for the description inside the caption. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Slide 6 Options" class="favtitle" />
+
+            <field
+              name="show_slide6"
+              type="radio"
+              default="0"
+              class="btn-group"
+              label="Show Slide 6"
+              description="Choose if this slide should be displayed or not.">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </field>
+
+          <field type="note" label="Image 6" class="favsubtitle"/>
+
+            <field
+              name="upload_image6"
+              type="media"
+              label="Image 6 Upload"
+              description="Upload the image for this slide. To clear the uploaded image, press the clear (X) button." />
+
+            <field
+              name="image_alt6"
+              type="text"
+              default=""
+              label="Image 6 Alt Text"
+              description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+            <field
+              name="image_link6"
+              type="text"
+              default=""
+              label="Image 6 Link"
+              description="Insert the URL for the image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+            <field
+              name="image_link_target6"
+              type="list"
+              default="blank"
+              class="btn-group"
+              label="Image 6 Link Target"
+              description="Choose the target for the URL of the image.">
+                <option value="self">self</option>
+                <option value="blank">blank</option>
+                <option value="parent">parent</option>
+                <option value="top">top</option>
+            </field>
+
+          <field type="note" label="Caption 6" class="favsubtitle"/>
+
+            <field
+              name="title_text6"
+              type="textarea"
+              filter="raw"
+              rows="1"
+              cols="40"
+              default="Simply Amazing"
+              label="Title 6 Text"
+              description="Insert the text for the title inside the caption. A blank field reverts the setting to the default value." />
+
+            <field
+              name="description_text6"
+              type="textarea"
+              filter="raw"
+              rows="10"
+              cols="40"
+              default="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              label="Description 6 Text"
+              description="Insert the text for the description inside the caption. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Slide 7 Options" class="favtitle" />
+
+            <field
+              name="show_slide7"
+              type="radio"
+              default="0"
+              class="btn-group"
+              label="Show Slide 7"
+              description="Choose if this slide should be displayed or not.">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </field>
+
+          <field type="note" label="Image 7" class="favsubtitle"/>
+
+            <field
+              name="upload_image7"
+              type="media"
+              label="Image 7 Upload"
+              description="Upload the image for this slide. To clear the uploaded image, press the clear (X) button." />
+
+            <field
+              name="image_alt7"
+              type="text"
+              default=""
+              label="Image 7 Alt Text"
+              description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+            <field
+              name="image_link7"
+              type="text"
+              default=""
+              label="Image 7 Link"
+              description="Insert the URL for the image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+            <field
+              name="image_link_target7"
+              type="list"
+              default="blank"
+              class="btn-group"
+              label="Image 7 Link Target"
+              description="Choose the target for the URL of the image.">
+                <option value="self">self</option>
+                <option value="blank">blank</option>
+                <option value="parent">parent</option>
+                <option value="top">top</option>
+            </field>
+
+          <field type="note" label="Caption 7" class="favsubtitle"/>
+
+            <field
+              name="title_text7"
+              type="textarea"
+              filter="raw"
+              rows="1"
+              cols="40"
+              default="Simply Amazing"
+              label="Title 7 Text"
+              description="Insert the text for the title inside the caption. A blank field reverts the setting to the default value." />
+
+            <field
+              name="description_text7"
+              type="textarea"
+              filter="raw"
+              rows="10"
+              cols="40"
+              default="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              label="Description 7 Text"
+              description="Insert the text for the description inside the caption. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Slide 8 Options" class="favtitle" />
+
+            <field
+              name="show_slide8"
+              type="radio"
+              default="0"
+              class="btn-group"
+              label="Show Slide 8"
+              description="Choose if this slide should be displayed or not.">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </field>
+
+          <field type="note" label="Image 8" class="favsubtitle"/>
+
+            <field
+              name="upload_image8"
+              type="media"
+              label="Image 8 Upload"
+              description="Upload the image for this slide. To clear the uploaded image, press the clear (X) button." />
+
+            <field
+              name="image_alt8"
+              type="text"
+              default=""
+              label="Image 8 Alt Text"
+              description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+            <field
+              name="image_link8"
+              type="text"
+              default=""
+              label="Image 8 Link"
+              description="Insert the URL for the image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+            <field
+              name="image_link_target8"
+              type="list"
+              default="blank"
+              class="btn-group"
+              label="Image 8 Link Target"
+              description="Choose the target for the URL of the image.">
+                <option value="self">self</option>
+                <option value="blank">blank</option>
+                <option value="parent">parent</option>
+                <option value="top">top</option>
+            </field>
+
+          <field type="note" label="Caption 8" class="favsubtitle"/>
+
+            <field
+              name="title_text8"
+              type="textarea"
+              filter="raw"
+              rows="1"
+              cols="40"
+              default="Simply Amazing"
+              label="Title 8 Text"
+              description="Insert the text for the title inside the caption. A blank field reverts the setting to the default value." />
+
+            <field
+              name="description_text8"
+              type="textarea"
+              filter="raw"
+              rows="10"
+              cols="40"
+              default="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              label="Description 8 Text"
+              description="Insert the text for the description inside the caption. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Slide 9 Options" class="favtitle" />
+
+            <field
+              name="show_slide9"
+              type="radio"
+              default="0"
+              class="btn-group"
+              label="Show Slide 9"
+              description="Choose if this slide should be displayed or not.">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </field>
+
+          <field type="note" label="Image 9" class="favsubtitle"/>
+
+            <field
+              name="upload_image9"
+              type="media"
+              label="Image 9 Upload"
+              description="Upload the image for this slide. To clear the uploaded image, press the clear (X) button." />
+
+            <field
+              name="image_alt9"
+              type="text"
+              default=""
+              label="Image 9 Alt Text"
+              description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+            <field
+              name="image_link9"
+              type="text"
+              default=""
+              label="Image 9 Link"
+              description="Insert the URL for the image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+            <field
+              name="image_link_target9"
+              type="list"
+              default="blank"
+              class="btn-group"
+              label="Image 9 Link Target"
+              description="Choose the target for the URL of the image.">
+                <option value="self">self</option>
+                <option value="blank">blank</option>
+                <option value="parent">parent</option>
+                <option value="top">top</option>
+            </field>
+
+          <field type="note" label="Caption 9" class="favsubtitle"/>
+
+            <field
+              name="title_text9"
+              type="textarea"
+              filter="raw"
+              rows="1"
+              cols="40"
+              default="Simply Amazing"
+              label="Title 9 Text"
+              description="Insert the text for the title inside the caption. A blank field reverts the setting to the default value." />
+
+            <field
+              name="description_text9"
+              type="textarea"
+              filter="raw"
+              rows="10"
+              cols="40"
+              default="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              label="Description 9 Text"
+              description="Insert the text for the description inside the caption. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Slide 10 Options" class="favtitle" />
+
+            <field
+              name="show_slide10"
+              type="radio"
+              default="0"
+              class="btn-group"
+              label="Show Slide 10"
+              description="Choose if this slide should be displayed or not.">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </field>
+
+          <field type="note" label="Image 10" class="favsubtitle"/>
+
+            <field
+              name="upload_image10"
+              type="media"
+              label="Image 10 Upload"
+              description="Upload the image for this slide. To clear the uploaded image, press the clear (X) button." />
+
+            <field
+              name="image_alt10"
+              type="text"
+              default=""
+              label="Image 10 Alt Text"
+              description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+            <field
+              name="image_link10"
+              type="text"
+              default=""
+              label="Image 10 Link"
+              description="Insert the URL for the image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+            <field
+              name="image_link_target10"
+              type="list"
+              default="blank"
+              class="btn-group"
+              label="Image 10 Link Target"
+              description="Choose the target for the URL of the image.">
+                <option value="self">self</option>
+                <option value="blank">blank</option>
+                <option value="parent">parent</option>
+                <option value="top">top</option>
+            </field>
+
+          <field type="note" label="Caption 10" class="favsubtitle"/>
+
+            <field
+              name="title_text10"
+              type="textarea"
+              filter="raw"
+              rows="1"
+              cols="40"
+              default="Simply Amazing"
+              label="Title 10 Text"
+              description="Insert the text for the title inside the caption. A blank field reverts the setting to the default value." />
+
+            <field
+              name="description_text10"
+              type="textarea"
+              filter="raw"
+              rows="10"
+              cols="40"
+              default="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              label="Description 10 Text"
+              description="Insert the text for the description inside the caption. A blank field reverts the setting to the default value." />
+
+          <field type="spacer" hr="true" />
+
+      </fieldset>
+
+      <fieldset name="advanced">
+
+        <field
+          name="moduleclass_sfx"
+          type="text"
+          label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+          description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+        <field
+          name="cache"
+          type="list"
+          default="1"
+          label="COM_MODULES_FIELD_CACHING_LABEL"
+          description="COM_MODULES_FIELD_CACHING_DESC">
+          <option
+            value="1">JGLOBAL_USE_GLOBAL</option>
+          <option
+            value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+        </field>
+
+        <field
+          name="cache_time"
+          type="text"
+          default="900"
+          label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+          description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+        <field
+          name="cachemode"
+          type="hidden"
+          default="static">
+          <option
+            value="static"></option>
+        </field>
+
+      </fieldset>
+
+    </fields>
+  </config>
+
+  <updateservers>
+	  <server type="extension" priority="2" name="FavSlider Updates">http://updates.favthemes.com/extensions/favslider.xml</server>
+	</updateservers>
+
+</extension>

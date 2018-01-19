@@ -1,0 +1,80 @@
+// Default Bootstrap styling for sliders (.accordion-inner)
+
+// Parent container
+.rl_sliders {
+	//
+	// Component animations
+	// --------------------------------------------------
+	.fade {
+		opacity: 0;
+		.transition(opacity 1ms linear);
+		&.in {
+			opacity: 1;
+		}
+	}
+	&.has_effects .fade {
+		.transition(opacity .15s linear);
+	}
+
+	.collapse {
+		display:  block;
+		position: relative;
+		height:   auto;
+		overflow: hidden;
+		.transition(height 1ms ease);
+		&.in {
+			height: auto;
+		}
+	}
+	&.has_effects .collapse {
+		.transition(height .35s ease);
+	}
+
+	&.accordion {
+		margin-bottom: @baseLineHeight; // Group == heading + body
+		//
+		// Accordion
+		// --------------------------------------------------
+		> .accordion-group {
+			margin-bottom: 2px;
+			border:        1px solid #e5e5e5;
+			.border-radius(4px);
+
+			.accordion-heading {
+				border-bottom: 0;
+				.accordion-toggle {
+					display: block;
+					padding: 8px 15px;
+					cursor:  pointer;
+				}
+			}
+
+			// Inner needs the styles because you can't animate properly with any styles on the element
+			> .accordion-body {
+				padding: 0;
+				border:  none;
+
+				> .accordion-inner {
+					padding:    9px 15px;
+					border-top: 1px solid #e5e5e5;
+				}
+
+				// Accordion overflow fix
+				&.in:hover {
+					overflow: visible;
+				}
+			}
+		}
+	}
+}
+
+@font-face {
+	font-family: 'IcoMoon';
+	src:         url('../../jui/fonts/IcoMoon.eot');
+	src:         url('../../jui/fonts/IcoMoon.eot?#iefix') format('embedded-opentype'),
+				 url('../../jui/fonts/IcoMoon.svg#IcoMoon') format('svg'),
+				 url('../../jui/fonts/IcoMoon.woff') format('woff'),
+				 url('../../jui/fonts/IcoMoon.ttf') format('truetype');
+	font-weight: normal;
+	font-style:  normal;
+}

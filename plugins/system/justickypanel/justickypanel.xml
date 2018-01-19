@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="2.5" group="system" method="upgrade">
+	<name>System - JU Sticky Panel</name>
+	<author>JoomUltra</author>
+	<creationDate>Mar 2014</creationDate>
+	<copyright>Copyright (C) 2010 - 2014 JoomUltra. All rights reserved.</copyright>
+	<license>license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<authorEmail>admin@joomultra.com</authorEmail>
+	<authorUrl>www.joomultra.com</authorUrl>
+	<version>1.2</version>
+	<updateservers>
+		<server type="collection">http://www.joomultra.com/service/tracking/list.xml</server>
+	</updateservers>
+	<description>
+		<![CDATA[
+		<div style='font-weight: normal'>
+		<h2 style='color: #0A71A5;'>JU Sticky Panel Plugin</strong></h2>
+		<span style='color: #ff0000;'><strong>Features:</strong></span>
+		<br/><br/>
+		Stick any element in your site, the sticked elements will be keep always visible when you scroll the page down.
+		<br/><br/>
+		<span style='color: #ff0000;'><strong>Usage:</strong></span>
+		<br/><br/>
+		You can use <a href="http://getfirebug.com/" title="Download Firebug" target="_blank">Firebug</a> on Firefox to inspect the element you want to stick, then put the class or id or name,...<i>(See <a href="http://api.jquery.com/category/selectors/" title="Read more about jQuery Selectors" target="_blank">jQuery selectors</a>)</i> of elements into the selectors config.
+		You can put as many selectors as you want, seperate by commas, all elements with selectors you put in selectors config will be sticked by JU Sticky Panel.
+		<br/><br/>
+		Here is an example how to stick a module:<br/>
+		<ul>
+			<li>1. In the module config, set <b>Module class suffix:</b> "<b> sticky</b>" <i>(without quote, and remember we have a white space preceded)</i></li>
+			<li>2. In the JU Sticky Panel Plugin set <b>Selectors:</b> <b>.sticky</b></li>
+			<li>3. That's all, now check the frontend, scroll down your site, you will see the module with class suffix "<b> sticky</b>" is ticked, and when it has been sticking it will be add new class in <b>After detach css class</b>, you can use this class to format sticked element if you want. And now you can adjust other config in the plugin to fit your needs. Remember that JU Sticky Panel support multi selectors, that means you can stick many elements in your site.</li>
+		</ul>
+		<br/><br/>
+		<strong><span style='color: #ff0000;'>Requirements:</span></strong>
+		<br/><br />
+		Joomla! 2.5.x, Joomla! 3.x<br/>
+		This plugin require jQuery javascript library to work. If your site gets jQuery conflict issue, you should install <b>Plugin <a href="http://extensions.joomla.org/extensions/core-enhancements/performance/jquery-scripts/18327" target="_blank" title="Download jQuery Easy">jQuery Easy</a></b> <i>(Remember activate this plugin after installing it)</i>.<br/><br/>
+		If you use JU Sticky Panel, please post a review for <a href="http://extensions.joomla.org/extensions/style-a-design/modules-panel/25232" target="_blank" title="Post a review for JU Sticky Panel">JU Sticky Panel on JED</a>
+		<p>Copyright 2010 - 2014 <a href="http://www.joomultra.com/" title="Visit JoomUltra.com!" target="_blank">JoomUltra.com</a>.</p>
+		</div>
+		]]>
+	</description>
+	<files>
+		<filename plugin="justickypanel">justickypanel.php</filename>
+		<filename>index.html</filename>
+		<folder>admin</folder>
+		<folder>assets</folder>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_system_justickypanel.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic" addfieldpath="/plugins/system/justickypanel/admin/elements/">
+				<field 
+					name="juformstyle" 
+					type="juformstyle" />
+				
+				<field name="loadjquery"
+					type="list"
+					default="2"
+					label="PLG_JUSTICKYPANEL_LOAD_JQUERY"
+					description="PLG_JUSTICKYPANEL_LOAD_JQUERY_DESC">
+					<option
+						value="1">PLG_JUSTICKYPANEL_ALWAYS</option>
+					<option
+						value="2">PLG_JUSTICKYPANEL_WHEN_NOT_EXISTS</option>
+					<option
+						value="0">JNO</option>
+				</field>
+				
+				<field name="loadjqueryfrom"
+					type="list"
+					default="1"
+					label="PLG_JUSTICKYPANEL_LOAD_JQUERY_FROM"
+					description="PLG_JUSTICKYPANEL_LOAD_JQUERY_FROM_DESC">
+					<option
+						value="1">PLG_JUSTICKYPANEL_LOCAL_FILE</option>
+					<option
+						value="2">PLG_JUSTICKYPANEL_GOOGLE_CDN</option>
+				</field>
+				
+				<field name="selectors"
+					type="text"
+					size="20"
+					default=".sticky"
+					filter="raw"
+					class=""
+					label="PLG_JUSTICKYPANEL_SELECTORS"
+					description="PLG_JUSTICKYPANEL_SELECTORS_DESC" 
+				/>
+				
+				<field name="topPadding"
+					type="text"
+					size="20"
+					default="0"
+					filter="integer"
+					class="validate-numeric"
+					label="PLG_JUSTICKYPANEL_TOPPADDING"
+					description="PLG_JUSTICKYPANEL_TOPPADDING_DESC" 
+				/>
+				
+				<field name="afterDetachCSSClass"
+					type="text"
+					size="20"
+					default="detached"
+					label="PLG_JUSTICKYPANEL_AFTERDETACHCSSCLASS"
+					description="PLG_JUSTICKYPANEL_AFTERDETACHCSSCLASS_DESC" 
+				/>
+				
+				<field 
+					name="savePanelSpace" 
+					type="radio" 
+					default="true" 
+					class="btn-group" 
+					label="PLG_JUSTICKYPANEL_SAVEPANELSPACE" 
+					description="PLG_JUSTICKYPANEL_SAVEPANELSPACE_DESC">
+					<option 
+						value="true">JYES</option>
+					<option 
+						value="false">JNO</option>
+				</field>
+				
+				<field 
+					name="parentSelector" 
+					type="text" 
+					default="" 
+					filter="raw"
+					size="20"
+					class="" 
+					label="PLG_JUSTICKYPANEL_PARENTSELECTOR" 
+					description="PLG_JUSTICKYPANEL_PARENTSELECTOR_DESC"
+				/>
+				
+				<field 
+					name="onDetached" 
+					type="textarea" 
+					default="null" 
+					filter="raw"
+					cols="40"
+					rows="5"
+					class="" 
+					label="PLG_JUSTICKYPANEL_ONDETACHED" 
+					description="PLG_JUSTICKYPANEL_ONDETACHED_DESC"
+				/>
+				
+				<field 
+					name="onReAttached" 
+					type="textarea" 
+					default="null" 
+					filter="raw"
+					cols="40"
+					rows="5"
+					class="" 
+					label="PLG_JUSTICKYPANEL_ONREATTACHED" 
+					description="PLG_JUSTICKYPANEL_ONREATTACHED_DESC"
+				/>
+			</fieldset>
+			<fieldset name="advanced" addfieldpath="/plugins/system/justickypanel/admin/elements/">
+				<field type="jumessage"
+					description="PLG_JUSTICKYPANEL_PATH_REGEX_INSTRUCTION"
+					class="juicon-info"
+				/>
+				
+				<field name="enablepaths"
+					type="textarea"
+					cols="40"
+					rows="5"
+					default=""
+					filter="raw"
+					label="PLG_JUSTICKYPANEL_ENABLE_PATHS"
+					description="PLG_JUSTICKYPANEL_ENABLE_PATHS_DESC" 
+				/>
+				
+				<field name="disablepaths"
+					type="textarea"
+					cols="40"
+					rows="5"
+					default=""
+					filter="raw"
+					label="PLG_JUSTICKYPANEL_DISABLE_PATHS"
+					description="PLG_JUSTICKYPANEL_DISABLE_PATHS_DESC" 
+				/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

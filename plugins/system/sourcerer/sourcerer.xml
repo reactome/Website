@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.4" type="plugin" group="system" method="upgrade">
+	<name>plg_system_sourcerer</name>
+	<description>PLG_SYSTEM_SOURCERER_DESC</description>
+	<version>7.1.11</version>
+	<creationDate>December 2017</creationDate>
+	<author>Regular Labs (Peter van Westen)</author>
+	<authorEmail>info@regularlabs.com</authorEmail>
+	<authorUrl>https://www.regularlabs.com</authorUrl>
+	<copyright>Copyright © 2017 Regular Labs - All Rights Reserved</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+
+	<scriptfile>script.install.php</scriptfile>
+
+	<updateservers>
+		<server type="extension" priority="1" name="Regular Labs - Sourcerer">
+			https://download.regularlabs.com/updates.xml?e=sourcerer&amp;type=.xml
+		</server>
+	</updateservers>
+
+	<files>
+		<filename plugin="sourcerer">sourcerer.php</filename>
+		<filename>script.install.helper.php</filename>
+		<folder>language</folder>
+		<folder>src</folder>
+		<folder>vendor</folder>
+	</files>
+
+	<media folder="media" destination="sourcerer">
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+		<folder>less</folder>
+	</media>
+
+	<config>
+		<fields name="params" addfieldpath="/libraries/regularlabs/fields">
+			<fieldset name="description">
+				<field name="@loadlanguage_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
+				<field name="@loadlanguage" type="rl_loadlanguage" extension="plg_system_sourcerer" />
+				<field name="@license" type="rl_license" extension="SOURCERER" />
+				<field name="@version" type="rl_version" extension="SOURCERER" />
+				<field name="@header" type="rl_header"
+					   label="SOURCERER"
+					   description="SOURCERER_DESC"
+					   url="https://www.regularlabs.com/sourcerer" />
+			</fieldset>
+			<fieldset name="advanced">
+				<field name="@block_tag_a" type="rl_block" start="1" label="RL_TAG_SYNTAX" />
+				<field name="syntax_word" type="text" size="20" default="source"
+					   label="SRC_SYNTAX_WORD"
+					   description="SRC_SYNTAX_WORD_DESC" />
+				<field name="tag_characters" type="list" default="{.}" class="input-small"
+					   label="RL_TAG_CHARACTERS"
+					   description="RL_TAG_CHARACTERS_DESC">
+					<option value="{.}">{...}</option>
+					<option value="[.]">[...]</option>
+					<option value="{{.}}">{{...}}</option>
+					<option value="[[.]]">[[...]]</option>
+					<option value="[:.:]">[:...:]</option>
+					<option value="[%.%]">[%...%]</option>
+				</field>
+				<field name="@block_tag_b" type="rl_block" end="1" />
+				<field name="trim" type="radio" class="btn-group" default="0"
+					   label="RL_STRIP_SURROUNDING_TAGS"
+					   description="RL_STRIP_SURROUNDING_TAGS_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="enable_in_head" type="radio" class="btn-group" default="0"
+					   label="SRC_ENABLE_IN_HEAD"
+					   description="SRC_ENABLE_IN_HEAD_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="remove_from_search" type="radio" class="btn-group" default="0"
+					   label="SRC_REMOVE_FROM_SEARCH"
+					   description="SRC_REMOVE_FROM_SEARCH_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="include_path" type="text" default="/"
+					   label="SRC_INCLUDE_PATH"
+					   description="SRC_INCLUDE_PATH_DESC" />
+				<field name="place_comments" type="radio" class="btn-group" default="1"
+					   label="RL_PLACE_HTML_COMMENTS"
+					   description="RL_PLACE_HTML_COMMENTS_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+			</fieldset>
+
+			<fieldset name="SRC_SECURITY_SETTINGS_DEFAULT">
+				<field name="@block_default" type="note" class="alert alert-info" description="SRC_SECURITY_SETTINGS_DEFAULT_DESC" />
+				<field name="@block_default_css_a" type="rl_block" start="1" label="SRC_CSS" />
+				<field name="enable_css" type="radio" class="btn-group" default="1"
+					   label="SRC_ALLOW_CSS_TAGS"
+					   description="SRC_ALLOW_CSS_TAGS_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="@block_default_css_b" type="rl_block" end="1" />
+
+				<field name="@block_default_js_a" type="rl_block" start="1" label="SRC_JAVASCRIPT" />
+				<field name="enable_js" type="radio" class="btn-group" default="1"
+					   label="SRC_ALLOW_JAVASCRIPT_TAGS"
+					   description="SRC_ALLOW_JAVASCRIPT_TAGS_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="@block_default_js_b" type="rl_block" end="1" />
+
+				<field name="@block_default_php_a" type="rl_block" start="1" label="SRC_PHP" />
+				<field name="enable_php" type="radio" class="btn-group" default="1"
+					   label="SRC_ALLOW_PHP_TAGS"
+					   description="SRC_ALLOW_PHP_TAGS_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="@toggler_default_php_a" type="rl_toggler" param="enable_php" value="1" />
+				<field name="forbidden_php" type="textarea" rows="3" cols="40"
+					   default="dl, escapeshellarg, escapeshellcmd, exec, passthru, popen, proc_close, proc_open, shell_exec, symlink, system"
+					   label="SRC_FORBIDDEN_PHP_FUNCTIONS"
+					   description="SRC_FORBIDDEN_PHP_FUNCTIONS_DESC" />
+				<field name="forbidden_tags" type="rl_textareaplus" width="400" height="80" default=""
+					   label="SRC_FORBIDDEN_HTML_TAGS"
+					   description="SRC_FORBIDDEN_HTML_TAGS_DESC" />
+				<field name="@toggler_default_php_b" type="rl_toggler" />
+				<field name="@block_default_php_b" type="rl_block" end="1" />
+
+			</fieldset>
+
+			<fieldset name="SRC_SECURITY_SETTINGS_ARTICLES">
+				<field name="@block_articles" type="note" class="alert alert-info" description="SRC_SECURITY_SETTINGS_ARTICLES_DESC" />
+				<field name="@notice_articles_security_level" type="rl_plaintext"
+					   label="SRC_SECURITY_LEVEL"
+					   description="SRC_SECURITY_LEVEL_DESC"
+					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+
+				<field name="@block_articles_css_a" type="rl_block" start="1" label="SRC_CSS" />
+				<field name="@notice_articles_enable_css" type="rl_plaintext"
+					   label="SRC_ALLOW_CSS_TAGS"
+					   description="SRC_ALLOW_CSS_TAGS_DESC"
+					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+				<field name="@block_articles_css_b" type="rl_block" end="1" />
+
+				<field name="@block_articles_js_a" type="rl_block" start="1" label="SRC_JAVASCRIPT" />
+				<field name="@notice_articles_enable_js" type="rl_plaintext"
+					   label="SRC_ALLOW_JAVASCRIPT_TAGS"
+					   description="SRC_ALLOW_JAVASCRIPT_TAGS_DESC"
+					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+				<field name="@block_articles_js_b" type="rl_block" end="1" />
+
+				<field name="@block_articles_php_a" type="rl_block" start="1" label="SRC_PHP" />
+				<field name="@notice_articles_enable_php" type="rl_plaintext"
+					   label="SRC_ALLOW_PHP_TAGS"
+					   description="SRC_ALLOW_PHP_TAGS_DESC"
+					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+				<field name="@block_articles_php_b" type="rl_block" end="1" />
+			</fieldset>
+
+			<fieldset name="SRC_SECURITY_SETTINGS_COMPONENTS">
+				<field name="@block_components" type="note" class="alert alert-info" description="SRC_SECURITY_SETTINGS_COMPONENTS_DESC" />
+				<field name="@notice_articles_security_level" type="rl_plaintext"
+					   label="RL_DISABLE_ON_COMPONENTS"
+					   description="SRC_DISABLE_ON_COMPONENTS_DESC"
+					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+
+				<field name="@block_components_css_a" type="rl_block" start="1" label="SRC_CSS" />
+				<field name="@notice_components_enable_css" type="rl_plaintext"
+					   label="SRC_ALLOW_CSS_TAGS"
+					   description="SRC_ALLOW_CSS_TAGS_DESC"
+					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+				<field name="@block_components_css_b" type="rl_block" end="1" />
+
+				<field name="@block_components_js_a" type="rl_block" start="1" label="SRC_JAVASCRIPT" />
+				<field name="@notice_components_enable_js" type="rl_plaintext"
+					   label="SRC_ALLOW_JAVASCRIPT_TAGS"
+					   description="SRC_ALLOW_JAVASCRIPT_TAGS_DESC"
+					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+				<field name="@block_components_js_b" type="rl_block" end="1" />
+
+				<field name="@block_components_php_a" type="rl_block" start="1" label="SRC_PHP" />
+				<field name="@notice_components_enable_php" type="rl_plaintext"
+					   label="SRC_ALLOW_PHP_TAGS"
+					   description="SRC_ALLOW_PHP_TAGS_DESC"
+					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+
+				<field name="@wizard" type="radio" class="btn-group" default="0" label="SRC_SHOW_WIZARD">
+					<option value="0">JNO</option>
+					<option value="">JYES</option>
+				</field>
+				<field name="@toggler_wizard_a" type="rl_toggler" param="@wizard" value="" />
+				<field name="@block_wizard" type="rl_plaintext"
+					   label="&#60;&#104;&#52;&#62;&#84;&#104;&#101;&#32;&#68;&#97;&#121;&#32;&#111;&#102;&#32;&#116;&#104;&#101;&#32;&#83;&#111;&#117;&#114;&#99;&#101;&#114;&#101;&#114;&#60;&#47;&#104;&#52;&#62;&#60;&#105;&#109;&#103;&#32;&#115;&#114;&#99;&#61;&#34;&#46;&#46;&#47;&#109;&#101;&#100;&#105;&#97;&#47;&#115;&#111;&#117;&#114;&#99;&#101;&#114;&#101;&#114;&#47;&#105;&#109;&#97;&#103;&#101;&#115;&#47;&#119;&#105;&#122;&#97;&#114;&#100;&#46;&#103;&#105;&#102;&#34;&#32;&#98;&#111;&#114;&#100;&#101;&#114;&#61;&#34;&#48;&#34;&#32;&#97;&#108;&#116;&#61;&#34;&#34;&#32;&#119;&#105;&#100;&#116;&#104;&#61;&#34;&#57;&#54;&#34;&#32;&#104;&#101;&#105;&#103;&#104;&#116;&#61;&#34;&#57;&#52;&#34;&#32;&#97;&#108;&#105;&#103;&#110;&#61;&#34;&#108;&#101;&#102;&#116;&#34;&#32;&#104;&#115;&#112;&#97;&#99;&#101;&#61;&#34;&#52;&#34;&#32;&#47;&#62;&#72;&#101;&#32;&#115;&#116;&#97;&#110;&#100;&#115;&#32;&#117;&#112;&#32;&#97;&#110;&#100;&#32;&#104;&#101;&#32;&#119;&#97;&#107;&#101;&#115;&#44;&#60;&#98;&#114;&#32;&#47;&#62;&#72;&#101;&#32;&#97;&#100;&#100;&#115;&#32;&#97;&#110;&#100;&#32;&#104;&#101;&#32;&#116;&#97;&#107;&#101;&#115;&#44;&#60;&#98;&#114;&#32;&#47;&#62;&#72;&#101;&#32;&#109;&#105;&#120;&#101;&#115;&#32;&#97;&#110;&#100;&#32;&#104;&#101;&#32;&#115;&#104;&#97;&#107;&#101;&#115;&#44;&#60;&#98;&#114;&#32;&#47;&#62;&#72;&#101;&#32;&#101;&#120;&#112;&#108;&#111;&#100;&#101;&#115;&#32;&#97;&#110;&#100;&#32;&#104;&#101;&#32;&#98;&#97;&#107;&#101;&#115;&#44;&#60;&#98;&#114;&#32;&#47;&#62;&#66;&#117;&#116;&#32;&#104;&#101;&#32;&#109;&#97;&#107;&#101;&#115;&#32;&#110;&#111;&#32;&#109;&#105;&#115;&#116;&#97;&#107;&#101;&#115;&#33;" />
+				<field name="@toggler_wizard_b" type="rl_toggler" />
+				<field name="@block_components_php_b" type="rl_block" end="1" />
+			</fieldset>
+
+			<fieldset name="SRC_SECURITY_SETTINGS_OTHER_AREAS">
+				<field name="@block_otherareas" type="note" class="alert alert-info" description="SRC_SECURITY_SETTINGS_OTHER_AREAS_DESC" />
+				<field name="@notice_articles_security_level" type="rl_plaintext"
+					   label="RL_ENABLE_OTHER_AREAS"
+					   description="SRC_ENABLE_OTHER_AREAS_DESC"
+					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+
+				<field name="@block_otherareas_css_a" type="rl_block" start="1" label="SRC_CSS" />
+				<field name="@noticeother_enable_css" type="rl_plaintext"
+					   label="SRC_ALLOW_CSS_TAGS"
+					   description="SRC_ALLOW_CSS_TAGS_DESC"
+					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+				<field name="@block_otherareas_css_b" type="rl_block" end="1" />
+
+				<field name="@block_otherareas_js_a" type="rl_block" start="1" label="SRC_JAVASCRIPT" />
+				<field name="@notice_other_enable_js" type="rl_plaintext"
+					   label="SRC_ALLOW_JAVASCRIPT_TAGS"
+					   description="SRC_ALLOW_JAVASCRIPT_TAGS_DESC"
+					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+				<field name="@block_otherareas_js_b" type="rl_block" end="1" />
+
+				<field name="@block_otherareas_php_a" type="rl_block" start="1" label="SRC_PHP" />
+				<field name="@notice_other_enable_php" type="rl_plaintext"
+					   label="SRC_ALLOW_PHP_TAGS"
+					   description="SRC_ALLOW_PHP_TAGS_DESC"
+					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+				<field name="@block_otherareas_php_b" type="rl_block" end="1" />
+			</fieldset>
+
+			<fieldset name="RL_SETTINGS_EDITOR_BUTTON">
+				<field name="button_text" type="text" default="Code"
+					   label="RL_BUTTON_TEXT"
+					   description="RL_BUTTON_TEXT_DESC" />
+				<field name="enable_frontend" type="radio" class="btn-group" default="1"
+					   label="RL_ENABLE_IN_FRONTEND"
+					   description="RL_ENABLE_IN_FRONTEND_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="@block_defaults_a" type="rl_block" start="1"
+					   label="SRC_DEFAULTS"
+					   description="SRC_DEFAULTS_DESC" />
+				<field name="addsourcetags" type="radio" class="btn-group" default="1"
+					   label="SRC_ADD_SOURCE_TAGS"
+					   description="SRC_ADD_SOURCE_TAGS_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="@block_defaults_b" type="rl_block" end="1" />
+
+				<field name="@block_example_a" type="rl_block" start="1" label="SRC_EXAMPLE_CODE" />
+				<field name="@notice_use_example_code" type="rl_plaintext"
+					   label="SRC_USE_EXAMPLE_CODE"
+					   description="SRC_USE_EXAMPLE_CODE_DESC"
+					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+				<field name="@block_example_b" type="rl_block" end="1" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config addfieldpath="/libraries/regularlabs/fields">
+	<fieldset name="text">
+		<field name="text" type="text" class="input-xxlarge input-large-text"
+			   label="RL_TEXT"
+			   hint="MDL_LINK_TEXT_HINT" />
+	</fieldset>
+
+	<fieldset name="settings">
+		<field name="@settings" type="rl_header"
+			   label="MDL_SETTINGS_TITLE" />
+		<field name="title" type="text" class="input-xxlarge"
+			   label="JGLOBAL_TITLE"
+			   description="MDL_TITLE_DESC" />
+		<field name="class" type="text" class="input-large"
+			   label="MDL_CSS_CLASS_LINK"
+			   description="MDL_CSS_CLASS_LINK_DESC" />
+		<field name="classname" type="text" class="input-large"
+			   label="MDL_CSS_CLASS_MODAL"
+			   description="MDL_CSS_CLASS_MODAL_DESC" />
+		<field name="width" type="text" class="input-small"
+			   label="RL_WIDTH"
+			   description="MDL_DIMENSION_DESC" />
+		<field name="height" type="text" class="input-small"
+			   label="RL_HEIGHT"
+			   description="MDL_DIMENSION_DESC" />
+		<field name="@toggler_iframe_a" type="rl_toggler" param="type" value="url,article" />
+		<field name="iframe" type="radio" class="btn-group" default="0"
+			   label="MDL_IFRAME"
+			   description="MDL_IFRAME_DESC2">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="@toggler_iframe_b" type="rl_toggler" />
+		<field name="@open" type="rl_plaintext"
+			   label="MDL_OPEN_ON_PAGELOAD"
+			   description="MDL_OPEN_ON_PAGELOAD_DESC"
+			   default="RL_ONLY_AVAILABLE_IN_PRO" />
+		<field name="@autoclose" type="rl_plaintext"
+			   label="MDL_AUTOCLOSE"
+			   description="MDL_AUTOCLOSE_DESC"
+			   default="RL_ONLY_AVAILABLE_IN_PRO" />
+	</fieldset>
+
+	<fieldset name="url">
+		<field name="@url" type="rl_plaintext"
+			   description="MDL_URL_DESC" />
+		<field name="url" type="text" label="" class="input-full" />
+	</fieldset>
+
+	<fieldset name="image">
+		<field name="@image" type="rl_plaintext"
+			   description="MDL_IMAGE_DESC" />
+		<field name="image" type="media" label="" />
+	</fieldset>
+
+	<fieldset name="gallery">
+		<field name="@galleryx" type="rl_block" class="alert alert-warning"
+			   description="RL_ONLY_AVAILABLE_IN_PRO" />
+	</fieldset>
+
+	<fieldset name="video">
+		<field name="@videox" type="rl_block" class="alert alert-warning"
+			   description="RL_ONLY_AVAILABLE_IN_PRO" />
+	</fieldset>
+
+	<fieldset name="article"
+			  addfieldpath="plugins/editors-xtd/modals/fields">
+		<field name="@articlex" type="rl_block" class="alert alert-warning"
+			   description="RL_ONLY_AVAILABLE_IN_PRO" />
+	</fieldset>
+
+	<fieldset name="content">
+		<field name="@contentx" type="rl_block" class="alert alert-warning"
+			   description="RL_ONLY_AVAILABLE_IN_PRO" />
+	</fieldset>
+</config>

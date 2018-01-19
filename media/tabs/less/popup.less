@@ -1,0 +1,42 @@
+/**
+ * @package         Tabs
+ * @version         7.1.8
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://www.regularlabs.com
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ */
+@import "../../regularlabs/less/init.less";
+
+#myTabTabs {
+	> li {
+		> a {
+			border-color:     #eeeeee #eeeeee #dddddd;
+			background-color: #f5f5f5;
+			margin-right:     4px;
+			&:hover,
+			&:focus {
+				background-color: #eeeeee;
+			}
+		}
+		&.active a {
+			border-color:        #dddddd;
+			border-bottom-color: transparent;
+			background-color:    #ffffff;
+		}
+	}
+}
+
+#myTabContent {
+	h1 > span.icon-default {
+		font-size:      18px;
+		vertical-align: top;
+	}
+	label[for$="_default0"] {
+		display: none;
+	}
+	label[for$="_default1"] {
+		.border-radius(@baseBorderRadius);
+	}
+}

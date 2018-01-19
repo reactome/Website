@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.4" type="plugin" group="editors-xtd" method="upgrade">
+	<name>plg_editors-xtd_sliders</name>
+	<description>PLG_EDITORS-XTD_SLIDERS_DESC</description>
+	<version>7.2.9</version>
+	<creationDate>January 2018</creationDate>
+	<author>Regular Labs (Peter van Westen)</author>
+	<authorEmail>info@regularlabs.com</authorEmail>
+	<authorUrl>https://www.regularlabs.com</authorUrl>
+	<copyright>Copyright © 2018 Regular Labs - All Rights Reserved</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+
+	<scriptfile>script.install.php</scriptfile>
+
+	<files>
+		<filename plugin="sliders">sliders.php</filename>
+		<filename>fields.xml</filename>
+		<filename>helper.php</filename>
+		<filename>popup.php</filename>
+		<filename>popup.tmpl.php</filename>
+		<filename>script.install.helper.php</filename>
+		<folder>language</folder>
+	</files>
+
+	<config>
+		<fields name="params" addfieldpath="/libraries/regularlabs/fields">
+			<fieldset name="description">
+				<field name="@loadlanguage_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
+				<field name="@loadlanguage" type="rl_loadlanguage" extension="plg_editors-xtd_sliders" />
+				<field name="@license" type="rl_license" extension="SLIDERS" />
+				<field name="@version" type="rl_version" extension="SLIDERS" />
+				<field name="@dependency" type="rl_dependency"
+					   label="SLD_THE_SYSTEM_PLUGIN"
+					   file="/plugins/system/sliders/sliders.php" />
+				<field name="@header" type="rl_header"
+					   label="SLIDERS"
+					   description="SLIDERS_DESC"
+					   url="https://www.regularlabs.com/sliders" />
+
+				<field name="@notice_settings" type="rl_plaintext"
+					   description="SLD_SETTINGS,&lt;a href=&quot;index.php?option=com_plugins&amp;filter_folder=system&amp;filter_search=sliders&quot; target=&quot;_blank&quot;&gt;,&lt;/a&gt;" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>

@@ -1,0 +1,131 @@
+/*
+*   name           FavSocial
+*   version        1.6
+*   description    Responsive and customizable Joomla!3 module
+*   demo           http://extensions.favthemes.com/favsocial
+*   author         FavThemes
+*   author URL     http://www.favthemes.com
+*   copyright      Copyright (C) 2012-2016 FavThemes.com. All Rights Reserved.
+*   license        Licensed under GNU/GPLv3, see http://www.gnu.org/licenses/gpl-3.0.html
+*/
+
+/*
+******************************************************************************************
+
+1. reset
+2. layout
+3. content
+
+******************************************************************************************
+*/
+
+/*
+******************************************************************************************
+
+/// favsocial css
+
+******************************************************************************************
+*/
+
+  /*
+  /////////////////////////////////
+
+1. reset
+
+  /////////////////////////////////
+  */
+
+div[id^="favsocial"] a,
+div[id*=" favsocial"] a,
+div[id^="favsocial"] a:hover,
+div[id*=" favsocial"] a:hover,
+div[id^="favsocial"] a:focus,
+div[id*=" favsocial"] a:focus {
+  text-decoration: none!important;
+}
+
+  /*
+  /////////////////////////////////
+
+2. layout
+
+  /////////////////////////////////
+  */
+
+div[id^="favsocial"] a,
+div[id*=" favsocial"] a {
+  float: left;
+}
+div[id^="favsocial"] a:hover,
+div[id*=" favsocial"] a:hover,
+div[id^="favsocial"] a:active,
+div[id*=" favsocial"] a:active,
+div[id^="favsocial"] a:focus,
+div[id*=" favsocial"] a:focus {
+  opacity: 0.8;
+  background-color: transparent;
+}
+
+  /*
+  /////////////////////////////////
+
+3. content
+
+  /////////////////////////////////
+  */
+
+/*
+///  icon
+*/
+
+li[id^="favsocial-icon"],
+li[id*=" favsocial-icon"] {
+  list-style: none;
+  float: left;
+  margin: 0 5px;
+}
+li[id^="favsocial-icon"] .favsocial,
+li[id*=" favsocial-icon"] .favsocial {
+  position: relative;
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  vertical-align: middle;
+}
+li[id^="favsocial-icon"] i,
+li[id*=" favsocial-icon"] i {
+  float: left;
+  width: 100%;
+  padding: 50% 0;
+  line-height: 0;
+  text-align: center;
+}
+li[id^="favsocial-icon"]:after,
+li[id*=" favsocial-icon"]:after {
+	content: "";
+  display: block;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%;
+}
+
+/*
+///  list float
+*/
+
+ul#favsocial-list {
+  margin: 0;
+  overflow: hidden;
+}
+ul#favsocial-list.favsocial-left {
+  float: left;
+}
+ul#favsocial-list.favsocial-center {
+  display: table;
+  margin: 0 auto;
+  float: none;
+}
+ul#favsocial-list.favsocial-right {
+  float: right;
+}

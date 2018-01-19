@@ -1,0 +1,876 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+  type="module"
+  version="3.0"
+  client="site"
+  method="upgrade">
+  <name>FavSocial</name>
+  <author>FavThemes</author>
+  <version>1.6</version>
+  <creationDate>2013</creationDate>
+  <authorUrl>http://www.favthemes.com</authorUrl>
+  <authoremail>hello@favthemes.com</authoremail>
+  <copyright>Copyright (C) FavThemes. All rights reserved.</copyright>
+  <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
+  <description>
+  <![CDATA[
+
+    <a href="http://extensions.favthemes.com/favsocial" target="_blank"><strong>FavSocial</strong></a> is a free responsive Joomla! module that lets you choose up to 10 social media icons from Font Awesome and link each one to your social media accounts.
+    <br/>
+    For more info, please see the <a href="http://extensions.favthemes.com/favsocial" target="_blank" style="font-weight: bold;">demo and documentation</a> for the FavSocial module.
+    <br/><br/>
+
+    <a href="http://extensions.favthemes.com/favsocial" target="_blank">
+      <img src="../modules/mod_favsocial/theme/img/favsocial.jpg" alt="FavSocial Responsive Module">
+    </a>
+
+    <br/><br/>
+    Copyright &#169; 2012-2016 <a href="http://www.favthemes.com" target="_blank" style="font-weight: bold;">FavThemes</a>.
+    <br/><br/>
+
+    <link rel="stylesheet" href="../modules/mod_favsocial/theme/css/admin.css" type="text/css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400" type="text/css" />
+    <script src="../modules/mod_favsocial/theme/js/jscolor/jscolor.js" type="text/javascript"></script>
+
+  ]]>
+  </description>
+
+  <files>
+  <filename module="mod_favsocial">mod_favsocial.php</filename>
+  <filename>mod_favsocial.xml</filename>
+    <filename>index.html</filename>
+    <filename>License.txt</filename>
+    <folder>theme/js</folder>
+    <folder>theme/css</folder>
+    <folder>theme/img</folder>
+  </files>
+
+  <help key="FavSocial" />
+
+  <config>
+
+    <fields name="params">
+
+      <fieldset name="settings" label="Module Settings">
+
+        <field type="note" label="Module Options" class="favtitle first" />
+
+          <field
+            name="module_align"
+            type="radio"
+            default="favsocial-left"
+            class="btn-group"
+            label="Module Alignment"
+            description="Choose if the icons should be aligned to the left, in the center or to the right.">
+              <option value="favsocial-left">left</option>
+              <option value="favsocial-center">center</option>
+              <option value="favsocial-right">right</option>
+          </field>
+
+        <field type="note" label="Icon 1 Options" class="favtitle" />
+
+          <field
+            name="show_icon1"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Icon 1"
+            description="Choose if this icon should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+           <field
+            name="icon_name1"
+            type="text"
+            default="fa-twitter"
+            label="Icon 1 Name"
+            description="Insert the Font Awesome icon name (for example: fa-twitter or fa-facebook). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_color1"
+            class="color {required:false}"
+            type="text"
+            default="FFFFFF"
+            label="Icon 1 Color"
+            description="Choose the color for the icon. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_bg_color1"
+            class="color {required:false}"
+            type="text"
+            default="00ACED"
+            label="Icon 1 Background Color"
+            description="Choose the color for the background of the icon. A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_font_size1"
+            type="text"
+            default="21px"
+            label="Icon 1 Font Size"
+            description="Insert the font size for the icon using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_link1"
+            type="text"
+            default="https://twitter.com/"
+            label="Icon 1 Link"
+            description="Insert the URL for the icon. Note that the link must include http:// or https://. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_link_target1"
+            type="list"
+            default="blank"
+            label="Icon 1 Target"
+            description="Choose the link target of the URL for the icon.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="icon_padding1"
+            type="text"
+            default="0.5em"
+            label="Icon 1 Padding"
+            description="Insert the padding for the icon using pixels or percent (for example: 14px or 10%, not 14). The padding is a CSS property that sets the space around the content. The padding can have from 1 to 4 values (top, right, bottom and left). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_border_radius1"
+            type="text"
+            default="50%"
+            label="Icon 1 Border Radius"
+            description="Insert the border-radius for the background of the icon using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Icon 2 Options" class="favtitle" />
+
+          <field
+            name="show_icon2"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Icon 2"
+            description="Choose if this icon should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+           <field
+            name="icon_name2"
+            type="text"
+            default="fa-facebook"
+            label="Icon 2 Name"
+            description="Insert the Font Awesome icon name (for example: fa-twitter or fa-facebook). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_color2"
+            class="color {required:false}"
+            type="text"
+            default="FFFFFF"
+            label="Icon 2 Color"
+            description="Choose the color for the icon. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_bg_color2"
+            class="color {required:false}"
+            type="text"
+            default="3B5998"
+            label="Icon 2 Background Color"
+            description="Choose the color for the background of the icon. A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_font_size2"
+            type="text"
+            default="21px"
+            label="Icon 2 Font Size"
+            description="Insert the font size for the icon using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_link2"
+            type="text"
+            default="https://www.facebook.com/"
+            label="Icon 2 Link"
+            description="Insert the URL for the icon. Note that the link must include http:// or https://. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_link_target2"
+            type="list"
+            default="blank"
+            label="Icon 2 Target"
+            description="Choose the link target of the URL for the icon.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="icon_padding2"
+            type="text"
+            default="0.5em"
+            label="Icon 2 Padding"
+            description="Insert the padding for the icon using pixels or percent (for example: 14px or 10%, not 14). The padding is a CSS property that sets the space around the content. The padding can have from 1 to 4 values (top, right, bottom and left). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_border_radius2"
+            type="text"
+            default="50%"
+            label="Icon 2 Border Radius"
+            description="Insert the border-radius for the background of the icon using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Icon 3 Options" class="favtitle" />
+
+          <field
+            name="show_icon3"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Icon 3"
+            description="Choose if this icon should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+           <field
+            name="icon_name3"
+            type="text"
+            default="fa-dribbble"
+            label="Icon 3 Name"
+            description="Insert the Font Awesome icon name (for example: fa-twitter or fa-facebook). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_color3"
+            class="color {required:false}"
+            type="text"
+            default="FFFFFF"
+            label="Icon 3 Color"
+            description="Choose the color for the icon. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_bg_color3"
+            class="color {required:false}"
+            type="text"
+            default="EA4C89"
+            label="Icon 3 Background Color"
+            description="Choose the color for the background of the icon. A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_font_size3"
+            type="text"
+            default="21px"
+            label="Icon 3 Font Size"
+            description="Insert the font size for the icon using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_link3"
+            type="text"
+            default="https://dribbble.com/"
+            label="Icon 3 Link"
+            description="Insert the URL for the icon. Note that the link must include http:// or https://. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_link_target3"
+            type="list"
+            default="blank"
+            label="Icon 3 Target"
+            description="Choose the link target of the URL for the icon.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="icon_padding3"
+            type="text"
+            default="0.5em"
+            label="Icon 3 Padding"
+            description="Insert the padding for the icon using pixels or percent (for example: 14px or 10%, not 14). The padding is a CSS property that sets the space around the content. The padding can have from 1 to 4 values (top, right, bottom and left). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_border_radius3"
+            type="text"
+            default="50%"
+            label="Icon 3 Border Radius"
+            description="Insert the border-radius for the background of the icon using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Icon 4 Options" class="favtitle" />
+
+          <field
+            name="show_icon4"
+            type="radio"
+            default="0"
+            class="btn-group"
+            label="Show Icon 4"
+            description="Choose if this icon should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+           <field
+            name="icon_name4"
+            type="text"
+            default=""
+            label="Icon 4 Name"
+            description="Insert the Font Awesome icon name (for example: fa-twitter or fa-facebook). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_color4"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 4 Color"
+            description="Choose the color for the icon. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_bg_color4"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 4 Background Color"
+            description="Choose the color for the background of the icon. A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_font_size4"
+            type="text"
+            default=""
+            label="Icon 4 Font Size"
+            description="Insert the font size for the icon using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_link4"
+            type="text"
+            default=""
+            label="Icon 4 Link"
+            description="Insert the URL for the icon. Note that the link must include http:// or https://. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_link_target4"
+            type="list"
+            default="blank"
+            label="Icon 4 Target"
+            description="Choose the link target of the URL for the icon.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="icon_padding4"
+            type="text"
+            default=""
+            label="Icon 4 Padding"
+            description="Insert the padding for the icon using pixels or percent (for example: 14px or 10%, not 14). The padding is a CSS property that sets the space around the content. The padding can have from 1 to 4 values (top, right, bottom and left). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_border_radius4"
+            type="text"
+            default=""
+            label="Icon 4 Border Radius"
+            description="Insert the border-radius for the background of the icon using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Icon 5 Options" class="favtitle" />
+
+          <field
+            name="show_icon5"
+            type="radio"
+            default="0"
+            class="btn-group"
+            label="Show Icon 5"
+            description="Choose if this icon should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+           <field
+            name="icon_name5"
+            type="text"
+            default=""
+            label="Icon 5 Name"
+            description="Insert the Font Awesome icon name (for example: fa-twitter or fa-facebook). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_color5"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 5 Color"
+            description="Choose the color for the icon. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_bg_color5"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 5 Background Color"
+            description="Choose the color for the background of the icon. A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_font_size5"
+            type="text"
+            default=""
+            label="Icon 5 Font Size"
+            description="Insert the font size for the icon using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_link5"
+            type="text"
+            default=""
+            label="Icon 5 Link"
+            description="Insert the URL for the icon. Note that the link must include http:// or https://. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_link_target5"
+            type="list"
+            default="blank"
+            label="Icon 5 Target"
+            description="Choose the link target of the URL for the icon.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="icon_padding5"
+            type="text"
+            default=""
+            label="Icon 5 Padding"
+            description="Insert the padding for the icon using pixels or percent (for example: 14px or 10%, not 14). The padding is a CSS property that sets the space around the content. The padding can have from 1 to 4 values (top, right, bottom and left). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_border_radius5"
+            type="text"
+            default=""
+            label="Icon 5 Border Radius"
+            description="Insert the border-radius for the background of the icon using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Icon 6 Options" class="favtitle" />
+
+          <field
+            name="show_icon6"
+            type="radio"
+            default="0"
+            class="btn-group"
+            label="Show Icon 6"
+            description="Choose if this icon should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+           <field
+            name="icon_name6"
+            type="text"
+            default=""
+            label="Icon 6 Name"
+            description="Insert the Font Awesome icon name (for example: fa-twitter or fa-facebook). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_color6"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 6 Color"
+            description="Choose the color for the icon. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_bg_color6"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 6 Background Color"
+            description="Choose the color for the background of the icon. A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_font_size6"
+            type="text"
+            default=""
+            label="Icon 6 Font Size"
+            description="Insert the font size for the icon using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_link6"
+            type="text"
+            default=""
+            label="Icon 6 Link"
+            description="Insert the URL for the icon. Note that the link must include http:// or https://. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_link_target6"
+            type="list"
+            default="blank"
+            label="Icon 6 Target"
+            description="Choose the link target of the URL for the icon.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="icon_padding6"
+            type="text"
+            default=""
+            label="Icon 6 Padding"
+            description="Insert the padding for the icon using pixels or percent (for example: 14px or 10%, not 14). The padding is a CSS property that sets the space around the content. The padding can have from 1 to 4 values (top, right, bottom and left). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_border_radius6"
+            type="text"
+            default=""
+            label="Icon 6 Border Radius"
+            description="Insert the border-radius for the background of the icon using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Icon 7 Options" class="favtitle" />
+
+          <field
+            name="show_icon7"
+            type="radio"
+            default="0"
+            class="btn-group"
+            label="Show Icon 7"
+            description="Choose if this icon should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+           <field
+            name="icon_name7"
+            type="text"
+            default=""
+            label="Icon 7 Name"
+            description="Insert the Font Awesome icon name (for example: fa-twitter or fa-facebook). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_color7"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 7 Color"
+            description="Choose the color for the icon. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_bg_color7"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 7 Background Color"
+            description="Choose the color for the background of the icon. A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_font_size7"
+            type="text"
+            default=""
+            label="Icon 7 Font Size"
+            description="Insert the font size for the icon using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_link7"
+            type="text"
+            default=""
+            label="Icon 7 Link"
+            description="Insert the URL for the icon. Note that the link must include http:// or https://. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_link_target7"
+            type="list"
+            default="blank"
+            label="Icon 7 Target"
+            description="Choose the link target of the URL for the icon.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="icon_padding7"
+            type="text"
+            default=""
+            label="Icon 7 Padding"
+            description="Insert the padding for the icon using pixels or percent (for example: 14px or 10%, not 14). The padding is a CSS property that sets the space around the content. The padding can have from 1 to 4 values (top, right, bottom and left). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_border_radius7"
+            type="text"
+            default=""
+            label="Icon 7 Border Radius"
+            description="Insert the border-radius for the background of the icon using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Icon 8 Options" class="favtitle" />
+
+          <field
+            name="show_icon8"
+            type="radio"
+            default="0"
+            class="btn-group"
+            label="Show Icon 8"
+            description="Choose if this icon should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+           <field
+            name="icon_name8"
+            type="text"
+            default=""
+            label="Icon 8 Name"
+            description="Insert the Font Awesome icon name (for example: fa-twitter or fa-facebook). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_color8"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 8 Color"
+            description="Choose the color for the icon. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_bg_color8"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 8 Background Color"
+            description="Choose the color for the background of the icon. A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_font_size8"
+            type="text"
+            default=""
+            label="Icon 8 Font Size"
+            description="Insert the font size for the icon using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_link8"
+            type="text"
+            default=""
+            label="Icon 8 Link"
+            description="Insert the URL for the icon. Note that the link must include http:// or https://. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_link_target8"
+            type="list"
+            default="blank"
+            label="Icon 8 Target"
+            description="Choose the link target of the URL for the icon.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="icon_padding8"
+            type="text"
+            default=""
+            label="Icon 8 Padding"
+            description="Insert the padding for the icon using pixels or percent (for example: 14px or 10%, not 14). The padding is a CSS property that sets the space around the content. The padding can have from 1 to 4 values (top, right, bottom and left). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_border_radius8"
+            type="text"
+            default=""
+            label="Icon 8 Border Radius"
+            description="Insert the border-radius for the background of the icon using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Icon 9 Options" class="favtitle" />
+
+          <field
+            name="show_icon9"
+            type="radio"
+            default="0"
+            class="btn-group"
+            label="Show Icon 9"
+            description="Choose if this icon should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+           <field
+            name="icon_name9"
+            type="text"
+            default=""
+            label="Icon 9 Name"
+            description="Insert the Font Awesome icon name (for example: fa-twitter or fa-facebook). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_color9"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 9 Color"
+            description="Choose the color for the icon. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_bg_color9"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 9 Background Color"
+            description="Choose the color for the background of the icon. A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_font_size9"
+            type="text"
+            default=""
+            label="Icon 9 Font Size"
+            description="Insert the font size for the icon using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_link9"
+            type="text"
+            default=""
+            label="Icon 9 Link"
+            description="Insert the URL for the icon. Note that the link must include http:// or https://. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_link_target9"
+            type="list"
+            default="blank"
+            label="Icon 9 Target"
+            description="Choose the link target of the URL for the icon.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="icon_padding9"
+            type="text"
+            default=""
+            label="Icon 9 Padding"
+            description="Insert the padding for the icon using pixels or percent (for example: 14px or 10%, not 14). The padding is a CSS property that sets the space around the content. The padding can have from 1 to 4 values (top, right, bottom and left). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_border_radius9"
+            type="text"
+            default=""
+            label="Icon 9 Border Radius"
+            description="Insert the border-radius for the background of the icon using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Icon 10 Options" class="favtitle" />
+
+          <field
+            name="show_icon10"
+            type="radio"
+            default="0"
+            class="btn-group"
+            label="Show Icon 10"
+            description="Choose if this icon should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+           <field
+            name="icon_name10"
+            type="text"
+            default=""
+            label="Icon 10 Name"
+            description="Insert the Font Awesome icon name (for example: fa-twitter or fa-facebook). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_color10"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 10 Color"
+            description="Choose the color for the icon. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_bg_color10"
+            class="color {required:false}"
+            type="text"
+            default=""
+            label="Icon 10 Background Color"
+            description="Choose the color for the background of the icon. A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_font_size10"
+            type="text"
+            default=""
+            label="Icon 10 Font Size"
+            description="Insert the font size for the icon using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value. " />
+
+          <field
+            name="icon_link10"
+            type="text"
+            default=""
+            label="Icon 10 Link"
+            description="Insert the URL for the icon. Note that the link must include http:// or https://. A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_link_target10"
+            type="list"
+            default="blank"
+            label="Icon 10 Target"
+            description="Choose the link target of the URL for the icon.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="icon_padding10"
+            type="text"
+            default=""
+            label="Icon 10 Padding"
+            description="Insert the padding for the icon using pixels or percent (for example: 14px or 10%, not 14). The padding is a CSS property that sets the space around the content. The padding can have from 1 to 4 values (top, right, bottom and left). A blank field reverts the setting to the default value." />
+
+          <field
+            name="icon_border_radius10"
+            type="text"
+            default=""
+            label="Icon 10 Border Radius"
+            description="Insert the border-radius for the background of the icon using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+      </fieldset>
+
+      <fieldset name="advanced">
+
+        <field
+          name="moduleclass_sfx"
+          type="text"
+          label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+          description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+        <field
+          name="cache"
+          type="list"
+          default="1"
+          label="COM_MODULES_FIELD_CACHING_LABEL"
+          description="COM_MODULES_FIELD_CACHING_DESC">
+          <option
+            value="1">JGLOBAL_USE_GLOBAL</option>
+          <option
+            value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+        </field>
+
+        <field
+          name="cache_time"
+          type="text"
+          default="900"
+          label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+          description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+        <field
+          name="cachemode"
+          type="hidden"
+          default="static">
+          <option
+            value="static"></option>
+        </field>
+
+      </fieldset>
+
+    </fields>
+  </config>
+
+      <updateservers>
+	  <server type="extension" priority="2" name="FavSocial Updates">http://updates.favthemes.com/extensions/favsocial.xml</server>
+	</updateservers>
+
+</extension>

@@ -1,0 +1,984 @@
+/*
+/   name           Favourite
+/   version        4.1
+/   description    Responsive and customizable Joomla!3 template
+/   demo           http://demo.favthemes.com/favourite
+/   author         FavThemes
+/   author URL     https://www.favthemes.com
+/   copyright      Copyright (C) 2012-2017 FavThemes.com. All Rights Reserved.
+/   license        Licensed under GNU/GPLv3 (http://www.gnu.org/licenses/gpl-3.0.html)
+*/
+
+/*//////////////////////////////////////////////////////////////////////////////
+///
+///  custom style
+///
+//////////////////////////////////////////////////////////////////////////////*/
+
+/*
+*   MAIN COLOR style2: #2F9EC2
+*   NOTE: The color used in the custom.css are based on the style2.
+*         If a new style is created, remember to replace the colors in the custom.css
+*/
+
+/* RESET */
+* {
+    text-transform: none !important;
+}
+
+/** Fix an issue on iOS devices showing shadow and rounded corner **/
+textarea,
+input[type="text"],
+input[type="text"]:focus,
+input[type="search"],
+input[type="search"]:focus,
+input[type="button"],
+input[type="submit"] {
+    -webkit-appearance: none !important;
+    border-radius: 0;
+}
+
+img {
+    background: none !important;
+}
+
+/* CUSTOMISING THE TEMPLATE */
+
+/*
+ * NOTE: Even though the extension supports changing the colour directly in the admin area, keeping the in the
+ *       css is easier to update.
+ */
+
+/* fav-primewrap div: adding the fireworks bg-image */
+#fav-primewrap {
+    background: url(../images/reactome/bg-fireworks-colour.svg) center top no-repeat fixed #111;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#fav-promowrap {
+    background-color: #111;
+    color: #fff;
+}
+
+#fav-slidewrap {
+    background-color: #F0F0F0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#fav-topbarwrap {
+    border: 1px solid #EBCCD0;
+}
+
+/* Keep the background color in the custom.css instead of changing here and in the template view */
+#fav-footerwrap.fav-module-block-color {
+    background-color: #2F9EC2 !important;
+}
+
+div[id^="fav-breadcrumbs"].favth-content-block,
+div[id*=" fav-breadcrumbs"].favth-content-block {
+    padding: 0;
+    margin-top: 1px;
+}
+
+div[id^="fav-maintop"].favth-content-block,
+div[id*=" fav-maintop"].favth-content-block {
+    padding: 0;
+    margin-top: 10px;
+}
+
+div[id^="favpromote-box"] h4,
+div[id*=" favpromote-box"] h4,
+div[id^="favpromote4col-box"] h4,
+div[id*=" favpromote4col-box"] h4 {
+    background-color: #2F9EC2 !important;
+}
+
+/* Module: NAV */
+#fav-headerwrap li a,
+#fav-headerwrap .nav-header,
+#fav-headerwrap p {
+    color: #444;
+    letter-spacing: normal;
+}
+
+#fav-headerwrap .favnav .nav a,
+#fav-headerwrap .favnav .nav .menu a,
+#fav-headerwrap .favnav .nav > li > a,
+#fav-headerwrap .favnav .nav .menu > li > a,
+#fav-headerwrap .favnav .nav span.nav-header,
+#fav-headerwrap .favnav .nav .menu span.nav-header,
+#fav-headerwrap .favnav .nav > li > span.nav-header,
+#fav-headerwrap .favnav .nav .menu > li > span.nav-header,
+#fav-headerwrap .favnav .nav ul.nav.menu li span.nav-header {
+    padding: 8px 8px 8px 8px;
+    margin: 16px 2px 9px 2px;
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: normal;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#fav-headerwrap .favnav ul.nav > li > a,
+#fav-headerwrap .favnav ul.nav > li > .nav-header,
+#fav-headerwrap .favnav ul.nav ul.nav-child a,
+#fav-headerwrap .favnav ul.nav ul.nav-child .nav-header,
+ul.menufavth-horizontal li a,
+ul.menufavth-horizontal li .nav-header {
+    text-transform: none;
+}
+
+/* nav - menu icon */
+#fav-headerwrap .favnav .nav li a[class^="fa-"]:hover:before,
+#fav-headerwrap .favnav .nav li a[class*=" fa-"]:hover:before,
+#fav-headerwrap .favnav .nav li a[class^="fa-"]:focus:before,
+#fav-headerwrap .favnav .nav li a[class*=" fa-"]:focus:before,
+#fav-headerwrap .favnav .nav li.active a[class^="fa-"]:before,
+#fav-headerwrap .favnav .nav li.active a[class*=" fa-"]:before,
+#fav-headerwrap .favnav .nav li span.nav-header[class^="fa-"]:hover:before,
+#fav-headerwrap .favnav .nav li span.nav-header[class*=" fa-"]:hover:before,
+#fav-headerwrap .favnav .nav li span.nav-header[class^="fa-"]:focus:before,
+#fav-headerwrap .favnav .nav li span.nav-header[class*=" fa-"]:focus:before,
+#fav-headerwrap .favnav .nav li.active span.nav-header[class^="fa-"]:before,
+#fav-headerwrap .favnav .nav li.active span.nav-header[class*=" fa-"]:before {
+    color: #fff !important;
+}
+
+/* nav change background color once selected */
+#fav-headerwrap .favnav .nav > .active > a,
+#fav-headerwrap .favnav .nav > li > a:hover,
+#fav-headerwrap .favnav .nav > li > a:focus,
+#fav-headerwrap .favnav .nav .menu > .active > a,
+#fav-headerwrap .favnav .nav .menu > li > a:hover,
+#fav-headerwrap .favnav .nav .menu > li > a:focus,
+#fav-headerwrap .favnav .nav li span.nav-header:hover,
+#fav-headerwrap .favnav .nav li span.nav-header:focus,
+#fav-headerwrap .favnav .nav > .active > span.nav-header,
+#fav-headerwrap .favnav .nav > li > span.nav-header:hover,
+#fav-headerwrap .favnav .nav > li > span.nav-header:focus,
+#fav-headerwrap .favnav .nav .menu > .active > span.nav-header,
+#fav-headerwrap .favnav .nav .menu > li > span.nav-header:hover,
+#fav-headerwrap .favnav .nav .menu > li > span.nav-header:focus {
+    background-color: #2F9EC2 !important;
+    color: #fff !important;
+}
+
+/* change links color */
+#fav-headerwrap .favnav .nav-child li a,
+#fav-headerwrap .favnav .nav-child li .nav-header,
+#fav-headerwrap .favnav .nav-child li.active .nav-header {
+    color: #444;
+}
+
+#fav-headerwrap .favnav li a:hover,
+#fav-headerwrap .favnav li a:focus,
+#fav-headerwrap .favnav li.active .nav-header,
+#fav-headerwrap .favnav li .nav-header:hover,
+#fav-headerwrap .favnav li .nav-header:focus {
+    color: #FFF;
+    background-color: #2F9EC2;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.fav-overlay {
+    background-color: rgba(17, 17, 17, 0.2);
+}
+
+
+/* Format Articles */
+#fav-main ol,
+#fav-main ul {
+    padding-left: 30px;
+}
+
+#fav-main ol li,
+#fav-main ul li {
+    margin-bottom: 10px;
+}
+
+#fav-maincontent {
+    margin-bottom: 40px;
+}
+
+img.article-img {
+    padding: 15px;
+    background-color: rgba(230, 230, 230, 0.5);
+    border-radius: 15px;
+    border: 1px solid rgb(200,200,200);
+    font-family: "Courier New", Courier, monospace;
+}
+
+/* An empty img is added in the List of Tagged Items. Using css to remove it */
+img.fav-tags-img {
+    display: none;
+}
+
+/* S: CUSTOMISING THE EXTENSIONS */
+
+/* favglyph */
+.favstyle div[id^="favglyph-icon"],
+.favstyle div[id*=" favglyph-icon"] {
+    background-color: #2F9EC2 !important;
+    border: 1px solid #2F9EC2 !important;
+}
+
+/* favglyph-box */
+.favstyle div[id^="favglyph-box"] i,
+.favstyle div[id*=" favglyph-box"] i {
+    color: #FFF !important;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+/* favglyph: favcustom for custom style in the glyphs used in the LP */
+.favcustom div[id^="favglyph-icon"],
+.favcustom div[id*=" favglyph-icon"] {
+    -webkit-box-shadow: 0 3px 8px 0 rgba(0,0,0,.17);
+    -moz-box-shadow: 0 3px 8px 0 rgba(0,0,0,.17);
+    box-shadow: 0 3px 8px 0 rgba(0,0,0,.17);
+}
+
+/* favglyph-box */
+.favcustom div[id^="favglyph-box"] i,
+.favcustom div[id*=" favglyph-box"] i,
+.favstats div[id^="favglyph-box"] i,
+.favstats div[id*=" favglyph-box"] i{
+    color: #2F9EC2 !important;
+}
+
+.favstats h2[id^="favglyph-description-"],
+.favstats h2[id*=" favglyph-description-"] {
+    margin: 5px !important;
+}
+
+/* faveffects */
+.favstyle div[id^="faveffects-icon"] i,
+.favstyle div[id*=" faveffects-icon"] i {
+    color: #2F9EC2 !important;
+}
+
+/* favpromote: make the link for prominent */
+div[id^="favpromote-box"]:hover a,
+div[id*=" favpromote-box"]:hover a,
+div[id^="favpromote-box"]:focus a,
+div[id*=" favpromote-box"]:focus a,
+div[id^="favpromote4col-box"]:hover a,
+div[id*=" favpromote4col-box"]:hover a,
+div[id^="favpromote4col-box"]:focus a,
+div[id*=" favpromote4col-box"]:focus a{
+    text-decoration: underline !important;
+}
+
+/* favpromote: hover same color as the img */
+div[id^="favpromote-box"]:hover, div[id*=" favpromote-box"]:hover, div[id^="favpromote-box"]:focus, div[id*=" favpromote-box"]:focus,
+div[id^="favpromote4col-box"]:hover, div[id*=" favpromote4col-box"]:hover, div[id^="favpromote4col-box"]:focus, div[id*=" favpromote4col-box"]:focus {
+    background-color: #F1F1F1 !important;
+}
+
+div[id^="favpromote-box"]:hover p[id^="favpromote-text"], div[id*=" favpromote-box"]:hover p[id^="favpromote-text"], div[id^="favpromote-box"]:hover p[id*=" favpromote-text"], div[id*=" favpromote-box"]:hover p[id*=" favpromote-text"],
+div[id^="favpromote4col-box"]:hover p[id^="favpromote4col-text"], div[id*=" favpromote4col-box"]:hover p[id^="favpromote4col-text"], div[id^="favpromote4col-box"]:hover p[id*=" favpromote4col-text"], div[id*=" favpromote4col-box"]:hover p[id*=" favpromote4col-text"]{
+    color: initial !important;
+}
+
+/* favpromote4col */
+p[id^="favpromote4col-widget"],
+p[id*=" favpromote4col-widget"] {
+    padding: 4px 21px 14px;
+    margin: 0;
+}
+
+/*
+.fav-module-block-light h3,
+.fav-module-block-light p {
+    color: #444;
+}
+
+/* favpromote + favpromote4col */
+div[id^="favpromote-image"] img,
+div[id^="favpromote4col-image"] img,
+div[id*=" favpromote-image"] img,
+div[id*=" favpromote4col-image"] img,
+div[id^="favpromote-image"] img:hover,
+div[id^="favpromote4col-image"] img:hover,
+div[id*=" favpromote-image"] img:hover,
+div[id*=" favpromote4col-image"] img:hover{
+    border: none;
+    box-shadow: none;
+    width: 200px;
+    height: 110px;
+    max-height:100%;
+    max-width:100%;
+    object-fit: contain;
+}
+
+
+/* E: CUSTOMISING THE EXTENSIONS */
+
+/* S: DOWNLOAD BUTTON*/
+#fav-download p {
+    margin: 0;
+}
+
+#fav-download #fav-download-message {
+    font-weight: 300;
+    font-size: 30px;
+    line-height: 1.3em;
+    float: left;
+    padding-top: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#fav-download #fav-download-btn {
+    float: right;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+#fav-download #fav-download-btn a.favth-btn {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 16px 24px 13px;
+    font-size: 18px;
+}
+
+#fav-download #fav-download-btn a.favth-btn i {
+    padding-right: 0.4em;
+    vertical-align: middle;
+    font-size: 18px;
+}
+
+#fav-download #fav-download-btn a.favth-btn:hover,
+#fav-download #fav-download-btn a.favth-btn:focus {
+    background-color: #fff !important;
+    color: #2F9EC2 !important;
+    border: 1px solid #fff;
+}
+
+#fav-download #fav-download-btn a.favth-btn:hover, #fav-download #fav-download-btn a.favth-btn:focus {
+    color: #2F9EC2 !important;
+}
+
+/* logo as text */
+.text-logo {
+    color: #2F9EC2;
+}
+
+#fav-logo h1 a {
+    display: block;
+}
+
+/* logo as image */
+.default-logo {
+    margin: 1px 0;
+}
+
+/* ########### RESIZE NOTICE ########### */
+#fav-noticewrap.alert {
+    padding: 5px 0 5px 0;
+}
+
+#fav-noticewrap {
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+#fav-notice {
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+#fav-notice .moduletable {
+    padding: 0;
+    border: none;
+}
+
+.rlp-noticemsg {
+    text-align: center;
+    margin: 0;
+}
+
+/* ########### MAIN SEARCH - HOME PAGE ########### */
+#fav-slide h3 {
+    text-align: center;
+}
+
+/* Can be removed once Joomla adopts Bootstrap 3 or 4 */
+.text-justify {
+    text-align: justify;
+}
+
+/* SEARCH - LANDING PAGE */
+input#mod-search-searchword,
+input#local-searchbox{
+    width: 50%;
+    vertical-align: top;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+
+div[class^="moduletable-"].main-search,
+div[class*=" moduletable-"].main-search,
+div[class^="moduletable "].main-search,
+div[class*=" moduletable "].main-search {
+    padding: 21px;
+}
+
+div[class^="moduletable-"].main-search div.search,
+div[class*=" moduletable-"].main-search div.search,
+div[class^="moduletable "].main-search div.search,
+div[class*=" moduletable "].main-search div.search {
+    margin: 1px;
+    border: none;
+    padding: 1px;
+}
+
+/* SEARCH - ALL OTHER PAGES */
+div[class^="moduletable-"].alt-search div.search,
+div[class*=" moduletable-"].alt-search div.search,
+div[class^="moduletable "].alt-search div.search,
+div[class*=" moduletable "].alt-search div.search,
+div[class^="moduletable-"].alt-search,
+div[class*=" moduletable-"].alt-search,
+div[class^="moduletable "].alt-search,
+div[class*=" moduletable "].alt-search {
+    margin: 1px;
+    border: none;
+    padding: 1px;
+}
+
+/* Adjust z-index of modal, it has top be on top of back to top */
+#cboxOverlay, #cboxWrapper, #colorbox {
+    z-index: 999999;
+}
+
+/* Clean form margin. Bootstrap adds margin-bottom in the form */
+.clean-form, .clean-margin {
+    margin: 0 !important;
+}
+
+/* CONTENT MENU */
+.custom-menu {
+    background-color: #333;
+}
+
+/* ########### LOGIN PAGE  ########### */
+.login-description {
+    padding: 8px 35px 8px 14px;
+    margin-bottom: 20px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    background-color: #fcf8e3;
+    border: 1px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    color: #c09853;
+}
+
+/** Default Margin **/
+#fav-container .margin0 {
+    margin: 0;
+}
+
+#fav-container .margin0.left {
+    margin-left: 15px;
+}
+
+#fav-container .margin0.left30 {
+    margin-left: 30px;
+}
+
+#fav-container .margin0.right {
+    margin-right: 15px;
+}
+
+#fav-container .margin0.right30 {
+    margin-right: 30px;
+}
+
+#fav-container .margin0.top {
+    margin-top: 15px;
+}
+
+#fav-container .margin0.top30 {
+    margin-top: 30px;
+}
+
+#fav-container .margin0.bottom {
+    margin-bottom: 15px;
+}
+
+#fav-container .margin0.bottom30 {
+    margin-bottom: 30px;
+}
+
+/** Default Padding **/
+#fav-container .padding0 {
+    padding: 0;
+}
+
+#fav-container .padding0.left {
+    padding-left: 15px;
+}
+
+#fav-container .padding0.left30 {
+    padding-left: 30px;
+}
+
+#fav-container .padding0.right {
+    padding-right: 15px;
+}
+
+#fav-container .padding0.right30 {
+    padding-right: 30px;
+}
+
+#fav-container .padding0.top {
+    padding-top: 15px;
+}
+
+#fav-container .padding0.top30 {
+    padding-top: 30px;
+}
+
+#fav-container .padding0.bottom {
+    padding-bottom: 15px;
+}
+
+#fav-container .padding0.bottom30 {
+    padding-bottom: 30px;
+}
+
+/** Adjusting maincontent page **/
+.page-header {
+    margin: 0;
+}
+
+.page-header h2 {
+    margin: 0;
+}
+
+.add-color {
+    background: #2F9EC2;
+    color: white !important;
+}
+
+/* FOOTER */
+#fav-footer {
+    padding-top: 6px;
+    padding-bottom: 2px;
+}
+
+.footer-menu {
+    padding-top: 10px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.footer-menu .nav-header {
+    padding:0;
+    color: #FFF;
+    font-weight:bold;
+}
+
+.footer-menu li a:hover,
+.footer-menu li a:focus {
+    text-decoration: none;
+    background: #f1f1f1;
+    color: #2F9EC2 !important;
+}
+
+ul.menu.footer-menu {
+    display: flex;
+    padding: 0 19px;
+    flex-direction: row;
+}
+
+ul.menu.footer-menu li {
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif, FontAwesome;
+    display: block;
+    padding: 7px;
+    line-height: 15px;
+}
+
+ul.menu.footer-menu > li > span,
+ul.menu.footer-menu > li > a {
+    font-size: 13px;
+    font-style: normal !important;
+    text-decoration: none !important;
+    text-shadow: none !important;
+    font-weight: bold;
+    line-height: 15px;
+}
+
+ul.menu.footer-menu > li > span:before,
+ul.menu.footer-menu > li > a:before {
+    padding-right: 5px;
+}
+
+/* ########### Style community > publications ########### */
+.article-publications ul {
+    list-style-type: lower-roman;
+    padding-left: 15px;
+}
+
+.article-publications ul li {
+    padding: 5px 20px 5px 5px;
+}
+
+.article-publications ul li:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.article-publications p {
+    background-color: #f1f1f1;
+    padding: 2px 10px;
+}
+
+/* Default Style for Tables */
+table.reactome {
+    width: 100%;
+    margin: 0 6px;
+}
+
+/* Zebra striping */
+table.reactome tr:nth-of-type(odd){
+    background: #F6F6F6;
+}
+
+table.reactome th {
+    background: #333;
+    color: white;
+    font-weight: bold;
+}
+
+table.reactome td,
+table.reactome th {
+    padding: 6px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+table.reactome td {
+    padding-left: 12px;
+}
+
+table.reactome thead tr:first-child th {
+    background-color: #2F9EC2;
+    /*text-align: center;*/
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* Download Article -- Downloads Page */
+#downloads-page ul {
+    list-style: none;
+    margin-left: 25px;
+}
+
+#downloads-page li {
+    line-height: 24px;
+}
+
+#downloads-page h3 {
+    font-size: 20px;
+}
+
+.ehld-search-bar .search {
+    margin: 0;
+    padding: 0;
+}
+
+table.instancebrowser tr:nth-of-type(odd){
+    background: #F6F6F6;
+}
+
+table.instancebrowser th {
+    background: #2F9EC2;
+    color: white;
+    font-weight: bold;
+}
+
+table.instancebrowser th a {
+    color: white;
+    font-weight: bold;
+}
+
+table.instancebrowser td,
+table.instancebrowser th {
+    padding: 6px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+table.instancebrowser td {
+    padding-left: 12px;
+}
+
+table.instancebrowser thead tr:first-child th {
+    background-color: #2F9EC2;
+    /*text-align: center;*/
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* ### TWITTER WIDGET ### */
+/* ### Note: Thoroughly test the responsive design once height is changed ### */
+.twitter-timeline {
+    background: none;
+    height: 525px !important;
+}
+
+/** Sync Tool **/
+.sync-tool-fs {
+    border: 1px solid #e7e7e7;
+    padding: 0 0 0 10px;
+    border-radius: 5px;
+    margin-bottom: 25px;
+    width: 270px;
+}
+
+.sync-tool-fs legend {
+    color: #2F9EC2;
+    font-size: 18px;
+    padding: 0;
+    margin-bottom: 0;
+    width: auto;
+}
+
+/** when prod environment is selected **/
+.sync-tool-prod {
+    border: 1px solid #FF0000 !important;
+}
+
+.sync-tool-prod legend {
+    color: red !important;
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .twitter-timeline {
+        height: 591px !important;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .twitter-timeline {
+        height: 605px !important;
+    }
+    ul.menu.footer-menu {
+        padding: 0;
+    }
+}
+/* ### END TWITTER WIDGET ### */
+
+@media only screen and (max-width: 1024px) {
+    .fav2buttons div[id^="favglyph-box"] i,
+    .fav2buttons div[id*=" favglyph-box"] i {
+        font-size: 2.8em !important;
+    }
+
+    #fav-download #fav-download-btn {
+        float: none;
+        font-size: 12px;
+        text-align: center;
+        bottom: 4px;
+        margin-top: 4px;
+        position: relative;
+    }
+
+    #fav-download #fav-download-message {
+        float: none;
+        text-align: center;
+        padding: 4px 0;
+        margin-bottom: 14px;
+    }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 991px) {
+    div[class^="moduletable-"].main-search,
+    div[class*=" moduletable-"].main-search,
+    div[class^="moduletable "].main-search,
+    div[class*=" moduletable "].main-search {
+        margin: 0 0 3px 0;
+    }
+
+    .form-inline {
+        margin: 0;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px){
+    #fav-logo h1 a {
+        display: block;
+        text-align: center;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    div[class^="moduletable-"].main-search,
+    div[class*=" moduletable-"].main-search,
+    div[class^="moduletable "].main-search,
+    div[class*=" moduletable "].main-search {
+        margin: 0 0 1px 0;
+        padding: 0;
+    }
+
+    .form-inline {
+        margin: 0;
+    }
+}
+
+/* RESPONSIVE TABLES: Enclosure table in <div id="r-responsive-table"> */
+@media only screen and (max-width: 767px) {
+    /* Force table to not be like tables anymore */
+    div[id^="r-responsive-table"] table.reactome,
+    div[id^="r-responsive-table"] table.reactome thead,
+    div[id^="r-responsive-table"] table.reactome tbody,
+    div[id^="r-responsive-table"] table.reactome th,
+    div[id^="r-responsive-table"] table.reactome td,
+    div[id^="r-responsive-table"] table.reactome tr {
+        display: block;
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    div[id^="r-responsive-table"] table.reactome thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    div[id^="r-responsive-table"] table.reactome tr {
+        border: 1px solid #ccc;
+    }
+
+    div[id^="r-responsive-table"] table.reactome td {
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid darkgray;
+        position: relative;
+        padding-left: 30%;
+        word-wrap: break-word;
+    }
+
+    div[id^="r-responsive-table"] table.reactome td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        content: attr(data-label); /* data-label has to be added in order to get the value <td data-label="Method" /> */
+    }
+
+    div[id^="r-responsive-table"] table.reactome td:first-child {
+        font-weight: bold;
+    }
+
+    #fav-footer {
+        padding: 0;
+    }
+
+    ul.menu.footer-menu {
+        display: flex;
+        /*padding: 19px;*/
+        flex-direction: column;
+        flex: 1;
+        align-items: center;
+    }
+
+    ul.menu.footer-menu li a,
+    ul.menu.footer-menu li span {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif, FontAwesome;
+        font-weight: normal;
+        font-size: 12px;
+        text-decoration: none;
+    }
+
+    div[id^="r-responsive-table"] table.reactome td:first-child {
+        font-weight: bold;
+    }
+
+    /* Remove logo margin */
+    #fav-logomobile .default-logo {
+        margin: 0;
+    }
+
+    /* Change logo size for phone devices */
+    .default-logo img, .media-logo img {
+        max-height: 45px;
+        margin: -6px;
+    }
+
+    /* adjusting margin of tweet widget for phone */
+    .moduletable.tweet-widget {
+        margin-top: 0;
+    }
+
+    /* Diagram Exporter: tables */
+    table.arguments tbody tr td:nth-of-type(1):before { content: "Name"; }
+    table.arguments tbody tr td:nth-of-type(2):before { content: "Description"; }
+    table.arguments tbody tr td:nth-of-type(3):before { content: "Values"; }
+    table.arguments tbody tr td:nth-of-type(4):before { content: "Default"; }
+
+    table.status tbody tr td:nth-of-type(1):before { content: "Feature"; }
+    table.status tbody tr td:nth-of-type(2):before { content: "Classic diagrams"; }
+    table.status tbody tr td:nth-of-type(3):before { content: "EHLDs"; }
+}
+
+@media  only screen and (max-width: 480px) {
+    #fav-lead div[id^="favglyph-box"],
+    #fav-lead div[id*=" favglyph-box"] {
+        border-bottom: 1px solid #eee;
+    }
+    #fav-lead div[id^="favglyph-box"]:last-child,
+    #fav-lead div[id*=" favglyph-box"]:last-child {
+        border-bottom: none;
+    }
+
+    div[class^="moduletable-"] div[id^="favglyph-box"],
+    div[class*=" moduletable-"] div[id*=" favglyph-box"] {
+        border-bottom: 1px solid #eee;
+    }
+
+    div[class^="last"] div[id^="favglyph-box"]:last-child,
+    div[class*=" last"] div[id^="favglyph-box"]:last-child {
+        border-bottom: none;
+    }
+
+    .form-horizontal .controls {
+         margin-left: 0;
+    }
+}
+
+@media only screen and (max-width: 425px) {
+    input#mod-search-searchword,
+    input#local-searchbox {
+        width: 85%;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    input#mod-search-searchword,
+    input#local-searchbox {
+        width: 80%;
+    }
+    
+    div[id^="r-responsive-table"] table.reactome td {
+	padding-left: 35%;
+    }
+}

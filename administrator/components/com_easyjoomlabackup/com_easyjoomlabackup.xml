@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.0" method="upgrade">
+    <name>COM_EASYJOOMLABACKUP</name>
+    <version>3.2.5</version>
+    <creationDate>2017-10-09</creationDate>
+    <license>http://www.gnu.org/licenses/gpl</license>
+    <copyright>Copyright 2017 Viktor Vogel. All rights reserved.</copyright>
+    <author>Viktor Vogel</author>
+    <authorEmail>admin@kubik-rubik.de</authorEmail>
+    <authorUrl>https://joomla-extensions.kubik-rubik.de/</authorUrl>
+    <description>COM_EASYJOOMLABACKUP_XML_DESCRIPTION</description>
+    <scriptfile>script.php</scriptfile>
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.sql</file>
+        </sql>
+    </install>
+    <update>
+        <schemas>
+            <schemapath type="mysql">sql/updates/mysql</schemapath>
+        </schemas>
+    </update>
+    <updateservers>
+        <server type="extension" priority="1" name="COM_EASYJOOMLABACKUP">https://check.kubik-rubik.de/updates/com_easyjoomlabackup.xml</server>
+    </updateservers>
+    <files folder="site">
+        <filename>index.html</filename>
+    </files>
+    <plugins>
+        <plugin folder="plugins" plugin="easyjoomlabackupcronjob" name="PLG_EASYJOOMLABACKUPCRONJOB" group="system" />
+    </plugins>
+    <administration>
+        <menu img="components/com_easyjoomlabackup/images/ejb-menu.png">COM_EASYJOOMLABACKUP</menu>
+        <files folder="admin">
+            <filename>index.html</filename>
+            <filename>easyjoomlabackup.php</filename>
+            <filename>controller.php</filename>
+            <filename>config.xml</filename>
+            <filename>access.xml</filename>
+            <filename>ejb_cli.php</filename>
+            <folder>backups</folder>
+            <folder>controllers</folder>
+            <folder>css</folder>
+            <folder>helpers</folder>
+            <folder>images</folder>
+            <folder>models</folder>
+            <folder>sql</folder>
+            <folder>tables</folder>
+            <folder>views</folder>
+        </files>
+        <languages folder="admin">
+            <language tag="en-GB">language/en-GB/en-GB.com_easyjoomlabackup.ini</language>
+            <language tag="en-GB">language/en-GB/en-GB.com_easyjoomlabackup.sys.ini</language>
+            <language tag="de-DE">language/de-DE/de-DE.com_easyjoomlabackup.ini</language>
+            <language tag="de-DE">language/de-DE/de-DE.com_easyjoomlabackup.sys.ini</language>
+        </languages>
+    </administration>
+</extension>

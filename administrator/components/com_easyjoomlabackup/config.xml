@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <fields addfieldpath="/administrator/components/com_easyjoomlabackup/models/fields">
+        <fieldset name="component">
+            <field type="krdonationcodecheck" />
+            <field name="ejbtitle_backup_process" type="krtitle" label="COM_EASYJOOMLABACKUP_BACKUPPROCESS" />
+            <field name="exclude_files" type="textarea" value="" rows="5" cols="60" filter="raw" label="COM_EASYJOOMLABACKUP_EXCLUDEFILES" description="COM_EASYJOOMLABACKUP_EXCLUDEFILESDESC" />
+            <field name="exclude_folders" type="textarea" value="" rows="5" cols="60" filter="raw" label="COM_EASYJOOMLABACKUP_EXCLUDEFOLDERS" description="COM_EASYJOOMLABACKUP_EXCLUDEFOLDERSDESC" />
+            <field name="add_drop_statement" type="list" default="0" label="COM_EASYJOOMLABACKUP_ADDDROPSTATEMENT" description="COM_EASYJOOMLABACKUP_ADDDROPSTATEMENTDESC">
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
+            <field name="add_db_tables" type="textarea" value="" rows="5" cols="60" filter="raw" label="COM_EASYJOOMLABACKUP_ADDDBTABLES" description="COM_EASYJOOMLABACKUP_ADDDBTABLESDESC" />
+            <field name="max_number_backups" type="text" default="5" size="40" filter="integer" label="COM_EASYJOOMLABACKUP_MAXNUMBERBACKUPS" description="COM_EASYJOOMLABACKUP_MAXNUMBERBACKUPSDESC" />
+            <field name="prefix_archive" type="text" default="" size="40" label="COM_EASYJOOMLABACKUP_PREFIXARCHIVE" description="COM_EASYJOOMLABACKUP_PREFIXARCHIVEDESC" />
+            <field name="add_suffix_archive" type="list" default="1" label="COM_EASYJOOMLABACKUP_ADDSUFFIXARCHIVE" description="COM_EASYJOOMLABACKUP_ADDSUFFIXARCHIVEDESC">
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
+        </fieldset>
+        <fieldset name="donation">
+            <field type="krdonationcodecheck" name="donation" />
+            <field name="donation_code" type="text" default="" size="40" label="KR_DONATION_CODE" description="KR_DONATION_CODEDESC" />
+        </fieldset>
+        <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+            <field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" validate="rules"	filter="rules" component="com_easyjoomlabackup" section="component" />
+        </fieldset>
+    </fields>
+</config>

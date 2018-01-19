@@ -1,0 +1,258 @@
+/*/
+////////////////////////////////////////////////////////////////////////////////
+///
+///  admin css
+///
+////////////////////////////////////////////////////////////////////////////////
+/*/
+
+/*//////////////////////////////////////////////////////////////////////////////
+
+1. layout
+
+//////////////////////////////////////////////////////////////////////////////*/
+
+ul#myTabTabs.nav.nav-tabs:before,
+ul#myTabTabs.nav.nav-tabs:hover:before,
+ul#myTabTabs.nav.nav-tabs a[href="#general"]:before,
+ul#myTabTabs.nav.nav-tabs a[href="#assignment"]:before,
+ul#myTabTabs.nav.nav-tabs a[href="#permissions"]:before,
+ul#myTabTabs.nav.nav-tabs a[href="#attrib-advanced"]:before,
+ul#myTabTabs.nav.nav-tabs a[href="#attrib-settings"]:before,
+ul#myTabTabs.nav.nav-tabs a[href="#attrib-content"]:before {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  line-height: normal;
+  vertical-align: baseline;
+  background-image: none !important;
+  background-position: 0% 0%;
+  background-repeat: repeat;
+  position: relative;
+  display: block;
+  text-align: center;
+  font-size: 21px;
+  color: #444;
+  padding-top: 9px;
+  margin-bottom: 4px;
+}
+ul#myTabTabs.nav.nav-tabs a[href="#general"]:before {
+  content: "\f00a";
+}
+ul#myTabTabs.nav.nav-tabs a[href="#assignment"]:before {
+  content: "\f0e8";
+}
+ul#myTabTabs.nav.nav-tabs a[href="#permissions"]:before {
+  content: "\f046";
+}
+ul#myTabTabs.nav.nav-tabs a[href="#attrib-advanced"]:before {
+  content: "\f12e";
+}
+ul#myTabTabs.nav.nav-tabs a[href="#attrib-settings"]:before {
+  content: "\f085";
+}
+ul#myTabTabs.nav.nav-tabs a[href="#attrib-content"]:before {
+  content: "\f044";
+}
+ul#myTabTabs.nav.nav-tabs a:hover:before,
+ul#myTabTabs.nav.nav-tabs li.active a:before {
+  color: #09f;
+}
+
+/*/
+///
+///  tabs
+///
+/*/
+
+ul#myTabTabs {
+  margin-bottom: 16px;
+  border: none;
+}
+div#myTabContent .span6 {
+  margin-top: 21px;
+  margin-left: 0;
+  width: 100%;
+}
+div#myTabContent .control-group hr {
+  border-top: 1px solid #dddddd;
+  border-bottom: 1px solid #ffffff;
+  width: 710px;
+  margin: 0;
+}
+div#myTabContent .control-label {
+  width: 20em;
+}
+div#myTabContent textarea {
+  width: 400px;
+}
+ul#myTabTabs.nav.nav-tabs li a {
+  color: #444444;
+  background-color: transparent;
+  background-image: linear-gradient(to bottom, #FFF, #E6E6E6);
+  padding: 7px 18px 7px;
+  line-height: 24px;
+  border: 1px solid #DDD;
+  border-radius: 4px;
+  margin-right: 0;
+  min-width: 60px;
+  text-align: center;
+  background-repeat: repeat-x;
+  transition: all 300ms linear 0s;
+}
+ul#myTabTabs.nav.nav-tabs li a:focus {
+  outline: none;
+  outline-offset: 0;
+}
+ul#myTabTabs.nav.nav-tabs li.active a,
+ul#myTabTabs.nav.nav-tabs > li a:hover {
+  background-image: linear-gradient(to bottom, #E6E6E6, #FFF);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15) inset, 0px 1px 2px rgba(0, 0, 0, 0.05);
+  color: #444;
+}
+.favtitle h4 {
+  font-family: "Open Sans",Helvetica,Arial,sans-serif;
+  color: #09F;
+  cursor: default;
+  font-size: 17px;
+  text-transform: uppercase;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 24px 0;
+  width: 710px;
+  font-weight: normal;
+}
+.favtitle.first h4 {
+  margin-top: -16px;
+  border-top: 0 none;
+}
+.favsubtitle h4 {
+  font-family: "Open Sans",Helvetica,Arial,sans-serif;
+  color: #09F;
+  font-weight: normal;
+}
+.favsubtitle h4:before {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  line-height: normal;
+  vertical-align: baseline;
+  content: "\f044";
+  padding-right: 0.4em;
+}
+
+/*/
+///
+///  collapsible
+///
+/*/
+
+.control-group.favcollapseh {
+  margin-bottom: 0;
+}
+.control-group.favcollapseh .favtitle.first h4 {
+  margin-top: -16px;
+  border-top: 0 none;
+}
+.control-group.favcollapseh .favtitle h4 {
+  border-bottom: 0 none;
+  margin: 0;
+  cursor: pointer;
+}
+.control-group.favcollapseh .favtitle h4:before {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  line-height: normal;
+  vertical-align: baseline;
+  content: "\f196";
+  float: right;
+}
+.favcollapseh.favcollapsehactive .favtitle h4 {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 28px;
+}
+.favcollapseh.favcollapsehactive .favtitle h4:before {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  line-height: normal;
+  vertical-align: baseline;
+  content: "\f147";
+  float: right;
+}
+
+/*/
+///
+///  mobile
+///
+/*/
+
+@media handheld, only screen and (max-width: 800px) {
+
+  /*/  icons  /*/
+
+  ul#myTabTabs.nav.nav-tabs:before,
+  ul#myTabTabs.nav.nav-tabs:hover:before,
+  ul#myTabTabs.nav.nav-tabs a[href="#general"]:before,
+  ul#myTabTabs.nav.nav-tabs a[href="#assignment"]:before,
+  ul#myTabTabs.nav.nav-tabs a[href="#permissions"]:before,
+  ul#myTabTabs.nav.nav-tabs a[href="#attrib-advanced"]:before,
+  ul#myTabTabs.nav.nav-tabs a[href="#attrib-settings"]:before,
+  ul#myTabTabs.nav.nav-tabs a[href="#attrib-content"]:before {
+    display: inline;
+    margin-right: 10px;
+    font-size: 14px;
+  }
+
+  /*/  tabs  /*/
+
+  ul#myTabTabs.nav.nav-tabs {
+    border: 0px none;
+  }
+  ul#myTabTabs.nav.nav-tabs > li {
+    float: none;
+  }
+  ul#myTabTabs.nav.nav-tabs li a {
+    border-radius: 4px;
+    background-color: #eee;
+    background-image: linear-gradient(to bottom, #fff, #eee);
+    padding: 12px 14px 10px;
+    text-align: left;
+    transition: none;
+  }
+  ul#myTabTabs.nav.nav-tabs li.active a,
+  ul#myTabTabs.nav.nav-tabs > li a:hover {
+    background-color: #eee;
+    background-image: none;
+  }
+  #myTabContent.tab-content div.control-group div.control-label,
+  #myTabContent.tab-content div.control-group div.controls {
+    float: none;
+    margin: 0;
+  }
+  .favtitle h4 {
+    width: auto;
+  }
+
+}
+
+/*//////////////////////////////////////////////////////////////////////////////
+
+2. fixes
+
+//////////////////////////////////////////////////////////////////////////////*/
+
+.control-group.favcollapsec label[id^="jform_params"],
+.control-group.favcollapsec label[id*=" jform_params"] {
+  background-color: transparent !important;
+  background-image: none !important;
+  color: #333 !important;
+  text-shadow: none !important;
+  border: 0 none !important;
+  box-shadow: none !important;
+}

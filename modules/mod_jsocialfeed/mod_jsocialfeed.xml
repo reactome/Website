@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="1.7" method="upgrade" client="site">
+	<name>mod_jsocialfeed</name>
+	<creationDate>03/06/2014</creationDate>
+	<author>Garda Informatica</author>
+	<authorEmail>info@gardainformatica.it</authorEmail>
+	<authorUrl>http://www.gardainformatica.it/</authorUrl>
+	<copyright>Garda Informatica</copyright>
+	<license>GNU/GPL - http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<version>1.5.4</version>
+	<description>MOD_JSOCIALFEED_DESCRIPTION</description>
+
+	<files>
+		<filename module="mod_jsocialfeed">mod_jsocialfeed.php</filename>
+		<filename>mod_jsocialfeed.xml</filename>
+		<filename>index.html</filename>
+		<folder>language</folder>
+		<folder>tmpl</folder>
+	</files>
+
+	<config>
+		<fields name="params">
+
+			<fieldset name="basic" addfieldpath="/libraries/jsocialfeed/models/fields">
+				<field type="langloader"/>
+				<field type="transchecker"/>
+				<field type="register"/>
+			
+				<field name="pause" type="text" size="6" label="JSOCIALFEED_PAUSE_LBL" description="JSOCIALFEED_PAUSE_DSC" default="2" required="true"/>
+				<field name="scroll" type="list" label="JSOCIALFEED_SCROLL_LBL" description="JSOCIALFEED_SCROLL_DSC" default="horizontal">
+					<option value="vertical">JSOCIALFEED_SCROLL_VERTICAL</option>
+					<option value="horizontal">JSOCIALFEED_SCROLL_HORIZONTAL</option>
+					<option value="fade">JSOCIALFEED_SCROLL_FADE</option>
+				</field>
+				
+				<field name="easing" type="list" label="JSOCIALFEED_EASING_LBL" description="JSOCIALFEED_EASING_DSC" default="linear">
+					<option value="linear">linear</option>
+					<option value="ease">ease</option>
+					<option value="ease-in">ease-in</option>
+					<option value="ease-out">ease-out</option>
+					<option value="ease-in-out">ease-in-out</option>
+					<option value="swing">swing</option>
+					<option value="easeInQuad">easeInQuad</option>
+					<option value="easeOutQuad">easeOutQuad</option>
+					<option value="easeInOutQuad">easeInOutQuad</option>
+					<option value="easeInCubic">easeInCubic</option>
+					<option value="easeOutCubic">easeOutCubic</option>
+					<option value="easeInOutCubic">easeInOutCubic</option>
+					<option value="easeInQuart">easeInQuart</option>
+					<option value="easeOutQuart">easeOutQuart</option>
+					<option value="easeInOutQuart">easeInOutQuart</option>
+					<option value="easeInQuint">easeInQuint</option>
+					<option value="easeOutQuint">easeOutQuint</option>
+					<option value="easeInOutQuint">easeInOutQuint</option>
+					<option value="easeInSine">easeInSine</option>
+					<option value="easeOutSine">easeOutSine</option>
+					<option value="easeInOutSine">easeInOutSine</option>
+					<option value="easeInExpo">easeInExpo</option>
+					<option value="easeOutExpo">easeOutExpo</option>
+					<option value="easeInOutExpo">easeInOutExpo</option>
+					<option value="easeInCirc">easeInCirc</option>
+					<option value="easeOutCirc">easeOutCirc</option>
+					<option value="easeInOutCirc">easeInOutCirc</option>
+					<option value="easeInElastic">easeInElastic</option>
+					<option value="easeOutElastic">easeOutElastic</option>
+					<option value="easeInOutElastic">easeInOutElastic</option>
+					<option value="easeInBack">easeInBack</option>
+					<option value="easeOutBack">easeOutBack</option>
+					<option value="easeInOutBack">easeInOutBack</option>
+					<option value="easeInBounce">easeInBounce</option>
+					<option value="easeOutBounce">easeOutBounce</option>
+					<option value="easeInOutBounce">easeInOutBounce</option>
+				</field>
+
+				
+                <field name="adaptive_height" type="list" label="JSOCIALFEED_ADAPTIVE_HEIGHT_LBL" description="JSOCIALFEED_ADAPTIVE_HEIGHT_DSC" default="1">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+				
+				<field name="vertical_num_slides" type="text" size="6" label="JSOCIALFEED_VERTICAL_NUM_SLIDES_LBL" description="JSOCIALFEED_VERTICAL_NUM_SLIDES_DSC" default="1" />
+				<field name="vertical_move_slides" type="text" size="6" label="JSOCIALFEED_VERTICAL_MOVE_SLIDES_LBL" description="JSOCIALFEED_VERTICAL_MOVE_SLIDES_DSC" default="1" />
+
+				
+				<field name="title_max_length" type="text" size="6" label="JSOCIALFEED_TITLE_MAX_LENGTH_LBL" description="JSOCIALFEED_TITLE_MAX_LENGTH_DSC" default="60" />
+				<field name="description_max_length" type="text" size="6" label="JSOCIALFEED_DESC_MAX_LENGTH_LBL" description="JSOCIALFEED_DESC_MAX_LENGTH_DSC" default="140" />
+			
+				<field name="num_items_per_feed" type="text" size="6" label="JSOCIALFEED_NUM_ITEMS_PER_FEED_LBL" description="JSOCIALFEED_NUM_ITEMS_PER_FEED_DSC" default="5" />
+				<field name="feed_cache_lifetime" type="text" size="6" label="JSOCIALFEED_FEED_CACHE_LIFETIME_LBL" description="JSOCIALFEED_FEED_CACHE_LIFETIME_DSC" default="60" />
+				
+                <field name="hide_thumb" type="list" label="JSOCIALFEED_HIDE_THUMB_LBL" description="JSOCIALFEED_HIDE_THUMB_DSC" default="0">
+                    <option value="0">JSHOW</option>
+                    <option value="1">JHIDE</option>
+                </field>
+                <field name="hide_title" type="list" label="JSOCIALFEED_HIDE_TITLE_LBL" description="JSOCIALFEED_HIDE_TITLE_DSC" default="0">
+                    <option value="0">JSHOW</option>
+                    <option value="1">JHIDE</option>
+                </field>
+                <field name="hide_description" type="list" label="JSOCIALFEED_HIDE_DESC_LBL" description="JSOCIALFEED_HIDE_DESC_DSC" default="0">
+                    <option value="0">JSHOW</option>
+                    <option value="1">JHIDE</option>
+                </field>
+                <field name="hide_date" type="list" label="JSOCIALFEED_HIDE_DATE_LBL" description="JSOCIALFEED_HIDE_DATE_DSC" default="0">
+                    <option value="0">JSHOW</option>
+                    <option value="1">JHIDE</option>
+                </field>
+                <field name="hide_likes" type="list" label="JSOCIALFEED_HIDE_LIKES_LBL" description="JSOCIALFEED_HIDE_LIKES_DSC" default="0">
+                    <option value="0">JSHOW</option>
+                    <option value="1">JHIDE</option>
+                </field>
+                <field name="hide_reshares" type="list" label="JSOCIALFEED_HIDE_RESHARES_LBL" description="JSOCIALFEED_HIDE_RESHARES_DSC" default="0">
+                    <option value="0">JSHOW</option>
+                    <option value="1">JHIDE</option>
+                </field>
+                <field name="hide_comments" type="list" label="JSOCIALFEED_HIDE_COMMENTS_LBL" description="JSOCIALFEED_HIDE_COMMENTS_DSC" default="0">
+                    <option value="0">JSHOW</option>
+                    <option value="1">JHIDE</option>
+                </field>
+				
+				
+                <field name="feed_order_by" type="list" label="JSOCIALFEED_FEED_ORDER_BY_LBL" description="JSOCIALFEED_FEED_ORDER_BY_DSC" default="datedesc">
+                    <option value="item">JSOCIALFEED_FEED_ORDER_BY_ITEM</option>
+                    <option value="reversed">JSOCIALFEED_FEED_ORDER_BY_REVERSED</option>
+                    <option value="dateasc">JSOCIALFEED_FEED_ORDER_BY_DATEASC</option>
+                    <option value="datedesc">JSOCIALFEED_FEED_ORDER_BY_DATEDESC</option>
+                    <option value="random">JSOCIALFEED_FEED_ORDER_BY_RANDOM</option>
+                </field>
+				
+				<field type="spacer" label="" />
+				<field type="spacer" label="Atom/RSS Feed" />
+				
+                <field name="show_rss_atom_channel" type="list" label="JSOCIALFEED_SHOW_RSS_ATOM_CHANNEL_LBL" description="JSOCIALFEED_SHOW_RSS_ATOM_CHANNEL_DSC" default="0">
+                    <option value="0">JHIDE</option>
+                    <option value="1">JSHOW</option>
+                </field>
+				<field name="rss_atom_thumb_width" type="text" size="6" label="JSOCIALFEED_RSS_ATOM_THUMB_WIDTH_LBL" description="JSOCIALFEED_RSS_ATOM_THUMB_WIDTH_DSC" default="50" />
+				<field name="rss_atom_thumb_height" type="text" size="6" label="JSOCIALFEED_RSS_ATOM_THUMB_HEIGHT_LBL" description="JSOCIALFEED_RSS_ATOM_THUMB_HEIGHT_DSC" default="50" />
+				
+				<field type="spacer" label="" />
+
+				<field name="rss_atom_url1" type="url" label="JSOCIALFEED_RSS_ATOM_URL_LBL" description="JSOCIALFEED_RSS_ATOM_URL_DSC" />
+				<field name="rss_atom_channel_title1" type="text" label="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_DSC" />
+				<field name="rss_atom_channel_link1" type="url" label="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_DSC" />
+				<field type="spacer" label="" />
+				
+
+				<field name="rss_atom_url2" type="url" label="JSOCIALFEED_RSS_ATOM_URL_LBL" description="JSOCIALFEED_RSS_ATOM_URL_DSC" />
+				<field name="rss_atom_channel_title2" type="text" label="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_DSC" />
+				<field name="rss_atom_channel_link2" type="url" label="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_DSC" />
+				<field type="spacer" label="" />
+
+				<field name="rss_atom_url3" type="url" label="JSOCIALFEED_RSS_ATOM_URL_LBL" description="JSOCIALFEED_RSS_ATOM_URL_DSC" />
+				<field name="rss_atom_channel_title3" type="text" label="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_DSC" />
+				<field name="rss_atom_channel_link3" type="url" label="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_DSC" />
+				<field type="spacer" label="" />
+
+				<field name="rss_atom_url4" type="url" label="JSOCIALFEED_RSS_ATOM_URL_LBL" description="JSOCIALFEED_RSS_ATOM_URL_DSC" />
+				<field name="rss_atom_channel_title4" type="text" label="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_DSC" />
+				<field name="rss_atom_channel_link4" type="url" label="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_DSC" />
+				<field type="spacer" label="" />
+
+				<field name="rss_atom_url5" type="url" label="JSOCIALFEED_RSS_ATOM_URL_LBL" description="JSOCIALFEED_RSS_ATOM_URL_DSC" />
+				<field name="rss_atom_channel_title5" type="text" label="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_DSC" />
+				<field name="rss_atom_channel_link5" type="url" label="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_DSC" />
+				<field type="spacer" label="" />
+
+				<field name="rss_atom_url6" type="url" label="JSOCIALFEED_RSS_ATOM_URL_LBL" description="JSOCIALFEED_RSS_ATOM_URL_DSC" />
+				<field name="rss_atom_channel_title6" type="text" label="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_DSC" />
+				<field name="rss_atom_channel_link6" type="url" label="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_DSC" />
+				<field type="spacer" label="" />
+
+				<field name="rss_atom_url7" type="url" label="JSOCIALFEED_RSS_ATOM_URL_LBL" description="JSOCIALFEED_RSS_ATOM_URL_DSC" />
+				<field name="rss_atom_channel_title7" type="text" label="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_DSC" />
+				<field name="rss_atom_channel_link7" type="url" label="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_DSC" />
+				<field type="spacer" label="" />
+
+				<field name="rss_atom_url8" type="url" label="JSOCIALFEED_RSS_ATOM_URL_LBL" description="JSOCIALFEED_RSS_ATOM_URL_DSC" />
+				<field name="rss_atom_channel_title8" type="text" label="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_DSC" />
+				<field name="rss_atom_channel_link8" type="url" label="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_DSC" />
+				<field type="spacer" label="" />
+
+				<field name="rss_atom_url9" type="url" label="JSOCIALFEED_RSS_ATOM_URL_LBL" description="JSOCIALFEED_RSS_ATOM_URL_DSC" />
+				<field name="rss_atom_channel_title9" type="text" label="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_DSC" />
+				<field name="rss_atom_channel_link9" type="url" label="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_DSC" />
+				<field type="spacer" label="" />
+
+				<field name="rss_atom_url10" type="url" label="JSOCIALFEED_RSS_ATOM_URL_LBL" description="JSOCIALFEED_RSS_ATOM_URL_DSC" />
+				<field name="rss_atom_channel_title10" type="text" label="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_TITLE_DSC" />
+				<field name="rss_atom_channel_link10" type="url" label="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_LBL" description="JSOCIALFEED_RSS_ATOM_CHANNEL_LINK_DSC" />
+				<field type="spacer" label="" />
+				
+				<field type="spacer" label="" />
+				<field type="spacer" label="Google+" />
+				<field name="google_api_key" type="text" label="JSOCIALFEED_GOOGLE_API_KEY_LBL" description="JSOCIALFEED_GOOGLE_API_KEY_DSC"/>
+				<field name="google_user_id1" type="text" label="JSOCIALFEED_GOOGLE_USER_ID_LBL" description="JSOCIALFEED_GOOGLE_USER_ID_DSC"/>
+				<field name="google_user_id2" type="text" label="JSOCIALFEED_GOOGLE_USER_ID_LBL" description="JSOCIALFEED_GOOGLE_USER_ID_DSC"/>
+				<field name="google_user_id3" type="text" label="JSOCIALFEED_GOOGLE_USER_ID_LBL" description="JSOCIALFEED_GOOGLE_USER_ID_DSC"/>
+				<field name="google_user_id4" type="text" label="JSOCIALFEED_GOOGLE_USER_ID_LBL" description="JSOCIALFEED_GOOGLE_USER_ID_DSC"/>
+				<field name="google_user_id5" type="text" label="JSOCIALFEED_GOOGLE_USER_ID_LBL" description="JSOCIALFEED_GOOGLE_USER_ID_DSC"/>
+				<field name="google_user_id6" type="text" label="JSOCIALFEED_GOOGLE_USER_ID_LBL" description="JSOCIALFEED_GOOGLE_USER_ID_DSC"/>
+				<field name="google_user_id7" type="text" label="JSOCIALFEED_GOOGLE_USER_ID_LBL" description="JSOCIALFEED_GOOGLE_USER_ID_DSC"/>
+				<field name="google_user_id8" type="text" label="JSOCIALFEED_GOOGLE_USER_ID_LBL" description="JSOCIALFEED_GOOGLE_USER_ID_DSC"/>
+				<field name="google_user_id9" type="text" label="JSOCIALFEED_GOOGLE_USER_ID_LBL" description="JSOCIALFEED_GOOGLE_USER_ID_DSC"/>
+				<field name="google_user_id10" type="text" label="JSOCIALFEED_GOOGLE_USER_ID_LBL" description="JSOCIALFEED_GOOGLE_USER_ID_DSC"/>
+				
+				
+				<field type="spacer" label="" />
+				<field type="spacer" label="Twitter" />
+				<field name="twitter_consumer_key" type="text" label="JSOCIALFEED_TWITTER_CONSUMER_KEY_LBL" description="JSOCIALFEED_TWITTER_CONSUMER_KEY_DSC"/>
+				<field name="twitter_consumer_secret" type="text" label="JSOCIALFEED_TWITTER_CONSUMER_SECRET_LBL" description="JSOCIALFEED_TWITTER_CONSUMER_SECRET_DSC"/>
+				<field name="twitter_user_name1" type="text" label="JSOCIALFEED_TWITTER_USER_NAME_LBL" description="JSOCIALFEED_TWITTER_USER_NAME_DSC"/>
+				<field name="twitter_user_name2" type="text" label="JSOCIALFEED_TWITTER_USER_NAME_LBL" description="JSOCIALFEED_TWITTER_USER_NAME_DSC"/>
+				<field name="twitter_user_name3" type="text" label="JSOCIALFEED_TWITTER_USER_NAME_LBL" description="JSOCIALFEED_TWITTER_USER_NAME_DSC"/>
+				<field name="twitter_user_name4" type="text" label="JSOCIALFEED_TWITTER_USER_NAME_LBL" description="JSOCIALFEED_TWITTER_USER_NAME_DSC"/>
+				<field name="twitter_user_name5" type="text" label="JSOCIALFEED_TWITTER_USER_NAME_LBL" description="JSOCIALFEED_TWITTER_USER_NAME_DSC"/>
+				<field name="twitter_user_name6" type="text" label="JSOCIALFEED_TWITTER_USER_NAME_LBL" description="JSOCIALFEED_TWITTER_USER_NAME_DSC"/>
+				<field name="twitter_user_name7" type="text" label="JSOCIALFEED_TWITTER_USER_NAME_LBL" description="JSOCIALFEED_TWITTER_USER_NAME_DSC"/>
+				<field name="twitter_user_name8" type="text" label="JSOCIALFEED_TWITTER_USER_NAME_LBL" description="JSOCIALFEED_TWITTER_USER_NAME_DSC"/>
+				<field name="twitter_user_name9" type="text" label="JSOCIALFEED_TWITTER_USER_NAME_LBL" description="JSOCIALFEED_TWITTER_USER_NAME_DSC"/>
+				<field name="twitter_user_name10" type="text" label="JSOCIALFEED_TWITTER_USER_NAME_LBL" description="JSOCIALFEED_TWITTER_USER_NAME_DSC"/>
+				
+				
+				<field type="spacer" label="" />
+				<field type="spacer" label="Facebook" />
+				<field name="facebook_app_id" type="text" label="JSOCIALFEED_FACEBOOK_APP_ID_LBL" description="JSOCIALFEED_FACEBOOK_APP_ID_DSC"/>
+				<field name="facebook_app_secret" type="text" label="JSOCIALFEED_FACEBOOK_APP_SECRET_LBL" description="JSOCIALFEED_FACEBOOK_APP_SECRET_DSC"/>
+				<field name="facebook_page_id1" type="text" label="JSOCIALFEED_FACEBOOK_PAGE_ID_LBL" description="JSOCIALFEED_FACEBOOK_PAGE_ID_DSC"/>
+				<field name="facebook_page_id2" type="text" label="JSOCIALFEED_FACEBOOK_PAGE_ID_LBL" description="JSOCIALFEED_FACEBOOK_PAGE_ID_DSC"/>
+				<field name="facebook_page_id3" type="text" label="JSOCIALFEED_FACEBOOK_PAGE_ID_LBL" description="JSOCIALFEED_FACEBOOK_PAGE_ID_DSC"/>
+				<field name="facebook_page_id4" type="text" label="JSOCIALFEED_FACEBOOK_PAGE_ID_LBL" description="JSOCIALFEED_FACEBOOK_PAGE_ID_DSC"/>
+				<field name="facebook_page_id5" type="text" label="JSOCIALFEED_FACEBOOK_PAGE_ID_LBL" description="JSOCIALFEED_FACEBOOK_PAGE_ID_DSC"/>
+				<field name="facebook_page_id6" type="text" label="JSOCIALFEED_FACEBOOK_PAGE_ID_LBL" description="JSOCIALFEED_FACEBOOK_PAGE_ID_DSC"/>
+				<field name="facebook_page_id7" type="text" label="JSOCIALFEED_FACEBOOK_PAGE_ID_LBL" description="JSOCIALFEED_FACEBOOK_PAGE_ID_DSC"/>
+				<field name="facebook_page_id8" type="text" label="JSOCIALFEED_FACEBOOK_PAGE_ID_LBL" description="JSOCIALFEED_FACEBOOK_PAGE_ID_DSC"/>
+				<field name="facebook_page_id9" type="text" label="JSOCIALFEED_FACEBOOK_PAGE_ID_LBL" description="JSOCIALFEED_FACEBOOK_PAGE_ID_DSC"/>
+				<field name="facebook_page_id10" type="text" label="JSOCIALFEED_FACEBOOK_PAGE_ID_LBL" description="JSOCIALFEED_FACEBOOK_PAGE_ID_DSC"/>
+
+				
+			</fieldset>
+
+			
+			<fieldset
+				name="advanced">
+				
+				<field name="load_jquery"
+					type="radio"
+					class="btn-group"
+					default="1"
+					label="MOD_JSOCIALFEED_LOAD_JQUERY_LBL"
+					description="MOD_JSOCIALFEED_LOAD_JQUERY_DSC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="custom_css" type="textarea" default="" label="JSOCIALFEED_CUSTOM_CSS_LBL" description="JSOCIALFEED_CUSTOM_CSS_DSC" rows="10" cols="5" filter="raw" />
+				
+				<field name="html_tags_whitelist" type="text" label="JSOCIALFEED_HTML_TAGS_WHITELIST_LBL" description="JSOCIALFEED_HTML_TAGS_WHITELIST_DSC" default="span, a, strong"/>
+				
+				
+				<field
+					name="layout"
+					type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+
+				<field
+					name="moduleclass_sfx"
+					type="textarea" rows="3"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+				<field
+					name="cache_time"
+					type="text"
+					default="900"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+			</fieldset>
+		</fields>
+	</config>
+
+</extension>

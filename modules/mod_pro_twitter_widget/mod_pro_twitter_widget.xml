@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+	type="module"
+	version="3.1"
+	client="site"
+	method="upgrade">
+	<name>PRO Twitter Widget</name>
+	<author>Joe Morrison</author>
+	<creationDate>January 2016</creationDate>
+	<copyright>Copyright (C) 2016. All rights reserved by highschooldiplomaonlinefast.com.</copyright>
+	<license>GNU General Public License version 2 or later</license>
+	<authorEmail>joemorrisonyt@yahoo.com</authorEmail>
+	<authorUrl>http://www.highschooldiplomaonlinefast.com/extensions</authorUrl>
+	<version>1.0</version>
+	<description>Thanks for installing PRO Twitter Widget.</description>
+	<files>
+		<filename module="mod_pro_twitter_widget">mod_pro_twitter_widget.php</filename>
+		<folder>tmpl</folder>
+		<filename>index.html</filename>
+		<filename>mod_pro_twitter_widget.xml</filename>
+	</files>
+	<config>
+            <fields name="params">
+                 <fieldset name="basic">
+				   
+				  <field
+						name="twitter_id"
+						type="text"
+						default="470475991895138304"
+						label="Your Twitter Id"
+						description="Your Twitter Id" />
+				 
+	  
+				  <field
+						name="twitter_name"
+						type="text"
+						default="BarackObama"
+						label="Your Twitter Name"
+						description="Your Twitter Name" />	
+						
+					<field type="spacer" name="&lt;div style=&quot;color:#000; width:400px; font-size:12px; font-weight:bold; padding:10px; margin:0; text-align:center; background:#dedede;&quot;&gt; Customization Options &lt;/div&gt;" />
+					
+					  
+				   <field
+						name="width"
+						type="text"
+						default="300"
+						label="Width"
+						description="Width" />	
+						
+				   <field
+						name="height"
+						type="text"
+						default="150px"
+						label="Height"
+						description="Height" />		
+			
+				<field name="scrollbar" class="btn-group" type="radio" label="Show Scrollbar" default="true" description="Show Scrollbar">
+						<option value="true">Yes</option>
+						<option value="false">No</option>
+                 </field>	
+						
+					<field name="color_scheme" class="btn-group" type="radio" default="0" label="Color Scheme" description="">
+						  <option value="0">Light</option>
+						  <option value="1">Dark</option>
+					</field>	
+						
+				   <field
+						name="backgroundColor"
+						type="color"
+						default="#f5784f"
+						label="Link Color"
+						description="Link Color" />
+						
+					
+					<field name="header" class="btn-group" type="radio" label="Show Header" default="true" description="Show Header">
+						<option value="true">Yes</option>
+						<option value="false">No</option>
+                   </field>
+					
+				   <field name="footer" class="btn-group" type="radio" label="Show Footer" default="true" description="Show Footer">
+						<option value="true">Yes</option>
+						<option value="false">No</option>
+                  </field>	
+				
+				 
+				 <field name="border" class="btn-group" type="radio" label="Show Border" default="true" description="Show Border">
+						<option value="true">Yes</option>
+						<option value="false">No</option>
+                 </field>
+				 	
+				  <field type="spacer" name="&lt;div style=&quot;color:red; width:400px; font-size:12px; font-family:sans; margin:0;  ;&quot;&gt; * if you remove backgrouncolor then you can add your customize backgroundcolor. &lt;/div&gt;" />	
+				 
+				 <field name="tranparent" class="btn-group" type="radio" label="Remove Background Color" default="false" description="Remove Background Color">
+						<option value="true">Yes</option>
+						<option value="false">No</option>
+                 </field>
+						
+				 <field
+						name="backgroundColors"
+						type="color"
+						default="#e6e1e2"
+						label="Background Color"
+						description="Active Default Background color" />		
+				  
+					  
+			</fieldset>
+			
+			   
+                    <fieldset name="advanced">
+                      <field name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL" description="JFIELD_ALT_LAYOUT_DESC" />
+                        <field
+							name="moduleclass_sfx"
+							type="text" 
+							label="Module Class Suffix"
+							description="Put your module class suffix here" />	
+		           </fieldset>
+                
+	   </fields>
+   </config>
+</extension>

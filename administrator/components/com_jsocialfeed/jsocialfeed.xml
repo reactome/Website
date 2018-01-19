@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="1.7.0" method="upgrade">
+	<name>COM_JSOCIALFEED</name>
+	<creationDate>03/06/2014</creationDate>
+	<author>Garda Informatica</author>
+	<authorEmail>info@gardainformatica.it</authorEmail>
+	<authorUrl>http://www.gardainformatica.it/</authorUrl>
+	<copyright>Garda Informatica</copyright>
+	<license>GNU/GPL - http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<version>1.5.4</version>
+	<description>COM_JSOCIALFEED_DESCRIPTION</description>
+
+	<files folder="site">
+		<filename>index.html</filename>
+		<filename>jsocialfeed.php</filename>
+		<filename>controller.php</filename>
+		<folder>views</folder>
+		<folder>sef_ext</folder>
+	</files>
+
+	<administration>
+		<menu img="../media/jsocialfeed/images/jsocialfeed-16.png">COM_JSOCIALFEED_MENU</menu>
+		<files folder="admin">
+			<filename>index.html</filename>
+			<filename>jsocialfeed.php</filename>
+			<folder>css</folder>
+			<folder>language</folder>
+		</files>
+	</administration>
+
+	<scriptfile>install.php</scriptfile>
+
+	<updateservers>
+		<server type="extension" priority="1" name="JSocialFeed update site"><![CDATA[http://www.gardainformatica.it/jsocialfeed/jsocialfeed.xml]]></server>
+	</updateservers>
+
+	<chain>
+		<extension directory="extras" name="lib_jsocialfeed" type="LIBRARY" />
+		<extension directory="extras" name="mod_jsocialfeed" type="MODULE" />
+	</chain>
+
+</extension>

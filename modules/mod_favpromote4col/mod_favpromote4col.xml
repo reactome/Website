@@ -1,0 +1,1130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+	type="module"
+	version="3.0"
+	client="site"
+	method="upgrade">
+	<name>FavPromote4col</name>
+	<author>FavThemes</author>
+	<version>2.1</version>
+	<creationDate>2013</creationDate>
+	<authorUrl>http://www.favthemes.com</authorUrl>
+	<authoremail>hello@favthemes.com</authoremail>
+	<copyright>Copyright (C) FavThemes. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
+	<description>
+  <![CDATA[
+
+    <a href="http://extensions.favthemes.com/favpromote" target="_blank"><strong>FavPromote</strong></a> is a free responsive Joomla! module that lets you upload any image and assign it a short description and a title with a Font Awesome icon.
+    <br/>
+    It works exactly in the same way as the pure FavPromote, however it is fixed in 4 cols or less. It means, if only one column is present it will occupy 3 empty spaces (12/4columns).
+    For more info, please see the <a href="http://extensions.favthemes.com/favpromote" target="_blank" style="font-weight: bold;">demo and documentation</a> for the FavPromote module.
+    <br/><br/>
+
+    <a href="http://extensions.favthemes.com/favpromote" target="_blank">
+      <img src="../modules/mod_favpromote4col/theme/img/favpromote4col.jpg" alt="FavPromote Responsive Module">
+    </a>
+
+    <br/><br/>
+    Copyright &#169; 2012-2017 <a href="http://www.favthemes.com" target="_blank" style="font-weight: bold;">FavThemes</a>.
+    <br/><br/>
+
+
+    <link rel="stylesheet" href="../modules/mod_favpromote4col/theme/css/admin.css" type="text/css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400" type="text/css" />
+    <script src="../modules/mod_favpromote4col/theme/js/jscolor/jscolor.js" type="text/javascript"></script>
+    <script src="../modules/mod_favpromote4col/theme/js/admin/admin.js" type="text/javascript"></script>
+
+  ]]>
+	</description>
+
+	<files>
+		<filename module="mod_favpromote4col">mod_favpromote4col.php</filename>
+		<filename>mod_favpromote4col.xml</filename>
+    <filename>index.html</filename>
+    <filename>License.txt</filename>
+    <folder>demo</folder>
+    <folder>theme/js</folder>
+    <folder>theme/css</folder>
+    <folder>theme/img</folder>
+    <folder>theme/bootstrap</folder>
+	</files>
+
+	<help key="FavPromote4col" />
+
+	<config>
+		<fields name="params">
+
+			<fieldset name="settings" label="Module Settings">
+
+        <field type="note" label="Module Options" class="favtitle first" />
+
+          <field
+            name="jquery_load"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Load Joomla! jQuery"
+            description="This setting loads Joomla!'s jQuery library. Choose NO if your website loads jQuery from an external source.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+            name="layout_effect"
+            type="list"
+            default="layout-effect1"
+            class="btn-group"
+            label="Layout Effect"
+            description="Choose a CSS3 effect for the layout on page scroll and load. Note that the CSS3 features are not supported by older browsers.">
+              <option value="layout-effect-none">None</option>
+              <option value="layout-effect1">Effect1</option>
+              <option value="layout-effect2">Effect2</option>
+              <option value="layout-effect3">Effect3</option>
+              <option value="layout-effect4">Effect4</option>
+              <option value="layout-effect5">Effect5</option>
+              <option value="layout-effect6">Effect6</option>
+              <option value="layout-effect7">Effect7</option>
+              <option value="layout-effect8">Effect8</option>
+          </field>
+
+        <field type="note" label="Title Options" class="favtitle" />
+
+          <field
+            name="title_google_font"
+            class=""
+            type="text"
+            default="Open Sans"
+            label="Title Google Font"
+            description="Insert the name of the Google Font for the title of the module, for example Open Sans or Roboto. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_font_weight"
+            type="list"
+            default="400"
+            label="Title Font Weight"
+            description="Set the font weight for the title of the module.">
+            <option value="300">Light</option>
+            <option value="400">Regular</option>
+            <option value="500">Medium</option>
+            <option value="600">Semibold</option>
+            <option value="700">Bold</option>
+          </field>
+
+          <field
+            name="title_font_style"
+            type="list"
+            default="normal"
+            label="Title Font Style"
+            description="Set the font style for the title of the module.">
+            <option value="normal">Normal</option>
+            <option value="italic">Italic</option>
+          </field>
+
+          <field
+            name="title_padding"
+            type="text"
+            default="10px 20px"
+            label="Title Padding"
+            description="Insert the padding for the title of the module using pixels or percent (for example: 14px or 10%, not 14). The padding is a CSS property that sets the space around the content. The padding can have from 1 to 4 values (top, right, bottom and left). A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_font_size"
+            type="text"
+            default="18px"
+            label="Title Font Size"
+            description="Insert the font size for the title of the module using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_line_height"
+            type="text"
+            default="1.4em"
+            label="Title Line Height"
+            description="Insert the line height for the title of the module using pixels or em (for example: 14px or 1.2em, not 14). The line-height property is used to modify the spacing between the lines of text. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_text_align"
+            type="radio"
+            default="left"
+            class="btn-group"
+            label="Title Text Align"
+            description="Choose the text align for the title of the module.">
+              <option value="left">left</option>
+              <option value="center">center</option>
+              <option value="right">right</option>
+          </field>
+
+        <field type="note" label="Title Icon" class="favsubtitle"/>
+
+          <field
+            name="title_icon_font_size"
+            type="text"
+            default="18px"
+            label="Title Icon Font Size"
+            description="Insert the font size for the icon of the title using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_icon_vertical_align"
+            type="list"
+            default="baseline"
+            label="Title Icon Vertical Align"
+            description="Choose the vertical alignment for the icon of the title of the module.">
+              <option value="baseline">baseline</option>
+              <option value="top">top</option>
+              <option value="middle">middle</option>
+              <option value="bottom">bottom</option>
+          </field>
+
+        <field type="note" label="Description Text Options" class="favtitle" />
+
+          <field
+            name="description_text_font_size"
+            type="text"
+            default="14px"
+            label="Description Font Size"
+            description="Insert the font size for the description text using pixels, percent or em (for example: 14px, 120% or 1.2em, not 14). A blank field reverts the setting to the default value." />
+
+          <field
+            name="description_text_line_height"
+            type="text"
+            default="1.5em"
+            label="Description Line Height"
+            description="Insert the line height for the description text using pixels or em (for example: 14px or 1.2em, not 14). The line-height property is used to modify the spacing between the lines of text. A blank field reverts the setting to the default value." />
+
+          <field
+            name="description_text_align"
+            type="list"
+            default="justify"
+            label="Description Text Align"
+            description="Choose the text align for the description of the module.">
+              <option value="left">left</option>
+              <option value="center">center</option>
+              <option value="right">right</option>
+              <option value="justify">justify</option>
+          </field>
+
+			</fieldset>
+
+      <fieldset name="content" label="Module Content">
+
+        <field type="note" label="Column 1 Options" class="favtitle first" />
+
+          <field
+            name="show_column1"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Column 1"
+            description="Choose if the column for this module should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+            name="column_border_color1"
+            class="color {required:false}"
+            type="text"
+            default="DDDDDD"
+            label="Column 1 Border Color"
+            description="Choose the color for the border of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="column_border_radius1"
+            type="text"
+            default="4px"
+            label="Column 1 Border Radius"
+            description="Insert the border-radius for the border of the module column using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Image 1" class="favsubtitle"/>
+
+          <field
+            name="upload_image1"
+            type="media"
+            label="Upload Image 1"
+            description="Upload the image for the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="image_link1"
+            type="text"
+            default=""
+            label="Image 1 Link"
+            description="Insert the URL for the module column image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+          <field
+            name="image_target1"
+            type="list"
+            default="blank"
+            label="Image 1 Link Target"
+            description="Choose the link target of the URL for the module column image.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="image_alt1"
+            type="text"
+            default=""
+            label="Image 1 Alt Text"
+            description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Title 1" class="favsubtitle"/>
+
+          <field
+            name="title_text1"
+            type="textarea"
+            filter="raw"
+            rows="1"
+            cols="40"
+            default="Title Text"
+            label="Title 1 Text"
+            description="Insert the text for the title of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_color1"
+            class="color {required:false}"
+            type="text"
+            default="FFFFFF"
+            label="Title 1 Color"
+            description="Choose the color for the title of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_bg_color1"
+            class="color {required:false}"
+            type="text"
+            default="D63E52"
+            label="Title 1 Background Color"
+            description="Choose the color for the background of the title of the module column. This is also the color for the module background on hover. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_link1"
+            type="text"
+            default=""
+            label="Title 1 Link"
+            description="Insert the URL for the title for the module column. Note that the link must include http:// or https://. A blank field means that no link is assigned to the title." />
+
+          <field
+            name="title_link_target1"
+            type="list"
+            default="blank"
+            label="Title 1 Link Target"
+            description="Choose the link target of the URL for the title for this module column.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="title_icon1"
+            type="text"
+            default="fa-coffee"
+            label="Title 1 Icon"
+            description="Insert the Font Awesome icon name (for example: fa-magic or fa-joomla). A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Description 1" class="favsubtitle"/>
+
+          <field
+            name="description_text1"
+            type="textarea"
+            filter="raw"
+            rows="10"
+            cols="40"
+            default="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor."
+            label="Description 1 Text"
+            description="Insert the text for the description of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+                  name="widget_text1"
+                  type="textarea"
+                  filter="raw"
+                  rows="10"
+                  cols="40"
+                  label="Widget 1 Text"
+                  description="Insert the text for the description of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="description_text_color1"
+            class="color {required:false}"
+            type="text"
+            default="444444"
+            label="Description 1 Text Color"
+            description="Choose the color for the description of the module column. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Column 2 Options" class="favtitle" />
+
+          <field
+            name="show_column2"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Column 2"
+            description="Choose if the column for this module should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+            name="column_border_color2"
+            class="color {required:false}"
+            type="text"
+            default="DDDDDD"
+            label="Column 2 Border Color"
+            description="Choose the color for the border of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="column_border_radius2"
+            type="text"
+            default="4px"
+            label="Column 2 Border Radius"
+            description="Insert the border-radius for the border of the module column using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Image 2" class="favsubtitle"/>
+
+          <field
+            name="upload_image2"
+            type="media"
+            label="Upload Image 2"
+            description="Upload the image for the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="image_link2"
+            type="text"
+            default=""
+            label="Image 2 Link"
+            description="Insert the URL for the module column image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+          <field
+            name="image_target2"
+            type="list"
+            default="blank"
+            label="Image 2 Link Target"
+            description="Select the link target of the URL for the module column image">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="image_alt2"
+            type="text"
+            default=""
+            label="Image 2 Alt Text"
+            description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Title 2" class="favsubtitle"/>
+
+          <field
+            name="title_text2"
+            type="textarea"
+            filter="raw"
+            rows="1"
+            cols="40"
+            default="Title Text"
+            label="Title 2 Text"
+            description="Insert the text for the title of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_color2"
+            class="color {required:false}"
+            type="text"
+            default="FFFFFF"
+            label="Title 2 Color"
+            description="Choose the color for the title of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_bg_color2"
+            class="color {required:false}"
+            type="text"
+            default="D63E52"
+            label="Title 2 Background Color"
+            description="Choose the color for the background of the title of the module. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_link2"
+            type="text"
+            default=""
+            label="Title 2 Link"
+            description="Insert the URL for the title for the module column. Note that the link must include http:// or https://. A blank field means that no link is assigned to the title." />
+
+          <field
+            name="title_link_target2"
+            type="list"
+            default="blank"
+            label="Title 2 Link Target"
+            description="Choose the link target of the URL for the title for this module column.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="title_icon2"
+            type="text"
+            default="fa-puzzle-piece"
+            label="Title 2 Icon"
+            description="Insert the Font Awesome icon name (for example: fa-magic or fa-joomla). A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Description 2" class="favsubtitle"/>
+
+          <field
+            name="description_text2"
+            type="textarea"
+            filter="raw"
+            rows="10"
+            cols="40"
+            default="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor."
+            label="Description 2 Text"
+            description="Insert the text for the description of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+                  name="widget_text2"
+                  type="textarea"
+                  filter="raw"
+                  rows="10"
+                  cols="40"
+                  label="Widget 2 Text"
+                  description="Insert the text for the description of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="description_text_color2"
+            class="color {required:false}"
+            type="text"
+            default="444444"
+            label="Description 2 Text Color"
+            description="Choose the color for the description of the module column. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Column 3 Options" class="favtitle" />
+
+          <field
+            name="show_column3"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Column 3"
+            description="Choose if the column for this module should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+            name="column_border_color3"
+            class="color {required:false}"
+            type="text"
+            default="DDDDDD"
+            label="Column 3 Border Color"
+            description="Choose the color for the border of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="column_border_radius3"
+            type="text"
+            default="4px"
+            label="Column 3 Border Radius"
+            description="Insert the border-radius for the border of the module column using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Image 3" class="favsubtitle"/>
+
+          <field
+            name="upload_image3"
+            type="media"
+            label="Upload Image 3"
+            description="Upload the image for the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="image_link3"
+            type="text"
+            default=""
+            label="Image 3 Link"
+            description="Insert the URL for the module column image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+          <field
+            name="image_target3"
+            type="list"
+            default="blank"
+            label="Image 3 Link Target"
+            description="Select the link target of the URL for the module column image">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="image_alt3"
+            type="text"
+            default=""
+            label="Image 3 Alt Text"
+            description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Title 3" class="favsubtitle"/>
+
+          <field
+            name="title_text3"
+            type="textarea"
+            filter="raw"
+            rows="1"
+            cols="40"
+            default="Title Text"
+            label="Title 3 Text"
+            description="Insert the text for the title of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_color3"
+            class="color {required:false}"
+            type="text"
+            default="FFFFFF"
+            label="Title 3 Color"
+            description="Choose the color for the title of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_bg_color3"
+            class="color {required:false}"
+            type="text"
+            default="D63E52"
+            label="Title 3 Background Color"
+            description="Choose the color for the background of the title of the module. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_link3"
+            type="text"
+            default=""
+            label="Title 3 Link"
+            description="Insert the URL for the title for the module column. Note that the link must include http:// or https://. A blank field means that no link is assigned to the title." />
+
+          <field
+            name="title_link_target3"
+            type="list"
+            default="blank"
+            label="Title 3 Link Target"
+            description="Choose the link target of the URL for the title for this module column.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="title_icon3"
+            type="text"
+            default="fa-bookmark"
+            label="Title 3 Icon"
+            description="Insert the Font Awesome icon name (for example: fa-magic or fa-joomla). A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Description 3" class="favsubtitle"/>
+
+          <field
+            name="description_text3"
+            type="textarea"
+            filter="raw"
+            rows="10"
+            cols="40"
+            default="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor."
+            label="Description 3 Text"
+            description="Insert the text for the description of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+                  name="widget_text3"
+                  type="textarea"
+                  filter="raw"
+                  rows="10"
+                  cols="40"
+                  label="Widget 3 Text"
+                  description="Insert the text for the description of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="description_text_color3"
+            class="color {required:false}"
+            type="text"
+            default="444444"
+            label="Description 3 Text Color"
+            description="Choose the color for the description of the module column. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Column 4 Options" class="favtitle" />
+
+          <field
+            name="show_column4"
+            type="radio"
+            default="1"
+            class="btn-group"
+            label="Show Column 4"
+            description="Choose if the column for this module should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+            name="column_border_color4"
+            class="color {required:false}"
+            type="text"
+            default="DDDDDD"
+            label="Column 4 Border Color"
+            description="Choose the color for the border of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="column_border_radius4"
+            type="text"
+            default="4px"
+            label="Column 4 Border Radius"
+            description="Insert the border-radius for the border of the module column using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Image 4" class="favsubtitle"/>
+
+          <field
+            name="upload_image4"
+            type="media"
+            label="Upload Image 4"
+            description="Upload the image for the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="image_link4"
+            type="text"
+            default=""
+            label="Image 4 Link"
+            description="Insert the URL for the module column image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+          <field
+            name="image_target4"
+            type="list"
+            default="blank"
+            label="Image 4 Link Target"
+            description="Select the link target of the URL for the module column image">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="image_alt4"
+            type="text"
+            default=""
+            label="Image 4 Alt Text"
+            description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Title 4" class="favsubtitle"/>
+
+          <field
+            name="title_text4"
+            type="textarea"
+            filter="raw"
+            rows="1"
+            cols="40"
+            default="Title Text"
+            label="Title 4 Text"
+            description="Insert the text for the title of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_color4"
+            class="color {required:false}"
+            type="text"
+            default="FFFFFF"
+            label="Title 4 Color"
+            description="Choose the color for the title of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_bg_color4"
+            class="color {required:false}"
+            type="text"
+            default="D63E52"
+            label="Title 4 Background Color"
+            description="Choose the color for the background of the title of the module. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_link4"
+            type="text"
+            default=""
+            label="Title 4 Link"
+            description="Insert the URL for the title for the module column. Note that the link must include http:// or https://. A blank field means that no link is assigned to the title." />
+
+          <field
+            name="title_link_target4"
+            type="list"
+            default="blank"
+            label="Title 4 Link Target"
+            description="Choose the link target of the URL for the title for this module column.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="title_icon4"
+            type="text"
+            default="fa-magic"
+            label="Title 4 Icon"
+            description="Insert the Font Awesome icon name (for example: fa-magic or fa-joomla). A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Description 4" class="favsubtitle"/>
+
+          <field
+            name="description_text4"
+            type="textarea"
+            filter="raw"
+            rows="10"
+            cols="40"
+            default="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor."
+            label="Description 4 Text"
+            description="Insert the text for the description of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+                  name="widget_text4"
+                  type="textarea"
+                  filter="raw"
+                  rows="10"
+                  cols="40"
+                  label="Widget 4 Text"
+                  description="Insert the text for the description of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="description_text_color4"
+            class="color {required:false}"
+            type="text"
+            default="444444"
+            label="Description 4 Text Color"
+            description="Choose the color for the description of the module column. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Column 5 Options" class="favtitle" />
+
+          <field
+            name="show_column5"
+            type="radio"
+            default="0"
+            class="btn-group"
+            label="Show Column 5"
+            description="Choose if the column for this module should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+            name="column_border_color5"
+            class="color {required:false}"
+            type="text"
+            default="DDDDDD"
+            label="Column 5 Border Color"
+            description="Choose the color for the border of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="column_border_radius5"
+            type="text"
+            default="4px"
+            label="Column 5 Border Radius"
+            description="Insert the border-radius for the border of the module column using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Image 5" class="favsubtitle"/>
+
+          <field
+            name="upload_image5"
+            type="media"
+            label="Upload Image 5"
+            description="Upload the image for the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="image_link5"
+            type="text"
+            default=""
+            label="Image 5 Link"
+            description="Insert the URL for the module column image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+          <field
+            name="image_target5"
+            type="list"
+            default="blank"
+            label="Image 5 Link Target"
+            description="Select the link target of the URL for the module column image">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="image_alt5"
+            type="text"
+            default=""
+            label="Image 5 Alt Text"
+            description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Title 5" class="favsubtitle"/>
+
+          <field
+            name="title_text5"
+            type="textarea"
+            filter="raw"
+            rows="1"
+            cols="40"
+            default="Title Text"
+            label="Title 5 Text"
+            description="Insert the text for the title of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_color5"
+            class="color {required:false}"
+            type="text"
+            default="FFFFFF"
+            label="Title 5 Color"
+            description="Choose the color for the title of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_bg_color5"
+            class="color {required:false}"
+            type="text"
+            default="D63E52"
+            label="Title 5 Background Color"
+            description="Choose the color for the background of the title of the module. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_link5"
+            type="text"
+            default=""
+            label="Title 5 Link"
+            description="Insert the URL for the title for the module column. Note that the link must include http:// or https://. A blank field means that no link is assigned to the title." />
+
+          <field
+            name="title_link_target5"
+            type="list"
+            default="blank"
+            label="Title 5 Link Target"
+            description="Choose the link target of the URL for the title for this module column.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="title_icon5"
+            type="text"
+            default="fa-quote-right"
+            label="Title 5 Icon"
+            description="Insert the Font Awesome icon name (for example: fa-magic or fa-joomla). A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Description 5" class="favsubtitle"/>
+
+          <field
+            name="description_text5"
+            type="textarea"
+            filter="raw"
+            rows="10"
+            cols="40"
+            default="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor."
+            label="Description 5 Text"
+            description="Insert the text for the description of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+                  name="widget_text5"
+                  type="textarea"
+                  filter="raw"
+                  rows="10"
+                  cols="40"
+                  label="Widget 5 Text"
+                  description="Insert the text for the description of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="description_text_color5"
+            class="color {required:false}"
+            type="text"
+            default="444444"
+            label="Description 5 Text Color"
+            description="Choose the color for the description of the module column. A blank field reverts the setting to the default value." />
+
+        <field type="note" label="Column 6 Options" class="favtitle" />
+
+          <field
+            name="show_column6"
+            type="radio"
+            default="0"
+            class="btn-group"
+            label="Show Column 6"
+            description="Choose if the column for this module should be displayed or not.">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+          </field>
+
+          <field
+            name="column_border_color6"
+            class="color {required:false}"
+            type="text"
+            default="DDDDDD"
+            label="Column 6 Border Color"
+            description="Choose the color for the border of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="column_border_radius6"
+            type="text"
+            default="4px"
+            label="Column 6 Border Radius"
+            description="Insert the border-radius for the border of the module column using pixels or percent (for example: 140px or 80%, not 140). Note that the CSS3 features are not supported by older browsers. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Image 6" class="favsubtitle"/>
+
+          <field
+            name="upload_image6"
+            type="media"
+            label="Upload Image 6"
+            description="Upload the image for the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="image_link6"
+            type="text"
+            default=""
+            label="Image 6 Link"
+            description="Insert the URL for the module column image. Note that the link must include http:// or https://. A blank field means that no link is assigned to the image." />
+
+          <field
+            name="image_target6"
+            type="list"
+            default="blank"
+            label="Image 6 Link Target"
+            description="Select the link target of the URL for the module column image">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="image_alt6"
+            type="text"
+            default=""
+            label="Image 6 Alt Text"
+            description="Insert the text for the image Alt. A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Title 6" class="favsubtitle"/>
+
+          <field
+            name="title_text6"
+            type="textarea"
+            filter="raw"
+            rows="1"
+            cols="40"
+            default="Title Text"
+            label="Title 6 Text"
+            description="Insert the text for the title of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_color6"
+            class="color {required:false}"
+            type="text"
+            default="FFFFFF"
+            label="Title 6 Color"
+            description="Choose the color for the title of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_bg_color6"
+            class="color {required:false}"
+            type="text"
+            default="D63E52"
+            label="Title 6 Background Color"
+            description="Choose the color for the background of the title of the module. A blank field reverts the setting to the default value." />
+
+          <field
+            name="title_link6"
+            type="text"
+            default=""
+            label="Title 6 Link"
+            description="Insert the URL for the title for the module column. Note that the link must include http:// or https://. A blank field means that no link is assigned to the title." />
+
+          <field
+            name="title_link_target6"
+            type="list"
+            default="blank"
+            label="Title 6 Link Target"
+            description="Choose the link target of the URL for the title for this module column.">
+              <option value="self">self</option>
+              <option value="blank">blank</option>
+              <option value="parent">parent</option>
+              <option value="top">top</option>
+          </field>
+
+          <field
+            name="title_icon6"
+            type="text"
+            default="fa-recycle"
+            label="Title 6 Icon"
+            description="Insert the Font Awesome icon name (for example: fa-magic or fa-joomla). A blank field reverts the setting to the default value." />
+
+          <field type="note" label="Description 6" class="favsubtitle"/>
+
+          <field
+            name="description_text6"
+            type="textarea"
+            filter="raw"
+            rows="10"
+            cols="40"
+            default="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor."
+            label="Description 6 Text"
+            description="Insert the text for the description of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+                  name="widget_text6"
+                  type="textarea"
+                  filter="raw"
+                  rows="10"
+                  cols="40"
+                  label="Widget 6 Text"
+                  description="Insert the text for the description of the module column. A blank field reverts the setting to the default value." />
+
+          <field
+            name="description_text_color6"
+            class="color {required:false}"
+            type="text"
+            default="444444"
+            label="Description 6 Text Color"
+            description="Choose the color for the description of the module column. A blank field reverts the setting to the default value." />
+
+          <field type="spacer" hr="true" />
+
+      </fieldset>
+
+			<fieldset name="advanced">
+
+				<field
+					name="moduleclass_sfx"
+					type="text"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+				<field
+					name="cache"
+					type="list"
+					default="1"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC">
+					<option
+						value="1">JGLOBAL_USE_GLOBAL</option>
+					<option
+						value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+
+				<field
+					name="cache_time"
+					type="text"
+					default="900"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+				<field
+					name="cachemode"
+					type="hidden"
+					default="static">
+					<option
+						value="static"></option>
+				</field>
+
+			</fieldset>
+
+		</fields>
+	</config>
+
+      <!--
+       UPDATE MUST BE DONE MANUALLY
+       <updateservers>
+	  <server type="extension" priority="2" name="FavPromote Updates">http://updates.favthemes.com/extensions/favpromote.xml</server>
+	</updateservers>-->
+
+</extension>

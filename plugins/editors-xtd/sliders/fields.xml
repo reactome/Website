@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config addfieldpath="/libraries/regularlabs/fields">
+	<fieldset name="slider_notice">
+		<field name="@toggler_title_empty_a" type="rl_toggler" param="slider_xxx_title" value="" />
+		<field name="@notice_title_empty" type="note" description="SLD_TITLE_EMPTY" />
+		<field name="@toggler_title_empty_b" type="rl_toggler" />
+	</fieldset>
+
+	<fieldset name="slider_params">
+		<field name="open" type="radio" class="btn-group" default=""
+			   label="SLD_DEFAULT"
+			   description="SLD_DEFAULT_DESC">
+			<option value="">JDEFAULT</option>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="alias" type="text"
+			   label="JFIELD_ALIAS_LABEL"
+			   description="SLD_ALIAS_DESC" />
+		<field name="class" type="text"
+			   label="RL_CSS_CLASS"
+			   description="RL_CSS_CLASS_DESC" />
+		<field name="icon" type="radio" class="btn-group" default="0"
+			   label="SLD_SHOW_ICON"
+			   description="SLD_SHOW_ICON_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="@notice_scroll" type="rl_plaintext"
+			   label="SLD_SCROLL"
+			   description="SLD_SCROLL_DESC"
+			   default="RL_ONLY_AVAILABLE_IN_PRO" />
+		<field name="@notice_access" type="rl_plaintext"
+			   label="JFIELD_ACCESS_LABEL"
+			   description="JFIELD_ACCESS_DESC"
+			   default="RL_ONLY_AVAILABLE_IN_PRO" />
+		<field name="@notice_usergroup" type="rl_plaintext"
+			   label="RL_USER_GROUPS"
+			   description="RL_USER_GROUPS_DESC"
+			   default="RL_ONLY_AVAILABLE_IN_PRO" />
+		<field name="@notice_extra" type="rl_plaintext"
+			   label="RL_EXTRA_PARAMETERS"
+			   description="RL_EXTRA_PARAMETERS_DESC"
+			   default="RL_ONLY_AVAILABLE_IN_PRO" />
+	</fieldset>
+
+	<fieldset name="params">
+		<field name="mainclass" type="text" default=""
+			   label="SLD_MAIN_CLASS"
+			   description="SLD_MAIN_CLASS_DESC" />
+		<field name="nested" type="radio" class="btn-group" default="0"
+			   label="SLD_NESTED_SET"
+			   description="SLD_NESTED_SET_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="@toggler_nested_a" type="rl_toggler" param="slider_1_nested" value="1" />
+		<field name="nested_id" type="text" class="btn-group" default="nested"
+			   label="SLD_NESTED_ID"
+			   description="SLD_NESTED_ID_DESC" />
+		<field name="@toggler_nested_b" type="rl_toggler" />
+	</fieldset>
+</config>

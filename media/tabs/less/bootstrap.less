@@ -1,0 +1,123 @@
+// Default Bootstrap styling for tabs
+
+.rl_tabs {
+	//
+	// Component animations
+	// --------------------------------------------------
+	.fade {
+		opacity: 0;
+		.transition(opacity 1ms linear);
+		&.in {
+			opacity: 1;
+		}
+	}
+	&.has_effects .fade {
+		.transition(opacity .15s linear);
+	}
+
+	.collapse {
+		position: relative;
+		height:   0;
+		overflow: hidden;
+		.transition(height 1ms ease);
+		&.in {
+			height: auto;
+		}
+	}
+	&.has_effects .collapse {
+		.transition(height .35s ease);
+	}
+
+	//
+	// Navs
+	// --------------------------------------------------
+	> .nav {
+		padding:       0;
+		margin-left:   0;
+		margin-bottom: @baseLineHeight;
+		list-style:    none; // Make links block level
+		> li > a {
+			display: block;
+			&:hover {
+				text-decoration:  none;
+				background-color: @grayLighter;
+			}
+		}
+
+		// Redeclare pull classes because of specificity
+		> .pull-right {
+			float: right;
+		}
+	}
+
+	// TABS
+	// ----
+	// Common styles
+	.nav-tabs {
+		.clearfix();
+		border-bottom: 1px solid #dddddd; // Give the tabs something to sit on
+		> li {
+			float:         left;
+			margin-bottom: -1px; // Make the list-items overlay the bottom border
+			// Actual tabs (as links)
+			> a {
+				margin-right: 2px;
+				padding:      8px 12px;
+				line-height:  @baseLineHeight;
+				border:       1px solid transparent;
+				.border-radius(4px 4px 0 0);
+				&:hover {
+					border-color: @grayLighter @grayLighter #dddddd;
+				}
+			}
+			// Active state, and it's :hover to override normal :hover
+			&.active > a,
+			&.active > a:hover {
+				color:               @gray;
+				background-color:    @white;
+				border:              1px solid #dddddd;
+				border-bottom-color: transparent;
+				cursor:              default;
+			}
+		}
+	}
+
+	// TABBABLE
+	// --------
+	.tab-content {
+		overflow: visible; // Show/hide tabbable areas
+		> .tab-pane {
+			.clearfix();
+			display: none;
+		}
+		> .active {
+			display: block;
+		}
+	}
+
+}
+
+.rl_tabs-responsive {
+	// Stacked tabs and pills
+	> .rl_tabs-sm {
+		border-bottom: 0;
+		> li {
+			float: none;
+			> a {
+				border: 1px solid #dddddd;
+				.border-radius(0);
+				&:hover,
+				&:focus {
+					border-color: #dddddd;
+					z-index:      2;
+				}
+			}
+			&:first-child > a {
+				.border-top-radius(4px);
+			}
+			&:last-child > a {
+				.border-bottom-radius(4px);
+			}
+		}
+	}
+}

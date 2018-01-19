@@ -1,0 +1,190 @@
+/**
+ * @package         Modals
+ * @version         9.7.1
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://www.regularlabs.com
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
+ * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ */
+/*
+ * You can override this stylesheet by creating your own in:
+ * /templates/[YOUR TEMPLATE]/css/modals/bootstrap.css
+ */
+@import "../../regularlabs/less/init.less";
+@import "base.less";
+
+/*
+ * User Style:
+ * Change the following styles to modify the appearance of ColorBox.  They are
+ * ordered & tabbed in a way that represents the nesting of the generated HTML.
+ */
+
+#cboxOverlay {
+	background-color: @black;
+	.opacity(80);
+}
+
+#colorbox {
+	outline:          0;
+	top:              50%;
+	left:             50%;
+	background-color: @white;
+	border:           1px solid #999999;
+	border:           1px solid rgba(0, 0, 0, .3);
+	*border:          1px solid #999999; /* IE6-7 */
+	.border-radius(6px);
+	.box-shadow(0 3px 7px rgba(0, 0, 0, 0.3));
+	.background-clip(padding-box);
+	margin:           0 !important;
+}
+
+#cboxContent {
+	overflow: hidden;
+}
+
+#cboxLoadedContent {
+	overflow-y:    auto;
+	padding:       15px;
+	margin-top:    44px;
+	margin-bottom: 0px;
+	max-height:    none;
+}
+
+#cboxTitle {
+	border-bottom:  1px solid #eeeeee;
+	position:       absolute;
+	top:            0;
+	left:           0;
+	right:          0;
+	margin:         0;
+	padding:        9px 25px 9px 15px;
+	color:          @headingsColor;
+	text-align:     left;
+	text-rendering: optimizelegibility;
+	font-size:      20px;
+	line-height:    24px;
+	font-weight:    bold;
+	min-height:     24px;
+	small {
+		font-weight: normal;
+	}
+}
+
+.cbimg {
+	border:      0;
+	font:        0/0 a;
+	text-shadow: none;
+	color:       transparent;
+	position:    absolute;
+	width:       14px;
+	height:      14px;
+	line-height: 14px;
+	background:  transparent url("../images/bootstrap/controls.png") no-repeat 0 0;
+	.ie7-restore-right-whitespace();
+	.box-sizing(border-box);
+}
+
+#cboxPrevious,
+#cboxNext,
+#cboxSlideshow {
+	.cbimg();
+	top:    50%;
+	width:  42px;
+	height: 44px;
+}
+
+#cboxCurrent,
+#cboxPrevious,
+#cboxNext,
+#cboxSlideshow {
+	position:         absolute;
+	background-color: @white;
+	border:           15px solid @white;
+	.border-radius(6px);
+	.box-shadow(0 0 10px rgba(0, 0, 0, .5));
+	.opacity(0);
+}
+
+#cboxContent:hover #cboxCurrent,
+#cboxContent:hover #cboxPrevious,
+#cboxContent:hover #cboxNext,
+#cboxContent:hover #cboxSlideshow {
+	.opacity(100);
+}
+
+#cboxCurrent {
+	font-weight: bold;
+	line-height: 1em;
+	bottom:      0;
+	right:       0;
+	.border-radius(6px 0 6px 0);
+}
+
+#cboxPrevious {
+	background-position: 0 0;
+	left:                0;
+	.border-radius(0 6px 6px 0);
+}
+
+#cboxNext {
+	background-position: -24px 0;
+	right:               0;
+	.border-radius(6px 0 0 6px);
+}
+
+#cboxSlideshow {
+	background-position: -48px 0;
+	left:                50%;
+	right:               50%;
+}
+
+.cboxSlideshow_on #cboxSlideshow {
+	background-position: -72px 0;
+}
+
+#cboxClose {
+	.cbimg();
+	background-position: -96px 0;
+	top:                 14px;
+	right:               15px;
+	.opacity(30);
+	&:hover {
+		.opacity(80);
+	}
+}
+
+#cboxLoadingGraphic {
+	background: transparent url(../images/bootstrap/loading.gif) no-repeat 50% 50%;
+	.opacity(80);
+	height:     100%;
+}
+
+.no_title {
+	#cboxTitle {
+		height:     0 !important;
+		min-height: 0;
+		padding:    0;
+	}
+	#cboxLoadedContent {
+		margin-top: 0 !important;
+	}
+	#cboxClose {
+		right: 3px;
+		top:   3px;
+	}
+	&.has_scrollbar {
+		#cboxClose {
+			right: 18px;
+		}
+	}
+}
+
+#cboxTitle .countdown {
+	width:            100%;
+	height:           2px;
+	position:         absolute;
+	top:              0;
+	left:             0;
+	background-color: @blue;
+}

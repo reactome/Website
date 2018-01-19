@@ -1,0 +1,516 @@
+/**
+ * ------------------------------------------------------------------------
+ * JU Backend Toolkit for Joomla 2.5/3.x
+ * ------------------------------------------------------------------------
+ * Copyright (C) 2010-2013 JoomUltra. All Rights Reserved.
+ * @license - GNU/GPL, http://www.gnu.org/licenses/gpl.html
+ * Author: JoomUltra Co., Ltd
+ * Websites: http://www.joomultra.com
+ * ------------------------------------------------------------------------
+ */
+
+/*Profile*/
+.juprofile .action-save, .juprofile .action-load, .juprofile .action-clone, .juprofile .action-delete {
+	float: left;
+	font-size: 10px;
+	font-weight: bold;
+	padding-left: 20px;
+	height: 24px;
+	line-height: 24px;
+	margin-left: 10px;
+	width: 32px;
+}
+.juprofile .action-save {
+	background: url("../images/save-icon.png") no-repeat scroll left center transparent;
+}
+.juprofile .action-load {
+	background: url("../images/load-icon.png") no-repeat scroll left center transparent;
+}
+.juprofile .action-clone {
+	background: url("../images/clone-icon.png") no-repeat scroll left center transparent;
+}
+.juprofile .action-delete {
+	background: url('../images/delete-icon.png') no-repeat scroll left center transparent;
+}
+.juprofile .profile-loader, .julayout .layout-loader {
+	width: 16px;
+	height: 16px;
+	background: url('../images/ajax-loader.gif') no-repeat center center;
+	display: none;
+	padding: 4px;
+	float: left;
+	margin-left: 10px;
+}
+.juprofile .profile-loader.active, .julayout .layout-loader.active {
+	display: inline-block;
+}
+
+/*Layout settings*/
+.julayoutsettings {
+	display: inline-block;
+    width: 100%;
+}
+.julayoutsettings ul.adminformlist {
+    display: inline-block;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+}
+.julayoutsettings ul li {
+    list-style: none outside none;
+	clear: both;
+}
+.julayoutsettings.joomla3ge label.hasTip {
+	float: left;
+	min-width: 160px;
+}
+.julayoutsettings.joomla3ge input {
+	float: left;
+}
+.julayoutsettings.joomla3ge ul.adminformlist > li {
+	float: left;
+	margin-bottom: 18px;
+}
+.julayoutsettings.joomla3ge ul.adminformlist > li > fieldset {
+	float: left;
+}
+.julayoutsettings.joomla25 label.hasTip {
+	min-width: 30% !important;
+}
+.julayoutsettings.joomla25 ul li {
+}
+
+/*Gallery*/
+.control-group .controls .jugallery {
+	margin: 0;
+}
+.jugallery-holder, .jugallery {
+	display: inline-block;
+	float: left;
+	min-height: 50px;
+	position: relative;
+	overflow: hidden;
+	text-align: center;
+	/*width: 100%;*/
+}
+.jugallery-holder, .jugallery:before {
+	content: "";
+	clear: both;
+}
+.jugallery-holder .jugallery li {
+	clear: none;
+    float: left;
+	list-style: none outside none;
+    margin: 5px;
+    width: auto;
+}
+.jugallery-holder .jugallery li.placeHolder div {
+	background: #f5f5f5;
+	border: 1px dashed #CCC;
+	opacity: 0.8;
+	width: 100%;
+	height: 100%;
+	display: block;
+	padding: 5px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;  
+}
+.jugallery-holder .jugallery li  div.img-element {
+	background: #FFF;
+	border: 1px solid #EE9900;
+	position: relative;
+	overflow: hidden;
+    text-align: center;
+	padding: 3px;
+	width: 100px;
+	height: 130px;
+	transition: all 0.2s ease 0s;
+	-webkit-transition: all 0.2s ease 0s;
+}
+.jugallery-holder .jugallery li  div.img-element img.img-item {
+	float: none;
+	max-width: 100px;
+	max-height: 100px;
+}
+.jugallery-holder .jugallery li  div.unpublished {
+    border: 1px solid #C0C0C0;
+	opacity: 0.7;
+}
+.jugallery-holder .jugallery li  div .view-image {
+    background: url("../images/view-icon.png") no-repeat scroll 0 0 transparent;
+    height: 16px;
+    right: 40px;
+    position: absolute;
+    text-indent: -999em;
+    top: 5px;
+    width: 16px;
+}
+.jugallery-holder .jugallery li  div .publish-image {
+    background: url("../images/published-icon.png") no-repeat scroll 0 0 transparent;
+    height: 16px;
+    right: 20px;
+    position: absolute;
+    text-indent: -999em;
+    top: 5px;
+    width: 16px;
+}
+.jugallery-holder .jugallery li  div.unpublished .publish-image {
+    background: url("../images/unpublished-icon.png") no-repeat scroll 0 0 transparent;
+}
+.jugallery-holder .jugallery li  div .delete-image {
+    background: url("../images/delete-icon.png") no-repeat scroll 0 0 transparent;
+    height: 16px;
+    right: 3px;
+    position: absolute;
+    text-indent: -999em;
+    top: 5px;
+    width: 16px;
+}
+.jugallery-holder .jugallery li  div .delete-image.deleting {
+	background: url("../images/ajax-loader.gif") no-repeat scroll 0 0 transparent;
+}
+.jugallery-holder .jugallery li  div .edit-img {
+    cursor: pointer;
+    display: block;
+    float: left;
+    text-align: center;
+    width: 100%;
+}
+.jugallery-holder .jugallery li  div .edit-img .edit-icon {
+    background: url("../images/edit-icon.png") no-repeat scroll 0 0 transparent;
+    display: inline-block;
+    height: 16px;
+    line-height: 16px;
+    padding-left: 16px;
+    text-indent: -999em;
+}
+.jugallery-holder .jugallery li  div .edit-img .img-name {
+	display: inline-block;
+	font-size: 80%;
+	margin-left: 3px;
+}
+.jugallery-holder .overlay {
+    background: url("../images/loading.gif") no-repeat scroll center center #FFFFFF;
+    height: 100%;
+    left: 0;
+    opacity: 0.8;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+.viewImagePopup {
+    height: auto !important;
+    width: auto !important;
+    max-width: 700px;
+}
+.viewImagePopup img {
+	max-height: 100%;
+	max-width: 100%;
+}
+
+/*Upload*/
+.juuploader {
+	float: left;
+}
+.juuploader .file-display {
+    border: 1px solid #CCCCCC;
+    cursor: pointer;
+    float: left;
+    height: 14px;
+    line-height: 14px;
+    margin: 5px 5px 5px 0;
+    max-width: 200px;
+    min-width: 100px;
+    overflow: hidden;
+    padding: 3px 6px;
+    white-space: nowrap;
+}
+.juuploader .btn-upload {
+	margin: 5px 5px 5px 0;
+	line-height: 18px;
+}
+.jureloadimages {
+    background: url("../images/reload-icon.png") no-repeat scroll center center transparent !important;
+    border: 0 none;
+    cursor: pointer;
+    float: left;
+    height: 22px !important;
+    margin: 5px;
+    text-indent: -999em;
+    width: 22px !important;
+}
+.upload-message {
+	display: none;
+    float: left;
+    margin: 5px;
+    padding: 3px;
+	white-space: nowrap;
+}
+.upload-message .uploading{
+    background: url("../images/ajax-loader.gif") no-repeat scroll 0 0 transparent;
+    float: left;
+    height: 16px;
+    width: 16px;
+}
+
+/*Group fields*/
+.jugroupfield {
+    border: 0 none;
+    clear: both;
+    display: block;
+    float: left;
+    margin: 0 !important;
+    min-height: auto;
+    min-width: 400px;
+    width: 100%;
+}
+.jugroupfield .jugroup {
+	background: #FFFDF2;
+	background-image: linear-gradient(bottom, #FFFCDB 0%, #FFFDF2 100%);
+	background-image: -o-linear-gradient(bottom, #FFFCDB 0%, #FFFDF2 100%);
+	background-image: -moz-linear-gradient(bottom, #FFFCDB 0%, #FFFDF2 100%);
+	background-image: -webkit-linear-gradient(bottom, #FFFCDB 0%, #FFFDF2 100%);
+	background-image: -ms-linear-gradient(bottom, #FFFCDB 0%, #FFFDF2 100%);
+	background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #FFFCDB),color-stop(1, #FFFDF2));
+    border-bottom: 1px solid #E6DC6C;
+	border-top: 1px solid #E6DC6C;
+	color: #444444;
+	cursor: auto !important;
+	font-size: 14px;
+	line-height: 1.2;
+	margin: 10px 0 10px;
+	padding: 6px 10px;
+	position: relative;
+	transition: all 0.5s ease 0s;
+	-webkit-transition: all 0.5s ease 0s;
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.jugroupfield .jugroup-red {
+	background: #ffdbdb;
+	background-image: linear-gradient(bottom, #ffdbdb 0%, #fff3f2 100%);
+	background-image: -o-linear-gradient(bottom, #ffdbdb 0%, #fff3f2 100%);
+	background-image: -moz-linear-gradient(bottom, #ffdbdb 0%, #fff3f2 100%);
+	background-image: -webkit-linear-gradient(bottom, #ffdbdb 0%, #fff3f2 100%);
+	background-image: -ms-linear-gradient(bottom, #ffdbdb 0%, #fff3f2 100%);
+	background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #ffdbdb),color-stop(1, #fff3f2));
+    border-bottom: 1px solid #de9797;
+	border-top: 1px solid #de9797;
+}
+.jugroupfield .jugroup-green {
+	background: #dbffdd;
+	background-image: linear-gradient(bottom, #dbffdd 0%, #f2fff3 100%);
+	background-image: -o-linear-gradient(bottom, #dbffdd 0%, #f2fff3 100%);
+	background-image: -moz-linear-gradient(bottom, #dbffdd 0%, #f2fff3 100%);
+	background-image: -webkit-linear-gradient(bottom, #dbffdd 0%, #f2fff3 100%);
+	background-image: -ms-linear-gradient(bottom, #dbffdd 0%, #f2fff3 100%);
+	background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #dbffdd),color-stop(1, #f2fff3));
+    border-bottom: 1px solid #97de9b;
+	border-top: 1px solid #97de9b;
+}
+.jugroupfield .jugroup-blue {
+	background: #dbedff;
+	background-image: linear-gradient(bottom, #dbedff 0%, #f2f9ff 100%);
+	background-image: -o-linear-gradient(bottom, #dbedff 0%, #f2f9ff 100%);
+	background-image: -moz-linear-gradient(bottom, #dbedff 0%, #f2f9ff 100%);
+	background-image: -webkit-linear-gradient(bottom, #dbedff 0%, #f2f9ff 100%);
+	background-image: -ms-linear-gradient(bottom, #dbedff 0%, #f2f9ff 100%);
+	background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #dbedff),color-stop(1, #f2f9ff));
+    border-bottom: 1px solid #97bade;
+	border-top: 1px solid #97bade;
+}
+.jugroupfield .jugroup-violet {
+	background: #fcdbff;
+	background-image: linear-gradient(bottom, #fcdbff 0%, #fef2ff 100%);
+	background-image: -o-linear-gradient(bottom, #fcdbff 0%, #fef2ff 100%);
+	background-image: -moz-linear-gradient(bottom, #fcdbff 0%, #fef2ff 100%);
+	background-image: -webkit-linear-gradient(bottom, #fcdbff 0%, #fef2ff 100%);
+	background-image: -ms-linear-gradient(bottom, #fcdbff 0%, #fef2ff 100%);
+	background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #fcdbff),color-stop(1, #fef2ff));
+    border-bottom: 1px solid #d897de;
+	border-top: 1px solid #d897de;
+}
+.jugroupfield .jugroup.close {
+	background-image: linear-gradient(bottom, #F0F0F0 0%, #FCFCFC 100%);
+	background-image: -o-linear-gradient(bottom, #F0F0F0 0%, #FCFCFC 100%);
+	background-image: -moz-linear-gradient(bottom, #F0F0F0 0%, #FCFCFC 100%);
+	background-image: -webkit-linear-gradient(bottom, #F0F0F0 0%, #FCFCFC 100%);
+	background-image: -ms-linear-gradient(bottom, #F0F0F0 0%, #FCFCFC 100%);
+	background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #F0F0F0),color-stop(1, #FCFCFC));
+    border-bottom: 1px solid #C0C0C0;
+	border-top: 1px solid #C0C0C0;
+	margin: 10px 0 0px;
+	opacity: 1;
+	padding: 6px 10px;
+	position: relative;
+}
+.jugroupfield .jugroup span {
+}
+.jugroupfield .jugroup a.toggle-btn{
+    background: url("../images/toggle-btn.png") no-repeat scroll center center transparent;
+    cursor: pointer;
+    height: 7px;
+    position: absolute;
+    right: 10px;
+    text-indent: -2000em;
+    top: 10px;
+    width: 11px;
+}
+.jugroupfield .jugroup.open a.toggle-btn {
+    background-position: left top;
+}
+.jugroupfield .jugroup.open a.toggle-btn:hover {
+    background-position: right top;
+}
+.jugroupfield .jugroup.close a.toggle-btn {
+    background-position: left bottom;
+}
+.jugroupfield .jugroup.close a.toggle-btn:hover {
+    background-position: right bottom;
+}
+
+/*Modal box*/
+#sbox-content {
+	border: none;
+	padding: 0;
+}
+#sbox-content fieldset {
+    border: 1px solid #CCCCCC;
+    margin-bottom: 10px;
+    padding: 10px;
+    text-align: left;
+}
+#sbox-content #imgdescription {
+	width: 100%;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;	/* Firefox, other Gecko */
+	box-sizing: border-box;		 /* Opera/IE 8+ */
+}
+
+#sbox-content ul {
+	margin: 0;
+}
+#sbox-content ul li {
+    float: left;
+    list-style: none outside none;
+	padding: 0;
+    width: 100%;
+}
+#sbox-content ul li label {
+	width: 30%;
+	float: left;
+}
+#sbox-content ul li input, #sbox-content ul li input {
+	float: left;
+}
+
+/*Message*/
+.jumessage {
+    background: none repeat scroll 0 0 #FEFDF2;
+    border-color: #FEC052;
+    border-radius: 2px 2px 2px 2px;
+	border-style: dashed;
+	border-width: 1px;
+    color: #333333;
+    font-size: 12px;
+    margin: 10px 0;
+	max-width: 450px;
+    padding: 8px;
+	width: auto;
+}
+div[class*="juicon-"] {
+    background-position: 10px center;
+    background-repeat: no-repeat;
+	line-height: 2;
+    min-height: 32px;
+    padding-left: 50px !important;
+}
+.juicon-bug {
+	background-image: url('../images/icon/bug.png');
+}
+.juicon-cart {
+	background-image: url('../images/icon/cart.png');
+}
+.juicon-cloud {
+	background-image: url('../images/icon/cloud.png');
+}
+.juicon-config {
+	background-image: url('../images/icon/config.png');
+}
+.juicon-flag {
+	background-image: url('../images/icon/flag.png');
+}
+.juicon-help {
+	background-image: url('../images/icon/help.png');
+}
+.juicon-image {
+	background-image: url('../images/icon/image.png');
+}
+.juicon-info {
+	background-image: url('../images/icon/info.png');
+}
+.juicon-key {
+	background-image: url('../images/icon/key.png');
+}
+.juicon-like {
+	background-image: url('../images/icon/like.png');
+}
+.juicon-notice {
+	background-image: url('../images/icon/notice.png');
+}
+.juicon-question {
+	background-image: url('../images/icon/question.png');
+}
+.juicon-star {
+	background-image: url('../images/icon/star.png');
+}
+.juicon-tip {
+	background-image: url('../images/icon/tip.png');
+}
+.juicon-user {
+	background-image: url('../images/icon/user.png');
+}
+div[class*="box-"] {
+	border-style: dashed;
+	border-width: 1px;
+	padding: 8px;
+}
+.box-red {
+	background-color: #fef2f2;
+	border-color: #E48B8B;
+}
+.box-green {
+	background-color: #F2FEF2;
+	border-color: #80CB7B;
+}
+.box-blue {
+	background-color: #F2F9FE;
+	border-color: #7AABDE;
+}
+.box-violet {
+	background-color: #FEF2FD;
+	border-color: #DE7ACF;
+}
+.box-yellow {
+	background-color: #FEFDF2;
+	border-color: #E6DC6C;
+}
+.box-blank {
+	background-color: #FFFFFF;
+	border-color: #FFFFFF;
+}
+.ju-fullwidth {
+	width: 100%;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;	/* Firefox, other Gecko */
+	box-sizing: border-box;		 /* Opera/IE 8+ */
+}
+.ju-seperator {
+	border: 1px solid #EE9900;
+}
+.no-display {
+	display: none;
+}

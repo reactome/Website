@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.4" type="plugin" group="editors-xtd" method="upgrade">
+	<name>plg_editors-xtd_tabs</name>
+	<description>PLG_EDITORS-XTD_TABS_DESC</description>
+	<version>7.1.8</version>
+	<creationDate>January 2018</creationDate>
+	<author>Regular Labs (Peter van Westen)</author>
+	<authorEmail>info@regularlabs.com</authorEmail>
+	<authorUrl>https://www.regularlabs.com</authorUrl>
+	<copyright>Copyright © 2018 Regular Labs - All Rights Reserved</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+
+	<scriptfile>script.install.php</scriptfile>
+
+	<files>
+		<filename plugin="tabs">tabs.php</filename>
+		<filename>fields.xml</filename>
+		<filename>helper.php</filename>
+		<filename>popup.php</filename>
+		<filename>popup.tmpl.php</filename>
+		<filename>script.install.helper.php</filename>
+		<folder>language</folder>
+	</files>
+
+	<config>
+		<fields name="params" addfieldpath="/libraries/regularlabs/fields">
+			<fieldset name="description">
+				<field name="@loadlanguage_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
+				<field name="@loadlanguage" type="rl_loadlanguage" extension="plg_editors-xtd_tabs" />
+				<field name="@license" type="rl_license" extension="TABS" />
+				<field name="@version" type="rl_version" extension="TABS" />
+				<field name="@dependency" type="rl_dependency"
+					   label="TAB_THE_SYSTEM_PLUGIN"
+					   file="/plugins/system/tabs/tabs.php" />
+				<field name="@header" type="rl_header"
+					   label="TABS"
+					   description="TABS_DESC"
+					   url="https://www.regularlabs.com/tabs" />
+
+				<field name="@notice_settings" type="rl_plaintext"
+					   description="TAB_SETTINGS,&lt;a href=&quot;index.php?option=com_plugins&amp;filter_folder=system&amp;filter_search=tabs&quot; target=&quot;_blank&quot;&gt;,&lt;/a&gt;" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>

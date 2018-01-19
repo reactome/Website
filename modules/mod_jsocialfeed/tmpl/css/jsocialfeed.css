@@ -1,0 +1,108 @@
+/**
+ * @author     Garda Informatica <info@gardainformatica.it>
+ * @copyright  Copyright (C) 2014 Garda Informatica. All rights reserved.
+ * @license    http://www.gnu.org/licenses/gpl-3.0.html  GNU General Public License version 3
+ * @package    JSocialFeed Joomla Extension
+ * @link       http://www.gardainformatica.it
+ */
+
+.jsocialfeed{
+	margin: 0;
+}
+
+.jsocialfeed >  li.jsf-dashed {
+	border-bottom: 1px dashed #AFAFAF;
+}
+
+.jsocialfeed >  li > img{
+	float:left;
+	margin: 0 5px 0 0;
+	padding-top:2px;
+}
+
+.jsocialfeed >  li  > .jsf-title > a {
+    font-family: Arial,sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+	margin-top:5px;
+	margin: 0 6px 0 0;
+}
+.jsocialfeed >  li > .jsf-content {
+    font-size: 14px;
+    margin: 0 36px 0 0;
+}
+.jsocialfeed >  li > .jsf-title {
+    margin: 0 36px 0 0;
+	padding-top:2px;
+}
+
+
+.jsocialfeed .jsf-clearboth {
+    clear: both;
+}
+
+.jsocialfeed .jsf-replies, .jsocialfeed .jsf-plusoners, .jsocialfeed .jsf-resharers, .jsocialfeed .jsf-date {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.8) inset, 0 1px 3px rgba(0, 0, 0, 0.6) inset;
+    padding: 2px 10px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+	white-space: nowrap;
+}
+
+.bx-wrapper .jsocialfeed_loading{
+	background: url("../../../../media/jsocialfeed/images/ajax-loader.gif") no-repeat scroll 50% 50%; 
+	min-height: 66px;
+}
+.jsf-displaynone{
+	display:none;
+}
+
+@font-face {
+	font-family: 'jsficomoon';
+	src:url('fonts/icomoon.eot?7n6qlb');
+	src:url('fonts/icomoon.eot?#iefix7n6qlb') format('embedded-opentype'),
+		url('fonts/icomoon.woff?7n6qlb') format('woff'),
+		url('fonts/icomoon.ttf?7n6qlb') format('truetype'),
+		url('fonts/icomoon.svg?7n6qlb#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="jsficon-"], [class*=" jsficon-"] {
+	font-family: 'jsficomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.jsficon-bubbles:before {
+	content: "\e600";
+}
+.jsficon-thumbs-up:before {
+	content: "\e601";
+}
+.jsficon-share:before {
+	content: "\e602";
+}
+.jsficon-clock:before {
+	content: "\e603";
+}
+
+.bx-wrapper .bx-prev,.bx-wrapper .bx-next{
+	-webkit-transition-property:background-position;
+	-moz-transition-property:background-position;
+	-o-transition-property:background-position;
+	transition-property:background-position;
+	-webkit-transition-duration:.2s;
+	-moz-transition-duration:.2s;
+	-o-transition-duration:.2s;
+	transition-duration:.2s;
+}

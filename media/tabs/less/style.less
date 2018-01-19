@@ -1,0 +1,631 @@
+/**
+ * @package         Tabs
+ * @version         7.1.8
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://www.regularlabs.com
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ */
+/*
+ * You can override this stylesheet by creating your own in:
+ * /templates/[YOUR TEMPLATE]/css/tabs/style.min.css
+ */
+@import "../../regularlabs/less/init.less";
+@import "bootstrap.less";
+
+@background-color: #f5f5f5;
+@background-color-hover: #eeeeee;
+@border-color: #dddddd;
+@border-color-focus: #eab03f;
+
+span.rl_tabs-title-inactive {
+	display: inherit;
+}
+
+span.rl_tabs-title-active {
+	display: none;
+}
+
+.rl_tabs-responsive,
+.rl_tabs {
+	.clearfix();
+
+	margin-bottom: 1em;
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.rl_tabs {
+	> ul.nav-tabs {
+		> li {
+			/* Reset styles to prevent templates li styles from messing stuff up */
+			margin:           0 !important;
+			margin-bottom:    -1px !important;
+			padding:          0 !important;
+			list-style:       none !important;
+			list-style-image: none !important;
+			background:       none !important;
+			overflow-y:       visible !important;
+			&:before {
+				content: "";
+				margin:  0;
+				padding: 0;
+			}
+			> a {
+				display:         block !important;
+				.transition-duration(.2s);
+				color:           @linkColor;
+				text-decoration: none;
+				line-height:     inherit;
+				&:hover {
+					color:           @linkColorHover;
+					text-decoration: none;
+				}
+			}
+			> a:focus,
+			&.active > a:focus {
+				outline:      none;
+				border-color: @border-color-focus;
+			}
+
+			&.active {
+				span.rl_tabs-title-inactive {
+					display: none;
+				}
+				span.rl_tabs-title-active {
+					display: inherit;
+				}
+			}
+		}
+	}
+	> .tab-content {
+		padding: 0;
+		> .tab-pane {
+			padding:    12px 0;
+			overflow-x: auto;
+			overflow-y: hidden;
+			& > :first-child {
+				margin-top: 0;
+			}
+			& > :last-child {
+				margin-bottom: 0;
+			}
+			.rl_tabs-title {
+				display: none;
+			}
+		}
+	}
+
+	.rl_tabs-scroll,
+	.rl_tabs-sm-scroll {
+		position:   relative;
+		visibility: hidden;
+		padding:    0;
+	}
+
+	// Outline Content
+	&.outline_content {
+		> .tab-content {
+			border:     1px solid @border-color;
+			border-top: none;
+			.border-radius(0 0 4px 4px);
+			> .tab-pane {
+				padding: 12px;
+			}
+		}
+
+		> ul.nav-tabs {
+			margin-bottom: 0;
+		}
+	}
+
+	// Outline Tabs
+	&.outline_handles {
+		ul.nav-tabs > li {
+			a,
+			a:hover {
+				border: 1px solid @border-color;
+			}
+		}
+	}
+
+	&.color_inactive_handles {
+		> ul.nav {
+			> li {
+				> a {
+					background-color: @background-color;
+					margin-right:     5px;
+					&:hover {
+						background-color: @background-color-hover;
+					}
+				}
+				&.active {
+					> a,
+					> a:hover {
+						background-color: #ffffff;
+					}
+				}
+			}
+		}
+	}
+
+	// Right Alignment
+	&.align_right {
+		> ul.nav-tabs {
+			> li {
+				float: right;
+				> a {
+					margin-left:  2px;
+					margin-right: 0;
+				}
+			}
+		}
+	}
+
+	// Centered Alignment
+	&.align_center {
+		> ul.nav-tabs {
+			text-align: center;
+			> li {
+				float:        none;
+				display:      inline-block;
+				.ie7-inline-block();
+				margin-left:  -1px;
+				margin-right: -3px;
+			}
+		}
+	}
+
+	// Justified Alignment
+	&.align_justify {
+		> ul.nav-tabs {
+			text-align:    center;
+			display:       table;
+			width:         100%;
+			margin-bottom: -1px;
+			> .rl_tabs-scroll {
+				display: table-cell;
+			}
+			> li {
+				float:   none;
+				display: table-cell;
+				&:last-child > a {
+					margin-right: 0;
+				}
+				a,
+				a:hover {
+					margin-bottom: -1px;
+					border-bottom: 1px solid transparent;
+				}
+			}
+			&:before {
+				display: none;
+			}
+			&:after {
+				display: none;
+			}
+		}
+		&.bottom {
+			> ul.nav-tabs {
+				margin-bottom: 0;
+				margin-top:    -1px;
+				> li {
+					a,
+					a:hover {
+						margin-bottom: 0;
+						margin-top:    -1px;
+						border-bottom: 1px solid @border-color;
+						border-top:    1px solid transparent;
+					}
+				}
+			}
+		}
+	}
+
+	// Classes: Normal state + Hover state
+
+	&.top {
+		.tabColor(@name, @color) {
+			> ul.nav-tabs {
+				> li.@{name} {
+					> a,
+					> a:hover {
+						border-top:  5px solid lighten(@color, 20%);
+						padding-top: 4px;
+						.border-radius(5px 5px 0 0);
+					}
+					> a:hover, // Hover state
+					&.active > a {
+						// Active state
+						border-top-color: @color;
+					}
+				}
+			}
+		}
+
+		> ul.nav-tabs {
+			> li {
+				> a {
+					border-bottom-color: @border-color;
+				}
+				> a:focus,
+				&.active > a:focus {
+					border-bottom-color: transparent;
+					.box-shadow(0 -2px 2px rgba(234, 176, 63, 0.5));
+				}
+			}
+			> li.active {
+				a,
+				a:hover {
+					border-bottom-color: transparent;
+				}
+			}
+		}
+
+		.tabColors();
+	}
+
+	&.bottom {
+		.tabColor(@name, @color) {
+			> .nav-tabs {
+				> li.@{name} {
+					> a,
+					> a:hover {
+						border-bottom:  5px solid lighten(@color, 20%);
+						padding-bottom: 4px;
+						.border-radius(0 0 5px 5px);
+					}
+					> a:hover, // Hover state
+					&.active > a {
+						// Active state
+						border-bottom-color: @color;
+					}
+				}
+			}
+		}
+
+		> .nav-tabs {
+			border-bottom: 0;
+			margin-bottom: 18px !important;
+			border-top:    1px solid @border-color;
+			> li {
+				margin-top:    -1px !important;
+				margin-bottom: 0 !important;
+				// Actual tabs (as links)
+				> a {
+					border-top-color: @border-color;
+					.border-radius(0 0 4px 4px);
+					&:hover {
+						border-color:     transparent;
+						border-top-color: @border-color;
+					}
+				}
+				// Active state, and it's :hover to override normal :hover
+				&.active > a,
+				&.active > a:hover {
+					border-color:     @border-color;
+					border-top-color: transparent;
+				}
+				> a:focus,
+				&.active > a:focus {
+					border-top-color: transparent;
+					.box-shadow(0 2px 2px rgba(234, 176, 63, 0.5));
+				}
+			}
+		}
+
+		.tabColors();
+
+		&.outline_content {
+			> .tab-content {
+				margin:        0;
+				border:        1px solid @border-color;
+				border-bottom: none;
+				.border-radius(4px 4px 0 0);
+			}
+		}
+	}
+
+	&.left,
+	&.right {
+		> .nav-tabs {
+			border-bottom: 0;
+			margin-bottom: 18px !important;
+			> li {
+				float: none;
+				> a {
+					min-width:     74px;
+					margin-right:  0 !important;
+					margin-bottom: 3px;
+				}
+			}
+		}
+
+		&.outline_content {
+			> .tab-content {
+				border: 1px solid @border-color;
+			}
+		}
+	}
+
+	&.left {
+		.tabColor(@name, @color) {
+			> .nav-tabs {
+				> li.@{name} {
+					> a,
+					> a:hover {
+						border-left:  5px solid lighten(@color, 20%);
+						padding-left: 7px;
+						.border-radius(5px 0 0 5px);
+					}
+					> a:hover, // Hover state
+					&.active > a {
+						// Active state
+						border-left-color: @color;
+					}
+				}
+			}
+		}
+
+		> .nav-tabs {
+			float:        left;
+			margin-right: 19px;
+			border-right: 1px solid @border-color;
+			> li {
+				margin-right:  -1px !important;
+				margin-bottom: 0 !important;
+				> a {
+					.border-radius(4px 0 0 4px);
+					&:hover {
+						border-color:       transparent;
+						border-right-color: @border-color;
+					}
+				}
+				// Active state, and it's :hover to override normal :hover
+				&.active > a,
+				&.active > a:hover {
+					border-color:       @border-color;
+					border-right-color: transparent;
+				}
+				> a:focus,
+				&.active > a:focus {
+					border-right-color: transparent;
+					.box-shadow(-2px 0 2px rgba(234, 176, 63, 0.5));
+				}
+			}
+		}
+
+		.tabColors();
+
+		&.outline_content {
+			> .tab-content {
+				.border-radius(0 4px 4px 4px);
+			}
+		}
+	}
+
+	&.right {
+		.tabColor(@name, @color) {
+			> .nav-tabs {
+				> li.@{name} {
+					> a,
+					> a:hover {
+						border-right:  5px solid lighten(@color, 20%);
+						padding-right: 7px;
+						.border-radius(0 5px 5px 0);
+					}
+					> a:hover, // Hover state
+					&.active > a {
+						// Active state
+						border-right-color: @color;
+					}
+				}
+			}
+		}
+
+		> .nav-tabs {
+			float:       right;
+			margin-left: 19px;
+			border-left: 1px solid @border-color;
+			> li {
+				margin-left:   -1px !important;
+				margin-bottom: 0 !important;
+				> a {
+					.border-radius(0 4px 4px 0);
+					&:hover {
+						border-color:      transparent;
+						border-left-color: @border-color;
+					}
+				}
+				&.active > a,
+				&.active > a:hover {
+					border-color:      @border-color;
+					border-left-color: transparent;
+				}
+				> a:focus,
+				&.active > a:focus {
+					border-left-color: transparent;
+					.box-shadow(2px 0 2px rgba(234, 176, 63, 0.5));
+				}
+			}
+		}
+
+		.tabColors();
+
+		&.outline_content {
+			> .tab-content {
+				.border-radius(4px 0 4px 4px);
+			}
+		}
+	}
+
+	.tabColor(@name, @color) {
+		> ul.nav-tabs {
+			> li.@{name} {
+				&.solid {
+					> a,
+					> a:hover {
+						background-color: lighten(@color, 20%);
+						border-color:     lighten(@color, 20%);
+						color:            #ffffff;
+					}
+					> a:hover, // Hover state
+					&.active > a {
+						// Active state
+						background-color: @color;
+						border-color:     @color
+					}
+				}
+			}
+		}
+		&.outline_content {
+			> .tab-content {
+				> .tab-pane.color_content.@{name} {
+					margin: 0 -1px -1px -1px;
+					border: 2px solid @color;
+					.border-radius(0 0 4px 4px);
+				}
+			}
+		}
+		> .tab-content {
+			> .tab-pane.solid.color_content.@{name} {
+				background-color: lighten(@color, 50%);
+			}
+		}
+	}
+
+	.tabColors();
+}
+
+ul.rl_tabs-sm {
+	display: none;
+}
+
+@media (max-width: 767px) {
+	.rl_tabs-responsive {
+		> ul.rl_tabs-sm {
+			display: block;
+		}
+
+		> .rl_tabs {
+			.clearfix();
+
+			> ul.nav-tabs {
+				display: none;
+			}
+
+			> .tab-content {
+				> .tab-pane {
+					display:    block;
+					visibility: visible;
+					.rl_tabs-title {
+						display: block;
+					}
+				}
+			}
+
+			.fade {
+				opacity: 1;
+			}
+
+			// Outline Content
+			&.outline_content {
+				> .tab-content {
+					border: none;
+					> .tab-pane {
+						border:        1px solid @border-color;
+						.border-radius(4px);
+						margin-bottom: 1em;
+						padding:       12px;
+					}
+				}
+			}
+		}
+
+		.tabColor(@name, @color) {
+			> ul.rl_tabs-sm {
+				> li.@{name} {
+					> a,
+					> a:hover {
+						border:              2px solid lighten(@color, 20%);
+						border-bottom-width: 3px;
+					}
+					&:last-child > a,
+					> a:hover {
+						border-bottom-width: 2px;
+					}
+					&.solid {
+						> a,
+						> a:hover {
+							background-color: lighten(@color, 20%);
+							border-color:     lighten(@color, 20%);
+							color:            #ffffff;
+						}
+						> a:hover, // Hover state
+						&.active > a {
+							// Active state
+							background-color: @color;
+							border-color:     @color
+						}
+					}
+				}
+			}
+			> .rl_tabs {
+				&.outline_content {
+					> .tab-content {
+						> .tab-pane.@{name} {
+							border: 2px solid lighten(@color, 20%);
+						}
+					}
+				}
+			}
+		}
+
+		.tabColors();
+	}
+}
+
+@media print {
+	.rl_tabs > .nav-tabs,
+	.rl_tabs-sm {
+		display: none !important;
+	}
+
+	.rl_tabs > .tab-content,
+	.rl_tabs > .tab-content > .rl_tabs-pane {
+		display: block !important;
+		opacity: 1 !important;
+	}
+
+	.rl_tabs-title {
+		display: block !important;
+	}
+}
+
+.tabColors() {
+	// Style: blue
+	.tabColor(~'blue', @btnPrimaryBackground);
+	.tabColor(~'primary', @btnPrimaryBackground);
+
+	// Style: info
+	.tabColor(~'info', @btnInfoBackgroundHighlight);
+
+	// Style: green / success
+	.tabColor(~'green', @btnSuccessBackgroundHighlight);
+	.tabColor(~'success', @btnSuccessBackgroundHighlight);
+
+	// Style: orange / warning
+	.tabColor(~'orange', @btnWarningBackgroundHighlight);
+	.tabColor(~'warning', @btnWarningBackgroundHighlight);
+
+	// Style: red / danger
+	.tabColor(~'red', @btnDangerBackgroundHighlight);
+	.tabColor(~'danger', @btnDangerBackgroundHighlight);
+	.tabColor(~'error', @btnDangerBackgroundHighlight);
+
+	// Style: grey / gray
+	.tabColor(~'grey', #808080);
+	.tabColor(~'gray', #808080);
+}

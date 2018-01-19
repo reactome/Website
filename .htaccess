@@ -1,0 +1,145 @@
+##
+# @package    Joomla
+# @copyright  Copyright (C) 2005 - 2017 Open Source Matters. All rights reserved.
+# @license    GNU General Public License version 2 or later; see LICENSE.txt
+##
+
+##
+# READ THIS COMPLETELY IF YOU CHOOSE TO USE THIS FILE!
+#
+# The line 'Options +FollowSymLinks' may cause problems with some server configurations.
+# It is required for the use of mod_rewrite, but it may have already been set by your 
+# server administrator in a way that disallows changing it in this .htaccess file.
+# If using it causes your site to produce an error, comment it out (add # to the 
+# beginning of the line), reload your site in your browser and test your sef urls. If 
+# they work, then it has been set by your server administrator and you do not need to 
+# set it here.
+##
+
+## No directory listings
+<IfModule autoindex>
+  IndexIgnore *
+</IfModule>
+
+## Can be commented out if causes errors, see notes above.
+Options +FollowSymlinks
+Options -Indexes
+
+## Mod_rewrite in use.
+
+RewriteEngine On
+
+# WP REST API BLOCK JSON REQUESTS
+# Block/Forbid Requests to: /wp-json/
+RewriteCond %{REQUEST_URI} ^.*wp-json/ [NC]
+RewriteRule ^(.*)$ - [F]
+
+#After trying to enable HTTPS by default in the entire site using JOOMLA! interface
+#it failed, so the following two lines do that
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,NC,L]
+
+#Remove the www. from the URL - Only in PROD
+#RewriteCond %{HTTP_HOST} ^www.reactome.org
+#RewriteRule (.*) https://reactome.org/$1 [R=301,L]
+
+## Begin - Rewrite rules to block out some common exploits.
+# If you experience problems on your site then comment out the operations listed 
+# below by adding a # to the beginning of the line.
+# This attempts to block the most common type of exploit `attempts` on Joomla!
+#
+# Block any script trying to base64_encode data within the URL.
+RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [OR]
+# Block any script that includes a <script> tag in URL.
+RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
+# Block any script trying to set a PHP GLOBALS variable via URL.
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+# Block any script trying to modify a _REQUEST variable via URL.
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
+# Return 403 Forbidden header and show the content of the root home page
+RewriteRule .* index.php [F]
+#
+## End - Rewrite rules to block out some common exploits.
+
+## Begin - Custom redirects
+#
+# If you need to redirect some pages, or set a canonical non-www to
+# www redirect (or vice versa), place that code here. Ensure those
+# redirects use the correct RewriteRule syntax and the [R=302,L] flags.
+
+Redirect 302 /pages/about/reactome /what-is-reactome
+Redirect 302 /pages/about/news /about/news
+Redirect 302 /pages/about/reactome-team /about/team
+Redirect 302 /pages/about/reactome-scientific-advisory-board /sab
+Redirect 302 /pages/about/license-agreement /license
+Redirect 302 /pages/about/reactome-disclaimer /about/disclaimer
+Redirect 302 /pages/about /what-is-reactome
+
+Redirect 302 /stats.html /about/statistics
+
+Redirect 302 /pages/content/orcid-integration-project /orcid
+
+Redirect 302 /pages/documentation/developer-guide/graph-database/tutorial-participating-molecules /dev/graph-database/extract-participating-molecules
+Redirect 302 /pages/documentation/developer-guide/diagram/diagram-js /dev/diagram/js
+Redirect 302 /pages/documentation/developer-guide/diagram/diagram-gwt /dev/diagram/gwt
+Redirect 302 /pages/documentation/developer-guide/pathways-overview/fireworks-js /dev/pathways-overview/js
+Redirect 302 /pages/documentation/developer-guide/pathways-overview/fireworks-gwt /dev/pathways-overview/gwt
+Redirect 302 /pages/documentation/developer-guide/analysis-service /dev/analysis
+Redirect 302 /pages/documentation/developer-guide/content-service /dev/content-service
+Redirect 302 /pages/documentation/developer-guide/graph-database /dev/graph-database
+Redirect 302 /pages/documentation/developer-guide/diagram /dev/diagram
+Redirect 302 /pages/documentation/developer-guide/pathways-overview /dev/pathways-overview
+Redirect 302 /pages/documentation/developer-guide/partners /community/partners
+
+Redirect 302 /pages/documentation/data-model /documentation/data-model
+Redirect 302 /pages/documentation/electronically-inferred-events /documentation/inferred-events
+Redirect 302 /electronic_inference.html /documentation/inferred-events
+Redirect 302 /pages/documentation/linking-to-reactome /linking-to-us
+Redirect 302 /pages/documentation/linking-to-reactome/list-of-identifiers /linking-to-us/identifiers
+Redirect 302 /pages/documentation/citing-reactome-publications /cite
+Redirect 302 /pages/documentation/developer-guide /dev
+Redirect 302 /pages/documentation /documentation
+
+Redirect 302 /pages/community/outreach /community/outreach
+Redirect 302 /pages/community/reactome-events /community/events
+Redirect 302 /pages/community/reactome-publications /community/publications
+Redirect 302 /pages/community/training /community/training
+Redirect 302 /pages/download-data /download-data
+
+Redirect 302 /download/tools/curatorTool/install.htm /download-data/reactome-curator-tool
+
+# Used in PAPERS
+Redirect 302 /tutorials/pwp https://youtu.be/-skixrvI4nU
+
+# Forbidding any url access for the user login component
+RewriteRule index.php/staff index.php [F]
+RewriteRule index.php/component/users index.php [F]
+
+# Servers only
+#Redirect 302 /staff  /
+#Redirect 302 /administrator  /
+
+## End - Custom redirects
+
+##
+# Uncomment the following line if your webserver's URL
+# is not directly related to physical file paths.
+# Update Your Joomla! Directory (just / for root).
+##
+# RewriteBase /
+
+## Begin - Joomla! core SEF Section.
+#
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+#
+# If the requested path and file is not /index.php and the request
+# has not already been internally rewritten to the index.php script
+RewriteCond %{REQUEST_URI} !^/index\.php
+# and the requested path and file doesn't directly match a physical file
+RewriteCond %{REQUEST_FILENAME} !-f
+# and the requested path and file doesn't directly match a physical folder
+RewriteCond %{REQUEST_FILENAME} !-d
+# internally rewrite the request to the index.php script
+RewriteRule .* index.php [L]
+#
+## End - Joomla! core SEF Section.
