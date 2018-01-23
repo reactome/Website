@@ -233,7 +233,7 @@ password: Not2$hare
 Also, front-end editing is available in the [Staff area](http://localhost/Website/administrator), again, username, emails and passwords were removed.
 
 ```console
-user:     unknown158
+user:     unknown162
 password: @Dock3r999
 ```
 
