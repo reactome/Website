@@ -33,7 +33,7 @@ Please visit this [page](https://downloads.joomla.org/technical-requirements) in
 ```console
 git clone https://github.com/reactome/Website.git
 ```
-ps. For security and privacy issues our Joomla Website Database and Joomla configuration.php are not available for public use. Please use the given configuration.php provided below and a clean database could be found in database/joomla_website_public.sql
+:warning: For security and privacy issues our Joomla Website Database and Joomla configuration.php are not available for public use. Please use the given configuration.php provided below and a clean database could be found in database/joomla_website_public.sql
 
 ## MySQL Database
 
