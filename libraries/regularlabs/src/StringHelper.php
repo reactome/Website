@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.1.7274
+ * @version         18.1.18571
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -256,5 +256,17 @@ class StringHelper
 		}
 
 		return strtolower($string);
+	}
+
+	/**
+	 * Removes html tags from string
+	 *
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	public static function removeHtml($string)
+	{
+		return Html::removeHtmlTags($string);
 	}
 }

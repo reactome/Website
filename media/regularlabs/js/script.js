@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         18.1.7274
+ * @version         18.1.18571
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -70,8 +70,13 @@ var RegularLabsScripts = null;
 			}
 
 			var base = window.location.pathname;
+			base     = base.substring(0, base.lastIndexOf('/'));
 
-			if (typeof Joomla !== 'undefined' || typeof Joomla.getOptions !== 'undefined') {
+			if (
+				typeof Joomla !== 'undefined'
+				&& typeof Joomla.getOptions !== 'undefined'
+				&& Joomla.getOptions('system.paths')
+			) {
 				var paths = Joomla.getOptions('system.paths');
 				base      = paths.base;
 			}
@@ -409,9 +414,11 @@ var RegularLabsScripts = null;
 
 		resizeCodeMirror: function(id) {
 			$('#' + id + ' .CodeMirror').width(100);
-			$('#' + id + ' .CodeMirror').each(function() {
-				$(this).width($(this).parent().width());
-			})
+			setTimeout(function() {
+				$('#' + id + ' .CodeMirror').each(function() {
+					$(this).width($(this).parent().width());
+				})
+			}, 100);
 		}
 	};
 

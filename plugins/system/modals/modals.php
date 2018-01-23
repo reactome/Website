@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         9.7.1
+ * @version         9.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -39,7 +39,8 @@ class PlgSystemModals extends Plugin
 	public $_title       = 'MODALS';
 	public $_lang_prefix = 'MDL';
 
-	public $_has_tags = true;
+	public $_has_tags              = true;
+	public $_disable_on_components = true;
 
 	/*
 	 * Below are the events that this plugin uses

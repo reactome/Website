@@ -1,10 +1,10 @@
 /**
  * @package         Modals
- * @version         9.7.1
+ * @version         9.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -31,6 +31,25 @@ var RLModals          = null;
 			$(window).resize(RegularLabsModals.resizeOnBrowserResize);
 			window.addEventListener("orientationchange", RegularLabsModals.resizeOnBrowserResize, false);
 
+			$.colorbox.settings.createImg = function() {
+				var img   = new Image();
+				var title = $(this).attr('data-modal-title') ? $(this).attr('data-modal-title')
+					: $(this).attr('data-modal-img-title') ? $(this).attr('data-modal-img-title')
+						: '';
+				var alt   = $(this).attr('data-modal-alt') ? $(this).attr('data-modal-alt')
+					: $(this).attr('data-modal-img-alt') ? $(this).attr('data-modal-img-alt')
+						: title;
+
+				img.title = title;
+				img.alt   = alt;
+
+				return img;
+			};
+
+			$("#cboxContent > button").each(function() {
+				$(this).attr('aria-label', this.id.replace('cbox', ''));
+			});
+
 			$.each($('.' + options.class), function(i, el) {
 				RegularLabsModals.initModal(el);
 			});
@@ -38,6 +57,10 @@ var RLModals          = null;
 
 			$(document).bind('cbox_open', function() {
 				RegularLabsModals.window_width = $(window).width();
+
+				$("#cboxContent > button").each(function() {
+					$(this).attr('aria-label', this.id.replace('cbox', ''));
+				});
 
 				$("#colorbox").swipe({
 					swipeLeft : function(event, direction, distance, duration, fingerCount) {
@@ -156,8 +179,6 @@ var RLModals          = null;
 				if (!$modal_wrapper.is(':visible')) {
 					return;
 				}
-
-				var $modal = RegularLabsModals.active_modal;
 
 				RegularLabsModals.resize();
 				RegularLabsModals.checkScrollBar();

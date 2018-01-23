@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         9.7.1
+ * @version         9.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -130,10 +130,10 @@ class Replace
 		foreach ($matches as $match)
 		{
 			// get the link attributes
-			$attributes = Link::getLinkAttributeList($match['0']);
+			$attributes = Link::getAttributeList($match[0]);
 
 			// ignore if the link has no href or is an anchor or has a target
-			if (empty($attributes->href) || $attributes->href['0'] == '#' || isset($attributes->target))
+			if (empty($attributes->href) || $attributes->href[0] == '#' || isset($attributes->target))
 			{
 				continue;
 			}
@@ -167,7 +167,7 @@ class Replace
 		{
 			$content = trim($match['image_pre'] . $match['text'] . $match['image_post']);
 
-			list($link, $extra) = Link::getLink($match['data'], $match['link_start'], $content);
+			list($link, $extra) = Link::get($match['data'], $match['link_start'], $content);
 			$link .= '</a>';
 
 			if ($params->place_comments)
@@ -175,7 +175,7 @@ class Replace
 				$link = Protect::wrapInCommentTags($link);
 			}
 
-			self::replaceOnce($match['0'], $link, $string, $extra);
+			self::replaceOnce($match[0], $link, $string, $extra);
 		}
 	}
 
@@ -210,7 +210,7 @@ class Replace
 				['p']
 			);
 
-			list($link, $extra) = Link::getLink($match['data'], '', trim($tags['pre'] . $match['text'] . $tags['post']));
+			list($link, $extra) = Link::get($match['data'], '', trim($tags['pre'] . $match['text'] . $tags['post']));
 
 			$link = $link . '</a>';
 
@@ -223,7 +223,7 @@ class Replace
 				. $link
 				. $tags['end_pre'] . $match['end_post'];
 
-			self::replaceOnce($match['0'], $html, $string, $extra);
+			self::replaceOnce($match[0], $html, $string, $extra);
 		}
 	}
 
@@ -259,7 +259,7 @@ class Replace
 	private static function replaceLink(&$string, $match)
 	{
 		// get the link attributes
-		$attributes = Link::getLinkAttributeList($match['0']);
+		$attributes = Link::getAttributeList($match[0]);
 
 		if ( ! Pass::passLinkChecks($attributes))
 		{
@@ -295,14 +295,14 @@ class Replace
 		$params = Params::get();
 
 		$attributes->class = ! empty($attributes->class) ? $attributes->class . ' ' . $params->class : $params->class;
-		$link              = Link::buildLink($attributes, $data);
+		$link              = Link::build($attributes, $data);
 
 		if ($params->place_comments)
 		{
 			$link = Protect::wrapInCommentTags($link);
 		}
 
-		self::replaceOnce($match['0'], $link, $string);
+		self::replaceOnce($match[0], $link, $string);
 	}
 
 
@@ -319,7 +319,7 @@ class Replace
 
 		// Place the extra div stuff behind the first ending div/p tag
 		$string = RL_String::replaceOnce(
-			$match['0'],
+			$match[0],
 			$replace . $match['post'] . $extra,
 			$string
 		);

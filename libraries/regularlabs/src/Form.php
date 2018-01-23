@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.1.7274
+ * @version         18.1.18571
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -303,8 +303,11 @@ class Form
 		$url = 'index.php?option=com_ajax&plugin=regularlabs&format=raw'
 			. '&attributes=' . urlencode(base64_encode(json_encode($attributes)));
 
-		$error   = "$('#" . $id . "_spinner').remove();";
-		$success = "$('#" . $id . "').replaceWith(data);$('#" . $id . "_spinner').remove();";
+		$remove_spinner = "$('#" . $id . "_spinner').remove();";
+		$replace_field  = "$('#" . $id . "').replaceWith(data);";
+
+		$error   = $remove_spinner;
+		$success = "if(data)\{" . $replace_field . "\}" . $remove_spinner;
 
 		//	$success .= "console.log('#" . $id . "');";
 

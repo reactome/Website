@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         9.7.1
+ * @version         9.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -62,7 +62,7 @@ class Document
 
 		JHtml::script('modals/jquery.touchSwipe.min.js', false, true);
 		JHtml::script('modals/jquery.colorbox-min.js', false, true);
-		RL_Document::script('modals/script.min.js', ($params->media_versioning ? '9.7.1' : ''));
+		RL_Document::script('modals/script.min.js', ($params->media_versioning ? '9.8.0' : ''));
 
 		if ($params->load_stylesheet)
 		{
@@ -89,7 +89,7 @@ class Document
 	{
 		$url = explode('#', $url, 2);
 
-		$url['0'] .= (strpos($url['0'], '?') === false) ? '?print=1' : '&amp;print=1';
+		$url[0] .= (strpos($url[0], '?') === false) ? '?print=1' : '&amp;print=1';
 
 		$url = implode('#', $url);
 
@@ -100,29 +100,29 @@ class Document
 	{
 		$url = explode('#', $url, 2);
 
-		if (substr($url['0'], 0, 4) != 'http'
-			&& strpos($url['0'], 'index.php') === 0
-			&& strpos($url['0'], '/') === false
+		if (substr($url[0], 0, 4) != 'http'
+			&& strpos($url[0], 'index.php') === 0
+			&& strpos($url[0], '/') === false
 		)
 		{
-			$url['0'] = JRoute::_($url['0']);
+			$url[0] = JRoute::_($url[0]);
 		}
 
-		$url['0'] = self::setUrlAttribute($url['0'], 'ml');
+		$url[0] = self::setUrlAttribute($url[0], 'ml');
 
 		if ($iframe)
 		{
-			$url['0'] = self::setUrlAttribute($url['0'], 'iframe');
+			$url[0] = self::setUrlAttribute($url[0], 'iframe');
 		}
 
 		if ($fullpage)
 		{
-			$url['0'] = self::setUrlAttribute($url['0'], 'fullpage');
+			$url[0] = self::setUrlAttribute($url[0], 'fullpage');
 		}
 
 		if ($print)
 		{
-			$url['0'] = self::setUrlAttribute($url['0'], 'print');
+			$url[0] = self::setUrlAttribute($url[0], 'print');
 		}
 
 		$url = implode('#', $url);

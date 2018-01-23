@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.1.7274
+ * @version         18.1.18571
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -115,6 +115,7 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 				}
 
 				$agents[] = ['Chrome (' . JText::_('JALL') . ')', 'Chrome'];
+				$agents[] = ['Chrome 61-70', '#Chrome/(6[1-9]|70)\.#'];
 				$agents[] = ['Chrome 51-60', '#Chrome/(5[1-9]|60)\.#'];
 				$agents[] = ['Chrome 41-50', '#Chrome/(4[1-9]|50)\.#'];
 				$agents[] = ['Chrome 31-40', '#Chrome/(3[1-9]|40)\.#'];
@@ -122,16 +123,17 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 				$agents[] = ['Chrome 11-20', '#Chrome/(1[1-9]|20)\.#'];
 				$agents[] = ['Chrome 1-10', '#Chrome/([1-9]|10)\.#'];
 				$agents[] = ['Firefox (' . JText::_('JALL') . ')', 'Firefox'];
+				$agents[] = ['Firefox 51-60', '#Firefox/(5[1-9]|60)\.#'];
 				$agents[] = ['Firefox 41-50', '#Firefox/(4[1-9]|50)\.#'];
 				$agents[] = ['Firefox 31-40', '#Firefox/(3[1-9]|40)\.#'];
 				$agents[] = ['Firefox 21-30', '#Firefox/(2[1-9]|30)\.#'];
 				$agents[] = ['Firefox 11-20', '#Firefox/(1[1-9]|20)\.#'];
 				$agents[] = ['Firefox 1-10', '#Firefox/([1-9]|10)\.#'];
-				$agents[] = ['Edge (' . JText::_('JALL') . ')', 'Edge'];
-				$agents[] = ['Edge 12', 'Edge/12'];
 				$agents[] = ['Internet Explorer (' . JText::_('JALL') . ')', 'MSIE'];
-				$agents[] = ['Internet Explorer Edge', 'MSIE Edge']; // missing MSIE is added to agent string in assingnments/agents.php
-				$agents[] = ['Internet Explorer 11', 'MSIE 11']; // missing MSIE is added to agent string in assingnments/agents.php
+				$agents[] = ['Internet Explorer Edge', 'MSIE Edge']; // missing MSIE is added to agent string in assignments/agents.php
+				$agents[] = ['Edge 13', 'Edge/13'];
+				$agents[] = ['Edge 12', 'Edge/12'];
+				$agents[] = ['Internet Explorer 11', 'MSIE 11']; // missing MSIE is added to agent string in assignments/agents.php
 				$agents[] = ['Internet Explorer 10.6', 'MSIE 10.6'];
 				$agents[] = ['Internet Explorer 10.0', 'MSIE 10.0'];
 				$agents[] = ['Internet Explorer 10', 'MSIE 10.'];
@@ -140,12 +142,14 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 				$agents[] = ['Internet Explorer 7', 'MSIE 7.'];
 				$agents[] = ['Internet Explorer 1-6', '#MSIE [1-6]\.#'];
 				$agents[] = ['Opera (' . JText::_('JALL') . ')', 'Opera'];
+				$agents[] = ['Opera 41-50', '#Opera/(4[1-9]|50)\.#'];
 				$agents[] = ['Opera 31-40', '#Opera/(3[1-9]|40)\.#'];
 				$agents[] = ['Opera 21-30', '#Opera/(2[1-9]|30)\.#'];
 				$agents[] = ['Opera 11-20', '#Opera/(1[1-9]|20)\.#'];
 				$agents[] = ['Opera 1-10', '#Opera/([1-9]|10)\.#'];
 				$agents[] = ['Safari (' . JText::_('JALL') . ')', 'Safari'];
-				//$agents[] = ['Safari 10', '#Version/10\..*Safari/#'];
+				$agents[] = ['Safari 11', '#Version/11\..*Safari/#'];
+				$agents[] = ['Safari 10', '#Version/10\..*Safari/#'];
 				$agents[] = ['Safari 9', '#Version/9\..*Safari/#'];
 				$agents[] = ['Safari 8', '#Version/8\..*Safari/#'];
 				$agents[] = ['Safari 7', '#Version/7\..*Safari/#'];

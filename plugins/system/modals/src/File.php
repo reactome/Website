@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         9.7.1
+ * @version         9.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -54,9 +54,9 @@ class File
 			return false;
 		}
 
-		if (strpos($filetypes['0'], ',') !== false)
+		if (strpos($filetypes[0], ',') !== false)
 		{
-			$filetypes = RL_Array::toArray($filetypes['0']);
+			$filetypes = RL_Array::toArray($filetypes[0]);
 		}
 
 		$pass = in_array($filetype, $filetypes);
@@ -152,7 +152,7 @@ class File
 
 		$ext = explode('?', $info['extension']);
 
-		return strtolower($ext['0']);
+		return strtolower($ext[0]);
 	}
 
 	public static function getFileName($url)
@@ -178,7 +178,7 @@ class File
 
 
 		$title = explode('.', $file_name);
-		$title = $title['0'];
+		$title = $title[0];
 		$title = RL_RegEx::replace('[_-]([0-9]+|[a-z])$', '', $title);
 		$title = str_replace(['-', '_'], ' ', $title);
 

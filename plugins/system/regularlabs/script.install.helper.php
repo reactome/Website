@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.1.7274
+ * @version         18.1.18571
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -35,7 +35,7 @@ class PlgSystemRegularLabsInstallerScriptHelper
 	{
 		if ( ! in_array($route, ['install', 'update']))
 		{
-			return;
+			return true;
 		}
 
 		JFactory::getLanguage()->load('plg_system_regularlabsinstaller', JPATH_PLUGINS . '/system/regularlabsinstaller');
@@ -49,6 +49,8 @@ class PlgSystemRegularLabsInstallerScriptHelper
 		{
 			return false;
 		}
+
+		return true;
 	}
 
 	public function postflight($route, JAdapterInstance $adapter)

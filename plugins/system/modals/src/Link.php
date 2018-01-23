@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         9.7.1
+ * @version         9.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -22,7 +22,7 @@ use RegularLabs\Library\StringHelper as RL_String;
 
 class Link
 {
-	public static function buildLink($attributes, $data, $content = '')
+	public static function build($attributes, $data, $content = '')
 	{
 
 		self::setVideoUrl($attributes, $data);
@@ -77,7 +77,7 @@ class Link
 			$data['video']     = 'true';
 		}
 
-		if ($attributes->href && $attributes->href['0'] != '#' && ! $isexternal && ! $ismedia)
+		if ($attributes->href && $attributes->href[0] != '#' && ! $isexternal && ! $ismedia)
 		{
 			$attributes->href = Document::addUrlAttributes($attributes->href, $isiframe, $fullpage, ! empty($data['print']));
 		}
@@ -90,6 +90,19 @@ class Link
 		}
 
 
+		// Add aria label for empty links for accessibility
+		if (empty($content))
+		{
+			$label = isset($attributes->title)
+				? $attributes->title
+				: (isset($data['title'])
+					? RL_String::removeHtml($data['title'])
+					: ''
+				);
+
+			$attributes->{'aria-label'} = $label ?: 'Popup link';
+		}
+
 		return
 			'<a'
 			. Data::flattenAttributeList($attributes)
@@ -98,18 +111,18 @@ class Link
 			. $content;
 	}
 
-	public static function getLink($string, $link = '', $content = '')
+	public static function get($string, $link = '', $content = '')
 	{
-		list($attributes, $data, $extra) = self::getLinkData($string, $link);
+		list($attributes, $data, $extra) = self::getData($string, $link);
 
-		return [self::buildLink($attributes, $data, $content), $extra];
+		return [self::build($attributes, $data, $content), $extra];
 	}
 
-	public static function getLinkData($string, $link = '')
+	public static function getData($string, $link = '')
 	{
 		$params = Params::get();
 
-		$attributes = self::prepareLinkAttributeList($link);
+		$attributes = self::prepareAttributeList($link);
 
 		RL_PluginTag::protectSpecialChars($string);
 
@@ -126,7 +139,7 @@ class Link
 			// to prevent issues with grabbing values from old syntax
 			if (RL_RegEx::match('^([a-z]+)=', $string, $match))
 			{
-				if ($match['1'] != 'url' && $match['1'] != 'href')
+				if ($match[1] != 'url' && $match[1] != 'href')
 				{
 					$string = 'url=|' . $string;
 				}
@@ -213,6 +226,70 @@ class Link
 		return JText::_($string);
 	}
 
+	private static function prepareAttributeList($link)
+	{
+		$params = Params::get();
+
+		$attributes        = (object) [];
+		$attributes->href  = '';
+		$attributes->class = $params->class;
+		$attributes->id    = '';
+
+		if ( ! $link)
+		{
+			return $attributes;
+		}
+
+		$link_attributes = self::getAttributeList(trim($link));
+
+		foreach ($link_attributes as $key => $val)
+		{
+			$key = trim($key);
+			$val = trim($val);
+
+			if ($key == '' || $val == '')
+			{
+				continue;
+			}
+
+			if ($key == 'class')
+			{
+				$attributes->{$key} = trim($attributes->{$key} . ' ' . $val);
+				continue;
+			}
+
+			$attributes->{$key} = $val;
+		}
+
+		return $attributes;
+	}
+
+	public static function getAttributeList($string)
+	{
+		$attributes = (object) [];
+
+		if ( ! $string)
+		{
+			return $attributes;
+		}
+
+		$params = Params::get();
+
+		RL_RegEx::matchAll('([a-z0-9_-]+)\s*=\s*(?:"(.*?)"|\'(.*?)\')', $string, $params);
+
+		if (empty($params))
+		{
+			return $attributes;
+		}
+
+		foreach ($params as $param)
+		{
+			$attributes->{$param[1]} = isset($param[3]) ? $param[3] : $param[2];
+		}
+
+		return $attributes;
+	}
+
 	private static function cleanUrl($url)
 	{
 		return RL_RegEx::replace('<a[^>]*>(.*?)</a>', '\1', $url);
@@ -259,9 +336,9 @@ class Link
 			return $url;
 		}
 
-		$url = 'https://www.youtube.com/embed/' . $parts['1'] . '?' . $parts['2'];
+		$url = 'https://www.youtube.com/embed/' . $parts[1] . '?' . $parts[2];
 
-		if (strpos($parts['2'], 'wmode=transparent') !== false)
+		if (strpos($parts[2], 'wmode=transparent') !== false)
 		{
 			return $url;
 		}
@@ -283,72 +360,7 @@ class Link
 
 		return
 			'https://player.vimeo.com/video/'
-			. $parts['1']
-			. $parts['2'];
+			. $parts[1]
+			. $parts[2];
 	}
-
-	private static function prepareLinkAttributeList($link)
-	{
-		$params = Params::get();
-
-		$attributes        = (object) [];
-		$attributes->href  = '';
-		$attributes->class = $params->class;
-		$attributes->id    = '';
-
-		if ( ! $link)
-		{
-			return $attributes;
-		}
-
-		$link_attributes = self::getLinkAttributeList(trim($link));
-
-		foreach ($link_attributes as $key => $val)
-		{
-			$key = trim($key);
-			$val = trim($val);
-
-			if ($key == '' || $val == '')
-			{
-				continue;
-			}
-
-			if ($key == 'class')
-			{
-				$attributes->{$key} = trim($attributes->{$key} . ' ' . $val);
-				continue;
-			}
-
-			$attributes->{$key} = $val;
-		}
-
-		return $attributes;
-	}
-
-	public static function getLinkAttributeList($string)
-	{
-		$attributes = (object) [];
-
-		if ( ! $string)
-		{
-			return $attributes;
-		}
-
-		$params = Params::get();
-
-		RL_RegEx::matchAll('([a-z0-9_-]+)\s*=\s*(?:"(.*?)"|\'(.*?)\')', $string, $params);
-
-		if (empty($params))
-		{
-			return $attributes;
-		}
-
-		foreach ($params as $param)
-		{
-			$attributes->{$param['1']} = isset($param['3']) ? $param['3'] : $param['2'];
-		}
-
-		return $attributes;
-	}
-
 }
