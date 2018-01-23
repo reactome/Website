@@ -96,7 +96,7 @@ function favgeneratesets(setel) {
 
             if (cnumber > 1) {
 
-                jQuery(this).css('display','none');
+                jQuery(this).css('display','block');
 
             }
 
