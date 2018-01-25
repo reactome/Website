@@ -114,6 +114,10 @@ Redirect 302 /tutorials/pwp https://youtu.be/-skixrvI4nU
 # Forbidding any url access for the user login component
 RewriteRule index.php/staff index.php [F]
 RewriteRule index.php/component/users index.php [F]
+#RewriteRule component/users index.php [F]
+
+#RewriteCond %{QUERY_STRING} (^|&)option=com_users(&|$)
+#RewriteRule ^(.*) - [F]
 
 # Servers only
 #Redirect 302 /staff  /

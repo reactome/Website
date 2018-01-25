@@ -113,63 +113,56 @@ JHTML::script('modules/mod_favpromote4col/theme/js/viewportchecker/viewportcheck
 <div id="favpromote4col-<?php echo $custom_id; ?>" class="favth-row">
 
 	<?php
-	$col_class = '';
-	$active_columns = array($show_column1,$show_column2,$show_column3,$show_column4,$show_column5,$show_column6);
-	$columns_check = 0; foreach ($active_columns as $active_column) { if ($active_column == 1) { $columns_check++; } }
-
-	if ($columns_check == 6) { $col_class = 'favth-col-lg-2 favth-col-md-4 favth-col-sm-6 favth-col-xs-12'; }
-	else if ($columns_check == 5) { $col_class = 'favth-col-lg-2-4 favth-col-md-4 favth-col-sm-6 favth-col-xs-12'; }
-	else if ($columns_check <= 4) { $col_class = 'favth-col-lg-3 favth-col-md-3 favth-col-sm-6 favth-col-xs-12'; }
-	//else if ($columns_check == 3) { $col_class = 'favth-col-lg-4 favth-col-md-4 favth-col-sm-4 favth-col-xs-12'; }
-	//else if ($columns_check == 2) { $col_class = 'favth-col-lg-6 favth-col-md-6 favth-col-sm-6 favth-col-xs-12'; }
-	//else if ($columns_check == 1) { $col_class = 'favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12'; }
-
 	$col_class = 'favth-col-lg-3 favth-col-md-3 favth-col-sm-6 favth-col-xs-12';
-
+    $max_module_content=20;
 	$seq = array();
-	for ($i=1;$i<21;$i++) {
+	for ($i=1;$i<=$max_module_content;$i++) {
 		$seq[] = ${'order'.$i};
 	}
-	ksort($seq);
 
-	for ($i=0;$i<20;$i++) {
-		$newi = $seq[$i];
+	//Sort an array and maintain index association, which has the information in the module
+	asort($seq);
 
-		if ((${'show_column'.$newi}) !=0) {   ?>
+	foreach ($seq as $key => $val) {
+	    // order 1 to 20
+        // array index 0..19, that's why +1 in the key
+		$mod_content = $key+1;
+
+		if ((${'show_column'.$mod_content}) !=0) {   ?>
 
             <div class="favpromote4col <?php echo $col_class; ?>">
 
-                <div id="favpromote4col-box<?php echo $newi; ?>"
-                     class="favpromote4col<?php echo $newi; ?>-<?php echo $custom_id; ?> layout-effect"
-                     style="border: 1px solid #<?php echo ${'column_border_color'.$newi}; ?>;
-                             -webkit-border-radius: <?php echo ${'column_border_radius'.$newi}; ?>;
-                             -moz-border-radius: <?php echo ${'column_border_radius'.$newi}; ?>;
-                             border-radius: <?php echo ${'column_border_radius'.$newi}; ?>;">
+                <div id="favpromote4col-box<?php echo $mod_content; ?>"
+                     class="favpromote4col<?php echo $mod_content; ?>-<?php echo $custom_id; ?> layout-effect"
+                     style="border: 1px solid #<?php echo ${'column_border_color'.$mod_content}; ?>;
+                             -webkit-border-radius: <?php echo ${'column_border_radius'.$mod_content}; ?>;
+                             -moz-border-radius: <?php echo ${'column_border_radius'.$mod_content}; ?>;
+                             border-radius: <?php echo ${'column_border_radius'.$mod_content}; ?>;">
 
-                    <div id="favpromote4col-image<?php echo $newi; ?>"
+                    <div id="favpromote4col-image<?php echo $mod_content; ?>"
                          style="height:100%; text-align: center;">
 
 						<?php // Do not receive link if the link setting is empty
-						if(empty(${'image_link'.$newi})) { ?>
+						if(empty(${'image_link'.$mod_content})) { ?>
 
-							<?php if (${'upload_image'.$newi}) { ?>
-                                <img src="<?php echo ${'upload_image'.$newi}; ?>"
-                                     alt="<?php echo ${'image_alt'.$newi}; ?>"/>
+							<?php if (${'upload_image'.$mod_content}) { ?>
+                                <img src="<?php echo ${'upload_image'.$mod_content}; ?>"
+                                     alt="<?php echo ${'image_alt'.$mod_content}; ?>"/>
 							<?php } else { ?>
-                                <img src="modules/mod_favpromote4col/demo/demo-image<?php echo $newi; ?>.jpg"
-                                     alt="<?php echo ${'image_alt'.$newi}; ?>" />
+                                <img src="modules/mod_favpromote4col/demo/demo-image<?php echo $mod_content; ?>.jpg"
+                                     alt="<?php echo ${'image_alt'.$mod_content}; ?>" />
 							<?php } ?>
 
 						<?php } else { ?>
 
-                            <a href="<?php echo ${'image_link'.$newi}; ?>" target="_<?php echo ${'image_link_target'.$newi}; ?>" >
+                            <a href="<?php echo ${'image_link'.$mod_content}; ?>" target="_<?php echo ${'image_link_target'.$mod_content}; ?>" >
 
-								<?php if (${'upload_image'.$newi}) { ?>
-                                    <img src="<?php echo ${'upload_image'.$newi}; ?>"
-                                         alt="<?php echo ${'image_alt'.$newi}; ?>"/>
+								<?php if (${'upload_image'.$mod_content}) { ?>
+                                    <img src="<?php echo ${'upload_image'.$mod_content}; ?>"
+                                         alt="<?php echo ${'image_alt'.$mod_content}; ?>"/>
 								<?php } else { ?>
-                                    <img src="modules/mod_favpromote4col/demo/demo-image<?php echo $newi; ?>.jpg"
-                                         alt="<?php echo ${'image_alt'.$newi}; ?>" />
+                                    <img src="modules/mod_favpromote4col/demo/demo-image<?php echo $mod_content; ?>.jpg"
+                                         alt="<?php echo ${'image_alt'.$mod_content}; ?>" />
 								<?php } ?>
 
                             </a>
@@ -178,28 +171,28 @@ JHTML::script('modules/mod_favpromote4col/theme/js/viewportchecker/viewportcheck
 
                     </div>
 
-                    <p id="favpromote4col-text<?php echo $newi; ?>"
+                    <p id="favpromote4col-text<?php echo $mod_content; ?>"
                        style=" height: 150px;
                                overflow:auto;
-                               color: #<?php echo ${'description_text_color'.$newi}; ?>;
+                               color: #<?php echo ${'description_text_color'.$mod_content}; ?>;
                                font-size: <?php echo $description_text_font_size; ?>;
                                line-height: <?php echo $description_text_line_height; ?>;
                                text-align: <?php echo $description_text_align; ?>;">
-						<?php echo ${'description_text'.$newi}; ?>
+						<?php echo ${'description_text'.$mod_content}; ?>
                     </p>
 
-                    <p id="favpromote4col-widget<?php echo $newi; ?>"
+                    <p id="favpromote4col-widget<?php echo $mod_content; ?>"
                        style=" margin-top: 15px;
-                               color: #<?php echo ${'description_text_color'.$newi}; ?>;
+                               color: #<?php echo ${'description_text_color'.$mod_content}; ?>;
                                font-size: <?php echo $description_text_font_size; ?>;
                                line-height: <?php echo $description_text_line_height; ?>;
                                text-align: <?php echo $description_text_align; ?>;">
-						<?php echo ${'widget_text'.$newi}; ?>
+						<?php echo ${'widget_text'.$mod_content}; ?>
                     </p>
 
-                    <h4 id="favpromote4col-title<?php echo $newi; ?>"
-                        style="color: #<?php echo ${'title_color'.$newi}; ?>;
-                                background-color: #<?php echo ${'title_bg_color'.$newi}; ?>;
+                    <h4 id="favpromote4col-title<?php echo $mod_content; ?>"
+                        style="color: #<?php echo ${'title_color'.$mod_content}; ?>;
+                                background-color: #<?php echo ${'title_bg_color'.$mod_content}; ?>;
                                 font-family: <?php echo $title_google_font; ?>;
                                 font-weight: <?php echo $title_font_weight; ?>;
                                 font-style: <?php echo $title_font_style; ?>;
@@ -208,23 +201,23 @@ JHTML::script('modules/mod_favpromote4col/theme/js/viewportchecker/viewportcheck
                                 line-height: <?php echo $title_line_height; ?>;
                                 text-align: <?php echo $title_text_align; ?>;
                                 margin-bottom:0;">
-                        <i class="fa <?php echo ${'title_icon'.$newi}; ?>"
-                           style="color: #<?php echo ${'title_color'.$newi}; ?>;
+                        <i class="fa <?php echo ${'title_icon'.$mod_content}; ?>"
+                           style="color: #<?php echo ${'title_color'.$mod_content}; ?>;
                                    font-size: <?php echo $title_icon_font_size; ?>;
                                    vertical-align: <?php echo $title_icon_vertical_align; ?>;
                                    padding-right: 0.4em;"></i>
 
 						<?php // Do not receive link if the link setting is empty
-						if(empty(${'title_link'.$newi})) { ?>
+						if(empty(${'title_link'.$mod_content})) { ?>
 
-							<?php echo ${'title_text'.$newi}; ?>
+							<?php echo ${'title_text'.$mod_content}; ?>
 
 						<?php } else { ?>
 
-                            <a href="<?php echo ${'title_link'.$newi}; ?>" target="_<?php echo ${'title_link_target'.$newi}; ?>"
-                               style="color: #<?php echo ${'title_color'.$newi}; ?>;">
+                            <a href="<?php echo ${'title_link'.$mod_content}; ?>" target="_<?php echo ${'title_link_target'.$mod_content}; ?>"
+                               style="color: #<?php echo ${'title_color'.$mod_content}; ?>;">
 
-								<?php echo ${'title_text'.$newi}; ?>
+								<?php echo ${'title_text'.$mod_content}; ?>
 
                             </a>
 
