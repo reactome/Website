@@ -934,6 +934,39 @@ table.instancebrowser thead tr:first-child th {
     table.arguments tbody tr td:nth-of-type(2):before { content: "Description"; }
     table.arguments tbody tr td:nth-of-type(3):before { content: "Values"; }
     table.arguments tbody tr td:nth-of-type(4):before { content: "Default"; }
+    
+    /* Columns for pathway-diagrams-specifications */
+    table.spec-nodes tbody tr td:nth-of-type(1):before { content: "Class"; }
+    table.spec-nodes tbody tr td:nth-of-type(2):before { content: "Background"; }
+    table.spec-nodes tbody tr td:nth-of-type(3):before { content: "Foreground"; }
+    table.spec-nodes tbody tr td:nth-of-type(4):before { content: "Example"; text-align: left; }
+
+    table.spec-edges tbody tr td:nth-of-type(1):before { content: "Type"; }
+    table.spec-edges tbody tr td:nth-of-type(2):before { content: "Shape"; }
+    table.spec-edges tbody tr td:nth-of-type(3):before { content: "Empty"; }
+    table.spec-edges tbody tr td:nth-of-type(4):before { content: "Text"; }
+    table.spec-edges tbody tr td:nth-of-type(5):before { content: "Example"; text-align: left; }
+
+    table.spec-shapes tbody tr td:nth-of-type(1):before { content: "Type"; }
+    table.spec-shapes tbody tr td:nth-of-type(2):before { content: "Shape"; }
+    
+    table.spec-connectors tbody tr td:nth-of-type(1):before { content: "Type"; }
+    table.spec-connectors tbody tr td:nth-of-type(2):before { content: "Shape"; }
+    table.spec-connectors tbody tr td:nth-of-type(3):before { content: "Empty"; }
+    table.spec-connectors tbody tr td:nth-of-type(4):before { content: "Example"; text-align: left; }
+  
+    table.spec-links tbody tr td:nth-of-type(1):before { content: "Class"; }
+    table.spec-links tbody tr td:nth-of-type(2):before { content: "Dashed"; }
+    table.spec-links tbody tr td:nth-of-type(3):before { content: "Link type"; }
+    table.spec-links tbody tr td:nth-of-type(4):before { content: "Shape"; }
+    table.spec-links tbody tr td:nth-of-type(5):before { content: "Empty"; }
+    table.spec-links tbody tr td:nth-of-type(6):before { content: "Example"; text-align: left; }
+    
+    div[id^="r-responsive-table"] table[class*="spec-"] td,
+    div[id^="r-responsive-table"] table[class*="spec-"] td:before {
+      	text-align: left !important;
+    }
+
 }
 
 @media  only screen and (max-width: 480px) {
