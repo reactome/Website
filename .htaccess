@@ -36,8 +36,8 @@ RewriteRule ^(.*)$ - [F]
 
 #After trying to enable HTTPS by default in the entire site using JOOMLA! interface
 #it failed, so the following two lines do that
-RewriteCond %{HTTPS} off
-RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,NC,L]
+#RewriteCond %{HTTPS} off
+#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,NC,L]
 
 #Remove the www. from the URL - Only in PROD
 #RewriteCond %{HTTP_HOST} ^www.reactome.org
@@ -107,6 +107,7 @@ Redirect 302 /pages/community/training /community/training
 Redirect 302 /pages/download-data /download-data
 
 Redirect 302 /download/tools/curatorTool/install.htm /download-data/reactome-curator-tool
+Redirect 301 /user/reactome-fiviz /tools/reactome-fiviz
 
 # Used in PAPERS
 Redirect 302 /tutorials/pwp https://youtu.be/-skixrvI4nU

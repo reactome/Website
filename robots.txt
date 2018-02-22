@@ -12,42 +12,4 @@
 # http://tool.motoricerca.info/robots-checker.phtml
 
 User-agent: *
-Disallow: /administrator/
-Disallow: /bin/
-Disallow: /cache/
-Disallow: /cli/
-Disallow: /components/
-Disallow: /includes/
-Disallow: /installation/
-Disallow: /language/
-Disallow: /layouts/
-Disallow: /libraries/
-Disallow: /logs/
-Disallow: /modules/
-Disallow: /plugins/
-Disallow: /tmp/
-
-# CGIs
-Disallow: /cgi-bin/
-Disallow: /img-tmp/
-Disallow: /entitylevelview/pathway_diagram_statics
-Disallow: /javascript/
-Disallow: /ReactomeRESTfulAPI/
-Crawl-delay: 5
-
-#Baiduspider
-User-agent: Baiduspider
-User-agent: baiduspider
-User-agent: Baiduspider+
-User-agent: Baiduspider-video
-User-agent: Baiduspider-image
-Disallow: /
-
-User-agent: SemrushBot
-Disallow: /
-
-User-agent: Yandex
-Disallow: /
-
-User-agent: AhrefsBot 
 Disallow: /
