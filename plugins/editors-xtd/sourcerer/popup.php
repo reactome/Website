@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.1.11
+ * @version         7.2.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -81,8 +81,8 @@ class PlgButtonSourcererPopup
 		";
 		RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('sourcerer/script.min.js', '7.1.11');
-		RL_Document::style('sourcerer/popup.min.css', '7.1.11');
+		RL_Document::script('sourcerer/script.min.js', '7.2.0');
+		RL_Document::style('sourcerer/popup.min.css', '7.2.0');
 
 		$this->params->code = '<!-- You can place html anywhere within the source tags --><br><br><br><script language=&quot;javascript&quot; type=&quot;text/javascript&quot;><br>    // You can place JavaScript like this<br>    <br></script><br><?php<br>    // You can place PHP like this<br>    <br>?>';
 		$this->params->code = str_replace(['<br>', '<br />'], "\n", $this->params->code);

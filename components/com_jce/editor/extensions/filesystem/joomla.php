@@ -408,19 +408,27 @@ class WFJoomlaFileSystem extends WFFileSystem
 
         $data['preview'] = WFUtility::cleanPath($url, '/');
 
-        if (preg_match('#\.(jpg|jpeg|bmp|gif|tiff|png)#i', $file)) {
+        if (preg_match('#\.(jpg|jpeg|bmp|gif|tiff|png|svg)#i', $file)) {
             $image = array();
 
             if ($count <= 100) {
-                $props = @getimagesize($path);
+                if (preg_match('#\.svg$#i', $file)) {
+                	$svg = @simplexml_load_file($path);
 
-                $width = $props[0];
-                $height = $props[1];
-
-                $image = array(
-                    'width' => $width,
-                    'height' => $height,
-                );
+            		if ($svg && isset($svg['viewBox'])) {
+                		list($start_x, $start_y, $end_x, $end_y) = explode(' ', $svg['viewBox']);
+                		
+                		$width 	= (int) $end_x;
+                		$height	= (int) $end_y;
+                		
+                		if ($width && $height) {
+                			$image['width'] 	= $width;
+                			$image['height']	= $height;
+                		}
+            		}
+                } else {
+                	list($image['width'], $image['height']) = @getimagesize($path);
+                }
             }
 
             $data['preview'] .= '?' . $date;
@@ -668,17 +676,28 @@ class WFJoomlaFileSystem extends WFFileSystem
         // get overwrite state
         $conflict = $this->get('upload_conflict', 'overwrite');
         // get suffix
-        $suffix = WFFileBrowser::getFileSuffix();
+        $suffix = $this->get('upload_suffix', '_copy');
 
         if ($conflict == 'unique') {
             // get extension
             $extension = JFile::getExt($name);
             // get name without extension
             $name = JFile::stripExt($name);
+            // create tmp copy
+            $tmpname = $name;
+
+            $x = 1;
 
             while (JFile::exists($dest)) {
-                $name .= $suffix;
-                $dest = WFUtility::makePath($path, $name.'.'.$extension);
+                if (strpos($suffix, '$') !== false) {
+                    $tmpname = $name . str_replace('$', $x, $suffix); 
+                } else {
+                    $tmpname .= $suffix;
+                }
+
+                $dest = WFUtility::makePath($path, $tmpname.'.'.$extension);
+
+                $x++;
             }
         }
 

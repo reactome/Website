@@ -95,7 +95,12 @@ class WFStyleselectPluginConfig
 
                     // clean up classes
                     if (isset($style->selector)) {
-                        $style->selector = self::cleanString($style->selector);
+                        $selector = self::cleanString($style->selector);
+
+                        // clean up selector to allow element and class only
+                        $selector = preg_replace('#[^a-z0-9,\.]+#', '', $selector);
+
+                        $style->selector = trim($selector);
                     }
 
                     // clean up classes
@@ -163,10 +168,10 @@ class WFStyleselectPluginConfig
             if (!empty($stylesheet)) {
                 $stylesheet = trim($stylesheet);
                 $stylesheet = str_replace('$template', $templates[0], $stylesheet);
-                $settings['styleselect_stylesheet'] = $stylesheet;
+                $settings['styleselect_stylesheets'] = $stylesheet;
 
                 // add the stylesheet to the content_css setting
-                $stylesheet = ltrim('/', $stylesheet);
+                $stylesheet = trim($stylesheet, "/");
                 $etag = "";
 
                 if (is_file(JPATH_SITE . '/' . $stylesheet)) {

@@ -104,6 +104,30 @@ $favcolumns = 6;
   <!-- FAVTH SCRIPTS -->
   <script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/js/favth-scripts.js"></script>
 
+  <!-- Google Webmaster Tools -->
+  <meta name="google-site-verification" content="RTiL6uaaS_DH5XmjYzK76jixDNHfH2KicYr2jT2y1Cw" />
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "url": "https://reactome.org/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://reactome.org/content/query?q={term}",
+      "query-input": "required name=term"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "url": "https://reactome.org",
+    "logo": "https://reactome.org/templates/favourite/images/logo/logo.png",
+    "email": "help@reactome.org"
+  }
+  </script>
 </head>
 
 <!-- Custom: added ontouchstart="" -->

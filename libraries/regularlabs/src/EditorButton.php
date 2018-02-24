@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.1.18571
+ * @version         18.2.13418
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -27,10 +27,11 @@ class EditorButton
 	private $_init   = false;
 	private $_helper = null;
 
-	var $main_type         = 'plugin'; // The type of extension that holds the parameters
-	var $check_installed   = null; // The types of extensions that need to be checked (will default to main_type)
-	var $require_core_auth = true; // Whether or not the core content create/edit permissions are required
-	var $folder            = null; // The path to the original caller file
+	var $main_type            = 'plugin'; // The type of extension that holds the parameters
+	var $check_installed      = null; // The types of extensions that need to be checked (will default to main_type)
+	var $require_core_auth    = true; // Whether or not the core content create/edit permissions are required
+	var $folder               = null; // The path to the original caller file
+	var $enable_on_acymailing = false; // Whether or not to enable the editor button on AcyMailing
 
 	/**
 	 * Display the button
@@ -85,7 +86,7 @@ class EditorButton
 			return null;
 		}
 
-		if (JFactory::getApplication()->input->get('option') == 'com_acymailing')
+		if ( ! $this->enable_on_acymailing && JFactory::getApplication()->input->get('option') == 'com_acymailing')
 		{
 			return null;
 		}

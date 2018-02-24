@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.1.18571
+ * @version         18.2.13418
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -250,11 +250,11 @@ abstract class Condition
 
 	public function getMenuItemParams($id = 0)
 	{
-		$hash = md5('getMenuItemParams_' . $id);
+		$cache_id = 'getMenuItemParams_' . $id;
 
-		if (Cache::has($hash))
+		if (Cache::has($cache_id))
 		{
-			return Cache::get($hash);
+			return Cache::get($cache_id);
 		}
 
 		$query = $this->db->getQuery(true)
@@ -267,7 +267,7 @@ abstract class Condition
 		$parameters = Parameters::getInstance();
 
 		return Cache::set(
-			$hash,
+			$cache_id,
 			$parameters->getParams($params)
 		);
 	}
@@ -279,11 +279,11 @@ abstract class Condition
 			return [];
 		}
 
-		$hash = md5('getParentIds_' . $id . '_' . $table . '_' . $parent . '_' . $child);
+		$cache_id = 'getParentIds_' . $id . '_' . $table . '_' . $parent . '_' . $child;
 
-		if (Cache::has($hash))
+		if (Cache::has($cache_id))
 		{
-			return Cache::get($hash);
+			return Cache::get($cache_id);
 		}
 
 		$parent_ids = [];
@@ -307,7 +307,7 @@ abstract class Condition
 		}
 
 		return Cache::set(
-			$hash,
+			$cache_id,
 			$parent_ids
 		);
 	}
@@ -319,11 +319,11 @@ abstract class Condition
 			return [];
 		}
 
-		$hash = md5('makeArray_' . json_encode($array) . '_' . $delimiter . '_' . $trim);
+		$cache_id = 'makeArray_' . json_encode($array) . '_' . $delimiter . '_' . $trim;
 
-		if (Cache::has($hash))
+		if (Cache::has($cache_id))
 		{
-			return Cache::get($hash);
+			return Cache::get($cache_id);
 		}
 
 		$array = $this->mixedDataToArray($array, $delimiter);
@@ -349,7 +349,7 @@ abstract class Condition
 		}
 
 		return Cache::set(
-			$hash,
+			$cache_id,
 			$array
 		);
 	}

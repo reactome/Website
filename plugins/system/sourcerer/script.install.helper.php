@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.1.11
+ * @version         7.2.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -35,7 +35,7 @@ class PlgSystemSourcererInstallerScriptHelper
 	{
 		if ( ! in_array($route, ['install', 'update']))
 		{
-			return;
+			return true;
 		}
 
 		JFactory::getLanguage()->load('plg_system_regularlabsinstaller', JPATH_PLUGINS . '/system/regularlabsinstaller');
@@ -49,6 +49,8 @@ class PlgSystemSourcererInstallerScriptHelper
 		{
 			return false;
 		}
+
+		return true;
 	}
 
 	public function postflight($route, JAdapterInstance $adapter)

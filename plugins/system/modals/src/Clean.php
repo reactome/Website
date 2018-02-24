@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.8.0
+ * @version         9.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -22,7 +22,6 @@ class Clean
 	 */
 	public static function cleanLeftoverJunk(&$string)
 	{
-		$params = Params::get();
 		list($tag_start, $tag_end) = Params::getTagCharacters();
 
 		Protect::unprotectTags($string);
@@ -30,7 +29,7 @@ class Clean
 		RL_Protect::removeFromHtmlTagContent($string, Params::getTags(true));
 		RL_Protect::removeInlineComments($string, 'Modals');
 		RL_Protect::removePluginTags($string,
-			Params::getTags(true),
+			Params::getTagWords(),
 			$tag_start,
 			$tag_end
 		);

@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         9.8.0
+ * @version         9.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -32,11 +32,19 @@ var RLModals          = null;
 			window.addEventListener("orientationchange", RegularLabsModals.resizeOnBrowserResize, false);
 
 			$.colorbox.settings.createImg = function() {
-				var img   = new Image();
-				var title = $(this).attr('data-modal-title') ? $(this).attr('data-modal-title')
+				var img = new Image();
+
+				var data_title = $(this).attr('data-modal-title')
+					? $(this).attr('data-modal-title')
+						.replace(/(.)<div class="modals_description">/, '$1 - ')
+						.replace(/<[a-z\/].*?>/g, ' ')
+					: '';
+
+				var title = data_title ? data_title
 					: $(this).attr('data-modal-img-title') ? $(this).attr('data-modal-img-title')
 						: '';
-				var alt   = $(this).attr('data-modal-alt') ? $(this).attr('data-modal-alt')
+
+				var alt = $(this).attr('data-modal-alt') ? $(this).attr('data-modal-alt')
 					: $(this).attr('data-modal-img-alt') ? $(this).attr('data-modal-img-alt')
 						: title;
 

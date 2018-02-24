@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.1.18571
+ * @version         18.2.13418
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -62,11 +62,11 @@ class Protect
 	 */
 	public static function isRestrictedPage($hastags = false, $restricted_formats = [])
 	{
-		$hash = md5('isRestrictedPage_' . $hastags . '_' . json_encode($restricted_formats));
+		$cache_id = 'isRestrictedPage_' . $hastags . '_' . json_encode($restricted_formats);
 
-		if (Cache::has($hash))
+		if (Cache::has($cache_id))
 		{
-			return Cache::get($hash);
+			return Cache::get($cache_id);
 		}
 
 		$input = JFactory::getApplication()->input;
@@ -93,7 +93,7 @@ class Protect
 		);
 
 		return Cache::set(
-			$hash,
+			$cache_id,
 			$is_restricted
 		);
 	}
@@ -137,7 +137,7 @@ class Protect
 		}
 
 		if (JFactory::getApplication()->input->get('option') == 'com_acymailing'
-			&& JFactory::getApplication()->input->get('ctrl') != 'user'
+			&& ! in_array(JFactory::getApplication()->input->get('ctrl'), ['user', 'archive'])
 		)
 		{
 			return true;
@@ -542,9 +542,9 @@ class Protect
 		// Protect entire form
 		if (empty($tags))
 		{
-			$form_parts      = explode('</form>', $string, 2);
+			$form_parts    = explode('</form>', $string, 2);
 			$form_parts[0] = self::protectString($form_parts[0] . '</form>');
-			$string          = implode('', $form_parts);
+			$string        = implode('', $form_parts);
 
 			return;
 		}
@@ -575,7 +575,7 @@ class Protect
 
 		foreach ($matches as $match)
 		{
-			$field           = str_replace($tags, $protected_tags, $match);
+			$field         = str_replace($tags, $protected_tags, $match);
 			$form_parts[0] = str_replace($match, $field, $form_parts[0]);
 		}
 
@@ -708,11 +708,11 @@ class Protect
 			$tags = [$tags];
 		}
 
-		$hash = md5('prepareTags_' . json_encode($tags) . '_' . $include_closing_tags);
+		$cache_id = 'prepareTags_' . json_encode($tags) . '_' . $include_closing_tags;
 
-		if (Cache::has($hash))
+		if (Cache::has($cache_id))
 		{
-			return Cache::get($hash);
+			return Cache::get($cache_id);
 		}
 
 		foreach ($tags as $i => $tag)
@@ -731,7 +731,7 @@ class Protect
 		}
 
 		return Cache::set(
-			$hash,
+			$cache_id,
 			[$tags, self::protectArray($tags, 1)]
 		);
 	}
