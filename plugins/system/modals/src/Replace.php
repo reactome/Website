@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.8.0
+ * @version         9.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -305,6 +305,41 @@ class Replace
 		self::replaceOnce($match[0], $link, $string);
 	}
 
+
+	private static function setImageTitleAndDescription(&$data, $image_attributes, $image)
+	{
+		$params = Params::get();
+
+		$data['title']       = isset($data['title']) ? $data['title'] : '';
+		$data['description'] = isset($data['description']) ? $data['description'] : '';
+
+		if ($params->images_use_title_attribute && isset($image_attributes->title))
+		{
+			$key        = $params->images_use_title_attribute == 'description' ? 'description' : 'title';
+			$data[$key] = $image_attributes->title;
+		}
+
+		if ($params->images_use_alt_attribute && isset($image_attributes->alt))
+		{
+			$key        = $params->images_use_alt_attribute == 'description' ? 'description' : 'title';
+			$data[$key] = $image_attributes->alt;
+		}
+
+		Image::setImageDataFromDataFile($image->folder, $data);
+		Image::setImageDataAtribute('title', $data, $image->image);
+		Image::setImageDataAtribute('description', $data, $image->image);
+
+		$data['title']       = isset($image_attributes->{'data-title'}) ? $image_attributes->{'data-title'} : $data['title'];
+		$data['description'] = isset($image_attributes->{'data-description'}) ? $image_attributes->{'data-description'} : $data['description'];
+
+		if ( ! $data['title'] && $params->auto_titles)
+		{
+			// set the auto title
+			$data['title'] = File::getTitle($image->image, $params->title_case);
+		}
+	}
+
+	/* <<< [PRO] <<< */
 
 	private static function replaceOnce($search, $replace, &$string, $extra = '')
 	{

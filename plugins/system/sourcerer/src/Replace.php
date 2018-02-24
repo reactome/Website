@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.1.11
+ * @version         7.2.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -97,8 +97,8 @@ class Replace
 		$components = Area::get($string, 'component');
 		foreach ($components as $component)
 		{
-			self::replace($component['1'], 'components', '');
-			$string = str_replace($component['0'], $component['1'], $string);
+			self::replace($component[1], 'components', '');
+			$string = str_replace($component[0], $component[1], $string);
 		}
 
 		// EVERYWHERE
@@ -297,13 +297,13 @@ class Replace
 		{
 			foreach ($matches as $match)
 			{
-				if ( ! in_array($match['1'], $forbidden_tags_array))
+				if ( ! in_array($match[1], $forbidden_tags_array))
 				{
 					continue;
 				}
 
-				$tag    = Protect::getMessageCommentTag(JText::sprintf('SRC_TAG_REMOVED_FORBIDDEN', $match['1']));
-				$string = str_replace($match['0'], $tag, $string);
+				$tag    = Protect::getMessageCommentTag(JText::sprintf('SRC_TAG_REMOVED_FORBIDDEN', $match[1]));
+				$string = str_replace($match[0], $tag, $string);
 			}
 		}
 
@@ -315,13 +315,13 @@ class Replace
 		{
 			foreach ($matches as $match)
 			{
-				if ( ! in_array($match['1'], $forbidden_tags_array))
+				if ( ! in_array($match[1], $forbidden_tags_array))
 				{
 					continue;
 				}
 
-				$tag    = Protect::getMessageCommentTag(JText::sprintf('SRC_TAG_REMOVED_FORBIDDEN', $match['1']));
-				$string = str_replace($match['0'], $tag, $string);
+				$tag    = Protect::getMessageCommentTag(JText::sprintf('SRC_TAG_REMOVED_FORBIDDEN', $match[1]));
+				$string = str_replace($match[0], $tag, $string);
 			}
 		}
 	}
@@ -358,8 +358,8 @@ class Replace
 		if ( ! $enabled)
 		{
 			// replace source block content with HTML comment
-			$string_array      = [];
-			$string_array['0'] = Protect::getMessageCommentTag(JText::sprintf('SRC_CODE_REMOVED_NOT_ALLOWED', JText::_('SRC_PHP'), JText::_('SRC_PHP')));
+			$string_array    = [];
+			$string_array[0] = Protect::getMessageCommentTag(JText::sprintf('SRC_CODE_REMOVED_NOT_ALLOWED', JText::_('SRC_PHP'), JText::_('SRC_PHP')));
 
 			$string = implode('', $string_array);
 
@@ -368,8 +368,8 @@ class Replace
 		if ( ! $security_pass)
 		{
 			// replace source block content with HTML comment
-			$string_array      = [];
-			$string_array['0'] = Protect::getMessageCommentTag(JText::sprintf('SRC_CODE_REMOVED_SECURITY', JText::_('SRC_PHP')));
+			$string_array    = [];
+			$string_array[0] = Protect::getMessageCommentTag(JText::sprintf('SRC_CODE_REMOVED_SECURITY', JText::_('SRC_PHP')));
 
 			$string = implode('', $string_array);
 
@@ -383,18 +383,18 @@ class Replace
 			{
 				if (fmod($i, 2) == 0)
 				{
-					$string_array['1'] .= "<!-- SRC_SEMICOLON --> ?>" . $string_array[$i] . "<?php ";
+					$string_array[1] .= "<!-- SRC_SEMICOLON --> ?>" . $string_array[$i] . "<?php ";
 					unset($string_array[$i]);
 					continue;
 				}
 
-				$string_array['1'] .= $string_array[$i];
+				$string_array[1] .= $string_array[$i];
 				unset($string_array[$i]);
 			}
 		}
 
 		$semicolon = '<!-- SRC_SEMICOLON -->';
-		$script    = trim($string_array['1']) . $semicolon;
+		$script    = trim($string_array[1]) . $semicolon;
 		$script    = RL_RegEx::replace('(;\s*)?' . RL_RegEx::quote($semicolon), ';', $script);
 
 		$area = Params::getArea('default');
@@ -411,14 +411,14 @@ class Replace
 			$functionsArray = [];
 			foreach ($functions as $function)
 			{
-				$functionsArray[] = $function['1'] . ')';
+				$functionsArray[] = $function[1] . ')';
 			}
 
 			$comment = JText::_('SRC_PHP_CODE_REMOVED_FORBIDDEN') . ': ( ' . implode(', ', $functionsArray) . ' )';
 
-			$string_array['1'] = RL_Document::isHtml()
+			$string_array[1] = RL_Document::isHtml()
 				? Protect::getMessageCommentTag($comment)
-				: $string_array['1'] = '';
+				: $string_array[1] = '';
 
 			$string = implode('', $string_array);
 
@@ -431,7 +431,7 @@ class Replace
 
 		$output = Code::run($script, $src_variables);
 
-		$string_array['1'] = $output;
+		$string_array[1] = $output;
 
 		$string = implode('', $string_array);
 	}

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.1.18571
+ * @version         18.2.13418
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -51,15 +51,15 @@ class Http
 	 */
 	public static function getFromUrl($url, $timeout = 20)
 	{
-		$hash = md5('getUrl_' . $url);
+		$cache_id = 'getUrl_' . $url;
 
-		if (Cache::has($hash))
+		if (Cache::has($cache_id))
 		{
-			return Cache::get($hash);
+			return Cache::get($cache_id);
 		}
 
 		if (JFactory::getApplication()->input->getInt('cache', 0)
-			&& $content = Cache::read($hash)
+			&& $content = Cache::read($cache_id)
 		)
 		{
 			return $content;
@@ -74,10 +74,10 @@ class Http
 
 		if ($ttl = JFactory::getApplication()->input->getInt('cache', 0))
 		{
-			return Cache::write($hash, $content, $ttl > 1 ? $ttl : 0);
+			return Cache::write($cache_id, $content, $ttl > 1 ? $ttl : 0);
 		}
 
-		return Cache::set($hash, $content);
+		return Cache::set($cache_id, $content);
 	}
 
 	/**
@@ -90,11 +90,11 @@ class Http
 	 */
 	public static function getFromServer($url, $timeout = 20)
 	{
-		$hash = md5('getByUrl_' . $url);
+		$cache_id = 'getByUrl_' . $url;
 
-		if (Cache::has($hash))
+		if (Cache::has($cache_id))
 		{
-			return Cache::get($hash);
+			return Cache::get($cache_id);
 		}
 
 		// only allow url calls from administrator
@@ -150,10 +150,10 @@ class Http
 
 		if ($ttl = JFactory::getApplication()->input->getInt('cache', 0))
 		{
-			return Cache::write($hash, $content, $ttl > 1 ? $ttl : 0);
+			return Cache::write($cache_id, $content, $ttl > 1 ? $ttl : 0);
 		}
 
-		return Cache::set($hash, $content);
+		return Cache::set($cache_id, $content);
 	}
 
 	/**

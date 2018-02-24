@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.8.0
+ * @version         9.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -78,6 +78,16 @@ class Params
 		];
 
 		return $only_start_tags ? $tags[0] : $tags;
+	}
+
+	public static function getTagWords()
+	{
+		$params = self::get();
+
+		return [
+				 $params->tag,
+			];
+
 	}
 
 	public static function getRegex($type = 'tag')

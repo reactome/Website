@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.1.18571
+ * @version         18.2.13418
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -35,11 +35,11 @@ class Conditions
 
 		$matching_method = in_array($matching_method, ['any', 'or']) ? 'any' : 'all';
 		$aid             = ($article && isset($article->id)) ? '[' . $article->id . ']' : '';
-		$hash            = md5('pass_' . $aid . '_' . $matching_method . '_' . json_encode($conditions));
+		$cache_id        = 'pass_' . $aid . '_' . $matching_method . '_' . json_encode($conditions);
 
-		if (Cache::has($hash))
+		if (Cache::has($cache_id))
 		{
-			return Cache::get($hash);
+			return Cache::get($cache_id);
 		}
 
 		$pass = (bool) ($matching_method == 'all');
@@ -65,7 +65,7 @@ class Conditions
 		}
 
 		return Cache::set(
-			$hash,
+			$cache_id,
 			$pass
 		);
 	}
@@ -90,11 +90,11 @@ class Conditions
 
 	public static function getConditionsFromParams(&$params)
 	{
-		$hash = md5('getConditionsFromParams_' . json_encode($params));
+		$cache_id = 'getConditionsFromParams_' . json_encode($params);
 
-		if (Cache::has($hash))
+		if (Cache::has($cache_id))
 		{
-			return Cache::get($hash);
+			return Cache::get($cache_id);
 		}
 
 		self::renameParamKeys($params);
@@ -123,7 +123,7 @@ class Conditions
 		}
 
 		return Cache::set(
-			$hash,
+			$cache_id,
 			$types
 		);
 	}
@@ -183,21 +183,21 @@ class Conditions
 
 	private static function passByType($condition, $type, $article = null)
 	{
-		$aid  = ($article && isset($article->id)) ? '[' . $article->id . ']' : '';
-		$hash = md5('passByType_' . $type . '_' . $aid . '_' . json_encode($condition) . '_' . json_encode($article));
+		$aid      = ($article && isset($article->id)) ? '[' . $article->id . ']' : '';
+		$cache_id = 'passByType_' . $type . '_' . $aid . '_' . json_encode($condition) . '_' . json_encode($article);
 
-		if (Cache::has($hash))
+		if (Cache::has($cache_id))
 		{
-			return Cache::get($hash);
+			return Cache::get($cache_id);
 		}
 
 		self::initParametersByType($condition, $type);
 
-		$hash = md5('passByType_' . $type . '_' . $aid . '_' . json_encode($condition) . '_' . json_encode($article));
+		$cache_id = 'passByType_' . $type . '_' . $aid . '_' . json_encode($condition) . '_' . json_encode($article);
 
-		if (Cache::has($hash))
+		if (Cache::has($cache_id))
 		{
-			return Cache::get($hash);
+			return Cache::get($cache_id);
 		}
 
 		$pass = false;
@@ -230,7 +230,7 @@ class Conditions
 		}
 
 		return Cache::set(
-			$hash,
+			$cache_id,
 			$pass
 		);
 	}
@@ -264,11 +264,11 @@ class Conditions
 			return [];
 		}
 
-		$hash = md5('makeArray_' . json_encode($array) . '_' . $delimiter . '_' . $trim);
+		$cache_id = 'makeArray_' . json_encode($array) . '_' . $delimiter . '_' . $trim;
 
-		if (Cache::has($hash))
+		if (Cache::has($cache_id))
 		{
-			return Cache::get($hash);
+			return Cache::get($cache_id);
 		}
 
 		$array = self::mixedDataToArray($array, $delimiter);
@@ -294,7 +294,7 @@ class Conditions
 		}
 
 		return Cache::set(
-			$hash,
+			$cache_id,
 			$array
 		);
 	}
