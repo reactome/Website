@@ -149,3 +149,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule .* index.php [L]
 #
 ## End - Joomla! core SEF Section.
+
+# Enable PHP Logs - uncomment the following to DEBUG php.
+# Comment once the issue is addressed.
+#php_flag display_errors on
