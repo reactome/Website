@@ -33,7 +33,7 @@ Please visit this [page](https://downloads.joomla.org/technical-requirements) in
 ```console
 git clone https://github.com/reactome/Website.git
 ```
-:warning: For security and privacy issues our Joomla Website Database and Joomla configuration.php are not available for public use. Please use the given configuration.php provided below and a clean database could be found in database/joomla_website_public.sql
+:warning: For security and privacy issues our Joomla Website Database and Joomla configuration.php are not available for public use. Please use the given configuration.php provided below and a clean database could be found in database/joomla_website_public.sql. Do not use this database in a production/public environment.
 
 ## MySQL Database
 
@@ -256,4 +256,22 @@ password: @Dock3r999
     public $dbprefix = 'rlp_';
   ```
 
+2. Enable PHP debug
+```console
+vi <XAMPP_HOME>/htdocs/Website/.htaccess
+Locate and uncomment the following line #php_flag display_errors on
+Restart apache
+```
+Now, the website will print more descriptive error. Then, Google the error and fix it.
+Comment the php_flag once the error is addressed.
 
+3. SimpleXML is disabled in PHP7 -> sudo apt-get install php7.0-xml
+
+4. Apache Modules
+```console
+ sudo a2enmod rewrite
+ sudo a2enmod headers
+ sudo a2enmod include
+ sudo a2enmod proxy
+ sudo a2enmod proxy_http
+```
