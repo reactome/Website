@@ -1,6 +1,6 @@
 /**
  * @package         Tabs
- * @version         7.1.8
+ * @version         7.2.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -559,8 +559,13 @@ var RegularLabsTabs = null;
 
 
 		initIframeReloading: function() {
+			// Mark iframes in active tabs as reloaded
 			$('.tab-pane.active iframe').each(function() {
 				$(this).attr('reloaded', true);
+			});
+			// Undo marking of iframes as reloaded in non-active tabs
+			$('.tab-pane:not(.active) iframe').each(function() {
+				$(this).attr('reloaded', false);
 			});
 
 			$('a.rl_tabs-toggle').on('show.bs.tab', function(e) {
@@ -572,10 +577,12 @@ var RegularLabsTabs = null;
 				var $el = $('#' + $(this).attr('data-id'));
 
 				$el.find('iframe').each(function() {
-					if (this.src && !$(this).attr('reloaded')) {
-						this.src += '';
-						$(this).attr('reloaded', true);
+					if (!this.src || $(this).attr('reloaded') == 'true') {
+						return;
 					}
+
+					this.src += '';
+					$(this).attr('reloaded', true);
 				});
 			});
 

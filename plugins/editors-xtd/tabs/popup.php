@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.1.8
+ * @version         7.2.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -40,12 +40,12 @@ class Popup
 		";
 		RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('tabs/popup.min.js', '7.1.8');
+		RL_Document::script('tabs/popup.min.js', '7.2.1');
 	}
 
 	public function loadStyles()
 	{
-		RL_Document::style('tabs/popup.min.css', '7.1.8');
+		RL_Document::style('tabs/popup.min.css', '7.2.1');
 	}
 }
 

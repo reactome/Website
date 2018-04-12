@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.2.13418
+ * @version         18.3.17810
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -85,9 +85,9 @@ class K2Category
 
 	private function getCategoryIDFromItem()
 	{
-		if ($this->article && isset($this->article->catid))
+		if ($this->item && isset($this->item->catid))
 		{
-			return $this->article->catid;
+			return $this->item->catid;
 		}
 
 		$query = $this->db->getQuery(true)

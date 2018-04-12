@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.9.0
+ * @version         9.10.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -306,37 +306,49 @@ class Replace
 	}
 
 
-	private static function setImageTitleAndDescription(&$data, $image_attributes, $image)
+	private static function setImageAttributes(&$data, &$image_attributes, $image)
 	{
 		$params = Params::get();
 
-		$data['title']       = isset($data['title']) ? $data['title'] : '';
-		$data['description'] = isset($data['description']) ? $data['description'] : '';
+		$image_texts = Image::getImageTexts((array) $image_attributes, $image);
+
+		if ( ! $image_texts->title && $params->auto_titles)
+		{
+			$image_texts->title = File::getTitle($image->image, $params->title_case);
+		}
+		if ( ! $image_texts->thumbnail_title)
+		{
+			$image_texts->thumbnail_title = $image_texts->title;
+		}
+
+		if (isset($image_attributes->{'data-title'}))
+		{
+			$data['title'] = $image_attributes->{'data-title'};
+		}
+
+		if (isset($image_attributes->{'data-description'}))
+		{
+			$data['description'] = $image_attributes->{'data-description'};
+		}
 
 		if ($params->images_use_title_attribute && isset($image_attributes->title))
 		{
 			$key        = $params->images_use_title_attribute == 'description' ? 'description' : 'title';
-			$data[$key] = $image_attributes->title;
+			$data[$key] = isset($data[$key]) ? $data[$key] : $image_attributes->title;
 		}
 
 		if ($params->images_use_alt_attribute && isset($image_attributes->alt))
 		{
 			$key        = $params->images_use_alt_attribute == 'description' ? 'description' : 'title';
-			$data[$key] = $image_attributes->alt;
+			$data[$key] = isset($data[$key]) ? $data[$key] : $image_attributes->alt;
 		}
 
-		Image::setImageDataFromDataFile($image->folder, $data);
-		Image::setImageDataAtribute('title', $data, $image->image);
-		Image::setImageDataAtribute('description', $data, $image->image);
+		$data['title']       = isset($data['title']) ? $data['title'] : $image_texts->title;
+		$data['alt']         = isset($data['title']) ? $data['title'] : $image_texts->alt;
+		$data['description'] = isset($data['description']) ? $data['description'] : $image_texts->description;
 
-		$data['title']       = isset($image_attributes->{'data-title'}) ? $image_attributes->{'data-title'} : $data['title'];
-		$data['description'] = isset($image_attributes->{'data-description'}) ? $image_attributes->{'data-description'} : $data['description'];
-
-		if ( ! $data['title'] && $params->auto_titles)
-		{
-			// set the auto title
-			$data['title'] = File::getTitle($image->image, $params->title_case);
-		}
+		$image_attributes->title = $image_texts->thumbnail_title;
+		$image_attributes->alt   = $image_texts->thumbnail_alt;
 	}
 
 	/* <<< [PRO] <<< */
