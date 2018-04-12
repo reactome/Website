@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.9.0
+ * @version         9.10.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -96,7 +96,7 @@ class Link
 			$label = isset($attributes->title)
 				? $attributes->title
 				: (isset($data['title'])
-					? RL_String::removeHtml($data['title'])
+					? self::cleanTitle($data['title'])
 					: ''
 				);
 
@@ -109,6 +109,13 @@ class Link
 			. Data::flattenDataAttributeList($data)
 			. '>'
 			. $content;
+	}
+
+	private static function cleanTitle($string)
+	{
+		$string = str_replace('<div class="modals_description">', ' - ', $string);
+
+		return RL_String::removeHtml($string);
 	}
 
 	public static function get($string, $link = '', $content = '')

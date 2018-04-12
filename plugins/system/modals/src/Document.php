@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.9.0
+ * @version         9.10.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -62,7 +62,7 @@ class Document
 
 		JHtml::script('modals/jquery.touchSwipe.min.js', false, true);
 		JHtml::script('modals/jquery.colorbox-min.js', false, true);
-		RL_Document::script('modals/script.min.js', ($params->media_versioning ? '9.9.0' : ''));
+		RL_Document::script('modals/script.min.js', ($params->media_versioning ? '9.10.1' : ''));
 
 		if ($params->load_stylesheet)
 		{

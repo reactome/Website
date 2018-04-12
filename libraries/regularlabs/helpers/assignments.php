@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.2.13418
+ * @version         18.3.17810
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -22,9 +22,9 @@ use RegularLabs\Library\Conditions as RL_Conditions;
 
 class RLAssignmentsHelper
 {
-	function passAll($assignments, $matching_method = 'all', $article = 0)
+	function passAll($assignments, $matching_method = 'all', $item = 0)
 	{
-		return RL_Conditions::pass($assignments, $matching_method, $article);
+		return RL_Conditions::pass($assignments, $matching_method, $item);
 	}
 
 	public function getAssignmentsFromParams(&$params)

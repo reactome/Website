@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.2.13418
+ * @version         18.3.17810
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -26,16 +26,17 @@ class Conditions
 	static $installed_extensions = null;
 	static $params               = null;
 
-	public static function pass($conditions, $matching_method = 'all', $article = null)
+	public static function pass($conditions, $matching_method = 'all', $item = null)
 	{
 		if (empty($conditions))
 		{
 			return true;
 		}
 
+		$item_type       = isset($item->advancedparams) ? 'module' : 'article';
+		$item_id         = ($item && isset($item->id)) ? $item->id : '';
 		$matching_method = in_array($matching_method, ['any', 'or']) ? 'any' : 'all';
-		$aid             = ($article && isset($article->id)) ? '[' . $article->id . ']' : '';
-		$cache_id        = 'pass_' . $aid . '_' . $matching_method . '_' . json_encode($conditions);
+		$cache_id        = 'pass_' . $item_type . '_' . $item_id . '_' . $matching_method . '_' . json_encode($conditions);
 
 		if (Cache::has($cache_id))
 		{
@@ -61,7 +62,7 @@ class Conditions
 				continue;
 			}
 
-			$pass = self::passByType($conditions[$type], $type, $article);
+			$pass = self::passByType($conditions[$type], $type, $item);
 		}
 
 		return Cache::set(
@@ -174,17 +175,19 @@ class Conditions
 		return $conditions;
 	}
 
-	private static function initParametersByType($params, $type = '')
+	private static function initParametersByType(&$params, $type = '')
 	{
 		$params->class_name = str_replace('.', '', $type);
 
 		$params->include_type = self::getConditionState($params->include_type);
 	}
 
-	private static function passByType($condition, $type, $article = null)
+	private static function passByType($condition, $type, $item = null)
 	{
-		$aid      = ($article && isset($article->id)) ? '[' . $article->id . ']' : '';
-		$cache_id = 'passByType_' . $type . '_' . $aid . '_' . json_encode($condition) . '_' . json_encode($article);
+		$item_type    = isset($item->advancedparams) ? 'module' : 'article';
+		$item_id      = isset($item->id) ? $item->id : '';
+		$cache_prefix = 'passByType_' . $type . '_' . $item_type . '_' . $item_id;
+		$cache_id     = $cache_prefix . '_' . json_encode($condition);
 
 		if (Cache::has($cache_id))
 		{
@@ -193,7 +196,7 @@ class Conditions
 
 		self::initParametersByType($condition, $type);
 
-		$cache_id = 'passByType_' . $type . '_' . $aid . '_' . json_encode($condition) . '_' . json_encode($article);
+		$cache_id = $cache_prefix . '_' . json_encode($condition);
 
 		if (Cache::has($cache_id))
 		{
@@ -220,7 +223,7 @@ class Conditions
 
 				$className = '\\RegularLabs\\Library\\Condition\\' . $condition->class_name;
 
-				$class = new $className($condition, $article);
+				$class = new $className($condition, $item);
 
 				$class->beforePass();
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.1.8
+ * @version         7.2.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -35,7 +35,7 @@ class PlgEditorsXtdTabsInstallerScriptHelper
 	{
 		if ( ! in_array($route, ['install', 'update']))
 		{
-			return;
+			return true;
 		}
 
 		JFactory::getLanguage()->load('plg_system_regularlabsinstaller', JPATH_PLUGINS . '/system/regularlabsinstaller');
@@ -49,6 +49,8 @@ class PlgEditorsXtdTabsInstallerScriptHelper
 		{
 			return false;
 		}
+
+		return true;
 	}
 
 	public function postflight($route, JAdapterInstance $adapter)

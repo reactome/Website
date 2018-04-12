@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.2.9
+ * @version         7.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -35,7 +35,7 @@ class PlgSystemSlidersInstallerScriptHelper
 	{
 		if ( ! in_array($route, ['install', 'update']))
 		{
-			return;
+			return true;
 		}
 
 		JFactory::getLanguage()->load('plg_system_regularlabsinstaller', JPATH_PLUGINS . '/system/regularlabsinstaller');
@@ -49,6 +49,8 @@ class PlgSystemSlidersInstallerScriptHelper
 		{
 			return false;
 		}
+
+		return true;
 	}
 
 	public function postflight($route, JAdapterInstance $adapter)

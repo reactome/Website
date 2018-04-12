@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.2.13418
+ * @version         18.3.17810
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -26,9 +26,9 @@ abstract class Content
 
 	public function getItem($fields = [])
 	{
-		if ($this->article)
+		if ($this->item)
 		{
-			return $this->article;
+			return $this->item;
 		}
 
 		if ( ! class_exists('ContentModelArticle'))
@@ -43,8 +43,8 @@ abstract class Content
 			return null;
 		}
 
-		$this->article = $model->getItem($this->request->id);
+		$this->item = $model->getItem($this->request->id);
 
-		return $this->article;
+		return $this->item;
 	}
 }

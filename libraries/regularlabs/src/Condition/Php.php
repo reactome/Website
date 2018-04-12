@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.2.13418
+ * @version         18.3.17810
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -47,7 +47,7 @@ class Php
 			}
 
 			ob_start();
-			$pass = (bool) $this->execute($php, $this->article);
+			$pass = (bool) $this->execute($php, $this->item);
 			ob_end_clean();
 
 			if ($pass)
@@ -81,7 +81,7 @@ class Php
 		return $model->getItem($this->request->id);
 	}
 
-	public function execute($string = '', $article = null)
+	public function execute($string = '', $item = null)
 	{
 		$function_name = 'regularlabs_php_' . md5($string);
 
@@ -90,7 +90,9 @@ class Php
 			return $function_name();
 		}
 
-		$contents = $this->generateFileContents($function_name, $string);
+		$item_name = isset($item->advancedparams) ? 'module' : 'article';
+
+		$contents = $this->generateFileContents($function_name, $item_name, $string);
 
 		$folder    = JFactory::getConfig()->get('tmp_path', JPATH_ROOT . '/tmp');
 		$temp_file = $folder . '/' . $function_name;
@@ -111,26 +113,26 @@ class Php
 			return true;
 		}
 
-		if ( ! $article && strpos($string, '$article') !== false)
+		if ( ! $item && strpos($string, '$article') !== false)
 		{
-			$article = null;
+			$item = null;
 			if ($this->request->option == 'com_content' && $this->request->view == 'article')
 			{
-				$article = $this->getArticleById($this->request->id);
+				$item = $this->getArticleById($this->request->id);
 			}
 		}
 
-		return $function_name($article);
+		return $function_name($item);
 	}
 
-	private function generateFileContents($function_name = 'rl_function', $string = '')
+	private function generateFileContents($function_name = 'rl_function', $item_name = 'article', $string = '')
 	{
 		$init_variables = $this->getVarInits();
 
 		$contents = [
 			'<?php',
 			'defined(\'_JEXEC\') or die;',
-			'function ' . $function_name . '($article){',
+			'function ' . $function_name . '($' . $item_name . '){',
 			implode("\n", $init_variables),
 			$string,
 			';return true;',
