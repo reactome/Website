@@ -1,6 +1,6 @@
 /**
  * @package         Tabs
- * @version         7.2.1
+ * @version         7.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -114,7 +114,7 @@ var RegularLabsTabs = null;
 
 			var self = this;
 
-			// If tab is already open, do scroll immediatly
+			// If tab is already open, do scroll immediately
 			if ($el.parent().hasClass('in') || $el.parent().hasClass('active')) {
 				self.scrollOnLoad();
 				return;

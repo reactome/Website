@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.3.17810
+ * @version         18.5.18576
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -29,9 +29,10 @@ abstract class Condition
 	public $selection    = null;
 	public $params       = null;
 	public $include_type = null;
-	public $item         = null;
+	public $article      = null;
+	public $module       = null;
 
-	public function __construct($condition = [], $item = null)
+	public function __construct($condition = [], $article = null, $module = null)
 	{
 		$tz         = new DateTimeZone(JFactory::getApplication()->getCfg('offset'));
 		$this->date = JFactory::getDate()->setTimeZone($tz);
@@ -44,7 +45,8 @@ abstract class Condition
 		$this->params       = isset($condition->params) ? $condition->params : [];
 		$this->include_type = isset($condition->include_type) ? $condition->include_type : 'none';
 
-		$this->item = $item;
+		$this->article = $article;
+		$this->module  = $module;
 	}
 
 	public function init()

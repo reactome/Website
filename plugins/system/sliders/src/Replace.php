@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.3.0
+ * @version         7.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -132,16 +132,26 @@ class Replace
 		$sets = self::getSets($string);
 		self::initSets($sets);
 
+		$prefix = '';
 		foreach ($sets as $set)
 		{
-			foreach ($set as $tab)
+			foreach ($set as $item)
 			{
-				$replace = '<' . $params->title_tag . ' class="rl_sliders-title nn_sliders-title">'
-					. '<a id="anchor-' . $tab->id . '" class="anchor"></a>'
-					. $tab->title_full
+
+				$class = 'rl_sliders-print';
+
+				if ($item->open)
+				{
+					$class .= ' active';
+				}
+
+				$replace = $prefix . '<div id="' . $item->id . '" class="' . $class . '">'
+					. '<' . $params->title_tag . ' class="rl_sliders-title nn_sliders-title">'
+					. '<a id="anchor-' . $item->id . '" class="anchor"></a>'
+					. $item->title_full
 					. '</' . $params->title_tag . '>';
 
-				$string = RL_String::replaceOnce($tab->orig, $replace, $string);
+				$string = RL_String::replaceOnce($item->orig, $replace, $string);
 			}
 		}
 
@@ -149,9 +159,11 @@ class Replace
 
 		RL_RegEx::matchAll($regex, $string, $matches);
 
+		$replace = '</div>';
 		foreach ($matches as $match)
 		{
-			$string = RL_String::replaceOnce($match[0], '', $string);
+			$string  = RL_String::replaceOnce($match[0], $replace, $string);
+			$replace = '';
 		}
 
 		$regex = Params::getRegex('link');
@@ -594,7 +606,8 @@ class Replace
 
 		if ( ! in_array(self::$context, ['com_search.search', 'com_finder.indexer']))
 		{
-			$heading_attributes = '';
+			$heading_attributes = ' role="heading"'
+				. ' aria-controls="' . $item->id . '"';
 			if ( ! empty($item->heading_attributes))
 			{
 				$heading_attributes .= ' ' . $item->heading_attributes;
@@ -612,10 +625,13 @@ class Replace
 				$body_class .= ' in';
 			}
 
-			$body_attributes = ' id="' . $item->id . '"';
+			$body_attributes = 'role="region"'
+				. ' aria-labelledby="slider-' . $item->id . '"'
+				. ' aria-hidden="' . ($item->open ? 'false' : 'true') . '"'
+				. ' id="' . $item->id . '"';
 			if ( ! empty($item->body_attributes))
 			{
-				$body_attributes .= ' ' . $item->lbody_attributes;
+				$body_attributes .= ' ' . $item->body_attributes;
 			}
 
 			$html[] = '<div class="' . $body_class . '" ' . $body_attributes . '>';
@@ -659,7 +675,7 @@ class Replace
 
 		$class = self::getMainClasses($items[0]);
 
-		return '<div class="' . $class . '" id="set-rl_sliders-' . $items[0]->set . '">'
+		return '<div class="' . $class . '" id="set-rl_sliders-' . $items[0]->set . '" role="presentation">'
 			. '<a id="rl_sliders-scrollto_' . $items[0]->set . '" class="anchor rl_sliders-scroll nn_sliders-scroll"></a>';
 	}
 
@@ -677,6 +693,7 @@ class Replace
 			$classes[] = $item->mainclass;
 		}
 
+
 		$classes = array_diff($classes, ['']);
 
 		return trim(implode(' ', $classes));
@@ -687,8 +704,10 @@ class Replace
 		$href            = RL_Uri::get($item->id);
 		$title           = $item->title_full;
 		$link_attributes = ' data-toggle="collapse"'
+			. ' id="slider-' . $item->id . '"'
 			. ' data-id="' . $item->id . '"'
-			. ' data-parent="#set-rl_sliders-' . $items[0]->set . '"';
+			. ' data-parent="#set-rl_sliders-' . $items[0]->set . '"'
+			. ' aria-selected="' . ($item->open ? 'true' : 'false') . '"';
 
 		if ( ! empty($item->link_attributes))
 		{

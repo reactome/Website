@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.10.1
+ * @version         9.11.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -56,7 +56,7 @@ class PlgSystemModalsInstallerScript extends PlgSystemModalsInstallerScriptHelpe
 
 		// Fix params changed since v9.9.0
 
-		if (!isset($params->images_use_title_attribute) || $params->images_use_title_attribute !== 1)
+		if ( ! isset($params->images_use_title_attribute) || $params->images_use_title_attribute !== 1)
 		{
 			return;
 		}

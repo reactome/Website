@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.3.17810
+ * @version         18.5.18576
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -68,20 +68,20 @@ class ContentCategory
 		if (
 			$this->params->inc_others
 			&& ! ($is_content && ($is_category || $is_item))
-			&& $this->item
+			&& $this->article
 		)
 		{
-			if ( ! isset($this->item->id) && isset($this->item->slug))
+			if ( ! isset($this->article->id) && isset($this->article->slug))
 			{
-				$this->item->id = (int) $this->item->slug;
+				$this->article->id = (int) $this->article->slug;
 			}
 
-			if ( ! isset($this->item->catid) && isset($this->item->catslug))
+			if ( ! isset($this->article->catid) && isset($this->article->catslug))
 			{
-				$this->item->catid = (int) $this->item->catslug;
+				$this->article->catid = (int) $this->article->catslug;
 			}
 
-			$this->request->id   = $this->item->id;
+			$this->request->id   = $this->article->id;
 			$this->request->view = 'article';
 		}
 
@@ -129,15 +129,15 @@ class ContentCategory
 			return (array) $this->request->id;
 		}
 
-		if ( ! $this->item && $this->request->id)
+		if ( ! $this->article && $this->request->id)
 		{
-			$this->item = JTable::getInstance('content');
-			$this->item->load($this->request->id);
+			$this->article = JTable::getInstance('content');
+			$this->article->load($this->request->id);
 		}
 
-		if ($this->item && $this->item->catid)
+		if ($this->article && isset($this->article->catid))
 		{
-			return (array) $this->item->catid;
+			return (array) $this->article->catid;
 		}
 
 		$catid      = JFactory::getApplication()->input->getInt('catid', JFactory::getApplication()->getUserState('com_content.articles.filter.category_id'));

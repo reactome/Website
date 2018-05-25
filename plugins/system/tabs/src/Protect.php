@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.2.1
+ * @version         7.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -21,6 +21,7 @@ class Protect
 
 	public static function _(&$string)
 	{
+		RL_Protect::protectHtmlCommentTags($string);
 		RL_Protect::protectFields($string, Params::getTags(true));
 		RL_Protect::protectSourcerer($string);
 	}
