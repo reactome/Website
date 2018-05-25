@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.10.1
+ * @version         9.11.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -37,12 +37,12 @@ class Popup
 		";
 		RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('modals/popup.min.js', '9.10.1');
+		RL_Document::script('modals/popup.min.js', '9.11.1');
 	}
 
 	public function loadStyles()
 	{
-		RL_Document::style('modals/popup.min.css', '9.10.1');
+		RL_Document::style('modals/popup.min.css', '9.11.1');
 	}
 }
 

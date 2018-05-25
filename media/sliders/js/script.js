@@ -1,6 +1,6 @@
 /**
  * @package         Sliders
- * @version         7.3.0
+ * @version         7.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -107,6 +107,12 @@ var RegularLabsSliders = null;
 				});
 
 				$el.collapse('show');
+
+				$el.closest('div.rl_sliders').find('.rl_sliders-toggle').attr('aria-selected', false);
+				$el.attr('aria-selected', true);
+
+				$el.closest('div.rl_sliders').find('.rl_sliders-body').attr('aria-hidden', true);
+				$('div#' + id).attr('aria-hidden', false);
 			}
 
 			this.updateActiveClassesOnSliderLinks($el);

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.3.17810
+ * @version         18.5.18576
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -346,9 +346,21 @@ class Protect
 	public static function protectHtmlTags(&$string)
 	{
 		// protect comment tags
-		self::protectByRegex($string, '<!--\s[^>].*?(?:\s-->|$)');
+		self::protectHtmlCommentTags($string);
+
 		// protect html tags
 		self::protectByRegex($string, '<[a-z][^>]*(?:="[^"]*"|=\'[^\']*\')+[^>]*>');
+	}
+
+	/**
+	 * Protect all html comment tags
+	 *
+	 * @param string $string
+	 */
+	public static function protectHtmlCommentTags(&$string)
+	{
+		// protect comment tags
+		self::protectByRegex($string, '<\!--.*?-->');
 	}
 
 	/**

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.10.1
+ * @version         9.11.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -85,9 +85,8 @@ class Params
 		$params = self::get();
 
 		return [
-				 $params->tag,
-			];
-
+			$params->tag,
+		];
 	}
 
 	public static function getRegex($type = 'tag')

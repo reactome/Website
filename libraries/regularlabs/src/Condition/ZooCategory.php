@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.3.17810
+ * @version         18.5.18576
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -67,9 +67,9 @@ class ZooCategory
 
 	private function getCategories()
 	{
-		if ($this->item && isset($this->item->catid))
+		if ($this->article && isset($this->article->catid))
 		{
-			return [$this->item->catid];
+			return [$this->article->catid];
 		}
 
 		$menuparams = $this->getMenuItemParams($this->request->Itemid);

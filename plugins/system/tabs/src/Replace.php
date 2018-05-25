@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.2.1
+ * @version         7.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -132,16 +132,26 @@ class Replace
 		$sets = self::getSets($string);
 		self::initSets($sets);
 
+		$prefix = '';
 		foreach ($sets as $set)
 		{
-			foreach ($set as $tab)
+			foreach ($set as $item)
 			{
-				$replace = '<' . $params->title_tag . ' class="rl_tabs-title nn_tabs-title">'
-					. '<a id="anchor-' . $tab->id . '" class="anchor"></a>'
-					. $tab->title_full
+				$class = 'rl_tabs-print';
+
+				if ($item->open)
+				{
+					$class .= ' active';
+				}
+
+				$replace = $prefix . '<div id="' . $item->id . '" class="' . $class . '">'
+					. '<' . $params->title_tag . ' class="rl_tabs-title nn_tabs-title">'
+					. '<a id="anchor-' . $item->id . '" class="anchor"></a>'
+					. $item->title_full
 					. '</' . $params->title_tag . '>';
 
-				$string = RL_String::replaceOnce($tab->orig, $replace, $string);
+				$string = RL_String::replaceOnce($item->orig, $replace, $string);
+				$prefix = '</div>';
 			}
 		}
 
@@ -149,9 +159,11 @@ class Replace
 
 		RL_RegEx::matchAll($regex, $string, $matches);
 
+		$replace = '</div>';
 		foreach ($matches as $match)
 		{
-			$string = RL_String::replaceOnce($match[0], '', $string);
+			$string  = RL_String::replaceOnce($match[0], $replace, $string);
+			$replace = '';
 		}
 
 		$regex = Params::getRegex('link');
@@ -616,7 +628,9 @@ class Replace
 
 		$class = self::getItemClass($item, 'tab-pane rl_tabs-pane nn_tabs-pane');
 
-		$body_attributes = 'role="tabpanel" aria-labelledby="tab-' . $item->id . '" aria-hidden="' . ($item->open ? 'false' : 'true') . '"';
+		$body_attributes = 'role="tabpanel"'
+			. ' aria-labelledby="tab-' . $item->id . '"'
+			. ' aria-hidden="' . ($item->open ? 'false' : 'true') . '"';
 		if ( ! empty($item->body_attributes))
 		{
 			$body_attributes .= ' ' . $item->body_attributes;
@@ -647,7 +661,7 @@ class Replace
 		$class = self::getMainClasses($item);
 
 
-		$html[] = '<div class="' . trim($class) . '">';
+		$html[] = '<div class="' . trim($class) . '" role="presentation">';
 		$html[] = self::getNav($items);
 		$html[] = '<div class="tab-content">';
 
@@ -980,7 +994,8 @@ class Replace
 
 			$onclick = '';
 
-			$heading_attributes = 'role="presentation"';
+			$heading_attributes = ' role="heading"';
+
 			if ( ! empty($item->heading_attributes))
 			{
 				$heading_attributes .= ' ' . $item->heading_attributes;

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.3.17810
+ * @version         18.5.18576
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -15,6 +15,7 @@ defined('_JEXEC') or die;
 
 use JFactory;
 use JHttpFactory;
+use Joomla\Registry\Registry;
 use RuntimeException;
 
 /**
@@ -168,7 +169,12 @@ class Http
 	{
 		try
 		{
-			$content = JHttpFactory::getHttp()->get($url, null, $timeout)->body;
+			// Adding a valid user agent string, otherwise some feed-servers returning an error
+			$options = new Registry([
+				'userAgent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0',
+			]);
+
+			$content = JHttpFactory::getHttp($options)->get($url, null, $timeout)->body;
 		}
 		catch (RuntimeException $e)
 		{
