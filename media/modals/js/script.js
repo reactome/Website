@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         9.11.1
+ * @version         9.12.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -149,7 +149,8 @@ var RLModals          = null;
 				$('.cboxIframe').attr({
 					webkitAllowFullScreen: true,
 					mozallowfullscreen   : true,
-					allowFullScreen      : true
+					allowFullScreen      : true,
+					allow                : 'autoplay; encrypted-media'
 				});
 
 				RegularLabsModals.resize();
