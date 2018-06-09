@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.11.1
+ * @version         9.12.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -333,41 +333,46 @@ class Link
 
 	private static function fixUrlYoutube($url)
 	{
-		if ( ! RL_RegEx::match(
-			'(?:^youtube=|youtu\.be/?|youtube\.com/embed/?|youtube\.com\/watch\?v=)([^/&\?]+)(?:\?|&amp;|&)?(.*)$',
-			trim($url),
-			$parts
-		)
-		)
+		$regex = '(?:^youtube=|youtu\.be/?|youtube\.com/embed/?|youtube\.com\/watch\?v=)(?<id>[^/&\?]+)(?:\?|&amp;|&)?(?<query>.*)$';
+
+		if ( ! RL_RegEx::match($regex, trim($url), $match))
 		{
 			return $url;
 		}
 
-		$url = 'https://www.youtube.com/embed/' . $parts[1] . '?' . $parts[2];
+		$url = 'https://www.youtube.com/embed/' . $match['id'];
 
-		if (strpos($parts[2], 'wmode=transparent') !== false)
+		if ( ! empty($match['query']))
+		{
+			$url .= '?' . $match['query'];
+		}
+
+		if (strpos($match['query'], 'wmode=transparent') !== false)
 		{
 			return $url;
 		}
 
-		return $url . '&wmode=transparent';
+		$url .= (strpos($url, '?') === false ? '?' : '&') . 'wmode=transparent';
+
+		return $url;
 	}
 
 	private static function fixUrlVimeo($url)
 	{
-		if ( ! RL_RegEx::match(
-			'(?:^vimeo=|vimeo\.com/(?:video/)?)([0-9]+)(.*)$',
-			trim($url),
-			$parts
-		)
-		)
+		$regex = '(?:^vimeo=|vimeo\.com/(?:video/)?)(?<id>[0-9]+)(?<query>.*)$';
+
+		if ( ! RL_RegEx::match($regex, trim($url), $match))
 		{
 			return $url;
 		}
 
-		return
-			'https://player.vimeo.com/video/'
-			. $parts[1]
-			. $parts[2];
+		$url = 'https://player.vimeo.com/video/' . $match['id'];
+
+		if ( ! empty($match['query']))
+		{
+			$url .= '?' . $match['query'];
+		}
+
+		return $url;
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.5.18576
+ * @version         18.5.26647
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -96,6 +96,7 @@ class EditorButtonPopup
 
 	private function getDir()
 	{
+		// use static::class instead of get_class($this) after php 5.4 support is dropped
 		$rc = new ReflectionClass(get_class($this));
 
 		return dirname($rc->getFileName());
