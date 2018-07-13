@@ -1,6 +1,6 @@
 /**
  * @package         Tabs
- * @version         7.3.0
+ * @version         7.4.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -105,8 +105,14 @@ var RegularLabsTabs = null;
 
 			this.updateActiveClassesOnTabLinks($el);
 
+			// trigger resize event to make certain scripts (like galleries) work
+			window.dispatchEvent(new Event('resize'));
+
 			if (!slideshow) {
-				$el.focus();
+				// For some reason Chrome 67 throws an error when not using a small delay
+				setTimeout(function() {
+					$el[0].focus();
+				}, 10);
 			}
 		},
 

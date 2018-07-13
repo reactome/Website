@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.3.0
+ * @version         7.4.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -133,9 +133,9 @@ class Replace
 		self::initSets($sets);
 
 		$prefix = '';
-		foreach ($sets as $set)
+		foreach ($sets as $items)
 		{
-			foreach ($set as $item)
+			foreach ($items as $item)
 			{
 				$class = 'rl_tabs-print';
 
@@ -373,6 +373,7 @@ class Replace
 		foreach ($sets as $set_id => $items)
 		{
 			$opened_by_default = 0;
+
 
 			foreach ($items as $i => $item)
 			{

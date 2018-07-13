@@ -1,6 +1,6 @@
 /**
  * @package         Sliders
- * @version         7.5.0
+ * @version         7.6.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -113,11 +113,17 @@ var RegularLabsSliders = null;
 
 				$el.closest('div.rl_sliders').find('.rl_sliders-body').attr('aria-hidden', true);
 				$('div#' + id).attr('aria-hidden', false);
+
+				// trigger resize event to make certain scripts (like galleries) work
+				window.dispatchEvent(new Event('resize'));
 			}
 
 			this.updateActiveClassesOnSliderLinks($el);
 
-			$el.focus();
+			// For some reason Chrome 67 throws an error when not using a small delay
+			setTimeout(function() {
+				$el[0].focus();
+			}, 10);
 		},
 
 		setScrollOnLoad: function($el) {

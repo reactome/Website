@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.5.26647
+ * @version         18.7.1356
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -71,7 +71,7 @@ class Document
 
 		if (JVERSION < 3.7)
 		{
-			return Cache::set($cache_id, $identifier == 'administrator' ? JFactory::getApplication()->isAdmin() : JFactory::getApplication()->isSite());
+			return Cache::set($cache_id, $identifier == 'administrator' ? JFactory::getApplication()->isClient('administrator') : JFactory::getApplication()->isClient('site'));
 		}
 
 		return Cache::set($cache_id, JFactory::getApplication()->isClient($identifier));
@@ -268,7 +268,7 @@ class Document
 
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '18.5.26647';
+			$version = '18.7.1356';
 		}
 
 		if ( ! $file = File::getMediaFile('js', $file))
@@ -294,7 +294,7 @@ class Document
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '18.5.26647';
+			$version = '18.7.1356';
 		}
 
 		if ( ! $file = File::getMediaFile('css', $file))

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.5.26647
+ * @version         18.7.1356
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -40,7 +40,7 @@ class PlgSystemRegularLabs extends JPlugin
 	{
 		if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 		{
-			if (JFactory::getApplication()->isAdmin())
+			if (JFactory::getApplication()->isClient('administrator'))
 			{
 				JFactory::getApplication()->enqueueMessage('The Regular Labs Library folder is missing or incomplete: ' . JPATH_LIBRARIES . '/regularlabs', 'error');
 			}

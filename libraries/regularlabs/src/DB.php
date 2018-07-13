@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.5.26647
+ * @version         18.7.1356
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -87,6 +87,11 @@ class DB
 
 	public static function getOperator(&$value, $default = '=')
 	{
+		if (empty($value))
+		{
+			return $default;
+		}
+
 		if (is_array($value))
 		{
 			$operator = self::getOperatorFromValue($value[0], $default);

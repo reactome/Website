@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.3.0
+ * @version         7.4.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -30,7 +30,7 @@ $xmlfile = __DIR__ . '/fields.xml';
 					</button>
 				</div>
 
-				<?php if (JFactory::getApplication()->isAdmin() && JFactory::getUser()->authorise('core.admin', 1)) : ?>
+				<?php if (JFactory::getApplication()->isClient('administrator') && JFactory::getUser()->authorise('core.admin', 1)) : ?>
 					<div class="btn-wrapper" id="toolbar-options">
 						<button onclick="window.open('index.php?option=com_plugins&filter_folder=system&filter_search=<?php echo JText::_('TABS') ?>');" class="btn btn-small">
 							<span class="icon-options"></span> <?php echo JText::_('JOPTIONS') ?>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.5.26647
+ * @version         18.7.1356
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -40,7 +40,7 @@ class Application
 
 		$caching = false;
 
-		if ($app->isSite() && $app->get('caching') && $app->get('caching', 2) == 2 && ! JFactory::getUser()->get('id'))
+		if ($app->isClient('site') && $app->get('caching') && $app->get('caching', 2) == 2 && ! JFactory::getUser()->get('id'))
 		{
 			$caching = true;
 		}
