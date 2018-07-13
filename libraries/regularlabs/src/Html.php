@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.5.26647
+ * @version         18.7.1356
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -575,7 +575,7 @@ class Html
 			return $string;
 		}
 
-		return str_replace($matches, $replacements, $string);
+		return str_replace($searches, $replacements, $string);
 	}
 
 	/**
