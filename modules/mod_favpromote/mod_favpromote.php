@@ -5,10 +5,10 @@
 *
 *   Responsive and customizable Joomla!3 module
 *
-*   @version        2.1
+*   @version        2.2
 *   @link           http://extensions.favthemes.com/favpromote
 *   @author         FavThemes - http://www.favthemes.com
-*   @copyright      Copyright (C) 2012-2017 FavThemes.com. All Rights Reserved.
+*   @copyright      Copyright (C) 2012-2018 FavThemes.com. All Rights Reserved.
 *   @license        Licensed under GNU/GPLv3, see http://www.gnu.org/licenses/gpl-3.0.html
 */
 
@@ -59,12 +59,22 @@ $custom_id = rand(10000,20000);
 
 if ($jquery_load) {JHtml::_('jquery.framework'); }
 
-// check if favth-bootstrap already loaded
+// check if favth-bootstrap and viewport checker already loaded
+
 $jhead = JFactory::getDocument();
 $lscripts = $jhead->_scripts;
+
 $load_favthb = true;
-foreach ($lscripts as $k => $v) { if (strpos($k, 'favth-bootstrap') !== false) { $load_favthb = false; break; } }
-// end check if favth-bootstrap already loaded
+$load_vwchk = true;
+
+foreach ($lscripts as $k => $v) {
+  
+  if (strpos($k, 'favth-bootstrap') !== false) { $load_favthb = false; }
+  else if (strpos($k, 'viewportchecker.js') !== false) { $load_vwchk = false; }
+  
+}
+
+// end check if favth-bootstrap and viewport checker already loaded
 
 if ($load_favthb) {
   JHTML::stylesheet('modules/mod_favpromote/theme/bootstrap/favth-bootstrap.css');
@@ -75,12 +85,14 @@ if ($load_favthb) {
 
 // Module CSS
 JHTML::stylesheet('modules/mod_favpromote/theme/css/favpromote.css');
-JHTML::stylesheet('//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+JHTML::stylesheet('//use.fontawesome.com/releases/v5.1.0/css/all.css');
 // Google Font
 JHTML::stylesheet('//fonts.googleapis.com/css?family='.str_replace(" ","+",$title_google_font).':'.$title_font_weight.str_replace("normal","",$title_font_style));
 
 // Scripts
-JHTML::script('modules/mod_favpromote/theme/js/viewportchecker/viewportchecker.js');
+if ($load_vwchk) {
+  JHTML::script('modules/mod_favpromote/theme/js/viewportchecker/viewportchecker.js');
+}
 
 ?>
 
@@ -186,7 +198,7 @@ JHTML::script('modules/mod_favpromote/theme/js/viewportchecker/viewportchecker.j
                 line-height: <?php echo $title_line_height; ?>;
                 text-align: <?php echo $title_text_align; ?>;
                 margin-bottom:0;">
-            <i class="fa <?php echo ${'title_icon'.$i}; ?>"
+            <i class="<?php echo ${'title_icon'.$i}; ?>"
               style="color: #<?php echo ${'title_color'.$i}; ?>;
                     font-size: <?php echo $title_icon_font_size; ?>;
                     vertical-align: <?php echo $title_icon_vertical_align; ?>;

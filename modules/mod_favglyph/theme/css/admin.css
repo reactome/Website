@@ -12,16 +12,16 @@
 
 //////////////////////////////////////////////////////////////////////////////*/
 
-ul#myTabTabs.nav.nav-tabs:before,
-ul#myTabTabs.nav.nav-tabs:hover:before,
-ul#myTabTabs.nav.nav-tabs a[href="#general"]:before,
-ul#myTabTabs.nav.nav-tabs a[href="#assignment"]:before,
-ul#myTabTabs.nav.nav-tabs a[href="#permissions"]:before,
-ul#myTabTabs.nav.nav-tabs a[href="#attrib-advanced"]:before,
-ul#myTabTabs.nav.nav-tabs a[href="#attrib-settings"]:before,
-ul#myTabTabs.nav.nav-tabs a[href="#attrib-content"]:before {
-  font-family: FontAwesome;
-  font-weight: normal;
+ul#myTabTabs.nav.nav-tabs::before,
+ul#myTabTabs.nav.nav-tabs:hover::before,
+ul#myTabTabs.nav.nav-tabs a[href="#general"]::before,
+ul#myTabTabs.nav.nav-tabs a[href="#assignment"]::before,
+ul#myTabTabs.nav.nav-tabs a[href="#permissions"]::before,
+ul#myTabTabs.nav.nav-tabs a[href="#attrib-advanced"]::before,
+ul#myTabTabs.nav.nav-tabs a[href="#attrib-settings"]::before,
+ul#myTabTabs.nav.nav-tabs a[href="#attrib-content"]::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
   font-style: normal;
   text-decoration: inherit;
   line-height: normal;
@@ -34,29 +34,29 @@ ul#myTabTabs.nav.nav-tabs a[href="#attrib-content"]:before {
   text-align: center;
   font-size: 21px;
   color: #444;
-  padding-top: 9px;
+  margin-top: 4px;
   margin-bottom: 4px;
 }
-ul#myTabTabs.nav.nav-tabs a[href="#general"]:before {
+ul#myTabTabs.nav.nav-tabs a[href="#general"]::before {
   content: "\f00a";
 }
-ul#myTabTabs.nav.nav-tabs a[href="#assignment"]:before {
+ul#myTabTabs.nav.nav-tabs a[href="#assignment"]::before {
   content: "\f0e8";
 }
-ul#myTabTabs.nav.nav-tabs a[href="#permissions"]:before {
-  content: "\f046";
+ul#myTabTabs.nav.nav-tabs a[href="#permissions"]::before {
+  content: "\f14a";
 }
-ul#myTabTabs.nav.nav-tabs a[href="#attrib-advanced"]:before {
+ul#myTabTabs.nav.nav-tabs a[href="#attrib-advanced"]::before {
   content: "\f12e";
 }
-ul#myTabTabs.nav.nav-tabs a[href="#attrib-settings"]:before {
+ul#myTabTabs.nav.nav-tabs a[href="#attrib-settings"]::before {
   content: "\f085";
 }
-ul#myTabTabs.nav.nav-tabs a[href="#attrib-content"]:before {
+ul#myTabTabs.nav.nav-tabs a[href="#attrib-content"]::before {
   content: "\f044";
 }
-ul#myTabTabs.nav.nav-tabs a:hover:before,
-ul#myTabTabs.nav.nav-tabs li.active a:before {
+ul#myTabTabs.nav.nav-tabs a:hover::before,
+ul#myTabTabs.nav.nav-tabs li.active a::before {
   color: #09f;
 }
 
@@ -91,7 +91,7 @@ ul#myTabTabs.nav.nav-tabs li a {
   color: #444444;
   background-color: transparent;
   background-image: linear-gradient(to bottom, #FFF, #E6E6E6);
-  padding: 7px 18px 7px;
+  padding: 16px 18px 12px;
   line-height: 24px;
   border: 1px solid #DDD;
   border-radius: 4px;
@@ -132,9 +132,9 @@ ul#myTabTabs.nav.nav-tabs > li a:hover {
   color: #09F;
   font-weight: normal;
 }
-.favsubtitle h4:before {
-  font-family: FontAwesome;
-  font-weight: normal;
+.favsubtitle h4::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
   font-style: normal;
   text-decoration: inherit;
   line-height: normal;
@@ -161,28 +161,28 @@ ul#myTabTabs.nav.nav-tabs > li a:hover {
   margin: 0;
   cursor: pointer;
 }
-.control-group.favcollapseh .favtitle h4:before {
-  font-family: FontAwesome;
-  font-weight: normal;
+.control-group.favcollapseh .favtitle h4::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
   font-style: normal;
   text-decoration: inherit;
   line-height: normal;
   vertical-align: baseline;
-  content: "\f196";
+  content: "\f0fe";
   float: right;
 }
 .favcollapseh.favcollapsehactive .favtitle h4 {
   border-bottom: 1px solid #ddd;
   margin-bottom: 28px;
 }
-.favcollapseh.favcollapsehactive .favtitle h4:before {
-  font-family: FontAwesome;
-  font-weight: normal;
+.favcollapseh.favcollapsehactive .favtitle h4::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
   font-style: normal;
   text-decoration: inherit;
   line-height: normal;
   vertical-align: baseline;
-  content: "\f147";
+  content: "\f146";
   float: right;
 }
 
@@ -196,14 +196,14 @@ ul#myTabTabs.nav.nav-tabs > li a:hover {
 
   /*/  icons  /*/
 
-  ul#myTabTabs.nav.nav-tabs:before,
-  ul#myTabTabs.nav.nav-tabs:hover:before,
-  ul#myTabTabs.nav.nav-tabs a[href="#general"]:before,
-  ul#myTabTabs.nav.nav-tabs a[href="#assignment"]:before,
-  ul#myTabTabs.nav.nav-tabs a[href="#permissions"]:before,
-  ul#myTabTabs.nav.nav-tabs a[href="#attrib-advanced"]:before,
-  ul#myTabTabs.nav.nav-tabs a[href="#attrib-settings"]:before,
-  ul#myTabTabs.nav.nav-tabs a[href="#attrib-content"]:before {
+  ul#myTabTabs.nav.nav-tabs::before,
+  ul#myTabTabs.nav.nav-tabs:hover::before,
+  ul#myTabTabs.nav.nav-tabs a[href="#general"]::before,
+  ul#myTabTabs.nav.nav-tabs a[href="#assignment"]::before,
+  ul#myTabTabs.nav.nav-tabs a[href="#permissions"]::before,
+  ul#myTabTabs.nav.nav-tabs a[href="#attrib-advanced"]::before,
+  ul#myTabTabs.nav.nav-tabs a[href="#attrib-settings"]::before,
+  ul#myTabTabs.nav.nav-tabs a[href="#attrib-content"]::before {
     display: inline;
     margin-right: 10px;
     font-size: 14px;
