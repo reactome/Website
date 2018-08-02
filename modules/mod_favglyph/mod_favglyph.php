@@ -5,10 +5,10 @@
 *
 *   Responsive and customizable Joomla!3 module
 *
-*   @version        2.1
+*   @version        2.2
 *   @link           http://extensions.favthemes.com/favglyph
 *   @author         FavThemes - http://www.favthemes.com
-*   @copyright      Copyright (C) 2012-2017 FavThemes.com. All Rights Reserved.
+*   @copyright      Copyright (C) 2012-2018 FavThemes.com. All Rights Reserved.
 *   @license        Licensed under GNU/GPLv3, see http://www.gnu.org/licenses/gpl-3.0.html
 */
 
@@ -57,12 +57,22 @@ $custom_id = rand(10000,20000);
 
 if ($jquery_load) {JHtml::_('jquery.framework'); }
 
-// check if favth-bootstrap already loaded
+// check if favth-bootstrap and viewport checker already loaded
+
 $jhead = JFactory::getDocument();
 $lscripts = $jhead->_scripts;
+
 $load_favthb = true;
-foreach ($lscripts as $k => $v) { if (strpos($k, 'favth-bootstrap') !== false) { $load_favthb = false; break; } }
-// end check if favth-bootstrap already loaded
+$load_vwchk = true;
+
+foreach ($lscripts as $k => $v) {
+  
+  if (strpos($k, 'favth-bootstrap') !== false) { $load_favthb = false; }
+  else if (strpos($k, 'viewportchecker.js') !== false) { $load_vwchk = false; }
+  
+}
+
+// end check if favth-bootstrap and viewport checker already loaded
 
 if ($load_favthb) {
   JHTML::stylesheet('modules/mod_favglyph/theme/bootstrap/favth-bootstrap.css');
@@ -73,12 +83,14 @@ if ($load_favthb) {
 
 // Module CSS
 JHTML::stylesheet('modules/mod_favglyph/theme/css/favglyph.css');
-JHTML::stylesheet('//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+JHTML::stylesheet('//use.fontawesome.com/releases/v5.1.0/css/all.css');
 // Google Font
 JHTML::stylesheet('//fonts.googleapis.com/css?family='.str_replace(" ","+",$title_google_font).':'.$title_font_weight.str_replace("normal","",$title_font_style));
 
 // Scripts
-JHTML::script('modules/mod_favglyph/theme/js/viewportchecker/viewportchecker.js');
+if ($load_vwchk) {
+  JHTML::script('modules/mod_favglyph/theme/js/viewportchecker/viewportchecker.js');
+}
 
 ?>
 
@@ -131,7 +143,7 @@ JHTML::script('modules/mod_favglyph/theme/js/viewportchecker/viewportchecker.js'
               <?php // Do not receive link if the link setting is empty
               if(empty(${'icon_link'.$i})) { ?>
 
-                  <i class="fa <?php echo ${'icon_name'.$i}; ?>"
+                  <i class="<?php echo ${'icon_name'.$i}; ?>"
                       style="color: #<?php echo ${'icon_color'.$i}; ?>;
                       font-size: <?php echo ${'icon_font_size'.$i}; ?>;">
                   </i>
@@ -139,7 +151,7 @@ JHTML::script('modules/mod_favglyph/theme/js/viewportchecker/viewportchecker.js'
               <?php } else { ?>
 
                 <a href="<?php echo ${'icon_link'.$i}; ?>" target="_<?php echo ${'icon_link_target'.$i}; ?>">
-                  <i class="fa <?php echo ${'icon_name'.$i}; ?>"
+                  <i class="<?php echo ${'icon_name'.$i}; ?>"
                       style="color: #<?php echo ${'icon_color'.$i}; ?>;
                       font-size: <?php echo ${'icon_font_size'.$i}; ?>;">
                   </i>
@@ -229,7 +241,7 @@ JHTML::script('modules/mod_favglyph/theme/js/viewportchecker/viewportchecker.js'
               <?php // Do not receive link if the link setting is empty
               if(empty(${'icon_link'.$i})) { ?>
 
-                  <i class="fa <?php echo ${'icon_name'.$i}; ?>"
+                  <i class="<?php echo ${'icon_name'.$i}; ?>"
                       style="color: #<?php echo ${'icon_color'.$i}; ?>;
                       font-size: <?php echo ${'icon_font_size'.$i}; ?>;">
                   </i>
@@ -237,7 +249,7 @@ JHTML::script('modules/mod_favglyph/theme/js/viewportchecker/viewportchecker.js'
               <?php } else { ?>
 
                 <a href="<?php echo ${'icon_link'.$i}; ?>" target="_<?php echo ${'icon_link_target'.$i}; ?>">
-                  <i class="fa <?php echo ${'icon_name'.$i}; ?>"
+                  <i class="<?php echo ${'icon_name'.$i}; ?>"
                       style="color: #<?php echo ${'icon_color'.$i}; ?>;
                       font-size: <?php echo ${'icon_font_size'.$i}; ?>;">
                   </i>
