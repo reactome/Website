@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,10 +11,10 @@
 
 namespace RegularLabs\Library;
 
+defined('_JEXEC') or die;
+
 use JApplicationHelper;
 use JFactory;
-
-defined('_JEXEC') or die;
 
 /**
  * Class Alias
@@ -42,6 +42,12 @@ class Alias
 		{
 			return self::stringURLUnicodeSlug($string);
 		}
+
+		// Remove < > html entities
+		$string = str_replace(['&lt;', '&gt;'], '', $string);
+
+		// Convert html entities
+		$string = StringHelper::html_entity_decoder($string);
 
 		return JApplicationHelper::stringURLSafe($string);
 	}

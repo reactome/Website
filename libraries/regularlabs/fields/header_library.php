@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -22,20 +22,25 @@ class JFormFieldRL_Header_Library extends JFormFieldRL_Header
 			'Advanced Module Manager',
 			'Advanced Template Manager',
 			'Articles Anywhere',
+			'Articles Field',
 			'Better Preview',
+			'Better Trash',
 			'Cache Cleaner',
 			'CDN for Joomla!',
 			'Components Anywhere',
+			'Conditional Content',
 			'Content Templater',
 			'DB Replacer',
 			'Dummy Content',
 			'Email Protector',
-			'GeoIp',
+			'GeoIP',
 			'IP Login',
 			'Modals',
 			'Modules Anywhere',
+			'Quick Index',
 			'Regular Labs Extension Manager',
 			'ReReplacer',
+			'Simple User Notes',
 			'Sliders',
 			'Snippets',
 			'Sourcerer',

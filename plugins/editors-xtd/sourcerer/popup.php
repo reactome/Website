@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.2.0
+ * @version         7.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,6 +14,7 @@ defined('_JEXEC') or die;
 use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\Language as RL_Language;
 use RegularLabs\Library\Parameters as RL_Parameters;
+use RegularLabs\Library\RegEx as RL_RegEx;
 
 $user = JFactory::getUser();
 if ($user->get('guest')
@@ -24,7 +25,7 @@ if ($user->get('guest')
 	)
 )
 {
-	JError::raiseError(403, JText::_("ALERTNOTAUTH"));
+	throw new JAccessExceptionNotallowed(JText::_('JERROR_ALERTNOAUTHOR'), 403);
 }
 
 $params = RL_Parameters::getInstance()->getPluginParams('sourcerer');
@@ -33,12 +34,11 @@ if (RL_Document::isClient('site'))
 {
 	if ( ! $params->enable_frontend)
 	{
-		JError::raiseError(403, JText::_("ALERTNOTAUTH"));
+		throw new JAccessExceptionNotallowed(JText::_('JERROR_ALERTNOAUTHOR'), 403);
 	}
 }
 
-$class = new PlgButtonSourcererPopup($params);
-$class->render();
+(new PlgButtonSourcererPopup($params))->render();
 
 class PlgButtonSourcererPopup
 {
@@ -72,17 +72,21 @@ class PlgButtonSourcererPopup
 		// Tag character start and end
 		list($tag_start, $tag_end) = explode('.', $this->params->tag_characters);
 
+		$editor = JFactory::getApplication()->input->getString('name', 'text');
+		// Remove any dangerous character to prevent cross site scripting
+		$editor = RL_RegEx::replace('[\'\";\s]', '', $editor);
+
 		$script = "
 			var sourcerer_syntax_word = '" . $this->params->syntax_word . "';
 			var sourcerer_tag_characters = ['" . $tag_start . "', '" . $tag_end . "'];
-			var sourcerer_editorname = '" . JFactory::getApplication()->input->getString('name', 'text') . "';
+			var sourcerer_editorname = '" . $editor . "';
 			var sourcerer_default_addsourcetags = " . (int) $this->params->addsourcetags . ";
 			var sourcerer_root = '" . JUri::root(true) . "';
 		";
 		RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('sourcerer/script.min.js', '7.2.0');
-		RL_Document::style('sourcerer/popup.min.css', '7.2.0');
+		RL_Document::script('sourcerer/script.min.js', '7.3.0');
+		RL_Document::style('sourcerer/popup.min.css', '7.3.0');
 
 		$this->params->code = '<!-- You can place html anywhere within the source tags --><br><br><br><script language=&quot;javascript&quot; type=&quot;text/javascript&quot;><br>    // You can place JavaScript like this<br>    <br></script><br><?php<br>    // You can place PHP like this<br>    <br>?>';
 		$this->params->code = str_replace(['<br>', '<br />'], "\n", $this->params->code);

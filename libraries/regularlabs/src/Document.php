@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -67,11 +67,6 @@ class Document
 		if (Cache::has($cache_id))
 		{
 			return Cache::get($cache_id);
-		}
-
-		if (JVERSION < 3.7)
-		{
-			return Cache::set($cache_id, $identifier == 'administrator' ? JFactory::getApplication()->isClient('administrator') : JFactory::getApplication()->isClient('site'));
 		}
 
 		return Cache::set($cache_id, JFactory::getApplication()->isClient($identifier));
@@ -268,7 +263,7 @@ class Document
 
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '18.7.1356';
+			$version = '18.9.3123';
 		}
 
 		if ( ! $file = File::getMediaFile('js', $file))
@@ -294,7 +289,7 @@ class Document
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '18.7.1356';
+			$version = '18.9.3123';
 		}
 
 		if ( ! $file = File::getMediaFile('css', $file))
@@ -329,32 +324,10 @@ class Document
 	 */
 	public static function scriptOptions($options = [], $name = '')
 	{
-		if (JVERSION < 3.7)
-		{
-			self::scriptOptionsLegacy($options, $name);
-
-			return;
-		}
-
 		$key = 'rl_' . Extension::getAliasByName($name);
 		JHtml::_('behavior.core');
 
 		JFactory::getDocument()->addScriptOptions($key, $options);
-	}
-
-	/**
-	 * Adds extension options to the page for Joomla 3.6.5 and lower
-	 *
-	 * @param array  $options
-	 * @param string $name
-	 */
-	private static function scriptOptionsLegacy($options = [], $name = '')
-	{
-		$key = 'rl_' . Extension::getAliasByName($name);
-
-		$script = 'var ' . $key . '_options = ' . json_encode($options) . ';';
-
-		self::scriptDeclaration($script, $name, true);
 	}
 
 	/**

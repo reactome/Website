@@ -2,8 +2,8 @@
 <extension version="3.4" type="plugin" group="editors-xtd" method="upgrade">
 	<name>plg_editors-xtd_modals</name>
 	<description>PLG_EDITORS-XTD_MODALS_DESC</description>
-	<version>9.12.0</version>
-	<creationDate>June 2018</creationDate>
+	<version>9.13.1</version>
+	<creationDate>September 2018</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -26,7 +26,7 @@
 
 	<config>
 		<fields name="params" addfieldpath="/libraries/regularlabs/fields">
-			<fieldset name="description">
+			<fieldset name="basic">
 				<field name="@loadlanguage_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
 				<field name="@loadlanguage" type="rl_loadlanguage" extension="plg_editors-xtd_modals" />
 				<field name="@license" type="rl_license" extension="MODALS" />
@@ -39,7 +39,7 @@
 					   description="MODALS_DESC"
 					   url="https://www.regularlabs.com/modals" />
 
-				<field name="@notice_settings" type="rl_plaintext"
+				<field name="@notice_settings" type="note" class="alert alert-info"
 					   description="MDL_SETTINGS,&lt;a href=&quot;index.php?option=com_plugins&amp;filter_folder=system&amp;filter_search=articles anywhere&quot; target=&quot;_blank&quot;&gt;,&lt;/a&gt;" />
 			</fieldset>
 		</fields>

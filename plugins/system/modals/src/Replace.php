@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.12.0
+ * @version         9.13.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -168,7 +168,7 @@ class Replace
 			$content = trim($match['image_pre'] . $match['text'] . $match['image_post']);
 
 			list($link, $extra) = Link::get($match['data'], $match['link_start'], $content);
-			$link .= '</a>';
+			$link = $link ? $link . '</a>' : '';
 
 			if ($params->place_comments)
 			{
@@ -212,7 +212,7 @@ class Replace
 
 			list($link, $extra) = Link::get($match['data'], '', trim($tags['pre'] . $match['text'] . $tags['post']));
 
-			$link = $link . '</a>';
+			$link = $link ? $link . '</a>' : '';
 
 			if ($params->place_comments)
 			{
@@ -306,7 +306,7 @@ class Replace
 	}
 
 
-	private static function setImageAttributes(&$data, &$image_attributes, $image)
+	public static function setImageAttributes(&$data, &$image_attributes, $image)
 	{
 		$params = Params::get();
 

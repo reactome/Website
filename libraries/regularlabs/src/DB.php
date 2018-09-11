@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -21,6 +21,8 @@ use JFactory;
  */
 class DB
 {
+	static $tables = [];
+
 	/**
 	 * Check if a table exists in the database
 	 *
@@ -30,6 +32,11 @@ class DB
 	 */
 	public static function tableExists($table)
 	{
+		if (isset(self::$tables[$table]))
+		{
+			return self::$tables[$table];
+		}
+
 		$db = JFactory::getDbo();
 
 		if (strpos($table, '#__') === 0)
@@ -46,7 +53,39 @@ class DB
 		$db->setQuery($query);
 		$result = $db->loadResult();
 
-		return ! empty($result);
+		self::$tables[$table] = ! empty($result);
+
+		return self::$tables[$table];
+	}
+
+	/**
+	 * Concatenate conditions using AND or OR
+	 *
+	 * @param string $glue
+	 * @param array  $conditions
+	 *
+	 * @return string
+	 */
+	public static function combine($conditions = [], $glue = 'OR')
+	{
+		if (empty($conditions))
+		{
+			return '';
+		}
+
+		if ( ! is_array($conditions))
+		{
+			return (string) $conditions;
+		}
+
+		if (count($conditions) < 2)
+		{
+			return $conditions[0];
+		}
+
+		$glue = strtoupper($glue) == 'AND' ? 'AND' : 'OR';
+
+		return '(' . implode(' ' . $glue . ' ', $conditions) . ')';
 	}
 
 	/**
@@ -57,7 +96,7 @@ class DB
 	 *
 	 * @return string
 	 */
-	public static function in($value)
+	public static function in($value, $handle_now = false)
 	{
 		if (empty($value) && ! is_array($value))
 		{
@@ -65,8 +104,7 @@ class DB
 		}
 
 		$operator = self::getOperator($value);
-
-		$value = JFactory::getDbo()->quote($value);
+		$value    = self::prepareValue($value, $handle_now);
 
 		if ( ! is_array($value))
 		{
@@ -83,6 +121,18 @@ class DB
 		$values = empty($value) ? "''" : implode(',', $value);
 
 		return ' ' . $operator . ' (' . $values . ')';
+	}
+
+	public static function prepareValue($value, $handle_now)
+	{
+		$dates = ['now', 'now()', 'date()', 'jfactory::getdate()'];
+
+		if ($handle_now && ! is_array($value) && in_array(strtolower($value), $dates))
+		{
+			return 'NOW()';
+		}
+
+		return JFactory::getDbo()->quote($value);
 	}
 
 	public static function getOperator(&$value, $default = '=')

@@ -2,8 +2,8 @@
 <extension version="3.4" type="plugin" group="system" method="upgrade">
 	<name>plg_system_sourcerer</name>
 	<description>PLG_SYSTEM_SOURCERER_DESC</description>
-	<version>7.2.0</version>
-	<creationDate>February 2018</creationDate>
+	<version>7.3.0</version>
+	<creationDate>September 2018</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -35,7 +35,7 @@
 
 	<config>
 		<fields name="params" addfieldpath="/libraries/regularlabs/fields">
-			<fieldset name="description">
+			<fieldset name="basic">
 				<field name="@loadlanguage_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
 				<field name="@loadlanguage" type="rl_loadlanguage" extension="plg_system_sourcerer" />
 				<field name="@license" type="rl_license" extension="SOURCERER" />
@@ -44,50 +44,6 @@
 					   label="SOURCERER"
 					   description="SOURCERER_DESC"
 					   url="https://www.regularlabs.com/sourcerer" />
-			</fieldset>
-			<fieldset name="advanced">
-				<field name="@block_tag_a" type="rl_block" start="1" label="RL_TAG_SYNTAX" />
-				<field name="syntax_word" type="text" size="20" default="source"
-					   label="SRC_SYNTAX_WORD"
-					   description="SRC_SYNTAX_WORD_DESC" />
-				<field name="tag_characters" type="list" default="{.}" class="input-small"
-					   label="RL_TAG_CHARACTERS"
-					   description="RL_TAG_CHARACTERS_DESC">
-					<option value="{.}">{...}</option>
-					<option value="[.]">[...]</option>
-					<option value="{{.}}">{{...}}</option>
-					<option value="[[.]]">[[...]]</option>
-					<option value="[:.:]">[:...:]</option>
-					<option value="[%.%]">[%...%]</option>
-				</field>
-				<field name="@block_tag_b" type="rl_block" end="1" />
-				<field name="trim" type="radio" class="btn-group" default="0"
-					   label="RL_STRIP_SURROUNDING_TAGS"
-					   description="RL_STRIP_SURROUNDING_TAGS_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="enable_in_head" type="radio" class="btn-group" default="0"
-					   label="SRC_ENABLE_IN_HEAD"
-					   description="SRC_ENABLE_IN_HEAD_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="remove_from_search" type="radio" class="btn-group" default="0"
-					   label="SRC_REMOVE_FROM_SEARCH"
-					   description="SRC_REMOVE_FROM_SEARCH_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="include_path" type="text" default="/"
-					   label="SRC_INCLUDE_PATH"
-					   description="SRC_INCLUDE_PATH_DESC" />
-				<field name="place_comments" type="radio" class="btn-group" default="1"
-					   label="RL_PLACE_HTML_COMMENTS"
-					   description="RL_PLACE_HTML_COMMENTS_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
 			</fieldset>
 
 			<fieldset name="SRC_SECURITY_SETTINGS_DEFAULT">
@@ -254,6 +210,52 @@
 					   description="SRC_USE_EXAMPLE_CODE_DESC"
 					   default="RL_ONLY_AVAILABLE_IN_PRO" />
 				<field name="@block_example_b" type="rl_block" end="1" />
+			</fieldset>
+
+			<fieldset name="RL_TAG_SYNTAX">
+				<field name="syntax_word" type="text" size="20" default="source"
+					   label="SRC_SYNTAX_WORD"
+					   description="SRC_SYNTAX_WORD_DESC" />
+				<field name="tag_characters" type="list" default="{.}" class="input-small"
+					   label="RL_TAG_CHARACTERS"
+					   description="RL_TAG_CHARACTERS_DESC">
+					<option value="{.}">{...}</option>
+					<option value="[.]">[...]</option>
+					<option value="{{.}}">{{...}}</option>
+					<option value="[[.]]">[[...]]</option>
+					<option value="[:.:]">[:...:]</option>
+					<option value="[%.%]">[%...%]</option>
+				</field>
+			</fieldset>
+
+			<fieldset name="advanced">
+				<field name="trim" type="radio" class="btn-group" default="0"
+					   label="RL_STRIP_SURROUNDING_TAGS"
+					   description="RL_STRIP_SURROUNDING_TAGS_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="enable_in_head" type="radio" class="btn-group" default="0"
+					   label="SRC_ENABLE_IN_HEAD"
+					   description="SRC_ENABLE_IN_HEAD_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="remove_from_search" type="radio" class="btn-group" default="0"
+					   label="SRC_REMOVE_FROM_SEARCH"
+					   description="SRC_REMOVE_FROM_SEARCH_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="include_path" type="text" default="/"
+					   label="SRC_INCLUDE_PATH"
+					   description="SRC_INCLUDE_PATH_DESC" />
+				<field name="place_comments" type="radio" class="btn-group" default="1"
+					   label="RL_PLACE_HTML_COMMENTS"
+					   description="RL_PLACE_HTML_COMMENTS_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
 			</fieldset>
 		</fields>
 	</config>

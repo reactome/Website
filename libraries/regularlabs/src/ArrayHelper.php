@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -83,6 +83,21 @@ class ArrayHelper
 		$array = array_filter($array);
 
 		return $array;
+	}
+
+	/**
+	 * Removes empty values from the array
+	 *
+	 * @param array $array
+	 *
+	 * @return array
+	 */
+	public static function removeEmpty($array)
+	{
+		// remove empty (or false) values
+		return array_filter($array, function ($value) {
+			return $value !== '';
+		});
 	}
 
 	/**
