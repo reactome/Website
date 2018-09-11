@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -128,13 +128,15 @@ class JFormFieldRL_Header extends \RegularLabs\Library\Field
 			}
 			$html[] = '<h4>' . RL_String::html_entity_decoder($title) . '</h4>';
 		}
+
 		if ($description)
 		{
 			$html[] = $description;
 		}
+
 		if ($url)
 		{
-			$html[] = '<p><a href="' . $url . '" target="_blank" title="' . JText::_('RL_MORE_INFO') . '">' . JText::_('RL_MORE_INFO') . '...</a></p>';
+			$html[] = '<p><a href="' . $url . '" class="btn btn-default" target="_blank" title="' . JText::_('RL_MORE_INFO') . '">' . JText::_('RL_MORE_INFO') . ' >></a></p>';
 		}
 
 		return '</div><div>' . implode('', $html);

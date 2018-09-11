@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -273,7 +273,7 @@ class Extension
 	 *
 	 * @return string
 	 */
-	public static function getXMLValue($key, $alias, $type = 'component', $folder = 'system')
+	public static function getXMLValue($key, $alias, $type = '', $folder = '')
 	{
 		if ( ! $xml = self::getXML($alias, $type, $folder))
 		{
@@ -297,7 +297,7 @@ class Extension
 	 *
 	 * @return array|bool
 	 */
-	public static function getXML($alias, $type = 'component', $folder = 'system')
+	public static function getXML($alias, $type = '', $folder = '')
 	{
 		if ( ! $file = self::getXMLFile($alias, $type, $folder))
 		{
@@ -316,7 +316,7 @@ class Extension
 	 *
 	 * @return string
 	 */
-	public static function getXMLFile($alias, $type = 'component', $folder = 'system')
+	public static function getXMLFile($alias, $type = '', $folder = '')
 	{
 		$element = self::getElementByAlias($alias);
 

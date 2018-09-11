@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -292,6 +292,8 @@ class Field
 			default:
 				$string = JText::_($string);
 		}
+
+		$string = str_replace('[:COMMA:]', ',', $string);
 
 		return $this->fixLanguageStringSyntax($string);
 	}

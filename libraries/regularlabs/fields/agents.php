@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -123,6 +123,7 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 				$agents[] = ['Chrome 11-20', '#Chrome/(1[1-9]|20)\.#'];
 				$agents[] = ['Chrome 1-10', '#Chrome/([1-9]|10)\.#'];
 				$agents[] = ['Firefox (' . JText::_('JALL') . ')', 'Firefox'];
+				$agents[] = ['Firefox 61-70', '#Firefox/(6[1-9]|70)\.#'];
 				$agents[] = ['Firefox 51-60', '#Firefox/(5[1-9]|60)\.#'];
 				$agents[] = ['Firefox 41-50', '#Firefox/(4[1-9]|50)\.#'];
 				$agents[] = ['Firefox 31-40', '#Firefox/(3[1-9]|40)\.#'];
@@ -131,6 +132,8 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 				$agents[] = ['Firefox 1-10', '#Firefox/([1-9]|10)\.#'];
 				$agents[] = ['Internet Explorer (' . JText::_('JALL') . ')', 'MSIE'];
 				$agents[] = ['Internet Explorer Edge', 'MSIE Edge']; // missing MSIE is added to agent string in assignments/agents.php
+				$agents[] = ['Edge 15', 'Edge/15'];
+				$agents[] = ['Edge 14', 'Edge/14'];
 				$agents[] = ['Edge 13', 'Edge/13'];
 				$agents[] = ['Edge 12', 'Edge/12'];
 				$agents[] = ['Internet Explorer 11', 'MSIE 11']; // missing MSIE is added to agent string in assignments/agents.php
@@ -142,6 +145,7 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 				$agents[] = ['Internet Explorer 7', 'MSIE 7.'];
 				$agents[] = ['Internet Explorer 1-6', '#MSIE [1-6]\.#'];
 				$agents[] = ['Opera (' . JText::_('JALL') . ')', 'Opera'];
+				$agents[] = ['Opera 51-60', '#Opera/(5[1-9]|60)\.#'];
 				$agents[] = ['Opera 41-50', '#Opera/(4[1-9]|50)\.#'];
 				$agents[] = ['Opera 31-40', '#Opera/(3[1-9]|40)\.#'];
 				$agents[] = ['Opera 21-30', '#Opera/(2[1-9]|30)\.#'];

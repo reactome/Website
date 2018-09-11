@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.12.0
+ * @version         9.13.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -157,7 +157,7 @@ class File
 
 	public static function getFileName($url)
 	{
-		return basename($url);
+		return trim(basename($url));
 	}
 
 	public static function getFileTitle($url)
@@ -169,7 +169,7 @@ class File
 
 	public static function getFilePath($url)
 	{
-		return dirname($url) . '/';
+		return trim(dirname($url), '/');
 	}
 
 	public static function getTitle($url, $case)

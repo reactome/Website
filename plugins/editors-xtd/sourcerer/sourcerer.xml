@@ -2,8 +2,8 @@
 <extension version="3.4" type="plugin" group="editors-xtd" method="upgrade">
 	<name>plg_editors-xtd_sourcerer</name>
 	<description>PLG_EDITORS-XTD_SOURCERER_DESC</description>
-	<version>7.2.0</version>
-	<creationDate>February 2018</creationDate>
+	<version>7.3.0</version>
+	<creationDate>September 2018</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -22,7 +22,7 @@
 
 	<config>
 		<fields name="params" addfieldpath="/libraries/regularlabs/fields">
-			<fieldset name="description">
+			<fieldset name="basic">
 				<field name="@license" type="rl_license" extension="SOURCERER" />
 				<field name="@version" type="rl_version" extension="SOURCERER" />
 				<field name="@dependency" type="rl_dependency"
@@ -33,7 +33,7 @@
 					   description="SOURCERER_DESC"
 					   url="https://www.regularlabs.com/sourcerer" />
 
-				<field name="@notice_settings" type="rl_plaintext"
+				<field name="@notice_settings" type="note" class="alert alert-info"
 					   description="SRC_SETTINGS,&lt;a href=&quot;index.php?option=com_plugins&amp;filter_folder=system&amp;filter_search=sourcerer&quot; target=&quot;_blank&quot;&gt;,&lt;/a&gt;" />
 			</fieldset>
 		</fields>

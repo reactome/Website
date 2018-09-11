@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.12.0
+ * @version         9.13.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -26,7 +26,7 @@ defined('_JEXEC') or die;
 					</button>
 				</div>
 
-				<?php if (JFactory::getApplication()->isAdmin() && JFactory::getUser()->authorise('core.admin', 1)) : ?>
+				<?php if (JFactory::getApplication()->isClient('administrator') && JFactory::getUser()->authorise('core.admin', 1)) : ?>
 					<div class="btn-wrapper" id="toolbar-options">
 						<button onclick="window.open('index.php?option=com_plugins&filter_folder=system&filter_search=<?php echo JText::_('MODALS') ?>');" class="btn btn-small">
 							<span class="icon-options"></span> <?php echo JText::_('JOPTIONS') ?>

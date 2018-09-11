@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -395,39 +395,6 @@ var RegularLabsScripts = null;
 			}
 
 			return '';
-		},
-
-		initResizeCodeMirror: function(id) {
-			if (!$('#' + id + ' .CodeMirror').length) {
-				setTimeout(function() {
-					RegularLabsScripts.initResizeCodeMirror(id);
-				}, 1000);
-				return;
-			}
-
-			RegularLabsScripts.resizeCodeMirror(id);
-
-			$(window).resize(function() {
-				RegularLabsScripts.resizeCodeMirror(id);
-			});
-		},
-
-		resizeCodeMirror: function(id) {
-			$('#' + id + ' .CodeMirror').width(100);
-			setTimeout(function() {
-				$('#' + id + ' .CodeMirror').each(function() {
-					var new_width = $(this).parent().width();
-
-					if (new_width <= 100) {
-						setTimeout(function() {
-							RegularLabsScripts.resizeCodeMirror(id);
-						}, 1000);
-						return;
-					}
-
-					$(this).width(new_width);
-				})
-			}, 100);
 		}
 	};
 

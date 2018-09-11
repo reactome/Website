@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -678,6 +678,7 @@ class Html
 		$elements = [
 			'span', 'code', 'a',
 			'strong', 'b', 'em', 'i', 'u', 'big', 'small', 'font',
+			'sup', 'sub',
 		];
 
 		return array_diff($elements, $exclude);
@@ -802,16 +803,22 @@ class Html
 	public static function removeHtmlTags($string)
 	{
 		// remove pagenavcounter
-		$string = RegEx::replace('(<div class="pagenavcounter">.*?</div>)', ' ', $string);
+		$string = RegEx::replace('<div class="pagenavcounter">.*?</div>', ' ', $string);
 		// remove pagenavbar
-		$string = RegEx::replace('(<div class="pagenavbar">(<div>.*?</div>)*</div>)', ' ', $string);
+		$string = RegEx::replace('<div class="pagenavbar">(<div>.*?</div>)*</div>', ' ', $string);
 		// remove inline scripts
-		$string = RegEx::replace('(<script[^a-z0-9].*?</script>)', ' ', $string);
-		$string = RegEx::replace('(<noscript[^a-z0-9].*?</noscript>)', ' ', $string);
+		$string = RegEx::replace('<script[^a-z0-9].*?</script>', '', $string);
+		$string = RegEx::replace('<noscript[^a-z0-9].*?</noscript>', '', $string);
 		// remove inline styles
-		$string = RegEx::replace('(<style[^a-z0-9].*?</style>)', ' ', $string);
-		// remove other tags
-		$string = RegEx::replace('(</?[a-z][a-z0-9]?.*?>)', ' ', $string);
+		$string = RegEx::replace('<style[^a-z0-9].*?</style>', '', $string);
+		// remove inline html tags
+		$string = RegEx::replace(
+			'</?(' . implode('|', self::getInlineElements()) . ')( [^>]*)?>',
+			'',
+			$string
+		);
+		// replace other tags with a space
+		$string = RegEx::replace('</?[a-z].*?>', ' ', $string);
 		// remove double whitespace
 		$string = trim(RegEx::replace('(\s)[ ]+', '\1', $string));
 

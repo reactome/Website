@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -299,5 +299,229 @@ class File
 		}
 
 		return true;
+	}
+
+	public static function isInternal($url)
+	{
+		return ! self::isExternal($url);
+	}
+
+	public static function isExternal($url)
+	{
+		if (strpos($url, '://') === false)
+		{
+			return false;
+		}
+
+		// hostname: give preference to SERVER_NAME, because this includes subdomains
+		$hostname = ($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : $_SERVER['HTTP_HOST'];
+
+		return ! (strpos(RegEx::replace('^.*?://', '', $url), $hostname) === 0);
+	}
+
+	public static function getDirname($url)
+	{
+		return rtrim(dirname($url), '/');
+	}
+
+	public static function getBaseName($url)
+	{
+		$basename = ltrim(basename($url), '/');
+
+		$ext = explode('?', $basename);
+
+		return strtolower($ext[0]);
+	}
+
+	public static function getFilename($url)
+	{
+		$info = pathinfo($url);
+		if ( ! isset($info['filename']))
+		{
+			return $url;
+		}
+
+		return $info['filename'];
+	}
+
+	public static function getExtension($url)
+	{
+		$info = pathinfo($url);
+		if ( ! isset($info['extension']))
+		{
+			return '';
+		}
+
+		$ext = explode('?', $info['extension']);
+
+		return strtolower($ext[0]);
+	}
+
+	public static function isImage($url)
+	{
+		return self::isMedia($url, self::getFileTypes('images'));
+	}
+
+	public static function isVideo($url)
+	{
+		return self::isMedia($url, self::getFileTypes('videos'));
+	}
+
+	public static function isDocument($url)
+	{
+		return self::isMedia($url, self::getFileTypes('documents'));
+	}
+
+	public static function isMedia($url, $filetypes = [])
+	{
+		$filetype = self::getExtension($url);
+
+		if ( ! $filetype)
+		{
+			return false;
+		}
+
+		if ( ! is_array($filetypes))
+		{
+			$filetypes = [$filetypes];
+		}
+
+		if (count($filetypes) == 1 && strpos($filetypes[0], ',') !== false)
+		{
+			$filetypes = ArrayHelper::toArray($filetypes[0]);
+		}
+
+		$filetypes = ! empty($filetypes) ? $filetypes : self::getFileTypes();
+
+		return in_array($filetype, $filetypes);
+	}
+
+	public static function getFileTypes($type = 'images')
+	{
+		switch ($type)
+		{
+			case 'image':
+			case 'images':
+				return [
+					'bmp',
+					'flif',
+					'gif',
+					'jpe',
+					'jpeg',
+					'jpg',
+					'png',
+					'tiff',
+					'eps',
+				];
+
+			case 'audio':
+				return [
+					'aif',
+					'aiff',
+					'mp3',
+					'wav',
+				];
+
+			case 'video':
+			case 'videos':
+				return [
+					'3g2',
+					'3gp',
+					'avi',
+					'divx',
+					'f4v',
+					'flv',
+					'm4v',
+					'mov',
+					'mp4',
+					'mpe',
+					'mpeg',
+					'mpg',
+					'ogv',
+					'swf',
+					'webm',
+					'wmv',
+				];
+
+			case 'document':
+			case 'documents':
+				return [
+					'doc',
+					'docm',
+					'docx',
+					'dotm',
+					'dotx',
+					'odb',
+					'odc',
+					'odf',
+					'odg',
+					'odi',
+					'odm',
+					'odp',
+					'ods',
+					'odt',
+					'onepkg',
+					'onetmp',
+					'onetoc',
+					'onetoc2',
+					'otg',
+					'oth',
+					'otp',
+					'ots',
+					'ott',
+					'oxt',
+					'pdf',
+					'potm',
+					'potx',
+					'ppam',
+					'pps',
+					'ppsm',
+					'ppsx',
+					'ppt',
+					'pptm',
+					'pptx',
+					'rtf',
+					'sldm',
+					'sldx',
+					'thmx',
+					'xla',
+					'xlam',
+					'xlc',
+					'xld',
+					'xll',
+					'xlm',
+					'xls',
+					'xlsb',
+					'xlsm',
+					'xlsx',
+					'xlt',
+					'xltm',
+					'xltx',
+					'xlw',
+				];
+
+			case 'other':
+			case 'others':
+				return [
+					'css',
+					'csv',
+					'js',
+					'json',
+					'tar',
+					'txt',
+					'xml',
+					'zip',
+				];
+
+			default:
+			case 'all':
+				return array_merge(
+					self::getFileTypes('images'),
+					self::getFileTypes('audio'),
+					self::getFileTypes('videos'),
+					self::getFileTypes('documents'),
+					self::getFileTypes('other')
+				);
+		}
 	}
 }

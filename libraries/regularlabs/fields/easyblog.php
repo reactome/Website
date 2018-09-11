@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -75,6 +75,8 @@ class JFormFieldRL_EasyBlog extends \RegularLabs\Library\FieldGroup
 			->select('t.alias as id, t.title as name')
 			->from('#__easyblog_tag AS t')
 			->where('t.published > -1')
+			->where('t.title != ' . $this->db->quote(''))
+			->group('t.title')
 			->order('t.title');
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();

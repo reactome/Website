@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.2.0
+ * @version         7.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -116,7 +116,16 @@ class Replace
 
 		$params = Params::get();
 
-		$data    = RL_PluginTag::getAttributesFromStringOld(trim($match['data']), []);
+		$data = RL_PluginTag::getAttributesFromStringOld(trim($match['data']), []);
+		foreach ($data as $key => $value)
+		{
+			if ( ! is_string($value))
+			{
+				continue;
+			}
+			$data->{$key} = trim($value, '""');
+		}
+
 		$content = trim($match['content']);
 
 		$remove_html = ! in_array('0', $data->params);
@@ -134,6 +143,13 @@ class Replace
 		if ( ! empty($file) && JFile::exists(JPATH_SITE . $params->include_path . $file))
 		{
 			$content = '<?php include JPATH_SITE . \'' . $params->include_path . $file . '\'; ?>' . $content;
+		}
+
+		// Add the include file if file-after=... or include-after=... is used in the {source} tag
+		$file = ! empty($data->{'file-after'}) ? $data->{'file-after'} : (! empty($data->{'include-after'}) ? $data->{'include-after'} : '');
+		if ( ! empty($file) && JFile::exists(JPATH_SITE . $params->include_path . $file))
+		{
+			$content .= '<?php include JPATH_SITE . \'' . $params->include_path . $file . '\'; ?>';
 		}
 
 		self::replaceTags($content, $area, $article);

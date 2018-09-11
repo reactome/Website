@@ -2,8 +2,8 @@
 <extension version="3.4" type="plugin" group="system" method="upgrade">
 	<name>plg_system_tabs</name>
 	<description>PLG_SYSTEM_TABS_DESC</description>
-	<version>7.4.1</version>
-	<creationDate>July 2018</creationDate>
+	<version>7.4.2</version>
+	<creationDate>September 2018</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -34,7 +34,7 @@
 
 	<config>
 		<fields name="params" addfieldpath="/libraries/regularlabs/fields">
-			<fieldset name="description">
+			<fieldset name="basic">
 				<field name="@loadlanguage_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
 				<field name="@loadlanguage" type="rl_loadlanguage" extension="plg_system_tabs" />
 				<field name="@license" type="rl_license" extension="TABS" />
@@ -44,8 +44,8 @@
 					   description="TABS_DESC"
 					   url="https://www.regularlabs.com/tabs" />
 			</fieldset>
-			<fieldset name="basic">
-				<field name="@block_styling_a" type="rl_block" start="1" label="RL_STYLING" />
+
+			<fieldset name="RL_STYLING">
 				<field name="load_stylesheet" type="radio" class="btn-group" default="1"
 					   label="RL_LOAD_STYLESHEET"
 					   description="RL_LOAD_STYLESHEET_DESC">
@@ -86,9 +86,9 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="@block_styling_b" type="rl_block" end="1" />
+			</fieldset>
 
-				<field name="@block_behavior_a" type="rl_block" start="1" label="RL_BEHAVIOR" />
+			<fieldset name="RL_BEHAVIOUR">
 				<field name="@notice_fade" type="rl_plaintext"
 					   label="TAB_FADE"
 					   description="TAB_FADE_DESC"
@@ -97,7 +97,6 @@
 					   label="TAB_MODE"
 					   description="TAB_MODE_DESC"
 					   default="RL_ONLY_AVAILABLE_IN_PRO" />
-				<field name="@block_behavior_b" type="rl_block" end="1" />
 
 				<field name="@block_scroll_a" type="rl_block" start="1" label="TAB_SCROLL" />
 				<field name="@notice_scroll" type="rl_plaintext"
@@ -126,8 +125,49 @@
 				<field name="@block_slideshow_b" type="rl_block" end="1" />
 			</fieldset>
 
-			<fieldset name="advanced">
-				<field name="@block_tag_a" type="rl_block" start="1" label="RL_TAG_SYNTAX" />
+			<fieldset name="RL_SETTINGS_EDITOR_BUTTON">
+				<field name="button_text" type="text" default="Tabs"
+					   label="RL_BUTTON_TEXT"
+					   description="RL_BUTTON_TEXT_DESC" />
+				<field name="enable_frontend" type="radio" class="btn-group" default="1"
+					   label="RL_ENABLE_IN_FRONTEND"
+					   description="RL_ENABLE_IN_FRONTEND_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="button_use_simple_button" type="radio" class="btn-group" default="0"
+					   label="RL_USE_SIMPLE_BUTTON"
+					   description="RL_USE_SIMPLE_BUTTON_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="@toggler_button_use_simple_button_no_a" type="rl_toggler" param="button_use_simple_button" value="0" />
+				<field name="button_max_count" type="list" class="input-mini" default="10"
+					   label="TAB_MAX_TAB_COUNT"
+					   description="TAB_MAX_TAB_COUNT_DESC">
+					<option value="5">5</option>
+					<option value="10">10</option>
+					<option value="20">20</option>
+					<option value="30">30</option>
+				</field>
+				<field name="@toggler_button_use_simple_button_no_b" type="rl_toggler" />
+				<field name="@toggler_button_use_simple_button_yes_a" type="rl_toggler" param="button_use_simple_button" value="1" />
+				<field name="button_use_custom_code" type="radio" class="btn-group" default="0"
+					   label="RL_USE_CUSTOM_CODE"
+					   description="RL_USE_CUSTOM_CODE_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="@toggler_button_code_a" type="rl_toggler" param="button_use_custom_code" value="1" />
+				<field name="button_custom_code" type="rl_textareaplus" filter="RAW" texttype="html" width="400" height="300"
+					   default="{tab Tab Title 1}&lt;br />[:SELECTION:]&lt;br />{tab Tab Title 2}&lt;br />Tab text...&lt;br />{/tabs}"
+					   label="RL_CUSTOM_CODE"
+					   description="RL_CUSTOM_CODE_DESC" />
+				<field name="@toggler_button_code_b" type="rl_toggler" />
+				<field name="@toggler_button_use_simple_button_yes_b" type="rl_toggler" />
+			</fieldset>
+
+			<fieldset name="RL_TAG_SYNTAX">
 				<field name="tag_open" type="text" size="20" default="tab"
 					   label="TAB_OPENING_TAG"
 					   description="TAB_OPENING_TAG_DESC" />
@@ -150,8 +190,9 @@
 					<option value="[:.:]">[:...:]</option>
 					<option value="[%.%]">[%...%]</option>
 				</field>
-				<field name="@block_tag_b" type="rl_block" end="1" />
+			</fieldset>
 
+			<fieldset name="advanced">
 				<field name="@notice_use_responsive_view" type="rl_plaintext"
 					   label="TAB_USE_RESPONSIVE_VIEW"
 					   description="TAB_USE_RESPONSIVE_VIEW_DESC"
@@ -171,7 +212,7 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="init_timeout" type="text" size="5" class="input-mini" default="0"
+				<field name="init_timeout" type="number" size="5" class="input-mini" default="0"
 					   label="TAB_INIT_TIMEOUT"
 					   description="TAB_INIT_TIMEOUT_DESC" />
 				<field name="@notice_use_cookies" type="rl_plaintext"
@@ -222,48 +263,6 @@
 					   description="RL_JQUERY_DISABLED,TABS" />
 				<field name="@toggler_load_jquery_b" type="rl_toggler" />
 				<field name="@toggler_load_bootstrap_framework_2b" type="rl_toggler" />
-			</fieldset>
-
-			<fieldset name="RL_SETTINGS_EDITOR_BUTTON">
-				<field name="button_text" type="text" default="Tabs"
-					   label="RL_BUTTON_TEXT"
-					   description="RL_BUTTON_TEXT_DESC" />
-				<field name="enable_frontend" type="radio" class="btn-group" default="1"
-					   label="RL_ENABLE_IN_FRONTEND"
-					   description="RL_ENABLE_IN_FRONTEND_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="button_use_simple_button" type="radio" class="btn-group" default="0"
-					   label="RL_USE_SIMPLE_BUTTON"
-					   description="RL_USE_SIMPLE_BUTTON_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="@toggler_button_use_simple_button_no_a" type="rl_toggler" param="button_use_simple_button" value="0" />
-				<field name="button_max_count" type="list" class="input-mini" default="10"
-					   label="TAB_MAX_TAB_COUNT"
-					   description="TAB_MAX_TAB_COUNT_DESC">
-					<option value="5">5</option>
-					<option value="10">10</option>
-					<option value="20">20</option>
-					<option value="30">30</option>
-				</field>
-				<field name="@toggler_button_use_simple_button_no_b" type="rl_toggler" />
-				<field name="@toggler_button_use_simple_button_yes_a" type="rl_toggler" param="button_use_simple_button" value="1" />
-				<field name="button_use_custom_code" type="radio" class="btn-group" default="0"
-					   label="RL_USE_CUSTOM_CODE"
-					   description="RL_USE_CUSTOM_CODE_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="@toggler_button_code_a" type="rl_toggler" param="button_use_custom_code" value="1" />
-				<field name="button_custom_code" type="rl_textareaplus" filter="RAW" texttype="html" width="400" height="300"
-					   default="{tab Tab Title 1}&lt;br />[:SELECTION:]&lt;br />{tab Tab Title 2}&lt;br />Tab text...&lt;br />{/tabs}"
-					   label="RL_CUSTOM_CODE"
-					   description="RL_CUSTOM_CODE_DESC" />
-				<field name="@toggler_button_code_b" type="rl_toggler" />
-				<field name="@toggler_button_use_simple_button_yes_b" type="rl_toggler" />
 			</fieldset>
 		</fields>
 	</config>

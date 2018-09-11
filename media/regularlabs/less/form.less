@@ -1,0 +1,89 @@
+/**
+ * @package         Regular Labs Library
+ * @version         18.9.3123
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://www.regularlabs.com
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ */
+
+.chzn-small {
+	width: 120px;
+}
+
+// hide chosen dropdown on color picker J3.2.3+
+div.chzn-container[id^="color_"][id$="_chzn"],
+div.chzn-container#advancedparams_color_chzn {
+	display: none;
+}
+
+.input-full {
+	width:      100%;
+	box-sizing: border-box;
+}
+
+input[type="text"].input-full {
+	height: 28px;
+}
+
+.input-maximize {
+	&:hover,
+	&:focus,
+	.chzn-container:hover,
+	.chzn-with-drop {
+		min-width: 100%;
+	}
+}
+
+.btn-group-yesno-reverse {
+	.active {
+		&.btn-success {
+			.buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
+		}
+		&.btn-danger {
+			.buttonBackground(@btnSuccessBackground, @btnSuccessBackgroundHighlight);
+		}
+	}
+}
+
+input.rl_codefield,
+input.rl_keyfield,
+div.rl_keycode {
+	#font > #family > .monospace;
+	font-size: 1.4em !important;
+}
+
+input.rl_codefield,
+input.rl_keyfield {
+	font-size: 14px !important;
+}
+
+.rl_keycode {
+	color:   @grayLight;
+	padding: 2px 0;
+}
+
+.rl_spinner {
+	display:        inline-block;
+	box-sizing:     border-box;
+	vertical-align: top;
+	margin:         0 4px;
+	border-top:     5px solid #7ac143;
+	border-right:   5px solid #f9a541;
+	border-bottom:  5px solid #f44321;
+	border-left:    5px solid #5091cd;
+	border-radius:  50%;
+	width:          20px;
+	height:         20px;
+	animation:      rl_spinner 1s linear infinite;
+}
+
+@keyframes rl_spinner {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}

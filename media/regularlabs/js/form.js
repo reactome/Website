@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -25,22 +25,20 @@ var RegularLabsForm = null;
 				return;
 			}
 
-			var type = $field.attr('type');
-
-			if (typeof type == "undefined" && $field.prop("tagName").toLowerCase() == 'select') {
-				type = 'select';
-			}
+			var type = $field[0].type;
 
 			switch (type) {
+				case 'radio':
+					$field = $('[name="' + name + '"]:checked');
+					break;
+
 				case 'checkbox':
 					return this.getValuesFromList($('[name="' + name + '[]"]:checked'), escape);
 
 				case 'select':
+				case 'select-one':
+				case 'select-multiple':
 					return this.getValuesFromList($field.find('option:checked'), escape);
-
-				case 'radio':
-					$field = $('[name="' + name + '"]:checked');
-					break;
 			}
 
 			return this.prepareValue($field.val(), escape);

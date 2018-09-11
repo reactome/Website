@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,9 +11,9 @@
 
 namespace RegularLabs\Library;
 
-use Joomla\String\Normalise;
-
 defined('_JEXEC') or die;
+
+use Joomla\String\Normalise;
 
 /**
  * Class StringHelper
@@ -118,6 +118,18 @@ class StringHelper
 		}
 
 		return (bool) RegEx::match('^[a-z0-9]+$', $string);
+	}
+
+	/**
+	 * Check if string is a valid key / alias (alphanumeric with optional _ or - chars)
+	 *
+	 * @param string $string
+	 *
+	 * @return bool
+	 */
+	public static function is_key($string)
+	{
+		return RegEx::match('^[a-z][a-z0-9-_]*$', trim($string));
 	}
 
 	/**

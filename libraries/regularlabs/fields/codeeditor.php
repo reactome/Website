@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -45,14 +45,22 @@ class JFormFieldRL_CodeEditor extends \RegularLabs\Library\Field
 		}
 
 		RL_Document::script('regularlabs/script.min.js');
+		RL_Document::script('regularlabs/codemirror.min.js');
 		RL_Document::stylesheet('regularlabs/style.min.css');
+		RL_Document::stylesheet('regularlabs/codemirror.min.css');
 
-		$script = "
+		JFactory::getDocument()->addScriptDeclaration("
 			jQuery(document).ready(function($) {
-				RegularLabsScripts.initResizeCodeMirror('rl_codemirror_" . $this->id . "');
+				RegularLabsCodeMirror.init('" . $this->id . "');
 			});
-		";
-		JFactory::getDocument()->addScriptDeclaration($script);
+		");
+
+		JFactory::getDocument()->addStyleDeclaration("
+			#rl_codemirror_" . $this->id . " .CodeMirror {
+			    height: " . $height . "px;
+			    min-height: " . min($height, '100') . "px;
+			}
+		");
 
 		return '<div class="rl_codemirror" id="rl_codemirror_' . $this->id . '">'
 			. JEditor::getInstance('codemirror')->display(

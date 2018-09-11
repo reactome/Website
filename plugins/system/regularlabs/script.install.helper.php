@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.7.1356
+ * @version         18.9.3123
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,17 +13,18 @@ defined('_JEXEC') or die;
 
 class PlgSystemRegularLabsInstallerScriptHelper
 {
-	public $name            = '';
-	public $alias           = '';
-	public $extname         = '';
-	public $extension_type  = '';
-	public $plugin_folder   = 'system';
-	public $module_position = 'status';
-	public $client_id       = 1;
-	public $install_type    = 'install';
-	public $show_message    = true;
-	public $db              = null;
-	public $softbreak       = null;
+	public $name              = '';
+	public $alias             = '';
+	public $extname           = '';
+	public $extension_type    = '';
+	public $plugin_folder     = 'system';
+	public $module_position   = 'status';
+	public $client_id         = 1;
+	public $install_type      = 'install';
+	public $show_message      = true;
+	public $db                = null;
+	public $softbreak         = null;
+	public $installed_version = '';
 
 	public function __construct(&$params)
 	{
@@ -39,6 +40,8 @@ class PlgSystemRegularLabsInstallerScriptHelper
 		}
 
 		JFactory::getLanguage()->load('plg_system_regularlabsinstaller', JPATH_PLUGINS . '/system/regularlabsinstaller');
+
+		$this->installed_version = $this->getVersion($this->getInstalledXMLFile());
 
 		if ($this->show_message && $this->isInstalled())
 		{
@@ -428,26 +431,26 @@ class PlgSystemRegularLabsInstallerScriptHelper
 
 	public function isNewer()
 	{
-		if ( ! $installed_version = $this->getVersion($this->getInstalledXMLFile()))
+		if ( ! $this->installed_version)
 		{
 			return true;
 		}
 
 		$package_version = $this->getVersion();
 
-		return version_compare($installed_version, $package_version, '<=');
+		return version_compare($this->installed_version, $package_version, '<=');
 	}
 
 	public function canInstall()
 	{
 		// The extension is not installed yet
-		if ( ! $installed_version = $this->getVersion($this->getInstalledXMLFile()))
+		if ( ! $this->installed_version)
 		{
 			return true;
 		}
 
 		// The free version is installed. So any version is ok to install
-		if (strpos($installed_version, 'PRO') === false)
+		if (strpos($this->installed_version, 'PRO') === false)
 		{
 			return true;
 		}

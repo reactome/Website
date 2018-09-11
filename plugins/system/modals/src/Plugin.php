@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.12.0
+ * @version         9.13.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -332,8 +332,8 @@ class Plugin extends JPlugin
 			return;
 		}
 
-		if (version_compare($plugin['version'], '18.5.26647', '<')
-			|| version_compare($library['version'], '18.5.26647', '<'))
+		if (version_compare($plugin['version'], '18.9.3123', '<')
+			|| version_compare($library['version'], '18.9.3123', '<'))
 		{
 			define('REGULAR_LABS_LIBRARY_INSTALLED', 'outdated');
 
@@ -350,7 +350,7 @@ class Plugin extends JPlugin
 	{
 		// Return if page is not an admin page or the admin login page
 		if (
-			! JFactory::getApplication()->isAdmin()
+			! JFactory::getApplication()->isClient('administrator')
 			|| JFactory::getUser()->get('guest')
 		)
 		{
