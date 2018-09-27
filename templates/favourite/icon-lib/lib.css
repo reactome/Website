@@ -208,6 +208,17 @@
     height: 16px;
 }
 
+.text-lg-overflow {
+    width: 89%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: inline-block;
+    line-height: 20px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
 .tooltip-information {
     visibility: hidden;
     height: auto;

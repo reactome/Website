@@ -91,7 +91,7 @@ if (file_exists($dir) == false && !is_null($arg)) {
                             <img src="'. $svg_path . '" alt="'. $name . '" />
                         </a>
                         <div class="svg-label">
-                            <a href="'. JUri::getInstance()->toString().'#'.$file .'">'. $name .'</a>
+                            <span class="text-lg-overflow"><a href="'. JUri::getInstance()->toString().'#'.$file .'">'. $name .'</a></span>
                         </div>
                         <div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12 extras ">
                                 <div class="favth-col-lg-6 favth-col-md-6 favth-col-sm-12 favth-col-xs-12">
