@@ -83,7 +83,7 @@ function search($term, $ehld_os_dir, $ehld_rel_dir) {
                             <div class="svg-component search-result">
                                 <a href="'. JUri::getInstance()->toString().'#'.$svg_file .'">
                                     <img src="'. $svg_fullpath . '" alt="'. $name . '" />
-                                    <div class="svg_label">'. $name_highlighted .'</div>
+                                    <div class="svg_label"><span class="text-lg-overflow">'. $name_highlighted .'</span></div>
                                 </a>
                                 <div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12 extras">
                                     <div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12 search-folder">
