@@ -739,6 +739,11 @@ table.instancebrowser thead tr:first-child th {
     color: #ffffff;
 }
 
+video.responsive-vid {
+    width: 600px;
+    height: 400px;
+}
+
 /* ### TWITTER WIDGET ### */
 /* ### Note: Thoroughly test the responsive design once height is changed ### */
 .twitter-timeline {
@@ -842,6 +847,11 @@ table.instancebrowser thead tr:first-child th {
 
     .form-inline {
         margin: 0;
+    }
+
+    video.responsive-vid {
+        width: auto;
+        height: auto;
     }
 }
 
