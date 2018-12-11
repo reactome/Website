@@ -197,7 +197,7 @@ sub person_table {
 	}
     }
 
-    my @header_tags = shift(\@rows);
+    my @header_tags = shift(@rows);
     return h3("Choose a person"),table({-class => 'reactome margin0', -style => 'width:100%;border:none'}, thead(\@header_tags), tbody([TR(\@rows)]));
 }
 
