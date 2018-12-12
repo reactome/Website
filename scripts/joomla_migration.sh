@@ -221,15 +221,15 @@ db_sync () {
 
     echo "Saving the Article Hits of the current database into CSV file"
     SAVE_ARTICLE_HITS="SELECT id, hits FROM $ARTICLES_TABLE INTO OUTFILE '$TMP_ARTICLE_HITS' FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n';"
-    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} ${MYSQL_HOME}/mysql -u ${DBUSER} -p${DBPASSWD} ${DBNAME} -e "$SAVE_ARTICLE_HITS";
+    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql -u ${DBUSER} -p${DBPASSWD} ${DBNAME} -e "$SAVE_ARTICLE_HITS"";
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
         echo "[ERROR] Could not EXPORT Article Hits [$TMP_ARTICLE_HITS] from current database [$DBNAME] in server [$SERVER]"
         exit
     fi
-exit
+
     echo "Importing database [$DBNAME] into [$SERVER]"
-    ${MYSQL_HOME}/mysql --host ${SERVER} -P ${DBPORT} -u ${DBUSER} ${DBNAME} < ${DUMP_SQL_FILE}
+    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql --host ${SERVER} -P ${DBPORT} -u ${DBUSER} ${DBNAME} < ${DUMP_SQL_FILE}"
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
         echo "[ERROR] Could not IMPORT file [$DUMP_SQL_FILE] to the database [$DBNAME] in server [$SERVER]"
@@ -240,7 +240,7 @@ exit
     echo "Dropping temporary table if it exists"
     # Can't use temporary table command because we are not running them under the same db connection
     DROP_TEMP_TABLE="DROP TABLE IF EXISTS $TMP_TABLE;"
-    ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$DROP_TEMP_TABLE"
+    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$DROP_TEMP_TABLE""
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
         echo "[ERROR] Could not DROP temporary table [$TMP_TABLE] from current database [$DBNAME]"
@@ -249,7 +249,7 @@ exit
 
     echo "Creating temporary table"
     CREATE_TEMP_TABLE="CREATE TABLE $TMP_TABLE (article_id int(10), article_hits int (10));"
-    ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$CREATE_TEMP_TABLE"
+    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$CREATE_TEMP_TABLE""
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
         echo "[ERROR] Could not CREATE temporary table [$TMP_TABLE] from current database [$DBNAME]"
@@ -258,7 +258,7 @@ exit
 
     echo "Loading the articles into temporary table"
     IMPORT_ARTICLES="LOAD DATA INFILE '$TMP_ARTICLE_HITS' INTO TABLE $TMP_TABLE FIELDS OPTIONALLY ENCLOSED BY '\"' TERMINATED BY ',' (article_id, article_hits);"
-    ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$IMPORT_ARTICLES"
+    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$IMPORT_ARTICLES""
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
         echo "[ERROR] Could not LOAD [$TMP_ARTICLE_HITS] file int temporary table [$TMP_TABLE] from current database [$DBNAME]"
@@ -267,7 +267,7 @@ exit
 
     echo "Updating Articles Hits based on the values in the temporary table"
     UPDATE_ARTICLES="UPDATE $ARTICLES_TABLE INNER JOIN $TMP_TABLE on $TMP_TABLE.article_id = $ARTICLES_TABLE.id SET $ARTICLES_TABLE.hits = $TMP_TABLE.article_hits;"
-    ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$UPDATE_ARTICLES"
+    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$UPDATE_ARTICLES""
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
         echo "[ERROR] Could not UPDATE article hits in [$ARTICLES_TABLE]"
@@ -276,7 +276,7 @@ exit
 
     echo "Dropping temporary table"
     DROP_TEMP_TABLE="DROP TABLE $TMP_TABLE;"
-    ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$DROP_TEMP_TABLE"
+    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$DROP_TEMP_TABLE""
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
         echo "[WARN] Could not DROP temporary table [$TMP_TABLE]"
@@ -284,7 +284,7 @@ exit
 
     echo "Cleaning up Easy Joomla Backup table"
     DEL_EJB_TABLE="DELETE FROM $BKP_TABLE;"
-    ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$DEL_EJB_TABLE"
+    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$DEL_EJB_TABLE""
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
         echo "[WARN] Could not DELETE rows from table [$BKP_TABLE]"
@@ -293,7 +293,7 @@ exit
 #    if [ "$ENV" == "PROD" ]; then
         echo "Removing Staff Login form from Production"
         UPDT_MENU_STAFF="UPDATE rlp_menu set published = 0 where id = 284;" # staff entry
-        ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$UPDT_MENU_STAFF"
+        sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql --host ${SERVER} -u ${DBUSER} ${DBNAME} -e "$UPDT_MENU_STAFF""
         OUT=$?
         if [ "$OUT" -ne 0 ]; then
             echo "[WARN] Could not REMOVE Reactome Staff Login form"
