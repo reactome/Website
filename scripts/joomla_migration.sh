@@ -221,7 +221,7 @@ db_sync () {
 
     echo "Saving the Article Hits of the current database into CSV file"
 #    SAVE_ARTICLE_HITS="SELECT id, hits FROM $ARTICLES_TABLE INTO OUTFILE '$TMP_ARTICLE_HITS' FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n';"
-    SAVE_ARTICLE_HITS="SELECT id, hits FROM $ARTICLES_TABLE"
+    SAVE_ARTICLE_HITS="SELECT * FROM testing"
     sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e '${SAVE_ARTICLE_HITS}'"
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
