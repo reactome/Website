@@ -221,7 +221,7 @@ db_sync () {
 
     echo "Saving the Article Hits of the current database into CSV file"
     SAVE_ARTICLE_HITS="SELECT id, hits FROM $ARTICLES_TABLE INTO OUTFILE '$TMP_ARTICLE_HITS' FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n';"
-    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$SAVE_ARTICLE_HITS"";
+    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e '${SAVE_ARTICLE_HITS}'";
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
         echo "[ERROR] Could not EXPORT Article Hits [$TMP_ARTICLE_HITS] from current database [$DBNAME] in server [$SERVER]"
