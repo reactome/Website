@@ -24,13 +24,11 @@
 # during execution have to be in different directory, I'd say, same level as static folder, that's why we 'go back' two directories
 
 # Go to the directory where the script resides. It ensures we can execute from anywhere and cd .. will work
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+DIR="/usr/local/reactomes/Reactome/production/Website"
 cd $DIR;
 
-cd ../..
-
-_JOOMLA_STATIC=$(pwd)'/static'
-_SYNCDIR=$(pwd)'/sync'
+_JOOMLA_STATIC=${DIR}'/static'
+_SYNCDIR=${DIR}'/sync'
 NOW=$(date +"%Y%m%d%H%M%S")
 LOG="${_SYNCDIR}/logfile"
 LOGFILE="${LOG}_${NOW}.txt"
@@ -51,14 +49,14 @@ MYSQL_HOME="/usr/bin"
 DEFAULT_DBNAME="website";
 
 # Do not change this values
-DEV_SERVER="dev.reactome.org"
-RELEASE_SERVER="release.reactome.org"
-PRD1_SERVER="reactome.org"
+DEV_SERVER="dev"
+RELEASE_SERVER="release"
+PRD1_SERVER="prd1"
 DBPORT=3306;
 
 # Written in the "source" server
 DUMP_SQL_FILE="${_SYNCDIR}/dump_from_release.sql"
-DEST_BACKUP_DB="${_SYNCDIR}/dump_from_dest_server.sql"
+DEST_BACKUP_DB="${_SYNCDIR}/current_db_bkp.sql"
 
 # Written in the "destination" server
 # Better to keep in tmp, mysql user does not have permission where www-data rules and can't write remotely
@@ -68,7 +66,7 @@ BKP_TABLE="rlp_easyjoomlabackup"
 TMP_TABLE="x4u_article_hits_tmp"
 ARTICLES_TABLE="rlp_content"
 
-PRIVATE_KEY="/var/www/.ssh/id_rsa"
+PRIVATE_KEY="/home/shared/.ssh/shared.pem"
 
 usage () {
     if [ "$EXTERNAL" == "php" ]; then
@@ -76,11 +74,15 @@ usage () {
     else
         _SCRIPT=$(basename "$0")
         echo "Usage: ./$_SCRIPT"
+        echo '           method=<ALL|DB|FILES>'
         echo '           env=<DEV|PROD>'
-        echo '           osuser=<User>'
-        echo '           ospasswd=<Passphrase>'
-        echo '           dbuser=<DB User>'
-        echo '           dbpasswd=<DB Password>'
+        echo '           srcosuser=<Source OS User> [Required when method is ALL or FILES]'
+        echo '           srcospasswd=<Source OS Password> [Required when method is ALL or FILES]'
+        echo '           osuser=<Destination OS User> [Required when method is ALL or FILES]'
+        echo '           ospasswd=<Destination OS Password> [Required when method is ALL or FILES]'
+        echo '           privatekey=<Destination OS Password> [Required when method is ALL or FILES]'
+        echo '           dbuser=<DB User> [Required when method is ALL or DB]'
+        echo '           dbpasswd=<DB Password> [Required when method is ALL or DB]'
         echo '           dbname=[<DB Name: DEFAULT website>]'
         echo '           dbport=[<DB Port: Default 3306>]'
   fi
@@ -94,7 +96,7 @@ recover_from_backup () {
     # Exporting MySQL password so we don't print it in the command line.
     export MYSQL_PWD=${DBPASSWD}
 
-    ${MYSQL_HOME}/mysql --host ${SERVER} -P ${DBPORT} -u ${DBUSER}  ${DBNAME} < ${DEST_BACKUP_DB}
+    ${MYSQL_HOME}/mysql -u ${DBUSER}  ${DBNAME} < ${DEST_BACKUP_DB}
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
         echo "[ERROR] Could not IMPORT file [$DEST_BACKUP_DB] to the database [$DBNAME]"
@@ -102,56 +104,42 @@ recover_from_backup () {
     fi
 }
 
-validate_accounts () {
-    echo $""
-    echo "Validating accounts"
+files_sync () {
+    RSYNC_ARGS="-rogtO"
+    if [ "$DRYRUN" == "Y" ]; then
+        # -n to enable dry-run and -v verbose
+        RSYNC_ARGS="${RSYNC_ARGS} --dry-run"
+        DRMSG=" - DRY-RUN";
+        echo "####### DRY-RUN ENABLED #######"
+    fi
 
-    #sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "mysql -u curator -p${DBPASSWD} website < website.sql"
-
-    # Exporting MySQL password so we don't print it in the command line.
-#    export MYSQL_PWD=${DBPASSWD}
-
-#    ${MYSQL_HOME}/mysql --host ${SERVER} -P ${DBPORT} -u ${DBUSER} -e exit 2> /dev/null
+    # make sure files have set user and group before moving them (SOURCE)
+    echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation"
+    echo ${SRCOSPASSWD} | sudo -S chown -R www-data:reactome ${_JOOMLA_STATIC} &> /dev/null
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
-        echo "[ERROR] Can't connect to remote MySQL. Please check DB user and password"
+        echo "[ERROR] Couldn't normalise the owner (www-data:reactome) of the static folder ${_JOOMLA_STATIC} in the Source server"
         exit
     fi
 
-    hash sshpass 2>/dev/null || { echo >&2 "sshpass is required. Please install it in this server. sudo apt-get install sshpass"; exit 1; }
+    # make sure files have set user and group in the Destination
+    echo "Updating file's owner in the destination server [${SERVER}] before synchronisation"
+    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${OSUSER}@${SERVER} "${_JOOMLA_STATIC}/scripts/website_chown.sh  &> /dev/null"
+    OUT=$?
+    if [ "$OUT" -ne 0 ]; then
+        echo "[ERROR] Couldn't normalise the owner (www-data:reactome) of the static folder ${_JOOMLA_STATIC} in the Destination server"
+        exit
+    fi
 
-}
-
-files_sync () {
-    RSYNC_ARGS="-rzogtO"
-
-    #sudo ./website_chown.sh
-
-    # make sure files have set user and group before moving them (SOURCE)
-#    echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation"
-#    sshpass -p ${SRCOSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SRCOSUSER}@${RELEASE_SERVER} "echo ${SRCOSPASSWD} | sudo -S chown -R www-data:gkb ${_JOOMLA_STATIC} &> /dev/null"
-#    OUT=$?
-#    if [ "$OUT" -ne 0 ]; then
-#        echo "[ERROR] Couldn't normalise the owner (www-data:gkb) of the static folder ${_JOOMLA_STATIC} in the Source server"
-#        exit
-#    fi
-#
-#    # make sure files have set user and group in the Destination
-#    echo "Updating file's owner in the destination server [${SERVER}] before synchronisation"
-#    sshpass -p ${OSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${OSUSER}@${SERVER} "echo ${OSPASSWD} | sudo -S chown -R www-data:gkb ${_JOOMLA_STATIC} &> /dev/null"
-#    OUT=$?
-#    if [ "$OUT" -ne 0 ]; then
-#        echo "[ERROR] Couldn't normalise the owner (www-data:gkb) of the static folder ${_JOOMLA_STATIC} in the Destination server"
-#        exit
-#    fi
+    # save security copy of the files
+    # TODO save security copy of the files
 
     # Check if sshpass is required. Program required to input the passwd into the rsync.
-    hash sshpass 2>/dev/null || { echo >&2 "sshpass is required. Please install it in this server. sudo apt-get install sshpass"; exit 1; }
-
+    # Not available for MacOS. To test locally, just run normal rsync and use the sshpasswordless.
     echo "File sync has started. Check rsync report for details"
 
-    echo "======= RSYNC REPORT ======="
-    sshpass -p ${OSPASSWD} rsync ${RSYNC_ARGS} -e 'ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors --exclude-from=${DIR}/.rsync_excludes.txt ${_JOOMLA_STATIC}/ ${OSUSER}@${SERVER}:${_JOOMLA_STATIC} #2> /dev/null
+    echo "======= RSYNC REPORT ${DRMSG} ======="
+    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD})  rsync ${RSYNC_ARGS} -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors --exclude-from=${_JOOMLA_STATIC}/scripts/.rsync_excludes.txt ${_JOOMLA_STATIC}/ ${OSUSER}@${SERVER}:${_JOOMLA_STATIC} #2> /dev/null
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
         echo "[ERROR] Rsync didn't executed properly. Check system output and address it manually. Re-run once the issue is sorted."
@@ -159,148 +147,11 @@ files_sync () {
     fi
     echo "===================================="
 
-#    echo "Updating file's owner in the destination server [${SERVER}]"
-#    sshpass -p ${OSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${OSUSER}@${SERVER} "echo ${OSPASSWD} | sudo -S chown -R www-data:gkb ${_JOOMLA_STATIC} &> /dev/null"
-#
-#    # folders permissions are not copied even though the flag is present. To prevent problems folders will be flagged as chmod:775 after execution
-#    echo "Updating folders mode bits (chmod) in the destination server [${SERVER}]"
-#    sshpass -p ${OSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${OSUSER}@${SERVER} "echo ${OSPASSWD} | sudo -S find ${_JOOMLA_STATIC} -type d -exec chmod 775 {} \; &> /dev/null"
-
     echo $"Files synchronisation has finished!"
 }
 
 db_sync () {
-    if [ -f ${DUMP_SQL_FILE} ]; then
-        rm ${DUMP_SQL_FILE}
-    fi
-
-    echo ${_SYNCDIR}
-
-    # Check current database backup file.
-    if [ -f ${DEST_BACKUP_DB} ]; then
-        BKP="$DEST_BACKUP_DB"
-        if [ -f "$BKP" ]
-        then
-            COUNT=1
-            while [ -e "$BKP.$COUNT" ]; do
-               let "COUNT += 1";
-            done
-            BKP="$BKP.$COUNT"
-        fi
-
-        mv "$DEST_BACKUP_DB" "$BKP"
-
-        # Delete old backups. Only 5 are kept
-        LRU=$(ls -t $DEST_BACKUP_DB* | sed -e '1,5d')
-        for BKP_TO_DEL in ${LRU}; do
-            rm ${BKP_TO_DEL};
-        done;
-    fi
-
-    # Exporting MySQL password so we don't print it in the command line.
-    export MYSQL_PWD=${DBPASSWD}
-
-    # DUMP FROM RELEASE - Our main hub
-    echo "Dumping Joomla MySQL database from Reactome Release [$RELEASE_SERVER]"
-    ${MYSQL_HOME}/mysqldump -u ${DBUSER} --add-drop-database --databases ${DBNAME} > ${DUMP_SQL_FILE}
-    OUT=$?
-    if [ "$OUT" -ne 0 ] || [ ! -s ${DUMP_SQL_FILE} ]; then
-        echo "[ERROR] Could not DUMP Joomla Database from Reactome Release [$RELEASE_SERVER]"
-        exit
-    fi
-
-    echo "Backing up the Database [$DEFAULT_DBNAME] in the Destination [$SERVER]"
-
-    # DESTINATION SERVER
-    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysqldump -u ${DBUSER} ${DEFAULT_DBNAME} > ${DEST_BACKUP_DB}"
-    OUT=$?
-    if [ "$OUT" -ne 0 ]; then
-        echo "[ERROR] Could not BACKUP the current database [$DEST_BACKUP_DB]"
-        exit
-    fi
-
-    echo "Saving the Article Hits of the current database into CSV file"
-    SAVE_ARTICLE_HITS="SELECT id, hits FROM ${ARTICLES_TABLE} INTO OUTFILE '{$TMP_ARTICLE_HITS}' FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n';"
-    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e \"${SAVE_ARTICLE_HITS}\""
-    OUT=$?
-    if [ "$OUT" -ne 0 ]; then
-        echo "[ERROR] Could not EXPORT Article Hits [$TMP_ARTICLE_HITS] from current database [$DBNAME] in server [$SERVER]"
-        exit
-    fi
-
-    echo "Importing database [$DBNAME] into [$SERVER]"
-    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} < ${DUMP_SQL_FILE}"
-    OUT=$?
-    if [ "$OUT" -ne 0 ]; then
-        echo "[ERROR] Could not IMPORT file [$DUMP_SQL_FILE] to the database [$DBNAME] in server [$SERVER]"
-        exit
-    fi
-
-    echo "Preparing the Article Hits in the new Database"
-    echo "Dropping temporary table if it exists"
-    # Can't use temporary table command because we are not running them under the same db connection
-    DROP_TEMP_TABLE="DROP TABLE IF EXISTS $TMP_TABLE;"
-    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$DROP_TEMP_TABLE""
-    OUT=$?
-    if [ "$OUT" -ne 0 ]; then
-        echo "[ERROR] Could not DROP temporary table [$TMP_TABLE] from current database [$DBNAME]"
-        exit
-    fi
-
-    echo "Creating temporary table"
-    CREATE_TEMP_TABLE="CREATE TABLE $TMP_TABLE (article_id int(10), article_hits int (10));"
-    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$CREATE_TEMP_TABLE""
-    OUT=$?
-    if [ "$OUT" -ne 0 ]; then
-        echo "[ERROR] Could not CREATE temporary table [$TMP_TABLE] from current database [$DBNAME]"
-        exit
-    fi
-
-    echo "Loading the articles into temporary table"
-    IMPORT_ARTICLES="LOAD DATA INFILE '$TMP_ARTICLE_HITS' INTO TABLE $TMP_TABLE FIELDS OPTIONALLY ENCLOSED BY '\"' TERMINATED BY ',' (article_id, article_hits);"
-    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$IMPORT_ARTICLES""
-    OUT=$?
-    if [ "$OUT" -ne 0 ]; then
-        echo "[ERROR] Could not LOAD [$TMP_ARTICLE_HITS] file int temporary table [$TMP_TABLE] from current database [$DBNAME]"
-        exit
-    fi
-
-    echo "Updating Articles Hits based on the values in the temporary table"
-    UPDATE_ARTICLES="UPDATE $ARTICLES_TABLE INNER JOIN $TMP_TABLE on $TMP_TABLE.article_id = $ARTICLES_TABLE.id SET $ARTICLES_TABLE.hits = $TMP_TABLE.article_hits;"
-    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$UPDATE_ARTICLES""
-    OUT=$?
-    if [ "$OUT" -ne 0 ]; then
-        echo "[ERROR] Could not UPDATE article hits in [$ARTICLES_TABLE]"
-        exit
-    fi
-
-    echo "Dropping temporary table"
-    DROP_TEMP_TABLE="DROP TABLE $TMP_TABLE;"
-    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$DROP_TEMP_TABLE""
-    OUT=$?
-    if [ "$OUT" -ne 0 ]; then
-        echo "[WARN] Could not DROP temporary table [$TMP_TABLE]"
-    fi
-
-    echo "Cleaning up Easy Joomla Backup table"
-    DEL_EJB_TABLE="DELETE FROM $BKP_TABLE;"
-    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$DEL_EJB_TABLE""
-    OUT=$?
-    if [ "$OUT" -ne 0 ]; then
-        echo "[WARN] Could not DELETE rows from table [$BKP_TABLE]"
-    fi
-
-#    if [ "$ENV" == "PROD" ]; then
-        echo "Removing Staff Login form from Production"
-        UPDT_MENU_STAFF="UPDATE rlp_menu set published = 0 where id = 284;" # staff entry
-        sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${OSUSER}@${SERVER} "export MYSQL_PWD=${DBPASSWD} ; ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$UPDT_MENU_STAFF""
-        OUT=$?
-        if [ "$OUT" -ne 0 ]; then
-            echo "[WARN] Could not REMOVE Reactome Staff Login form"
-        fi
-#    fi
-
-    echo "Database synchronisation has finished!";
+     sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD})  ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${OSUSER}@${SERVER} "${_JOOMLA_STATIC}/scripts/website_db_sync.sh dbuser=${DBUSER} dbpasswd=${DBPASSWD}"
 }
 
 # Check arguments
@@ -311,26 +162,53 @@ do
 
     case "$KEY" in
             env)            ENV=${VALUE} ;;
+            method)         METHOD=${VALUE} ;;
+            srcosuser)      SRCOSUSER=${VALUE} ;;
+            srcospasswd)    SRCOSPASSWD=${VALUE} ;;
             osuser)         OSUSER=${VALUE} ;;
             ospasswd)       OSPASSWD=${VALUE} ;;
             dbuser)         DBUSER=${VALUE} ;;
             dbpasswd)       DBPASSWD=${VALUE} ;;
             dbname)         DBNAME=${VALUE} ;;
             dbport)         DBPORT=${VALUE} ;;
+            privatekey)     PRIVATE_KEY=${VALUE} ;;
             external)       EXTERNAL=${VALUE} ;;
             joomlauser)     JOOMLAUSER=${VALUE} ;;
+            dryrun)         DRYRUN=${VALUE} ;;
             *)
     esac
 done
+
+if [ "$METHOD" = "" ]; then
+    echo "Missing execution method [ALL|DB|FILES]"
+    usage
+fi
 
 if  [ "$ENV" = "" ]; then
     echo "Missing environment method [DEV|PROD]"
     usage
 fi
 
-if  [ "$DBUSER" = "" ] || [ "$DBPASSWD" = "" ] ||
-    [ "$OSUSER" = "" ] || [ "$OSPASSWD" = "" ]; then
-    echo "Missing OS Credentials and/or DB Credentials"
+if [ "$METHOD" == "ALL" ]; then
+    if  [ "$DBUSER" = "" ] || [ "$DBPASSWD" = "" ] ||
+        [ "$SRCOSUSER" = "" ] || [ "$SRCOSPASSWD" = "" ] ||
+        [ "$OSUSER" = "" ] || [ "$OSPASSWD" = "" ]; then
+        echo "Missing OS Credentials and/or DB Credentials"
+        usage
+    fi
+elif [ "$METHOD" == "DB" ]; then
+    if [ "$DBUSER" = "" ] || [ "$DBPASSWD" = "" ]; then
+        echo "Missing DB Credentials"
+        usage
+    fi
+elif [ "$METHOD" == "FILES" ]; then # it is files, but just to list all the options
+    if [ "$SRCOSUSER" = "" ] || [ "$SRCOSPASSWD" = "" ] ||
+       [ "$OSUSER" = "" ] || [ "$OSPASSWD" = "" ]; then
+        echo "Missing OS Credentials"
+        usage
+    fi
+else
+    echo "Invalid synchronisation method [ALL|DB|FILES]"
     usage
 fi
 
@@ -376,6 +254,12 @@ fi
 echo "Server: [$SERVER]"
 echo "Database: [$DBNAME]"
 
-#validate_accounts
-db_sync
-files_sync
+# Define which sync method to call.
+if [ "$METHOD" == "ALL" ]; then
+    echo $""
+    echo "Method: [DB and Files sync]"
+    db_sync
+    files_sync
+else
+    echo "[ERROR] Execution method is invalid"
+fi
