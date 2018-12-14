@@ -49,9 +49,9 @@ MYSQL_HOME="/usr/bin"
 DEFAULT_DBNAME="website";
 
 # Do not change this values
-DEV_SERVER="dev"
-RELEASE_SERVER="release"
-PRD1_SERVER="prd1"
+DEV_SERVER="dev.reactome.org"
+RELEASE_SERVER="release.reactome.org"
+PRD1_SERVER="reactome.org"
 DBPORT=3306;
 
 # Written in the "source" server
@@ -66,7 +66,7 @@ BKP_TABLE="rlp_easyjoomlabackup"
 TMP_TABLE="x4u_article_hits_tmp"
 ARTICLES_TABLE="rlp_content"
 
-PRIVATE_KEY="/home/shared/.ssh/shared.pem"
+PRIVATE_KEY="/home/gviteri/gviteri.pem"
 
 usage () {
     if [ "$EXTERNAL" == "php" ]; then
@@ -114,22 +114,6 @@ files_sync () {
     fi
 
     # make sure files have set user and group before moving them (SOURCE)
-    echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation"
-    echo ${SRCOSPASSWD} | sudo -S chown -R www-data:reactome ${_JOOMLA_STATIC} &> /dev/null
-    OUT=$?
-    if [ "$OUT" -ne 0 ]; then
-        echo "[ERROR] Couldn't normalise the owner (www-data:reactome) of the static folder ${_JOOMLA_STATIC} in the Source server"
-        exit
-    fi
-
-    # make sure files have set user and group in the Destination
-    echo "Updating file's owner in the destination server [${SERVER}] before synchronisation"
-    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${OSUSER}@${SERVER} "${_JOOMLA_STATIC}/scripts/website_chown.sh  &> /dev/null"
-    OUT=$?
-    if [ "$OUT" -ne 0 ]; then
-        echo "[ERROR] Couldn't normalise the owner (www-data:reactome) of the static folder ${_JOOMLA_STATIC} in the Destination server"
-        exit
-    fi
 
     # save security copy of the files
     # TODO save security copy of the files
@@ -139,7 +123,7 @@ files_sync () {
     echo "File sync has started. Check rsync report for details"
 
     echo "======= RSYNC REPORT ${DRMSG} ======="
-    sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD})  rsync ${RSYNC_ARGS} -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors --exclude-from=${_JOOMLA_STATIC}/scripts/.rsync_excludes.txt ${_JOOMLA_STATIC}/ ${OSUSER}@${SERVER}:${_JOOMLA_STATIC} #2> /dev/null
+    rsync ${RSYNC_ARGS} -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors --exclude-from=${_JOOMLA_STATIC}/scripts/.rsync_excludes.txt ${_JOOMLA_STATIC}/ ${OSUSER}@${SERVER}:${_JOOMLA_STATIC} #2> /dev/null
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
         echo "[ERROR] Rsync didn't executed properly. Check system output and address it manually. Re-run once the issue is sorted."
@@ -151,7 +135,7 @@ files_sync () {
 }
 
 db_sync () {
-     sshpass -P passphrase -f <(printf '%s\n' ${OSPASSWD})  ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${OSUSER}@${SERVER} "${_JOOMLA_STATIC}/scripts/website_db_sync.sh dbuser=${DBUSER} dbpasswd=${DBPASSWD}"
+     ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${OSUSER}@${SERVER} "${_JOOMLA_STATIC}/scripts/website_db_sync.sh dbuser=${DBUSER} dbpasswd=${DBPASSWD}"
 }
 
 # Check arguments
