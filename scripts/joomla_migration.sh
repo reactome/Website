@@ -65,7 +65,7 @@ PRIVATE_KEY="/home/shared/.ssh/shared.pem"
 PASSPHRASE=""
 
 usage () {
-    if [ "$EXTERNAL" == "php" ]; then
+    if [[ "$EXTERNAL" == "php" ]]; then
         echo  "Missing mandatory parameters"
     else
         _SCRIPT=$(basename "$0")
@@ -93,7 +93,7 @@ normalise_owner_and_permissions () {
     echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation"
     sshpass -p ${SRCOSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SRCOSUSER}@${RELEASE_SERVER} "echo ${SRCOSPASSWD} | sudo -S chown -R ${OWNER} ${_JOOMLA_STATIC} &> /dev/null"
     OUT=$?
-    if [ "$OUT" -ne 0 ]; then
+    if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${RELEASE_SERVER}]"
         exit
     fi
@@ -110,7 +110,7 @@ validate_source_credentials () {
 
     sshpass -p ${SRCOSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t -q ${SRCOSUSER}@${RELEASE_SERVER} exit
     local OUT=$?
-    if [ "$OUT" -ne 0 ]; then
+    if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Can't connect to SOURCE server [${RELEASE_SERVER}]. Please type a valid OS user [${SRCOSUSER}] and password"
         exit
     fi
@@ -129,7 +129,7 @@ files () {
     echo "======= RSYNC REPORT ======="
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync ${RSYNC_ARGS} -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors --exclude-from=${_JOOMLA_STATIC}/scripts/.rsync_excludes.txt ${_JOOMLA_STATIC}/ ${DEST_SERVER}:${_JOOMLA_STATIC} #2> /dev/null
     OUT=$?
-    if [ "$OUT" -ne 0 ]; then
+    if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Rsync didn't executed properly. Check system output and address it manually. Re-run once the issue is sorted."
         exit
     fi
@@ -157,8 +157,8 @@ database () {
 # Check arguments
 for ARGUMENT in "$@"
 do
-    KEY=$(echo $ARGUMENT | cut -f1 -d=)
-    VALUE=$(echo $ARGUMENT | cut -f2 -d=)
+    KEY=$(echo ${ARGUMENT} | cut -f1 -d=)
+    VALUE=$(echo ${ARGUMENT} | cut -f2 -d=)
 
     case "$KEY" in
             env)            ENV=${VALUE} ;;
@@ -180,7 +180,7 @@ if  [[ "$ENV" = "" ]]; then
     usage
 fi
 
-if [[ "$SRCOSUSER" ]] || [[ "$SRCOSPASSWD" = "" ]]; then
+if [[ "$SRCOSUSER"  = "" ]] || [[ "$SRCOSPASSWD" = "" ]]; then
     echo "Missing OS Credentials"
     usage
 fi
