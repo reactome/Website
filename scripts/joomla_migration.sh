@@ -25,7 +25,7 @@
 
 # Go to the directory where the script resides. It ensures we can execute from anywhere and cd .. will work
 DIR="/usr/local/reactomes/Reactome/production/Website"
-cd $DIR;
+cd ${DIR};
 
 _JOOMLA_STATIC=${DIR}'/static'
 _SYNCDIR=${DIR}'/sync'
@@ -40,33 +40,29 @@ exec 2>&1
 # Delete old backups. Only 5 are kept
 LRU=$(ls -t $LOG* 2>/dev/null | sed -e '1,5d')
 for LOG_TO_DEL in ${LRU}; do
-    rm ${LOG_TO_DEL};
+    rm -f ${LOG_TO_DEL};
 done;
 
-SERVER=""
+DEST_SERVER=""
 
-MYSQL_HOME="/usr/bin"
+MYSQL_DUMP=`which mysqldump`
 DEFAULT_DBNAME="website";
 
 # Do not change this values
-DEV_SERVER="dev.reactome.org"
-RELEASE_SERVER="release.reactome.org"
-PRD1_SERVER="reactome.org"
-DBPORT=3306;
+DEV_SERVER="dev"
+RELEASE_SERVER="release"
+PRD1_SERVER="prd1"
+
+SYNC_SCRIPTS_HOME="${_JOOMLA_STATIC}/sync_scripts";
+SYNC_TOOL="${SYNC_SCRIPTS_HOME}/sync_tool.sh";
+
+OWNER="www-data:reactome"
 
 # Written in the "source" server
-DUMP_SQL_FILE="${_SYNCDIR}/dump_from_release.sql"
-DEST_BACKUP_DB="${_SYNCDIR}/current_db_bkp.sql"
+DUMP_SQL_FILE="/tmp/dump_from_release.sql"
 
-# Written in the "destination" server
-# Better to keep in tmp, mysql user does not have permission where www-data rules and can't write remotely
-TMP_ARTICLE_HITS="/tmp/articles_hits_${NOW}.csv"
-
-BKP_TABLE="rlp_easyjoomlabackup"
-TMP_TABLE="x4u_article_hits_tmp"
-ARTICLES_TABLE="rlp_content"
-
-PRIVATE_KEY="/home/gviteri/gviteri.pem"
+PRIVATE_KEY="/home/shared/.ssh/shared.pem"
+PASSPHRASE=""
 
 usage () {
     if [ "$EXTERNAL" == "php" ]; then
@@ -74,56 +70,64 @@ usage () {
     else
         _SCRIPT=$(basename "$0")
         echo "Usage: ./$_SCRIPT"
-        echo '           method=<ALL|DB|FILES>'
         echo '           env=<DEV|PROD>'
-        echo '           srcosuser=<Source OS User> [Required when method is ALL or FILES]'
-        echo '           srcospasswd=<Source OS Password> [Required when method is ALL or FILES]'
-        echo '           osuser=<Destination OS User> [Required when method is ALL or FILES]'
-        echo '           ospasswd=<Destination OS Password> [Required when method is ALL or FILES]'
-        echo '           privatekey=<Destination OS Password> [Required when method is ALL or FILES]'
-        echo '           dbuser=<DB User> [Required when method is ALL or DB]'
-        echo '           dbpasswd=<DB Password> [Required when method is ALL or DB]'
+        echo '           privatekey=<Certificate PEM> [Default: ${PRIVATE_KEY}]'
+        echo '           passphrase=<Certificate Passphrase>'
+        echo '           osuser=<Your OS User>'
+        echo '           ospasswd=<Your OS Password>'
+        echo '           dbuser=<DB User>'
+        echo '           dbpasswd=<DB Password>'
         echo '           dbname=[<DB Name: DEFAULT website>]'
-        echo '           dbport=[<DB Port: Default 3306>]'
   fi
 
   exit
 }
 
-recover_from_backup () {
-    echo "Recovering database using the backup [$DEST_BACKUP_DB]"
+sshpass_exists () {
+    # Check if sshpass is required. Program required to input the passwd into the rsync.
+    hash sshpass 2>/dev/null || { echo >&2 "sshpass is required. Please install it in this server. sudo apt-get install sshpass"; exit 1; }
+}
 
-    # Exporting MySQL password so we don't print it in the command line.
-    export MYSQL_PWD=${DBPASSWD}
-
-    ${MYSQL_HOME}/mysql -u ${DBUSER}  ${DBNAME} < ${DEST_BACKUP_DB}
+normalise_owner_and_permissions () {
+    # make sure files have set user and group before moving them (SOURCE)
+    echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation"
+    sshpass -p ${SRCOSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SRCOSUSER}@${RELEASE_SERVER} "echo ${SRCOSPASSWD} | sudo -S chown -R ${OWNER} ${_JOOMLA_STATIC} &> /dev/null"
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
-        echo "[ERROR] Could not IMPORT file [$DEST_BACKUP_DB] to the database [$DBNAME]"
+        echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${RELEASE_SERVER}]"
         exit
     fi
 }
 
-files_sync () {
-    RSYNC_ARGS="-rogtO"
-    if [ "$DRYRUN" == "Y" ]; then
-        # -n to enable dry-run and -v verbose
-        RSYNC_ARGS="${RSYNC_ARGS} --dry-run"
-        DRMSG=" - DRY-RUN";
-        echo "####### DRY-RUN ENABLED #######"
+normalise_owner_permissions_and_flags_remote () {
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${DEST_SERVER} "${SYNC_TOOL} OWNERANDPERMWEBSITE"
+}
+
+# Credentials in for the source (mainly release) is needed in the website update phase.
+validate_source_credentials () {
+    echo $""
+    echo "Validating [${RELEASE_SERVER}] credentials..."
+
+    sshpass -p ${SRCOSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t -q ${SRCOSUSER}@${RELEASE_SERVER} exit
+    local OUT=$?
+    if [ "$OUT" -ne 0 ]; then
+        echo "[ERROR] Can't connect to SOURCE server [${RELEASE_SERVER}]. Please type a valid OS user [${SRCOSUSER}] and password"
+        exit
     fi
+}
 
-    # make sure files have set user and group before moving them (SOURCE)
 
-    # save security copy of the files
-    # TODO save security copy of the files
+files () {
+    # Normalise directories before synchronising
+    normalise_owner_and_permissions
+    normalise_owner_permissions_and_flags_remote
 
-    # Check if sshpass is required. Program required to input the passwd into the rsync.
-    # Not available for MacOS. To test locally, just run normal rsync and use the sshpasswordless.
+    RSYNC_ARGS="-rogtO"
+
     echo "File sync has started. Check rsync report for details"
 
-    echo "======= RSYNC REPORT ${DRMSG} ======="
-    rsync ${RSYNC_ARGS} -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors --exclude-from=${_JOOMLA_STATIC}/scripts/.rsync_excludes.txt ${_JOOMLA_STATIC}/ ${OSUSER}@${SERVER}:${_JOOMLA_STATIC} #2> /dev/null
+    echo "======= RSYNC REPORT ======="
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync ${RSYNC_ARGS} -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors --exclude-from=${_JOOMLA_STATIC}/scripts/.rsync_excludes.txt ${_JOOMLA_STATIC}/ ${DEST_SERVER}:${_JOOMLA_STATIC} #2> /dev/null
     OUT=$?
     if [ "$OUT" -ne 0 ]; then
         echo "[ERROR] Rsync didn't executed properly. Check system output and address it manually. Re-run once the issue is sorted."
@@ -131,11 +135,23 @@ files_sync () {
     fi
     echo "===================================="
 
+    # folders permissions are not copied even though the flag is present. To prevent problems folders will be flagged as chmod:775 after execution
+    normalise_owner_permissions_and_flags_remote
+
     echo $"Files synchronisation has finished!"
 }
 
-db_sync () {
-     ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${OSUSER}@${SERVER} "${_JOOMLA_STATIC}/scripts/website_db_sync.sh dbuser=${DBUSER} dbpasswd=${DBPASSWD}"
+database () {
+    export MYSQL_PWD=${DBPASSWD}
+
+    # Dump database in RELEASE (localhost)
+    ${MYSQL_DUMP} -u ${DBUSER} ${DBNAME} > ${DUMP_SQL_FILE}
+
+    # Transfer dump file to DESTINATION_SERVER
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) scp -i ${PRIVATE_KEY} ${DUMP_SQL_FILE} ${DEST_SERVER}:${DUMP_SQL_FILE}
+
+    # Call website_db_sync in the remote server
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${DEST_SERVER} "${_JOOMLA_STATIC}/scripts/website_db_sync.sh dbuser=${DBUSER} dbpasswd=${DBPASSWD}"
 }
 
 # Check arguments
@@ -146,80 +162,58 @@ do
 
     case "$KEY" in
             env)            ENV=${VALUE} ;;
-            method)         METHOD=${VALUE} ;;
-            srcosuser)      SRCOSUSER=${VALUE} ;;
-            srcospasswd)    SRCOSPASSWD=${VALUE} ;;
-            osuser)         OSUSER=${VALUE} ;;
-            ospasswd)       OSPASSWD=${VALUE} ;;
+            privatekey)     PRIVATE_KEY=${VALUE} ;;
+            passphrase)     PASSPHRASE=${VALUE} ;;
+            osuser)         SRCOSUSER=${VALUE} ;;
+            ospasswd)       SRCOSPASSWD=${VALUE} ;;
             dbuser)         DBUSER=${VALUE} ;;
             dbpasswd)       DBPASSWD=${VALUE} ;;
             dbname)         DBNAME=${VALUE} ;;
-            dbport)         DBPORT=${VALUE} ;;
-            privatekey)     PRIVATE_KEY=${VALUE} ;;
             external)       EXTERNAL=${VALUE} ;;
             joomlauser)     JOOMLAUSER=${VALUE} ;;
-            dryrun)         DRYRUN=${VALUE} ;;
             *)
     esac
 done
 
-if [ "$METHOD" = "" ]; then
-    echo "Missing execution method [ALL|DB|FILES]"
-    usage
-fi
-
-if  [ "$ENV" = "" ]; then
+if  [[ "$ENV" = "" ]]; then
     echo "Missing environment method [DEV|PROD]"
     usage
 fi
 
-if [ "$METHOD" == "ALL" ]; then
-    if  [ "$DBUSER" = "" ] || [ "$DBPASSWD" = "" ] ||
-        [ "$SRCOSUSER" = "" ] || [ "$SRCOSPASSWD" = "" ] ||
-        [ "$OSUSER" = "" ] || [ "$OSPASSWD" = "" ]; then
-        echo "Missing OS Credentials and/or DB Credentials"
-        usage
-    fi
-elif [ "$METHOD" == "DB" ]; then
-    if [ "$DBUSER" = "" ] || [ "$DBPASSWD" = "" ]; then
-        echo "Missing DB Credentials"
-        usage
-    fi
-elif [ "$METHOD" == "FILES" ]; then # it is files, but just to list all the options
-    if [ "$SRCOSUSER" = "" ] || [ "$SRCOSPASSWD" = "" ] ||
-       [ "$OSUSER" = "" ] || [ "$OSPASSWD" = "" ]; then
-        echo "Missing OS Credentials"
-        usage
-    fi
-else
-    echo "Invalid synchronisation method [ALL|DB|FILES]"
+if [[ "$SRCOSUSER" ]] || [[ "$SRCOSPASSWD" = "" ]]; then
+    echo "Missing OS Credentials"
     usage
 fi
 
-if [ "$DBNAME" = "" ]
+if  [[ "$DBUSER" = "" ]] || [[ "$DBPASSWD" = "" ]] || [[ "$PASSPHRASE" = "" ]]; then
+    echo "Missing Key/Passphrase Key and/or DB Credentials"
+    usage
+fi
+
+if [[ "$DBNAME" = "" ]]
 then
     DBNAME=${DEFAULT_DBNAME}
 fi
 
-if [ "${ENV}" == "PROD" ]
+if [[ "${ENV}" == "PROD" ]]
 then
-    SERVER=${PRD1_SERVER}
-elif [ "${ENV}" == "DEV" ]
+    DEST_SERVER=${PRD1_SERVER}
+elif [[ "${ENV}" == "DEV" ]]
 then
-    SERVER=${DEV_SERVER}
+    DEST_SERVER=${DEV_SERVER}
 else
     echo $"Invalid environment. Please provide DEV or PROD"
     exit;
 fi
 
 shopt -s nocasematch
-if [ "$EXTERNAL" != "php" ]
+if [[ "$EXTERNAL" != "php" ]]
 then
     echo "Looks like script is being executed via command line"
-    if [ "$DBNAME" != "website" ]
+    if [[ "$DBNAME" != "website" ]]
     then
         echo "Oh! And you are updating another database ..."
-        read -p "CAREFUL: Updating a different database might be dangerous. Are you sure you want to update [$DBNAME] in [$SERVER]? " -n 1 -r
+        read -p "CAREFUL: Updating a different database might be dangerous. Are you sure you want to update [$DBNAME] in [$DEST_SERVER]? " -n 1 -r
         if [[ ! "$REPLY" =~ ^[Yy]$ ]]
         then
             echo $"Bye!";
@@ -227,23 +221,24 @@ then
         fi
     fi
 else
-    echo "Script is being executed via Synchronization Tool."
-
     # Running the script using the Web Interface, there's no way to change the database. It is always the default.
     DBNAME=${DEFAULT_DBNAME};
 
+    echo "Script is being executed via Synchronization Tool."
     echo "Synchronization started by [$JOOMLAUSER]"
 fi
 
-echo "Server: [$SERVER]"
+echo "Server: [$DEST_SERVER], using key [$PRIVATE_KEY]"
 echo "Database: [$DBNAME]"
 
-# Define which sync method to call.
-if [ "$METHOD" == "ALL" ]; then
-    echo $""
-    echo "Method: [DB and Files sync]"
-    db_sync
-    files_sync
-else
-    echo "[ERROR] Execution method is invalid"
-fi
+echo $""
+
+sshpass_exists
+
+validate_source_credentials
+
+# FILES FIRST to make sure the scripts are up to date
+files
+
+database
+

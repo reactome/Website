@@ -25,7 +25,7 @@
 
 # Go to the directory where the script resides. It ensures we can execute from anywhere and cd .. will work
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-cd $DIR;
+cd ${DIR};
 
 NOW=$(date +"%Y%m%d%H%M%S")
 
@@ -33,11 +33,9 @@ MYSQL_HOME="/usr/bin"
 DEFAULT_DBNAME="website";
 DBPORT=3306;
 
-# Written in the "source" server
 DUMP_SQL_FILE="/tmp/dump_from_release.sql"
 DEST_BACKUP_DB="/tmp/current_db_bkp.sql"
 
-# Written in the "destination" server
 # Better to keep in tmp, mysql user does not have permission where www-data rules and can't write remotely
 TMP_ARTICLE_HITS="/var/lib/mysql-files/articles_hits_${NOW}.csv"
 
@@ -63,7 +61,7 @@ db_sync () {
     echo "Backing up the Database [$DEFAULT_DBNAME] in the Destination"
     ${MYSQL_HOME}/mysqldump -u ${DBUSER} ${DEFAULT_DBNAME} > ${DEST_BACKUP_DB}
     OUT=$?
-    if [ "$OUT" -ne 0 ] || [ ! -s ${DEST_BACKUP_DB} ]; then
+    if [[ "$OUT" -ne 0 ]] || [[ ! -s ${DEST_BACKUP_DB} ]]; then
         echo "[ERROR] Could not BACKUP the current database [$DEST_BACKUP_DB]"
         exit
     fi
@@ -72,7 +70,7 @@ db_sync () {
     SAVE_ARTICLE_HITS="SELECT id, hits FROM $ARTICLES_TABLE INTO OUTFILE '$TMP_ARTICLE_HITS' FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n';"
     ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$SAVE_ARTICLE_HITS";
     OUT=$?
-    if [ "$OUT" -ne 0 ]; then
+    if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Could not EXPORT Article Hits [$TMP_ARTICLE_HITS] from current database [$DBNAME]"
         exit
     fi
@@ -80,18 +78,17 @@ db_sync () {
     echo "Importing database [$DBNAME]"
     ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} < ${DUMP_SQL_FILE}
     OUT=$?
-    if [ "$OUT" -ne 0 ]; then
+    if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Could not IMPORT file [$DUMP_SQL_FILE] to the database [$DBNAME] "
         exit
     fi
 
     echo "Preparing the Article Hits in the new Database"
     echo "Dropping temporary table if it exists"
-    # Can't use temporary table command because we are not running them under the same db connection
     DROP_TEMP_TABLE="DROP TABLE IF EXISTS $TMP_TABLE;"
     ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$DROP_TEMP_TABLE"
     OUT=$?
-    if [ "$OUT" -ne 0 ]; then
+    if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Could not DROP temporary table [$TMP_TABLE] from current database [$DBNAME]"
         exit
     fi
@@ -100,7 +97,7 @@ db_sync () {
     CREATE_TEMP_TABLE="CREATE TABLE $TMP_TABLE (article_id int(10), article_hits int (10));"
     ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$CREATE_TEMP_TABLE"
     OUT=$?
-    if [ "$OUT" -ne 0 ]; then
+    if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Could not CREATE temporary table [$TMP_TABLE] from current database [$DBNAME]"
         exit
     fi
@@ -109,7 +106,7 @@ db_sync () {
     IMPORT_ARTICLES="LOAD DATA INFILE '$TMP_ARTICLE_HITS' INTO TABLE $TMP_TABLE FIELDS OPTIONALLY ENCLOSED BY '\"' TERMINATED BY ',' (article_id, article_hits);"
     ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$IMPORT_ARTICLES"
     OUT=$?
-    if [ "$OUT" -ne 0 ]; then
+    if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Could not LOAD [$TMP_ARTICLE_HITS] file int temporary table [$TMP_TABLE] from current database [$DBNAME]"
         exit
     fi
@@ -118,7 +115,7 @@ db_sync () {
     UPDATE_ARTICLES="UPDATE $ARTICLES_TABLE INNER JOIN $TMP_TABLE on $TMP_TABLE.article_id = $ARTICLES_TABLE.id SET $ARTICLES_TABLE.hits = $TMP_TABLE.article_hits;"
     ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$UPDATE_ARTICLES"
     OUT=$?
-    if [ "$OUT" -ne 0 ]; then
+    if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Could not UPDATE article hits in [$ARTICLES_TABLE]"
         exit
     fi
@@ -127,7 +124,7 @@ db_sync () {
     DROP_TEMP_TABLE="DROP TABLE $TMP_TABLE;"
     ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$DROP_TEMP_TABLE"
     OUT=$?
-    if [ "$OUT" -ne 0 ]; then
+    if [[ "$OUT" -ne 0 ]]; then
         echo "[WARN] Could not DROP temporary table [$TMP_TABLE]"
     fi
 
@@ -135,7 +132,7 @@ db_sync () {
     DEL_EJB_TABLE="DELETE FROM $BKP_TABLE;"
     ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$DEL_EJB_TABLE"
     OUT=$?
-    if [ "$OUT" -ne 0 ]; then
+    if [[ "$OUT" -ne 0 ]]; then
         echo "[WARN] Could not DELETE rows from table [$BKP_TABLE]"
     fi
 
@@ -143,7 +140,7 @@ db_sync () {
     UPDT_MENU_STAFF="UPDATE rlp_menu set published = 0 where id = 284;" # staff entry
     ${MYSQL_HOME}/mysql -u ${DBUSER} ${DBNAME} -e "$UPDT_MENU_STAFF"
     OUT=$?
-    if [ "$OUT" -ne 0 ]; then
+    if [[ "$OUT" -ne 0 ]]; then
         echo "[WARN] Could not REMOVE Reactome Staff Login form"
     fi
 
@@ -153,8 +150,8 @@ db_sync () {
 # Check arguments
 for ARGUMENT in "$@"
 do
-    KEY=$(echo $ARGUMENT | cut -f1 -d=)
-    VALUE=$(echo $ARGUMENT | cut -f2 -d=)
+    KEY=$(echo ${ARGUMENT} | cut -f1 -d=)
+    VALUE=$(echo ${ARGUMENT} | cut -f2 -d=)
 
     case "$KEY" in
             dbuser)         DBUSER=${VALUE} ;;
@@ -167,7 +164,7 @@ do
     esac
 done
 
-if [ "$DBNAME" = "" ]
+if [[ "$DBNAME" = "" ]]
 then
     DBNAME=${DEFAULT_DBNAME}
 fi

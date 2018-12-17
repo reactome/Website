@@ -7,6 +7,7 @@ $lastexecname = '.last_execution';
 if(isset($_POST["action"])) {
 	if (htmlspecialchars($_POST["action"]) === "sync") {
 		$env            = htmlspecialchars($_POST["env"]);
+		$passphrase     = htmlspecialchars($_POST["passphrase"]);
 		$osuser         = htmlspecialchars($_POST["osuser"]);
 		$ospasswd       = htmlspecialchars($_POST["ospasswd"]);
 		$dbuser         = htmlspecialchars($_POST["dbuser"]);
@@ -18,6 +19,7 @@ if(isset($_POST["action"])) {
 		$output = shell_exec(getcwd() . '/scripts/joomla_migration.sh ' .
 			'env=' . $env . ' ' .
 			'osuser=' . $osuser . ' ' .
+			'passphrase=' . $passphrase . ' ' .
 			'ospasswd=' . $ospasswd . ' ' .
 			'dbuser=' . $dbuser . ' ' .
 			'dbpasswd=' . $dbpasswd . ' ' .
@@ -95,16 +97,20 @@ if(isset($_POST["action"])) {
     </div>
 
     <fieldset id="src-server" class="sync-tool-fs hidden">
-        <legend>Account Information</legend>
-        <!--        <small class="form-text text-muted"></small>-->
+        <legend>Release Server Credentials</legend>
         <div class="favth-form-group">
-            <label for="osuser"  style="display: block;">Shared User:</label>
+            <label for="osuser"  style="display: block;">Your OS user:</label>
             <input type="text" class="favth-form-control" id="osuser" name="osuser" style="display: block; width: 247px;" placeholder="Enter the user">
         </div>
 
         <div class="favth-form-group">
-            <label for="ospasswd" style="display: block;">Public key Passphrase:</label>
-            <input type="password" class="favth-form-control" id="ospasswd" name="ospasswd" style="width: 247px;" placeholder="Enter the key passphrase">
+            <label for="ospasswd" style="display: block;">Your OS password:</label>
+            <input type="password" class="favth-form-control" id="ospasswd" name="ospasswd" style="width: 247px;" placeholder="Enter the password">
+        </div>
+
+        <div class="favth-form-group">
+            <label for="passphrase" style="display: block;">Key Passphrase:</label>
+            <input type="password" class="favth-form-control" id="passphrase" name="passphrase" style="width: 247px;" placeholder="Enter the key passphrase">
         </div>
     </fieldset>
 
@@ -155,6 +161,7 @@ if(isset($_POST["action"])) {
 
         env.change(function () {
             var value       = this.value;
+            var passphrase  = jQuery("#passphrase");
             var osuser      = jQuery("#osuser");
             var ospasswd    = jQuery("#ospasswd");
             var dbuser      = jQuery("#dbuser");
@@ -165,12 +172,14 @@ if(isset($_POST["action"])) {
             database.addClass("hidden");
             srcserver.addClass("hidden");
 
+            passphrase.removeAttr("required");
             osuser.removeAttr("required");
             ospasswd.removeAttr("required");
             dbuser.removeAttr("required");
             dbpasswd.removeAttr("required");
 
             // clean up
+            passphrase.val("");
             osuser.val("");
             ospasswd.val("");
             dbuser.val("");
@@ -181,6 +190,7 @@ if(isset($_POST["action"])) {
             server.removeClass("hidden");
             srcserver.removeClass("hidden");
             database.removeClass("hidden");
+            passphrase.attr("required", "true");
             osuser.attr("required", "true");
             ospasswd.attr("required", "true");
             dbuser.attr("required", "true");
