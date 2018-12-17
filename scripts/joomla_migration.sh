@@ -104,7 +104,7 @@ normalise_owner_permissions_and_flags_remote () {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${DEST_SERVER} "${SYNC_TOOL} OWNERANDPERMWEBSITE"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${DEST_SERVER}]"
+        echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Destination server [${DEST_SERVER}]"
         exit
     fi
 }
