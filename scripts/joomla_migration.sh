@@ -89,29 +89,36 @@ sshpass_exists () {
 }
 
 normalise_owner_and_permissions () {
+    SERVER="${RELEASE_SERVER}.reatome.org"
     # make sure files have set user and group before moving them (SOURCE)
     echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation"
-    sshpass -p ${SRCOSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SRCOSUSER}@${RELEASE_SERVER} "echo ${SRCOSPASSWD} | sudo -S chown -R ${OWNER} ${_JOOMLA_STATIC} &> /dev/null"
+    sshpass -p ${SRCOSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SRCOSUSER}@${SERVER} "echo ${SRCOSPASSWD} | sudo -S chown -R ${OWNER} ${_JOOMLA_STATIC} &> /dev/null"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${RELEASE_SERVER}]"
+        echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${SERVER}]"
         exit
     fi
 }
 
 normalise_owner_permissions_and_flags_remote () {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${DEST_SERVER} "${SYNC_TOOL} OWNERANDPERMWEBSITE"
+    OUT=$?
+    if [[ "$OUT" -ne 0 ]]; then
+        echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${DEST_SERVER}]"
+        exit
+    fi
 }
 
 # Credentials in for the source (mainly release) is needed in the website update phase.
 validate_source_credentials () {
+    SERVER="${RELEASE_SERVER}.reatome.org"
     echo $""
-    echo "Validating [${RELEASE_SERVER}] credentials..."
+    echo "Validating [${SERVER}] credentials..."
 
-    sshpass -p ${SRCOSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t -q ${SRCOSUSER}@${RELEASE_SERVER} exit
+    sshpass -p ${SRCOSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t -q ${SRCOSUSER}@${SERVER} exit
     local OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        echo "[ERROR] Can't connect to SOURCE server [${RELEASE_SERVER}]. Please type a valid OS user [${SRCOSUSER}] and password"
+        echo "[ERROR] Can't connect to SOURCE server [${SERVER}]. Please type a valid OS user [${SRCOSUSER}] and password"
         exit
     fi
 }
