@@ -53,7 +53,7 @@ DEV_SERVER="dev"
 RELEASE_SERVER="release"
 PRD1_SERVER="prd1"
 
-SYNC_SCRIPTS_HOME="${_JOOMLA_STATIC}/sync_scripts";
+SYNC_SCRIPTS_HOME="${_JOOMLA_STATIC}/scripts";
 SYNC_TOOL="${SYNC_SCRIPTS_HOME}/sync_tool.sh";
 
 OWNER="www-data:reactome"
