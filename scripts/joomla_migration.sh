@@ -115,6 +115,8 @@ validate_source_credentials () {
     echo $""
     echo "Validating [${SERVER}] credentials..."
 
+echo ${SRCOSPASSWD}
+
     sshpass -p ${SRCOSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t -q ${SRCOSUSER}@${SERVER} exit
     local OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
@@ -243,6 +245,10 @@ echo $""
 sshpass_exists
 
 #validate_source_credentials
+
+echo ${DBPASSWD}
+echo ${SRCOSPASSWD}
+
 
 # FILES FIRST to make sure the scripts are up to date
 files
