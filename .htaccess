@@ -112,6 +112,8 @@ Redirect 301 /user/reactome-fiviz /tools/reactome-fiviz
 
 # Used in PAPERS
 Redirect 302 /tutorials/pwp https://youtu.be/-skixrvI4nU
+Redirect 302 /documentation/index.php/Glossary_Data_Model /documentation/data-model
+Redirect 302 /cgi-bin/classbrowser /content/schema
 
 # Forbidding any url access for the user login component
 RewriteRule index.php/staff index.php [F]
