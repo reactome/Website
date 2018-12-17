@@ -92,7 +92,9 @@ normalise_owner_and_permissions () {
     SERVER="${RELEASE_SERVER}.reactome.org"
     # make sure files have set user and group before moving them (SOURCE)
     echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation."
-    echo ${SRCOSPASSWD} | sudo -u ${SRCOSUSER} -S chown -R ${OWNER} ${_JOOMLA_STATIC} #&> /dev/null
+    echo ${SRCOSPASSWD}
+
+    sshpass -p ${SRCOSPASSWD} sudo -u ${SRCOSUSER} -S chown -R ${OWNER} ${_JOOMLA_STATIC} #&> /dev/null
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${SERVER}]"
@@ -114,8 +116,6 @@ validate_source_credentials () {
     SERVER="${RELEASE_SERVER}.reactome.org"
     echo $""
     echo "Validating [${SERVER}] credentials..."
-
-echo ${SRCOSPASSWD}
 
     sshpass -p ${SRCOSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t -q ${SRCOSUSER}@${SERVER} exit
     local OUT=$?
