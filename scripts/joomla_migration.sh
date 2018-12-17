@@ -111,7 +111,7 @@ normalise_owner_permissions_and_flags_remote () {
 
 # Credentials in for the source (mainly release) is needed in the website update phase.
 validate_source_credentials () {
-    SERVER="${RELEASE_SERVER}.reatome.org"
+    SERVER="${RELEASE_SERVER}.reactome.org"
     echo $""
     echo "Validating [${SERVER}] credentials..."
 
