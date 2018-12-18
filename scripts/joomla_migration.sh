@@ -93,6 +93,8 @@ normalise_owner_and_permissions () {
     # make sure files have set user and group before moving them (SOURCE)
     echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation."
     echo ${SRCOSPASSWD}
+    echo ${SRCOSUSER}
+    echo ${PASSPHRASE}
 
     sshpass -p ${SRCOSPASSWD} sudo -u ${SRCOSUSER} chown -R ${OWNER} ${_JOOMLA_STATIC} #&> /dev/null
     OUT=$?
@@ -245,10 +247,6 @@ echo $""
 sshpass_exists
 
 #validate_source_credentials
-
-echo ${DBPASSWD}
-echo ${SRCOSPASSWD}
-
 
 # FILES FIRST to make sure the scripts are up to date
 files
