@@ -93,7 +93,8 @@ normalise_owner_and_permissions () {
     # make sure files have set user and group before moving them (SOURCE)
     echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation."
 
-    sudo -u gviteri -S chown -R ${OWNER} ${_JOOMLA_STATIC} #&> /dev/null
+    sudo ./website_chown.sh
+
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${SERVER}]"
