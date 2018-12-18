@@ -94,7 +94,7 @@ normalise_owner_and_permissions () {
     echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation."
     echo ${SRCOSPASSWD}
 
-    sshpass -p ${SRCOSPASSWD} sudo -u ${SRCOSUSER} -S chown -R ${OWNER} ${_JOOMLA_STATIC} #&> /dev/null
+    sshpass -p ${SRCOSPASSWD} sudo -u ${SRCOSUSER} chown -R ${OWNER} ${_JOOMLA_STATIC} #&> /dev/null
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${SERVER}]"
