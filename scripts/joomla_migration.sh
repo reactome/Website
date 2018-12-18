@@ -97,8 +97,8 @@ normalise_owner_and_permissions () {
     #echo ${SRCOSPASSWD}
     #echo ${SRCOSUSER}
     #echo ${PASSPHRASE}
-#-o LogLevel=quiet
-    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i "/var/www/.ssh/id_rsa" -qn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t "shared"@${SERVER} "echo ${SRCOSPASSWD} | sudo -u ${SRCOSUSER} -S chown -R ${OWNER} ${_JOOMLA_STATIC}" #&> /dev/null
+#-o LogLevel=quiet -qn
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i "/var/www/.ssh/id_rsa" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t "shared@${SERVER}" "echo ${SRCOSPASSWD} | sudo -u ${SRCOSUSER} -S chown -R ${OWNER} ${_JOOMLA_STATIC}" #&> /dev/null
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${SERVER}]"
