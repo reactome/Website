@@ -93,7 +93,7 @@ normalise_owner_and_permissions () {
     # make sure files have set user and group before moving them (SOURCE)
     echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation."
 
-    sudo -S ${SYNC_SCRIPTS_HOME}/website_chown.sh
+    sudo -u gviteri -S ${SYNC_SCRIPTS_HOME}/website_chown.sh
 
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
