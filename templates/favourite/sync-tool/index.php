@@ -16,7 +16,7 @@ if(isset($_POST["action"])) {
 		$start = (float) array_sum(explode(' ', microtime()));
 
 		# note that shell_exec() does not grab STDERR, so use "2>&1" to redirect it to STDOUT and catch it.
-		$output = shell_exec(getcwd() . '/scripts/joomla_migration.sh ' .
+		$output = shell_exec('sudo ' . getcwd() . '/scripts/joomla_migration.sh ' .
 			'env=' . $env . ' ' .
 			'osuser=' . $osuser . ' ' .
 			'passphrase=' . $passphrase . ' ' .
