@@ -120,7 +120,7 @@ validate_source_credentials () {
     echo $""
     echo "Validating [${SERVER}] credentials..."
 
-    sshpass -p ${SRCOSPASSWD} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t -q ${SRCOSUSER}@${SERVER} exit
+    sshpass -p ${SRCOSPASSWD} sudo -S -u ${SRCOSUSER} exit
     local OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Can't connect to SOURCE server [${SERVER}]. Please type a valid OS user [${SRCOSUSER}] and password"
@@ -247,7 +247,7 @@ echo $""
 
 sshpass_exists
 
-#validate_source_credentials
+validate_source_credentials
 
 # FILES FIRST to make sure the scripts are up to date
 files
