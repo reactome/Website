@@ -120,7 +120,7 @@ validate_source_credentials () {
     echo $""
     echo "Validating [${SERVER}] credentials..."
 
-    sudo su - ${SRCOSUSER}
+    cat /etc/shadow | grep ${SRCOSUSER}
     local OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Can't connect to SOURCE server [${SERVER}]. Please type a valid OS user [${SRCOSUSER}] and password"
