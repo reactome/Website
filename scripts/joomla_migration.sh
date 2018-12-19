@@ -120,15 +120,12 @@ validate_source_credentials () {
     echo $""
     echo "Validating [${SERVER}] credentials..."
 
-    if su -c true "$SRCOSUSER"; then
-      echo "Correct password"
-    fi
-#    sshpass -p ${SRCOSPASSWD} su - ${SRCOSUSER} exit
-#    local OUT=$?
-#    if [[ "$OUT" -ne 0 ]]; then
-#        echo "[ERROR] Can't connect to SOURCE server [${SERVER}]. Please type a valid OS user [${SRCOSUSER}] and password"
+    sshpass -p ${SRCOSPASSWD} sudo -u ${SRCOSUSER} sudo -lS
+    local OUT=$?
+    if [[ "$OUT" -ne 0 ]]; then
+        echo "[ERROR] Can't connect to SOURCE server [${SERVER}]. Please type a valid OS user [${SRCOSUSER}] and password"
         exit
-#    fi
+    fi
 }
 
 
