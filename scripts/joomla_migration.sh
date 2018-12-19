@@ -93,16 +93,12 @@ normalise_owner_and_permissions () {
     # make sure files have set user and group before moving them (SOURCE)
     echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation."
 
-    #sudo -S ${SYNC_SCRIPTS_HOME}/website_chown.sh
-    #sudo -u gviteri chown -R www-data:reactome ${_JOOMLA_STATIC}
-    sshpass -p ${SRCOSPASSWD} sudo -S -u ${SRCOSUSER} sudo chown -R www-data:reactome ${_JOOMLA_STATIC}
-
+    sshpass -p ${SRCOSPASSWD} sudo -S -u ${SRCOSUSER} sudo chown -R ${OWNER} ${_JOOMLA_STATIC}
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${SERVER}]"
         exit
     fi
-    exit
 }
 
 normalise_owner_permissions_and_flags_remote () {
@@ -126,7 +122,6 @@ validate_source_credentials () {
         echo "[ERROR] Can't connect to SOURCE server [${SERVER}]. Please type a valid OS user [${SRCOSUSER}] and password"
         exit
     fi
-    exit
 }
 
 
