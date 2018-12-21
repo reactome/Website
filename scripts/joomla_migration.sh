@@ -107,10 +107,15 @@ normalise_owner_permissions_and_flags_remote () {
     # sync the chown script to make the destination has the latest version.
     echo "Upload latest version of website_chown.sh script..."
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) scp -i ${PRIVATE_KEY} ${SYNC_CHOWN} ${SHARED_USER}@${DEST_SERVER}:${SYNC_CHOWN}
+    OUT=$?
+    if [[ "$OUT" -ne 0 ]]; then
+        echo "[ERROR] Couldn't upload latest version of the chown script"
+        exit
+    fi
 
 #    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${DEST_SERVER} "${SYNC_TOOL} OWNERANDPERMWEBSITE"
     echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation."
-    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${DEST_SERVER} "sudo ${SYNC_CHOWN}"
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -n -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${DEST_SERVER} "sudo ${SYNC_CHOWN}"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Destination server [${DEST_SERVER}]"
@@ -132,6 +137,23 @@ validate_source_credentials () {
     fi
 }
 
+validate_cert_passphrase () {
+    SERVER="${RELEASE_SERVER}.reactome.org"
+    echo $""
+    echo "Validating certificate passphrase"
+
+    if [[ ! -e ${PRIVATE_KEY} ]]; then
+        echo "[ERROR] Couldn't find the private key [${PRIVATE_KEY}]"
+        exit
+    fi
+
+    sshpass -p ${SRCOSPASSWD} ssh-keygen -y -f ${PRIVATE_KEY} &> /dev/null
+    local OUT=$?
+    if [[ "$OUT" -ne 0 ]]; then
+        echo "[ERROR] Invalid passphrase"
+        exit
+    fi
+}
 
 files () {
     # Normalise directories before synchronising
@@ -252,6 +274,7 @@ echo $""
 sshpass_exists
 
 validate_source_credentials
+validate_cert_passphrase
 
 # FILES FIRST to make sure the scripts are up to date
 files
