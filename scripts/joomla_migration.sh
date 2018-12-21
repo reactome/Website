@@ -73,7 +73,7 @@ usage () {
         _SCRIPT=$(basename "$0")
         echo "Usage: ./$_SCRIPT"
         echo '           env=<DEV|PROD>'
-        echo '           privatekey=<Certificate PEM> [Default: ${PRIVATE_KEY}]'
+        echo '           privatekey=<Certificate PEM> [Default: ' ${PRIVATE_KEY} ']'
         echo '           passphrase=<Certificate Passphrase>'
         echo '           osuser=<Your OS User>'
         echo '           ospasswd=<Your OS Password>'
