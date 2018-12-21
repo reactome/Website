@@ -49,9 +49,9 @@ MYSQL_DUMP=`which mysqldump`
 DEFAULT_DBNAME="website";
 
 # Do not change this values
-DEV_SERVER="dev"
-RELEASE_SERVER="release"
-PRD1_SERVER="prd1"
+DEV_SERVER="dev.reactome.org"
+RELEASE_SERVER="release.reactome.org"
+PRD1_SERVER="reactome.org"
 
 SYNC_SCRIPTS_HOME="${_JOOMLA_STATIC}/scripts";
 SYNC_TOOL="${SYNC_SCRIPTS_HOME}/sync_tool.sh";
