@@ -164,10 +164,10 @@ database () {
     ${MYSQL_DUMP} -u ${DBUSER} ${DBNAME} > ${DUMP_SQL_FILE}
 
     # Transfer dump file to DESTINATION_SERVER
-    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) scp -i ${PRIVATE_KEY} ${DUMP_SQL_FILE} ${DEST_SERVER}:${DUMP_SQL_FILE}
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) scp -i ${PRIVATE_KEY} ${DUMP_SQL_FILE} ${SHARED_USER}@${DEST_SERVER}:${DUMP_SQL_FILE}
 
     # Call website_db_sync in the remote server
-    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${DEST_SERVER} "${_JOOMLA_STATIC}/scripts/website_db_sync.sh dbuser=${DBUSER} dbpasswd=${DBPASSWD}"
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${DEST_SERVER} "${_JOOMLA_STATIC}/scripts/website_db_sync.sh dbuser=${DBUSER} dbpasswd=${DBPASSWD}"
 }
 
 # Check arguments
