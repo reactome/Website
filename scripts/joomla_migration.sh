@@ -147,7 +147,7 @@ validate_cert_passphrase () {
         exit
     fi
 
-    sshpass -p ${SRCOSPASSWD} ssh-keygen -y -f ${PRIVATE_KEY} &> /dev/null
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh-keygen -y -f ${PRIVATE_KEY} &> /dev/null
     local OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Invalid passphrase"
