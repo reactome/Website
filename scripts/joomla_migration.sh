@@ -57,12 +57,12 @@ SYNC_SCRIPTS_HOME="${_JOOMLA_STATIC}/scripts";
 SYNC_TOOL="${SYNC_SCRIPTS_HOME}/sync_tool.sh";
 SYNC_CHOWN="${SYNC_SCRIPTS_HOME}/website_chown.sh";
 
-
 OWNER="www-data:reactome"
 
 # Written in the "source" server
 DUMP_SQL_FILE="/tmp/dump_from_release.sql"
 
+SHARED_USER="shared"
 PRIVATE_KEY="/home/shared/.ssh/shared.pem"
 PASSPHRASE=""
 
@@ -106,11 +106,11 @@ normalise_owner_and_permissions () {
 normalise_owner_permissions_and_flags_remote () {
     # sync the chown script to make the destination has the latest version.
     echo "Upload latest version of website_chown.sh script..."
-    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) scp -i ${PRIVATE_KEY} ${SYNC_CHOWN} shared@${DEST_SERVER}:${SYNC_CHOWN}
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) scp -i ${PRIVATE_KEY} ${SYNC_CHOWN} ${SHARED_USER}@${DEST_SERVER}:${SYNC_CHOWN}
 
 #    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${DEST_SERVER} "${SYNC_TOOL} OWNERANDPERMWEBSITE"
     echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation."
-    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t shared@${DEST_SERVER} "${SYNC_CHOWN}"
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${DEST_SERVER} "${SYNC_CHOWN}"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Destination server [${DEST_SERVER}]"
@@ -143,7 +143,7 @@ files () {
     echo "File sync has started. Check rsync report for details"
 
     echo "======= RSYNC REPORT ======="
-    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync ${RSYNC_ARGS} -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors --exclude-from=${_JOOMLA_STATIC}/scripts/.rsync_excludes.txt ${_JOOMLA_STATIC}/ ${DEST_SERVER}:${_JOOMLA_STATIC} #2> /dev/null
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync ${RSYNC_ARGS} -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors --exclude-from=${_JOOMLA_STATIC}/scripts/.rsync_excludes.txt ${_JOOMLA_STATIC}/ ${SHARED_USER}@${DEST_SERVER}:${_JOOMLA_STATIC} #2> /dev/null
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Rsync didn't executed properly. Check system output and address it manually. Re-run once the issue is sorted."
