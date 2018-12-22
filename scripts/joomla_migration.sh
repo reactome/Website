@@ -11,10 +11,12 @@
 #
 # Few things to take into account during the db migration
 #   - Articles hits MUST to be kept, to achieve this a tmp file is created prior to db import phase and loaded later on
-#   - Recover from backup function MUST NOT import the database from releaseserver, otherwise article hits are going to be lost up, specially when updating production
+#   - Recover from backup function MUST NOT import the database from release server, otherwise article hits are going to be lost up, specially when updating production
 #   - Files used in this script are kept in $_PWD
 #   - Current DB backup are kept under LRU of 5 (sed -e '1,5d')
 #   - Logs are kept
+#
+# www-data needs sudo access to this script. Check visudo in the Release Server.
 #
 # Guilherme Viteri  - gviteri@ebi.ac.uk
 #
@@ -113,8 +115,8 @@ normalise_owner_permissions_and_flags_remote () {
         exit
     fi
 
-#    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${DEST_SERVER} "${SYNC_TOOL} OWNERANDPERMWEBSITE"
     echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation."
+    # sudo visudo - authorise shared user to run chown script without asking for password
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -n -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${DEST_SERVER} "sudo ${SYNC_CHOWN}"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
@@ -138,7 +140,6 @@ validate_source_credentials () {
 }
 
 validate_cert_passphrase () {
-    SERVER="${RELEASE_SERVER}.reactome.org"
     echo $""
     echo "Validating certificate passphrase"
 
@@ -150,7 +151,7 @@ validate_cert_passphrase () {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh-keygen -y -f ${PRIVATE_KEY} &> /dev/null
     local OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        echo "[ERROR] Invalid passphrase"
+        echo "[ERROR] Invalid certificate passphrase"
         exit
     fi
 }
