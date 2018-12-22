@@ -96,8 +96,8 @@ if(isset($_POST["action"])) {
         </small>
     </div>
 
-    <div class="favth-col-lg-4 favth-col-md-4 favth-col-sm-12 favth-col-xs-12 padding0">
-        <fieldset id="src-server" class="sync-tool-fs hidden">
+    <div class="favth-col-lg-4 favth-col-md-4 favth-col-sm-12 favth-col-xs-12 padding0 hidden">
+        <fieldset id="src-server" class="sync-tool-fs">
             <legend>Release Server Credentials</legend>
             <div class="favth-form-group">
                 <label for="osuser"  style="display: block;">Your OS user:</label>
@@ -116,8 +116,8 @@ if(isset($_POST["action"])) {
         </fieldset>
     </div>
 
-    <div class="favth-col-lg-3 favth-col-md-4 favth-col-sm-12 favth-col-xs-12">
-        <fieldset id="database" class="sync-tool-fs hidden">
+    <div class="favth-col-lg-3 favth-col-md-4 favth-col-sm-12 favth-col-xs-12 hidden">
+        <fieldset id="database" class="sync-tool-fs">
             <legend>Database</legend>
             <div class="favth-form-group">
                 <label for="dbuser"  style="display: block;">DB User:</label>
@@ -130,7 +130,7 @@ if(isset($_POST["action"])) {
             </div>
         </fieldset>
 
-        <button id="sync-btn" type="submit" class="btn btn-primary hidden">Run</button>
+        <button id="sync-btn" type="submit" class="btn btn-primary">Run</button>
     </div>
 
 
@@ -162,7 +162,6 @@ if(isset($_POST["action"])) {
     jQuery(document).ready(function() {
         var env         = jQuery("#env");
 
-        var server      = jQuery('#server');
         var srcserver   = jQuery('#src-server');
         var database    = jQuery('#database');
         var syncbtn     = jQuery("#sync-btn");
@@ -176,10 +175,13 @@ if(isset($_POST["action"])) {
             var dbpasswd    = jQuery("#dbpasswd");
             var serverlabel = jQuery("#server-label");
 
-            server.addClass("hidden");
-            database.addClass("hidden");
-            srcserver.addClass("hidden");
-            syncbtn.addClass("hidden");
+            // database.addClass("hidden");
+            // srcserver.addClass("hidden");
+            // syncbtn.addClass("hidden");
+
+            jQuery(".hidden").each(function() {
+                $(this).addClass("hidden");
+            });
 
             passphrase.removeAttr("required");
             osuser.removeAttr("required");
@@ -196,10 +198,13 @@ if(isset($_POST["action"])) {
             serverlabel.text("");
             jQuery(".summary").text("");
 
-            server.removeClass("hidden");
-            srcserver.removeClass("hidden");
-            database.removeClass("hidden");
-            syncbtn.removeClass("hidden");
+            // srcserver.removeClass("hidden");
+            // database.removeClass("hidden");
+            // syncbtn.removeClass("hidden");
+            jQuery(".hidden").each(function() {
+                $(this).removeClass("hidden");
+            });
+
 
             passphrase.attr("required", "true");
             osuser.attr("required", "true");
@@ -210,11 +215,9 @@ if(isset($_POST["action"])) {
             var hostname = (value === "PROD") ? "reactome.org" : "dev.reactome.org";
             if (value === "PROD") {
                 alert('Production has been selected. Have you updated \'development\' ?');
-                server.addClass("sync-tool-prod");
                 srcserver.addClass("sync-tool-prod");
                 database.addClass("sync-tool-prod");
             } else {
-                server.removeClass("sync-tool-prod");
                 srcserver.removeClass("sync-tool-prod");
                 database.removeClass("sync-tool-prod");
             }
