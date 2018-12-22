@@ -96,56 +96,64 @@ if(isset($_POST["action"])) {
         </small>
     </div>
 
-    <fieldset id="src-server" class="sync-tool-fs hidden">
-        <legend>Release Server Credentials</legend>
-        <div class="favth-form-group">
-            <label for="osuser"  style="display: block;">Your OS user:</label>
-            <input type="text" class="favth-form-control" id="osuser" name="osuser" style="display: block; width: 247px;" placeholder="Enter the user">
-        </div>
+    <div class="favth-col-lg-4 favth-col-md-4 favth-col-sm-12 favth-col-xs-12">
+        <fieldset id="src-server" class="sync-tool-fs hidden">
+            <legend>Release Server Credentials</legend>
+            <div class="favth-form-group">
+                <label for="osuser"  style="display: block;">Your OS user:</label>
+                <input type="text" class="favth-form-control" id="osuser" name="osuser" style="display: block; width: 247px;" placeholder="Enter the user">
+            </div>
 
-        <div class="favth-form-group">
-            <label for="ospasswd" style="display: block;">Your OS password:</label>
-            <input type="password" class="favth-form-control" id="ospasswd" name="ospasswd" style="width: 247px;" placeholder="Enter the password">
-        </div>
+            <div class="favth-form-group">
+                <label for="ospasswd" style="display: block;">Your OS password:</label>
+                <input type="password" class="favth-form-control" id="ospasswd" name="ospasswd" style="width: 247px;" placeholder="Enter the password">
+            </div>
 
-        <div class="favth-form-group">
-            <label for="passphrase" style="display: block;">Key Passphrase:</label>
-            <input type="password" class="favth-form-control" id="passphrase" name="passphrase" style="width: 247px;" placeholder="Enter the key passphrase">
-        </div>
-    </fieldset>
+            <div class="favth-form-group">
+                <label for="passphrase" style="display: block;">Key Passphrase:</label>
+                <input type="password" class="favth-form-control" id="passphrase" name="passphrase" style="width: 247px;" placeholder="Enter the key passphrase">
+            </div>
+        </fieldset>
+    </div>
 
-    <fieldset id="database" class="sync-tool-fs hidden">
-        <legend>Database</legend>
-        <div class="favth-form-group">
-            <label for="dbuser"  style="display: block;">DB User:</label>
-            <input type="text" class="favth-form-control" id="dbuser" name="dbuser" style="width: 247px;" placeholder="Enter the database user" >
-        </div>
+    <div class="favth-col-lg-3 favth-col-md-4 favth-col-sm-12 favth-col-xs-12">
+        <fieldset id="database" class="sync-tool-fs hidden">
+            <legend>Database</legend>
+            <div class="favth-form-group">
+                <label for="dbuser"  style="display: block;">DB User:</label>
+                <input type="text" class="favth-form-control" id="dbuser" name="dbuser" style="width: 247px;" placeholder="Enter the database user" >
+            </div>
 
-        <div class="favth-form-group">
-            <label for="dbpasswd" style="display: block;">DB Password:</label>
-            <input type="password" class="favth-form-control" id="dbpasswd" name="dbpasswd" style="width: 247px;" placeholder="Enter the database password" >
-        </div>
-    </fieldset>
+            <div class="favth-form-group">
+                <label for="dbpasswd" style="display: block;">DB Password:</label>
+                <input type="password" class="favth-form-control" id="dbpasswd" name="dbpasswd" style="width: 247px;" placeholder="Enter the database password" >
+            </div>
+        </fieldset>
 
-    <button id="sync-btn" type="submit" class="btn btn-primary">Run</button>
+        <button id="sync-btn" type="submit" class="btn btn-primary">Run</button>
+    </div>
+
+
 
 	<?php
 	if ( $user->id == 158 || $user->id == 159 ) {
 		$lastexecp = fopen(getcwd() . '/scripts/' . $lastexecname . '_PROD.txt', "rw");
-		echo '<p class="text-right margin0" style="color:gray;"><small>' . fgets($lastexecp) . '</small></p>';
+		echo '<div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12"><p class="text-right margin0" style="color:gray;"><small>' . fgets($lastexecp) . '</small></p></div>';
 		fclose($lastexecp);
 
 		$lastexecd = fopen(getcwd() . '/scripts/' . $lastexecname . '_DEV.txt', "rw");
-		echo '<p class="text-right margin0"  style="color:gray;"><small>' . fgets($lastexecd) . '</small></p>';
+		echo '<div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12"><p class="text-right margin0"  style="color:gray;"><small>' . fgets($lastexecd) . '</small></p></div>';
 		fclose($lastexecd);
 	}
 	?>
 
-    <div class="wait-msg hidden alert alert-info margin0 top">Your request is being processed. Please do not click anywhere either close the browser.</div>
+    <div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12">
+        <div class="wait-msg hidden alert alert-info margin0 top">Your request is being processed. Please do not click anywhere either close the browser.</div>
+    </div>
 
 	<?php
 	if ($output != '') {
-		echo "<div class='summary favth-clearfix'><h3>Execution summary:</h3><div style='max-height: 450px; overflow: auto;'><pre class='output'>" . htmlspecialchars($output) . "</pre></div></div>";
+		echo "<div class='favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12'><div class='summary favth-clearfix'><h3>Execution summary:</h3><div style='max-height: 450px; overflow: auto;'><pre class='output'>" . htmlspecialchars($output) . "</pre></div></div></div>";
 	}
 	?>
 </form>
