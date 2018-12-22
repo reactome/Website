@@ -130,7 +130,7 @@ if(isset($_POST["action"])) {
             </div>
         </fieldset>
 
-        <button id="sync-btn" type="submit" class="btn btn-primary">Run</button>
+        <button id="sync-btn" type="submit" class="btn btn-primary hidden">Run</button>
     </div>
 
 
