@@ -96,7 +96,7 @@ if(isset($_POST["action"])) {
         </small>
     </div>
 
-    <div class="favth-col-lg-4 favth-col-md-4 favth-col-sm-12 favth-col-xs-12">
+    <div class="favth-col-lg-4 favth-col-md-4 favth-col-sm-12 favth-col-xs-12 padding0">
         <fieldset id="src-server" class="sync-tool-fs hidden">
             <legend>Release Server Credentials</legend>
             <div class="favth-form-group">
@@ -179,6 +179,7 @@ if(isset($_POST["action"])) {
             server.addClass("hidden");
             database.addClass("hidden");
             srcserver.addClass("hidden");
+            syncbtn.addClass("hidden");
 
             passphrase.removeAttr("required");
             osuser.removeAttr("required");
@@ -198,6 +199,8 @@ if(isset($_POST["action"])) {
             server.removeClass("hidden");
             srcserver.removeClass("hidden");
             database.removeClass("hidden");
+            syncbtn.removeClass("hidden");
+
             passphrase.attr("required", "true");
             osuser.attr("required", "true");
             ospasswd.attr("required", "true");
