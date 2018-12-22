@@ -65,7 +65,7 @@ OWNER="www-data:reactome"
 DUMP_SQL_FILE="/tmp/dump_from_release.sql"
 
 SHARED_USER="shared"
-PRIVATE_KEY="/home/shared/.ssh/sharfed.pem"
+PRIVATE_KEY="/home/shared/.ssh/shared.pem"
 PASSPHRASE=""
 
 usage () {
