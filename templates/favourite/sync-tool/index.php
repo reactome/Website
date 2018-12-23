@@ -97,8 +97,8 @@ if(isset($_POST["action"])) {
     </div>
 
     <div id="creddiv" class="favth-col-lg-4 favth-col-md-4 favth-col-sm-12 favth-col-xs-12 padding0 hidden">
-        <fieldset id="src-server" class="sync-tool-fs">
-            <legend>Release Server Credentials</legend>
+        <div id="src-server" class="sync-tool-fs">
+<!--            <legend>Release Server Credentials</legend>-->
             <div class="favth-form-group">
                 <label for="osuser"  style="display: block;">Your OS user:</label>
                 <input type="text" class="favth-form-control" id="osuser" name="osuser" style="display: block; width: 247px;" placeholder="Enter the user">
@@ -113,12 +113,12 @@ if(isset($_POST["action"])) {
                 <label for="passphrase" style="display: block;">Key Passphrase:</label>
                 <input type="password" class="favth-form-control" id="passphrase" name="passphrase" style="width: 247px;" placeholder="Enter the key passphrase">
             </div>
-        </fieldset>
+        </div>
     </div>
 
-    <div id="dbdiv" class="favth-col-lg-3 favth-col-md-4 favth-col-sm-12 favth-col-xs-12 hidden">
-        <fieldset id="database" class="sync-tool-fs">
-            <legend>Database</legend>
+    <div id="dbdiv" class="favth-col-lg-4 favth-col-md-4 favth-col-sm-12 favth-col-xs-12 ">
+        <div id="database" class="sync-tool-fs">
+<!--            <legend>Database</legend>-->
             <div class="favth-form-group">
                 <label for="dbuser"  style="display: block;">DB User:</label>
                 <input type="text" class="favth-form-control" id="dbuser" name="dbuser" style="width: 247px;" placeholder="Enter the database user" >
@@ -128,7 +128,7 @@ if(isset($_POST["action"])) {
                 <label for="dbpasswd" style="display: block;">DB Password:</label>
                 <input type="password" class="favth-form-control" id="dbpasswd" name="dbpasswd" style="width: 247px;" placeholder="Enter the database password" >
             </div>
-        </fieldset>
+        </div>
 
         <button id="sync-btn" type="submit" class="btn btn-primary">Run</button>
     </div>
