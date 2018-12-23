@@ -179,8 +179,9 @@ if(isset($_POST["action"])) {
             // srcserver.addClass("hidden");
             // syncbtn.addClass("hidden");
 
-            jQuery(".hidden").each(function() {
+            jQuery(".showing").each(function() {
                 $(this).addClass("hidden");
+                $(this).removeClass("showing");
             });
 
             passphrase.removeAttr("required");
@@ -203,6 +204,7 @@ if(isset($_POST["action"])) {
             // syncbtn.removeClass("hidden");
             jQuery(".hidden").each(function() {
                 $(this).removeClass("hidden");
+                $(this).addClass("showing");
             });
 
 
