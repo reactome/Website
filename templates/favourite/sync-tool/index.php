@@ -79,10 +79,12 @@ if(isset($_POST["action"])) {
 ?>
 
 <form method="post" id="sync-form">
-    <div class="alert alert-info margin0 bottom">
-        <span><i class="fa fa-info-circle"></i> This tool synchronizes <strong>Joomla Content</strong> to the specified environment</span>
-    </div>
     <input id="action" type="hidden" name="action" value="sync" />
+    <div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12 padding0">
+        <div class="alert alert-info margin0 bottom">
+            <span><i class="fa fa-info-circle"></i> This tool synchronizes <strong>Joomla Content</strong> to the specified environment</span>
+        </div>
+    </div>
 
     <div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12 padding0">
         <div class="favth-form-group" id="env-div">
