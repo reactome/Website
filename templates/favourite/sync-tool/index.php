@@ -180,8 +180,8 @@ if(isset($_POST["action"])) {
             // syncbtn.addClass("hidden");
 
             jQuery(".showing").each(function() {
-                $(this).addClass("hidden");
-                $(this).removeClass("showing");
+                jQuery(this).addClass("hidden");
+                jQuery(this).removeClass("showing");
             });
 
             passphrase.removeAttr("required");
@@ -203,8 +203,8 @@ if(isset($_POST["action"])) {
             // database.removeClass("hidden");
             // syncbtn.removeClass("hidden");
             jQuery(".hidden").each(function() {
-                $(this).removeClass("hidden");
-                $(this).addClass("showing");
+                jQuery(this).removeClass("hidden");
+                jQuery(this).addClass("showing");
             });
 
 
