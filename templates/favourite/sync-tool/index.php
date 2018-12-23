@@ -84,16 +84,18 @@ if(isset($_POST["action"])) {
     </div>
     <input id="action" type="hidden" name="action" value="sync" />
 
-    <div class="favth-form-group" id="env-div">
-        <label for="env" style="display: block;">Environment:</label>
-        <select class="form-control" id="env" name="env" aria-describedby="prod-msg" style="display: block;" required>
-            <option value="">Select environment</option>
-            <option value="DEV" >Development</option>
-            <option value="PROD">Production*</option>
-        </select>
-        <small id="prod-msg" class="form-text text-muted">
-            *Be careful when selecting production.
-        </small>
+    <div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12 padding0">
+        <div class="favth-form-group" id="env-div">
+            <label for="env" style="display: block;">Environment:</label>
+            <select class="form-control" id="env" name="env" aria-describedby="prod-msg" style="display: block;" required>
+                <option value="">Select environment</option>
+                <option value="DEV" >Development</option>
+                <option value="PROD">Production*</option>
+            </select>
+            <small id="prod-msg" class="form-text text-muted">
+                *Be careful when selecting production.
+            </small>
+        </div>
     </div>
 
     <div id="creddiv" class="favth-col-lg-4 favth-col-md-6 favth-col-sm-6 favth-col-xs-12 padding0 hidden">
@@ -116,7 +118,7 @@ if(isset($_POST["action"])) {
         </fieldset>
     </div>
 
-    <div id="dbdiv" class="favth-col-lg-4 favth-col-md-6 favth-col-sm-6 favth-col-xs-12 hidden">
+    <div id="dbdiv" class="favth-col-lg-4 favth-col-md-6 favth-col-sm-6 favth-col-xs-12 padding0 hidden">
         <fieldset id="database" class="sync-tool-fs">
             <legend>Database</legend>
             <div class="favth-form-group">
@@ -132,8 +134,6 @@ if(isset($_POST["action"])) {
 
         <button id="sync-btn" type="submit" class="btn btn-primary">Run</button>
     </div>
-
-
 
 	<?php
 	if ( $user->id == 158 || $user->id == 159 ) {
