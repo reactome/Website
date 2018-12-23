@@ -96,7 +96,7 @@ if(isset($_POST["action"])) {
         </small>
     </div>
 
-    <div class="favth-col-lg-4 favth-col-md-4 favth-col-sm-12 favth-col-xs-12 padding0 hidden">
+    <div id="creddiv" class="favth-col-lg-4 favth-col-md-4 favth-col-sm-12 favth-col-xs-12 padding0 hidden">
         <fieldset id="src-server" class="sync-tool-fs">
             <legend>Release Server Credentials</legend>
             <div class="favth-form-group">
@@ -116,7 +116,7 @@ if(isset($_POST["action"])) {
         </fieldset>
     </div>
 
-    <div class="favth-col-lg-3 favth-col-md-4 favth-col-sm-12 favth-col-xs-12 hidden">
+    <div id="dbdiv" class="favth-col-lg-3 favth-col-md-4 favth-col-sm-12 favth-col-xs-12 hidden">
         <fieldset id="database" class="sync-tool-fs">
             <legend>Database</legend>
             <div class="favth-form-group">
@@ -147,8 +147,8 @@ if(isset($_POST["action"])) {
 	}
 	?>
 
-    <div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12">
-        <div class="wait-msg hidden alert alert-info margin0 top">Your request is being processed. Please do not click anywhere either close the browser.</div>
+    <div class="wait-msg favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12 hidden">
+        <div class="alert alert-info margin0 top">Your request is being processed. Please do not click anywhere either close the browser.</div>
     </div>
 
 	<?php
@@ -165,6 +165,8 @@ if(isset($_POST["action"])) {
         var srcserver   = jQuery('#src-server');
         var database    = jQuery('#database');
         var syncbtn     = jQuery("#sync-btn");
+        var creddiv     = jQuery("#creddiv");
+        var dbdiv       = jQuery("#dbdiv");
 
         env.change(function () {
             var value       = this.value;
@@ -179,10 +181,8 @@ if(isset($_POST["action"])) {
             // srcserver.addClass("hidden");
             // syncbtn.addClass("hidden");
 
-            jQuery(".showing").each(function() {
-                jQuery(this).addClass("hidden");
-                jQuery(this).removeClass("showing");
-            });
+            creddiv.addClass("hidden");
+            dbdiv.addClass("hidden");
 
             passphrase.removeAttr("required");
             osuser.removeAttr("required");
@@ -202,11 +202,9 @@ if(isset($_POST["action"])) {
             // srcserver.removeClass("hidden");
             // database.removeClass("hidden");
             // syncbtn.removeClass("hidden");
-            jQuery(".hidden").each(function() {
-                jQuery(this).removeClass("hidden");
-                jQuery(this).addClass("showing");
-            });
 
+            creddiv.removeClass("hidden");
+            dbdiv.removeClass("hidden");
 
             passphrase.attr("required", "true");
             osuser.attr("required", "true");
