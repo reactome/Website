@@ -114,9 +114,10 @@ normalise_owner_and_permissions () {
 }
 
 normalise_owner_permissions_and_flags_remote () {
-    # sync the chown script to make the destination has the latest version.
+    # sync the chown script to make sure the destination has the latest version.
     echo "Upload latest version of website_chown.sh script..."
-    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) scp -i ${PRIVATE_KEY} ${SYNC_CHOWN} ${SHARED_USER}@${DEST_SERVER}:${SYNC_CHOWN}
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -ogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' ${SYNC_CHOWN} ${SHARED_USER}@${DEST_SERVER}:${SYNC_CHOWN} #2> /dev/null
+#    scp -i ${PRIVATE_KEY} ${SYNC_CHOWN} ${SHARED_USER}@${DEST_SERVER}:${SYNC_CHOWN}
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Couldn't upload latest version of the chown script"
