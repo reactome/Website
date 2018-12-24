@@ -757,7 +757,13 @@ video.responsive-vid {
     padding: 0 0 0 10px;
     border-radius: 5px;
     margin-bottom: 25px;
-    width: 270px;
+    width: 95%;
+}
+
+.sync-tool-fs input[type="text"],
+.sync-tool-fs input[type="password"]{
+    width: 98% !important;
+    display: block;
 }
 
 .sync-tool-fs legend {
@@ -773,7 +779,16 @@ video.responsive-vid {
     border: 1px solid #FF0000 !important;
 }
 
-.sync-tool-prod legend {
+.sync-tool-prod input[type="text"],
+.sync-tool-prod input[type="password"] {
+    display: block;
+    border: 1px solid #FF0000;
+    border-radius: 4px;
+}
+
+.sync-tool-prod label,
+.sync-tool-prod legend,
+.sync-tool-prod input::placeholder {
     color: red !important;
 }
 
@@ -979,6 +994,16 @@ video.responsive-vid {
     div[id^="r-responsive-table"] table[class*="spec-"] td,
     div[id^="r-responsive-table"] table[class*="spec-"] td:before {
       	text-align: left !important;
+    }
+
+    /** Sync Tool **/
+    .sync-tool-fs {
+        width: 100%;
+    }
+
+    .sync-tool-fs input[type="text"],
+    .sync-tool-fs input[type="password"]{
+        width: 96% !important;
     }
 
 }
