@@ -100,62 +100,63 @@ if(isset($_POST["action"])) {
         </div>
     </div>
 
-    <div id="creddiv" class="favth-col-lg-4 favth-col-md-6 favth-col-sm-6 favth-col-xs-12 padding0 hidden">
+    <div id="creddiv" class="favth-col-lg-6 favth-col-md-6 favth-col-sm-6 favth-col-xs-12 padding0 hidden">
         <fieldset id="src-server" class="sync-tool-fs">
             <legend>Release Server Credentials</legend>
             <div class="favth-form-group">
-                <label for="osuser"  style="display: block;">Your OS user:</label>
-                <input type="text" class="favth-form-control" id="osuser" name="osuser" style="display: block; width: 247px;" placeholder="Enter the user">
+                <label for="osuser">Your OS user:</label>
+                <input type="text" class="favth-form-control" id="osuser" name="osuser" placeholder="Enter the user">
             </div>
 
             <div class="favth-form-group">
-                <label for="ospasswd" style="display: block;">Your OS password:</label>
-                <input type="password" class="favth-form-control" id="ospasswd" name="ospasswd" style="width: 247px;" placeholder="Enter the password">
+                <label for="ospasswd">Your OS password:</label>
+                <input type="password" class="favth-form-control" id="ospasswd" name="ospasswd" placeholder="Enter the password">
             </div>
 
             <div class="favth-form-group">
-                <label for="passphrase" style="display: block;">Key Passphrase:</label>
-                <input type="password" class="favth-form-control" id="passphrase" name="passphrase" style="width: 247px;" placeholder="Enter the key passphrase">
+                <label for="passphrase">Key Passphrase:</label>
+                <input type="password" class="favth-form-control" id="passphrase" name="passphrase" placeholder="Enter the key passphrase">
             </div>
         </fieldset>
     </div>
 
-    <div id="dbdiv" class="favth-col-lg-4 favth-col-md-6 favth-col-sm-6 favth-col-xs-12 padding0 hidden">
-        <fieldset id="database" class="sync-tool-fs">
+    <div id="dbdiv" class="favth-col-lg-6 favth-col-md-6 favth-col-sm-6 favth-col-xs-12 padding0 hidden">
+        <fieldset id="database" class="sync-tool-fs" style="display: inline-block;">
             <legend>Database</legend>
             <div class="favth-form-group">
-                <label for="dbuser"  style="display: block;">DB User:</label>
-                <input type="text" class="favth-form-control" id="dbuser" name="dbuser" style="width: 247px;" placeholder="Enter the database user" >
+                <label for="dbuser">DB User:</label>
+                <input type="text" class="favth-form-control" id="dbuser" name="dbuser" placeholder="Enter the database user" >
             </div>
 
             <div class="favth-form-group">
-                <label for="dbpasswd" style="display: block;">DB Password:</label>
-                <input type="password" class="favth-form-control" id="dbpasswd" name="dbpasswd" style="width: 247px;" placeholder="Enter the database password" >
+                <label for="dbpasswd">DB Password:</label>
+                <input type="password" class="favth-form-control" id="dbpasswd" name="dbpasswd" placeholder="Enter the database password" >
             </div>
         </fieldset>
-
-        <button id="sync-btn" type="submit" class="btn btn-primary">Run</button>
+        <div style="display:block; text-align: center;">
+            <button id="sync-btn" type="submit" class="btn btn-primary">Run</button>
+        </div>
     </div>
 
 	<?php
 	if ( $user->id == 158 || $user->id == 159 ) {
 		$lastexecp = fopen(getcwd() . '/scripts/' . $lastexecname . '_PROD.txt', "rw");
-		echo '<div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12"><p class="text-right margin0" style="color:gray;"><small>' . fgets($lastexecp) . '</small></p></div>';
+		echo '<div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12 padding0"><p class="text-right margin0" style="color:gray;"><small>' . fgets($lastexecp) . '</small></p></div>';
 		fclose($lastexecp);
 
 		$lastexecd = fopen(getcwd() . '/scripts/' . $lastexecname . '_DEV.txt', "rw");
-		echo '<div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12"><p class="text-right margin0"  style="color:gray;"><small>' . fgets($lastexecd) . '</small></p></div>';
+		echo '<div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12 padding0"><p class="text-right margin0"  style="color:gray;"><small>' . fgets($lastexecd) . '</small></p></div>';
 		fclose($lastexecd);
 	}
 	?>
 
-    <div class="wait-msg favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12 hidden">
+    <div class="wait-msg favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12 padding0 hidden">
         <div class="alert alert-info margin0 top">Your request is being processed. Please do not click anywhere either close the browser.</div>
     </div>
 
 	<?php
 	if ($output != '') {
-		echo "<div class='favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12'><div class='summary favth-clearfix'><h3>Execution summary:</h3><div style='max-height: 450px; overflow: auto;'><pre class='output'>" . htmlspecialchars($output) . "</pre></div></div></div>";
+		echo "<div class='favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12 padding0'><div class='summary favth-clearfix'><h3>Execution summary:</h3><div style='max-height: 450px; overflow: auto;'><pre class='output'>" . htmlspecialchars($output) . "</pre></div></div></div>";
 	}
 	?>
 </form>
@@ -179,10 +180,6 @@ if(isset($_POST["action"])) {
             var dbpasswd    = jQuery("#dbpasswd");
             var serverlabel = jQuery("#server-label");
 
-            // database.addClass("hidden");
-            // srcserver.addClass("hidden");
-            // syncbtn.addClass("hidden");
-
             creddiv.addClass("hidden");
             dbdiv.addClass("hidden");
 
@@ -201,10 +198,6 @@ if(isset($_POST["action"])) {
             serverlabel.text("");
             jQuery(".summary").text("");
 
-            // srcserver.removeClass("hidden");
-            // database.removeClass("hidden");
-            // syncbtn.removeClass("hidden");
-
             creddiv.removeClass("hidden");
             dbdiv.removeClass("hidden");
 
@@ -217,11 +210,16 @@ if(isset($_POST["action"])) {
             var hostname = (value === "PROD") ? "reactome.org" : "dev.reactome.org";
             if (value === "PROD") {
                 alert('Production has been selected. Have you updated \'development\' ?');
+
+                env.addClass("sync-tool-prod");
                 srcserver.addClass("sync-tool-prod");
                 database.addClass("sync-tool-prod");
+                syncbtn.css("background-color", "#FF0000")
             } else {
+                env.removeClass("sync-tool-prod");
                 srcserver.removeClass("sync-tool-prod");
                 database.removeClass("sync-tool-prod");
+                syncbtn.css("background-color", "")
             }
             serverlabel.text("Your account in " + hostname);
         });
