@@ -16,7 +16,7 @@
 #   - Current DB backup are kept under LRU of 5 (sed -e '1,5d')
 #   - Logs are kept
 #
-# www-data needs sudo access to this script. Check visudo in the Release Server.
+# www-data needs sudo access to this script. Check visudo in the Dev/Release/Prod Server.
 #
 # Guilherme Viteri  - gviteri@ebi.ac.uk
 #

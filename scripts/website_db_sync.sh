@@ -1,13 +1,6 @@
 #!/bin/bash
 
-######################## IMPORTANT #########################
-###### PLEASE MAKE SURE FILES ARE OWNED BY www-data ########
-############################################################
-
 #-----------------------------------------------------------
-# Script that migrates Joomla database and/or files.
-#  - From Release to Dev
-#  - From Release to Prod
 #
 # Few things to take into account during the db migration
 #   - Articles hits MUST to be kept, to achieve this a tmp file is created prior to db import phase and loaded later on
@@ -15,6 +8,8 @@
 #   - Files used in this script are kept in $_PWD
 #   - Current DB backup are kept under LRU of 5 (sed -e '1,5d')
 #   - Logs are kept
+#
+# joomla_migrations invoke this script remotely and the website_db_sync is run locally
 #
 # Guilherme Viteri  - gviteri@ebi.ac.uk
 #
@@ -24,7 +19,7 @@
 # during execution have to be in different directory, I'd say, same level as static folder, that's why we 'go back' two directories
 
 # Go to the directory where the script resides. It ensures we can execute from anywhere and cd .. will work
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+DIR="/usr/local/reactomes/Reactome/production/Website"
 cd ${DIR};
 
 NOW=$(date +"%Y%m%d%H%M%S")
