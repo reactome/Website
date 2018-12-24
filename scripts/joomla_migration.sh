@@ -103,6 +103,14 @@ normalise_owner_and_permissions () {
         echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${SERVER}]"
         exit
     fi
+
+    echo "Updating directory mode bits in the source server [${RELEASE_SERVER}] before synchronisation."
+    sshpass -p ${SRCOSPASSWD} sudo -S -u ${SRCOSUSER} sudo find ${_JOOMLA_STATIC} -type d -exec chmod 775 {} \; &> /dev/null
+    OUT=$?
+    if [[ "$OUT" -ne 0 ]]; then
+        echo "[ERROR] Couldn't normalise the mode bits in the static folder ${_JOOMLA_STATIC} in the Source server [${SERVER}]"
+        exit
+    fi
 }
 
 normalise_owner_permissions_and_flags_remote () {
