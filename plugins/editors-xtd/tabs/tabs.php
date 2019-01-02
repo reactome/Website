@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.4.2
+ * @version         7.5.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -22,7 +22,7 @@ require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
  * Button Plugin that places Editor Buttons
  */
 class PlgButtonTabs
-	extends \RegularLabs\Library\EditorButton
+	extends \RegularLabs\Library\EditorButtonPlugin
 {
 	var $require_core_auth = false;
 }

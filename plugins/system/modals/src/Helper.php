@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,7 @@ namespace RegularLabs\Plugin\System\Modals;
 
 defined('_JEXEC') or die;
 
-use JFactory;
+use Joomla\CMS\Factory as JFactory;
 use RegularLabs\Library\Article as RL_Article;
 use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\Html as RL_Html;

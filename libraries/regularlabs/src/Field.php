@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,9 +13,10 @@ namespace RegularLabs\Library;
 
 defined('_JEXEC') or die;
 
-use JFactory;
-use JHtml;
-use JText;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Form\Form as JForm;
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
+use Joomla\CMS\Language\Text as JText;
 
 /**
  * Class Field
@@ -53,6 +54,16 @@ class Field
 		$params = Parameters::getInstance()->getPluginParams('regularlabs');
 
 		$this->max_list_count = $params->max_list_count;
+
+		Document::loadFormDependencies();
+		Document::stylesheet('regularlabs/style.min.css');
+	}
+
+	public function setup(\SimpleXMLElement $element, $value, $group = null)
+	{
+		$this->params = $element->attributes();
+
+		return parent::setup($element, $value, $group);
 	}
 
 	/**
@@ -283,17 +294,10 @@ class Field
 				$string = $this->sprintf_old($string);
 				break;
 
-			// sprintf format (comma separated)
-			case (strpos($string, ',') !== false):
-				$string = $this->sprintf($string);
-				break;
-
 			// Normal language string
 			default:
 				$string = JText::_($string);
 		}
-
-		$string = str_replace('[:COMMA:]', ',', $string);
 
 		return $this->fixLanguageStringSyntax($string);
 	}
@@ -307,6 +311,7 @@ class Field
 	 */
 	private function fixLanguageStringSyntax($string = '')
 	{
+		$string = str_replace('[:COMMA:]', ',', $string);
 		$string = trim(StringHelper::html_entity_decoder($string));
 		$string = str_replace('&quot;', '"', $string);
 		$string = str_replace('span style="font-family:monospace;"', 'span class="rl_code"', $string);

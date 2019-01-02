@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.6.2
+ * @version         7.7.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,8 +13,8 @@ namespace RegularLabs\Plugin\System\Sliders;
 
 defined('_JEXEC') or die;
 
-use JFactory;
-use JHtml;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
 use RegularLabs\Library\Document as RL_Document;
 
 class Document
@@ -49,11 +49,11 @@ class Document
 
 		RL_Document::scriptOptions($options, 'Sliders');
 
-		RL_Document::script('sliders/script.min.js', ($params->media_versioning ? '7.6.2' : ''));
+		RL_Document::script('sliders/script.min.js', ($params->media_versioning ? '7.7.2' : ''));
 
 		if ($params->load_stylesheet)
 		{
-			RL_Document::style('sliders/style.min.css', ($params->media_versioning ? '7.6.2' : ''));
+			RL_Document::style('sliders/style.min.css', ($params->media_versioning ? '7.7.2' : ''));
 		}
 
 	}

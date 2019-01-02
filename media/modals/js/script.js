@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -27,11 +27,11 @@ var RLModals          = null;
 				return;
 			}
 
-			// Resize Colorbox when resizing window or changing mobile device orientation
+			// Resize modal when resizing window or changing mobile device orientation
 			$(window).resize(RegularLabsModals.resizeOnBrowserResize);
 			window.addEventListener("orientationchange", RegularLabsModals.resizeOnBrowserResize, false);
 
-			$.colorbox.settings.createImg = function() {
+			$.rl_modals.settings.createImg = function() {
 				var img = new Image();
 
 				var data_title = $(this).attr('data-modal-title')
@@ -54,33 +54,26 @@ var RLModals          = null;
 				return img;
 			};
 
-			$("#cboxContent > button").each(function() {
-				$(this).attr('aria-label', this.id.replace('cbox', ''));
-			});
-
 			$.each($('.' + options.class), function(i, el) {
 				RegularLabsModals.initModal(el);
 			});
 
 
-			$(document).bind('cbox_open', function() {
+			$(document).bind('rl_modals_open', function() {
 				RegularLabsModals.window_width = $(window).width();
 
-				$("#cboxContent > button").each(function() {
-					$(this).attr('aria-label', this.id.replace('cbox', ''));
-				});
-
-				$("#colorbox").swipe({
+				$('#rl_modals').swipe({
 					swipeLeft : function(event, direction, distance, duration, fingerCount) {
-						$.colorbox.next();
+						$.rl_modals.next();
 					},
 					swipeRight: function(event, direction, distance, duration, fingerCount) {
-						$.colorbox.prev();
+						$.rl_modals.prev();
 					},
 
 					fallbackToMouseEvents: false
 				});
 			});
+
 		},
 
 		getOptions: function() {
@@ -110,7 +103,7 @@ var RLModals          = null;
 
 			// Get data from tag
 			$.each(el.attributes, function(index, attr) {
-				if (attr.name.indexOf("data-modal-") === 0) {
+				if (attr.name.indexOf('data-modal-') === 0) {
 					var key       = $.camelCase(attr.name.substring(11));
 					defaults[key] = attr.value;
 				}
@@ -146,7 +139,7 @@ var RLModals          = null;
 				$('.modal_active').removeClass('modal_active');
 				$el.addClass('modal_active');
 
-				$('.cboxIframe').attr({
+				$('.rl_modals_iframe').attr({
 					webkitAllowFullScreen: true,
 					mozallowfullscreen   : true,
 					allowFullScreen      : true,
@@ -157,11 +150,11 @@ var RLModals          = null;
 				RegularLabsModals.checkScrollBar();
 
 
-				$('#colorbox').addClass('complete');
+				$('#rl_modals').addClass('complete');
 			};
 
 			defaults['onClosed'] = function() {
-				$('#colorbox').removeClass('complete');
+				$('#rl_modals').removeClass('complete');
 				$('.modal_active').removeClass('modal_active');
 			};
 
@@ -173,7 +166,7 @@ var RLModals          = null;
 			}
 
 			// Bind the modal script to the element
-			$el.colorbox(defaults);
+			$el.rl_modals(defaults);
 
 		},
 
@@ -183,9 +176,9 @@ var RLModals          = null;
 			}
 
 			RegularLabsModals.resize_timer = setTimeout(function() {
-				var $modal_wrapper = $("#cboxWrapper");
+				var $wrapper = $('#rl_modals_wrapper');
 
-				if (!$modal_wrapper.is(':visible')) {
+				if (!$wrapper.is(':visible')) {
 					return;
 				}
 
@@ -195,13 +188,13 @@ var RLModals          = null;
 		},
 
 		checkScrollBar: function() {
-			var $colorbox = $('#colorbox');
-			var $content  = $('#cboxLoadedContent');
+			var $wrapper = $('#rl_modals');
+			var $content = $('#rl_modals_loaded_content');
 
-			$colorbox.removeClass('has_scrollbar');
+			$wrapper.removeClass('has_scrollbar');
 
 			if ($content.prop('scrollHeight') > $content.innerHeight()) {
-				$colorbox.addClass('has_scrollbar');
+				$wrapper.addClass('has_scrollbar');
 			}
 		},
 
@@ -233,8 +226,8 @@ var RLModals          = null;
 
 			var modals_settings = $modal.data('modals_settings');
 
-			var $content   = $('#cboxLoadedContent');
-			var $container = $('#cboxContent');
+			var $content   = $('#rl_modals_loaded_content');
+			var $container = $('#rl_modals_content');
 
 			var original_container_width = this.getWidth($container);
 			var original_width           = this.getWidth($content);
@@ -270,15 +263,16 @@ var RLModals          = null;
 			new_container_width = new_width + container_extra_width;
 
 			var $content_copy = $content.clone();
-			$content.after($content_copy);
+			$content.before($content_copy);
 
 			$content.hide();
 
-			$container.width(new_container_width);
+			$container.width(new_container_width + 10);
 			$content_copy.css({
-				'width'  : 'auto',
-				'height' : 'auto',
-				'display': modals_settings.iframe ? 'block' : 'inline-block'
+				'width'     : 'auto',
+				'height'    : 'auto',
+				'background': 'red',
+				'display'   : modals_settings.iframe ? 'block' : 'inline-block'
 			});
 
 			var resized_width  = this.getWidth($content_copy);
@@ -298,13 +292,13 @@ var RLModals          = null;
 		},
 
 		resizeTitle: function() {
-			var $title = $('#cboxTitle');
+			var $title = $('#rl_modals_title');
 
 			if (!this.getHeight($title)) {
 				return;
 			}
 
-			var $content        = $('#cboxLoadedContent');
+			var $content        = $('#rl_modals_loaded_content');
 			var original_height = this.getHeight($content);
 
 			var title_attr     = this.getTitleHeightAndPos();
@@ -334,7 +328,7 @@ var RLModals          = null;
 		},
 
 		getTitleHeightAndPos: function() {
-			var $title = $('#cboxTitle');
+			var $title = $('#rl_modals_title');
 
 			var height_inner = this.getHeight($title);
 
@@ -375,31 +369,33 @@ var RLModals          = null;
 				modals_settings.innerHeight = height;
 			}
 
-			$modal.colorbox.resize(modals_settings);
+			modals_settings.transition = 'none';
+
+			$modal.rl_modals.resize(modals_settings);
 		},
 
 		reload: function() {
-			var $colorbox       = $('#colorbox');
-			var $content        = $('#cboxLoadedContent');
+			var $container      = $('#rl_modals');
+			var $content        = $('#rl_modals_loaded_content');
 			var $modal          = RegularLabsModals.active_modal;
 			var modals_settings = $modal.data('modals_settings');
 
-			var original_fadeOut       = $modal.colorbox.settings.fadeOut;
-			var original_initialWidth  = $modal.colorbox.settings.initialWidth;
-			var original_initialHeight = $modal.colorbox.settings.initialHeight;
+			var original_fadeOut       = $modal.rl_modals.settings.fadeOut;
+			var original_initialWidth  = $modal.rl_modals.settings.initialWidth;
+			var original_initialHeight = $modal.rl_modals.settings.initialHeight;
 			var original_scrollHeight  = $content.scrollTop();
 
-			$modal.colorbox(modals_settings);
+			$modal.rl_modals(modals_settings);
 
-			$modal.colorbox.settings.fadeOut       = 0;
-			$modal.colorbox.settings.initialWidth  = this.getWidth($colorbox);
-			$modal.colorbox.settings.initialHeight = this.getHeight($colorbox);
+			$modal.rl_modals.settings.fadeOut       = 0;
+			$modal.rl_modals.settings.initialWidth  = this.getWidth($container);
+			$modal.rl_modals.settings.initialHeight = this.getHeight($container);
 
 			$modal.click();
 
-			$modal.colorbox.settings.fadeOut       = original_fadeOut;
-			$modal.colorbox.settings.initialWidth  = original_initialWidth;
-			$modal.colorbox.settings.initialHeight = original_initialHeight;
+			$modal.rl_modals.settings.fadeOut       = original_fadeOut;
+			$modal.rl_modals.settings.initialWidth  = original_initialWidth;
+			$modal.rl_modals.settings.initialHeight = original_initialHeight;
 
 			$content.scrollTop(original_scrollHeight);
 		},
@@ -548,17 +544,17 @@ var RLModals          = null;
 
 		getOuterWidthPadding: function() {
 			return parseInt(
-				$('#cboxMiddleLeft').outerWidth() + $('#cboxMiddleRight').outerWidth()
-				+ parseInt($('#cboxLoadedContent').css('margin-left')) + parseInt($('#cboxLoadedContent').css('margin-right'))
-				+ parseInt($('#cboxLoadedContent').css('padding-left')) + parseInt($('#cboxLoadedContent').css('padding-right'))
+				$('#rl_modals_middle_left').outerWidth() + $('#rl_modals_middle_right').outerWidth()
+				+ parseInt($('#rl_modals_loaded_content').css('margin-left')) + parseInt($('#rl_modals_loaded_content').css('margin-right'))
+				+ parseInt($('#rl_modals_loaded_content').css('padding-left')) + parseInt($('#rl_modals_loaded_content').css('padding-right'))
 			);
 		},
 
 		getOuterHeightPadding: function() {
 			return parseInt(
-				$('#cboxTopCenter').outerHeight() + $('#cboxBottomCenter').outerHeight()
-				+ parseInt($('#cboxLoadedContent').css('margin-top')) + parseInt($('#cboxLoadedContent').css('margin-bottom'))
-				+ parseInt($('#cboxLoadedContent').css('padding-top')) + parseInt($('#cboxLoadedContent').css('padding-bottom'))
+				$('#rl_modals_top_center').outerHeight() + $('#rl_modals_bottom_center').outerHeight()
+				+ parseInt($('#rl_modals_loaded_content').css('margin-top')) + parseInt($('#rl_modals_loaded_content').css('margin-bottom'))
+				+ parseInt($('#rl_modals_loaded_content').css('padding-top')) + parseInt($('#rl_modals_loaded_content').css('padding-bottom'))
 			);
 		}
 	};

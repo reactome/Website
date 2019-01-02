@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.3.0
+ * @version         7.4.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -19,20 +19,20 @@ namespace RegularLabs\Plugin\System\Sourcerer;
 
 defined('_JEXEC') or die;
 
-if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
-{
-	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
-}
-
-use JFactory;
-use JInstaller;
-use JPlugin;
-use JPluginHelper;
-use JText;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Installer\Installer as JInstaller;
+use Joomla\CMS\Language\Text as JText;
+use Joomla\CMS\Plugin\CMSPlugin as JPlugin;
+use Joomla\CMS\Plugin\PluginHelper as JPluginHelper;
 use ReflectionMethod;
 use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\Language as RL_Language;
 use RegularLabs\Library\Protect as RL_Protect;
+
+if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+}
 
 class Plugin extends JPlugin
 {
@@ -332,8 +332,8 @@ class Plugin extends JPlugin
 			return;
 		}
 
-		if (version_compare($plugin['version'], '18.9.3123', '<')
-			|| version_compare($library['version'], '18.9.3123', '<'))
+		if (version_compare($plugin['version'], '18.12.3953', '<')
+			|| version_compare($library['version'], '18.12.3953', '<'))
 		{
 			define('REGULAR_LABS_LIBRARY_INSTALLED', 'outdated');
 

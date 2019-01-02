@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.3.0
+ * @version         7.4.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,7 +14,7 @@ namespace RegularLabs\Plugin\System\Sourcerer;
 defined('_JEXEC') or die;
 
 use JFile;
-use JText;
+use Joomla\CMS\Language\Text as JText;
 use RegularLabs\Library\ArrayHelper as RL_Array;
 use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\Html as RL_Html;

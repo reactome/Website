@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,6 +11,9 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Language\Text as JText;
+
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
@@ -18,18 +21,12 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
-use RegularLabs\Library\Document as RL_Document;
-
 class JFormFieldRL_Checkbox extends \RegularLabs\Library\Field
 {
 	public $type = 'Checkbox';
 
 	protected function getInput()
 	{
-		$this->params = $this->element->attributes();
-
-		RL_Document::stylesheet('regularlabs/style.min.css');
-
 		$showcheckall = $this->get('showcheckall', 0);
 
 		$checkall = ($this->value == '*');
@@ -82,19 +79,16 @@ class JFormFieldRL_Checkbox extends \RegularLabs\Library\Field
 
 		if ($showcheckall)
 		{
-			$checkers = [];
-			if ($showcheckall)
-			{
-				$checkers[] = '<input id="rl_checkall_' . $this->id . '" type="checkbox" onclick=" RegularLabsScripts.checkAll( this, \'rl_' . $this->id . '\' );"> ' . JText::_('JALL');
+			$js = "
+				jQuery(document).ready(function() {
+					RegularLabsForm.initCheckAlls('rl_checkall_" . $this->id . "', 'rl_" . $this->id . "');
+				});
+			";
+			JFactory::getDocument()->addScriptDeclaration($js);
 
-				$js = "
-					jQuery(document).ready(function() {
-						RegularLabsScripts.initCheckAlls('rl_checkall_" . $this->id . "', 'rl_" . $this->id . "');
-					});
-				";
-				JFactory::getDocument()->addScriptDeclaration($js);
-			}
-			$options = implode('&nbsp;&nbsp;&nbsp;', $checkers) . '<br>' . $options;
+			$checker = '<input id="rl_checkall_' . $this->id . '" type="checkbox" onclick=" RegularLabsForm.checkAll( this, \'rl_' . $this->id . '\' );"> ' . JText::_('JALL');
+
+			$options = $checker . '<br>' . $options;
 		}
 		$options .= '<input type="hidden" id="' . $this->id . 'x" name="' . $this->name . '' . '[]" value="x" checked="checked">';
 

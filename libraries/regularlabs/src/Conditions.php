@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,8 +14,6 @@ namespace RegularLabs\Library;
 defined('_JEXEC') or die;
 
 jimport('joomla.filesystem.file');
-
-use JFile;
 
 /**
  * Class Conditions
@@ -216,7 +214,7 @@ class Conditions
 				break;
 
 			default:
-				if ( ! JFile::exists(__DIR__ . '/Condition/' . $condition->class_name . '.php'))
+				if ( ! file_exists(__DIR__ . '/Condition/' . $condition->class_name . '.php'))
 				{
 					break;
 				}

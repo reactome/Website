@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -24,12 +24,17 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel as JModel;
+use Joomla\CMS\Pagination\Pagination as JPagination;
+use Joomla\CMS\Plugin\PluginHelper as JPluginHelper;
+
 /**
  * Search Component Search Model
  *
  * @since  1.5
  */
-class SearchModelSearch extends JModelLegacy
+class SearchModelSearch extends JModel
 {
 	/**
 	 * Search data array

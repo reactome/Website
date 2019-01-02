@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.6.2
+ * @version         7.7.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,9 +13,9 @@ namespace RegularLabs\Plugin\System\Sliders;
 
 defined('_JEXEC') or die;
 
-use JFactory;
-use JRoute;
-use JUri;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Router\Route as JRoute;
+use Joomla\CMS\Uri\Uri as JUri;
 use RegularLabs\Library\Alias as RL_Alias;
 use RegularLabs\Library\Html as RL_Html;
 use RegularLabs\Library\HtmlTag as RL_HtmlTag;
@@ -750,7 +750,7 @@ class Replace
 		}
 
 		return
-			'<a href="' . $href . '" class="' . $class . '"' . $onclick . $link_attributes . '>'
+			'<a href="' . $href . '" title="' . htmlspecialchars($item->title) . '" class="' . $class . '"' . $onclick . $link_attributes . '>'
 			. '<span class="rl_sliders-toggle-inner nn_sliders-toggle-inner">'
 			. ' ' . $title
 			. '</span>'

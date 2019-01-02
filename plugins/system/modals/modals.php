@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,12 +11,12 @@
 
 defined('_JEXEC') or die;
 
+use RegularLabs\Plugin\System\Modals\Plugin;
+
 // Do not instantiate plugin on install pages
 // to prevent installation/update breaking because of potential breaking changes
-if (
-	in_array(JFactory::getApplication()->input->get('option'), ['com_installer', 'com_regularlabsmanager'])
-	&& JFactory::getApplication()->input->get('action') != ''
-)
+$input = \Joomla\CMS\Factory::getApplication()->input;
+if ($input->get('action') != '' && in_array($input->get('option'), ['com_installer', 'com_regularlabsmanager']))
 {
 	return;
 }
@@ -27,8 +27,6 @@ if ( ! is_file(__DIR__ . '/vendor/autoload.php'))
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
-
-use RegularLabs\Plugin\System\Modals\Plugin;
 
 /**
  * System Plugin that places a Modals code block into the text

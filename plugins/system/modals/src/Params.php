@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -44,22 +44,44 @@ class Params
 		$params->paramNamesCamelcase = [
 			'innerWidth', 'innerHeight', 'initialWidth', 'initialHeight',
 			'maxWidth', 'maxHeight', 'minWidth', 'minHeight', 'className',
+			'scalePhotos',
+			'retinaImage', 'retinaUrl', 'retinaSuffix',
 		];
 		$params->paramNamesLowercase = array_map('strtolower', $params->paramNamesCamelcase);
 		$params->paramNamesBooleans  = [
 			'scalephotos', 'scrolling', 'inline', 'iframe', 'fastiframe',
 			'photo', 'preloading', 'retinaimage', 'open', 'returnfocus', 'trapfocus', 'reposition',
 			'loop', 'slideshow', 'slideshowauto', 'overlayclose', 'closebutton', 'esckey', 'arrowkey', 'fixed',
+			'overlay',
 		];
 
 		$params->booleans = [
 			'openOnce', 'inline', 'iframe', 'fullpage',
 			'auto_titles',
+			'scalephotos',
+			'retinaimage', 'retinaurl',
+			'overlay',
 		];
 
 		self::$params = $params;
 
 		return self::$params;
+	}
+
+	public static function getSettings()
+	{
+		$params = self::get();
+
+		$settings = [];
+
+		foreach ($params as $key => $value)
+		{
+			$key = str_replace('_', '-', $key);
+
+			$settings[$key] = $value;
+		}
+
+		return (object) $settings;
 	}
 
 	public static function getTags($only_start_tags = false)

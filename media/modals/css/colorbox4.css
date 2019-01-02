@@ -1,53 +1,78 @@
+/**
+ * @package         Modals
+ * @version         11.1.3
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://www.regularlabs.com
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ */
+/**
+ * @package         Modals
+ * @version         11.1.3
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://www.regularlabs.com
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ */
 /*
- * ColorBox Core Style:
+ * Core Style:
  * The following CSS is consistent between example themes and should not be altered.
  */
-#colorbox,
-#cboxOverlay,
-#cboxWrapper {
+#rl_modals,
+#rl_modals_overlay,
+#rl_modals_wrapper {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 9999;
   overflow: hidden;
 }
-#cboxWrapper {
+#rl_modals_wrapper {
   max-width: none;
 }
-#cboxOverlay {
+#rl_modals_overlay {
   position: fixed;
   width: 100%;
   height: 100%;
 }
-#cboxMiddleLeft,
-#cboxBottomLeft {
+#rl_modals_middle_left,
+#rl_modals_bottom_left {
   clear: left;
 }
-#cboxContent {
+#rl_modals_content {
   position: relative;
 }
-#cboxLoadedContent {
+#rl_modals_loaded_content {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
-#cboxTitle {
+#rl_modals_title {
   margin: 0;
 }
-#cboxLoadingOverlay,
-#cboxLoadingGraphic {
+#rl_modals_loading_overlay,
+#rl_modals_loading_graphic {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
 }
-#cboxPrevious,
-#cboxNext,
-#cboxClose,
-#cboxSlideshow {
+#rl_modals_previous,
+#rl_modals_next,
+#rl_modals_close,
+#rl_modals_slideshow {
   cursor: pointer;
 }
-.cboxPhoto {
+#rl_modals.no_navigation #rl_modals_previous,
+#rl_modals.no_navigation #rl_modals_next,
+#rl_modals.no_navigation #rl_modals_close,
+#rl_modals.no_navigation #rl_modals_slideshow,
+#rl_modals.no_navigation #rl_modals_current {
+  display: none !important;
+}
+.rl_modals_photo {
   float: left;
   margin: auto;
   border: 0;
@@ -55,7 +80,7 @@
   max-width: none;
   -ms-interpolation-mode: bicubic;
 }
-.cboxIframe {
+.rl_modals_iframe {
   width: 100%;
   height: 100%;
   display: block;
@@ -63,103 +88,98 @@
   padding: 0;
   margin: 0;
 }
-#colorbox,
-#cboxContent,
-#cboxLoadedContent {
+#rl_modals,
+#rl_modals_content,
+#rl_modals_loaded_content {
   box-sizing: content-box;
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-#cboxTitle .modals_description {
-  font-size: .7em;
+#rl_modals_title .modals_description {
+  font-size: 0.7em;
   font-weight: normal;
 }
 .modal_link_hidden {
   display: none !important;
 }
-/*
-    User Style:
-    Change the following styles to modify the appearance of Colorbox.  They are
-    ordered & tabbed in a way that represents the nesting of the generated HTML.
-*/
-#cboxOverlay {
-  background: #fff;
+#rl_modals_overlay {
+  background: #ffffff;
 }
-#colorbox {
+#rl_modals {
   outline: 0;
 }
-#cboxTopLeft {
+#rl_modals_top_left {
   width: 25px;
   height: 25px;
   background: url(../images/colorbox4/border1.png) no-repeat 0 0;
 }
-#cboxTopCenter {
+#rl_modals_top_center {
   height: 25px;
   background: url(../images/colorbox4/border1.png) repeat-x 0 -50px;
 }
-#cboxTopRight {
+#rl_modals_top_right {
   width: 25px;
   height: 25px;
   background: url(../images/colorbox4/border1.png) no-repeat -25px 0;
 }
-#cboxBottomLeft {
+#rl_modals_bottom_left {
   width: 25px;
   height: 25px;
   background: url(../images/colorbox4/border1.png) no-repeat 0 -25px;
 }
-#cboxBottomCenter {
+#rl_modals_bottom_center {
   height: 25px;
   background: url(../images/colorbox4/border1.png) repeat-x 0 -75px;
 }
-#cboxBottomRight {
+#rl_modals_bottom_right {
   width: 25px;
   height: 25px;
   background: url(../images/colorbox4/border1.png) no-repeat -25px -25px;
 }
-#cboxMiddleLeft {
+#rl_modals_middle_left {
   width: 25px;
   background: url(../images/colorbox4/border2.png) repeat-y 0 0;
 }
-#cboxMiddleRight {
+#rl_modals_middle_right {
   width: 25px;
   background: url(../images/colorbox4/border2.png) repeat-y -25px 0;
 }
-#cboxContent {
-  background: #fff;
+#rl_modals_content {
+  background: #ffffff;
   overflow: hidden;
 }
-.cboxIframe {
-  background: #fff;
+.rl_modals_iframe {
+  background: #ffffff;
 }
-#cboxError {
+#rl_modals_error {
   padding: 50px;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
 }
-#cboxLoadedContent {
+#rl_modals_loaded_content {
   margin-bottom: 20px;
 }
-#cboxTitle {
+#rl_modals_title {
   position: absolute;
   bottom: 0px;
   left: 0;
   text-align: center;
   width: 100%;
-  color: #999;
+  color: #999999;
 }
-#cboxCurrent {
+#rl_modals_current {
   position: absolute;
   bottom: 0px;
   left: 100px;
-  color: #999;
+  color: #999999;
 }
-#cboxLoadingOverlay {
-  background: #fff url(../images/colorbox4/loading.gif) no-repeat 5px 5px;
+#rl_modals_loading_overlay {
+  background: #ffffff url(../images/colorbox4/loading.gif) no-repeat 5px 5px;
 }
 /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
-#cboxPrevious,
-#cboxNext,
-#cboxSlideshow,
-#cboxClose {
+#rl_modals_previous,
+#rl_modals_next,
+#rl_modals_slideshow,
+#rl_modals_close {
   border: 0;
   padding: 0;
   margin: 0;
@@ -168,49 +188,34 @@
   background: none;
 }
 /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
-#cboxPrevious:active,
-#cboxNext:active,
-#cboxSlideshow:active,
-#cboxClose:active {
+#rl_modals_previous:active,
+#rl_modals_next:active,
+#rl_modals_slideshow:active,
+#rl_modals_close:active {
   outline: 0;
 }
-#cboxSlideshow {
+#rl_modals_slideshow {
   position: absolute;
   bottom: 0px;
   right: 42px;
-  color: #444;
+  color: #444444;
 }
-#cboxPrevious {
+#rl_modals_previous {
   position: absolute;
   bottom: 0px;
   left: 0;
-  color: #444;
+  color: #444444;
 }
-#cboxNext {
+#rl_modals_next {
   position: absolute;
   bottom: 0px;
   left: 63px;
-  color: #444;
+  color: #444444;
 }
-#cboxClose {
+#rl_modals_close {
   position: absolute;
   bottom: 0;
   right: 0;
   display: block;
-  color: #444;
-}
-/*
-  The following fixes a problem where IE7 and IE8 replace a PNG's alpha transparency with a black fill
-  when an alpha filter (opacity change) is set on the element or ancestor element.  This style is not applied to or needed in IE9.
-  See: http://jacklmoore.com/notes/ie-transparency-problems/
-*/
-.cboxIE #cboxTopLeft,
-.cboxIE #cboxTopCenter,
-.cboxIE #cboxTopRight,
-.cboxIE #cboxBottomLeft,
-.cboxIE #cboxBottomCenter,
-.cboxIE #cboxBottomRight,
-.cboxIE #cboxMiddleLeft,
-.cboxIE #cboxMiddleRight {
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00FFFFFF', endColorstr='#00FFFFFF');
+  color: #444444;
 }

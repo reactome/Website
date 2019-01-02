@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,8 +13,8 @@ namespace RegularLabs\Library;
 
 defined('_JEXEC') or die;
 
-use JFactory;
-use JHttpFactory;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Http\HttpFactory as JHttpFactory;
 use Joomla\Registry\Registry;
 use RuntimeException;
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -10,6 +10,10 @@
  */
 
 defined('_JEXEC') or die;
+
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
+use Joomla\CMS\Language\Text as JText;
+use RegularLabs\Library\RegEx as RL_RegEx;
 
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
@@ -23,8 +27,6 @@ require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 require_once JPATH_LIBRARIES . '/joomla/form/fields/list.php';
 
-use RegularLabs\Library\RegEx as RL_RegEx;
-
 class JFormFieldRL_FileList extends JFormFieldList
 {
 	public  $type   = 'FileList';
@@ -32,8 +34,6 @@ class JFormFieldRL_FileList extends JFormFieldList
 
 	protected function getInput()
 	{
-		$this->params = $this->element->attributes();
-
 		return parent::getInput();
 	}
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -61,7 +61,7 @@ class Html
 	 *
 	 * @return array
 	 */
-	public static function getBody($html)
+	public static function getBody($html, $include_body_tag = true)
 	{
 		if (strpos($html, '<body') === false || strpos($html, '</body>') === false)
 		{
@@ -77,6 +77,15 @@ class Html
 		$body_split = explode('</body>', $body);
 		$post       = array_pop($body_split);
 		$body       = implode('</body>', $body_split) . '</body>';
+
+		if ( ! $include_body_tag)
+		{
+			RegEx::match('^(<body[^>]*>\s*)(.*?)(\s*</body>)$', $body, $match);
+
+			$pre  = $pre . $match[1];
+			$body = $match[2];
+			$post = $match[3] . $post;
+		}
 
 		return [$pre, $body, $post];
 	}
@@ -289,25 +298,27 @@ class Html
 
 		$doc->substituteEntities = false;
 
-		// Add temporary surrounding div
-		$string = '<div>' . $string . '</div>';
+		list($pre, $body, $post) = Html::getBody($string, false);
 
-		@$doc->loadHTML($string);
-		$string = $doc->saveHTML();
+		// Add temporary surrounding div
+		$body = '<div>' . $body . '</div>';
+
+		@$doc->loadHTML($body);
+		$body = $doc->saveHTML();
 
 		// Remove html document structures
-		$string = RegEx::replace('^<[^>]*>(.*?)<html>.*?(?:<head>(.*)</head>.*?)?<body>(.*)</body>.*?$', '\1\2\3', $string);
+		$body = RegEx::replace('^<[^>]*>(.*?)<html>.*?(?:<head>(.*)</head>.*?)?<body>(.*)</body>.*?$', '\1\2\3', $body);
 
 		// Remove temporary surrounding div
-		$string = RegEx::replace('^\s*<div>(.*)</div>\s*$', '\1', $string);
+		$body = RegEx::replace('^\s*<div>(.*)</div>\s*$', '\1', $body);
 
 		// Remove leading/trailing empty paragraph
-		$string = RegEx::replace('(^\s*<div>\s*</div>|<div>\s*</div>\s*$)', '', $string);
+		$body = RegEx::replace('(^\s*<div>\s*</div>|<div>\s*</div>\s*$)', '', $body);
 
 		// Remove leading/trailing empty paragraph
-		$string = RegEx::replace('(^\s*<p(?: [^>]*)?>\s*</p>|<p(?: [^>]*)?>\s*</p>\s*$)', '', $string);
+		$body = RegEx::replace('(^\s*<p(?: [^>]*)?>\s*</p>|<p(?: [^>]*)?>\s*</p>\s*$)', '', $body);
 
-		return $string;
+		return $pre . $body . $post;
 	}
 
 	/**

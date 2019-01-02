@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,6 +13,7 @@ namespace RegularLabs\Plugin\System\Modals;
 
 defined('_JEXEC') or die;
 
+use RegularLabs\Library\File as RL_File;
 use RegularLabs\Library\RegEx as RL_RegEx;
 use RegularLabs\Library\StringHelper as RL_String;
 

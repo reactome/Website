@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,11 +13,12 @@ namespace RegularLabs\Plugin\System\Modals;
 
 defined('_JEXEC') or die;
 
-use JFactory;
-use JHtml;
-use JRoute;
-use JText;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
+use Joomla\CMS\Language\Text as JText;
+use Joomla\CMS\Router\Route as JRoute;
 use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\RegEx as RL_RegEx;
 
 class Document
 {
@@ -61,21 +62,19 @@ class Document
 		RL_Document::scriptOptions($options, 'Modals');
 
 		JHtml::script('modals/jquery.touchSwipe.min.js', false, true);
-		JHtml::script('modals/jquery.colorbox-min.js', false, true);
-		RL_Document::script('modals/script.min.js', ($params->media_versioning ? '9.13.1' : ''));
+		RL_Document::script('modals/jquery.modals.min.js', ($params->media_versioning ? '11.1.3' : ''));
+		RL_Document::script('modals/script.min.js', ($params->media_versioning ? '11.1.3' : ''));
 
 		if ($params->load_stylesheet)
 		{
-			RL_Document::style('modals/' . $params->style . '.min.css');
+			RL_Document::style('modals/' . $params->style . '.min.css', ($params->media_versioning ? '11.1.3' : ''));
 		}
 	}
 
 	public static function removeHeadStuff(&$html)
 	{
-		$params = Params::get();
-
 		// Don't remove if modals class is found
-		if (strpos($html, $params->class) !== false)
+		if (RL_RegEx::match('class="[^"]*modal_link', $html))
 		{
 			return;
 		}
@@ -192,6 +191,9 @@ class Document
 			'initialHeight'  => 450,
 			'maxWidth'       => false,
 			'maxHeight'      => false,
+			'retinaImage'    => false,
+			'retinaUrl'      => false,
+			'retinaSuffix'   => '@2x.$1',
 		];
 
 		$defaults = [];

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -476,8 +476,14 @@ class PluginTag
 	 */
 	public static function getRegexLeadingHtml($group_id = '')
 	{
-		$group          = 'leading_block_element_' . $group_id;
-		$html_tag_group = 'html_tag_' . $group_id;
+		$group          = 'leading_block_element';
+		$html_tag_group = 'html_tag';
+
+		if ($group_id)
+		{
+			$group          .= '_' . $group_id;
+			$html_tag_group .= '_' . $group_id;
+		}
 
 		$block_elements = Html::getBlockElements(['div']);
 		$block_element  = '(?<' . $group . '>' . implode('|', $block_elements) . ')';
@@ -501,7 +507,12 @@ class PluginTag
 	 */
 	public static function getRegexTrailingHtml($group_id = '')
 	{
-		$group = 'leading_block_element_' . $group_id;
+		$group = 'leading_block_element';
+
+		if ($group_id)
+		{
+			$group .= '_' . $group_id;
+		}
 
 		// If the grouped name is found, then grab all content till ending html tag is found. Otherwise grab nothing.
 		return '(?(<' . $group . '>)'

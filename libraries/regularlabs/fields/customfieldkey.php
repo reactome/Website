@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,6 +11,9 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Language\Text as JText;
+use RegularLabs\Library\StringHelper as RL_String;
+
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
@@ -18,16 +21,12 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
-use RegularLabs\Library\StringHelper as RL_String;
-
 class JFormFieldRL_CustomFieldKey extends \RegularLabs\Library\Field
 {
 	public $type = 'CustomFieldKey';
 
 	protected function getLabel()
 	{
-		$this->params = $this->element->attributes();
-
 		$label       = $this->get('label') ? $this->get('label') : '';
 		$size        = $this->get('size') ? 'style="width:' . $this->get('size') . 'px"' : '';
 		$class       = 'class="' . ($this->get('class') ? $this->get('class') : 'text_area') . '"';

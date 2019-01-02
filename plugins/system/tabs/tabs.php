@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.4.2
+ * @version         7.5.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,12 +11,12 @@
 
 defined('_JEXEC') or die;
 
+use RegularLabs\Plugin\System\Tabs\Plugin;
+
 // Do not instantiate plugin on install pages
 // to prevent installation/update breaking because of potential breaking changes
-if (
-	in_array(JFactory::getApplication()->input->get('option'), ['com_installer', 'com_regularlabsmanager'])
-	&& JFactory::getApplication()->input->get('action') != ''
-)
+$input = \Joomla\CMS\Factory::getApplication()->input;
+if ($input->get('action') != '' && in_array($input->get('option'), ['com_installer', 'com_regularlabsmanager']))
 {
 	return;
 }
@@ -27,8 +27,6 @@ if ( ! is_file(__DIR__ . '/vendor/autoload.php'))
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
-
-use RegularLabs\Plugin\System\Tabs\Plugin;
 
 /**
  * System Plugin that places a Tabs code block into the text

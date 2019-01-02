@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -200,6 +200,7 @@ class PlgSystemRegularLabsInstallerScriptHelper
 		{
 			foreach ($folders as $folder)
 			{
+				JFactory::getApplication()->enqueueMessage('2. Deleting: ' . $folder, 'notice');
 				JFolder::delete($folder);
 			}
 
@@ -550,14 +551,36 @@ class PlgSystemRegularLabsInstallerScriptHelper
 		}
 	}
 
-	public function fixAssetsRules($rules = '{"core.admin":[],"core.manage":[]}')
+	public function fixAssetsRules()
 	{
-		// replace default rules value {} with the correct initial value
+		$query = $this->db->getQuery(true)
+			->select($this->db->quoteName('rules'))
+			->from('#__assets')
+			->where($this->db->quoteName('title') . ' = ' . $this->db->quote('com_' . $this->extname));
+		$this->db->setQuery($query, 0, 1);
+		$rules = $this->db->loadResult();
+
+		$rules = json_decode($rules);
+
+		if(empty($rules)) {
+			return;
+		}
+
+		foreach($rules as $key => $value) {
+			if(!empty($value)) {
+				continue;
+			}
+
+			unset($rules->$key);
+		}
+
+		$rules = json_encode($rules);
+
+
 		$query = $this->db->getQuery(true)
 			->update($this->db->quoteName('#__assets'))
 			->set($this->db->quoteName('rules') . ' = ' . $this->db->quote($rules))
-			->where($this->db->quoteName('title') . ' = ' . $this->db->quote('com_' . $this->extname))
-			->where($this->db->quoteName('rules') . ' = ' . $this->db->quote('{}'));
+			->where($this->db->quoteName('title') . ' = ' . $this->db->quote('com_' . $this->extname));
 		$this->db->setQuery($query);
 		$this->db->execute();
 	}

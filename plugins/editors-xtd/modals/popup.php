@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,8 +13,7 @@ namespace RegularLabs\Plugin\EditorButton\Modals\Popup;
 
 defined('_JEXEC') or die;
 
-use JFactory;
-use JHtml;
+use Joomla\CMS\Factory as JFactory;
 use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\RegEx as RL_RegEx;
 
@@ -28,8 +27,6 @@ class Popup
 		// Tag character start and end
 		list($tag_start, $tag_end) = explode('.', $this->params->tag_characters);
 
-		JHtml::_('behavior.core');
-
 		$editor = JFactory::getApplication()->input->getString('name', 'text');
 		// Remove any dangerous character to prevent cross site scripting
 		$editor = RL_RegEx::replace('[\'\";\s]', '', $editor);
@@ -41,12 +38,12 @@ class Popup
 		";
 		RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('modals/popup.min.js', '9.13.1');
+		RL_Document::script('modals/popup.min.js', '11.1.3');
 	}
 
 	public function loadStyles()
 	{
-		RL_Document::style('modals/popup.min.css', '9.13.1');
+		RL_Document::style('modals/popup.min.css', '11.1.3');
 	}
 }
 

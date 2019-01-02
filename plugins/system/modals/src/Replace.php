@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,8 @@ namespace RegularLabs\Plugin\System\Modals;
 
 defined('_JEXEC') or die;
 
-use JFactory;
+use Joomla\CMS\Factory as JFactory;
+use RegularLabs\Library\File as RL_File;
 use RegularLabs\Library\Html as RL_Html;
 use RegularLabs\Library\Protect as RL_Protect;
 use RegularLabs\Library\RegEx as RL_RegEx;
@@ -23,11 +24,6 @@ class Replace
 {
 	public static function replaceTags(&$string, $area = 'article', $context = '')
 	{
-		if ($area == 'article')
-		{
-			return false;
-		}
-
 		if ( ! is_string($string) || $string == '')
 		{
 			return false;
@@ -78,7 +74,7 @@ class Replace
 		// Handle content inside the iframed modal
 		if (JFactory::getApplication()->input->getInt('ml', 0) && JFactory::getApplication()->input->getInt('iframe', 0))
 		{
-			self::replaceInsideModal($string);
+			self::replaceInsideModal($string, $area);
 
 			Clean::cleanLeftoverJunk($string);
 
@@ -101,7 +97,7 @@ class Replace
 		);
 
 		// tag syntax
-		self::replaceTagSyntax($string);
+		self::replaceTagSyntax($string, $area);
 
 		$string = $pre_string . $string . $post_string;
 
@@ -114,9 +110,9 @@ class Replace
 	}
 
 	// add ml to internal links
-	private static function replaceInsideModal(&$string)
+	private static function replaceInsideModal(&$string, $area = '')
 	{
-		self::replaceTagSyntax($string);
+		self::replaceTagSyntax($string, $area);
 
 		$regex = Params::getRegex('link');
 
@@ -126,6 +122,8 @@ class Replace
 		{
 			return;
 		}
+
+		$params = Params::get();
 
 		foreach ($matches as $match)
 		{
@@ -139,7 +137,7 @@ class Replace
 			}
 
 			// ignore if link is external or an image
-			if (File::isExternal($attributes->href) || File::isMedia($attributes->href))
+			if (RL_File::isExternal($attributes->href) || RL_File::isMedia($attributes->href, $params->mediafiles))
 			{
 				continue;
 			}
@@ -179,7 +177,7 @@ class Replace
 		}
 	}
 
-	private static function replaceTagSyntax(&$string)
+	private static function replaceTagSyntax(&$string, $area = '')
 	{
 		$regex = Params::getRegex();
 
@@ -266,9 +264,11 @@ class Replace
 			return;
 		}
 
+		$params = Params::get();
+
 		$data       = [];
-		$isexternal = File::isExternal($attributes->href);
-		$ismedia    = File::isMedia($attributes->href);
+		$isexternal = RL_File::isExternal($attributes->href);
+		$ismedia    = RL_File::isMedia($attributes->href, $params->mediafiles);
 		$iframe     = File::isIframe($attributes->href, $data);
 
 		// Find data-modal attributes set in html tag
@@ -305,53 +305,6 @@ class Replace
 		self::replaceOnce($match[0], $link, $string);
 	}
 
-
-	public static function setImageAttributes(&$data, &$image_attributes, $image)
-	{
-		$params = Params::get();
-
-		$image_texts = Image::getImageTexts((array) $image_attributes, $image);
-
-		if ( ! $image_texts->title && $params->auto_titles)
-		{
-			$image_texts->title = File::getTitle($image->image, $params->title_case);
-		}
-		if ( ! $image_texts->thumbnail_title)
-		{
-			$image_texts->thumbnail_title = $image_texts->title;
-		}
-
-		if (isset($image_attributes->{'data-title'}))
-		{
-			$data['title'] = $image_attributes->{'data-title'};
-		}
-
-		if (isset($image_attributes->{'data-description'}))
-		{
-			$data['description'] = $image_attributes->{'data-description'};
-		}
-
-		if ($params->images_use_title_attribute && isset($image_attributes->title))
-		{
-			$key        = $params->images_use_title_attribute == 'description' ? 'description' : 'title';
-			$data[$key] = isset($data[$key]) ? $data[$key] : $image_attributes->title;
-		}
-
-		if ($params->images_use_alt_attribute && isset($image_attributes->alt))
-		{
-			$key        = $params->images_use_alt_attribute == 'description' ? 'description' : 'title';
-			$data[$key] = isset($data[$key]) ? $data[$key] : $image_attributes->alt;
-		}
-
-		$data['title']       = isset($data['title']) ? $data['title'] : $image_texts->title;
-		$data['alt']         = isset($data['title']) ? $data['title'] : $image_texts->alt;
-		$data['description'] = isset($data['description']) ? $data['description'] : $image_texts->description;
-
-		$image_attributes->title = $image_texts->thumbnail_title;
-		$image_attributes->alt   = $image_texts->thumbnail_alt;
-	}
-
-	/* <<< [PRO] <<< */
 
 	private static function replaceOnce($search, $replace, &$string, $extra = '')
 	{

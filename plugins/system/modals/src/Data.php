@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,7 @@ namespace RegularLabs\Plugin\System\Modals;
 
 defined('_JEXEC') or die;
 
-use JFactory;
+use Joomla\CMS\Factory as JFactory;
 use RegularLabs\Library\RegEx as RL_RegEx;
 use RegularLabs\Library\Uri as RL_Uri;
 
@@ -99,6 +99,7 @@ class Data
 			{
 				continue;
 			}
+
 			$data[] = $str;
 		}
 
@@ -137,9 +138,9 @@ class Data
 		}
 
 
-		if (($key == 'width' || $key == 'height') && strpos($val, '%') === false)
+		if (($key == 'width' || $key == 'height'))
 		{
-			// set param to innerWidth/innerHeight if value of width/height is a percentage
+			// set param to innerWidth/innerHeight if width/height is set
 			return 'data-modal-inner-' . $key . '="' . $val . '"';
 		}
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,7 @@ namespace RegularLabs\Library\Condition;
 
 defined('_JEXEC') or die;
 
-use JFactory;
+use Joomla\CMS\Factory as JFactory;
 
 /**
  * Class K2Category
@@ -88,6 +88,11 @@ class K2Category
 		if ($this->article && isset($this->article->catid))
 		{
 			return $this->article->catid;
+		}
+
+		if ( ! $this->request->id)
+		{
+			return $this->getCategoryID();
 		}
 
 		$query = $this->db->getQuery(true)
