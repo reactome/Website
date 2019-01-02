@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,6 +11,11 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
+use Joomla\CMS\Language\Text as JText;
+use RegularLabs\Library\Form as RL_Form;
+use RegularLabs\Library\RegEx as RL_RegEx;
+
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
@@ -18,17 +23,12 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
-use RegularLabs\Library\Form as RL_Form;
-use RegularLabs\Library\RegEx as RL_RegEx;
-
 class JFormFieldRL_Modules extends \RegularLabs\Library\Field
 {
 	public $type = 'Modules';
 
 	protected function getInput()
 	{
-		$this->params = $this->element->attributes();
-
 		JHtml::_('behavior.modal', 'a.modal');
 
 		$size = $this->get('size') ? 'style="width:' . $this->get('size') . 'px"' : '';

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,8 +14,9 @@ namespace RegularLabs\Plugin\System\Modals;
 defined('_JEXEC') or die;
 
 use ContentHelperRoute;
-use JFactory;
-use JText;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Language\Text as JText;
+use RegularLabs\Library\File as RL_File;
 use RegularLabs\Library\PluginTag as RL_PluginTag;
 use RegularLabs\Library\RegEx as RL_RegEx;
 use RegularLabs\Library\StringHelper as RL_String;
@@ -25,30 +26,76 @@ class Link
 	public static function build($attributes, $data, $content = '')
 	{
 
+		$params = Params::get();
+
+		if (isset($data['image']))
+		{
+			$attributes->href = $data['image'];
+			unset($data['image']);
+
+			if ( ! $content)
+			{
+				$image = new Image($attributes->href, $data);
+
+				$content = $image->thumbnail->exists()
+					? $image->thumbnail->getHtmlTag()
+					: $image->getHtmlTag();
+
+				$attributes->href = $image->getHref();
+
+				if ( ! isset($attributes->title))
+				{
+					$attributes->title = $image->attributes->title;
+				}
+
+				if ( ! isset($attributes->alt))
+				{
+					$attributes->alt = $image->attributes->alt;
+				}
+
+				if ( ! isset($attributes->{'data-modal-description'}) && isset($image->attributes->description))
+				{
+					$attributes->{'data-modal-description'} = $image->attributes->description;
+				}
+			}
+		}
+
 		self::setVideoUrl($attributes, $data);
 
-		$isexternal = File::isExternal($attributes->href);
-		$ismedia    = File::isMedia($attributes->href);
+		if (empty($attributes->href))
+		{
+			return '';
+		}
+
+		$isexternal = RL_File::isExternal($attributes->href);
+		$ismedia    = RL_File::isMedia($attributes->href, $params->mediafiles);
 		$isvideo    = File::isVideo($attributes->href, $data);
 		$fullpage   = (empty($data['fullpage']) || $isexternal) ? false : (bool) $data['fullpage'];
 		$isiframe   = $fullpage || File::isIframe($attributes->href, $data);
-
-		$params = Params::get();
+		$class      = ! empty($data['classname']) ? [$data['classname']] : [];
 
 		if (isset($attributes->{'data-modal-title'}) && ! isset($data['title']))
 		{
 			$data['title'] = $attributes->{'data-modal-title'};
+			unset($attributes->{'data-modal-title'});
 		}
 
 		if (isset($attributes->title) && ! isset($data['title']))
 		{
 			$data['title'] = $attributes->title;
+			unset($attributes->title);
+		}
+
+		if (isset($attributes->{'data-modal-description'}) && ! isset($data['description']))
+		{
+			$data['description'] = $attributes->{'data-modal-description'};
+			unset($attributes->{'data-modal-description'});
 		}
 
 		if ($ismedia)
 		{
-			$data['classname'] = (isset($data['classname']) ? $data['classname'] . ' ' : '') . 'is_image';
-			$data['image']     = 'true';
+			$class[]       = 'is_image';
+			$data['image'] = 'true';
 
 			if ( ! isset($data['title']))
 			{
@@ -60,6 +107,10 @@ class Link
 				}
 			}
 
+			if ($params->retinaurl && ! $isexternal && ! File::retinaImageExists($attributes->href))
+			{
+				$data['retinaurl'] = 'false';
+			}
 		}
 		unset($data['auto_titles']);
 
@@ -73,8 +124,8 @@ class Link
 
 		if ($isvideo)
 		{
-			$data['classname'] = (isset($data['classname']) ? $data['classname'] . ' ' : '') . 'is_video';
-			$data['video']     = 'true';
+			$class[]       = 'is_video';
+			$data['video'] = 'true';
 		}
 
 		if ($attributes->href && $attributes->href[0] != '#' && ! $isexternal && ! $ismedia)
@@ -85,9 +136,11 @@ class Link
 
 		if (empty($data['title']))
 		{
-			$data['classname'] = (isset($data['classname']) ? $data['classname'] . ' ' : '') . 'no_title';
-			$data['title']     = '';
+			$class[]       = 'no_title';
+			$data['title'] = '';
 		}
+
+		$data['classname'] = implode(' ', $class);
 
 
 		// Add aria label for empty links for accessibility
@@ -159,8 +212,7 @@ class Link
 		$tag = RL_PluginTag::getAttributesFromString($string, 'url', $params->booleans);
 
 		$key_aliases = [
-			'url'     => ['href', 'link', 'image', 'src'],
-			'gallery' => ['galery', 'images'],
+			'url'              => ['href', 'link', 'src'],
 		];
 
 		RL_PluginTag::replaceKeyAliases($tag, $key_aliases);

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,6 +11,11 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
+use Joomla\CMS\Language\Text as JText;
+use Joomla\Registry\Registry;
+
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
@@ -18,16 +23,12 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
-use Joomla\Registry\Registry;
-
 class JFormFieldRL_Templates extends \RegularLabs\Library\Field
 {
 	public $type = 'Templates';
 
 	protected function getInput()
 	{
-		$this->params = $this->element->attributes();
-
 		// fix old '::' separator and change it to '--'
 		$value = json_encode($this->value);
 		$value = str_replace('::', '--', $value);

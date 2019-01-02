@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config addfieldpath="/libraries/regularlabs/fields">
 	<fieldset name="tab_notice">
-		<field name="@toggler_title_empty_a" type="rl_toggler" param="tab_xxx_title" value="" />
-		<field name="@notice_title_empty" type="note" description="TAB_TITLE_EMPTY" />
-		<field name="@toggler_title_empty_b" type="rl_toggler" />
+		<field name="@notice_title_empty" type="note" class="alert alert-warning"
+			   description="TAB_TITLE_EMPTY"
+			   showon="title:" />
 	</fieldset>
 
 	<fieldset name="tab_params">
@@ -18,22 +18,18 @@
 		<field name="class" type="text"
 			   label="RL_CSS_CLASS"
 			   description="RL_CSS_CLASS_DESC" />
-		<field name="@notice_scroll" type="rl_plaintext"
+		<field name="@notice_scroll" type="rl_onlypro"
 			   label="TAB_SCROLL"
-			   description="TAB_SCROLL_DESC"
-			   default="RL_ONLY_AVAILABLE_IN_PRO" />
-		<field name="@notice_access" type="rl_plaintext"
+			   description="TAB_SCROLL_DESC" />
+		<field name="@notice_access" type="rl_onlypro"
 			   label="JFIELD_ACCESS_LABEL"
-			   description="JFIELD_ACCESS_DESC"
-			   default="RL_ONLY_AVAILABLE_IN_PRO" />
-		<field name="@notice_usergroup" type="rl_plaintext"
+			   description="JFIELD_ACCESS_DESC" />
+		<field name="@notice_usergroup" type="rl_onlypro"
 			   label="RL_USER_GROUPS"
-			   description="RL_USER_GROUPS_DESC"
-			   default="RL_ONLY_AVAILABLE_IN_PRO" />
-		<field name="@notice_extra" type="rl_plaintext"
+			   description="RL_USER_GROUPS_DESC" />
+		<field name="@notice_extra" type="rl_onlypro"
 			   label="RL_EXTRA_PARAMETERS"
-			   description="RL_EXTRA_PARAMETERS_DESC"
-			   default="RL_ONLY_AVAILABLE_IN_PRO" />
+			   description="RL_EXTRA_PARAMETERS_DESC" />
 	</fieldset>
 
 	<fieldset name="params">
@@ -70,25 +66,22 @@
 			<option value="center">&lt;span class="icon-reglab-paragraph-center">&lt;/span></option>
 			<option value="justify">&lt;span class="icon-reglab-paragraph-justify">&lt;/span></option>
 		</field>
-		<field name="@notice_positioning" type="rl_plaintext"
+		<field name="@notice_positioning" type="rl_onlypro"
 			   label="TAB_POSITIONING_HANDLES"
-			   description="TAB_POSITIONING_HANDLES_DESC"
-			   default="RL_ONLY_AVAILABLE_IN_PRO" />
+			   description="TAB_POSITIONING_HANDLES_DESC" />
 		
-		<field name="@notice_slideshow" type="rl_plaintext"
+		<field name="@notice_slideshow" type="rl_onlypro"
 			   label="TAB_SLIDESHOW"
-			   description="SLIDESHOW_DESC"
-			   default="RL_ONLY_AVAILABLE_IN_PRO" />
+			   description="SLIDESHOW_DESC" />
 		<field name="nested" type="radio" class="btn-group" default="0"
 			   label="TAB_NESTED_SET"
 			   description="TAB_NESTED_SET_DESC">
 			<option value="">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="@toggler_nested_a" type="rl_toggler" param="tab_1_nested" value="1" />
 		<field name="nested_id" type="text" class="btn-group" default="nested"
 			   label="TAB_NESTED_ID"
-			   description="TAB_NESTED_ID_DESC" />
-		<field name="@toggler_nested_b" type="rl_toggler" />
+			   description="TAB_NESTED_ID_DESC"
+			   showon="nested:1" />
 	</fieldset>
 </config>

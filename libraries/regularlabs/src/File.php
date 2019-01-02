@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,14 +13,14 @@ namespace RegularLabs\Library;
 
 defined('_JEXEC') or die;
 
-use JClientFtp;
-use JClientHelper;
-use JFactory;
 use JFilesystemWrapperPath;
 use JFolder;
-use JLog;
-use JText;
-use JUri;
+use Joomla\CMS\Client\ClientHelper as JClientHelper;
+use Joomla\CMS\Client\FtpClient as JFtpClient;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Language\Text as JText;
+use Joomla\CMS\Log\Log as JLog;
+use Joomla\CMS\Uri\Uri as JUri;
 
 /**
  * Class File
@@ -168,7 +168,7 @@ class File
 		if ($FTPOptions['enabled'] == 1)
 		{
 			// Connect the FTP client
-			$ftp = JClientFtp::getInstance($FTPOptions['host'], $FTPOptions['port'], [], $FTPOptions['user'], $FTPOptions['pass']);
+			$ftp = JFtpClient::getInstance($FTPOptions['host'], $FTPOptions['port'], [], $FTPOptions['user'], $FTPOptions['pass']);
 		}
 
 		foreach ($files as $file)
@@ -282,7 +282,7 @@ class File
 		if ($FTPOptions['enabled'] == 1)
 		{
 			// Connect the FTP client
-			$ftp = JClientFtp::getInstance($FTPOptions['host'], $FTPOptions['port'], [], $FTPOptions['user'], $FTPOptions['pass']);
+			$ftp = JFtpClient::getInstance($FTPOptions['host'], $FTPOptions['port'], [], $FTPOptions['user'], $FTPOptions['pass']);
 
 			// Translate path and delete
 			$path = $pathObject->clean(str_replace(JPATH_ROOT, $FTPOptions['root'], $path), '/');
@@ -299,6 +299,11 @@ class File
 		}
 
 		return true;
+	}
+
+	public static function trimFolder($folder)
+	{
+		return trim(str_replace(['\\', '//'], '/', $folder), '/');
 	}
 
 	public static function isInternal($url)
@@ -319,34 +324,54 @@ class File
 		return ! (strpos(RegEx::replace('^.*?://', '', $url), $hostname) === 0);
 	}
 
-	public static function getDirname($url)
+
+	// some/url/to/a/file.ext
+	// > some/url/to/a
+	public static function getDirName($url)
 	{
 		return rtrim(dirname($url), '/');
 	}
 
-	public static function getBaseName($url)
+	// some/url/to/a/file.ext
+	// > file.ext
+	public static function getBaseName($url, $lowercase = false)
 	{
 		$basename = ltrim(basename($url), '/');
 
-		$ext = explode('?', $basename);
+		$parts = explode('?', $basename);
 
-		return strtolower($ext[0]);
-	}
+		$basename = $parts[0];
 
-	public static function getFilename($url)
-	{
-		$info = pathinfo($url);
-		if ( ! isset($info['filename']))
+		if ($lowercase)
 		{
-			return $url;
+			$basename = strtolower($basename);
 		}
 
-		return $info['filename'];
+		return $basename;
 	}
 
+	// some/url/to/a/file.ext
+	// > file
+	public static function getFileName($url, $lowercase = false)
+	{
+		$info = pathinfo($url);
+
+		$filename = isset($info['filename']) ? $info['filename'] : $url;
+
+		if ($lowercase)
+		{
+			$filename = strtolower($filename);
+		}
+
+		return $filename;
+	}
+
+	// some/url/to/a/file.ext
+	// > ext
 	public static function getExtension($url)
 	{
 		$info = pathinfo($url);
+
 		if ( ! isset($info['extension']))
 		{
 			return '';
@@ -365,6 +390,14 @@ class File
 	public static function isVideo($url)
 	{
 		return self::isMedia($url, self::getFileTypes('videos'));
+	}
+
+	public static function isExternalVideo($url)
+	{
+		return (strpos($url, 'youtu.be') !== false
+			|| strpos($url, 'youtube.com') !== false
+			|| strpos($url, 'vimeo.com') !== false
+		);
 	}
 
 	public static function isDocument($url)

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,8 +14,8 @@ namespace RegularLabs\Library\Condition;
 defined('_JEXEC') or die;
 
 use ContentsubmitModelArticle;
-use JFactory;
-use JTable;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Table\Table as JTable;
 
 /**
  * Class ContentCategory

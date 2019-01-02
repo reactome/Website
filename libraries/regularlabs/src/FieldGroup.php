@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,8 +13,8 @@ namespace RegularLabs\Library;
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Language\Text as JText;
 use Joomla\Registry\Registry;
-use JText;
 
 class FieldGroup
 	extends Field

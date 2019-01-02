@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -10,6 +10,18 @@
  */
 
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Plugin\CMSPlugin as JPlugin;
+use Joomla\CMS\Uri\Uri as JUri;
+use Joomla\Registry\Registry;
+use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\Parameters as RL_Parameters;
+use RegularLabs\Library\Uri as RL_Uri;
+use RegularLabs\Plugin\System\RegularLabs\AdminMenu as RL_AdminMenu;
+use RegularLabs\Plugin\System\RegularLabs\DownloadKey as RL_DownloadKey;
+use RegularLabs\Plugin\System\RegularLabs\QuickPage as RL_QuickPage;
+use RegularLabs\Plugin\System\RegularLabs\SearchHelper as RL_SearchHelper;
 
 if ( ! is_file(__DIR__ . '/vendor/autoload.php'))
 {
@@ -22,15 +34,6 @@ if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 }
-
-use Joomla\Registry\Registry;
-use RegularLabs\Library\Document as RL_Document;
-use RegularLabs\Library\Parameters as RL_Parameters;
-use RegularLabs\Library\Uri as RL_Uri;
-use RegularLabs\Plugin\System\RegularLabs\AdminMenu as RL_AdminMenu;
-use RegularLabs\Plugin\System\RegularLabs\DownloadKey as RL_DownloadKey;
-use RegularLabs\Plugin\System\RegularLabs\QuickPage as RL_QuickPage;
-use RegularLabs\Plugin\System\RegularLabs\SearchHelper as RL_SearchHelper;
 
 JFactory::getLanguage()->load('plg_system_regularlabs', __DIR__);
 
@@ -62,15 +65,13 @@ class PlgSystemRegularLabs extends JPlugin
 			return;
 		}
 
-		if ( ! RL_Document::isAdmin() || ! RL_Document::isHtml()
+		if ( ! RL_Document::isAdmin(true) || ! RL_Document::isHtml()
 		)
 		{
 			return;
 		}
 
-		JHtml::_('jquery.framework');
-
-		RL_Document::script('regularlabs/script.min.js');
+		RL_Document::loadMainDependencies();
 	}
 
 	public function onAfterRender()
@@ -80,7 +81,7 @@ class PlgSystemRegularLabs extends JPlugin
 			return;
 		}
 
-		if ( ! RL_Document::isAdmin() || ! RL_Document::isHtml()
+		if ( ! RL_Document::isAdmin(true) || ! RL_Document::isHtml()
 		)
 		{
 			return;

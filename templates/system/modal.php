@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,10 +11,11 @@
 
 defined('_JEXEC') or die;
 
-require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
-
+use Joomla\CMS\Factory as JFactory;
 use RegularLabs\Library\Parameters as RL_Parameters;
 use RegularLabs\Library\RegEx as RL_RegEx;
+
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 ?>
 <?php if (JFactory::getApplication()->input->get('iframe')) : ?>

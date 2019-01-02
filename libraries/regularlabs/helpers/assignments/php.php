@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,6 +12,9 @@
 /* @DEPRECATED */
 
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel as JModel;
 
 if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
@@ -116,7 +119,7 @@ class RLAssignmentsPHP extends RLAssignment
 			require_once JPATH_SITE . '/components/com_content/models/article.php';
 		}
 
-		$model = JModelLegacy::getInstance('article', 'contentModel');
+		$model = JModel::getInstance('article', 'contentModel');
 
 		if ( ! method_exists($model, 'getItem'))
 		{

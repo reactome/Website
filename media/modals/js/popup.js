@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -137,7 +137,7 @@ var RegularLabsModalsPopup = null;
 					return this.getAttributesDefault('url', 'Please enter a URL', true);
 
 				case 'image':
-					return this.getAttributesDefault('image', 'Please select an image', false, 'url');
+					return this.getAttributesImage();
 
 
 				default:

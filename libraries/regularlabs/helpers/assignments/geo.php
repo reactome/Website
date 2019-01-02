@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,6 +12,8 @@
 /* @DEPRECATED */
 
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Log\Log as JLog;
 
 if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,57 +13,12 @@ namespace RegularLabs\Plugin\System\Modals;
 
 defined('_JEXEC') or die;
 
-use RegularLabs\Library\ArrayHelper as RL_Array;
+use RegularLabs\Library\File as RL_File;
 use RegularLabs\Library\RegEx as RL_RegEx;
 use RegularLabs\Library\StringHelper as RL_String;
 
 class File
 {
-	public static function isExternal($url)
-	{
-		if (strpos($url, '://') === false)
-		{
-			return false;
-		}
-
-		// hostname: give preference to SERVER_NAME, because this includes subdomains
-		$hostname = ($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : $_SERVER['HTTP_HOST'];
-
-		return ! (strpos(RL_RegEx::replace('^.*?://', '', $url), $hostname) === 0);
-	}
-
-	public static function isMedia($url, $filetypes = [], $ignore = false)
-	{
-		$filetype = self::getFiletype($url);
-
-		if ( ! $filetype)
-		{
-			return false;
-		}
-
-		if (empty($filetypes))
-		{
-			$params = Params::get();
-
-			$filetypes = $params->mediafiles;
-			$ignore    = false;
-		}
-
-		if ( ! $filetypes)
-		{
-			return false;
-		}
-
-		if (strpos($filetypes[0], ',') !== false)
-		{
-			$filetypes = RL_Array::toArray($filetypes[0]);
-		}
-
-		$pass = in_array($filetype, $filetypes);
-
-		return $ignore ? ! $pass : $pass;
-	}
-
 	public static function isVideo($url, $data)
 	{
 		if (isset($data['video']) && $data['video'] == 'true')
@@ -71,37 +26,7 @@ class File
 			return true;
 		}
 
-		// Return true for external video urls
-		if (strpos($url, 'youtu.be') !== false
-			|| strpos($url, 'youtube.com') !== false
-			|| strpos($url, 'vimeo.com') !== false
-		)
-		{
-			return true;
-		}
-
-		$filetype = self::getFiletype($url);
-
-		$filetypes = [
-			'3g2',
-			'3gp',
-			'avi',
-			'divx',
-			'f4v',
-			'flv',
-			'm4v',
-			'mov',
-			'mp4',
-			'mpe',
-			'mpeg',
-			'mpg',
-			'ogv',
-			'swf',
-			'webm',
-			'wmv',
-		];
-
-		return in_array($filetype, $filetypes);
+		return RL_File::isExternalVideo($url) || RL_File::isVideo($url);
 	}
 
 	public static function isIframe($url, &$data)
@@ -113,12 +38,12 @@ class File
 
 		$params = Params::get();
 
-		if (self::isMedia($url, $params->iframefiles))
+		if (RL_File::isMedia($url, $params->iframefiles))
 		{
 			return true;
 		}
 
-		if (self::isMedia($url))
+		if (RL_File::isMedia($url, $params->mediafiles))
 		{
 			unset($data['iframe']);
 
@@ -137,83 +62,66 @@ class File
 	{
 		$params = Params::get();
 
-		$retina_file = RL_RegEx::replace('\.([a-z0-9]+)$', $params->retinasuffix, $url);
+		$suffix = str_replace('.$1', '.\1', $params->retinasuffix);
 
-		return is_file(JPATH_SITE . '/' . $retina_file);
+		$retina_file = RL_RegEx::replace('(\.[a-z0-9]+)$', $suffix, $url);
+
+		return file_exists(JPATH_SITE . '/' . $retina_file);
 	}
 
-	public static function getFiletype($url)
+	public static function getCleanFileName($url)
 	{
-		$info = pathinfo($url);
-		if ( ! isset($info['extension']))
-		{
-			return '';
-		}
+		$params = Params::get();
 
-		$ext = explode('?', $info['extension']);
+		$title = RL_File::getFileName($url);
 
-		return strtolower($ext[0]);
+		// Remove trailing numbers and dimensions
+		$title = RL_RegEx::replace('[_-][0-9]+(x[0-9]+)?$', '', $title);
+
+
+		return $title;
 	}
 
-	public static function getFileName($url)
+	public static function getCleanTitle($url)
 	{
-		return trim(basename($url));
-	}
+		$title = self::getCleanFileName($url);
 
-	public static function getFileTitle($url)
-	{
-		$info = pathinfo($url);
-
-		return isset($info['filename']) ? $info['filename'] : '';
-	}
-
-	public static function getFilePath($url)
-	{
-		return trim(dirname($url), '/');
+		// Replace dashes with spaces
+		return str_replace(['-', '_'], ' ', $title);
 	}
 
 	public static function getTitle($url, $case)
 	{
-		$file_name = basename($url);
-
-		$title = explode('.', $file_name);
-		$title = $title[0];
-		$title = RL_RegEx::replace('[_-]([0-9]+|[a-z])$', '', $title);
-		$title = str_replace(['-', '_'], ' ', $title);
-
 		$params = Params::get();
+
+		$title = self::getCleanTitle($url);
 
 		switch ($case)
 		{
 			case 'lowercase':
-				$title = RL_String::strtolower($title);
-				break;
+				return RL_String::strtolower($title);
+
 			case 'uppercase':
-				$title = RL_String::strtoupper($title);
-				break;
+				return RL_String::strtoupper($title);
+
 			case 'uppercasefirst':
-				$title = RL_String::strtoupper(RL_String::substr($title, 0, 1))
+				return RL_String::strtoupper(RL_String::substr($title, 0, 1))
 					. RL_String::strtolower(RL_String::substr($title, 1));
-				break;
+
 			case 'titlecase':
-				$title = function_exists('mb_convert_case')
+				return function_exists('mb_convert_case')
 					? mb_convert_case(RL_String::strtolower($title), MB_CASE_TITLE)
 					: ucwords(strtolower($title));
-				break;
+
 			case 'titlecase_smart':
 				$title           = function_exists('mb_convert_case')
 					? mb_convert_case(RL_String::strtolower($title), MB_CASE_TITLE)
 					: ucwords(strtolower($title));
 				$lowercase_words = explode(',', ' ' . str_replace(',', ' , ', RL_String::strtolower($params->lowercase_words)) . ' ');
-				$title           = str_ireplace($lowercase_words, $lowercase_words, $title);
-				break;
+
+				return str_ireplace($lowercase_words, $lowercase_words, $title);
 		}
 
 		return $title;
-	}
-
-	public static function trimFolder($folder)
-	{
-		return trim(str_replace(['\\', '//'], '/', $folder), '/');
 	}
 }

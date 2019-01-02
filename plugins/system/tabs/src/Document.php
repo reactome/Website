@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.4.2
+ * @version         7.5.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,8 +13,8 @@ namespace RegularLabs\Plugin\System\Tabs;
 
 defined('_JEXEC') or die;
 
-use JFactory;
-use JHtml;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
 use RegularLabs\Library\Document as RL_Document;
 
 class Document
@@ -49,11 +49,11 @@ class Document
 
 		RL_Document::scriptOptions($options, 'Tabs');
 
-		RL_Document::script('tabs/script.min.js', ($params->media_versioning ? '7.4.2' : ''));
+		RL_Document::script('tabs/script.min.js', ($params->media_versioning ? '7.5.2' : ''));
 
 		if ($params->load_stylesheet)
 		{
-			RL_Document::stylesheet('tabs/style.min.css', ($params->media_versioning ? '7.4.2' : ''));
+			RL_Document::stylesheet('tabs/style.min.css', ($params->media_versioning ? '7.5.2' : ''));
 		}
 
 	}

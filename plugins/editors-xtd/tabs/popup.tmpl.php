@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.4.2
+ * @version         7.5.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -10,6 +10,11 @@
  */
 
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Form\Form as JForm;
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
+use Joomla\CMS\Language\Text as JText;
 
 $xmlfile = __DIR__ . '/fields.xml';
 ?>
@@ -73,8 +78,6 @@ $xmlfile = __DIR__ . '/fields.xml';
 
 					<div class="row-fluid">
 						<div class="span8">
-							<?php echo str_replace('xxx', $i, $form->renderFieldset('tab_notice')); ?>
-
 							<div class="form-inline form-inline-header">
 								<div class="control-group">
 									<div class="control-label">
@@ -94,6 +97,8 @@ $xmlfile = __DIR__ . '/fields.xml';
 									<div id="tab_<?php echo $i; ?>_content" style="display:none;" class="well well-small"></div>
 								</div>
 							</div>
+
+							<?php echo $form->renderFieldset('tab_notice'); ?>
 						</div>
 
 						<div class="span4">

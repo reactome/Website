@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,11 +13,11 @@ namespace RegularLabs\Library;
 
 defined('_JEXEC') or die;
 
-jimport('joomla.filesystem.file');
-
-use JComponentHelper;
 use JFile;
-use JPluginHelper;
+use Joomla\CMS\Component\ComponentHelper as JComponentHelper;
+use Joomla\CMS\Plugin\PluginHelper as JPluginHelper;
+
+jimport('joomla.filesystem.file');
 
 /**
  * Class Parameters
@@ -252,7 +252,7 @@ class Parameters
 		}
 
 		if ( ! $path
-			|| ! JFile::exists($path)
+			|| ! file_exists($path)
 			|| ! $file = JFile::read($path)
 		)
 		{

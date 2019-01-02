@@ -24,54 +24,51 @@
 		<field name="height" type="text" class="input-small"
 			   label="RL_HEIGHT"
 			   description="MDL_DIMENSION_DESC" />
-		<field name="@toggler_iframe_a" type="rl_toggler" param="type" value="url,article" />
 		<field name="iframe" type="radio" class="btn-group" default="0"
 			   label="MDL_IFRAME"
-			   description="MDL_IFRAME_DESC2">
+			   description="MDL_IFRAME_DESC2"
+			   showon="type:url,article">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="@toggler_iframe_b" type="rl_toggler" />
-		<field name="@open" type="rl_plaintext"
+		<field name="@open" type="rl_onlypro"
 			   label="MDL_OPEN_ON_PAGELOAD"
-			   description="MDL_OPEN_ON_PAGELOAD_DESC"
-			   default="RL_ONLY_AVAILABLE_IN_PRO" />
-		<field name="@autoclose" type="rl_plaintext"
+			   description="MDL_OPEN_ON_PAGELOAD_DESC" />
+		<field name="@autoclose" type="rl_onlypro"
 			   label="MDL_AUTOCLOSE"
-			   description="MDL_AUTOCLOSE_DESC"
-			   default="RL_ONLY_AVAILABLE_IN_PRO" />
+			   description="MDL_AUTOCLOSE_DESC" />
 	</fieldset>
 
 	<fieldset name="url">
-		<field name="@url" type="rl_plaintext"
-			   description="MDL_URL_DESC" />
+		<field name="@url" type="note" description="MDL_URL_DESC" />
 		<field name="url" type="text" label="" class="input-full" />
 	</fieldset>
 
 	<fieldset name="image">
-		<field name="@image" type="rl_plaintext"
-			   description="MDL_IMAGE_DESC" />
-		<field name="image" type="media" label="" />
+		<field name="@image_free1" type="rl_onlypro" class="alert alert-warning" />
+		<field name="@image_free2" type="note" class="alert alert-info"
+			   description="MDL_IMAGE_FREE_DESC" />
 	</fieldset>
 
 	<fieldset name="gallery">
-		<field name="@galleryx" type="rl_block" class="alert alert-warning"
-			   description="RL_ONLY_AVAILABLE_IN_PRO" />
+		<field name="@gallery_free1" type="rl_onlypro" class="alert alert-warning" />
+		<field name="@gallery_free2" type="note" class="alert alert-info"
+			   description="MDL_GALLERY_FREE_DESC" />
 	</fieldset>
 
 	<fieldset name="video">
-		<field name="@videox" type="rl_block" class="alert alert-warning"
-			   description="RL_ONLY_AVAILABLE_IN_PRO" />
+		<field name="@video_free1" type="rl_onlypro" class="alert alert-warning" />
+		<field name="@video_free2" type="note" class="alert alert-info"
+			   description="MDL_VIDEO_FREE_DESC" />
 	</fieldset>
 
-	<fieldset name="article"
-			  addfieldpath="plugins/editors-xtd/modals/fields">
-		<field name="@articlex" type="rl_block" class="alert alert-warning"
-			   description="RL_ONLY_AVAILABLE_IN_PRO" />
+	<fieldset name="article" addfieldpath="plugins/editors-xtd/modals/fields">
+		<field name="@article_free1" type="rl_onlypro" class="alert alert-warning" />
+		<field name="@article_free2" type="note" class="alert alert-info"
+			   description="MDL_ARTICLE_FREE_DESC" />
 	</fieldset>
 
 	<fieldset name="content">
-		<field name="@contentx" type="rl_block" class="alert alert-warning"
-			   description="RL_ONLY_AVAILABLE_IN_PRO" />
+		<field name="@contentx" type="rl_onlypro" class="alert alert-warning" />
 	</fieldset>
 </config>

@@ -1,37 +1,135 @@
+/**
+ * @package         Modals
+ * @version         11.1.3
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://www.regularlabs.com
+ * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ */
 @import "../../regularlabs/less/init.less";
 @import "base.less";
 
-/*
-    User Style:
-    Change the following styles to modify the appearance of Colorbox.  They are
-    ordered & tabbed in a way that represents the nesting of the generated HTML.
-*/
-#cboxOverlay{background:#fff;}
-#colorbox{outline:0;}
-#cboxContent{margin-top:32px; overflow:visible; background:#000;}
-.cboxIframe{background:#fff;}
-#cboxError{padding:50px; border:1px solid #ccc;}
-#cboxLoadedContent{background:#000; padding:6px 12px; color: #fff;}
-#colorbox.is_image #cboxLoadedContent,#colorbox.is_video #cboxLoadedContent{padding:0;}
-#cboxLoadingGraphic{background:url(../images/colorbox2/loading.gif) no-repeat center center;}
-#cboxLoadingOverlay{background:#000;}
-#cboxTitle{position:absolute; top:-22px; left:0; color:#000;background:#fff;}
-#cboxCurrent{position:absolute; top:-22px; right:205px; text-indent:-9999px;}
+#rl_modals_overlay {
+	background: #ffffff;
+}
+
+#rl_modals {
+	outline: 0;
+}
+
+#rl_modals_content {
+	margin-top: 32px;
+	overflow:   visible;
+	background: #000000;
+}
+
+.rl_modals_iframe {
+	background: #ffffff;
+}
+
+#rl_modals_error {
+	padding: 50px;
+	border:  1px solid #cccccc;
+}
+
+#rl_modals_loaded_content {
+	background: #000000;
+	padding:    6px 12px;
+	color:      #ffffff;
+}
+
+#rl_modals.is_image #rl_modals_loaded_content, #rl_modals.is_video #rl_modals_loaded_content {
+	padding: 0;
+}
+
+#rl_modals_loading_graphic {
+	background: url(../images/colorbox2/loading.gif) no-repeat center center;
+}
+
+#rl_modals_loading_overlay {
+	background: #000000;
+}
+
+#rl_modals_title {
+	position:   absolute;
+	top:        -22px;
+	left:       0;
+	color:      #000000;
+	background: #ffffff;
+}
+
+#rl_modals_current {
+	position:    absolute;
+	top:         -22px;
+	right:       205px;
+	text-indent: -9999px;
+}
 
 /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
-#cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; text-indent:-9999px; width:20px; height:20px; position:absolute; top:-20px; background:url(../images/colorbox2/controls.png) no-repeat 0 0;}
+#rl_modals_previous, #rl_modals_next, #rl_modals_slideshow, #rl_modals_close {
+	border:      0;
+	padding:     0;
+	margin:      0;
+	overflow:    visible;
+	text-indent: -9999px;
+	width:       20px;
+	height:      20px;
+	position:    absolute;
+	top:         -20px;
+	background:  url(../images/colorbox2/controls.png) no-repeat 0 0;
+}
 
 /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
-#cboxPrevious:active, #cboxNext:active, #cboxSlideshow:active, #cboxClose:active {outline:0;}
+#rl_modals_previous:active, #rl_modals_next:active, #rl_modals_slideshow:active, #rl_modals_close:active {
+	outline: 0;
+}
 
-#cboxPrevious{background-position:0px 0px; right:44px;}
-#cboxPrevious:hover{background-position:0px -25px;}
-#cboxNext{background-position:-25px 0px; right:22px;}
-#cboxNext:hover{background-position:-25px -25px;}
-#cboxClose{background-position:-50px 0px; right:0;}
-#cboxClose:hover{background-position:-50px -25px;}
-.cboxSlideshow_on #cboxPrevious, .cboxSlideshow_off #cboxPrevious{right:66px;}
-.cboxSlideshow_on #cboxSlideshow{background-position:-75px -25px; right:44px;}
-.cboxSlideshow_on #cboxSlideshow:hover{background-position:-100px -25px;}
-.cboxSlideshow_off #cboxSlideshow{background-position:-100px 0px; right:44px;}
-.cboxSlideshow_off #cboxSlideshow:hover{background-position:-75px -25px;}
+#rl_modals_previous {
+	background-position: 0px 0px;
+	right:               44px;
+}
+
+#rl_modals_previous:hover {
+	background-position: 0px -25px;
+}
+
+#rl_modals_next {
+	background-position: -25px 0px;
+	right:               22px;
+}
+
+#rl_modals_next:hover {
+	background-position: -25px -25px;
+}
+
+#rl_modals_close {
+	background-position: -50px 0px;
+	right:               0;
+}
+
+#rl_modals_close:hover {
+	background-position: -50px -25px;
+}
+
+.rl_modals_slideshow_on #rl_modals_previous, .rl_modals_slideshow_off #rl_modals_previous {
+	right: 66px;
+}
+
+.rl_modals_slideshow_on #rl_modals_slideshow {
+	background-position: -75px -25px;
+	right:               44px;
+}
+
+.rl_modals_slideshow_on #rl_modals_slideshow:hover {
+	background-position: -100px -25px;
+}
+
+.rl_modals_slideshow_off #rl_modals_slideshow {
+	background-position: -100px 0px;
+	right:               44px;
+}
+
+.rl_modals_slideshow_off #rl_modals_slideshow:hover {
+	background-position: -75px -25px;
+}

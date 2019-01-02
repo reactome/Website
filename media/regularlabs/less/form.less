@@ -1,12 +1,13 @@
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
  * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+@import "init.less";
 
 .chzn-small {
 	width: 120px;
@@ -27,12 +28,11 @@ input[type="text"].input-full {
 	height: 28px;
 }
 
-.input-maximize {
-	&:hover,
+.controls .input-maximize {
 	&:focus,
 	.chzn-container:hover,
 	.chzn-with-drop {
-		min-width: 100%;
+		min-width: 99%;
 	}
 }
 
@@ -41,6 +41,7 @@ input[type="text"].input-full {
 		&.btn-success {
 			.buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
 		}
+
 		&.btn-danger {
 			.buttonBackground(@btnSuccessBackground, @btnSuccessBackgroundHighlight);
 		}
@@ -59,10 +60,27 @@ input.rl_keyfield {
 	font-size: 14px !important;
 }
 
+.btn.disabled {
+	cursor: not-allowed !important;
+}
+
 .rl_keycode {
 	color:   @grayLight;
 	padding: 2px 0;
 }
+
+fieldset.rl_plaintext {
+	margin-top: 5px;
+}
+
+.rl_textarea {
+	.box-sizing(border-box);
+}
+
+.inlist .simplecolors-swatch span {
+	position: relative;
+}
+
 
 .rl_spinner {
 	display:        inline-block;

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,17 +13,17 @@
 
 defined('_JEXEC') or die;
 
-if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
-{
-	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
-}
-
 use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\Extension as RL_Extension;
 use RegularLabs\Library\File as RL_File;
 use RegularLabs\Library\Http as RL_Http;
 use RegularLabs\Library\Language as RL_Language;
 use RegularLabs\Library\Xml as RL_Xml;
+
+if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+}
 
 /**
  * Framework Functions

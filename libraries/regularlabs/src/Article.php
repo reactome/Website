@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,7 @@ namespace RegularLabs\Library;
 
 defined('_JEXEC') or die;
 
-use JFactory;
+use Joomla\CMS\Factory as JFactory;
 use Joomla\Registry\Registry;
 
 jimport('joomla.filesystem.file');
@@ -25,6 +25,7 @@ jimport('joomla.filesystem.file');
 class Article
 {
 	static $articles = [];
+	static $splitter = '[[:SPLIT-ARTICLE:]]';
 
 	/**
 	 * Method to get article data.
@@ -156,21 +157,56 @@ class Article
 	{
 		self::processText('title', $article, $helper, $method, $params, $ignore);
 		self::processText('created_by_alias', $article, $helper, $method, $params, $ignore);
+		self::processText('description', $article, $helper, $method, $params, $ignore);
 
+		// Don't replace in text fields in the category list view, as they won't get used anyway
 		if (Document::isCategoryList($context))
 		{
-			self::processText('description', $article, $helper, $method, $params, $ignore);
+			return;
+		}
+
+		// prevent fulltext from being messed with, when it is a json encoded string (Yootheme Pro templates do this for some weird f-ing reason)
+		if ( ! empty($article->fulltext) && substr($article->fulltext, 0, 6) == '<!-- {')
+		{
+			self::processText('text', $article, $helper, $method, $params, $ignore);
+
+			return;
+		}
+
+		$has_text                  = isset($article->text);
+		$has_article_texts         = isset($article->introtext) && isset($article->fulltext);
+		$text_same_as_article_text = false;
+
+		if ($has_text && $has_article_texts)
+		{
+			$check_text               = RegEx::replace('\s', '', $article->text);
+			$check_introtext_fulltext = RegEx::replace('\s', '', $article->introtext . ' ' . $article->fulltext);
+
+			$text_same_as_article_text = $check_text == $check_introtext_fulltext;
+		}
+
+		if ($has_article_texts && ! $has_text)
+		{
+			self::processText('introtext', $article, $helper, $method, $params, $ignore);
+			self::processText('fulltext', $article, $helper, $method, $params, $ignore);
+
+			return;
+		}
+
+		if ($has_article_texts && $text_same_as_article_text)
+		{
+			$article->text = $article->introtext . self::$splitter . $article->fulltext;
+
+			self::processText('text', $article, $helper, $method, $params, $ignore);
+
+			list($article->introtext, $article->fulltext) = explode(self::$splitter, $article->text, 2);
+
+			$article->text = str_replace(self::$splitter, ' ', $article->text);
 
 			return;
 		}
 
 		self::processText('text', $article, $helper, $method, $params, $ignore);
-
-		if ( ! empty($article->text))
-		{
-			return;
-		}
-
 		self::processText('introtext', $article, $helper, $method, $params, $ignore);
 		self::processText('fulltext', $article, $helper, $method, $params, $ignore);
 	}

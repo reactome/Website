@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -74,13 +74,14 @@ class ArrayHelper
 	 */
 	public static function clean($array)
 	{
-		// trim all values
-		self::trim($array);
+		if ( ! is_array($array))
+		{
+			return $array;
+		}
 
-		// remove duplicates
-		$array = array_unique($array);
-		// remove empty (or false) values
-		$array = array_filter($array);
+		$array = self::trim($array);
+		$array = self::unique($array);
+		$array = self::removeEmpty($array);
 
 		return $array;
 	}
@@ -94,10 +95,62 @@ class ArrayHelper
 	 */
 	public static function removeEmpty($array)
 	{
-		// remove empty (or false) values
-		return array_filter($array, function ($value) {
-			return $value !== '';
-		});
+		if ( ! is_array($array))
+		{
+			return $array;
+		}
+
+		foreach ($array as $key => &$value)
+		{
+			if ($key && ! is_numeric($key))
+			{
+				continue;
+			}
+
+			if ($value !== '')
+			{
+				continue;
+			}
+
+			unset($array[$key]);
+		}
+
+		return $array;
+	}
+
+	/**
+	 * Removes duplicate values from the array
+	 *
+	 * @param array $array
+	 *
+	 * @return array
+	 */
+	public static function unique($array)
+	{
+		if ( ! is_array($array))
+		{
+			return $array;
+		}
+
+		$values = [];
+
+		foreach ($array as $key => $value)
+		{
+			if ( ! is_numeric($key))
+			{
+				continue;
+			}
+
+			if ( ! in_array($value, $values))
+			{
+				$values[] = $value;
+				continue;
+			}
+
+			unset($array[$key]);
+		}
+
+		return $array;
 	}
 
 	/**
@@ -109,7 +162,49 @@ class ArrayHelper
 	 */
 	public static function trim($array)
 	{
-		// trim all values
-		return array_map('trim', $array);
+		if ( ! is_array($array))
+		{
+			return $array;
+		}
+
+		foreach ($array as &$value)
+		{
+			if ( ! is_string($value))
+			{
+				continue;
+			}
+
+			$value = trim($value);
+		}
+
+		return $array;
+	}
+
+	/**
+	 * Check if any of the given values is found in the array
+	 *
+	 * @param array $values
+	 * @param array $array
+	 *
+	 * @return boolean
+	 */
+	public static function find($values, $array)
+	{
+		if ( ! is_array($array) || empty($array))
+		{
+			return false;
+		}
+
+		$values = self::toArray($values);
+
+		foreach ($values as $value)
+		{
+			if (in_array($value, $array))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

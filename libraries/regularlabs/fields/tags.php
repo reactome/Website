@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,6 +11,10 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\HTML\HTMLHelper as JHtml;
+use Joomla\CMS\Language\Text as JText;
+use Joomla\Registry\Registry;
+
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
@@ -18,16 +22,12 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
-use Joomla\Registry\Registry;
-
 class JFormFieldRL_Tags extends \RegularLabs\Library\Field
 {
 	public $type = 'Tags';
 
 	protected function getInput()
 	{
-		$this->params = $this->element->attributes();
-
 		$size        = (int) $this->get('size');
 		$simple      = (int) $this->get('simple');
 		$show_ignore = $this->get('show_ignore');

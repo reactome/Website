@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,9 +13,9 @@ namespace RegularLabs\Library\Condition;
 
 defined('_JEXEC') or die;
 
-use JFactory;
-use JLanguageHelper;
-use JUri;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Language\LanguageHelper as JLanguageHelper;
+use Joomla\CMS\Uri\Uri as JUri;
 use RegularLabs\Library\RegEx;
 use RegularLabs\Library\StringHelper;
 

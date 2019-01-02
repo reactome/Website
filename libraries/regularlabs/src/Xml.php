@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,10 +13,9 @@ namespace RegularLabs\Library;
 
 defined('_JEXEC') or die;
 
-jimport('joomla.filesystem.file');
-
-use JFile;
 use SimpleXMLElement;
+
+jimport('joomla.filesystem.file');
 
 /**
  * Class File
@@ -41,7 +40,7 @@ class Xml
 			return Cache::get($cache_id);
 		}
 
-		if (JFile::exists($url))
+		if (file_exists($url))
 		{
 			$xml = @new SimpleXMLElement($url, LIBXML_NONET | LIBXML_NOCDATA, 1);
 		}

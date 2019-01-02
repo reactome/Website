@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -18,18 +18,12 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
-use RegularLabs\Library\Document as RL_Document;
-
 class JFormFieldRL_PlainText extends \RegularLabs\Library\Field
 {
 	public $type = 'PlainText';
 
 	protected function getLabel()
 	{
-		RL_Document::stylesheet('regularlabs/style.min.css');
-
-		$this->params = $this->element->attributes();
-
 		$label   = $this->prepareText($this->get('label'));
 		$tooltip = $this->prepareText($this->get('description'));
 
@@ -54,8 +48,6 @@ class JFormFieldRL_PlainText extends \RegularLabs\Library\Field
 
 	protected function getInput()
 	{
-		$this->params = $this->element->attributes();
-
 		$text = $this->prepareText($this->value);
 
 		if ( ! $text)

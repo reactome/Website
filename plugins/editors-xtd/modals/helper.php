@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         9.13.1
+ * @version         11.1.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -10,6 +10,8 @@
  */
 
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Object\CMSObject as JObject;
 
 /**
  * Plugin that places the button

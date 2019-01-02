@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,11 +13,10 @@ namespace RegularLabs\Library;
 
 defined('_JEXEC') or die;
 
-jimport('joomla.filesystem.file');
+use Joomla\CMS\Access\Access as JAccess;
+use Joomla\CMS\Factory as JFactory;
 
-use JAccess;
-use JFactory;
-use JFile;
+jimport('joomla.filesystem.file');
 
 /**
  * Class Protect
@@ -155,7 +154,7 @@ class Protect
 	 */
 	public static function isComponentInstalled($extension_alias)
 	{
-		return JFile::exists(JPATH_ADMINISTRATOR . '/components/com_' . $extension_alias . '/' . $extension_alias . '.php');
+		return file_exists(JPATH_ADMINISTRATOR . '/components/com_' . $extension_alias . '/' . $extension_alias . '.php');
 	}
 
 	/**
@@ -167,7 +166,7 @@ class Protect
 	 */
 	public static function isSystemPluginInstalled($extension_alias)
 	{
-		return JFile::exists(JPATH_PLUGINS . '/system/' . $extension_alias . '/' . $extension_alias . '.php');
+		return file_exists(JPATH_PLUGINS . '/system/' . $extension_alias . '/' . $extension_alias . '.php');
 	}
 
 	/**

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.9.3123
+ * @version         18.12.11784
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,8 +14,7 @@ namespace RegularLabs\Library;
 defined('_JEXEC') or die;
 
 use Exception;
-use JHtml;
-use JText;
+use Joomla\CMS\Language\Text as JText;
 use ReflectionClass;
 
 /**
@@ -50,6 +49,9 @@ class EditorButtonPopup
 		$this->loadLibraryScriptsStyles();
 
 		$this->loadLanguages();
+
+		Document::style('regularlabs/popup.min.css');
+
 		$this->loadScripts();
 		$this->loadStyles();
 
@@ -77,11 +79,7 @@ class EditorButtonPopup
 
 	private function loadLibraryScriptsStyles()
 	{
-		JHtml::_('jquery.framework');
-
-		Document::script('regularlabs/script.min.js');
-		Document::style('regularlabs/popup.min.css');
-		Document::style('regularlabs/style.min.css');
+		Document::loadPopupDependencies();
 	}
 
 	private function renderTemplate()

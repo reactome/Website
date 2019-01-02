@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.6.2
+ * @version         7.7.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,6 +11,8 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Language\Text as JText;
+use Joomla\CMS\Object\CMSObject as JObject;
 use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\RegEx as RL_RegEx;
 
@@ -30,6 +32,8 @@ class PlgButtonSlidersHelper
 	 */
 	public function render($editor_name)
 	{
+		RL_Document::loadEditorButtonDependencies();
+
 		if ($this->params->button_use_simple_button)
 		{
 			return $this->renderSimpleButton($editor_name);

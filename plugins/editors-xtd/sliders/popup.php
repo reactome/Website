@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.6.2
+ * @version         7.7.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,8 +13,8 @@ namespace RegularLabs\Plugin\EditorButton\Sliders\Popup;
 
 defined('_JEXEC') or die;
 
-use JFactory;
-use JText;
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Language\Text as JText;
 use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\RegEx as RL_RegEx;
 
@@ -44,12 +44,12 @@ class Popup
 		";
 		RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('sliders/popup.min.js', '7.6.2');
+		RL_Document::script('sliders/popup.min.js', '7.7.2');
 	}
 
 	public function loadStyles()
 	{
-		RL_Document::style('sliders/popup.min.css', '7.6.2');
+		RL_Document::style('sliders/popup.min.css', '7.7.2');
 	}
 }
 

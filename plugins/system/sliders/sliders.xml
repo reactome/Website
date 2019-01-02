@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3.4" type="plugin" group="system" method="upgrade">
+<extension version="3.9" type="plugin" group="system" method="upgrade">
 	<name>plg_system_sliders</name>
 	<description>PLG_SYSTEM_SLIDERS_DESC</description>
-	<version>7.6.2</version>
-	<creationDate>September 2018</creationDate>
+	<version>7.7.2</version>
+	<creationDate>December 2018</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -58,15 +58,13 @@
 			</fieldset>
 
 			<fieldset name="RL_BEHAVIOUR">
-				<field name="@notice_mode" type="rl_plaintext"
+				<field name="@notice_mode" type="rl_onlypro"
 					   label="SLD_MODE"
-					   description="SLD_MODE_DESC"
-					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+					   description="SLD_MODE_DESC" />
 				
-				<field name="@notice_slide_speed" type="rl_plaintext"
+				<field name="@notice_slide_speed" type="rl_onlypro"
 					   label="SLD_SLIDE_SPEED"
-					   description="SLD_SLIDE_SPEED_DESC"
-					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+					   description="SLD_SLIDE_SPEED_DESC" />
 				<field name="state_first" type="radio" class="btn-group" default="open"
 					   label="SLD_STATE_FIRST_SLIDER"
 					   description="SLD_STATE_FIRST_SLIDER_DESC">
@@ -75,22 +73,18 @@
 				</field>
 
 				<field name="@block_scroll_a" type="rl_block" start="1" label="SLD_SCROLL" />
-				<field name="@notice_scroll" type="rl_plaintext"
+				<field name="@notice_scroll" type="rl_onlypro"
 					   label="SLD_SCROLL"
-					   description="SLD_SCROLL_DESC"
-					   default="RL_ONLY_AVAILABLE_IN_PRO" />
-				<field name="@notice_linkscroll" type="rl_plaintext"
+					   description="SLD_SCROLL_DESC" />
+				<field name="@notice_linkscroll" type="rl_onlypro"
 					   label="SLD_SCROLL_LINKS"
-					   description="SLD_SCROLL_LINKS_DESC"
-					   default="RL_ONLY_AVAILABLE_IN_PRO" />
-				<field name="@notice_urlscroll" type="rl_plaintext"
+					   description="SLD_SCROLL_LINKS_DESC" />
+				<field name="@notice_urlscroll" type="rl_onlypro"
 					   label="SLD_SCROLL_BY_URL"
-					   description="SLD_SCROLL_BY_URL_DESC"
-					   default="RL_ONLY_AVAILABLE_IN_PRO" />
-				<field name="@notice_scrolloffset" type="rl_plaintext"
+					   description="SLD_SCROLL_BY_URL_DESC" />
+				<field name="@notice_scrolloffset" type="rl_onlypro"
 					   label="SLD_SCROLL_OFFSET"
-					   description="SLD_SCROLL_OFFSET_DESC"
-					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+					   description="SLD_SCROLL_OFFSET_DESC" />
 				<field name="@block_scroll_b" type="rl_block" end="1" />
 			</fieldset>
 
@@ -110,30 +104,28 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="@toggler_button_use_simple_button_no_a" type="rl_toggler" param="button_use_simple_button" value="0" />
 				<field name="button_max_count" type="list" class="input-mini" default="10"
 					   label="SLD_MAX_SLIDER_COUNT"
-					   description="SLD_MAX_SLIDER_COUNT_DESC">
+					   description="SLD_MAX_SLIDER_COUNT_DESC"
+					   showon="button_use_simple_button:0">
 					<option value="5">5</option>
 					<option value="10">10</option>
 					<option value="20">20</option>
 					<option value="30">30</option>
 				</field>
-				<field name="@toggler_button_use_simple_button_no_b" type="rl_toggler" />
-				<field name="@toggler_button_use_simple_button_yes_a" type="rl_toggler" param="button_use_simple_button" value="1" />
+				<field name="@showon_button_use_simple_button_yes_a" type="rl_showon" value="button_use_simple_button:1" />
 				<field name="button_use_custom_code" type="radio" class="btn-group" default="0"
 					   label="RL_USE_CUSTOM_CODE"
 					   description="RL_USE_CUSTOM_CODE_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="@toggler_button_code_a" type="rl_toggler" param="button_use_custom_code" value="1" />
 				<field name="button_custom_code" type="rl_textareaplus" filter="RAW" texttype="html" width="400" height="300"
 					   default="{slider Slider Title 1}&lt;br />[:SELECTION:]&lt;br />{slider Slider Title 2}&lt;br />Slider text...&lt;br />{/sliders}"
 					   label="RL_CUSTOM_CODE"
-					   description="RL_CUSTOM_CODE_DESC" />
-				<field name="@toggler_button_code_b" type="rl_toggler" />
-				<field name="@toggler_button_use_simple_button_yes_b" type="rl_toggler" />
+					   description="RL_CUSTOM_CODE_DESC"
+					   showon="button_use_custom_code:1" />
+				<field name="@showon_button_use_simple_button_yes_b" type="rl_showon" />
 			</fieldset>
 
 			<fieldset name="RL_TAG_SYNTAX">
@@ -154,6 +146,7 @@
 					   description="RL_TAG_CHARACTERS_DESC">
 					<option value="{.}">{...}</option>
 					<option value="[.]">[...]</option>
+					<option value="«.»">«...»</option>
 					<option value="{{.}}">{{...}}</option>
 					<option value="[[.]]">[[...]]</option>
 					<option value="[:.:]">[:...:]</option>
@@ -180,15 +173,13 @@
 				<field name="init_timeout" type="number" size="5" class="input-mini" default="0"
 					   label="SLD_INIT_TIMEOUT"
 					   description="SLD_INIT_TIMEOUT_DESC" />
-				<field name="@notice_use_cookies" type="rl_plaintext"
+				<field name="@notice_use_cookies" type="rl_onlypro"
 					   label="SLD_USE_COOKIES"
-					   description="SLD_USE_COOKIES_DESC"
-					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+					   description="SLD_USE_COOKIES_DESC" />
 				
-				<field name="@notice_disabled_components" type="rl_plaintext"
+				<field name="@notice_disabled_components" type="rl_onlypro"
 					   label="RL_DISABLE_ON_COMPONENTS"
-					   description="RL_DISABLE_ON_COMPONENTS_DESC"
-					   default="RL_ONLY_AVAILABLE_IN_PRO" />
+					   description="RL_DISABLE_ON_COMPONENTS_DESC" />
 				<field name="enable_admin" type="radio" class="btn-group" default="0"
 					   label="RL_ENABLE_IN_ADMIN"
 					   description="RL_ENABLE_IN_ADMIN_DESC">
@@ -213,21 +204,18 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="@toggler_load_bootstrap_framework_a" type="rl_toggler" param="load_bootstrap_framework" value="0" />
-				<field name="@notice_load_bootstrap_framework" type="note" class="alert alert-danger" description="RL_BOOTSTRAP_FRAMEWORK_DISABLED,SLIDERS" />
-				<field name="@toggler_load_bootstrap_framework_b" type="rl_toggler" />
-				<field name="@toggler_load_bootstrap_framework_2a" type="rl_toggler" param="load_bootstrap_framework" value="0" />
+				<field name="@showon_no_load_bootstrap_framework_a" type="rl_showon" value="load_bootstrap_framework:0" />
+				<field name="@notice_no_load_bootstrap_framework" type="note" class="alert alert-danger" description="RL_BOOTSTRAP_FRAMEWORK_DISABLED,SLIDERS" />
 				<field name="load_jquery" type="radio" class="btn-group" default="0"
 					   label="RL_LOAD_JQUERY"
 					   description="RL_LOAD_JQUERY_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="@toggler_load_jquery_a" type="rl_toggler" param="load_jquery" value="0" />
-				<field name="@notice_load_jquery" type="note" class="alert alert-danger"
-					   description="RL_JQUERY_DISABLED,SLIDERS" />
-				<field name="@toggler_load_jquery_b" type="rl_toggler" />
-				<field name="@toggler_load_bootstrap_framework_2b" type="rl_toggler" />
+				<field name="@notice_no_load_jquery" type="note" class="alert alert-danger"
+					   description="RL_JQUERY_DISABLED,SLIDERS"
+					   showon="load_jquery:0" />
+				<field name="@showon_no_load_bootstrap_framework_b" type="rl_showon" />
 			</fieldset>
 		</fields>
 	</config>
