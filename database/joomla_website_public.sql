@@ -606,7 +606,11 @@ CREATE TABLE `rlp_contentitem_tag_map` (
 
 LOCK TABLES `rlp_contentitem_tag_map` WRITE;
 /*!40000 ALTER TABLE `rlp_contentitem_tag_map` DISABLE KEYS */;
+<<<<<<< HEAD
 INSERT INTO `rlp_contentitem_tag_map` VALUES ('com_content.article',1,54,5,'2019-01-02 17:14:09',1),('com_content.article',1,54,6,'2019-01-02 17:14:09',1),('com_content.article',7,71,7,'2019-01-02 17:14:09',1),('com_content.article',6,72,7,'2019-01-02 17:14:09',1),('com_content.article',5,74,7,'2019-01-02 17:14:09',1),('com_content.article',4,77,7,'2019-01-02 17:14:09',1),('com_content.article',3,78,7,'2019-01-02 17:14:09',1),('com_content.article',2,90,7,'2019-01-02 17:14:09',1),('com_content.article',8,98,7,'2019-01-02 17:14:09',1),('com_content.article',9,102,7,'2019-01-02 17:14:09',1),('com_content.article',10,103,7,'2019-01-02 17:14:09',1),('com_content.article',11,106,7,'2019-01-02 17:14:09',1),('com_content.article',12,116,7,'2019-01-02 17:14:09',1);
+=======
+INSERT INTO `rlp_contentitem_tag_map` VALUES ('com_content.article',1,54,5,'2019-01-02 17:08:20',1),('com_content.article',1,54,6,'2019-01-02 17:08:20',1),('com_content.article',7,71,7,'2019-01-02 17:08:20',1),('com_content.article',6,72,7,'2019-01-02 17:08:20',1),('com_content.article',5,74,7,'2019-01-02 17:08:20',1),('com_content.article',4,77,7,'2019-01-02 17:08:20',1),('com_content.article',3,78,7,'2019-01-02 17:08:20',1),('com_content.article',2,90,7,'2019-01-02 17:08:20',1),('com_content.article',8,98,7,'2019-01-02 17:08:20',1),('com_content.article',9,102,7,'2019-01-02 17:08:20',1),('com_content.article',10,103,7,'2019-01-02 17:08:20',1),('com_content.article',11,106,7,'2019-01-02 17:08:20',1),('com_content.article',12,116,7,'2019-01-02 17:08:20',1);
+>>>>>>> a1884832e69064e8563ac0337054c3dd33f7a735
 /*!40000 ALTER TABLE `rlp_contentitem_tag_map` ENABLE KEYS */;
 UNLOCK TABLES;
 
