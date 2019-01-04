@@ -58,21 +58,21 @@ if(isset($_POST["action"])) {
 		$db->setQuery($query);
 		$rows   = $db->loadRowList();
 
-//        foreach($rows as $email) {
-//            $mailer->addRecipient($email);
-//        }
-//
-//        //add the subject
-//        $date = new DateTime();
-//        $mailer->setSubject('[Joomla Update] '. $user->username . ' is synchronising to ' .$servername. ' (' . $date->getTimestamp() . ')');
-//
-//        //add body
-//        $mailer->setBody($output);
-//
-//        $send =& $mailer->Send();
-//        if ($send !== true)	{
-//            echo '<script>console.log(' . $send->message . ')</script>';
-//        }
+        foreach($rows as $email) {
+            $mailer->addRecipient($email);
+        }
+
+        //add the subject
+        $date = new DateTime();
+        $mailer->setSubject('[Joomla Update] '. $user->username . ' is synchronising to ' .$servername. ' (' . $date->getTimestamp() . ')');
+
+        //add body
+        $mailer->setBody($output);
+
+        $send =& $mailer->Send();
+        if ($send !== true)	{
+            echo '<script>console.log(' . $send->message . ')</script>';
+        }
 	}
 }
 
