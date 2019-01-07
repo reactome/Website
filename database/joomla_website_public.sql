@@ -65,7 +65,7 @@ CREATE TABLE `rlp_action_logs` (
   KEY `idx_user_id_logdate` (`user_id`,`log_date`),
   KEY `idx_user_id_extension` (`user_id`,`extension`),
   KEY `idx_extension_item_id` (`extension`,`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +74,6 @@ CREATE TABLE `rlp_action_logs` (
 
 LOCK TABLES `rlp_action_logs` WRITE;
 /*!40000 ALTER TABLE `rlp_action_logs` DISABLE KEYS */;
-INSERT INTO `rlp_action_logs` VALUES (1,'COM_PRIVACY_ACTION_LOG_ADMIN_CREATED_REQUEST','{\"action\":\"request-created\",\"requesttype\":\"export\",\"subjectemail\":\"gviteri@ebi.ac.uk\",\"id\":\"1\",\"itemlink\":\"index.php?option=com_privacy&view=request&id=1\",\"userid\":\"158\",\"username\":\"gviteri\",\"accountlink\":\"index.php?option=com_users&task=user.edit&id=158\"}','2019-01-04 13:13:13','com_privacy.request',158,1,'COM_ACTIONLOGS_DISABLED'),(2,'COM_PRIVACY_ACTION_LOG_ADMIN_INVALIDATED_REQUEST','{\"action\":\"request-invalidated\",\"requesttype\":\"export\",\"subjectemail\":\"gviteri@ebi.ac.uk\",\"id\":\"1\",\"itemlink\":\"index.php?option=com_privacy&view=request&id=1\",\"userid\":\"158\",\"username\":\"gviteri\",\"accountlink\":\"index.php?option=com_users&task=user.edit&id=158\"}','2019-01-04 13:14:31','com_privacy.request',158,1,'COM_ACTIONLOGS_DISABLED');
 /*!40000 ALTER TABLE `rlp_action_logs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1957,7 +1956,7 @@ CREATE TABLE `rlp_privacy_requests` (
   `confirm_token` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `confirm_token_created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
