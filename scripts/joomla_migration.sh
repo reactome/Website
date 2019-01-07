@@ -114,7 +114,7 @@ normalise_owner_and_permissions () {
 }
 
 normalise_owner_permissions_and_flags_remote () {
-    echo "Updating file's owner in [${DEST_SERVER}] before synchronisation. Executing ${SYNC_CHOWN}."
+    echo "Updating file's owner in [${DEST_SERVER}]. Executing ${SYNC_CHOWN}."
 
     # sudo visudo - authorise shared user to run chown script without asking for password
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -n -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${DEST_SERVER} "sudo ${SYNC_CHOWN}"
