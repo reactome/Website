@@ -1916,14 +1916,14 @@ sub top_browsing_view {
     $self->urlmaker($self->create_url_maker('cgi-bin/author_contributions'));
     
     my $authors = GKB::Utils::get_authors_recursively($self);
-    my $authors_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$authors}) || '&nbsp';
-        
+    my $authors_str = join(", ",map {get_person_link($_)} @{$authors}) || '&nbsp';
+
     my $reviewers = GKB::Utils::get_reviewers_recursively($self);
-    my $reviewers_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$reviewers}) || '&nbsp';
+    my $reviewers_str = join(", ",map {get_person_link($_)} @{$reviewers}) || '&nbsp';
 
     my $editors = GKB::Utils::get_editors_recursively($self);
-    my $editors_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$editors}) || '&nbsp';
-    
+    my $editors_str = join(", ",map {get_person_link($_)} @{$editors}) || '&nbsp';
+
     my $out = qq(<TR><TD data-label="Topic">);
     if ($doi_flag) {
         $out .= $self->displayName();
@@ -1981,6 +1981,15 @@ sub top_browsing_view {
 	. qq(<TD data-label="editor">$editors_str</TD>)
 	. qq(</TR>\n);
     return $out;
+}
+
+sub get_person_link {
+    my $person_instance = shift;
+
+    my $person_id = $person_instance->db_id;
+    my $person_name = $person_instance->displayName;
+
+    return qq{<a href="content/detail/person/$person_id">$person_name</a>};
 }
 
 sub create_url_maker {
@@ -2991,6 +3000,34 @@ sub displayName {
     }
     return $self->Surname->[0] . ', ' . $self->Initial->[0];
 }
+
+
+package GKB::PrettyInstance::Drug;
+use vars qw(@ISA);
+use strict;
+use GKB::Config;
+@ISA = qw(GKB::PrettyInstance::PhysicalEntity);
+
+
+package GKB::PrettyInstance::ChemicalDrug;
+use vars qw(@ISA);
+use strict;
+use GKB::Config;
+@ISA = qw(GKB::PrettyInstance::Drug);
+
+
+package GKB::PrettyInstance::ProteinDrug;
+use vars qw(@ISA);
+use strict;
+use GKB::Config;
+@ISA = qw(GKB::PrettyInstance::Drug);
+
+
+package GKB::PrettyInstance::RNADrug;
+use vars qw(@ISA);
+use strict;
+use GKB::Config;
+@ISA = qw(GKB::PrettyInstance::Drug);
 
 
 package GKB::PrettyInstance::EntitySet;
