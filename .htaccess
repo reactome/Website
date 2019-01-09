@@ -115,6 +115,24 @@ Redirect 302 /tutorials/pwp https://youtu.be/-skixrvI4nU
 Redirect 302 /documentation/index.php/Glossary_Data_Model /documentation/data-model
 Redirect 302 /cgi-bin/classbrowser /content/schema
 
+# Redirect eventbrowser to content/detail
+RewriteCond %{REQUEST_URI}  ^/cgi-bin/eventbrowser*$
+RewriteCond %{QUERY_STRING} ^ST_ID=(R-[A-Z]{3}-[0-9].*)$
+RewriteRule ^(.*)$ /content/detail/%1? [R=301,L]
+
+RewriteCond %{REQUEST_URI}  ^/cgi-bin/eventbrowser_st_id*$
+RewriteCond %{QUERY_STRING} ^ST_ID=(R-[a-z|A-Z]{3}-[0-9].*)$
+RewriteRule ^(.*)$ /content/detail/%1? [R=301,L]
+
+# Redirect author_contributions to /content/detail/person
+RewriteCond %{REQUEST_URI}  ^/cgi-bin/author_contributions*$
+RewriteCond %{QUERY_STRING} ^DB=(.*)&ID=([0-9]*)$
+RewriteRule ^(.*)$ /content/detail/person/%2? [R=301,L]
+
+RewriteCond %{REQUEST_URI}  ^/cgi-bin/author_contributions*$
+RewriteCond %{QUERY_STRING} ^ID=([0-9]*)$
+RewriteRule ^(.*)$ /content/detail/person/%1? [R=301,L]
+
 # Forbidding any url access for the user login component
 RewriteRule index.php/staff index.php [F]
 RewriteRule index.php/component/users index.php [F]
