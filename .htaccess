@@ -126,7 +126,7 @@ RewriteRule ^(.*)$ /content/detail/%1? [R=301,L]
 
 # Redirect author_contributions to /content/detail/person
 RewriteCond %{REQUEST_URI}  ^/cgi-bin/author_contributions*$
-RewriteCond %{QUERY_STRING} ^DB=(.*)&ID=([0-9]*)$
+RewriteCond %{QUERY_STRING} ^DB=(.*)&ID=([0-9]*)\&?$
 RewriteRule ^(.*)$ /content/detail/person/%2? [R=301,L]
 
 RewriteCond %{REQUEST_URI}  ^/cgi-bin/author_contributions*$
