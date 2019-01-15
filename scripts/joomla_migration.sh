@@ -55,8 +55,6 @@ DEV_SERVER="dev.reactome.org"
 RELEASE_SERVER="release.reactome.org"
 PRD1_SERVER="reactome.org"
 
-SYNC_SCRIPTS_HOME="${_JOOMLA_STATIC}/scripts";
-SYNC_TOOL="${SYNC_SCRIPTS_HOME}/sync_tool.sh";
 SYNC_CHOWN="${DIR}/scripts/website_chown.sh";
 
 OWNER="www-data:reactome"
