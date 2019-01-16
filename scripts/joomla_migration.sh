@@ -127,9 +127,7 @@ normalise_owner_permissions_and_flags_remote () {
 # Credentials in for the source (mainly release) is needed in the website update phase.
 validate_source_credentials () {
     SERVER="${RELEASE_SERVER}.reactome.org"
-    echo $""
     echo "Validating [${SERVER}] credentials..."
-
     sshpass -p ${SRCOSPASSWD} sudo -S -u ${SRCOSUSER} sudo ls &> /dev/null
     local OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
@@ -139,14 +137,11 @@ validate_source_credentials () {
 }
 
 validate_cert_passphrase () {
-    echo $""
     echo "Validating certificate passphrase"
-
     if [[ ! -e ${PRIVATE_KEY} ]]; then
         echo "[ERROR] Couldn't find the private key [${PRIVATE_KEY}]"
         exit
     fi
-
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh-keygen -y -f ${PRIVATE_KEY} &> /dev/null
     local OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
@@ -156,7 +151,6 @@ validate_cert_passphrase () {
 }
 
 validate_mysql_credentials () {
-    echo $""
     echo "Validating MySQL credentials..."
     # Exporting MySQL password so we don't print it in the command line.
     export MYSQL_PWD=${DBPASSWD}
@@ -282,8 +276,6 @@ fi
 
 echo "Server: [$DEST_SERVER], using key [$PRIVATE_KEY]"
 echo "Database: [$DBNAME]"
-
-echo $""
 
 sshpass_exists
 
