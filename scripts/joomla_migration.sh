@@ -48,6 +48,7 @@ done;
 DEST_SERVER=""
 
 MYSQL_DUMP=`which mysqldump`
+MYSQL=`which mysql`
 DEFAULT_DBNAME="website";
 
 # Do not change this values
@@ -152,6 +153,20 @@ validate_cert_passphrase () {
         echo "[ERROR] Invalid certificate passphrase"
         exit
     fi
+}
+
+validate_mysql_credentials () {
+    echo $""
+    echo "Validating MySQL credentials..."
+    # Exporting MySQL password so we don't print it in the command line.
+    export MYSQL_PWD=${DBPASSWD}
+    ${MYSQL} -u ${DBUSER} -e exit 2> /dev/null
+    local OUT=$?
+    if [[ "$OUT" -ne 0 ]]; then
+        echo "[ERROR] Can't connect to MySQL. Please check DB user and password and try again."
+        exit
+    fi
+    return ${OUT}
 }
 
 files () {
@@ -274,6 +289,7 @@ sshpass_exists
 
 validate_source_credentials
 validate_cert_passphrase
+validate_mysql_credentials
 
 # FILES FIRST to make sure the scripts are up to date
 files
