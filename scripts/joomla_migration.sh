@@ -116,7 +116,7 @@ normalise_owner_and_permissions () {
 normalise_owner_permissions_and_flags_remote () {
     echo "Updating file's owner in [${DEST_SERVER}]. Executing ${SYNC_CHOWN}."
 
-    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${SYNC_CHOWN} ${SHARED_USER}@${SERVER}:${SYNC_CHOWN_DEST} #2> /dev/null
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${_JOOMLA_STATIC}/management/ ${SHARED_USER}@${SERVER}:${_JOOMLA_STATIC}/management #2> /dev/null
 
     # sudo visudo - authorise shared user to run chown script without asking for password
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -n -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${DEST_SERVER} "sudo ${SYNC_CHOWN}"
