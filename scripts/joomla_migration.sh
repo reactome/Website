@@ -117,6 +117,11 @@ normalise_owner_permissions_and_flags_remote () {
     echo "Updating file's owner in [${DEST_SERVER}]. Executing ${SYNC_CHOWN}."
 
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${SYNC_SCRIPTS}/ ${SHARED_USER}@${SERVER}:${SYNC_SCRIPTS} #2> /dev/null
+    OUT=$?
+    if [[ "$OUT" -ne 0 ]]; then
+        echo "[ERROR] Couldn't transfer scripts from ${SYNC_SCRIPTS} to the Destination server [${DEST_SERVER}]"
+        exit
+    fi
 
     # sudo visudo - authorise shared user to run chown script without asking for password
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -n -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${DEST_SERVER} "sudo ${SYNC_CHOWN}"
