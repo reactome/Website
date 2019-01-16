@@ -41,9 +41,9 @@ ARTICLES_TABLE="rlp_content"
 usage () {
    _SCRIPT=$(basename "$0")
    echo "Usage: ./$_SCRIPT"
-   echo '           dbuser=<DB User> [Required when method is ALL or DB]'
-   echo '           dbpasswd=<DB Password> [Required when method is ALL or DB]'
-   echo '           dbname=[<DB Name: DEFAULT website>]'
+   echo '           dbuser=<DB User>'
+   echo '           dbpasswd=<DB Password>'
+   echo '           dbname=<DB Name>'
    echo '           dbport=[<DB Port: Default 3306>]'
 
    exit
