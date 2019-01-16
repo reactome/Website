@@ -164,7 +164,7 @@ PRIVATE_KEY="/home/shared/.ssh/shared.pem"
 SHARED_USER="shared"
 PASSPHRASE="" # do not push this script if the passphrase is written down here
 
-SYNC_TOOL="sudo ${STATIC_DIR}/scripts/sync_tool.sh";
+SYNC_TOOL="sudo ${DIR}/sync_tool.sh";
 
 # IMPORTANT: SAME DIRECTORY IS USED FOR CLEAN UP - NEVER PUT A
 # to add more directories to be transferred ["name"]=dir
