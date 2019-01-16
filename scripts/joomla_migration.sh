@@ -56,7 +56,7 @@ DEV_SERVER="dev.reactome.org"
 RELEASE_SERVER="release.reactome.org"
 PRD1_SERVER="reactome.org"
 
-SYNC_CHOWN="${DIR}/scripts/website_chown.sh";
+SYNC_CHOWN="${_JOOMLA_STATIC}/scripts/website_chown.sh";
 
 OWNER="www-data:reactome"
 
@@ -80,7 +80,7 @@ usage () {
         echo '           ospasswd=<Your OS Password>'
         echo '           dbuser=<DB User>'
         echo '           dbpasswd=<DB Password>'
-        echo '           dbname=[<DB Name: DEFAULT website>]'
+        echo '           dbname=<DB Name: DEFAULT website>'
   fi
 
   exit
