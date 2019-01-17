@@ -285,14 +285,16 @@ check_services () {
                 IS_EVERYTHING_OK=1
             else
                 echo "ContentService is OK"
-                echo "Checking GraphDB version"
-                # DO NOT CHANGE TO HTTPS
-                DB_VERSION=`curl -X GET --silent "http://localhost:8080/ContentService/data/database/version" -H "accept: text/plain"`
-                if [[ "${DB_VERSION}" != "${RELEASE_VERSION}" ]]; then
-                    echo "[GraphDB] Graph Database hasn't been updated properly. Current [${DB_VERSION}] and Release version is [${RELEASE_VERSION}]"
-                    IS_EVERYTHING_OK=1
-                else
-                    echo "[GraphDB] Graph Database has been updated correctly"
+                if [[ "${RELEASE_VERSION}" = "" ]]; then
+                    echo "Checking GraphDB version"
+                    # DO NOT CHANGE TO HTTPS
+                    DB_VERSION=`curl -X GET --silent "http://localhost:8080/ContentService/data/database/version" -H "accept: text/plain"`
+                    if [[ "${DB_VERSION}" != "${RELEASE_VERSION}" ]]; then
+                        echo "[GraphDB] Graph Database hasn't been updated properly. Current [${DB_VERSION}] and Release version is [${RELEASE_VERSION}]"
+                        IS_EVERYTHING_OK=1
+                    else
+                        echo "[GraphDB] Graph Database has been updated correctly"
+                    fi
                 fi
             fi
             break;
