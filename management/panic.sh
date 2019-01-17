@@ -15,9 +15,6 @@
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run as sudo." ; exit 1 ; fi
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-cd ${DIR};
-
 print_help () {
     echo $""
     echo "##################################################################"
@@ -38,7 +35,7 @@ usage () {
     _SCRIPT=$(basename "$0")
     echo "Usage: sudo ./$_SCRIPT arguments... <command> [commands: complete_reload, stop_only, start_only, help]"
     echo '          destination_server=<DEV|PROD> *** [MANDATORY] ***'
-    echo '          static_dir=[DEFAULT: /usr/local/reactomes/Reactome/production/Website/static] ** if using different one, it must have configuration.php'
+    echo '          static_dir=[DEFAULT: /usr/local/reactomes/Reactome/production/Website/static]'
     echo ''
     echo '          complete_reload [Perform complete reload in Production]'
     echo '          stop_only [ProxyPass and stop to analyse logs or maintenance]'
@@ -68,6 +65,7 @@ do
 done
 
 ########### VARIABLES ###########
+DIR="/usr/local/reactomes/Reactome/production/Website/scripts"
 STATIC_DIR="/usr/local/reactomes/Reactome/production/Website/static"
 
 # server
