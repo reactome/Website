@@ -24,7 +24,7 @@
 # Don't need to execute as sudo
 
 if [[ $# -ne 3  ]]; then
-    echo "website2china expects 3 arguments <database user> <database password> <joomla user id>"
+    echo "website2china expects 3 arguments <database user> <database password> <joomla super user id>"
     exit;
 fi
 
@@ -73,10 +73,10 @@ USERS_PASSWD="nothinghere"
 echo "Cleaning up sensitive information in the temp database before dumping it...."
 
 # ALL USERS ARE BLOCKED
-SQL_CL_USERS="UPDATE rlp_users SET username = concat('guest',id), name = concat('Name',' ',id), email = concat('invalid',id,'@nodomain.com'), requireReset = 0, resetCount = 0, block = 1, params = '{\"admin_style\":\"\",\"admin_language\":\"\",\"language\":\"\",\"editor\":\"\",\"helpsite\":\"\",\"timezone\":\"\"}', registerDate='2017-01-01 09:00:00', lastvisitDate='2017-01-01 10:00:00', lastResetTime='0000-00-00 00:00:00', password = '${USERS_PASSWD}' WHERE id <> ${SUPER_USER_ID};"
+SQL_CL_USERS="SET sql_mode = '';UPDATE rlp_users SET username = concat('guest',id), name = concat('Name',' ',id), email = concat('invalid',id,'@nodomain.com'), requireReset = 0, resetCount = 0, block = 1, params = '{\"admin_style\":\"\",\"admin_language\":\"\",\"language\":\"\",\"editor\":\"\",\"helpsite\":\"\",\"timezone\":\"\"}', registerDate='2017-01-01 09:00:00', lastvisitDate='2017-01-01 10:00:00', lastResetTime='0000-00-00 00:00:00', password = '${USERS_PASSWD}' WHERE id <> ${SUPER_USER_ID};"
 
 # ADMIN ACCOUNT
-SQL_CL_ADMIN="UPDATE rlp_users SET username = 'admin', name = 'Joomla Admin', email = 'change-me@nodomain.com', requireReset = 0, resetCount = 0, params = '{\"admin_style\":\"\",\"admin_language\":\"\",\"language\":\"\",\"editor\":\"\",\"helpsite\":\"\",\"timezone\":\"\"}', registerDate='2017-01-01 09:00:00', lastvisitDate='2017-01-01 10:00:00', lastResetTime='0000-00-00 00:00:00', password = '${ADMIN_PASSWD}' WHERE id = ${SUPER_USER_ID};"
+SQL_CL_ADMIN="SET sql_mode = '';UPDATE rlp_users SET username = 'admin', name = 'Joomla Admin', email = 'change-me@nodomain.com', requireReset = 0, resetCount = 0, params = '{\"admin_style\":\"\",\"admin_language\":\"\",\"language\":\"\",\"editor\":\"\",\"helpsite\":\"\",\"timezone\":\"\"}', registerDate='2017-01-01 09:00:00', lastvisitDate='2017-01-01 10:00:00', lastResetTime='0000-00-00 00:00:00', password = '${ADMIN_PASSWD}' WHERE id = ${SUPER_USER_ID};"
 SQL_DELETE_GROUPS="DELETE FROM rlp_user_usergroup_map WHERE user_id <> ${SUPER_USER_ID} AND group_id <> 2;"
 SQL_DELETE_EJBBKP="DELETE FROM rlp_easyjoomlabackup;"
 SQL_SET_AI_EJBBKP="SET sql_mode = '';ALTER TABLE rlp_easyjoomlabackup AUTO_INCREMENT = 1;"
@@ -154,6 +154,7 @@ do
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Could not run [${SQL}]"
+        exit;
     fi
 done
 
