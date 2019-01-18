@@ -85,12 +85,6 @@ PUBLIC_DB_FILE="${LOCAL_REPO}/database/joomla_website_public.sql"
 SUPER_USER_ID=$4
 TO=$5
 
-echo ${GITHUB_EMAIL}
-echo ${DBUSER}
-echo ${DBPASSWD}
-echo ${SUPER_USER_ID}
-echo ${TO}
-
 send_error_mail () {
     sleep 15s
     set_owner
