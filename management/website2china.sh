@@ -23,6 +23,11 @@
 
 # Don't need to execute as sudo
 
+if [[ $# -ne 3  ]]; then
+    echo "website2china expects 3 arguments <database user> <database password> <joomla user id>"
+    exit;
+fi
+
 PRIVATE_FOLDER="/usr/local/reactomes/Reactome/production/Website/private"
 LOCAL_REPO="/usr/local/reactomes/Reactome/production/Website/static"
 
