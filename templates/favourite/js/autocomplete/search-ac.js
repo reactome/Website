@@ -1,7 +1,7 @@
 /* Lightweight javascript to be loaded in all the pages outside data-content project. */
 /* This is meant for the autocomplete to work across Reactome */
 jQuery(document).ready(function () {
-    jQuery('#local-searchbox').autocomplete({
+    jQuery('#local-searchbox').devbridgeAutocomplete({
         serviceUrl: '/content/getTags',
         minChars: 2,
         deferRequestBy: 250,
