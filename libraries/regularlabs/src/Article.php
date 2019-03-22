@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.12.11784
+ * @version         19.3.7504
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -25,12 +25,11 @@ jimport('joomla.filesystem.file');
 class Article
 {
 	static $articles = [];
-	static $splitter = '[[:SPLIT-ARTICLE:]]';
 
 	/**
 	 * Method to get article data.
 	 *
-	 * @param   integer $id The id of the article.
+	 * @param   integer|string $id The id, alias or title of the article.
 	 *
 	 * @return  object|boolean Menu item data object on success, boolean false
 	 */
@@ -58,8 +57,20 @@ class Article
 					'a.metakey', 'a.metadesc', 'a.access', 'a.hits', 'a.metadata', 'a.featured', 'a.language', 'a.xreference',
 				]
 			)
-			->from($db->quoteName('#__content', 'a'))
-			->where($db->quoteName('a.id') . ' = ' . (int) $id);
+			->from($db->quoteName('#__content', 'a'));
+
+		if ( ! is_numeric($id))
+		{
+			$query->where('(' .
+				$db->quoteName('a.title') . ' = ' . $db->quote($id)
+				. ' OR ' .
+				$db->quoteName('a.alias') . ' = ' . $db->quote($id)
+				. ')');
+		}
+		else
+		{
+			$query->where($db->quoteName('a.id') . ' = ' . (int) $id);
+		}
 
 		// Join on category table.
 		$query->select([
@@ -131,8 +142,11 @@ class Article
 	{
 		$input = JFactory::getApplication()->input;
 
-		if ( ! $id = $input->getInt('id')
-			|| ! (($input->get('option') == 'com_content' && $input->get('view') == 'article')
+		$id = $input->getInt('id');
+
+		if ( ! $id
+			|| ! (
+				($input->get('option') == 'com_content' && $input->get('view') == 'article')
 				|| ($input->get('option') == 'com_flexicontent' && $input->get('view') == 'item')
 			)
 		)
@@ -195,13 +209,20 @@ class Article
 
 		if ($has_article_texts && $text_same_as_article_text)
 		{
-			$article->text = $article->introtext . self::$splitter . $article->fulltext;
+			$splitter = '͞';
+			if (strpos($article->introtext, $splitter) !== false
+				|| strpos($article->fulltext, $splitter) !== false)
+			{
+				$splitter = 'Ͽ';
+			}
+
+			$article->text = $article->introtext . $splitter . $article->fulltext;
 
 			self::processText('text', $article, $helper, $method, $params, $ignore);
 
-			list($article->introtext, $article->fulltext) = explode(self::$splitter, $article->text, 2);
+			list($article->introtext, $article->fulltext) = explode($splitter, $article->text, 2);
 
-			$article->text = str_replace(self::$splitter, ' ', $article->text);
+			$article->text = str_replace($splitter, ' ', $article->text);
 
 			return;
 		}

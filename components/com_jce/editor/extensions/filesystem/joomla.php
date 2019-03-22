@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved
+ * @copyright 	Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -670,6 +670,8 @@ class WFJoomlaFileSystem extends WFFileSystem
     {
         jimport('joomla.filesystem.file');
 
+        $dispatcher = JDispatcher::getInstance();
+
         $path = WFUtility::makePath($this->getBaseDir(), rawurldecode($dir));
         $dest = WFUtility::makePath($path, $name);
 
@@ -712,14 +714,31 @@ class WFJoomlaFileSystem extends WFFileSystem
             }
         }
 
-        JDispatcher::getInstance()->trigger('onWfFileSystemBeforeUpload', array(&$src, &$dest));
+        $dispatcher->trigger('onWfFileSystemBeforeUpload', array(&$src, &$dest));
+
+        // create object to pass to joomla event
+        $object_file = new JObject(array(
+            'name'      => basename($dest),
+            'tmp_name'  => $src,
+            'filepath'  => $dest
+        ));
+
+        // trigger Joomla event before upload
+        $dispatcher->trigger('onContentBeforeSave', array('com_jce.file', &$object_file, true));
 
         if (JFile::upload($src, $dest, false, true)) {
             $result->state = true;
             $result->path = $dest;
         }
 
-        JDispatcher::getInstance()->trigger('onWfFileSystemAfterUpload', array(&$result));
+        $dispatcher->trigger('onWfFileSystemAfterUpload', array(&$result));
+
+        // update $object_file
+        $object_file->name = basename($result->path);
+        $object_file->filepath = $result->path;
+
+        // trigger Joomla event after upload
+        $dispatcher->trigger('onContentAfterSave', array('com_jce.file', &$object_file, true));
 
         return $result;
     }

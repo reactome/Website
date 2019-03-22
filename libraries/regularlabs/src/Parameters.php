@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.12.11784
+ * @version         19.3.7504
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -13,7 +13,7 @@ namespace RegularLabs\Library;
 
 defined('_JEXEC') or die;
 
-use JFile;
+use Joomla\CMS\Filesystem\File as JFile;
 use Joomla\CMS\Component\ComponentHelper as JComponentHelper;
 use Joomla\CMS\Plugin\PluginHelper as JPluginHelper;
 
@@ -273,7 +273,6 @@ class Parameters
 		{
 			if ($field['tag'] != 'FIELD'
 				|| ! isset($field['attributes'])
-				|| ( ! isset($field['attributes']['DEFAULT']) && ! isset($field['attributes'][$default]))
 				|| ! isset($field['attributes']['NAME'])
 				|| $field['attributes']['NAME'] == ''
 				|| $field['attributes']['NAME'][0] == '@'
@@ -287,6 +286,11 @@ class Parameters
 			if (isset($field['attributes'][$default]))
 			{
 				$field['attributes']['DEFAULT'] = $field['attributes'][$default];
+			}
+
+			if (!isset($field['attributes']['DEFAULT']))
+			{
+				$field['attributes']['DEFAULT'] = '';
 			}
 
 			if ($field['attributes']['TYPE'] == 'textarea')

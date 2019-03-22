@@ -61,7 +61,7 @@ DOWNLOAD_DIR=${STATIC_DIR}"/download/"${RELEASE_VERSION}
 
 MYSQL=`which mysql`
 MYSQL_DUMP=`which mysqldump`
-GK_CURRENT_DB="gk_current"
+GK_CURRENT_DB="current"
 
 # No trailing slash, they're added when needed.
 SOLR_DATA_DIR="/var/solr/data"  # solr:solr

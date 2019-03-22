@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.5.2
+ * @version         7.5.7
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -642,9 +642,10 @@ class Replace
 		if ( ! $item->haslink)
 		{
 			$class = 'anchor';
-			$html[] = '<' . $item->title_tag . ' class="rl_tabs-title nn_tabs-title">'
-				. '<a id="anchor-' . $item->id . '" class="' . $class . '"></a>'
-				. $item->title . '</' . $item->title_tag . '>';
+			$html[] = '<a id="anchor-' . $item->id . '" class="' . $class . '"></a>'
+				. '<' . $item->title_tag . ' class="rl_tabs-title nn_tabs-title">'
+				. $item->title
+				. '</' . $item->title_tag . '>';
 		}
 
 		$html = implode("\n", $html);

@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.12.11784
+ * @version         19.3.7504
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -66,7 +66,7 @@ abstract class Condition
 		$app   = JFactory::getApplication();
 		$input = $app->input;
 
-		$id = $input->get('id', [0], 'array');
+		$id = $input->get('id', $input->get('a_id', [0], 'array'), 'array');
 
 		$request = (object) [
 			'idname' => 'id',

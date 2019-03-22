@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.5.2
+ * @version         7.5.7
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -104,12 +104,13 @@ class Params
 
 		// Tag character start and end
 		list($tag_start, $tag_end) = self::getTagCharacters();
-		$tag_start = RL_RegEx::quote($tag_start);
-		$tag_end   = RL_RegEx::quote($tag_end);
 
 		$pre        = RL_PluginTag::getRegexSurroundingTagsPre();
 		$post       = RL_PluginTag::getRegexSurroundingTagsPost();
-		$inside_tag = RL_PluginTag::getRegexInsideTag();
+		$inside_tag = RL_PluginTag::getRegexInsideTag($tag_start, $tag_end);
+
+		$tag_start = RL_RegEx::quote($tag_start);
+		$tag_end   = RL_RegEx::quote($tag_end);
 
 		$delimiter = ($params->tag_delimiter == 'space') ? RL_PluginTag::getRegexSpaces() : '=';
 		$set_id    = '(?:-[a-zA-Z0-9-_]+)?';

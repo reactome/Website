@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.12.11784
+ * @version         19.3.7504
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -139,8 +139,12 @@ class Form
 
 		if ($simple)
 		{
-			$attr = 'style="width: ' . $size . 'px"';
-			$attr .= $multiple ? ' multiple="multiple"' : '';
+			$attr = 'style="width: ' . $size . 'px" multiple="multiple"';
+
+			if (substr($name, -2) !== '[]')
+			{
+				$name .= '[]';
+			}
 
 			$html = JHtml::_('select.genericlist', $options, $name, trim($attr), 'value', 'text', $value, $id);
 
@@ -318,6 +322,24 @@ class Form
 	{
 		JHtml::_('jquery.framework');
 
+		$script = self::getAddToLoadAjaxListScript($field, $name, $value, $id, $attributes, $simple);
+
+		if (is_array($value))
+		{
+			$value = implode(',', $value);
+		}
+
+		Document::script('regularlabs/script.min.js');
+		Document::stylesheet('regularlabs/style.min.css');
+
+		$input = '<textarea name="' . $name . '" id="' . $id . '" cols="40" rows="5">' . $value . '</textarea>'
+			. '<div id="' . $id . '_spinner" class="rl_spinner"></div>';
+
+		return $input . $script;
+	}
+
+	public static function getAddToLoadAjaxListScript($field, $name, $value, $id, $attributes = [], $simple = false)
+	{
 		$attributes['field'] = $field;
 		$attributes['name']  = $name;
 		$attributes['value'] = $value;
@@ -334,8 +356,6 @@ class Form
 
 //			$success .= "console.log('#" . $id . "');";
 //			$success .= "console.log(data);";
-
-		Document::script('regularlabs/script.min.js');
 
 		if ($simple)
 		{
@@ -357,18 +377,7 @@ class Form
 			. ")"
 			. "});";
 
-		if (is_array($value))
-		{
-			$value = implode(',', $value);
-		}
-
-		Document::script('regularlabs/script.min.js');
-		Document::stylesheet('regularlabs/style.min.css');
-
-		$input = '<textarea name="' . $name . '" id="' . $id . '" cols="40" rows="5">' . $value . '</textarea>'
-			. '<div id="' . $id . '_spinner" class="rl_spinner"></div>';
-
-		return $input . '<script>' . $script . '</script>';
+		return '<script>' . $script . '</script>';
 	}
 
 	/**
