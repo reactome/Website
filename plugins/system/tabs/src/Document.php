@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.5.2
+ * @version         7.5.7
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -49,11 +49,11 @@ class Document
 
 		RL_Document::scriptOptions($options, 'Tabs');
 
-		RL_Document::script('tabs/script.min.js', ($params->media_versioning ? '7.5.2' : ''));
+		RL_Document::script('tabs/script.min.js', ($params->media_versioning ? '7.5.7' : ''));
 
 		if ($params->load_stylesheet)
 		{
-			RL_Document::stylesheet('tabs/style.min.css', ($params->media_versioning ? '7.5.2' : ''));
+			RL_Document::stylesheet('tabs/style.min.css', ($params->media_versioning ? '7.5.7' : ''));
 		}
 
 	}

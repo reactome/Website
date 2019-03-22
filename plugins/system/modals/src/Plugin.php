@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         11.1.3
+ * @version         11.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -19,6 +19,11 @@ namespace RegularLabs\Plugin\System\Modals;
 
 defined('_JEXEC') or die;
 
+if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+}
+
 use Joomla\CMS\Factory as JFactory;
 use Joomla\CMS\Installer\Installer as JInstaller;
 use Joomla\CMS\Language\Text as JText;
@@ -28,11 +33,6 @@ use ReflectionMethod;
 use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\Language as RL_Language;
 use RegularLabs\Library\Protect as RL_Protect;
-
-if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
-{
-	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
-}
 
 class Plugin extends JPlugin
 {
@@ -92,6 +92,14 @@ class Plugin extends JPlugin
 				continue;
 			}
 			$arguments[] = $caller['args'][$count];
+		}
+
+		if ($event == 'onContentPrepare'
+			&& empty($arguments[1]->id)
+			&& in_array($arguments[0], ['com_k2.item', 'com_k2.itemlist'])
+		)
+		{
+			return false;
 		}
 
 		return call_user_func_array([$this->_helper, $event], $arguments);
@@ -332,8 +340,8 @@ class Plugin extends JPlugin
 			return;
 		}
 
-		if (version_compare($plugin['version'], '18.12.11784', '<')
-			|| version_compare($library['version'], '18.12.11784', '<'))
+		if (version_compare($plugin['version'], '19.3.7504', '<')
+			|| version_compare($library['version'], '19.3.7504', '<'))
 		{
 			define('REGULAR_LABS_LIBRARY_INSTALLED', 'outdated');
 

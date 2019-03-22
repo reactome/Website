@@ -2,8 +2,8 @@
 <extension version="3.9" type="plugin" group="system" method="upgrade">
 	<name>plg_system_modals</name>
 	<description>PLG_SYSTEM_MODALS_DESC</description>
-	<version>11.1.3</version>
-	<creationDate>December 2018</creationDate>
+	<version>11.3.0</version>
+	<creationDate>March 2019</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -218,6 +218,11 @@
 					   description="MDL_AUTOCONVERT_URLS_DESC" />
 				<field name="@block_urls_b" type="rl_block" end="1" />
 
+				<field name="exclude_urls" type="textarea" cols="40" rows="5" default=""
+					   label="MDL_EXCLUDE_URLS"
+					   description="MDL_EXCLUDE_URLS_DESC"
+					   showon="autoconvert_classnames:1[OR]external:1[OR]target:1[OR]filetypes:1[OR]autoconvert_urls:1" />
+
 				<field name="@block_autoconvert_b" type="rl_block" end="1" />
 
 				<field name="@block_autoconvert_images_a" type="rl_block" start="1" label="MDL_IMAGES" />
@@ -283,9 +288,6 @@
 				<field name="iframefiles" type="text" default="pdf"
 					   label="MDL_IFRAME_FILES"
 					   description="MDL_IFRAME_FILES_DESC" />
-				<field name="exclude_urls" type="textarea" cols="40" rows="5" default=""
-					   label="MDL_EXCLUDE_URLS"
-					   description="MDL_EXCLUDE_URLS_DESC" />
 				<field name="@notice_open_count_based_on" type="rl_onlypro"
 					   label="MDL_OPEN_COUNT_BASED_ON"
 					   description="MDL_OPEN_COUNT_BASED_ON_DESC" />

@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.12.11784
+ * @version         19.3.7504
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -50,7 +50,11 @@ class ArrayHelper
 			return [$data];
 		}
 
-		$array = explode($separator, $data);
+		// explode on separator, but keep escaped separators
+		$splitter = uniqid('RL_SPLIT');
+		$data     = str_replace($separator, $splitter, $data);
+		$data     = str_replace('\\' . $splitter, $separator, $data);
+		$array    = explode($splitter, $data);
 
 		if ($trim)
 		{
@@ -63,6 +67,24 @@ class ArrayHelper
 		}
 
 		return $array;
+	}
+
+	/**
+	 * Join array elements with a string
+	 *
+	 * @param string $glue
+	 * @param array  $pieces
+	 *
+	 * @return array
+	 */
+	public static function implode($pieces, $glue = '')
+	{
+		if ( ! is_array($pieces))
+		{
+			$pieces = self::toArray($pieces, $glue);
+		}
+
+		return implode($glue, $pieces);
 	}
 
 	/**
@@ -206,5 +228,22 @@ class ArrayHelper
 		}
 
 		return false;
+	}
+
+	/**
+	 * Sorts the array by keys based on the values of another array
+	 *
+	 * @param array $array
+	 * @param array $order
+	 *
+	 * @return array
+	 */
+	public static function sortByOtherArray($array, $order)
+	{
+		uksort($array, function ($key1, $key2) use ($order) {
+			return (array_search($key1, $order) > array_search($key2, $order));
+		});
+
+		return $array;
 	}
 }

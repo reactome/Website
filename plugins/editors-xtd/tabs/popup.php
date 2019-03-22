@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.5.2
+ * @version         7.5.7
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -44,12 +44,12 @@ class Popup
 		";
 		RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('tabs/popup.min.js', '7.5.2');
+		RL_Document::script('tabs/popup.min.js', '7.5.7');
 	}
 
 	public function loadStyles()
 	{
-		RL_Document::style('tabs/popup.min.css', '7.5.2');
+		RL_Document::style('tabs/popup.min.css', '7.5.7');
 	}
 }
 

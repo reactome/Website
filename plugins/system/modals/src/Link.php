@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         11.1.3
+ * @version         11.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -26,39 +26,14 @@ class Link
 	public static function build($attributes, $data, $content = '')
 	{
 
-		$params = Params::get();
-
 		if (isset($data['image']))
 		{
 			$attributes->href = $data['image'];
 			unset($data['image']);
 
-			if ( ! $content)
-			{
-				$image = new Image($attributes->href, $data);
-
-				$content = $image->thumbnail->exists()
-					? $image->thumbnail->getHtmlTag()
-					: $image->getHtmlTag();
-
-				$attributes->href = $image->getHref();
-
-				if ( ! isset($attributes->title))
-				{
-					$attributes->title = $image->attributes->title;
-				}
-
-				if ( ! isset($attributes->alt))
-				{
-					$attributes->alt = $image->attributes->alt;
-				}
-
-				if ( ! isset($attributes->{'data-modal-description'}) && isset($image->attributes->description))
-				{
-					$attributes->{'data-modal-description'} = $image->attributes->description;
-				}
-			}
 		}
+
+		$params = Params::get();
 
 		self::setVideoUrl($attributes, $data);
 

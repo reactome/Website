@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         11.1.3
+ * @version         11.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -129,12 +129,13 @@ class Params
 
 		// Tag character start and end
 		list($tag_start, $tag_end) = Params::getTagCharacters();
-		$tag_start = RL_RegEx::quote($tag_start);
-		$tag_end   = RL_RegEx::quote($tag_end);
 
 		$pre        = RL_PluginTag::getRegexSurroundingTagsPre();
 		$post       = RL_PluginTag::getRegexSurroundingTagsPost();
-		$inside_tag = RL_PluginTag::getRegexInsideTag();
+		$inside_tag = RL_PluginTag::getRegexInsideTag($tag_start, $tag_end);
+
+		$tag_start = RL_RegEx::quote($tag_start);
+		$tag_end   = RL_RegEx::quote($tag_end);
 
 		$spaces      = RL_PluginTag::getRegexSpaces();
 		$spaces_none = RL_PluginTag::getRegexSpaces('*');

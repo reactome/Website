@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.7.2
+ * @version         7.7.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -332,8 +332,8 @@ class Plugin extends JPlugin
 			return;
 		}
 
-		if (version_compare($plugin['version'], '18.12.15489', '<')
-			|| version_compare($library['version'], '18.12.15489', '<'))
+		if (version_compare($plugin['version'], '19.3.7504', '<')
+			|| version_compare($library['version'], '19.3.7504', '<'))
 		{
 			define('REGULAR_LABS_LIBRARY_INSTALLED', 'outdated');
 

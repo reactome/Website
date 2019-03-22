@@ -1,10 +1,10 @@
 /**
  * @package         Tabs
- * @version         7.5.2
+ * @version         7.5.7
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -92,6 +92,7 @@ var RegularLabsTabs = null;
 
 
 			if (this.scroll_to) {
+
 				this.setScrollOnLoad($el);
 			}
 
@@ -320,7 +321,7 @@ var RegularLabsTabs = null;
 			parent = parents.pop();
 
 			if (parent.el.hasClass('in') || parent.el.parent().hasClass('active')) {
-				self.stepThroughParents(parents, parent, scroll);
+				self.stepThroughParents(parents, parent);
 				return;
 			}
 
@@ -463,7 +464,12 @@ var RegularLabsTabs = null;
 			var $link = $(el);
 
 			// link is a tab or slider or list link, so ignore
-			if ($link.attr('data-toggle') || $link.hasClass('rl_aliders-link') || $link.hasClass('rl_tabs-toggle-sm') || $link.hasClass('rl_sliders-toggle-sm')) {
+			if ($link.attr('data-toggle')
+				|| $link.hasClass('rl_tabs-toggle')
+				|| $link.hasClass('rl_tabs-toggle-sm')
+				|| $link.hasClass('rl_sliders-toggle')
+				|| $link.hasClass('rl_sliders-link')
+			) {
 				return;
 			}
 
@@ -482,6 +488,7 @@ var RegularLabsTabs = null;
 
 			var is_tab  = true;
 			var $anchor = $('a[data-toggle="tab"][data-id="' + id + '"]');
+
 
 			if (!$anchor.length) {
 				$anchor = $('#' + id + ',a[name="' + id + '"]');

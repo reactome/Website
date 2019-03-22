@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         18.12.11784
+ * @version         19.3.7504
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -41,14 +41,7 @@ class JFormFieldRL_Header extends \RegularLabs\Library\Field
 
 		if ($description)
 		{
-			// variables
-			$v1 = $this->get('var1');
-			$v2 = $this->get('var2');
-			$v3 = $this->get('var3');
-			$v4 = $this->get('var4');
-			$v5 = $this->get('var5');
-
-			$description = RL_String::html_entity_decoder(trim(JText::sprintf($description, $v1, $v2, $v3, $v4, $v5)));
+			$description = RL_String::html_entity_decoder(trim(JText::_($description)));
 		}
 
 		if ($title)

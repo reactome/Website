@@ -1,10 +1,10 @@
 /**
  * @package         Sliders
- * @version         7.7.2
+ * @version         7.7.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -434,7 +434,12 @@ var RegularLabsSliders = null;
 			var $link = $(el);
 
 			// link is a tab or slider or list link, so ignore
-			if ($link.attr('data-toggle') || $link.hasClass('rl_tabs-link') || $link.hasClass('rl_tabs-toggle-sm') || $link.hasClass('rl_sliders-toggle-sm')) {
+			if ($link.attr('data-toggle')
+				|| $link.hasClass('rl_sliders-toggle')
+				|| $link.hasClass('rl_tabs-toggle')
+				|| $link.hasClass('rl_tabs-toggle-sm')
+				|| $link.hasClass('rl_tabs-link')
+			) {
 				return;
 			}
 

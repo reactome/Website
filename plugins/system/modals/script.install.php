@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         11.1.3
+ * @version         11.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2018 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -106,6 +106,13 @@ class PlgSystemModalsInstallerScript extends PlgSystemModalsInstallerScriptHelpe
 		if ( ! isset($params->thumbnail_legacy) && ! empty($params->thumbnail_suffix))
 		{
 			$params->thumbnail_legacy = 1;
+		}
+
+		// Since v11.3.0
+		if (isset($params->thumbnail_crop) && is_numeric($params->thumbnail_crop))
+		{
+			$params->thumbnail_resize_type = $params->thumbnail_crop ? 'crop' : 'scale';
+			unset($params->thumbnail_crop);
 		}
 
 		$query->clear()
