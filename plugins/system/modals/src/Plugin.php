@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.3.0
+ * @version         11.3.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -340,8 +340,8 @@ class Plugin extends JPlugin
 			return;
 		}
 
-		if (version_compare($plugin['version'], '19.3.7504', '<')
-			|| version_compare($library['version'], '19.3.7504', '<'))
+		if (version_compare($plugin['version'], '19.3.16030', '<')
+			|| version_compare($library['version'], '19.3.16030', '<'))
 		{
 			define('REGULAR_LABS_LIBRARY_INSTALLED', 'outdated');
 
