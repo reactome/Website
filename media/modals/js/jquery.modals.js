@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         11.3.0
+ * @version         11.3.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -120,9 +120,9 @@
 					});
 				}
 
-				if ('scrolling' in iframe) {
-					iframe.scrolling = 'no';
-				}
+				// if ('scrolling' in iframe) {
+				// 	iframe.scrolling = 'no';
+				// }
 				if ('frameBorder' in iframe) {
 					iframe.frameBorder = 0;
 				}

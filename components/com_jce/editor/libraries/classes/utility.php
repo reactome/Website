@@ -285,7 +285,7 @@ abstract class WFUtility
 
         // only for utf-8 to avoid PCRE errors - PCRE must be at least version 5
         if ($mode == 'utf-8') {
-            try {                
+            try {
                 // perform pcre replacement
                 $result = preg_replace($search, '', $subject);
             } catch (Exception $e) {
@@ -521,7 +521,7 @@ abstract class WFUtility
         if (empty($name) && (string) $name !== "0") {
             return false;
         }
-        
+
         // list of invalid extensions
         $executable = array(
             'php', 'php3', 'php4', 'php5', 'js', 'exe', 'phtml', 'java', 'perl', 'py', 'asp', 'dll', 'go', 'ade', 'adp', 'bat', 'chm', 'cmd', 'com', 'cpl', 'hta', 'ins', 'isp',
@@ -551,6 +551,7 @@ abstract class WFUtility
                 return false;
             }
         }
+
         return true;
     }
 

@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         19.3.7504
+ * @version         19.3.16030
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
