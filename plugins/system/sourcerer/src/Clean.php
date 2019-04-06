@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.4.2
+ * @version         7.4.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -63,11 +63,12 @@ class Clean
 		$params = Params::get();
 
 		list($tag_start, $tag_end) = Params::getTagCharacters();
+
+		$inside_tag = RL_PluginTag::getRegexInsideTag($tag_start, $tag_end);
+		$spaces     = RL_PluginTag::getRegexSpaces();
+
 		$tag_start = RL_RegEx::quote($tag_start);
 		$tag_end   = RL_RegEx::quote($tag_end);
-
-		$inside_tag = RL_PluginTag::getRegexInsideTag();
-		$spaces     = RL_PluginTag::getRegexSpaces();
 
 		$regex = Params::getRegex();
 
