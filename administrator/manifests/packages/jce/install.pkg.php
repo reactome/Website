@@ -151,6 +151,12 @@ class pkg_jceInstallerScript
             return true;
         }
 
+        $jversion = new JVersion();
+
+        if (version_compare($jversion->getShortVersion(), '3.7', 'lt')) {
+            throw new RuntimeException('JCE requires Joomla 3.7 or later.');
+        }
+
         $parent = $installer->getParent();
 
         // get current package version
@@ -188,11 +194,16 @@ class pkg_jceInstallerScript
 
         // clean up for legacy upgrade
         if ($version && version_compare($version, '2.7.7', '<')) {
-            // remove admin folder
-            JFolder::delete(JPATH_ADMINISTRATOR . '/components/com_jce');
-
-            // remove site folder
-            JFolder::delete(JPATH_SITE . '/components/com_jce');
+            // remove admin folder, catch exception
+            try {
+                JFolder::delete(JPATH_ADMINISTRATOR . '/components/com_jce');
+            } catch(Exception $e) {}
+            
+            // remove site folder, catch exception
+            try {
+                JFolder::delete(JPATH_SITE . '/components/com_jce');;
+            } catch(Exception $e) {}
+            
         }
     }
 

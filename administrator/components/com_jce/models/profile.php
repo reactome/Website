@@ -72,13 +72,29 @@ class JceModelProfile extends JModelAdmin
     protected function preprocessForm(JForm $form, $data, $group = 'content')
     {
         if (!empty($data->config)) {
-            $registry = new JRegistry($data->config);
-
             // get plugins from profile data
             $plugins = explode(',', $data->plugins);
 
             // prepend "editor" to array
             array_unshift($plugins, 'editor');
+
+            $registry = new JRegistry($data);
+
+            // process individual fields to remove default value if required
+            $fields = $form->getFieldset();
+
+            foreach ($fields as $field) {
+                $name = $field->getAttribute('name');
+
+                // get the field group and add the field name
+                $group = (string) $field->group;
+                $group = $group . '.' . $name;
+
+                // reset the "default" attribute value if a value is set
+                if ($registry->exists($group)) {
+                    $form->setFieldAttribute($name, 'default', '', (string) $field->group);
+                }
+            }
         }
 
         parent::preprocessForm($form, $data);
@@ -206,6 +222,11 @@ class JceModelProfile extends JModelAdmin
 
                     // not in the list...
                     if (empty($name) || array_key_exists($name, $plugins) === false) {
+                        continue;
+                    }
+
+                    // must be assigned...
+                    if (!$plugins[$name]->active) {
                         continue;
                     }
 
@@ -349,60 +370,60 @@ class JceModelProfile extends JModelAdmin
 
                     // no parameter fields
                     if (empty($plugin->form->getFieldsets())) {
-                        $plugin->form   = false;
+                        $plugin->form = false;
                         $plugins[$name] = $plugin;
                         continue;
                     }
-                    
+
                     // bind data to the form
                     $plugin->form->bind($data->params);
 
                     $extensions = JcePluginsHelper::getExtensions();
 
-                    foreach($extensions as $type => $items) {
+                    foreach ($extensions as $type => $items) {
 
                         $item = new StdClass;
-                        $item->name     = '';
-                        $item->title    = '';
+                        $item->name = '';
+                        $item->title = '';
                         $item->manifest = WF_EDITOR_LIBRARIES . '/xml/config/' . $type . '.xml';
-                        $item->context  = '';
+                        $item->context = '';
 
                         array_unshift($items, $item);
 
                         foreach ($items as $p) {
                             // check for plugin fieldset using xpath, as fieldset can be empty
                             $fieldset = $plugin->form->getXml()->xpath('(//fieldset[@name="plugin.' . $type . '"])');
-    
+
                             // not supported, move along...
                             if (empty($fieldset)) {
                                 continue;
                             }
-    
+
                             $context = (string) $fieldset[0]->attributes()->context;
-    
+
                             // check for a context, eg: images, web, video
                             if ($context && !in_array($p->context, explode(',', $context))) {
                                 continue;
                             }
-    
+
                             if (is_file($p->manifest)) {
                                 $path = array($plugin->name, $type, $p->name);
-    
+
                                 // create new extension object
                                 $extension = new StdClass;
-    
+
                                 // set extension name as the plugin name
                                 $extension->name = $p->name;
-    
+
                                 // set extension title
                                 $extension->title = $p->title;
-    
+
                                 // load form
                                 $extension->form = $this->loadForm('com_jce.profile.' . implode('.', $path), $p->manifest, array('control' => 'jform[config][' . $plugin->name . '][' . $type . ']', 'load_data' => true), true, '//extension');
-                                
+
                                 // get fieldsets if any
                                 $fieldsets = $extension->form->getFieldsets();
-    
+
                                 foreach ($fieldsets as $fieldset) {
                                     // load form
                                     $plugin->extensions[$type][$p->name] = $extension;
@@ -457,11 +478,15 @@ class JceModelProfile extends JModelAdmin
                     $value = implode(',', filter_var_array($value, FILTER_SANITIZE_STRING));
                     break;
                 case 'area':
-                    if (count($value) === 2) {
-                        $value = array(0);
+                    if (is_array($value)) {
+                        if (count($value) === 2) {
+                            $value = 0;
+                        } else {
+                            $value = $value[0];
+                        }
                     }
 
-                    $value = (int) $value[0];
+                    $value = $value;
 
                     break;
                 case 'components':
@@ -521,18 +546,11 @@ class JceModelProfile extends JModelAdmin
 
         // get layout rows and plugins data
         $rows = isset($data['rows']) ? $data['rows'] : '';
+        $plugins = isset($data['plugins']) ? $data['plugins'] : '';
 
-        // restore layout rows and plugins data
-        $data['rows']       = $filter->clean($rows, 'STRING');
-        $data['plugins']    = $filter->clean($plugins, 'STRING');
-
-        $area = $data['area'];
-
-        if (count($area) === 2) {
-            $area = array(0);
-        }
-
-        $data['area'] = (int) $area[0];
+        // clean layout rows and plugins data
+        $data['rows'] = $filter->clean($rows, 'STRING');
+        $data['plugins'] = $filter->clean($plugins, 'STRING');
 
         // add back config data
         $data['params'] = $filter->clean($config, 'ARRAY');
@@ -716,7 +734,7 @@ class JceModelProfile extends JModelAdmin
             $buffer .= "\n\t\t";
             $buffer .= '<profile>';
 
-           $fields = $table->getProperties();
+            $fields = $table->getProperties();
 
             foreach ($fields as $key => $value) {
                 // skip some stuff
