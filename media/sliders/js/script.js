@@ -1,6 +1,6 @@
 /**
  * @package         Sliders
- * @version         7.7.4
+ * @version         7.7.5
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -39,6 +39,7 @@ var RegularLabsSliders = null;
 			if (this.current_url.indexOf('#') > -1) {
 				this.current_url = this.current_url.substr(0, this.current_url.indexOf('#'));
 			}
+			this.current_path = this.current_url.replace(/^.*\/\/.*?\//, '');
 
 			// Hide all non-active slider bodies
 			$('.rl_sliders-body:not(.in)').height(0);
@@ -253,7 +254,7 @@ var RegularLabsSliders = null;
 				return;
 			}
 
-			var $anchor = $('#' + id + ',a[name="' + id + '"],a#anchor-' + id + '');
+			var $anchor = $('[id="' + id + '"],a[name="' + id + '"],a#anchor-' + id);
 
 			if (!$anchor.length) {
 				return;
@@ -424,7 +425,16 @@ var RegularLabsSliders = null;
 		initHashLinkList: function() {
 			var self = this;
 
-			$('a[href^="#"],a[href^="' + this.current_url + '#"],area[href^="#"],area[href^="' + this.current_url + '#"]').each(function($i, el) {
+			$(
+				'a[href^="#"],'
+				+ 'a[href^="' + this.current_url + '#"],'
+				+ 'a[href^="' + this.current_path + '#"],'
+				+ 'a[href^="/' + this.current_path + '#"],'
+				+ 'area[href^="#"],'
+				+ 'area[href^="' + this.current_url + '#"]'
+				+ 'area[href^="' + this.current_path + '#"]'
+				+ 'area[href^="/' + this.current_path + '#"]'
+			).each(function($i, el) {
 				self.initHashLink(el);
 			});
 		},
@@ -460,7 +470,7 @@ var RegularLabsSliders = null;
 			var $anchor   = $('a[data-toggle="collapse"][data-id="' + id + '"]');
 
 			if (!$anchor.length) {
-				$anchor = $('#' + id + ',a[name="' + id + '"]');
+				$anchor = $('[id="' + id + '"],a[name="' + id + '"]');
 
 				// No accompanying link found
 				if (!$anchor.length) {

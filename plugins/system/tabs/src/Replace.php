@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.5.7
+ * @version         7.5.8
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
