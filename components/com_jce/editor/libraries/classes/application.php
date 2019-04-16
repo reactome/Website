@@ -405,39 +405,46 @@ class WFApplication extends JObject
      * @param $fallback Fallback value
      * @param $default Default value
      */
-    public function getParam($key, $fallback = '', $default = '', $type = 'string', $allowempty = true)
+    public function getParam($key, $fallback = '', $default = '', $type = 'string')
     {
         // get params for base key
         $params = $this->getParams();
 
         // get a parameter
         $value = $params->get($key);
-
-        // key not present in params, use fallback value
-        if ($params->exists($key) === false) {
-            $value = $fallback;
-        } else {
-            if (!$allowempty && $this->isEmptyValue($value)) {
+        
+        // key not present in params or was empty string (JRegistry returns null), use fallback value
+        if (is_null($value)) {
+            // set default as empty string
+            $value = "";
+            
+            // key does not exist - parameter was not set - use fallback
+            if ($params->exists($key) === false) {
                 $value = $fallback;
             }
         }
 
+        // clean string value of whitespace
         if (is_string($value) && $type == 'string') {
             $value = trim(preg_replace('#[\n\r\t]+#', '', $value));
         }
 
+        // cast default to float if numeric
         if (is_numeric($default)) {
             $default = (float) $default;
         }
 
+        // cast value to float if numeric
         if (is_numeric($value)) {
             $value = (float) $value;
         }
 
+        // if value is equal to system default, return empty string
         if ($value === $default) {
             return '';
         }
 
+        // cast value to boolean
         if ($type == 'boolean') {
             $value = (bool) $value;
         }
