@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         19.3.16030
+ * @version         19.4.11218
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -130,6 +130,11 @@ class RegEx
 			return '(' . $prefix . implode('|', $array) . ')';
 		}
 
+		if ( ! empty($name))
+		{
+			return '(?<' . $name . '>' . preg_quote($data, $delimiter) . ')';
+		}
+
 		return preg_quote($data, $delimiter);
 	}
 
@@ -179,7 +184,7 @@ class RegEx
 	public static function quoteArray($array = [], $delimiter = '#')
 	{
 		array_walk($array, function (&$part, $key, $delimiter) {
-			$part = self::quote($part, $delimiter);
+			$part = self::quote($part, '', $delimiter);
 		}, $delimiter);
 
 		return $array;

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.7.5
+ * @version         7.7.6
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -708,7 +708,8 @@ class Replace
 			. ' id="slider-' . $item->id . '"'
 			. ' data-id="' . $item->id . '"'
 			. ' data-parent="#set-rl_sliders-' . $items[0]->set . '"'
-			. ' aria-selected="' . ($item->open ? 'true' : 'false') . '"';
+			. ' aria-selected="' . ($item->open ? 'true' : 'false') . '"'
+			. ' aria-expanded="' . ($item->open ? 'true' : 'false') . '"';
 
 		if ( ! empty($item->link_attributes))
 		{

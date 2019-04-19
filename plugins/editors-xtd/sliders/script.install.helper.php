@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.7.5
+ * @version         7.7.6
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -162,7 +162,7 @@ class PlgEditorsXtdSlidersInstallerScriptHelper
 
 		switch ($type)
 		{
-			case 'plugin';
+			case 'plugin':
 				$folders[] = JPATH_PLUGINS . '/' . $folder . '/' . $extname;
 				break;
 
@@ -370,7 +370,7 @@ class PlgEditorsXtdSlidersInstallerScriptHelper
 	{
 		switch ($this->extension_type)
 		{
-			case 'plugin';
+			case 'plugin':
 				return JText::_('plg_' . strtolower($this->plugin_folder));
 
 			case 'component':

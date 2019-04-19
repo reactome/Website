@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.4.3
+ * @version         7.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -18,7 +18,7 @@ use Joomla\CMS\Factory as JFactory;
 
 class Code
 {
-	public static function run($src_string = '', &$src_variables)
+	public static function run($src_string = '', &$src_variables, $tmp_path = '')
 	{
 		if ( ! is_string($src_string) || $src_string == '')
 		{
@@ -28,7 +28,7 @@ class Code
 		$src_pre_variables = array_keys(get_defined_vars());
 
 		ob_start();
-		$src_post_variables = self::execute($src_string, $src_variables);
+		$src_post_variables = self::execute($src_string, $src_variables, $tmp_path);
 		$src_output         = ob_get_contents();
 		ob_end_clean();
 
@@ -54,7 +54,7 @@ class Code
 		return $src_output;
 	}
 
-	private static function execute($string = '', $src_variables)
+	private static function execute($string = '', $src_variables, $tmp_path = '')
 	{
 		$function_name = 'sourcerer_php_' . md5($string);
 
@@ -65,8 +65,8 @@ class Code
 
 		$contents = self::generateFileContents($function_name, $string);
 
-		$folder    = JFactory::getConfig()->get('tmp_path', JPATH_ROOT . '/tmp');
-		$temp_file = $folder . '/' . $function_name;
+		$tmp_path  = $tmp_path ? $tmp_path : JFactory::getConfig()->get('tmp_path', JPATH_ROOT . '/tmp');
+		$temp_file = $tmp_path . '/' . $function_name;
 
 		JFile::write($temp_file, $contents);
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.4.3
+ * @version         7.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -203,10 +203,8 @@ class Replace
 			return;
 		}
 
-		$params = Params::get();
-
 		// allow in component?
-		if (RL_Protect::isRestrictedComponent(isset($params->components) ? $params->components : [], $area))
+		if (RL_Protect::isRestrictedComponent(Params::get('components', []), $area))
 		{
 			Protect::protectTags($string);
 
@@ -445,7 +443,7 @@ class Replace
 
 		$src_variables['article'] = $article;
 
-		$output = Code::run($script, $src_variables);
+		$output = Code::run($script, $src_variables, Params::get('tmp_path'));
 
 		$string_array[1] = $output;
 

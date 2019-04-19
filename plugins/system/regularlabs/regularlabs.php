@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         19.3.16030
+ * @version         19.4.11218
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -87,9 +87,30 @@ class PlgSystemRegularLabs extends JPlugin
 			return;
 		}
 
+		$this->fixQuotesInTooltips();
+
 		RL_AdminMenu::combine();
 
 		RL_AdminMenu::addHelpItem();
+	}
+
+	private function fixQuotesInTooltips()
+	{
+		$html = JFactory::getApplication()->getBody();
+
+		if ($html == '')
+		{
+			return;
+		}
+
+		if (strpos($html, '&amp;quot;rl_code&amp;quot;') === false)
+		{
+			return;
+		}
+
+		$html = str_replace('&amp;quot;rl_code&amp;quot;', '&quot;rl_code&quot;', $html);
+
+		JFactory::getApplication()->setBody($html);
 	}
 
 	public function onInstallerBeforePackageDownload(&$url, &$headers)
