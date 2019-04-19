@@ -2,7 +2,7 @@
 <extension version="3.9" type="plugin" group="system" method="upgrade">
 	<name>plg_system_sourcerer</name>
 	<description>PLG_SYSTEM_SOURCERER_DESC</description>
-	<version>7.4.3</version>
+	<version>7.5.0</version>
 	<creationDate>April 2019</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
@@ -216,6 +216,7 @@
 			</fieldset>
 
 			<fieldset name="advanced">
+				<field name="@loadlanguage_config" type="rl_loadlanguage" extension="com_config" />
 				<field name="trim" type="radio" class="btn-group" default="0"
 					   label="RL_STRIP_SURROUNDING_TAGS"
 					   description="RL_STRIP_SURROUNDING_TAGS_DESC">
@@ -237,6 +238,10 @@
 				<field name="include_path" type="text" default="/"
 					   label="SRC_INCLUDE_PATH"
 					   description="SRC_INCLUDE_PATH_DESC" />
+				<field name="tmp_path" type="text" default=""
+					   label="COM_CONFIG_FIELD_TEMP_PATH_LABEL"
+					   description="%s&lt;br&gt;%s,COM_CONFIG_FIELD_TEMP_PATH_DESC,SRC_TMP_PATH_DESC"
+						hint="JDEFAULT" />
 				<field name="place_comments" type="radio" class="btn-group" default="1"
 					   label="RL_PLACE_HTML_COMMENTS"
 					   description="RL_PLACE_HTML_COMMENTS_DESC">

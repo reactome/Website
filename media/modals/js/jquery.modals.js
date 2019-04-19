@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         11.3.1
+ * @version         11.4.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -434,7 +434,7 @@
 				loadedHeight    = $loaded.outerHeight(true);
 				loadedWidth     = $loaded.outerWidth(true);
 
-				// Opens inital empty Colorbox prior to content being loaded.
+				// Opens initial empty Colorbox prior to content being loaded.
 				var initialWidth  = setSize(settings.get('initialWidth'), 'x');
 				var initialHeight = setSize(settings.get('initialHeight'), 'y');
 				var maxWidth      = settings.get('maxWidth');

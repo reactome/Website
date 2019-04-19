@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         19.3.16030
+ * @version         19.4.11218
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -52,10 +52,10 @@ class JFormFieldRL_Dependency extends \RegularLabs\Library\Field
 
 		switch ($extension)
 		{
-			case 'com';
+			case 'com':
 				$file = $path . '/components/com_' . $file . '/com_' . $file . '.xml';
 				break;
-			case 'mod';
+			case 'mod':
 				$file = $path . '/modules/mod_' . $file . '/mod_' . $file . '.xml';
 				break;
 			default:

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.5.8
+ * @version         7.5.9
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -986,7 +986,8 @@ class Replace
 			$link_attributes = ' id="tab-' . $item->id . '"'
 				. ' data-toggle="tab" data-id="' . $item->id . '"'
 				. ' role="tab" aria-controls="' . $item->id . '"'
-				. ' aria-selected="' . ($item->open ? 'true' : 'false') . '"';
+				. ' aria-selected="' . ($item->open ? 'true' : 'false') . '"'
+				. ' aria-expanded="' . ($item->open ? 'true' : 'false') . '"';
 
 			$class = 'rl_tabs-toggle nn_tabs-toggle';
 

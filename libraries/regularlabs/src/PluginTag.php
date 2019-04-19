@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         19.3.16030
+ * @version         19.4.11218
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -139,20 +139,17 @@ class PluginTag
 		}
 
 		// Convert boolean values to actual booleans
-		switch ($value)
+		if ($value === 'true' || $value === true)
 		{
-			case 'true':
-				return $match['not'] ? false : true;
-				break;
-
-			case 'false':
-				return $match['not'] ? true : false;
-				break;
-
-			default:
-				return $match['not'] ? '!NOT!' . $value : $value;
-				break;
+			return $match['not'] ? false : true;
 		}
+
+		if ($value === 'false' || $value === false)
+		{
+			return $match['not'] ? true : false;
+		}
+
+		return $match['not'] ? '!NOT!' . $value : $value;
 	}
 
 	/**

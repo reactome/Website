@@ -65,55 +65,57 @@ RewriteRule .* index.php [F]
 #
 # If you need to redirect some pages, or set a canonical non-www to
 # www redirect (or vice versa), place that code here. Ensure those
-# redirects use the correct RewriteRule syntax and the [R=302,L] flags.
+# redirects use the correct RewriteRule syntax and the [R=301,L] flags.
 
-Redirect 302 /pages/about/reactome /what-is-reactome
-Redirect 302 /pages/about/news /about/news
-Redirect 302 /pages/about/reactome-team /about/team
-Redirect 302 /pages/about/reactome-scientific-advisory-board /sab
-Redirect 302 /pages/about/license-agreement /license
-Redirect 302 /pages/about/reactome-disclaimer /about/disclaimer
-Redirect 302 /pages/about /what-is-reactome
+Redirect 301 /pages/about/reactome /what-is-reactome
+Redirect 301 /pages/about/news /about/news
+Redirect 301 /pages/about/reactome-team /about/team
+Redirect 301 /pages/about/reactome-scientific-advisory-board /sab
+Redirect 301 /pages/about/license-agreement /license
+Redirect 301 /pages/about/reactome-disclaimer /about/disclaimer
+Redirect 301 /pages/about /what-is-reactome
 
-Redirect 302 /stats.html /about/statistics
+Redirect 301 /stats.html /about/statistics
 
-Redirect 302 /pages/content/orcid-integration-project /orcid
+Redirect 301 /pages/content/orcid-integration-project /orcid
 
-Redirect 302 /pages/documentation/developer-guide/graph-database/tutorial-participating-molecules /dev/graph-database/extract-participating-molecules
-Redirect 302 /pages/documentation/developer-guide/diagram/diagram-js /dev/diagram/js
-Redirect 302 /pages/documentation/developer-guide/diagram/diagram-gwt /dev/diagram/gwt
-Redirect 302 /pages/documentation/developer-guide/pathways-overview/fireworks-js /dev/pathways-overview/js
-Redirect 302 /pages/documentation/developer-guide/pathways-overview/fireworks-gwt /dev/pathways-overview/gwt
-Redirect 302 /pages/documentation/developer-guide/analysis-service /dev/analysis
-Redirect 302 /pages/documentation/developer-guide/content-service /dev/content-service
-Redirect 302 /pages/documentation/developer-guide/graph-database /dev/graph-database
-Redirect 302 /pages/documentation/developer-guide/diagram /dev/diagram
-Redirect 302 /pages/documentation/developer-guide/pathways-overview /dev/pathways-overview
-Redirect 302 /pages/documentation/developer-guide/partners /community/partners
+Redirect 301 /pages/documentation/developer-guide/graph-database/tutorial-participating-molecules /dev/graph-database/extract-participating-molecules
+Redirect 301 /pages/documentation/developer-guide/diagram/diagram-js /dev/diagram/js
+Redirect 301 /pages/documentation/developer-guide/diagram/diagram-gwt /dev/diagram/gwt
+Redirect 301 /pages/documentation/developer-guide/pathways-overview/fireworks-js /dev/pathways-overview/js
+Redirect 301 /pages/documentation/developer-guide/pathways-overview/fireworks-gwt /dev/pathways-overview/gwt
+Redirect 301 /pages/documentation/developer-guide/analysis-service /dev/analysis
+Redirect 301 /pages/documentation/developer-guide/content-service /dev/content-service
+Redirect 301 /pages/documentation/developer-guide/graph-database /dev/graph-database
+Redirect 301 /pages/documentation/developer-guide/diagram /dev/diagram
+Redirect 301 /pages/documentation/developer-guide/pathways-overview /dev/pathways-overview
+Redirect 301 /pages/documentation/developer-guide/partners /community/partners
 
-Redirect 302 /pages/documentation/data-model /documentation/data-model
-Redirect 302 /pages/documentation/electronically-inferred-events /documentation/inferred-events
-Redirect 302 /electronic_inference.html /documentation/inferred-events
-Redirect 302 /electronic_inference_compara.html /documentation/inferred-events
-Redirect 302 /pages/documentation/linking-to-reactome /linking-to-us
-Redirect 302 /pages/documentation/linking-to-reactome/list-of-identifiers /linking-to-us/identifiers
-Redirect 302 /pages/documentation/citing-reactome-publications /cite
-Redirect 302 /pages/documentation/developer-guide /dev
-Redirect 302 /pages/documentation /documentation
+Redirect 301 /pages/documentation/data-model /documentation/data-model
+Redirect 301 /pages/documentation/electronically-inferred-events /documentation/inferred-events
+Redirect 301 /electronic_inference.html /documentation/inferred-events
+Redirect 301 /electronic_inference_compara.html /documentation/inferred-events
+Redirect 301 /pages/documentation/linking-to-reactome /linking-to-us
+Redirect 301 /pages/documentation/linking-to-reactome/list-of-identifiers /linking-to-us/identifiers
+Redirect 301 /pages/documentation/citing-reactome-publications /cite
+Redirect 301 /pages/documentation/developer-guide /dev
+Redirect 301 /pages/documentation /documentation
 
-Redirect 302 /pages/community/outreach /community/outreach
-Redirect 302 /pages/community/reactome-events /community/events
-Redirect 302 /pages/community/reactome-publications /community/publications
-Redirect 302 /pages/community/training /community/training
-Redirect 302 /pages/download-data /download-data
+Redirect 301 /pages/community/outreach /community/outreach
+Redirect 301 /pages/community/reactome-events /community/events
+Redirect 301 /pages/community/reactome-publications /community/publications
+Redirect 301 /pages/community/training /community/training
+Redirect 301 /pages/download-data /download-data
 
-Redirect 302 /download/tools/curatorTool/install.htm /download-data/reactome-curator-tool
+Redirect 301 /download/tools/curatorTool/install.htm /download-data/reactome-curator-tool
 Redirect 301 /user/reactome-fiviz /tools/reactome-fiviz
 
+Redirect 302 /user/guide /userguide
+
 # Used in PAPERS
-Redirect 302 /tutorials/pwp https://youtu.be/-skixrvI4nU
-Redirect 302 /documentation/index.php/Glossary_Data_Model /documentation/data-model
-Redirect 302 /cgi-bin/classbrowser /content/schema
+Redirect 301 /tutorials/pwp https://youtu.be/-skixrvI4nU
+Redirect 301 /documentation/index.php/Glossary_Data_Model /documentation/data-model
+Redirect 301 /cgi-bin/classbrowser /content/schema
 
 # Redirect eventbrowser to content/detail
 RewriteCond %{REQUEST_URI}  ^/cgi-bin/eventbrowser*$
@@ -142,8 +144,8 @@ RewriteRule index.php/component/users index.php [F]
 #RewriteRule ^(.*) - [F]
 
 # Servers only
-#Redirect 302 /staff  /
-#Redirect 302 /administrator  /
+#Redirect 301 /staff  /
+#Redirect 301 /administrator  /
 
 ## End - Custom redirects
 

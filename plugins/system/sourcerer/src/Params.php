@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.4.3
+ * @version         7.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -24,8 +24,13 @@ class Params
 	protected static $regexes = null;
 	protected static $areas   = null;
 
-	public static function get()
+	public static function get($key = '', $default = '')
 	{
+		if ($key != '')
+		{
+			return self::getByKey($key, $default);
+		}
+
 		if ( ! is_null(self::$params))
 		{
 			return self::$params;
@@ -45,6 +50,13 @@ class Params
 		self::$params = $params;
 
 		return self::$params;
+	}
+
+	private static function getByKey($key, $default = '')
+	{
+		$params = self::get();
+
+		return ! empty($params->{$key}) ? $params->{$key} : $default;
 	}
 
 	public static function getTags($only_start_tags = false)
