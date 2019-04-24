@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.4.0
+ * @version         11.4.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -103,7 +103,7 @@ class Link
 			$data['video'] = 'true';
 		}
 
-		if ($attributes->href && $attributes->href[0] != '#' && ! $isexternal && ! $ismedia)
+		if ($attributes->href && $attributes->href[0] != '#' && ! $isexternal && ! $ismedia && ! $isvideo)
 		{
 			$attributes->href = Document::addUrlAttributes($attributes->href, $isiframe, $fullpage, ! empty($data['print']));
 		}
@@ -216,7 +216,7 @@ class Link
 		if ( ! empty($tag->title))
 		{
 			$tag->title        = self::translateString($tag->title);
-			$attributes->title = $tag->title;
+			$attributes->title = RL_String::removeHtml($tag->title);
 		}
 
 		if ( ! empty($tag->description))
