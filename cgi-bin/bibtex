@@ -1,17 +1,22 @@
-#!/usr/local/bin/perl -w 
-
+#!/usr/local/bin/perl
 use strict;
+use warnings;
+
 use CGI qw(:standard);
 use CGI::Carp 'fatalsToBrowser';
 use HTTP::Tiny;
 use Data::Dumper;
 use JSON;
+use List::MoreUtils qw/any/;
+
+use lib '../cgi-modules';
+use GKB::CommonUtils;
+
 
 my $host = url(-base => 1);
-my $REST = $host . '/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/';
 
 my $id  = param('DB_ID');
-my $pid = param('personId'); 
+my $person_id = param('personId');
 
 
 my %month = qw/
@@ -28,114 +33,94 @@ my %month = qw/
 11 November
 12 December
 /;
-print header(-type=>"text/plain");
+print header(-type => 'text/plain');
 
-if ($id && $pid) {
+if ($id && $person_id) {
     $id =~ s/\.\d+$//;
-    my $pathway = REST_query($id) || die "NO pathway data for $id";
-    
+    my $dba = get_dba('current', 'localhost');
+    my $pathway = $dba->fetch_instance_by_db_id($id)->[0];
 
     #print Dumper $pathway;
-    my $stable_id = $pathway->{stableIdentifier}->{displayName} || 'NO STABLE ID';
-    my $doi       = $pathway->{doi};
-    my $title     = $pathway->{displayName}      || 'NO NAME';
-    my @authors   = filter_authors($pathway->{authored},$pid);
-    my @reviewers = filter_authors($pathway->{reviewed},$pid);
+    my $stable_id = $pathway->stableIdentifier->[0]->displayName || 'NO STABLE ID';
+    my $doi       = $pathway->doi->[0];
+    my $title     = $pathway->displayName || 'NO NAME';
+    my @authors_name_and_datetime   = filter_authors($pathway->authored, $person_id);
+    my @reviewers_name_and_datetime = filter_authors($pathway->reviewed, $person_id);
 
-    my $xref      = "Reactome:$stable_id";
+    my $xref = "Reactome:$stable_id";
     if ($doi) {
-	$xref .= ", DOI:$doi";
+        $xref .= ", DOI:$doi";
     }
-    my $note      = 'Reactome Pathway Knowledgebase, http://www.reactome.org/';
-    my $url       = "http://www.reactome.org/PathwayBrowser/#$stable_id";
-    my $how_pub   = "\\url{http://www.reactome.org/PathwayBrowser/\#$stable_id\}";
-    
+    my $live_site_url = 'https://reactome.org';
+    my $note = "Reactome Pathway Knowledgebase, $live_site_url";
+    #my $url = "$live_site_url/content/detail/$stable_id";
+    my $how_pub   = "\\url{$live_site_url/PathwayBrowser/\#$stable_id\}";
+
     my $OK;
-    if (@authors && has_event(@authors)) {
-	print "Authored:\n";
-	print bibtex($stable_id,$title,$xref,$how_pub,$note,$doi,@authors);
-	$OK++;
+    if (@authors_name_and_datetime && has_entries(@authors_name_and_datetime)) {
+        print "Authored:\n";
+        print bibtex($stable_id,$title,$xref,$how_pub,$note,$doi,@authors_name_and_datetime);
+        $OK++;
     }
 
-    if (@reviewers && has_event(@reviewers)) {
-	print "Reviewed:\n";
-	print bibtex($stable_id,$title,$xref,$how_pub,$note,$doi,@reviewers);
-	$OK++;
+    if (@reviewers_name_and_datetime && has_entries(@reviewers_name_and_datetime)) {
+        print "Reviewed:\n";
+        print bibtex($stable_id,$title,$xref,$how_pub,$note,$doi,@reviewers_name_and_datetime);
+        $OK++;
     }
 
-    unless ($OK) {
-	print "No data found for Pathway $id, Person $pid\n";
+    if (!$OK) {
+        print "No data found for Pathway $id, Person $person_id\n";
     }
-}
-else {
-    print "No DB_ID was provided\n";
+} else {
+    print "DB_ID or personId parameter(s) not found\n";
 }
 
 sub filter_authors {
-    my $authored = shift;
-    my $pid      = shift;
+    my $author_instance_edits = shift;
+    my $person_id = shift;
 
-    $authored && @$authored > 0 or return undef;
-   
-    my @events = map { get_object($_) } @$authored;
-
-    my @rtn;
-
-    for my $event (@events) {
-	my @authors = grep {$_->{dbId} == $pid} @{$event->{author}};
-	next unless @authors && @authors > 0;
-
-	my $display_name = $event->{displayName};
-	push @rtn, [$display_name =~ /^(.+), (\d+)-(\d+)-\d+/];
+    if (!$author_instance_edits || scalar @{$author_instance_edits} == 0) {
+        return;
     }
 
-    return @rtn;
+    my @selected_author_instance_edits = grep {
+        any { $_->db_id == $person_id } @{$_->author}
+    } @{$author_instance_edits};
 
-}
-
-sub get_object {
-    my $thing = shift;
-    return REST_query($thing->{dbId});
-}
-
-sub REST_query {
-    my $id = shift;
-
-    my $url = "$REST$id";
-
-    my $response = HTTP::Tiny->new->get($url);
-
-    if ($response->{success}) {
-        return decode_json($response->{content});
-    }
-
-    return undef;
+    return map { [ $_->displayName =~ /^(.+), (\d+)-(\d+)-\d+/ ] } @selected_author_instance_edits;
 }
 
 # gotta love Perl...
-sub has_event {
+# Checks the incoming array has entries and they are array references
+# returning the count, therefore a count of zero is used a false value
+# and more than zero is used as a true value
+#
+# Each entry should be an array reference containing the author name, year of
+# entry, and month of entry
+sub has_entries {
     return scalar(grep {$_ && @$_} @_);
 }
 
 sub bibtex {
     my ($stable_id,$title,$xref,$how_pub,$note,$doi,@authors) = @_;
-    for my $event (@authors) {
-	$event && @$event || next;
-	my ($authorstring, $year, $mon) = @$event;
-	my $month = $month{$mon};
-	
-	my $bibtex = bibtex_template();
-	$bibtex    =~ s/STABLE_ID/$stable_id/gm;
-	$bibtex    =~ s/TITLE/$title/gm;
-	$bibtex    =~ s/XREF/$xref/gm;
-	$bibtex    =~ s/HOW_PUB/$how_pub/gm;
-	$bibtex    =~ s/NOTE/$note/gm;
-	$bibtex    =~ s/MONTH/$month/gm;
-	$bibtex    =~ s/YEAR/$year/gm;
-	$bibtex    =~ s/ATSTR/$authorstring/gm;
-	$bibtex    =~ s/XREF/DOI:$doi/gm;
-	
-	print "$bibtex\n";
+    for my $author_entry (@authors) {
+        $author_entry && @{$author_entry} || next;
+        my ($author_string, $year, $mon) = @{$author_entry};
+        my $month = $month{$mon};
+
+        my $bibtex = bibtex_template();
+        $bibtex    =~ s/STABLE_ID/$stable_id/gm;
+        $bibtex    =~ s/TITLE/$title/gm;
+        $bibtex    =~ s/XREF/$xref/gm;
+        $bibtex    =~ s/HOW_PUB/$how_pub/gm;
+        $bibtex    =~ s/NOTE/$note/gm;
+        $bibtex    =~ s/MONTH/$month/gm;
+        $bibtex    =~ s/YEAR/$year/gm;
+        $bibtex    =~ s/ATSTR/$author_string/gm;
+        $bibtex    =~ s/XREF/DOI:$doi/gm;
+
+        print "$bibtex\n";
     }
 }
 
