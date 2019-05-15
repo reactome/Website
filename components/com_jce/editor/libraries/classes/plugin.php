@@ -419,7 +419,6 @@ class WFEditorPlugin extends JObject
      * @param mixed  $fallback   Fallback value
      * @param mixed  $default    Default value
      * @param string $type       Variable type eg: string, boolean, integer, array
-     * @param bool   $allowempty
      *
      * @return mixed
      */
@@ -446,6 +445,11 @@ class WFEditorPlugin extends JObject
                 // get fallback from plugin (with editor parameter as fallback)
                 $fallback = $wf->getParam($name . '.' . $key, $fallback, $default, $type);
                 $name = $caller;
+            }
+            
+            // reset the $default to prevent clearing
+            if ($fallback === $default) {
+                $default = '';
             }
 
             // return parameter
