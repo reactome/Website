@@ -93,7 +93,6 @@ class WFMediaManagerBase extends WFEditorPlugin
         parent::display();
 
         $document = WFDocument::getInstance();
-        $layout = JFactory::getApplication()->input->getCmd('layout', 'plugin');
 
         $view = $this->getView();
         $browser = $this->getFileBrowser();
@@ -267,21 +266,24 @@ class WFMediaManagerBase extends WFEditorPlugin
         if (is_array($textcase)) {
             $textcase = implode(',', $textcase);
         }
+        
+        $filter = $this->getParam('editor.dir_filter', array());
 
-        $filter = (array) $this->getParam('editor.dir_filter', array());
-
-        // remove empty values
-        $filter = array_filter($filter);
-
-        // get directory from parameter
-        $dir = $this->getParam('dir', '');
-
-        // fix Link plugin legacy "direction" conflict
-        if ($this->get('caller') === 'link') {
-            $fallback = $this->getParam('editor.dir', '');
-            $dir = $this->getParam($this->getName() . '.dir', $fallback);
+        // explode to array if string - 2.7.x...2.7.11
+        if (!is_array($filter)) {
+            $filter = explode(',', $filter);
         }
 
+        // remove empty values
+        $filter = array_filter((array) $filter);
+
+        // get base directory from editor parameter
+        $baseDir = $this->getParam('editor.dir', '', '', false);
+        
+        // get directory from plugin parameter, fallback to base directory as it cannot itself be empty
+        $dir = $this->getParam($this->getName() . '.dir', $baseDir);
+
+        // get websafe spaces parameter and convert legacy values
         $websafe_spaces = $this->getParam('editor.websafe_allow_spaces', '_');
 
         if (is_numeric($websafe_spaces)) {
