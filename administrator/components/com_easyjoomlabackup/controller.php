@@ -2,8 +2,8 @@
 /**
  * @package    EJB - Easy Joomla Backup for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.2.5 - 2017-10-09
- * @link       https://joomla-extensions.kubik-rubik.de/ejb-easy-joomla-backup
+ * @version    3.2.6 - 2019-06-30
+ * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
  * This program is free software: you can redistribute it and/or modify
@@ -19,13 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-defined('_JEXEC') or die('Restricted access');
-jimport('joomla.application.component.controller');
+defined('_JEXEC') || die('Restricted access');
 
 class EasyJoomlaBackupController extends JControllerLegacy
 {
-	public function display($cachable = false, $urlparams = false)
-	{
-		parent::display();
-	}
+    public function display($cachable = false, $urlparams = false)
+    {
+        parent::display();
+    }
 }

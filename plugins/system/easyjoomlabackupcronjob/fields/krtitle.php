@@ -3,8 +3,8 @@
  * @Copyright
  * @package     Field - Kubik-Rubik Title
  * @author      Viktor Vogel <admin@kubik-rubik.de>
- * @version     Joomla! 3 - 3.3.0 - 2017-08-06
- * @link        https://joomla-extensions.kubik-rubik.de
+ * @version     Joomla! 3 - 3.4.1 - 2019-06-03
+ * @link        https://kubik-rubik.de/
  *
  * @license     GNU/GPL
  * This program is free software: you can redistribute it and/or modify
@@ -20,61 +20,76 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-defined('JPATH_PLATFORM') or die;
+defined('JPATH_PLATFORM') || die('Restricted access');
 
+/**
+ * Form Field class for Kubik-Rubik Joomla! Extensions.
+ * Provides a custom title and description field.
+ */
 class JFormFieldKRTitle extends JFormField
 {
-	protected $type = 'krtitle';
+    protected $type = 'krtitle';
 
-	protected function getInput()
-	{
-		return '';
-	}
+    protected function getInput()
+    {
+        return '';
+    }
 
-	protected function getLabel()
-	{
-		// Use static variable to execute the CSS instruction only once
-		static $execute_once = false;
+    protected function getLabel()
+    {
+        // Use static variable to execute the CSS instruction only once
+        static $executeOnce = false;
 
-		if(empty($execute_once))
-		{
-			$document = JFactory::getDocument();
+        if (empty($executeOnce)) {
+            $document = JFactory::getDocument();
 
-			// Set label instruction only for option tabs
-			$fieldsets = $this->form->getFieldsets();
+            // Set label instruction only for option tabs
+            $fieldsets = $this->form->getFieldsets();
 
-			foreach($fieldsets as $fieldset)
-			{
-				$document->addScriptDeclaration('jQuery(function($){$("div#attrib-'.$fieldset->name.' .control-label:has(.clr)").addClass("krtitle");});');
-				$document->addStyleDeclaration('div#attrib-'.$fieldset->name.' .control-label.krtitle, div#'.$fieldset->name.' .control-label.krtitle {width: 100%;}');
-				$document->addStyleDeclaration('div#attrib-'.$fieldset->name.' .control-label, div#'.$fieldset->name.' .control-label {width: 20em;}');
+            foreach ($fieldsets as $fieldset) {
+                $scriptDeclaration = 'jQuery(function($){$("div#attrib-' . $fieldset->name . ' .control-label:has(.clr)").addClass("krtitle");});';
 
-				// Legacy
-				$document->addStyleDeclaration('div#attrib-'.$fieldset->name.' label, div#'.$fieldset->name.' label {width: 20em;}');
-			}
+                if (empty($this->group)) {
+                    $scriptDeclaration = 'jQuery(function($){$("div#' . $fieldset->name . ' .control-label:has(.clr)").addClass("krtitle");});';
+                }
 
-			$document->addStyleDeclaration('div.krtitle-title {padding: 5px 5px 5px 0; font-size: 16px; font-weight: bold;}');
-			$document->addStyleDeclaration('div.krtitle-description {padding: 5px 5px 5px 0; font-size: 14px;}');
+                $document->addScriptDeclaration($scriptDeclaration);
+                $document->addStyleDeclaration('div#attrib-' . $fieldset->name . ' .control-label.krtitle, div#' . $fieldset->name . ' .control-label.krtitle {width: 100%;}');
+                $document->addStyleDeclaration('div#attrib-' . $fieldset->name . ' .control-label, div#' . $fieldset->name . ' .control-label {width: 20em;}');
 
-			$execute_once = true;
-		}
+                // Legacy
+                $document->addStyleDeclaration('div#attrib-' . $fieldset->name . ' label, div#' . $fieldset->name . ' label {width: 20em;}');
+            }
 
-		$label = '<div class="clr"></div>';
+            $document->addScriptDeclaration('jQuery(function($){$(".control-group:has(.krtitle-hidden)").remove();});');
+            $document->addStyleDeclaration('div.krtitle-title {padding: 5px 5px 5px 0; font-size: 16px; font-weight: bold;}');
+            $document->addStyleDeclaration('div.krtitle-description {padding: 5px 5px 5px 0; font-size: 14px;}');
 
-		if($this->element['label'])
-		{
-			$label .= '<div class="krtitle-title">'.JText::_($this->element['label']).'</div>';
-		}
-		else
-		{
-			$label .= parent::getLabel();
-		}
+            $executeOnce = true;
+        }
 
-		if($this->element['description'])
-		{
-			$label .= '<div class="krtitle-description">'.JText::_($this->element['description']).'</div>';
-		}
+        $filterDonationCode = (string) $this->element['filter'];
 
-		return $label;
-	}
+        if ($filterDonationCode === 'donation') {
+            $fieldValueSession = JFactory::getSession()->get('field_value', '', 'krdonationcodecheck');
+
+            if ($fieldValueSession === 1) {
+                return '<div class="krtitle-hidden"></div>';
+            }
+        }
+
+        $label = '<div class="clr"></div>';
+
+        if ($this->element['label']) {
+            $label .= '<div class="krtitle-title">' . JText::_((string) $this->element['label']) . '</div>';
+        } else {
+            $label .= parent::getLabel();
+        }
+
+        if ($this->element['description']) {
+            $label .= '<div class="krtitle-description">' . JText::_((string) $this->element['description']) . '</div>';
+        }
+
+        return $label;
+    }
 }

@@ -2,8 +2,8 @@
 /**
  * @package    EJB - Easy Joomla Backup for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.2.5 - 2017-10-09
- * @link       https://joomla-extensions.kubik-rubik.de/ejb-easy-joomla-backup
+ * @version    3.2.6 - 2019-06-30
+ * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
  * This program is free software: you can redistribute it and/or modify
@@ -23,34 +23,28 @@ defined('_JEXEC') or die('Restricted access');
 
 class EasyJoomlaBackupViewCreatebackup extends JViewLegacy
 {
-	public function display($tpl = null)
-	{
-		$task = JFactory::getApplication()->input->get('task');
+    public function display($tpl = null)
+    {
+        $task = JFactory::getApplication()->input->get('task');
 
-		if($task == 'fullbackup')
-		{
-			JToolbarHelper::title(JText::_('COM_EASYJOOMLABACKUP').' - '.JText::_('COM_EASYJOOMLABACKUP_CREATEBACKUP_FULLBACKUP'), 'easyjoomlabackup-add');
-		}
-		elseif($task == 'databasebackup')
-		{
-			JToolbarHelper::title(JText::_('COM_EASYJOOMLABACKUP').' - '.JText::_('COM_EASYJOOMLABACKUP_CREATEBACKUP_DATABASEBACKUP'), 'easyjoomlabackup-add');
-		}
-		elseif($task == 'filebackup')
-		{
-			JToolbarHelper::title(JText::_('COM_EASYJOOMLABACKUP').' - '.JText::_('COM_EASYJOOMLABACKUP_CREATEBACKUP_FILEBACKUP'), 'easyjoomlabackup-add');
-		}
+        if ($task == 'fullbackup') {
+            JToolbarHelper::title(JText::_('COM_EASYJOOMLABACKUP') . ' - ' . JText::_('COM_EASYJOOMLABACKUP_CREATEBACKUP_FULLBACKUP'), 'easyjoomlabackup-add');
+        } elseif ($task == 'databasebackup') {
+            JToolbarHelper::title(JText::_('COM_EASYJOOMLABACKUP') . ' - ' . JText::_('COM_EASYJOOMLABACKUP_CREATEBACKUP_DATABASEBACKUP'), 'easyjoomlabackup-add');
+        } elseif ($task == 'filebackup') {
+            JToolbarHelper::title(JText::_('COM_EASYJOOMLABACKUP') . ' - ' . JText::_('COM_EASYJOOMLABACKUP_CREATEBACKUP_FILEBACKUP'), 'easyjoomlabackup-add');
+        }
 
-		JToolbarHelper::custom('backupCreate'.ucwords(JFactory::getApplication()->input->get('task')), 'new', 'new', JText::_('COM_EASYJOOMLABACKUP_CREATEBACKUP_BUTTON'), false);
-		JToolbarHelper::cancel('cancel');
+        JToolbarHelper::custom('backupCreate' . ucwords(JFactory::getApplication()->input->get('task')), 'new', 'new', JText::_('COM_EASYJOOMLABACKUP_CREATEBACKUP_BUTTON'), false);
+        JToolbarHelper::cancel('cancel');
 
-		$document = JFactory::getDocument();
-		$document->addStyleSheet('components/com_easyjoomlabackup/css/easyjoomlabackup.css');
+        $document = JFactory::getDocument();
+        $document->addStyleSheet('components/com_easyjoomlabackup/css/easyjoomlabackup.css');
 
-		// Get donation code message
-		require_once JPATH_COMPONENT.'/helpers/easyjoomlabackup.php';
-		$donation_code_message = EasyJoomlaBackupHelper::getDonationCodeMessage();
-		$this->donation_code_message = $donation_code_message;
+        // Get donation code message
+        require_once JPATH_COMPONENT . '/helpers/easyjoomlabackup.php';
+        $this->donationCodeMessage = EasyJoomlaBackupHelper::getDonationCodeMessage();
 
-		parent::display($tpl);
-	}
+        parent::display($tpl);
+    }
 }
