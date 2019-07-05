@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension type="plugin" version="3.0" group="system" method="upgrade">
     <name>PLG_EASYJOOMLABACKUPCRONJOB</name>
-    <version>3.2.5</version>
-    <creationDate>2017-10-09</creationDate>
+    <version>3.2.6</version>
+    <creationDate>2019-06-30</creationDate>
     <license>http://www.gnu.org/licenses/gpl</license>
-    <copyright>Copyright 2017 Viktor Vogel. All rights reserved.</copyright>
+    <copyright>Copyright 2019 Viktor Vogel. All rights reserved.</copyright>
     <author>Viktor Vogel</author>
     <authoremail>admin@kubik-rubik.de</authoremail>
-    <authorurl>https://joomla-extensions.kubik-rubik.de/</authorurl>
+    <authorurl>https://kubik-rubik.de/</authorurl>
     <description>PLG_EASYJOOMLABACKUPCRONJOB_XML_DESCRIPTION</description>
     <files>
         <filename plugin="easyjoomlabackupcronjob">easyjoomlabackupcronjob.php</filename>
@@ -23,8 +23,8 @@
     <config>
         <fields name="params" addfieldpath="/plugins/system/easyjoomlabackupcronjob/fields">
             <fieldset name="settings">
-                <field type="krdonationcodecheck" />
-                <field name="token" type="text" default="" size="40" filter="raw" label="PLG_EASYJOOMLABACKUPCRONJOB_TOKEN" description="PLG_EASYJOOMLABACKUPCRONJOB_TOKENDESC" />
+                <field type="krdonationcodecheck"/>
+                <field name="token" type="text" default="" size="40" filter="raw" label="PLG_EASYJOOMLABACKUPCRONJOB_TOKEN" description="PLG_EASYJOOMLABACKUPCRONJOB_TOKENDESC"/>
                 <field name="type" type="list" default="1" label="PLG_EASYJOOMLABACKUPCRONJOB_TYPE" description="PLG_EASYJOOMLABACKUPCRONJOB_TYPEDESC">
                     <option value="1">PLG_EASYJOOMLABACKUPCRONJOB_FULLBACKUP</option>
                     <option value="2">PLG_EASYJOOMLABACKUPCRONJOB_DATABASEBACKUP</option>
@@ -32,8 +32,9 @@
                 </field>
             </fieldset>
             <fieldset name="donation">
-                <field type="krdonationcodecheck" name="donation" />
-                <field name="donation_code" type="text" default="" size="40" label="KR_DONATION_CODE" description="KR_DONATION_CODEDESC" />
+                <field type="krdonationcodecheck" name="donation"/>
+                <field name="donation_code" type="text" default="" size="40" label="KR_DONATION_CODE" description="KR_DONATION_CODE_DESC"/>
+                <field type="krprobutton" name="easyjoomlabackupcronjob"/>
             </fieldset>
         </fields>
     </config>

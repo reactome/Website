@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.0" method="upgrade">
     <name>COM_EASYJOOMLABACKUP</name>
-    <version>3.2.5</version>
-    <creationDate>2017-10-09</creationDate>
+    <version>3.2.6</version>
+    <creationDate>2019-06-30</creationDate>
     <license>http://www.gnu.org/licenses/gpl</license>
-    <copyright>Copyright 2017 Viktor Vogel. All rights reserved.</copyright>
+    <copyright>Copyright 2019 Viktor Vogel. All rights reserved.</copyright>
     <author>Viktor Vogel</author>
     <authorEmail>admin@kubik-rubik.de</authorEmail>
-    <authorUrl>https://joomla-extensions.kubik-rubik.de/</authorUrl>
+    <authorUrl>https://kubik-rubik.de/</authorUrl>
     <description>COM_EASYJOOMLABACKUP_XML_DESCRIPTION</description>
     <scriptfile>script.php</scriptfile>
     <install>
@@ -27,7 +27,7 @@
         <filename>index.html</filename>
     </files>
     <plugins>
-        <plugin folder="plugins" plugin="easyjoomlabackupcronjob" name="PLG_EASYJOOMLABACKUPCRONJOB" group="system" />
+        <plugin folder="plugins" plugin="easyjoomlabackupcronjob" name="PLG_EASYJOOMLABACKUPCRONJOB" group="system"/>
     </plugins>
     <administration>
         <menu img="components/com_easyjoomlabackup/images/ejb-menu.png">COM_EASYJOOMLABACKUP</menu>
