@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.5.0
+ * @version         8.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,7 +14,9 @@ namespace RegularLabs\Plugin\System\Sourcerer;
 defined('_JEXEC') or die;
 
 use JFile;
+use Joomla\CMS\Factory as JFactory;
 use Joomla\CMS\Language\Text as JText;
+use Joomla\CMS\Uri\Uri as JUri;
 use RegularLabs\Library\ArrayHelper as RL_Array;
 use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\Html as RL_Html;
@@ -116,19 +118,17 @@ class Replace
 
 		$params = Params::get();
 
-		$data = RL_PluginTag::getAttributesFromStringOld(trim($match['data']), []);
-		foreach ($data as $key => $value)
-		{
-			if ( ! is_string($value))
-			{
-				continue;
-			}
-			$data->{$key} = trim($value, '""');
-		}
+		$data        = trim($match['data']);
+		$remove_html = ! isset($data[0]) || $data[0] !== '0';
+
+		$data = trim($match['data'], '0 ');
+		$data = str_replace(['"', ' '], ['', '|'], $data);
+
+		$data = RL_PluginTag::getAttributesFromStringOld($data, []);
 
 		$content = trim($match['content']);
 
-		$remove_html = ! in_array('0', $data->params);
+		$remove_html = (isset($data->raw) && $data->raw) ? false : $remove_html;
 
 		// Remove html tags if code is placed via the WYSIWYG editor
 		if ($remove_html)
@@ -138,19 +138,6 @@ class Replace
 
 		self::replacePhpShortCodes($content);
 
-		// Add the include file if file=... or include=... is used in the {source} tag
-		$file = ! empty($data->file) ? $data->file : (! empty($data->include) ? $data->include : '');
-		if ( ! empty($file) && JFile::exists(JPATH_SITE . $params->include_path . $file))
-		{
-			$content = '<?php include JPATH_SITE . \'' . $params->include_path . $file . '\'; ?>' . $content;
-		}
-
-		// Add the include file if file-after=... or include-after=... is used in the {source} tag
-		$file = ! empty($data->{'file-after'}) ? $data->{'file-after'} : (! empty($data->{'include-after'}) ? $data->{'include-after'} : '');
-		if ( ! empty($file) && JFile::exists(JPATH_SITE . $params->include_path . $file))
-		{
-			$content .= '<?php include JPATH_SITE . \'' . $params->include_path . $file . '\'; ?>';
-		}
 
 		self::replaceTags($content, $area, $article);
 

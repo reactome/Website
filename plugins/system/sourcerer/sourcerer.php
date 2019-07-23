@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.5.0
+ * @version         8.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -16,7 +16,7 @@ use RegularLabs\Plugin\System\Sourcerer\Plugin;
 // Do not instantiate plugin on install pages
 // to prevent installation/update breaking because of potential breaking changes
 $input = \Joomla\CMS\Factory::getApplication()->input;
-if ($input->get('action') != '' && in_array($input->get('option'), ['com_installer', 'com_regularlabsmanager']))
+if (in_array($input->get('option'), ['com_installer', 'com_regularlabsmanager']) && $input->get('action') != '')
 {
 	return;
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         19.4.18605
+ * @version         19.7.8403
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -102,11 +102,16 @@ class JFormFieldRL_FileList extends JFormFieldList
 
 	private function get($val, $default = '')
 	{
-		if ( ! isset($this->params[$val]) || (string) $this->params[$val] == '')
+		if (isset($this->element[$val]))
 		{
-			return $default;
+			return (string) $this->element[$val] != '' ? (string) $this->element[$val] : $default;
 		}
 
-		return (string) $this->params[$val];
+		if (isset($this->params[$val]))
+		{
+			return (string) $this->params[$val] != '' ? (string) $this->params[$val] : $default;
+		}
+
+		return $default;
 	}
 }
