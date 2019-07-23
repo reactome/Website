@@ -1,6 +1,6 @@
 /**
  * @package         Sourcerer
- * @version         7.5.0
+ * @version         8.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,17 +12,21 @@ var RegularLabsSourcererPopup = null;
 
 (function($) {
 	var $editor = null;
+	var $form   = null;
 
 	RegularLabsSourcererPopup = {
 		init: function() {
-			$editor = Joomla.editors.instances['source'];
+			$editor = Joomla.editors.instances['code'];
+			$form   = document.getElementById('sourcererForm');
 
 			try {
-				var string = $editor.getValue();
+				var test = $editor.getValue();
 			} catch (err) {
 				setTimeout("RegularLabsSourcererPopup.init();", 100);
 				return;
 			}
+
+			var string = '';
 
 			var editor_textarea = window.parent.document.getElementById(sourcerer_editorname);
 			if (editor_textarea) {
@@ -50,89 +54,133 @@ var RegularLabsSourcererPopup = null;
 					}
 				}
 
-				selection = this.cleanRange(selection);
-
-				if (selection != '') {
-					$editor.setValue(selection);
-				}
-
-				this.resizeEditorHeight();
+				string = this.cleanRange(selection);
 			}
 
-			string = $editor.getValue();
+			if (string) {
+				// Handle indentation
+				string = string.replace(/^\t/gm, '    ');
 
-			// Handle indentation
-			string = string.replace(/^\t/gm, '    ');
-			$editor.setValue(string);
+				this.setAttributes(string);
+				var code = this.removeSourceTags(string);
 
-			var icon = $('span.icon-src_sourcetags');
-			if (string.search(this.preg_quote(sourcerer_tag_characters[0] + sourcerer_syntax_word)) != -1) {
-				icon.addClass('icon-src_nosourcetags');
+				$editor.setValue(code);
 			}
 
-			if (sourcerer_default_addsourcetags) {
-				this.toggleSourceTags(1);
-			}
-
-			icon = $('span.icon-src_tagstyle');
-			if (string.search(/\[\[/g) != -1 && string.search(/\]\]/g) != -1) {
-				icon.addClass('icon-src_tagstyle_brackets');
-			}
-		},
-
-		resizeEditorHeight: function() {
-			var min_height  = 220;
-			var html_height = $('html').height();
-			var new_height  = Math.max(html_height, min_height);
-
-			// Start by setting the editor to the height of the html page
-			// which we know is too large to fit inside the modal
-			$('.CodeMirror-wrap').css('min-height', 0).height(new_height);
-
-			// Then decrease the size is steps of 5px till the body is no longer larger than the html
-			while ($('body').height() > html_height && new_height > min_height) {
-				new_height = new_height - 5;
-
-				$('.CodeMirror-wrap').height(new_height);
-			}
-
-			// Also set the sizer element to this new height
-			$('.CodeMirror-sizer').height(new_height);
+			$('.reglab-overlay').css('cursor', '').fadeOut();
 		},
 
 		insertText: function() {
-			var string = $editor.getValue();
+			var t_word  = sourcerer_syntax_word;
+			var t_start = sourcerer_tag_characters[0];
+			var t_end   = sourcerer_tag_characters[1];
+
+			var code = $editor.getValue();
+			code     = this.removeSourceTags(code);
+
+			var pre_php = [];
+			var codes   = [];
+
+
+			if (code) {
+				codes.push(code)
+			}
+
+			string = codes.join('\n');
+
 
 			// convert to html entities
 			string = this.htmlentities(string, 'ENT_NOQUOTES');
+
+			// replace indentation with tab images
+			string = string.indent2Images();
+
+			// replace linebreaks with br tags
+			string = string.nl2br();
+
+			var attributes = [];
+
+			if ($form['raw'].value == '1') {
+				attributes.push('raw="true"');
+			}
+
+			if ($form['trim'].value == '1') {
+				attributes.push('trim="true"');
+			}
+
+
+			if (string) {
+				string = '<span style="font-family: courier new, courier, monospace;">'
+					+ string
+					+ '</span>';
+			}
+
+			string = t_start + (t_word + ' ' + attributes.join(' ')).trim() + t_end
+				+ string
+				+ t_start + '/' + t_word + t_end;
+
+			window.parent.jInsertEditorText(string, sourcerer_editorname);
+
+			return true;
+		},
+
+		setAttributes: function(string) {
+			var t_word  = sourcerer_syntax_word;
+			var t_start = sourcerer_tag_characters[0];
+			var t_end   = sourcerer_tag_characters[1];
+
+			var start_tag = this.preg_quote(t_start + t_word) + '( .*?)' + this.preg_quote(t_end);
+			var regex     = new RegExp(start_tag, 'gim');
+
+			if (!string.match(regex)) {
+				return;
+			}
+
+			var attributes = this.getAttributes(regex.exec(string)[1].trim());
+
+			if ('raw' in attributes) {
+				this.setRadioOption('raw', attributes.raw.toString().toBoolean());
+			}
+			if ('trim' in attributes) {
+				this.setRadioOption('trim', attributes.trim.toString().toBoolean());
+			}
+
+			return;
+		},
+
+		setPhpField: function(value, method) {
+			this.setField('php_file', value);
+			this.setSelectOption('php_include_method', method);
+		},
+
+		getAttributes: function(string) {
+			var attributes = {};
 
 			var t_word  = sourcerer_syntax_word;
 			var t_start = sourcerer_tag_characters[0];
 			var t_end   = sourcerer_tag_characters[1];
 
-			var start_tag = this.preg_quote(t_start + t_word) + '.*?' + this.preg_quote(t_end);
-			var end_tag   = this.preg_quote(t_start + '/' + t_word + t_end);
-
-			// Set all code (with {source} tags) in courier
-			var regex = new RegExp('(' + start_tag + ')((?:.|[\n\r])*?)(' + end_tag + ')', 'gim');
-			string    = string.replace(regex, '$1<span style="font-family: courier new, courier, monospace;">$2</span>$3');
-
-			// replace linebreaks with br tags
-			regex  = new RegExp('\n\r?', 'gm');
-			string = string.replace(regex, '<br>');
-
-			regex = new RegExp('((^|<br>)(    |\t)*)(   ? ?|\t)', 'gm');
-			while (regex.test(string)) {
-				string = string.replace(regex, '$1<img src="' + sourcerer_root + '/media/sourcerer/images/tab.png">');
+			var regex = new RegExp('^0 ?');
+			if (string.match(regex)) {
+				attributes.raw = true;
+				string         = string.replace(/^0/, '').trim();
 			}
 
-			window.parent.jInsertEditorText(string, sourcerer_editorname);
+			var start_tag = this.preg_quote(t_start + t_word) + '( .*?)' + this.preg_quote(t_end);
+			var regex     = new RegExp('([a-z_-]+)="([^"]*)"', 'gim');
+
+			if (!string.match(regex)) {
+				return attributes;
+			}
+
+			while (match = regex.exec(string)) {
+				attributes[match[1]] = match[2];
+			}
+
+			return attributes;
 		},
 
-		toggleSourceTags: function(add) {
-			var icon   = $('span.icon-src_sourcetags');
-			var string = $editor.getValue();
-
+		removeSourceTags: function(string) {
 			var t_word  = sourcerer_syntax_word;
 			var t_start = sourcerer_tag_characters[0];
 			var t_end   = sourcerer_tag_characters[1];
@@ -151,40 +199,7 @@ var RegularLabsSourcererPopup = null;
 			end_tag = t_start + '/' + t_word + t_end;
 			string  = string.replace(regex, '');
 
-			if (!add && !icon.hasClass('icon-src_nosourcetags')) {
-				icon.addClass('icon-src_nosourcetags');
-			} else {
-				string = string.trim();
-
-				if (string.trim() != '' && (string.substr(0, 5) != '<?php' || string.substr(-2) != '?>')) {
-					string = '\n' + string + '\n';
-				}
-
-				string = start_tag + string + end_tag;
-				icon.removeClass('icon-src_nosourcetags');
-			}
-
-			$editor.setValue(string);
-		},
-
-		toggleTagStyle: function() {
-			var icon   = $('span.icon-src_tagstyle');
-			var string = $editor.getValue();
-
-			string = string.replace(/\[\[/g, '<');
-			string = string.replace(/\]\]/g, '>');
-
-			if (!icon.hasClass('icon-src_tagstylebrackets')) {
-				string = string.replace(/<(\/?\w+((\s+\w+(\s*=\s*(?:"[\s\S.]*?"|'[\s\S.]*?'|[^'">\s]+))?)+\s*|\s*)\/?(--)?)>/gm, '[[$1]]');
-				string = string.replace(/<(!--[\s\S.]*?--)>/gm, '[[$1]]');
-				string = string.replace(/<\?(?:php)?([^a-z0-9])/gim, '[[?php$1');
-				string = string.replace(/( *)\?>/g, '$1?]]');
-				icon.addClass('icon-src_tagstylebrackets');
-			} else {
-				icon.removeClass('icon-src_tagstylebrackets');
-			}
-
-			$editor.setValue(string);
+			return string.trim();
 		},
 
 		cleanRange: function(string) {
@@ -364,17 +379,79 @@ var RegularLabsSourcererPopup = null;
 
 		preg_quote: function(str) {
 			return (str + '').replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!<>\|\:])/g, '\\$1');
+		},
+
+		setField: function(name, value) {
+			$('input[name="' + name + '"]').val(value);
+		},
+
+		setRadioOption: function(name, value) {
+			var inputs = $('input[name="' + name + '"]');
+			var input  = $('input[name="' + name + '"][value="' + value + '"]');
+
+			$('label[for="' + input.attr('id') + '"]').click();
+			inputs.attr('checked', false);
+			input.attr('checked', true).click();
+		},
+
+		setSelectOption: function(name, value) {
+			var self = this;
+
+			var select = $('select[name="' + name + '"]');
+			var option = $('select[name="' + name + '"] option[value="' + value + '"]');
+
+			if (!option.length) {
+				return;
+			}
+
+			select.find('option').attr('selected', false);
+			option.attr('selected', 'selected');
+			select.trigger('liszt:updated');
 		}
 	};
 
-	String.prototype.ltrim = function() {
-		return this.replace(/^ */, "");
+	String.prototype.ltrim         = function() {
+		return this.fixLineBreaks().replace(/^[\n ]*/, "");
 	};
-	String.prototype.rtrim = function() {
-		return this.replace(/ *$/, "");
+	String.prototype.rtrim         = function() {
+		return this.fixLineBreaks().replace(/[\n ]*$/, "");
 	};
-	String.prototype.trim  = function() {
-		return this.ltrim().rtrim();
+	String.prototype.trim          = function() {
+		return this.fixLineBreaks().ltrim().rtrim();
+	};
+	String.prototype.toBoolean     = function() {
+		return this == 1 || this == '1' || this == 'true' ? 1 : 0;
+	};
+	String.prototype.fixLineBreaks = function() {
+		return this.replace(/\r/, "");
+	};
+	String.prototype.escapeQuotes  = function() {
+		return this.replace(/"/g, '\\"');
+	};
+	String.prototype.hasLineBreaks = function() {
+		var regex = new RegExp('\n', 'gm');
+		return regex.test(this);
+	};
+	String.prototype.indent        = function() {
+		var regex = new RegExp('\n', 'gm');
+
+		return '\n    ' + this.replace(regex, '\n    ') + '\n';
+	};
+	String.prototype.nl2br         = function() {
+		var regex = new RegExp('\n', 'gm');
+
+		return this.replace(regex, '<br>');
+	};
+
+	String.prototype.indent2Images = function() {
+		var string = this;
+		var regex  = new RegExp('((^|\n)(    |\t)*)(   ? ?|\t)', 'gm');
+
+		while (regex.test(string)) {
+			string = string.replace(regex, '$1<img src="' + sourcerer_root + '/media/sourcerer/images/tab.png">');
+		}
+
+		return string.replace(regex, '<br>');
 	};
 
 })(jQuery);

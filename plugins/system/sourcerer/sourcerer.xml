@@ -2,8 +2,8 @@
 <extension version="3.9" type="plugin" group="system" method="upgrade">
 	<name>plg_system_sourcerer</name>
 	<description>PLG_SYSTEM_SOURCERER_DESC</description>
-	<version>7.5.0</version>
-	<creationDate>April 2019</creationDate>
+	<version>8.0.0</version>
+	<creationDate>July 2019</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -179,23 +179,6 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-
-				<field name="@block_defaults_a" type="rl_block" start="1"
-					   label="SRC_DEFAULTS"
-					   description="SRC_DEFAULTS_DESC" />
-				<field name="addsourcetags" type="radio" class="btn-group" default="1"
-					   label="SRC_ADD_SOURCE_TAGS"
-					   description="SRC_ADD_SOURCE_TAGS_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="@block_defaults_b" type="rl_block" end="1" />
-
-				<field name="@block_example_a" type="rl_block" start="1" label="SRC_EXAMPLE_CODE" />
-				<field name="@notice_use_example_code" type="rl_onlypro"
-					   label="SRC_USE_EXAMPLE_CODE"
-					   description="SRC_USE_EXAMPLE_CODE_DESC" />
-				<field name="@block_example_b" type="rl_block" end="1" />
 			</fieldset>
 
 			<fieldset name="RL_TAG_SYNTAX">

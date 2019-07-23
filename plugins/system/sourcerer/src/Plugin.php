@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.5.0
+ * @version         8.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -94,9 +94,10 @@ class Plugin extends JPlugin
 			$arguments[] = $caller['args'][$count];
 		}
 
+		// Work-around for K2 stuff :(
 		if ($event == 'onContentPrepare'
 			&& empty($arguments[1]->id)
-			&& in_array($arguments[0], ['com_k2.item', 'com_k2.itemlist'])
+			&& strpos($arguments[0], 'com_k2') === 0
 		)
 		{
 			return false;
@@ -340,8 +341,8 @@ class Plugin extends JPlugin
 			return;
 		}
 
-		if (version_compare($plugin['version'], '19.4.11218', '<')
-			|| version_compare($library['version'], '19.4.11218', '<'))
+		if (version_compare($plugin['version'], '19.7.8403', '<')
+			|| version_compare($library['version'], '19.7.8403', '<'))
 		{
 			define('REGULAR_LABS_LIBRARY_INSTALLED', 'outdated');
 
