@@ -1,6 +1,6 @@
 /**
  * @package         Tabs
- * @version         7.5.9
+ * @version         7.5.10
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -99,8 +99,8 @@ var RegularLabsTabs = null;
 
 			$el.tab('show');
 
-			$el.closest('ul.nav-tabs').find('.rl_tabs-toggle').attr('aria-selected', false).attr('aria-expanded', false);
-			$el.attr('aria-selected', true).attr('aria-expanded', true);
+			$el.closest('ul.nav-tabs').find('.rl_tabs-toggle').attr('aria-selected', false);
+			$el.attr('aria-selected', true);
 
 			$el.closest('div.rl_tabs').find('.tab-content').first().children().attr('aria-hidden', true);
 			$('div#' + id).attr('aria-hidden', false);

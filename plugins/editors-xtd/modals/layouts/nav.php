@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.4.1
+ * @version         11.5.5
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -15,7 +15,7 @@ use Joomla\CMS\Factory as JFactory;
 use Joomla\CMS\Language\Text as JText;
 
 ?>
-<nav class="navbar navbar-fixed-top">
+<nav class="navbar">
 	<div class="navbar-inner">
 		<div class="container-fluid">
 			<div class="btn-toolbar" id="toolbar">

@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         11.4.1
+ * @version         11.5.5
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -276,7 +276,25 @@
 
 	// Convert '%' and 'px' values to integers
 	function setSize(size, dimension) {
-		return Math.round((/%/.test(size) ? ((dimension === 'x' ? $window.width() : winheight()) / 100) : 1) * parseInt(size, 10));
+		var size_int = parseInt(size, 10);
+
+		// unit: %
+		if (/%/.test(size)) {
+			var window_size = dimension === 'x' ? $window.width() : winheight();
+
+			return Math.round((window_size / 100) * size_int);
+		}
+
+		// unit: vw or vh
+		if (/v[wh]$/.test(size)) {
+			var unit        = size.match(/v[wh]$/)[0];
+			var window_size = unit === 'vw' ? $window.width() : winheight();
+
+			return Math.round((window_size / 100) * size_int);
+		}
+
+		// unit: px or none
+		return Math.round(size_int);
 	}
 
 	// Checks an href to see if it is a photo.

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.7.6
+ * @version         7.7.7
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -607,8 +607,8 @@ class Replace
 
 		if ( ! in_array(self::$context, ['com_search.search', 'com_finder.indexer']))
 		{
-			$heading_attributes = ' role="heading"'
-				. ' aria-controls="' . $item->id . '"';
+			$heading_attributes = ' aria-controls="' . $item->id . '"';
+
 			if ( ! empty($item->heading_attributes))
 			{
 				$heading_attributes .= ' ' . $item->heading_attributes;
@@ -708,7 +708,6 @@ class Replace
 			. ' id="slider-' . $item->id . '"'
 			. ' data-id="' . $item->id . '"'
 			. ' data-parent="#set-rl_sliders-' . $items[0]->set . '"'
-			. ' aria-selected="' . ($item->open ? 'true' : 'false') . '"'
 			. ' aria-expanded="' . ($item->open ? 'true' : 'false') . '"';
 
 		if ( ! empty($item->link_attributes))

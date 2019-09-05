@@ -1,6 +1,6 @@
 /**
  * @package         Sliders
- * @version         7.7.6
+ * @version         7.7.7
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -109,8 +109,8 @@ var RegularLabsSliders = null;
 
 				$el.collapse('show');
 
-				$el.closest('div.rl_sliders').find('.rl_sliders-toggle').attr('aria-selected', false).attr('aria-expanded', false);
-				$el.attr('aria-selected', true).attr('aria-expanded', true);
+				$el.closest('div.rl_sliders').find('.rl_sliders-toggle').attr('aria-expanded', false);
+				$el.attr('aria-expanded', true);
 
 				$el.closest('div.rl_sliders').find('.rl_sliders-body').attr('aria-hidden', true);
 				$('div#' + id).attr('aria-hidden', false);

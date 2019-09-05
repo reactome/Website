@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         11.4.1
+ * @version         11.5.5
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -15,17 +15,36 @@ var RegularLabsModalsPopup = null;
 
 	RegularLabsModalsPopup = {
 		init: function() {
-			$('ul.nav-tabs > li > a').on('shown.bs.tab', function() {
-				$('#type').val($(this)[0].hash.replace('#tab-', '')).trigger('change');
-			});
-
-			var selection = this.getSelection();
-
-			if (selection) {
-				$('input[name="text"]').val(selection);
-			}
+			this.initType();
+			this.initText();
 
 			$('.reglab-overlay').css('cursor', '').fadeOut();
+		},
+
+		initText: function($el) {
+			var selection = this.getSelection();
+
+			if (!selection) {
+				return;
+			}
+
+			$('input[name="text"]').val(selection);
+		},
+
+		initType: function($el) {
+			RegularLabsModalsPopup.setTypeFromTab($('ul.nav-tabs > li.active > a').first());
+
+			$('ul.nav-tabs > li > a').on('shown.bs.tab', function() {
+				RegularLabsModalsPopup.setTypeFromTab($(this));
+			});
+		},
+
+		setTypeFromTab: function($el) {
+			if (!$el || !$el.attr('href')) {
+				return;
+			}
+
+			$('#type').val($el.attr('href').replace('#tab-', '')).trigger('change');
 		},
 
 		insertText: function() {

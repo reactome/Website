@@ -1,6 +1,6 @@
 /**
  * @package         Sliders
- * @version         7.7.6
+ * @version         7.7.7
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -161,7 +161,9 @@ var RegularLabsSlidersPopup = null;
 				}
 
 				var params = [];
-				if (Object.keys(parameters).length < 2) {
+				if (
+					Object.keys(parameters).length < 2
+				) {
 					params.push(self.escape(parameters.title));
 				} else {
 					for (var key in parameters) {

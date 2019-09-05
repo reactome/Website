@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.0.0
+ * @version         8.1.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,11 +14,13 @@ namespace RegularLabs\Plugin\System\Sourcerer;
 defined('_JEXEC') or die;
 
 use JFile;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Version;
 
 class Code
 {
-	public static function run($src_string = '', &$src_variables, $tmp_path = '')
+	public static function run($src_string, &$src_variables, $tmp_path = '')
 	{
 		if ( ! is_string($src_string) || $src_string == '')
 		{
@@ -113,11 +115,43 @@ class Code
 	private static function getVarInits()
 	{
 		return [
-			'$app = $mainframe = JFactory::getApplication();',
-			'$document = $doc = JFactory::getDocument();',
+			'$app = $mainframe = RegularLabs\Plugin\System\Sourcerer\Code::getApplication();',
+			'$document = $doc = RegularLabs\Plugin\System\Sourcerer\Code::getDocument();',
 			'$database = $db = JFactory::getDbo();',
 			'$user = JFactory::getUser();',
 			'$Itemid = $app->input->getInt(\'Itemid\');',
 		];
+	}
+
+	public static function getApplication()
+	{
+		if (JFactory::getApplication()->input->get('option') != 'com_finder')
+		{
+			return JFactory::getApplication();
+		}
+
+		return CMSApplication::getInstance('site');
+	}
+
+	public static function getDocument()
+	{
+		if (JFactory::getApplication()->input->get('option') != 'com_finder')
+		{
+			return JFactory::getDocument();
+		}
+
+		$lang    = JFactory::getLanguage();
+		$version = new Version;
+
+		$attributes = [
+			'charset'      => 'utf-8',
+			'lineend'      => 'unix',
+			'tab'          => "\t",
+			'language'     => $lang->getTag(),
+			'direction'    => $lang->isRtl() ? 'rtl' : 'ltr',
+			'mediaversion' => $version->getMediaVersion(),
+		];
+
+		return \JDocument::getInstance('html', $attributes);
 	}
 }

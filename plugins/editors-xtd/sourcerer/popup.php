@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.0.0
+ * @version         8.1.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -23,14 +23,6 @@ class Popup
 {
 	var $require_core_auth = false;
 
-	public function __construct($extension)
-	{
-		parent::__construct($extension);
-
-		$this->params->code = '<!-- You can place html anywhere within the source tags --><br><br><br><script language=&quot;javascript&quot; type=&quot;text/javascript&quot;><br>    // You can place JavaScript like this<br>    <br></script><br><?php<br>    // You can place PHP like this<br>    <br>?>';
-		$this->params->code = str_replace(['<br>', '<br />'], "\n", $this->params->code);
-	}
-
 	public function loadScripts()
 	{
 		JFactory::getDocument()->addScript('//code.jquery.com/ui/1.9.2/jquery-ui.js');
@@ -50,14 +42,14 @@ class Popup
 		";
 		RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('sourcerer/script.min.js', '8.0.0');
+		RL_Document::script('sourcerer/script.min.js', '8.1.1');
 	}
 
 	public function loadStyles()
 	{
 		JFactory::getDocument()->addStyleSheet('//code.jquery.com/ui/1.9.2/themes/smoothness/jquery-ui.css');
 
-		RL_Document::style('sourcerer/popup.min.css', '8.0.0');
+		RL_Document::style('sourcerer/popup.min.css', '8.1.1');
 	}
 }
 

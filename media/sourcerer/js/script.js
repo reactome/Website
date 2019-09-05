@@ -1,6 +1,6 @@
 /**
  * @package         Sourcerer
- * @version         8.0.0
+ * @version         8.1.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -22,13 +22,14 @@ var RegularLabsSourcererPopup = null;
 			try {
 				var test = $editor.getValue();
 			} catch (err) {
-				setTimeout("RegularLabsSourcererPopup.init();", 100);
+				setTimeout('RegularLabsSourcererPopup.init();', 100);
 				return;
 			}
 
 			var string = '';
 
 			var editor_textarea = window.parent.document.getElementById(sourcerer_editorname);
+
 			if (editor_textarea) {
 				var iframes = editor_textarea.parentNode.getElementsByTagName('iframe');
 				if (!iframes.length) {
@@ -426,7 +427,7 @@ var RegularLabsSourcererPopup = null;
 		return this.replace(/\r/, "");
 	};
 	String.prototype.escapeQuotes  = function() {
-		return this.replace(/"/g, '\\"');
+		return this.replace(/'/g, '\\\'');
 	};
 	String.prototype.hasLineBreaks = function() {
 		var regex = new RegExp('\n', 'gm');
