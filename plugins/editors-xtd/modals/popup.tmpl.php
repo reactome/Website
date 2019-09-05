@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.4.1
+ * @version         11.5.5
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -23,8 +23,8 @@ $form->loadFile($xmlfile, 1, '//config');
 ?>
 <div class="reglab-overlay"></div>
 
-<?php include 'layouts/nav.php'; ?>
 <?php include 'layouts/header.php'; ?>
+<?php include 'layouts/nav.php'; ?>
 
 <div class="container-fluid container-main">
 	<form action="index.php" id="modalsForm" method="post">
@@ -59,7 +59,6 @@ $form->loadFile($xmlfile, 1, '//config');
 				}
 
 				echo JHtml::_('bootstrap.endTabSet');
-
 				?>
 			</div>
 

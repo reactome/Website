@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.4.1
+ * @version         11.5.5
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -370,17 +370,8 @@ class Link
 
 		$url = 'https://www.youtube.com/embed/' . $match['id'];
 
-		if ( ! empty($match['query']))
-		{
-			$url .= '?' . $match['query'];
-		}
-
-		if (strpos($match['query'], 'wmode=transparent') !== false)
-		{
-			return $url;
-		}
-
-		$url .= (strpos($url, '?') === false ? '?' : '&') . 'wmode=transparent';
+		$url = self::addUrlParameter($url, $match['query']);
+		$url = self::addUrlParameter($url, 'wmode', 'transparent');
 
 		return $url;
 	}
@@ -396,11 +387,32 @@ class Link
 
 		$url = 'https://player.vimeo.com/video/' . $match['id'];
 
-		if ( ! empty($match['query']))
-		{
-			$url .= '?' . $match['query'];
-		}
+		$url = self::addUrlParameter($url, $match['query']);
 
 		return $url;
+	}
+
+	private static function addUrlParameter($url, $key, $value = '')
+	{
+		if (empty($key))
+		{
+			return $url;
+		}
+
+		$key = ltrim($key, '?&');
+
+		if (RL_RegEx::match('[\?&]' . $key . '=', $url))
+		{
+			return $url;
+		}
+
+		$query = $key;
+
+		if ($value)
+		{
+			$query .= '=' . $value;
+		}
+
+		return $url . (strpos($url, '?') === false ? '?' : '&') . $query;
 	}
 }

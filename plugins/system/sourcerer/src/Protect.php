@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.0.0
+ * @version         8.1.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -21,7 +21,7 @@ class Protect
 
 	public static function _(&$string)
 	{
-		RL_Protect::protectForm($string, Params::getTags(true));
+		RL_Protect::protectForm($string, Params::getTags(true), true, 'no-sourcerer');
 	}
 
 	public static function protectTags(&$string)

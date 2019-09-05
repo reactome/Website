@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         19.7.8403
+ * @version         19.8.25552
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -39,6 +39,12 @@ class ContentArticle
 			return $this->_(false);
 		}
 
+		// Pass Featured
+		if ( ! $this->passItemByType($pass, 'Featured'))
+		{
+			return $this->_(false);
+		}
+
 		// Pass Content Keywords
 		if ( ! $this->passItemByType($pass, 'ContentKeyword'))
 		{
@@ -56,6 +62,19 @@ class ContentArticle
 		{
 			return $this->_(false);
 		}
+
+		// Pass Date
+		if ( ! $this->passItemByType($pass, 'Date'))
+		{
+			return $this->_(false);
+		}
+
+		// Pass Fields
+		if ( ! $this->passItemByType($pass, 'Field'))
+		{
+			return $this->_(false);
+		}
+
 
 		return $this->_($pass);
 	}

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.7.6
+ * @version         7.7.7
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -20,7 +20,14 @@ $xmlfile = __DIR__ . '/fields.xml';
 ?>
 <div class="reglab-overlay"></div>
 
-<nav class="navbar navbar-fixed-top">
+<div class="header">
+	<h1 class="page-title">
+		<span class="icon-reglab icon-sliders"></span>
+		<?php echo JText::_('SLIDERS'); ?>
+	</h1>
+</div>
+
+<nav class="navbar">
 	<div class="navbar-inner">
 		<div class="container-fluid">
 			<div class="btn-toolbar" id="toolbar">
@@ -46,13 +53,6 @@ $xmlfile = __DIR__ . '/fields.xml';
 		</div>
 	</div>
 </nav>
-
-<div class="header has-navbar-fixed-top">
-	<h1 class="page-title">
-		<span class="icon-reglab icon-sliders"></span>
-		<?php echo JText::_('INSERT_SLIDERS'); ?>
-	</h1>
-</div>
 
 <div class="container-fluid container-main">
 	<form action="index.php" id="slidersForm" method="post">

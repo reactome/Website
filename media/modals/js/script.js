@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         11.4.1
+ * @version         11.5.5
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -143,7 +143,7 @@ var RLModals          = null;
 					webkitAllowFullScreen: true,
 					mozallowfullscreen   : true,
 					allowFullScreen      : true,
-					allow                : 'autoplay; encrypted-media'
+					allow                : 'autoplay; fullscreen; encrypted-media'
 				});
 
 				RegularLabsModals.resize();
@@ -475,6 +475,16 @@ var RLModals          = null;
 				return this.getWidthByPercentage(95);
 			}
 
+			// unit: vw
+			if (/vw$/.test(width)) {
+				return this.getInnerWidth(parseInt(width) * $(window).width() / 100);
+			}
+
+			// unit: vh
+			if (/vh$/.test(width)) {
+				return this.getInnerWidth(parseInt(width) * $(window).height() / 100);
+			}
+
 			if (isNaN(width) && width.indexOf('%') > -1) {
 				return this.getWidthByPercentage(width);
 			}
@@ -496,6 +506,16 @@ var RLModals          = null;
 
 			if (!height) {
 				return this.getHeigthByPercentage(95);
+			}
+
+			// unit: vw
+			if (/vw$/.test(height)) {
+				return this.getInnerHeight(parseInt(height) * $(window).width() / 100);
+			}
+
+			// unit: vh
+			if (/vh$/.test(height)) {
+				return this.getInnerHeight(parseInt(height) * $(window).height() / 100);
 			}
 
 			if (isNaN(height) && height.indexOf('%') > -1) {

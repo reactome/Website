@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.4.1
+ * @version         11.5.5
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,9 +14,9 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Language\Text as JText;
 
 ?>
-<div class="header has-navbar-fixed-top">
+<div class="header">
 	<h1 class="page-title">
-		<span class="icon-reglab icon-tabs"></span>
+		<span class="icon-reglab icon-modals"></span>
 		<?php echo JText::_('INSERT_MODAL'); ?>
 	</h1>
 </div>
