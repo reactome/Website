@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         19.8.25552
+ * @version         19.9.9950
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,7 +12,10 @@
 namespace RegularLabs\Library;
 
 use FieldsHelper;
+use Joomla\CMS\Date\Date as JDate;
 use Joomla\CMS\Factory as JFactory;
+use RegularLabs\Library\Parameters as RL_Parameters;
+use RegularLabs\Plugin\System\ArticlesAnywhere\Replace as AA_Replace;
 
 defined('_JEXEC') or die;
 
@@ -252,10 +255,9 @@ trait ConditionContent
 					continue;
 				}
 
-				$value         = $field->field_value;
-				$article_value = ArrayHelper::toArray($article_field->rawvalue);
+				$comparison = ! empty($field->field_comparison) ? $field->field_comparison : 'equals';
 
-				if ( ! ArrayHelper::find($value, $article_value))
+				if ( ! self::passComparison($field->field_value, $article_field->rawvalue, $comparison))
 				{
 					return false;
 				}
@@ -265,6 +267,151 @@ trait ConditionContent
 		}
 
 		return count((array) $fields) == count($passes);
+	}
+
+	private static function passComparison($needle, $haystack, $comparison = 'equals')
+	{
+		$haystack = ArrayHelper::toArray($haystack);
+
+		if (empty($haystack))
+		{
+			return false;
+		}
+
+		// For list values
+		if (count($haystack) > 1)
+		{
+			switch ($comparison)
+			{
+				case 'contains':
+					$needle = ArrayHelper::toArray($needle);
+					sort($needle);
+
+					$intersect = array_intersect($needle, $haystack);
+
+					return $needle == $intersect;
+
+				case 'contains_one':
+					return ArrayHelper::find($needle, $haystack);
+
+				case 'equals':
+				default:
+					$needle = ArrayHelper::toArray($needle);
+					sort($needle);
+					sort($haystack);
+
+					return $needle == $haystack;
+			}
+		}
+
+		$haystack = $haystack[0];
+
+		if ($comparison == 'regex')
+		{
+			return RegEx::match($needle, $haystack);
+		}
+
+		// What's the use case? Not sure yet :)
+		$needle = self::runThroughArticlesAnywhere($needle);
+
+		// Convert dynamic date values i, like date('yesterday')
+		$needle = self::valueToDateString($needle);
+
+		// make the needle and haystack lowercase, so comparisons are case insensitive
+		$needle = StringHelper::strtolower($needle);
+		$haystack = StringHelper::strtolower($haystack);
+
+		switch ($comparison)
+		{
+			case 'contains':
+			case 'contains_one':
+				return strpos($haystack, $needle) !== false;
+
+			case 'begins_with':
+				$length = strlen($needle);
+
+				return substr($haystack, 0, $length) === $needle;
+
+			case 'ends_with':
+				$length = strlen($needle);
+
+				if ($length == 0)
+				{
+					return true;
+				}
+
+				return substr($haystack, -$length) === $needle;
+
+			case 'less_than':
+				return $haystack <= $needle;
+
+			case 'greater_than':
+				return $haystack >= $needle;
+
+			case 'equals':
+			default:
+				return $needle == $haystack;
+		}
+	}
+
+	private static function valueToDateString($value, $apply_offset = true)
+	{
+		if (in_array($value, [
+			'now()',
+			'JFactory::getDate()',
+		]))
+		{
+			if ( ! $apply_offset)
+			{
+				return date('Y-m-d H:i:s', strtotime('now'));
+			}
+
+			$date = new JDate('now', JFactory::getConfig()->get('offset', 'UTC'));
+
+			return $date->format('Y-m-d H:i:s');
+		}
+
+		$regex = '^date\(\s*'
+			. '(?:\'(?<datetime>.*?)\')?'
+			. '(?:\\\\?,\s*\'(?<format>.*?)\')?'
+			. '\s*\)$';
+
+		if ( ! RegEx::match($regex, $value, $match))
+		{
+			return $value;
+		}
+
+		$datetime = ! empty($match['datetime']) ? $match['datetime'] : 'now';
+		$format   = ! empty($match['format']) ? $match['format'] : '';
+
+		if (empty($format))
+		{
+			$time   = date('His', strtotime($datetime));
+			$format = (int) $time ? 'Y-m-d H:i:s' : 'Y-m-d';
+		}
+
+		if ( ! $apply_offset)
+		{
+			return date($format, strtotime($datetime));
+		}
+
+		$date = new JDate(strtotime($datetime), JFactory::getConfig()->get('offset', 'UTC'));
+
+		return $date->format($format);
+	}
+
+	public static function runThroughArticlesAnywhere($string)
+	{
+		$articlesanywhere_params = RL_Parameters::getInstance()->getPluginParams('articlesanywhere');
+
+		if (empty($articlesanywhere_params) || ! isset($articlesanywhere_params->article_tag) || ! isset($articlesanywhere_params->articles_tag))
+		{
+			return $string;
+		}
+
+		AA_Replace::replaceTags($string);
+
+		return $string;
 	}
 
 	abstract public function getItem($fields = []);
