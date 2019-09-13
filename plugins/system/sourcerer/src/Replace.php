@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.1.1
+ * @version         8.2.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -20,6 +20,7 @@ use Joomla\CMS\Uri\Uri as JUri;
 use RegularLabs\Library\ArrayHelper as RL_Array;
 use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\Html as RL_Html;
+use RegularLabs\Library\ObjectHelper as RL_Object;
 use RegularLabs\Library\PluginTag as RL_PluginTag;
 use RegularLabs\Library\Protect as RL_Protect;
 use RegularLabs\Library\RegEx as RL_RegEx;
@@ -122,8 +123,11 @@ class Replace
 		$remove_html = ! isset($data[0]) || $data[0] !== '0';
 
 		$data = trim($match['data'], '0 ');
+		// Remove spaces inside list values
+		$data = RL_RegEx::replace('(="[^"]*,) ', '\1', $data);
+		// Convert new syntax to old
 		$data = str_replace(['"', ' '], ['', '|'], $data);
-
+		// Get attributes from old syntax (we still need this to handle the unquoted stuff)
 		$data = RL_PluginTag::getAttributesFromStringOld($data, []);
 
 		$content = trim($match['content']);
@@ -174,6 +178,7 @@ class Replace
 
 		return $content;
 	}
+
 
 	private static function replacePhpShortCodes(&$string)
 	{
