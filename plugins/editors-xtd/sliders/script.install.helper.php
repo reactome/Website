@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.7.7
+ * @version         7.7.8
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -358,7 +358,7 @@ class PlgEditorsXtdSlidersInstallerScriptHelper
 	{
 		JFactory::getApplication()->enqueueMessage(
 			JText::sprintf(
-				JText::_($this->install_type == 'update' ? 'RLI_THE_EXTENSION_HAS_BEEN_UPDATED_SUCCESSFULLY' : 'RLI_THE_EXTENSION_HAS_BEEN_INSTALLED_SUCCESSFULLY'),
+				$this->install_type == 'update' ? 'RLI_THE_EXTENSION_HAS_BEEN_UPDATED_SUCCESSFULLY' : 'RLI_THE_EXTENSION_HAS_BEEN_INSTALLED_SUCCESSFULLY',
 				'<strong>' . JText::_($this->name) . '</strong>',
 				'<strong>' . $this->getVersion() . '</strong>',
 				$this->getFullType()
