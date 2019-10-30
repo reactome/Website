@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         19.9.9950
+ * @version         19.10.11711
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,8 +13,8 @@ namespace RegularLabs\Library\Condition;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Filesystem\File as JFile;
 use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Filesystem\File as JFile;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel as JModel;
 use RegularLabs\Library\RegEx;
 

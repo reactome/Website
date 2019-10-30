@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         19.9.9950
+ * @version         19.10.11711
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -160,7 +160,7 @@ class HtmlTag
 	{
 		foreach ($attributes as $key => &$val)
 		{
-			$val = str_replace('"', '&quot;',  $val);
+			$val = str_replace('"', '&quot;', $val);
 			$val = $key . '="' . $val . '"';
 		}
 

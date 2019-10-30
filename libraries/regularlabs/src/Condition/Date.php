@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         19.9.9950
+ * @version         19.10.11711
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,9 +12,6 @@
 namespace RegularLabs\Library\Condition;
 
 defined('_JEXEC') or die;
-
-use DateTimeZone;
-use Joomla\CMS\Factory as JFactory;
 
 /**
  * Class Date

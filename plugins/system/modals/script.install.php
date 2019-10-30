@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.5.5
+ * @version         11.5.6
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -28,7 +28,14 @@ class PlgSystemModalsInstallerScript extends PlgSystemModalsInstallerScriptHelpe
 
 	public function onBeforeInstall($route)
 	{
+		if ( ! parent::onBeforeInstall($route))
+		{
+			return false;
+		}
+
 		$this->showDivMessage();
+
+		return true;
 	}
 
 	public function onAfterInstall($route)
@@ -37,6 +44,8 @@ class PlgSystemModalsInstallerScript extends PlgSystemModalsInstallerScriptHelpe
 		JFile::copy(__DIR__ . '/modal.php', JPATH_SITE . '/templates/system/modal.php');
 
 		$this->fixOldParams();
+
+		return parent::onAfterInstall($route);
 	}
 
 	private function showDivMessage()

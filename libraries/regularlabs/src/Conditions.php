@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         19.9.9950
+ * @version         19.10.11711
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -610,7 +610,7 @@ class Conditions
 
 		$incs = self::getTypeParamValue($id, $params, 'inc', true);
 
-		if (empty($incs) && !empty($params->conditions[$id]) && ! isset($params->conditions[$id . '_inc']))
+		if (empty($incs) && ! empty($params->conditions[$id]) && ! isset($params->conditions[$id . '_inc']))
 		{
 			$incs = ['inc_items', 'inc_arts', 'inc_cats', 'inc_others', 'x'];
 		}
