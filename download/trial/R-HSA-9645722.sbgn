@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_262" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="188.0" y="1608.0"/>
+            </label>
+            <bbox w="2928.0" h="1672.0" x="58.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_2456" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="155.0" y="516.0"/>
+            </label>
+            <bbox w="431.0" h="578.0" x="136.0" y="30.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17906_90" compartmentOrder="10.0">
+            <label text="mitochondrial outer membrane">
+                <bbox w="241.0" h="24.0" x="838.0" y="1514.0"/>
+            </label>
+            <bbox w="1083.0" h="1284.0" x="803.0" y="362.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70616_91" compartmentOrder="10.0">
+            <label text="mitochondrial inner membrane">
+                <bbox w="238.0" h="24.0" x="954.0" y="1443.0"/>
+            </label>
+            <bbox w="762.0" h="992.0" x="948.0" y="509.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_9645736_194267">
+            <label text="p14ARF LOF mutants (C1QBP)"/>
+            <bbox w="134.0" h="36.0" x="2062.0" y="1113.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9645765_3241">
+            <label text="C1QBP homotrimer"/>
+            <bbox w="123.0" h="28.0" x="1901.0" y="1178.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9645766_194266">
+            <label text="p14ARF mutants do not bind C1QBP"/>
+            <bbox w="12.0" h="12.0" x="2025.0" y="1272.0"/>
+            <port id="reactionVertex_9645766.1" x="2031.0" y="1234.0"/>
+            <port id="reactionVertex_9645766.2" x="2031.0" y="1337.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_3241_input_194266" source="entityVertex_9645765_3241" target="reactionVertex_9645766.1">
+            <start x="1985.0" y="1209.0"/>
+            <next x="2031.0" y="1234.0"/>
+            <end x="2031.0" y="1234.0"/>
+        </arc>
+        <arc class="consumption" id="arc_194267_input_194266" source="entityVertex_9645736_194267" target="reactionVertex_9645766.1">
+            <start x="2111.0" y="1155.0"/>
+            <next x="2031.0" y="1234.0"/>
+            <end x="2031.0" y="1234.0"/>
+        </arc>
+    </map>
+</sbgn>

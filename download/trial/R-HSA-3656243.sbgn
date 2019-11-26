@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17963_1584" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1704.0" y="1136.0"/>
+            </label>
+            <bbox w="2278.0" h="164.0" x="262.0" y="1028.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_1" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="4779.0" y="721.0"/>
+            </label>
+            <bbox w="2842.0" h="750.0" x="3043.0" y="223.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_977" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1707.0" y="482.0"/>
+            </label>
+            <bbox w="2656.0" h="761.0" x="111.0" y="172.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_39" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="71.0" y="1154.0"/>
+            </label>
+            <bbox w="5913.0" h="1102.0" x="0.0" y="115.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_3656258_111455">
+            <label text="Defective ST3GAL3 does not transfer SA to keratan"/>
+            <bbox w="12.0" h="12.0" x="1885.0" y="1074.0"/>
+            <port id="reactionVertex_3656258.1" x="1853.0" y="1080.0"/>
+            <port id="reactionVertex_3656258.2" x="1928.0" y="1080.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2046314_1608">
+            <label text="Keratan(3)-PG"/>
+            <bbox w="107.0" h="22.0" x="1703.0" y="1071.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_3702117_111456">
+            <label text="ST3GAL3 mutants"/>
+            <bbox w="118.0" h="22.0" x="1832.0" y="1018.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_727815_1953">
+            <label text="CMP-Neu5Ac"/>
+            <bbox w="126.0" h="30.0" x="1754.0" y="1104.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_1953_input_111455" source="entityVertex_727815_1953" target="reactionVertex_3656258.1">
+            <start x="1830.0" y="1101.0"/>
+            <next x="1853.0" y="1080.0"/>
+            <end x="1853.0" y="1080.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1608_input_111455" source="entityVertex_2046314_1608" target="reactionVertex_3656258.1">
+            <start x="1816.0" y="1080.0"/>
+            <next x="1853.0" y="1080.0"/>
+            <end x="1853.0" y="1080.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_111456_catalyst_111455" source="entityVertex_3702117_111456" target="reactionVertex_3656258_111455">
+            <start x="1891.0" y="1046.0"/>
+            <next x="1891.0" y="1064.0"/>
+            <end x="1891.0" y="1064.0"/>
+        </arc>
+    </map>
+</sbgn>

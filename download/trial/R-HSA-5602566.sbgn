@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_7660_4128" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="1552.0" y="864.0"/>
+            </label>
+            <bbox w="227.0" h="229.0" x="1500.0" y="712.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_4009" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="74.0" y="43.0"/>
+            </label>
+            <bbox w="1798.0" h="1260.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17940_4010" compartmentOrder="10.0">
+            <label text="endosome">
+                <bbox w="82.0" h="24.0" x="1080.0" y="178.0"/>
+            </label>
+            <bbox w="1120.0" h="881.0" x="192.0" y="123.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5607960_145803">
+            <label text="TICAM1 variants"/>
+            <bbox w="103.0" h="22.0" x="342.0" y="43.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5602712_145802">
+            <label text="TICAM1 deficiency blocks TLR3 pathway"/>
+            <bbox w="12.0" h="12.0" x="460.0" y="80.0"/>
+            <port id="reactionVertex_5602712.1" x="435.0" y="87.0"/>
+            <port id="reactionVertex_5602712.2" x="511.0" y="110.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_167985_4004">
+            <label text="viral dsRNA :TLR3"/>
+            <bbox w="115.0" h="22.0" x="326.0" y="120.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_4004_input_145802" source="entityVertex_167985_4004" target="reactionVertex_5602712.1">
+            <start x="396.0" y="117.0"/>
+            <next x="435.0" y="87.0"/>
+            <end x="435.0" y="87.0"/>
+        </arc>
+        <arc class="consumption" id="arc_145803_input_145802" source="entityVertex_5607960_145803" target="reactionVertex_5602712.1">
+            <glyph class="stoichiometry" id="Stoichiometry_5607960_INPUT_5602712">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="415.0" y="73.0"/>
+            </glyph>
+            <start x="407.0" y="71.0"/>
+            <next x="435.0" y="87.0"/>
+            <end x="435.0" y="87.0"/>
+        </arc>
+    </map>
+</sbgn>

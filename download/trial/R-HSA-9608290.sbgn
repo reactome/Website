@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_7660_1" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="412.0" y="1600.0"/>
+            </label>
+            <bbox w="1811.0" h="1606.0" x="396.0" y="41.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_1672" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="29.0" y="1632.0"/>
+            </label>
+            <bbox w="2277.0" h="1687.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_1774" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="65.0" y="241.0"/>
+            </label>
+            <bbox w="318.0" h="250.0" x="53.0" y="222.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9605335_192019">
+            <label text="MUTYH LOF mutants:(OGUA:Ade)-dsDNA"/>
+            <bbox w="191.0" h="36.0" x="717.0" y="409.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9605313_192018">
+            <label text="Defective MUTYH mutants do not cleave adenine mispaired with 8-oxoguanine"/>
+            <bbox w="12.0" h="12.0" x="955.0" y="418.0"/>
+            <port id="reactionVertex_9605313.1" x="911.0" y="425.0"/>
+            <port id="reactionVertex_9605313.2" x="990.0" y="423.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_192019_input_192018" source="entityVertex_9605335_192019" target="reactionVertex_9605313.1">
+            <start x="911.0" y="425.0"/>
+            <end x="961.0" y="424.0"/>
+        </arc>
+    </map>
+</sbgn>

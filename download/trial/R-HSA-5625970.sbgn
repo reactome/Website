@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_1" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="60.0" y="402.0"/>
+            </label>
+            <bbox w="829.0" h="462.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_118" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="255.0" y="355.0"/>
+            </label>
+            <bbox w="338.0" h="270.0" x="234.0" y="137.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5625964_3">
+            <label text="RHOA,RHOG,RAC1,CDC42:GTP"/>
+            <bbox w="199.0" h="25.0" x="157.0" y="137.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5625955_5">
+            <label text="RHOA,RHOG,RAC1,CDC42:GTP:KTN1"/>
+            <bbox w="201.0" h="39.0" x="370.0" y="167.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5672103_412">
+            <label text="KTN1"/>
+            <bbox w="41.0" h="22.0" x="250.0" y="205.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5672083_183">
+            <label text="KTN1 binds Kinesin-1"/>
+            <bbox w="10.0" h="10.0" x="583.0" y="216.0"/>
+            <port id="reactionVertex_5672083.1" x="588.0" y="219.0"/>
+            <port id="reactionVertex_5672083.2" x="586.0" y="249.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_983227_184">
+            <label text="Kinesin-1"/>
+            <bbox w="73.0" h="22.0" x="635.0" y="154.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5672087_185">
+            <label text="RHOA,RHOG,RAC1,CDC42:GTP:KTN1:Kinesin-1"/>
+            <bbox w="194.0" h="41.0" x="488.0" y="252.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5625959_2">
+            <label text="Activated RHOA, RHOG, RAC1 and CDC42 bind KTN1 (kinectin)"/>
+            <bbox w="10.0" h="10.0" x="323.0" y="184.0"/>
+            <port id="reactionVertex_5625959.1" x="329.0" y="189.0"/>
+            <port id="reactionVertex_5625959.2" x="367.0" y="188.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_3_input_2" source="entityVertex_5625964_3" target="reactionVertex_5625959.1">
+            <start x="278.0" y="165.0"/>
+            <end x="329.0" y="189.0"/>
+        </arc>
+        <arc class="consumption" id="arc_184_input_183" source="entityVertex_983227_184" target="reactionVertex_5672083.1">
+            <start x="654.0" y="179.0"/>
+            <end x="588.0" y="219.0"/>
+        </arc>
+        <arc class="production" id="arc_185_output_183" source="reactionVertex_5672083.2" target="entityVertex_5672087_185">
+            <start x="588.0" y="221.0"/>
+            <end x="586.0" y="249.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_183" source="entityVertex_5625955_5" target="reactionVertex_5672083.1">
+            <start x="539.0" y="209.0"/>
+            <end x="588.0" y="219.0"/>
+        </arc>
+        <arc class="consumption" id="arc_412_input_2" source="entityVertex_5672103_412" target="reactionVertex_5625959.1">
+            <start x="294.0" y="206.0"/>
+            <end x="329.0" y="189.0"/>
+        </arc>
+        <arc class="production" id="arc_5_output_2" source="reactionVertex_5625959.2" target="entityVertex_5625955_5">
+            <start x="328.0" y="189.0"/>
+            <end x="367.0" y="188.0"/>
+        </arc>
+    </map>
+</sbgn>

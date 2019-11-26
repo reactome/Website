@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_1" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="1523.0" y="914.0"/>
+            </label>
+            <bbox w="4380.0" h="1800.0" x="0.0" y="74.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_1554" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="4119.0" y="597.0"/>
+            </label>
+            <bbox w="246.0" h="304.0" x="4108.0" y="338.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17927_308" compartmentOrder="10.0">
+            <label text="mitochondrial intermembrane space">
+                <bbox w="280.0" h="24.0" x="1792.0" y="1107.0"/>
+            </label>
+            <bbox w="1743.0" h="611.0" x="1775.0" y="1104.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_27" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="84.0" y="1095.0"/>
+            </label>
+            <bbox w="557.0" h="887.0" x="67.0" y="726.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_733" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="2574.0" y="106.0"/>
+            </label>
+            <bbox w="660.0" h="152.0" x="2401.0" y="93.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_223" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="2391.0" y="1154.0"/>
+            </label>
+            <bbox w="1681.0" h="549.0" x="1804.0" y="1141.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9036104_138705">
+            <label text="Defective UGT1A4 does not transfer GlcA from UDP-GlcA to BMG"/>
+            <bbox w="12.0" h="12.0" x="523.0" y="1255.0"/>
+            <port id="reactionVertex_9036104.1" x="529.0" y="1232.0"/>
+            <port id="reactionVertex_9036104.2" x="529.0" y="1292.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_174384_1594">
+            <label text="UDP-GlcA"/>
+            <bbox w="74.0" h="30.0" x="518.0" y="968.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_159151_822">
+            <label text="BIL"/>
+            <bbox w="33.0" h="30.0" x="484.0" y="944.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5605025_138706">
+            <label text="UGT1A4 S376F"/>
+            <bbox w="98.0" h="22.0" x="579.0" y="1139.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5604954_138707">
+            <label text="Defective UGT1A4 does not transfer GlcA from UDP-GlcA to BIL"/>
+            <bbox w="12.0" h="12.0" x="493.0" y="1054.0"/>
+            <port id="reactionVertex_5604954.1" x="499.0" y="1012.0"/>
+            <port id="reactionVertex_5604954.2" x="499.0" y="1103.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_174384_834">
+            <label text="UDP-GlcA"/>
+            <bbox w="74.0" h="30.0" x="429.0" y="1199.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_1594_input_138707" source="entityVertex_174384_1594" target="reactionVertex_5604954.1">
+            <start x="526.0" y="1001.0"/>
+            <next x="499.0" y="1012.0"/>
+            <end x="499.0" y="1012.0"/>
+        </arc>
+        <arc class="consumption" id="arc_834_input_138705" source="entityVertex_174384_834" target="reactionVertex_9036104.1">
+            <start x="506.0" y="1224.0"/>
+            <next x="529.0" y="1232.0"/>
+            <end x="529.0" y="1232.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_138706_catalyst_138707" source="entityVertex_5605025_138706" target="reactionVertex_5604954_138707">
+            <start x="612.0" y="1136.0"/>
+            <next x="512.0" y="1069.0"/>
+            <end x="512.0" y="1069.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_138706_catalyst_138705" source="entityVertex_5605025_138706" target="reactionVertex_9036104_138705">
+            <start x="618.0" y="1164.0"/>
+            <next x="540.0" y="1249.0"/>
+            <end x="540.0" y="1249.0"/>
+        </arc>
+        <arc class="consumption" id="arc_822_input_138707" source="entityVertex_159151_822" target="reactionVertex_5604954.1">
+            <start x="499.0" y="977.0"/>
+            <next x="499.0" y="1012.0"/>
+            <end x="499.0" y="1012.0"/>
+        </arc>
+    </map>
+</sbgn>

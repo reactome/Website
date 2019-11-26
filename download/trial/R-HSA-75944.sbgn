@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_5460_134" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="17.0" y="594.0"/>
+            </label>
+            <bbox w="334.0" h="650.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_163312_123">
+            <label text="TFAM"/>
+            <bbox w="92.0" h="22.0" x="194.0" y="30.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_163298_125">
+            <label text="TFAM:mitochondrial promoter complex"/>
+            <bbox w="126.0" h="36.0" x="181.0" y="171.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_163310_122">
+            <label text="TFAM binds to mitochondrial promoters"/>
+            <bbox w="10.0" h="10.0" x="233.0" y="131.0"/>
+            <port id="reactionVertex_163310.1" x="239.0" y="116.0"/>
+            <port id="reactionVertex_163310.2" x="241.0" y="168.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_163296_126">
+            <label text="Association of TFAM:mt promoter complex with POLRMT:TFB2M"/>
+            <bbox w="10.0" h="10.0" x="160.0" y="251.0"/>
+            <port id="reactionVertex_163296.1" x="164.0" y="226.0"/>
+            <port id="reactionVertex_163296.2" x="167.0" y="286.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_163307_128">
+            <label text="POLRMT:TFB2M:TFAM:mitochondrial promoter complex"/>
+            <bbox w="126.0" h="50.0" x="107.0" y="289.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_163321_132">
+            <label text="mTERF:mitochondrial transcription termination sequence"/>
+            <bbox w="134.0" h="64.0" x="130.0" y="526.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_163306_127">
+            <label text="POLRMT:TFB2M complex"/>
+            <bbox w="103.0" h="36.0" x="56.0" y="167.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_163320_129">
+            <label text="Association of mTERF with the termination sequence"/>
+            <bbox w="10.0" h="10.0" x="192.0" y="482.0"/>
+            <port id="reactionVertex_163320.1" x="197.0" y="458.0"/>
+            <port id="reactionVertex_163320.2" x="197.0" y="523.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_163305_124">
+            <label text="mitochondrial DNA promoter"/>
+            <bbox w="120.0" h="36.0" x="86.0" y="68.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_163275_130">
+            <label text="MTERF"/>
+            <bbox w="48.0" h="22.0" x="203.0" y="409.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_164569_131">
+            <label text="mitochondrial transcription termination sequence"/>
+            <bbox w="90.0" h="64.0" x="73.0" y="388.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_124_input_122" source="entityVertex_163305_124" target="reactionVertex_163310.1">
+            <start x="201.0" y="107.0"/>
+            <next x="239.0" y="116.0"/>
+            <end x="239.0" y="116.0"/>
+        </arc>
+        <arc class="consumption" id="arc_131_input_129" source="entityVertex_164569_131" target="reactionVertex_163320.1">
+            <start x="166.0" y="441.0"/>
+            <next x="197.0" y="458.0"/>
+            <end x="197.0" y="458.0"/>
+        </arc>
+        <arc class="production" id="arc_128_output_126" source="reactionVertex_163296.2" target="entityVertex_163307_128">
+            <start x="165.0" y="256.0"/>
+            <end x="167.0" y="286.0"/>
+        </arc>
+        <arc class="production" id="arc_132_output_129" source="reactionVertex_163320.2" target="entityVertex_163321_132">
+            <start x="197.0" y="487.0"/>
+            <end x="197.0" y="523.0"/>
+        </arc>
+        <arc class="consumption" id="arc_123_input_122" source="entityVertex_163312_123" target="reactionVertex_163310.1">
+            <start x="239.0" y="55.0"/>
+            <next x="239.0" y="116.0"/>
+            <end x="239.0" y="116.0"/>
+        </arc>
+        <arc class="production" id="arc_125_output_122" source="reactionVertex_163310.2" target="entityVertex_163298_125">
+            <start x="238.0" y="136.0"/>
+            <end x="241.0" y="168.0"/>
+        </arc>
+        <arc class="consumption" id="arc_130_input_129" source="entityVertex_163275_130" target="reactionVertex_163320.1">
+            <start x="218.0" y="434.0"/>
+            <next x="197.0" y="458.0"/>
+            <end x="197.0" y="458.0"/>
+        </arc>
+        <arc class="consumption" id="arc_127_input_126" source="entityVertex_163306_127" target="reactionVertex_163296.1">
+            <start x="132.0" y="206.0"/>
+            <next x="164.0" y="226.0"/>
+            <end x="164.0" y="226.0"/>
+        </arc>
+        <arc class="consumption" id="arc_125_input_126" source="entityVertex_163298_125" target="reactionVertex_163296.1">
+            <start x="205.0" y="210.0"/>
+            <next x="164.0" y="226.0"/>
+            <end x="164.0" y="226.0"/>
+        </arc>
+    </map>
+</sbgn>

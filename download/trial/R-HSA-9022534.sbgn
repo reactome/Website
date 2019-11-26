@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_7660_1" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="165.0" y="1378.0"/>
+            </label>
+            <bbox w="1925.0" h="1222.0" x="135.0" y="222.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_6" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="103.0" y="1543.0"/>
+            </label>
+            <bbox w="2267.0" h="1507.0" x="77.0" y="90.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_917757_2687" compartmentOrder="10.0">
+            <label text="clathrin-sculpted gamma-aminobutyric acid transport vesicle membrane">
+                <bbox w="559.0" h="24.0" x="1451.0" y="137.0"/>
+            </label>
+            <bbox w="187.0" h="74.0" x="1449.0" y="131.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_9022446_2276">
+            <label text="5hmC-DNA"/>
+            <bbox w="76.0" h="22.0" x="1370.0" y="420.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9022462_190193">
+            <label text="MECP2 mutants R133C ,D121G, R133H and S134F do not bind 5hmC-DNA"/>
+            <bbox w="12.0" h="12.0" x="1346.0" y="417.0"/>
+            <port id="reactionVertex_9022462.1" x="1344.0" y="449.0"/>
+            <port id="reactionVertex_9022462.2" x="1385.0" y="393.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_9022522_190194">
+            <label text="MECP2 R133C,MECP2 D121G,MECP2 R133H,MECP2 S134F"/>
+            <bbox w="99.0" h="64.0" x="759.0" y="469.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_2276_input_190193" source="entityVertex_9022446_2276" target="reactionVertex_9022462.1">
+            <start x="1367.0" y="441.0"/>
+            <next x="1344.0" y="449.0"/>
+            <end x="1344.0" y="449.0"/>
+        </arc>
+        <arc class="consumption" id="arc_190194_input_190193" source="entityVertex_9022522_190194" target="reactionVertex_9022462.1">
+            <start x="864.0" y="496.0"/>
+            <next x="1344.0" y="449.0"/>
+            <end x="1344.0" y="449.0"/>
+        </arc>
+    </map>
+</sbgn>

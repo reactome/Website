@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17963_1584" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1704.0" y="1136.0"/>
+            </label>
+            <bbox w="2278.0" h="164.0" x="262.0" y="1028.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_1" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="4779.0" y="721.0"/>
+            </label>
+            <bbox w="2842.0" h="750.0" x="3043.0" y="223.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_977" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1707.0" y="482.0"/>
+            </label>
+            <bbox w="2656.0" h="761.0" x="111.0" y="172.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_39" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="71.0" y="1154.0"/>
+            </label>
+            <bbox w="5913.0" h="1102.0" x="0.0" y="115.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2282889_92838">
+            <label text="Defective ARSB does not hydrolyse C4S/C6S chains"/>
+            <bbox w="12.0" h="12.0" x="4257.0" y="627.0"/>
+            <port id="reactionVertex_2282889.1" x="4224.0" y="633.0"/>
+            <port id="reactionVertex_2282889.2" x="4305.0" y="633.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9036065_92836">
+            <label text="Defective ARSB does not hydrolyse DS"/>
+            <bbox w="12.0" h="12.0" x="4257.0" y="512.0"/>
+            <port id="reactionVertex_9036065.1" x="4226.0" y="518.0"/>
+            <port id="reactionVertex_9036065.2" x="4297.0" y="518.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_1605715_613">
+            <label text="H2O"/>
+            <bbox w="49.0" h="30.0" x="4162.0" y="552.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2065251_635">
+            <label text="C4S/C6S chains"/>
+            <bbox w="85.0" h="36.0" x="4037.0" y="671.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9631731_92837">
+            <label text="ARSB mutants:Ca2+"/>
+            <bbox w="125.0" h="22.0" x="4200.0" y="556.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_2065231_611">
+            <label text="ChEBI:63519 chain"/>
+            <bbox w="115.0" h="44.0" x="4066.0" y="496.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_613_input_92838" source="entityVertex_1605715_613" target="reactionVertex_2282889.1">
+            <start x="4194.0" y="585.0"/>
+            <next x="4224.0" y="633.0"/>
+            <end x="4224.0" y="633.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_92837_catalyst_92838" source="entityVertex_9631731_92837" target="reactionVertex_2282889_92838">
+            <start x="4262.0" y="581.0"/>
+            <next x="4263.0" y="617.0"/>
+            <end x="4263.0" y="617.0"/>
+        </arc>
+        <arc class="consumption" id="arc_635_input_92838" source="entityVertex_2065251_635" target="reactionVertex_2282889.1">
+            <start x="4128.0" y="672.0"/>
+            <next x="4224.0" y="633.0"/>
+            <end x="4224.0" y="633.0"/>
+        </arc>
+        <arc class="consumption" id="arc_613_input_92836" source="entityVertex_1605715_613" target="reactionVertex_9036065.1">
+            <start x="4198.0" y="549.0"/>
+            <next x="4226.0" y="518.0"/>
+            <end x="4226.0" y="518.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_92837_catalyst_92836" source="entityVertex_9631731_92837" target="reactionVertex_9036065_92836">
+            <start x="4262.0" y="553.0"/>
+            <next x="4263.0" y="534.0"/>
+            <end x="4263.0" y="534.0"/>
+        </arc>
+        <arc class="consumption" id="arc_611_input_92836" source="entityVertex_2065231_611" target="reactionVertex_9036065.1">
+            <start x="4184.0" y="518.0"/>
+            <next x="4226.0" y="518.0"/>
+            <end x="4226.0" y="518.0"/>
+        </arc>
+    </map>
+</sbgn>

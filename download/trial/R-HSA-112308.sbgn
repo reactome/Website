@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_5" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="376.0" y="161.0"/>
+            </label>
+            <bbox w="594.0" h="447.0" x="173.0" y="0.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_74112_2">
+            <label text="Ca2+"/>
+            <bbox w="61.0" h="30.0" x="67.0" y="159.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_210420_1">
+            <label text="Ca2+ influx through voltage gated Ca2+ channels"/>
+            <bbox w="12.0" h="12.0" x="173.0" y="168.0"/>
+            <port id="reactionVertex_210420.1" x="131.0" y="174.0"/>
+            <port id="reactionVertex_210420.2" x="248.0" y="174.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_74126_6">
+            <label text="K+"/>
+            <bbox w="35.0" h="30.0" x="0.0" y="207.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5672066_8">
+            <label text="CACFD1 dimer"/>
+            <bbox w="94.0" h="22.0" x="131.0" y="270.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_74016_3">
+            <label text="Ca2+"/>
+            <bbox w="61.0" h="30.0" x="251.0" y="160.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_210378_4">
+            <label text="Voltage Gated Ca2+ Channel"/>
+            <bbox w="131.0" h="36.0" x="113.0" y="84.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5263618_7">
+            <label text="CACFD1 dimer transports Ca2+ from extracellular region to cytosol"/>
+            <bbox w="12.0" h="12.0" x="171.0" y="229.0"/>
+            <port id="reactionVertex_5263618.1" x="116.0" y="192.0"/>
+            <port id="reactionVertex_5263618.2" x="255.0" y="193.0"/>
+        </glyph>
+        <arc class="production" id="arc_3_output_7" source="reactionVertex_5263618.2" target="entityVertex_74016_3">
+            <start x="177.0" y="235.0"/>
+            <end x="255.0" y="193.0"/>
+        </arc>
+        <arc class="production" id="arc_3_output_1" source="reactionVertex_210420.2" target="entityVertex_74016_3">
+            <start x="179.0" y="174.0"/>
+            <end x="248.0" y="174.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_8_catalyst_7" source="entityVertex_5672066_8" target="reactionVertex_5263618_7">
+            <start x="177.0" y="267.0"/>
+            <next x="177.0" y="251.0"/>
+            <end x="177.0" y="251.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2_input_1" source="entityVertex_74112_2" target="reactionVertex_210420.1">
+            <start x="131.0" y="174.0"/>
+            <end x="179.0" y="174.0"/>
+        </arc>
+        <arc class="inhibition" id="arc_6_inhibitor_1" source="entityVertex_74126_6" target="reactionVertex_210420_1">
+            <start x="38.0" y="219.0"/>
+            <next x="179.0" y="198.0"/>
+            <next x="179.0" y="183.0"/>
+            <end x="179.0" y="183.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2_input_7" source="entityVertex_74112_2" target="reactionVertex_5263618.1">
+            <start x="116.0" y="192.0"/>
+            <end x="177.0" y="235.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_4_catalyst_1" source="entityVertex_210378_4" target="reactionVertex_210420_1">
+            <start x="178.0" y="126.0"/>
+            <next x="179.0" y="158.0"/>
+            <end x="179.0" y="158.0"/>
+        </arc>
+    </map>
+</sbgn>

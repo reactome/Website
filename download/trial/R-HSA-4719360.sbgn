@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17963_640" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="2939.0" y="263.0"/>
+            </label>
+            <bbox w="3367.0" h="350.0" x="1167.0" y="120.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_1604" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="642.0" y="195.0"/>
+            </label>
+            <bbox w="631.0" h="177.0" x="472.0" y="108.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_5" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="725.0" y="443.0"/>
+            </label>
+            <bbox w="5631.0" h="1256.0" x="0.0" y="88.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_6" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="1071.0" y="966.0"/>
+            </label>
+            <bbox w="5161.0" h="451.0" x="423.0" y="675.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_927893_957" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum quality control compartment">
+                <bbox w="400.0" h="24.0" x="3203.0" y="1055.0"/>
+            </label>
+            <bbox w="1106.0" h="324.0" x="2440.0" y="780.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_162860_73">
+            <label text="GDP-Man"/>
+            <bbox w="73.0" h="30.0" x="101.0" y="926.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_449744_119064">
+            <label text="DOLDP"/>
+            <bbox w="48.0" h="30.0" x="383.0" y="1065.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_4719354_119063">
+            <label text="Defective DPM3 does not transfer mannose to DOLP to form DOLPman"/>
+            <bbox w="12.0" h="12.0" x="369.0" y="1029.0"/>
+            <port id="reactionVertex_4719354.1" x="260.0" y="1080.0"/>
+            <port id="reactionVertex_4719354.2" x="376.0" y="1007.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9631746_119065">
+            <label text="DPM1:DPM2:DPM3 L85S"/>
+            <bbox w="85.0" h="36.0" x="404.0" y="1018.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_73_input_119063" source="entityVertex_162860_73" target="reactionVertex_4719354.1">
+            <start x="150.0" y="959.0"/>
+            <next x="260.0" y="1080.0"/>
+            <end x="260.0" y="1080.0"/>
+        </arc>
+        <arc class="consumption" id="arc_119064_input_119063" source="entityVertex_449744_119064" target="reactionVertex_4719354.1">
+            <start x="380.0" y="1080.0"/>
+            <next x="260.0" y="1080.0"/>
+            <end x="260.0" y="1080.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_119065_catalyst_119063" source="entityVertex_9631746_119065" target="reactionVertex_4719354_119063">
+            <start x="401.0" y="1035.0"/>
+            <next x="391.0" y="1035.0"/>
+            <end x="391.0" y="1035.0"/>
+        </arc>
+    </map>
+</sbgn>

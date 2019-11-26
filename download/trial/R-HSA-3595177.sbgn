@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17963_1584" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1704.0" y="1136.0"/>
+            </label>
+            <bbox w="2278.0" h="164.0" x="262.0" y="1028.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_1" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="4779.0" y="721.0"/>
+            </label>
+            <bbox w="2842.0" h="750.0" x="3043.0" y="223.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_977" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1707.0" y="482.0"/>
+            </label>
+            <bbox w="2656.0" h="761.0" x="111.0" y="172.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_39" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="71.0" y="1154.0"/>
+            </label>
+            <bbox w="5913.0" h="1102.0" x="0.0" y="115.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2064172_1250">
+            <label text="chondroitin(1)-core proteins"/>
+            <bbox w="107.0" h="36.0" x="1536.0" y="221.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_1889970_1260">
+            <label text="UDP-GlcA"/>
+            <bbox w="93.0" h="30.0" x="1597.0" y="272.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_3595178_109536">
+            <label text="Defective CHSY1 does not transfer GlcA to chondroitin"/>
+            <bbox w="12.0" h="12.0" x="1737.0" y="215.0"/>
+            <port id="reactionVertex_3595178.1" x="1688.0" y="221.0"/>
+            <port id="reactionVertex_3595178.2" x="1776.0" y="221.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_735700_1266">
+            <label text="UDP-GalNAc"/>
+            <bbox w="115.0" h="30.0" x="1874.0" y="266.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_3636795_109537">
+            <label text="CHSY1 mutants"/>
+            <bbox w="97.0" h="22.0" x="1816.0" y="162.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_3595176_109538">
+            <label text="Defective CHSY1 does not transfer GalNAc to chondroitin"/>
+            <bbox w="12.0" h="12.0" x="1990.0" y="208.0"/>
+            <port id="reactionVertex_3595176.1" x="1964.0" y="214.0"/>
+            <port id="reactionVertex_3595176.2" x="2072.0" y="214.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_1260_input_109536" source="entityVertex_1889970_1260" target="reactionVertex_3595178.1">
+            <start x="1653.0" y="269.0"/>
+            <next x="1688.0" y="221.0"/>
+            <end x="1688.0" y="221.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1266_input_109538" source="entityVertex_735700_1266" target="reactionVertex_3595176.1">
+            <start x="1938.0" y="263.0"/>
+            <next x="1964.0" y="214.0"/>
+            <end x="1964.0" y="214.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_109537_catalyst_109538" source="entityVertex_3636795_109537" target="reactionVertex_3595176_109538">
+            <start x="1899.0" y="190.0"/>
+            <next x="1980.0" y="210.0"/>
+            <end x="1980.0" y="210.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_109537_catalyst_109536" source="entityVertex_3636795_109537" target="reactionVertex_3595178_109536">
+            <start x="1836.0" y="190.0"/>
+            <next x="1758.0" y="216.0"/>
+            <end x="1758.0" y="216.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1250_input_109536" source="entityVertex_2064172_1250" target="reactionVertex_3595178.1">
+            <start x="1649.0" y="229.0"/>
+            <next x="1688.0" y="221.0"/>
+            <end x="1688.0" y="221.0"/>
+        </arc>
+    </map>
+</sbgn>

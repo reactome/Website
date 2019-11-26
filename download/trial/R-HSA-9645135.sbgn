@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_1" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="82.0" y="559.0"/>
+            </label>
+            <bbox w="890.0" h="605.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_9645129_3">
+            <label text="Activators of STAT5"/>
+            <bbox w="124.0" h="26.0" x="147.0" y="74.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_9645126_2">
+            <label text="Activators bind STAT5"/>
+            <bbox w="10.0" h="10.0" x="320.0" y="136.0"/>
+            <port id="reactionVertex_9645126.1" x="274.0" y="141.0"/>
+            <port id="reactionVertex_9645126.2" x="378.0" y="140.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9645118_5">
+            <label text="Activators of STAT5:STAT5"/>
+            <bbox w="177.0" h="28.0" x="381.0" y="126.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_7">
+            <label text="ATP"/>
+            <bbox w="38.0" h="30.0" x="466.0" y="239.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_507929_14">
+            <label text="p-STAT5A, p-STAT5B"/>
+            <bbox w="154.0" h="32.0" x="97.0" y="482.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9645134_13">
+            <label text="p-STAT5 dissociates from activator:STAT5 complex"/>
+            <bbox w="12.0" h="12.0" x="569.0" y="362.0"/>
+            <port id="reactionVertex_9645134.1" x="690.0" y="288.0"/>
+            <port id="reactionVertex_9645134.2" x="367.0" y="370.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_10">
+            <label text="ADP"/>
+            <bbox w="38.0" h="30.0" x="677.0" y="115.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9645137_6">
+            <label text="Activator phosphorylates STAT5"/>
+            <bbox w="12.0" h="12.0" x="586.0" y="187.0"/>
+            <port id="reactionVertex_9645137.1" x="535.0" y="192.0"/>
+            <port id="reactionVertex_9645137.2" x="639.0" y="192.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_9645119_8">
+            <label text="Activators of STAT5:p-STAT5"/>
+            <bbox w="185.0" h="33.0" x="620.0" y="249.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_1295523_4">
+            <label text="STAT5"/>
+            <bbox w="47.0" h="22.0" x="190.0" y="181.0"/>
+        </glyph>
+        <arc class="production" id="arc_5_output_2" source="reactionVertex_9645126.2" target="entityVertex_9645118_5">
+            <start x="325.0" y="141.0"/>
+            <end x="378.0" y="140.0"/>
+        </arc>
+        <arc class="production" id="arc_10_output_6" source="reactionVertex_9645137.2" target="entityVertex_29370_10">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_9645137">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="654.0" y="164.0"/>
+            </glyph>
+            <start x="682.0" y="148.0"/>
+            <next x="639.0" y="192.0"/>
+            <end x="639.0" y="192.0"/>
+        </arc>
+        <arc class="production" id="arc_14_output_13" source="reactionVertex_9645134.2" target="entityVertex_507929_14">
+            <start x="198.0" y="476.0"/>
+            <next x="367.0" y="370.0"/>
+            <end x="367.0" y="370.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_6" source="entityVertex_9645118_5" target="reactionVertex_9645137.1">
+            <start x="486.0" y="157.0"/>
+            <next x="535.0" y="192.0"/>
+            <end x="535.0" y="192.0"/>
+        </arc>
+        <arc class="consumption" id="arc_8_input_13" source="entityVertex_9645119_8" target="reactionVertex_9645134.1">
+            <start x="690.0" y="288.0"/>
+            <end x="575.0" y="368.0"/>
+        </arc>
+        <arc class="production" id="arc_8_output_6" source="reactionVertex_9645137.2" target="entityVertex_9645119_8">
+            <start x="695.0" y="243.0"/>
+            <next x="639.0" y="192.0"/>
+            <end x="639.0" y="192.0"/>
+        </arc>
+        <arc class="consumption" id="arc_3_input_2" source="entityVertex_9645129_3" target="reactionVertex_9645126.1">
+            <start x="224.0" y="106.0"/>
+            <next x="274.0" y="141.0"/>
+            <end x="274.0" y="141.0"/>
+        </arc>
+        <arc class="consumption" id="arc_7_input_6" source="entityVertex_113592_7" target="reactionVertex_9645137.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_9645137">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="510.0" y="208.0"/>
+            </glyph>
+            <start x="497.0" y="236.0"/>
+            <next x="535.0" y="192.0"/>
+            <end x="535.0" y="192.0"/>
+        </arc>
+        <arc class="production" id="arc_3_output_13" source="reactionVertex_9645134.2" target="entityVertex_9645129_3">
+            <start x="216.0" y="106.0"/>
+            <next x="367.0" y="370.0"/>
+            <end x="367.0" y="370.0"/>
+        </arc>
+        <arc class="consumption" id="arc_4_input_2" source="entityVertex_1295523_4" target="reactionVertex_9645126.1">
+            <start x="226.0" y="175.0"/>
+            <next x="274.0" y="141.0"/>
+            <end x="274.0" y="141.0"/>
+        </arc>
+    </map>
+</sbgn>

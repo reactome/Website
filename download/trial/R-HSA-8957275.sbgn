@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17957_1" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="261.0" y="306.0"/>
+            </label>
+            <bbox w="434.0" h="315.0" x="41.0" y="36.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_2" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="699.0" y="426.0"/>
+            </label>
+            <bbox w="781.0" h="474.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_8931884_327">
+            <label text="ADP"/>
+            <bbox w="53.0" h="28.0" x="255.0" y="196.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8952335_5">
+            <label text="FAM20C:Phosphorylated FAM20C substrates"/>
+            <bbox w="129.0" h="50.0" x="242.0" y="98.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_8931885_174">
+            <label text="ATP"/>
+            <bbox w="48.0" h="28.0" x="140.0" y="195.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_8952289_3">
+            <label text="FAM20C phosphorylates FAM20C substrates"/>
+            <bbox w="12.0" h="12.0" x="216.0" y="163.0"/>
+            <port id="reactionVertex_8952289.1" x="206.0" y="168.0"/>
+            <port id="reactionVertex_8952289.2" x="242.0" y="168.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8952321_4">
+            <label text="FAM20C:FAM20C substrates"/>
+            <bbox w="115.0" h="37.0" x="73.0" y="111.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8957338_1063">
+            <label text="FAM20C:FAM20A"/>
+            <bbox w="109.0" h="22.0" x="167.0" y="251.0"/>
+        </glyph>
+        <arc class="stimulation" id="arc_1063_activator_3" source="entityVertex_8957338_1063" target="reactionVertex_8952289_3">
+            <start x="221.0" y="248.0"/>
+            <next x="222.0" y="178.0"/>
+            <end x="222.0" y="178.0"/>
+        </arc>
+        <arc class="consumption" id="arc_174_input_3" source="entityVertex_8931885_174" target="reactionVertex_8952289.1">
+            <glyph class="stoichiometry" id="Stoichiometry_8931885_INPUT_8952289">
+                <label text="105"/>
+                <bbox w="15.0" h="15.0" x="185.0" y="173.0"/>
+            </glyph>
+            <start x="178.0" y="192.0"/>
+            <next x="206.0" y="168.0"/>
+            <end x="206.0" y="168.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_4_catalyst_3" source="entityVertex_8952321_4" target="reactionVertex_8952289_3">
+            <start x="191.0" y="133.0"/>
+            <next x="221.0" y="136.0"/>
+            <next x="222.0" y="153.0"/>
+            <end x="222.0" y="153.0"/>
+        </arc>
+        <arc class="consumption" id="arc_4_input_3" source="entityVertex_8952321_4" target="reactionVertex_8952289.1">
+            <start x="166.0" y="151.0"/>
+            <next x="206.0" y="168.0"/>
+            <end x="206.0" y="168.0"/>
+        </arc>
+        <arc class="production" id="arc_5_output_3" source="reactionVertex_8952289.2" target="entityVertex_8952335_5">
+            <start x="270.0" y="151.0"/>
+            <next x="242.0" y="168.0"/>
+            <end x="242.0" y="168.0"/>
+        </arc>
+        <arc class="production" id="arc_327_output_3" source="reactionVertex_8952289.2" target="entityVertex_8931884_327">
+            <glyph class="stoichiometry" id="Stoichiometry_8931884_OUTPUT_8952289">
+                <label text="105"/>
+                <bbox w="15.0" h="15.0" x="248.0" y="173.0"/>
+            </glyph>
+            <start x="268.0" y="193.0"/>
+            <next x="242.0" y="168.0"/>
+            <end x="242.0" y="168.0"/>
+        </arc>
+    </map>
+</sbgn>

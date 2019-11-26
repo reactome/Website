@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_16" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="5864.0" y="1277.0"/>
+            </label>
+            <bbox w="5772.0" h="1190.0" x="180.0" y="159.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_171043_66" compartmentOrder="10.0">
+            <label text="early endosome lumen">
+                <bbox w="176.0" h="24.0" x="752.0" y="654.0"/>
+            </label>
+            <bbox w="225.0" h="220.0" x="718.0" y="491.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_290" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="2954.0" y="665.0"/>
+            </label>
+            <bbox w="617.0" h="161.0" x="2614.0" y="551.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_173031_67" compartmentOrder="10.0">
+            <label text="late endosome lumen">
+                <bbox w="166.0" h="24.0" x="1698.0" y="689.0"/>
+            </label>
+            <bbox w="227.0" h="232.0" x="1685.0" y="511.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_516" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="3499.0" y="599.0"/>
+            </label>
+            <bbox w="715.0" h="246.0" x="3387.0" y="450.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_68" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="2126.0" y="713.0"/>
+            </label>
+            <bbox w="315.0" h="316.0" x="2064.0" y="482.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_20600_283" compartmentOrder="10.0">
+            <label text="synaptic vesicle">
+                <bbox w="121.0" h="24.0" x="1350.0" y="654.0"/>
+            </label>
+            <bbox w="254.0" h="400.0" x="1219.0" y="400.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17927_652" compartmentOrder="10.0">
+            <label text="mitochondrial intermembrane space">
+                <bbox w="280.0" h="24.0" x="3371.0" y="708.0"/>
+            </label>
+            <bbox w="809.0" h="321.0" x="3355.0" y="437.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_188972_98">
+            <label text="Cl-"/>
+            <bbox w="35.0" h="30.0" x="4005.0" y="31.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_111627_96">
+            <label text="HCO3-"/>
+            <bbox w="58.0" h="30.0" x="3931.0" y="227.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5627725_157600">
+            <label text="SLC26A3 mutants"/>
+            <bbox w="111.0" h="22.0" x="3799.0" y="150.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5627737_157599">
+            <label text="SLC26A3 does not exchange Cl- for HCO3-"/>
+            <bbox w="12.0" h="12.0" x="3955.0" y="154.0"/>
+            <port id="reactionVertex_5627737.1" x="3960.0" y="201.0"/>
+            <port id="reactionVertex_5627737.2" x="3960.0" y="119.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_96_input_157599" source="entityVertex_111627_96" target="reactionVertex_5627737.1">
+            <start x="3960.0" y="224.0"/>
+            <next x="3960.0" y="201.0"/>
+            <end x="3960.0" y="201.0"/>
+        </arc>
+        <arc class="consumption" id="arc_98_input_157599" source="entityVertex_188972_98" target="reactionVertex_5627737.1">
+            <start x="4016.0" y="64.0"/>
+            <next x="3960.0" y="201.0"/>
+            <end x="3960.0" y="201.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_157600_catalyst_157599" source="entityVertex_5627725_157600" target="reactionVertex_5627737_157599">
+            <start x="3916.0" y="160.0"/>
+            <next x="3945.0" y="160.0"/>
+            <end x="3945.0" y="160.0"/>
+        </arc>
+    </map>
+</sbgn>

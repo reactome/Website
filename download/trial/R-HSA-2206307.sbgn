@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17963_1584" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1704.0" y="1136.0"/>
+            </label>
+            <bbox w="2278.0" h="164.0" x="262.0" y="1028.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_1" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="4779.0" y="721.0"/>
+            </label>
+            <bbox w="2842.0" h="750.0" x="3043.0" y="223.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_977" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1707.0" y="482.0"/>
+            </label>
+            <bbox w="2656.0" h="761.0" x="111.0" y="172.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_39" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="71.0" y="1154.0"/>
+            </label>
+            <bbox w="5913.0" h="1102.0" x="0.0" y="115.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_2090072_947">
+            <label text="Heparan sulfate chain(2)"/>
+            <bbox w="126.0" h="44.0" x="3637.0" y="293.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9036050_95632">
+            <label text="Defective SGSH does not hydrolyse Heparan sulfate chain(2)"/>
+            <bbox w="12.0" h="12.0" x="3818.0" y="308.0"/>
+            <port id="reactionVertex_9036050.1" x="3794.0" y="314.0"/>
+            <port id="reactionVertex_9036050.2" x="3849.0" y="314.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2214337_95633">
+            <label text="SGSH mutants"/>
+            <bbox w="89.0" h="22.0" x="3780.0" y="261.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_2090070_990">
+            <label text="Heparan sulfate chain(7)"/>
+            <bbox w="126.0" h="44.0" x="4931.0" y="298.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_1605715_1020">
+            <label text="H2O"/>
+            <bbox w="49.0" h="30.0" x="5039.0" y="361.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_1605715_948">
+            <label text="H2O"/>
+            <bbox w="49.0" h="30.0" x="3730.0" y="355.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2263444_95630">
+            <label text="Defective SGSH does not hydrolyse Heparan sulfate chain(7)"/>
+            <bbox w="12.0" h="12.0" x="5121.0" y="313.0"/>
+            <port id="reactionVertex_2263444.1" x="5088.0" y="319.0"/>
+            <port id="reactionVertex_2263444.2" x="5164.0" y="319.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2214337_95631">
+            <label text="SGSH mutants"/>
+            <bbox w="89.0" h="22.0" x="5083.0" y="267.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_990_input_95630" source="entityVertex_2090070_990" target="reactionVertex_2263444.1">
+            <start x="5060.0" y="319.0"/>
+            <next x="5088.0" y="319.0"/>
+            <end x="5088.0" y="319.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_95633_catalyst_95632" source="entityVertex_2214337_95633" target="reactionVertex_9036050_95632">
+            <start x="3824.0" y="289.0"/>
+            <next x="3824.0" y="298.0"/>
+            <end x="3824.0" y="298.0"/>
+        </arc>
+        <arc class="consumption" id="arc_948_input_95632" source="entityVertex_1605715_948" target="reactionVertex_9036050.1">
+            <glyph class="stoichiometry" id="Stoichiometry_1605715_INPUT_9036050">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="3773.0" y="327.0"/>
+            </glyph>
+            <start x="3764.0" y="352.0"/>
+            <next x="3794.0" y="314.0"/>
+            <end x="3794.0" y="314.0"/>
+        </arc>
+        <arc class="consumption" id="arc_947_input_95632" source="entityVertex_2090072_947" target="reactionVertex_9036050.1">
+            <start x="3766.0" y="314.0"/>
+            <next x="3794.0" y="314.0"/>
+            <end x="3794.0" y="314.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_95631_catalyst_95630" source="entityVertex_2214337_95631" target="reactionVertex_2263444_95630">
+            <start x="5127.0" y="295.0"/>
+            <next x="5127.0" y="303.0"/>
+            <end x="5127.0" y="303.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1020_input_95630" source="entityVertex_1605715_1020" target="reactionVertex_2263444.1">
+            <glyph class="stoichiometry" id="Stoichiometry_1605715_INPUT_2263444">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="5072.0" y="332.0"/>
+            </glyph>
+            <start x="5069.0" y="358.0"/>
+            <next x="5088.0" y="319.0"/>
+            <end x="5088.0" y="319.0"/>
+        </arc>
+    </map>
+</sbgn>

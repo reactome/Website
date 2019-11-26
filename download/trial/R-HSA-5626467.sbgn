@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_1" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="79.0" y="569.0"/>
+            </label>
+            <bbox w="769.0" h="670.0" x="4.0" y="0.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5626540_78">
+            <label text="IQGAP1 dimer"/>
+            <bbox w="91.0" h="22.0" x="144.0" y="201.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_201877_7">
+            <label text="F-actin"/>
+            <bbox w="58.0" h="23.0" x="406.0" y="185.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5672317_81">
+            <label text="CDH1 dimer:CTTNB1:CTTNA1:IQGAP1:MEN1"/>
+            <bbox w="94.0" h="62.0" x="24.0" y="300.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5672304_76">
+            <label text="IQGAP1 binds CDH1:CTTNB1:CTTNA1 and MEN1"/>
+            <bbox w="10.0" h="10.0" x="157.0" y="286.0"/>
+            <port id="reactionVertex_5672304.1" x="175.0" y="269.0"/>
+            <port id="reactionVertex_5672304.2" x="121.0" y="310.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_534997_11">
+            <label text="CALM1:4Ca2+"/>
+            <bbox w="94.0" h="22.0" x="282.0" y="281.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5672329_310">
+            <label text="IQGAP1 binds CLIP1 and microtubules"/>
+            <bbox w="10.0" h="10.0" x="411.0" y="556.0"/>
+            <port id="reactionVertex_5672329.1" x="399.0" y="546.0"/>
+            <port id="reactionVertex_5672329.2" x="455.0" y="591.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_389778_3">
+            <label text="CDC42:GTP, RAC1:GTP"/>
+            <bbox w="82.0" h="44.0" x="105.0" y="30.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5626465_5">
+            <label text="RAC1,CDC42:GTP:IQGAPs"/>
+            <bbox w="125.0" h="40.0" x="285.0" y="34.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5626507_6">
+            <label text="IQGAPs bind F-actin, which is inhibited by calmodulin"/>
+            <bbox w="10.0" h="10.0" x="441.0" y="98.0"/>
+            <port id="reactionVertex_5626507.1" x="429.0" y="110.0"/>
+            <port id="reactionVertex_5626507.2" x="483.0" y="88.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5626373_4">
+            <label text="IQGAP"/>
+            <bbox w="71.0" h="22.0" x="190.0" y="141.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5626549_10">
+            <label text="IQGAPs bind CALM1"/>
+            <bbox w="10.0" h="10.0" x="359.0" y="226.0"/>
+            <port id="reactionVertex_5626549.1" x="364.0" y="231.0"/>
+            <port id="reactionVertex_5626549.2" x="561.0" y="219.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5626510_8">
+            <label text="RAC1,CDC42:GTP:IQGAP:F-actin"/>
+            <bbox w="122.0" h="34.0" x="457.0" y="51.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5672315_77">
+            <label text="MEN1"/>
+            <bbox w="43.0" h="22.0" x="209.0" y="256.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5626551_9">
+            <label text="RAC1:GTP,CDC42:GTP:IQGAPs:CALM1:4Ca2+"/>
+            <bbox w="153.0" h="46.0" x="564.0" y="192.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_377732_311">
+            <label text="CLIP1"/>
+            <bbox w="41.0" h="22.0" x="438.0" y="488.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5672333_314">
+            <label text="RAC1,CDC42:GTP:IQGAP1:CLIP1:microtubule"/>
+            <bbox w="126.0" h="55.0" x="426.0" y="594.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5626469_2">
+            <label text="GTP-bound RAC1 and CDC42 bind IQGAPs"/>
+            <bbox w="10.0" h="10.0" x="223.0" y="81.0"/>
+            <port id="reactionVertex_5626469.1" x="205.0" y="97.0"/>
+            <port id="reactionVertex_5626469.2" x="282.0" y="70.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5672334_313">
+            <label text="RAC1,CDC42:GTP:IQGAP1"/>
+            <bbox w="123.0" h="36.0" x="233.0" y="594.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_190599_316">
+            <label text="Microtubule"/>
+            <bbox w="91.0" h="23.0" x="313.0" y="485.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_201938_315">
+            <label text="CDH1 dimer:CTNNB1:CTNNA1"/>
+            <bbox w="104.0" h="48.0" x="0.0" y="214.0"/>
+        </glyph>
+        <arc class="production" id="arc_314_output_310" source="reactionVertex_5672329.2" target="entityVertex_5672333_314">
+            <start x="416.0" y="561.0"/>
+            <end x="455.0" y="591.0"/>
+        </arc>
+        <arc class="consumption" id="arc_78_input_76" source="entityVertex_5626540_78" target="reactionVertex_5672304.1">
+            <start x="186.0" y="226.0"/>
+            <next x="175.0" y="269.0"/>
+            <end x="175.0" y="269.0"/>
+        </arc>
+        <arc class="consumption" id="arc_77_input_76" source="entityVertex_5672315_77" target="reactionVertex_5672304.1">
+            <start x="206.0" y="267.0"/>
+            <next x="175.0" y="269.0"/>
+            <end x="175.0" y="269.0"/>
+        </arc>
+        <arc class="production" id="arc_5_output_2" source="reactionVertex_5626469.2" target="entityVertex_5626465_5">
+            <start x="228.0" y="86.0"/>
+            <end x="282.0" y="70.0"/>
+        </arc>
+        <arc class="production" id="arc_9_output_10" source="reactionVertex_5626549.2" target="entityVertex_5626551_9">
+            <start x="364.0" y="231.0"/>
+            <end x="561.0" y="219.0"/>
+        </arc>
+        <arc class="consumption" id="arc_315_input_76" source="entityVertex_201938_315" target="reactionVertex_5672304.1">
+            <start x="107.0" y="251.0"/>
+            <next x="175.0" y="269.0"/>
+            <end x="175.0" y="269.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_6" source="entityVertex_5626465_5" target="reactionVertex_5626507.1">
+            <start x="376.0" y="77.0"/>
+            <next x="429.0" y="110.0"/>
+            <end x="429.0" y="110.0"/>
+        </arc>
+        <arc class="consumption" id="arc_313_input_310" source="entityVertex_5672334_313" target="reactionVertex_5672329.1">
+            <start x="322.0" y="591.0"/>
+            <next x="399.0" y="546.0"/>
+            <end x="399.0" y="546.0"/>
+        </arc>
+        <arc class="inhibition" id="arc_5_inhibitor_76" source="entityVertex_5626465_5" target="reactionVertex_5672304_76">
+            <start x="339.0" y="77.0"/>
+            <next x="252.0" y="311.0"/>
+            <next x="171.0" y="293.0"/>
+            <end x="171.0" y="293.0"/>
+        </arc>
+        <arc class="consumption" id="arc_311_input_310" source="entityVertex_377732_311" target="reactionVertex_5672329.1">
+            <start x="444.0" y="513.0"/>
+            <next x="399.0" y="546.0"/>
+            <end x="399.0" y="546.0"/>
+        </arc>
+        <arc class="inhibition" id="arc_9_inhibitor_6" source="entityVertex_5626551_9" target="reactionVertex_5626507_6">
+            <start x="600.0" y="189.0"/>
+            <next x="454.0" y="107.0"/>
+            <end x="454.0" y="107.0"/>
+        </arc>
+        <arc class="consumption" id="arc_3_input_2" source="entityVertex_389778_3" target="reactionVertex_5626469.1">
+            <start x="174.0" y="80.0"/>
+            <next x="205.0" y="97.0"/>
+            <end x="205.0" y="97.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_10" source="entityVertex_5626465_5" target="reactionVertex_5626549.1">
+            <start x="348.0" y="77.0"/>
+            <end x="364.0" y="231.0"/>
+        </arc>
+        <arc class="consumption" id="arc_7_input_6" source="entityVertex_201877_7" target="reactionVertex_5626507.1">
+            <start x="434.0" y="182.0"/>
+            <next x="429.0" y="110.0"/>
+            <end x="429.0" y="110.0"/>
+        </arc>
+        <arc class="production" id="arc_81_output_76" source="reactionVertex_5672304.2" target="entityVertex_5672317_81">
+            <start x="162.0" y="291.0"/>
+            <end x="121.0" y="310.0"/>
+        </arc>
+        <arc class="consumption" id="arc_11_input_10" source="entityVertex_534997_11" target="reactionVertex_5626549.1">
+            <start x="335.0" y="278.0"/>
+            <end x="364.0" y="231.0"/>
+        </arc>
+        <arc class="production" id="arc_8_output_6" source="reactionVertex_5626507.2" target="entityVertex_5626510_8">
+            <start x="446.0" y="103.0"/>
+            <end x="483.0" y="88.0"/>
+        </arc>
+        <arc class="consumption" id="arc_316_input_310" source="entityVertex_190599_316" target="reactionVertex_5672329.1">
+            <start x="367.0" y="511.0"/>
+            <next x="399.0" y="546.0"/>
+            <end x="399.0" y="546.0"/>
+        </arc>
+        <arc class="consumption" id="arc_4_input_2" source="entityVertex_5626373_4" target="reactionVertex_5626469.1">
+            <start x="221.0" y="135.0"/>
+            <next x="205.0" y="97.0"/>
+            <end x="205.0" y="97.0"/>
+        </arc>
+    </map>
+</sbgn>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_1488" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="1214.0" y="372.0"/>
+            </label>
+            <bbox w="473.0" h="347.0" x="1201.0" y="347.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_784" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="146.0" y="98.0"/>
+            </label>
+            <bbox w="333.0" h="86.0" x="24.0" y="59.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_2" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="996.0" y="290.0"/>
+            </label>
+            <bbox w="264.0" h="336.0" x="806.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_4" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="826.0" y="160.0"/>
+            </label>
+            <bbox w="108.0" h="183.0" x="826.0" y="94.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_262" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="45.0" y="684.0"/>
+            </label>
+            <bbox w="500.0" h="231.0" x="32.0" y="499.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_1224" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="1266.0" y="425.0"/>
+            </label>
+            <bbox w="395.0" h="219.0" x="1254.0" y="414.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_234" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="44.0" y="437.0"/>
+            </label>
+            <bbox w="1105.0" h="375.0" x="9.0" y="389.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_299" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="698.0" y="632.0"/>
+            </label>
+            <bbox w="185.0" h="65.0" x="685.0" y="614.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_236" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="149.0" y="170.0"/>
+            </label>
+            <bbox w="419.0" h="207.0" x="0.0" y="9.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17927_1183" compartmentOrder="10.0">
+            <label text="mitochondrial intermembrane space">
+                <bbox w="280.0" h="24.0" x="674.0" y="673.0"/>
+            </label>
+            <bbox w="248.0" h="125.0" x="667.0" y="592.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29368_257">
+            <label text="O2"/>
+            <bbox w="34.0" h="30.0" x="950.0" y="37.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_8963870_772">
+            <label text="VD3"/>
+            <bbox w="42.0" h="30.0" x="901.0" y="81.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5602147_142943">
+            <label text="Defective CYP2R1 does not 25-hydroxylate vitamin D"/>
+            <bbox w="12.0" h="12.0" x="961.0" y="146.0"/>
+            <port id="reactionVertex_5602147.1" x="968.0" y="114.0"/>
+            <port id="reactionVertex_5602147.2" x="967.0" y="204.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5602112_142944">
+            <label text="CYP2R1 L99P"/>
+            <bbox w="88.0" h="22.0" x="869.0" y="142.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29364_252">
+            <label text="NADPH"/>
+            <bbox w="59.0" h="30.0" x="988.0" y="16.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_70106_254">
+            <label text="H+"/>
+            <bbox w="36.0" h="30.0" x="1003.0" y="61.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_772_input_142943" source="entityVertex_8963870_772" target="reactionVertex_5602147.1">
+            <start x="946.0" y="104.0"/>
+            <next x="968.0" y="114.0"/>
+            <end x="968.0" y="114.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_142944_catalyst_142943" source="entityVertex_5602112_142944" target="reactionVertex_5602147_142943">
+            <start x="960.0" y="152.0"/>
+            <next x="951.0" y="152.0"/>
+            <end x="951.0" y="152.0"/>
+        </arc>
+        <arc class="consumption" id="arc_252_input_142943" source="entityVertex_29364_252" target="reactionVertex_5602147.1">
+            <start x="1008.0" y="49.0"/>
+            <next x="968.0" y="114.0"/>
+            <end x="968.0" y="114.0"/>
+        </arc>
+        <arc class="consumption" id="arc_257_input_142943" source="entityVertex_29368_257" target="reactionVertex_5602147.1">
+            <start x="967.0" y="70.0"/>
+            <next x="968.0" y="114.0"/>
+            <end x="968.0" y="114.0"/>
+        </arc>
+        <arc class="consumption" id="arc_254_input_142943" source="entityVertex_70106_254" target="reactionVertex_5602147.1">
+            <start x="1000.0" y="88.0"/>
+            <next x="968.0" y="114.0"/>
+            <end x="968.0" y="114.0"/>
+        </arc>
+    </map>
+</sbgn>

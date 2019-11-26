@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_7" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="2200.0" y="2237.0"/>
+            </label>
+            <bbox w="2493.0" h="2248.0" x="0.0" y="66.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_10" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="88.0" y="1722.0"/>
+            </label>
+            <bbox w="533.0" h="800.0" x="68.0" y="1361.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_602" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="790.0" y="123.0"/>
+            </label>
+            <bbox w="590.0" h="234.0" x="580.0" y="104.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_587" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="2227.0" y="550.0"/>
+            </label>
+            <bbox w="237.0" h="253.0" x="2212.0" y="344.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113551_611">
+            <label text="Pi"/>
+            <bbox w="29.0" h="30.0" x="736.0" y="134.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_3229129_99450">
+            <label text="SLC37A4 mutants"/>
+            <bbox w="111.0" h="22.0" x="674.0" y="319.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_3229118_99449">
+            <label text="Defective SLC37A4 does not exchange G6P and Pi across the ER membrane"/>
+            <bbox w="12.0" h="12.0" x="805.0" y="327.0"/>
+            <port id="reactionVertex_3229118.1" x="806.0" y="333.0"/>
+            <port id="reactionVertex_3229118.2" x="813.0" y="333.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_30537_80">
+            <label text="G6P"/>
+            <bbox w="41.0" h="30.0" x="1216.0" y="531.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_80_input_99449" source="entityVertex_30537_80" target="reactionVertex_3229118.1">
+            <start x="1213.0" y="544.0"/>
+            <next x="951.0" y="522.0"/>
+            <end x="806.0" y="333.0"/>
+        </arc>
+        <arc class="consumption" id="arc_611_input_99449" source="entityVertex_113551_611" target="reactionVertex_3229118.1">
+            <start x="754.0" y="167.0"/>
+            <end x="806.0" y="333.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_99450_catalyst_99449" source="entityVertex_3229129_99450" target="reactionVertex_3229118_99449">
+            <start x="791.0" y="332.0"/>
+            <next x="795.0" y="332.0"/>
+            <end x="795.0" y="332.0"/>
+        </arc>
+    </map>
+</sbgn>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_7660_1" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="55.0" y="264.0"/>
+            </label>
+            <bbox w="816.0" h="313.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5641216_22">
+            <label text="ELOVL3 gene"/>
+            <bbox w="92.0" h="51.0" x="240.0" y="188.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5663252_21">
+            <label text="NR1D1 (REV-ERBA) binds heme, the ELOVL3 gene, and recruits corepressors"/>
+            <bbox w="10.0" h="10.0" x="431.0" y="176.0"/>
+            <port id="reactionVertex_5663252.1" x="381.0" y="182.0"/>
+            <port id="reactionVertex_5663252.2" x="488.0" y="181.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_375499_3">
+            <label text="NR1D1"/>
+            <bbox w="94.0" h="36.0" x="26.0" y="50.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5663261_23">
+            <label text="NR1D1:heme:Corepressors:ELOVL3 gene"/>
+            <bbox w="277.0" h="24.0" x="491.0" y="170.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_442464_7">
+            <label text="HDAC3"/>
+            <bbox w="94.0" h="36.0" x="26.0" y="228.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_1368125_5">
+            <label text="ferriheme b"/>
+            <bbox w="102.0" h="44.0" x="25.0" y="113.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_442501_6">
+            <label text="NCOR1"/>
+            <bbox w="94.0" h="36.0" x="26.0" y="173.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_22_input_21" source="entityVertex_5641216_22" target="reactionVertex_5663252.1">
+            <start x="341.0" y="190.0"/>
+            <next x="381.0" y="182.0"/>
+            <end x="381.0" y="182.0"/>
+        </arc>
+        <arc class="production" id="arc_23_output_21" source="reactionVertex_5663252.2" target="entityVertex_5663261_23">
+            <start x="436.0" y="181.0"/>
+            <end x="488.0" y="181.0"/>
+        </arc>
+        <arc class="consumption" id="arc_7_input_21" source="entityVertex_442464_7" target="reactionVertex_5663252.1">
+            <start x="100.0" y="225.0"/>
+            <next x="197.0" y="164.0"/>
+            <next x="381.0" y="182.0"/>
+            <end x="381.0" y="182.0"/>
+        </arc>
+        <arc class="consumption" id="arc_3_input_21" source="entityVertex_375499_3" target="reactionVertex_5663252.1">
+            <start x="108.0" y="89.0"/>
+            <next x="204.0" y="134.0"/>
+            <next x="381.0" y="182.0"/>
+            <end x="381.0" y="182.0"/>
+        </arc>
+        <arc class="consumption" id="arc_6_input_21" source="entityVertex_442501_6" target="reactionVertex_5663252.1">
+            <start x="123.0" y="178.0"/>
+            <next x="198.0" y="158.0"/>
+            <next x="381.0" y="182.0"/>
+            <end x="381.0" y="182.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_21" source="entityVertex_1368125_5" target="reactionVertex_5663252.1">
+            <start x="130.0" y="140.0"/>
+            <next x="200.0" y="148.0"/>
+            <next x="381.0" y="182.0"/>
+            <end x="381.0" y="182.0"/>
+        </arc>
+    </map>
+</sbgn>

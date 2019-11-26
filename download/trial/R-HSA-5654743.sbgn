@@ -1,0 +1,1611 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_1" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="2290.0" y="622.0"/>
+            </label>
+            <bbox w="5643.0" h="1540.0" x="224.0" y="0.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_162563_274">
+            <label text="PTPN11"/>
+            <bbox w="93.0" h="46.0" x="2821.0" y="457.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_167679_95">
+            <label text="p-4Y-PLCG1"/>
+            <bbox w="111.0" h="32.0" x="505.0" y="69.0"/>
+            <glyph class="unit of information" id="entityVertex_167675_7_mt">
+                <label text="P"/>
+                <bbox w="10.0" h="16.0" x="515.0" y="63.0"/>
+            </glyph>
+            <glyph class="unit of information" id="entityVertex_191478_8_mt">
+                <label text="P"/>
+                <bbox w="10.0" h="16.0" x="531.0" y="63.0"/>
+            </glyph>
+            <glyph class="unit of information" id="entityVertex_191469_9_mt">
+                <label text="P"/>
+                <bbox w="10.0" h="16.0" x="547.0" y="63.0"/>
+            </glyph>
+            <glyph class="unit of information" id="entityVertex_213441_10_mt">
+                <label text="P"/>
+                <bbox w="10.0" h="16.0" x="563.0" y="63.0"/>
+            </glyph>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_179838_303">
+            <label text="PI(3,4,5)P3"/>
+            <bbox w="67.0" h="53.0" x="4478.0" y="333.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_93">
+            <label text="ADP"/>
+            <bbox w="42.0" h="30.0" x="740.0" y="230.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_947860_388">
+            <label text="p-T250,T255,T385,S437-MKNK1"/>
+            <bbox w="118.0" h="55.0" x="5495.0" y="748.0"/>
+            <glyph class="unit of information" id="entityVertex_947828_1_mt">
+                <label text="P"/>
+                <bbox w="10.0" h="16.0" x="5505.0" y="742.0"/>
+            </glyph>
+            <glyph class="unit of information" id="entityVertex_947839_2_mt">
+                <label text="P"/>
+                <bbox w="10.0" h="16.0" x="5521.0" y="742.0"/>
+            </glyph>
+            <glyph class="unit of information" id="entityVertex_947849_3_mt">
+                <label text="P"/>
+                <bbox w="10.0" h="16.0" x="5537.0" y="742.0"/>
+            </glyph>
+            <glyph class="unit of information" id="entityVertex_947827_4_mt">
+                <label text="P"/>
+                <bbox w="10.0" h="16.0" x="5553.0" y="742.0"/>
+            </glyph>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29438_190">
+            <label text="GTP"/>
+            <bbox w="57.0" h="36.0" x="2661.0" y="711.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_934544_394">
+            <label text="PP2A (A:C)"/>
+            <bbox w="90.0" h="37.0" x="5534.0" y="1273.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_1268261_163">
+            <label text="p-T,Y MAPK dimers"/>
+            <bbox w="89.0" h="33.0" x="2884.0" y="1052.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_1295590_222">
+            <label text="p-S111,S120-SPRY2"/>
+            <bbox w="100.0" h="36.0" x="3420.0" y="1123.0"/>
+            <glyph class="unit of information" id="entityVertex_1295633_5_mt">
+                <label text="P"/>
+                <bbox w="10.0" h="16.0" x="3430.0" y="1117.0"/>
+            </glyph>
+            <glyph class="unit of information" id="entityVertex_1295630_6_mt">
+                <label text="P"/>
+                <bbox w="10.0" h="16.0" x="3446.0" y="1117.0"/>
+            </glyph>
+        </glyph>
+        <glyph class="complex" id="entityVertex_109797_177">
+            <label text="GRB2-1:SOS1"/>
+            <bbox w="72.0" h="38.0" x="2137.0" y="447.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_91">
+            <label text="ATP"/>
+            <bbox w="42.0" h="30.0" x="840.0" y="225.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_302">
+            <label text="ADP"/>
+            <bbox w="57.0" h="29.0" x="4484.0" y="502.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_17">
+            <label text="ATP"/>
+            <bbox w="40.0" h="30.0" x="323.0" y="652.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_1295621_408">
+            <label text="CBL dissociates from ubiquitinated p-SPRY2"/>
+            <bbox w="10.0" h="10.0" x="5595.0" y="1434.0"/>
+            <port id="reactionVertex_1295621.1" x="5683.0" y="1433.0"/>
+            <port id="reactionVertex_1295621.2" x="5490.0" y="1440.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5654714_321">
+            <label text="FGFR4- and PTPN11-associated PI3K phosphorylates PIP2 to PIP3"/>
+            <bbox w="12.0" h="12.0" x="4402.0" y="446.0"/>
+            <port id="reactionVertex_5654714.1" x="4376.0" y="451.0"/>
+            <port id="reactionVertex_5654714.2" x="4436.0" y="452.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_5654169_94">
+            <label text="p-4Y-PLCG1 dissociates from activated FGFR4"/>
+            <bbox w="10.0" h="10.0" x="575.0" y="197.0"/>
+            <port id="reactionVertex_5654169.1" x="656.0" y="267.0"/>
+            <port id="reactionVertex_5654169.2" x="640.0" y="112.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5654662_296">
+            <label text="Activated FGFR4:p-FRS2:GRB2:GAB1:PI3KR1 binds PIK3CA"/>
+            <bbox w="10.0" h="10.0" x="3993.0" y="62.0"/>
+            <port id="reactionVertex_5654662.1" x="3956.0" y="68.0"/>
+            <port id="reactionVertex_5654662.2" x="4058.0" y="77.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_179849_291">
+            <label text="GRB2:GAB1"/>
+            <bbox w="107.0" h="34.0" x="3535.0" y="627.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_179838_75">
+            <label text="PI(3,4,5)P3"/>
+            <bbox w="68.0" h="47.0" x="1113.0" y="236.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_191482_131">
+            <label text="FRS3"/>
+            <bbox w="69.0" h="26.0" x="1419.0" y="49.0"/>
+        </glyph>
+        <glyph class="submap" id="entityVertex_1489509_96">
+            <label text="DAG and IP3 signaling"/>
+            <bbox w="115.0" h="55.0" x="337.0" y="59.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_74686_390">
+            <label text="GRB2-1"/>
+            <bbox w="87.0" h="30.0" x="5539.0" y="905.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_934576_395">
+            <label text="Y55/Y227-pSPRY2:CBL"/>
+            <bbox w="114.0" h="47.0" x="5676.0" y="1273.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5654422_127">
+            <label text="Activated FGFR4 binds FRS2"/>
+            <bbox w="10.0" h="10.0" x="1604.0" y="192.0"/>
+            <port id="reactionVertex_5654422.1" x="1562.0" y="196.0"/>
+            <port id="reactionVertex_5654422.2" x="1671.0" y="194.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_1307963_26">
+            <label text="Autocatalytic phosphorylation of BetaKlotho-bound FGFR4"/>
+            <bbox w="12.0" h="12.0" x="269.0" y="1054.0"/>
+            <port id="reactionVertex_1307963.1" x="277.0" y="1033.0"/>
+            <port id="reactionVertex_1307963.2" x="277.0" y="1082.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_1169480_157">
+            <label text="SHC1-2,SHC1-3"/>
+            <bbox w="82.0" h="51.0" x="1216.0" y="475.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_179864_293">
+            <label text="GRB2:GAB1:PIK3R1"/>
+            <bbox w="110.0" h="52.0" x="3592.0" y="463.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5654423_243">
+            <label text="Activated FGFR4:p-SHC1 binds GRB2:SOS1"/>
+            <bbox w="10.0" h="10.0" x="2390.0" y="507.0"/>
+            <port id="reactionVertex_5654423.1" x="2294.0" y="550.0"/>
+            <port id="reactionVertex_5654423.2" x="2594.0" y="416.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5654717_299">
+            <label text="FGFR4-associated PI3K phosphorylates PIP2 to PIP3"/>
+            <bbox w="12.0" h="12.0" x="4398.0" y="387.0"/>
+            <port id="reactionVertex_5654717.1" x="4375.0" y="394.0"/>
+            <port id="reactionVertex_5654717.2" x="4441.0" y="392.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_112199_393">
+            <label text="CBL"/>
+            <bbox w="60.0" h="30.0" x="5516.0" y="1087.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654335_351">
+            <label text="Activated FGFR4:p-FRS2:p-PPTN11:p-CBL:GRB2"/>
+            <bbox w="117.0" h="74.0" x="4783.0" y="200.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1295613_389">
+            <label text="SPRY2 binds GRB2"/>
+            <bbox w="10.0" h="10.0" x="5748.0" y="1007.0"/>
+            <port id="reactionVertex_1295613.1" x="5748.0" y="964.0"/>
+            <port id="reactionVertex_1295613.2" x="5738.0" y="1050.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_113595_398">
+            <label text="Ub"/>
+            <bbox w="46.0" h="26.0" x="5557.0" y="1354.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654337_275">
+            <label text="Activated FGFR4:p-FRS:PTPN11"/>
+            <bbox w="109.0" h="49.0" x="2912.0" y="147.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_279">
+            <label text="ADP"/>
+            <bbox w="54.0" h="31.0" x="3127.0" y="218.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_109783_192">
+            <label text="p21 RAS:GTP"/>
+            <bbox w="75.0" h="40.0" x="2935.0" y="622.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_387">
+            <label text="ADP"/>
+            <bbox w="48.0" h="37.0" x="5799.0" y="749.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1307955_20">
+            <label text="FGFR4 binds HS:KLB:FGF19"/>
+            <bbox w="10.0" h="10.0" x="264.0" y="865.0"/>
+            <port id="reactionVertex_1307955.1" x="264.0" y="830.0"/>
+            <port id="reactionVertex_1307955.2" x="271.0" y="949.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_277">
+            <label text="ATP"/>
+            <bbox w="57.0" h="28.0" x="3005.0" y="210.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_301">
+            <label text="ATP"/>
+            <bbox w="56.0" h="28.0" x="4236.0" y="491.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29420_191">
+            <label text="GDP"/>
+            <bbox w="57.0" h="41.0" x="2861.0" y="724.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1370875_409">
+            <label text="Ub-(Y55/Y227)p-SPRY2"/>
+            <bbox w="107.0" h="38.0" x="5333.0" y="1425.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_182964_350">
+            <label text="p-Y371-CBL:GRB2"/>
+            <bbox w="83.0" h="51.0" x="4584.0" y="422.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_74789_292">
+            <label text="PIK3R1"/>
+            <bbox w="65.0" h="26.0" x="3687.0" y="636.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_162">
+            <label text="ADP"/>
+            <bbox w="42.0" h="30.0" x="1956.0" y="475.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654331_311">
+            <label text="Activated FGFR4:p-FRS2:p-PTPN11:GRB2:GAB1:PI3K"/>
+            <bbox w="155.0" h="73.0" x="4059.0" y="315.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_237">
+            <label text="ATP"/>
+            <bbox w="38.0" h="30.0" x="1563.0" y="467.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29372_376">
+            <label text="Pi"/>
+            <bbox w="50.0" h="26.0" x="5400.0" y="606.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654319_132">
+            <label text="Activated FGFR4:FRS3"/>
+            <bbox w="111.0" h="39.0" x="1696.0" y="65.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654193_135">
+            <label text="Activated FGFR4:p-FRS2"/>
+            <bbox w="108.0" h="40.0" x="1978.0" y="180.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5654651_130">
+            <label text="Activated FGFR4 binds FRS3"/>
+            <bbox w="10.0" h="10.0" x="1604.0" y="84.0"/>
+            <port id="reactionVertex_5654651.1" x="1534.0" y="88.0"/>
+            <port id="reactionVertex_5654651.2" x="1693.0" y="85.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5654663_188">
+            <label text="Activated FGFR4:p-FRS2:GRB2:SOS1 activates RAS nucleotide exchange"/>
+            <bbox w="12.0" h="12.0" x="2809.0" y="642.0"/>
+            <port id="reactionVertex_5654663.1" x="2759.0" y="647.0"/>
+            <port id="reactionVertex_5654663.2" x="2853.0" y="651.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654330_308">
+            <label text="Activated FGFR4:p-FRS2:p-PTPN11"/>
+            <bbox w="120.0" h="67.0" x="3309.0" y="291.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_1295609_379">
+            <label text="SRC phosphorylates SPRY2 on Y55 and Y227"/>
+            <bbox w="12.0" h="12.0" x="5473.0" y="855.0"/>
+            <port id="reactionVertex_1295609.1" x="5460.0" y="755.0"/>
+            <port id="reactionVertex_1295609.2" x="5486.0" y="883.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_190915_13">
+            <label text="HS"/>
+            <bbox w="71.0" h="40.0" x="71.0" y="463.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654191_295">
+            <label text="Activated FGFR4:p-FRS2:GRB2:GAB1:PIK3R1"/>
+            <bbox w="146.0" h="61.0" x="3756.0" y="32.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_27">
+            <label text="ATP"/>
+            <bbox w="42.0" h="30.0" x="329.0" y="998.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1307953_24">
+            <label text="FGFR4:HS:KLB:FGF19"/>
+            <bbox w="128.0" h="41.0" x="208.0" y="952.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5654658_273">
+            <label text="Activated FGFR4:p-FRS bind to PPTN11"/>
+            <bbox w="10.0" h="10.0" x="2853.0" y="168.0"/>
+            <port id="reactionVertex_5654658.1" x="2810.0" y="173.0"/>
+            <port id="reactionVertex_5654658.2" x="2909.0" y="172.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654363_363">
+            <label text="Ub-Activated FGFR4 complex:Ub-p-FRS2"/>
+            <bbox w="147.0" h="41.0" x="4985.0" y="212.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654320_158">
+            <label text="Activated FGFR4:SHC1"/>
+            <bbox w="111.0" h="45.0" x="1482.0" y="387.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_160">
+            <label text="ATP"/>
+            <bbox w="42.0" h="30.0" x="1812.0" y="479.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_1295632_373">
+            <label text="PPA2A dephosphorylates SPRY2"/>
+            <bbox w="12.0" h="12.0" x="5343.0" y="567.0"/>
+            <port id="reactionVertex_1295632.1" x="5350.0" y="535.0"/>
+            <port id="reactionVertex_1295632.2" x="5352.0" y="599.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5654426_661">
+            <label text="Activated FGFR4:p-SHC1:GRB2:SOS1 activates RAS nucleotide exchange"/>
+            <bbox w="12.0" h="12.0" x="2783.0" y="684.0"/>
+            <port id="reactionVertex_5654426.1" x="2722.0" y="690.0"/>
+            <port id="reactionVertex_5654426.2" x="2855.0" y="690.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_934559_385">
+            <label text="SPRY2 is phosphorylated by phosphorylated MNK1"/>
+            <bbox w="12.0" h="12.0" x="5714.0" y="731.0"/>
+            <port id="reactionVertex_934559.1" x="5719.0" y="707.0"/>
+            <port id="reactionVertex_934559.2" x="5720.0" y="765.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5654655_276">
+            <label text="Activated FGFR4 phosphorylates PPTN11"/>
+            <bbox w="12.0" h="12.0" x="3089.0" y="163.0"/>
+            <port id="reactionVertex_5654655.1" x="3060.0" y="169.0"/>
+            <port id="reactionVertex_5654655.2" x="3140.0" y="168.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654182_129">
+            <label text="Activated FGFR4:FRS2"/>
+            <bbox w="114.0" h="47.0" x="1674.0" y="169.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654343_244">
+            <label text="Activated FGFR4:pY-SHC1:GRB2:SOS1"/>
+            <bbox w="108.0" h="55.0" x="2597.0" y="364.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5654684_361">
+            <label text="CBL ubiquitinates FRS2 and FGFR4"/>
+            <bbox w="12.0" h="12.0" x="4941.0" y="228.0"/>
+            <port id="reactionVertex_5654684.1" x="4924.0" y="233.0"/>
+            <port id="reactionVertex_5654684.2" x="4982.0" y="233.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_170963_128">
+            <label text="FRS2"/>
+            <bbox w="70.0" h="25.0" x="1448.0" y="169.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_934572_397">
+            <label text="Ub:Y55/Y227-pSPRY2:CBL"/>
+            <bbox w="110.0" h="53.0" x="5686.0" y="1404.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_19">
+            <label text="ADP"/>
+            <bbox w="41.0" h="30.0" x="329.0" y="711.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_65043_383">
+            <label text="SRC-1"/>
+            <bbox w="61.0" h="26.0" x="5235.0" y="847.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_1295634_234">
+            <label text="SPRY2 is serine phosphorylated in response to MAPK activation"/>
+            <bbox w="12.0" h="12.0" x="3114.0" y="1133.0"/>
+            <port id="reactionVertex_1295634.1" x="3091.0" y="1143.0"/>
+            <port id="reactionVertex_1295634.2" x="3154.0" y="1139.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5654425_156">
+            <label text="Activated FGFR4 binds SHC1"/>
+            <bbox w="10.0" h="10.0" x="1400.0" y="406.0"/>
+            <port id="reactionVertex_5654425.1" x="1367.0" y="406.0"/>
+            <port id="reactionVertex_5654425.2" x="1479.0" y="409.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654187_298">
+            <label text="Activated FGFR4:p-FRS2:GRB2:GAB1:PI3K"/>
+            <bbox w="131.0" h="59.0" x="4061.0" y="60.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5654324_174">
+            <label text="Activated FGFR4:p-FRS"/>
+            <bbox w="112.0" h="40.0" x="2213.0" y="186.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_134">
+            <label text="ATP"/>
+            <bbox w="42.0" h="30.0" x="1794.0" y="134.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654322_161">
+            <label text="Activated FGFR4:p-8T-FRS2"/>
+            <bbox w="121.0" h="44.0" x="1966.0" y="385.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_190326_16">
+            <label text="Autocatalytic phosphorylation of FGFR4"/>
+            <bbox w="12.0" h="12.0" x="280.0" y="694.0"/>
+            <port id="reactionVertex_190326.1" x="285.0" y="662.0"/>
+            <port id="reactionVertex_190326.2" x="289.0" y="724.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_1295599_377">
+            <label text="SPRY2 translocates to the plasma membrane"/>
+            <bbox w="12.0" h="12.0" x="5493.0" y="650.0"/>
+            <port id="reactionVertex_1295599.1" x="5405.0" y="657.0"/>
+            <port id="reactionVertex_1295599.2" x="5668.0" y="654.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_1549564_410">
+            <label text="PPTN11 dephosphorylates SPRY2"/>
+            <bbox w="12.0" h="12.0" x="5679.0" y="1014.0"/>
+            <port id="reactionVertex_1549564.1" x="5708.0" y="1050.0"/>
+            <port id="reactionVertex_1549564.2" x="5687.0" y="971.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_1295604_219">
+            <label text="B-RAF dissociates from S111/S120 p-SPRY2"/>
+            <bbox w="10.0" h="10.0" x="3327.0" y="1127.0"/>
+            <port id="reactionVertex_1295604.1" x="3286.0" y="1135.0"/>
+            <port id="reactionVertex_1295604.2" x="3370.0" y="1127.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654340_238">
+            <label text="Activated FGFR4:pY-SHC1"/>
+            <bbox w="100.0" h="53.0" x="1714.0" y="382.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_1295622_392">
+            <label text="SPRY2 binds CBL"/>
+            <bbox w="12.0" h="12.0" x="5688.0" y="1198.0"/>
+            <port id="reactionVertex_1295622.1" x="5691.0" y="1164.0"/>
+            <port id="reactionVertex_1295622.2" x="5696.0" y="1238.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1295625_391">
+            <label text="PPA2A (A:C):Y55/Y227 p-SPRY2:GRB2"/>
+            <bbox w="127.0" h="57.0" x="5666.0" y="1053.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1307958_28">
+            <label text="Activated FGFR4 bound to FGF19:BetaKlotho"/>
+            <bbox w="131.0" h="50.0" x="210.0" y="1135.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654166_80">
+            <label text="activated FGFR4:PLCG1"/>
+            <bbox w="120.0" h="50.0" x="897.0" y="264.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5654667_307">
+            <label text="Activated FGFR4:p-FRS2:p-PPTN11 binds GRB2:GAB1:PI3KR1"/>
+            <bbox w="10.0" h="10.0" x="3696.0" y="318.0"/>
+            <port id="reactionVertex_5654667.1" x="3674.0" y="323.0"/>
+            <port id="reactionVertex_5654667.2" x="3735.0" y="327.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_190328_18">
+            <label text="Activated FGFR4 homodimer"/>
+            <bbox w="109.0" h="36.0" x="236.0" y="779.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_189888_21">
+            <label text="FGF19"/>
+            <bbox w="66.0" h="28.0" x="26.0" y="721.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5654669_310">
+            <label text="Activated FGFR4:p-FRS2:p-PPTN11:GRB2:GAB1:PIK3R1binds PIK3CA"/>
+            <bbox w="10.0" h="10.0" x="3997.0" y="349.0"/>
+            <port id="reactionVertex_5654669.1" x="3977.0" y="351.0"/>
+            <port id="reactionVertex_5654669.2" x="4056.0" y="352.0"/>
+        </glyph>
+        <glyph class="submap" id="entityVertex_5673001_411">
+            <label text="RAF/MAP kinase cascade"/>
+            <bbox w="149.0" h="55.0" x="2859.0" y="873.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_113595_362">
+            <label text="Ub"/>
+            <bbox w="46.0" h="26.0" x="4847.0" y="460.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_239">
+            <label text="ADP"/>
+            <bbox w="39.0" h="30.0" x="1678.0" y="476.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654339_278">
+            <label text="Activated FGFR4:p-FRS:p-PTPN11"/>
+            <bbox w="118.0" h="66.0" x="3216.0" y="139.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_177931_290">
+            <label text="Binding of PIK3 regulatory alpha subunit to GRB2:GAB1"/>
+            <bbox w="10.0" h="10.0" x="3643.0" y="550.0"/>
+            <port id="reactionVertex_177931.1" x="3649.0" y="586.0"/>
+            <port id="reactionVertex_177931.2" x="3647.0" y="518.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_136">
+            <label text="ADP"/>
+            <bbox w="42.0" h="30.0" x="1937.0" y="134.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5654418_133">
+            <label text="Activated FGFR4 phosphorylates FRS2"/>
+            <bbox w="12.0" h="12.0" x="1873.0" y="191.0"/>
+            <port id="reactionVertex_5654418.1" x="1842.0" y="196.0"/>
+            <port id="reactionVertex_5654418.2" x="1907.0" y="195.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5654163_74">
+            <label text="Activated FGFR4 binds PLCG1"/>
+            <bbox w="10.0" h="10.0" x="1069.0" y="289.0"/>
+            <port id="reactionVertex_5654163.1" x="1090.0" y="320.0"/>
+            <port id="reactionVertex_5654163.2" x="1020.0" y="291.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_167682_79">
+            <label text="PLCG1"/>
+            <bbox w="61.0" h="36.0" x="989.0" y="352.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_167224_221">
+            <label text="BRAF"/>
+            <bbox w="47.0" h="25.0" x="3435.0" y="1026.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_934604_396">
+            <label text="Phosphorylated SPRY2 is ubiquitinated by CBL"/>
+            <bbox w="12.0" h="12.0" x="5728.0" y="1361.0"/>
+            <port id="reactionVertex_934604.1" x="5730.0" y="1345.0"/>
+            <port id="reactionVertex_934604.2" x="5738.0" y="1401.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1295587_220">
+            <label text="S111/S120 p-SPRY2:B-RAF"/>
+            <bbox w="126.0" h="37.0" x="3157.0" y="1121.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_934598_381">
+            <label text="PP2A(A:C):Y55/Y227-pSPRY2"/>
+            <bbox w="106.0" h="50.0" x="5688.0" y="868.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_190223_15">
+            <label text="FGFR4 homodimer bound to FGF"/>
+            <bbox w="124.0" h="64.0" x="220.0" y="578.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_179856_300">
+            <label text="PI(4,5)P2"/>
+            <bbox w="59.0" h="42.0" x="4230.0" y="365.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_189921_12">
+            <label text="FGFR4"/>
+            <bbox w="89.0" h="36.0" x="230.0" y="413.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_386">
+            <label text="ATP"/>
+            <bbox w="54.0" h="36.0" x="5782.0" y="678.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654168_92">
+            <label text="activated FGFR4:p-4Y-PLCG1"/>
+            <bbox w="119.0" h="34.0" x="617.0" y="270.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5654734_349">
+            <label text="p-CBL:GRB2 binds p-FRS2:activated FGFR4"/>
+            <bbox w="10.0" h="10.0" x="4731.0" y="226.0"/>
+            <port id="reactionVertex_5654734.1" x="4700.0" y="231.0"/>
+            <port id="reactionVertex_5654734.2" x="4780.0" y="233.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_189959_14">
+            <label text="FGFR4-binding FGFs"/>
+            <bbox w="130.0" h="36.0" x="0.0" y="373.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5654653_146">
+            <label text="Activated FGFR4 phosphorylates FRS3"/>
+            <bbox w="12.0" h="12.0" x="1879.0" y="76.0"/>
+            <port id="reactionVertex_5654653.1" x="1835.0" y="79.0"/>
+            <port id="reactionVertex_5654653.2" x="1932.0" y="81.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1295605_374">
+            <label text="PPA2A (A:C):S112/S115 p-SPRY2"/>
+            <bbox w="82.0" h="62.0" x="5311.0" y="470.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5654664_173">
+            <label text="Activated FGFR4:p-FRS binds GRB2:SOS1"/>
+            <bbox w="10.0" h="10.0" x="2440.0" y="235.0"/>
+            <port id="reactionVertex_5654664.1" x="2392.0" y="240.0"/>
+            <port id="reactionVertex_5654664.2" x="2577.0" y="235.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5654566_159">
+            <label text="Activated ERK1/2 threonine-phosphorylates FGFR4-associated FRS2."/>
+            <bbox w="12.0" h="12.0" x="1888.0" y="443.0"/>
+            <port id="reactionVertex_5654566.1" x="1853.0" y="448.0"/>
+            <port id="reactionVertex_5654566.2" x="1926.0" y="448.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_190915_25">
+            <label text="HS"/>
+            <bbox w="71.0" h="40.0" x="27.0" y="870.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5654158_76">
+            <label text="Activated FGFR4"/>
+            <bbox w="122.0" h="46.0" x="1218.0" y="282.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_382">
+            <label text="ADP"/>
+            <bbox w="41.0" h="26.0" x="5450.0" y="919.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5654428_236">
+            <label text="Activated FGFR4 phosphorylates SHC1"/>
+            <bbox w="12.0" h="12.0" x="1644.0" y="401.0"/>
+            <port id="reactionVertex_5654428.1" x="1619.0" y="408.0"/>
+            <port id="reactionVertex_5654428.2" x="1670.0" y="408.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_934578_384">
+            <label text="PP2A(A:C):S112/S121-pSPRY2"/>
+            <bbox w="128.0" h="36.0" x="5659.0" y="809.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1295598_235">
+            <label text="SPRY2:B-RAF"/>
+            <bbox w="115.0" h="42.0" x="2973.0" y="1130.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_190265_11">
+            <label text="FGFR4 binds to FGF"/>
+            <bbox w="10.0" h="10.0" x="271.0" y="525.0"/>
+            <port id="reactionVertex_190265.1" x="276.0" y="500.0"/>
+            <port id="reactionVertex_190265.2" x="279.0" y="575.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5654151_90">
+            <label text="Activated FGFR4 phosphorylates PLCG1"/>
+            <bbox w="12.0" h="12.0" x="813.0" y="288.0"/>
+            <port id="reactionVertex_5654151.1" x="851.0" y="289.0"/>
+            <port id="reactionVertex_5654151.2" x="776.0" y="297.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_1307932_23">
+            <label text="KLB"/>
+            <bbox w="50.0" h="31.0" x="73.0" y="811.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654333_309">
+            <label text="Activated FGFR4:p-FRS2:p-PTPN11:GRB2:GAB1:PIK3R1"/>
+            <bbox w="153.0" h="60.0" x="3738.0" y="307.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1295593_375">
+            <label text="PPA2A(A:C):SPRY2"/>
+            <bbox w="102.0" h="36.0" x="5300.0" y="641.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_934550_378">
+            <label text="PP2A(A:C):SPRY2"/>
+            <bbox w="96.0" h="52.0" x="5671.0" y="628.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_29">
+            <label text="ADP"/>
+            <bbox w="47.0" h="33.0" x="323.0" y="1074.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5654659_294">
+            <label text="Activated FGFR4:p-FRS2 binds GRB2:GAB1:PIK3R1"/>
+            <bbox w="10.0" h="10.0" x="3680.0" y="56.0"/>
+            <port id="reactionVertex_5654659.1" x="3645.0" y="62.0"/>
+            <port id="reactionVertex_5654659.2" x="3753.0" y="61.0"/>
+        </glyph>
+        <glyph class="submap" id="entityVertex_1257604_304">
+            <label text="PIP3 activates AKT signaling"/>
+            <bbox w="122.0" h="76.0" x="4442.0" y="149.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_109796_189">
+            <label text="p21 RAS:GDP"/>
+            <bbox w="67.0" h="42.0" x="2624.0" y="626.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_380">
+            <label text="ATP"/>
+            <bbox w="40.0" h="30.0" x="5255.0" y="698.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_8941613_508">
+            <label text="Activated FGFR4:p-FRS:p-PTPN11 activates RAS nucleotide exchange"/>
+            <bbox w="12.0" h="12.0" x="2855.0" y="564.0"/>
+            <port id="reactionVertex_8941613.1" x="2727.0" y="574.0"/>
+            <port id="reactionVertex_8941613.2" x="2916.0" y="590.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654326_148">
+            <label text="Activated FGFR4:p-FRS3"/>
+            <bbox w="115.0" h="41.0" x="1965.0" y="65.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_74787_297">
+            <label text="PIK3CA"/>
+            <bbox w="77.0" h="35.0" x="3902.0" y="492.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5654327_178">
+            <label text="Activated FGFR4:p-FRS2:GRB2:SOS1"/>
+            <bbox w="117.0" h="56.0" x="2580.0" y="205.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_177_input_173" source="entityVertex_109797_177" target="reactionVertex_5654664.1">
+            <start x="2191.0" y="444.0"/>
+            <next x="2392.0" y="240.0"/>
+            <end x="2392.0" y="240.0"/>
+        </arc>
+        <arc class="consumption" id="arc_380_input_379" source="entityVertex_113592_380" target="reactionVertex_1295609.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_1295609">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="5373.0" y="730.0"/>
+            </glyph>
+            <start x="5298.0" y="717.0"/>
+            <next x="5460.0" y="755.0"/>
+            <end x="5460.0" y="755.0"/>
+        </arc>
+        <arc class="consumption" id="arc_190_input_188" source="entityVertex_29438_190" target="reactionVertex_5654663.1">
+            <start x="2704.0" y="708.0"/>
+            <next x="2759.0" y="647.0"/>
+            <end x="2759.0" y="647.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_158_catalyst_236" source="entityVertex_5654320_158" target="reactionVertex_5654428_236">
+            <start x="1560.0" y="384.0"/>
+            <next x="1608.0" y="341.0"/>
+            <next x="1641.0" y="394.0"/>
+            <end x="1641.0" y="394.0"/>
+        </arc>
+        <arc class="production" id="arc_161_output_159" source="reactionVertex_5654566.2" target="entityVertex_5654322_161">
+            <start x="1972.0" y="432.0"/>
+            <next x="1926.0" y="448.0"/>
+            <end x="1926.0" y="448.0"/>
+        </arc>
+        <arc class="production" id="arc_191_output_508" source="reactionVertex_8941613.2" target="entityVertex_29420_191">
+            <start x="2892.0" y="721.0"/>
+            <next x="2916.0" y="590.0"/>
+            <end x="2916.0" y="590.0"/>
+        </arc>
+        <arc class="consumption" id="arc_190_input_508" source="entityVertex_29438_190" target="reactionVertex_8941613.1">
+            <start x="2693.0" y="708.0"/>
+            <next x="2727.0" y="574.0"/>
+            <end x="2727.0" y="574.0"/>
+        </arc>
+        <arc class="consumption" id="arc_378_input_379" source="entityVertex_934550_378" target="reactionVertex_1295609.1">
+            <start x="5668.0" y="672.0"/>
+            <next x="5460.0" y="755.0"/>
+            <end x="5460.0" y="755.0"/>
+        </arc>
+        <arc class="consumption" id="arc_27_input_26" source="entityVertex_113592_27" target="reactionVertex_1307963.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_1307963">
+                <label text="10"/>
+                <bbox w="12.0" h="12.0" x="295.0" y="1019.0"/>
+            </glyph>
+            <start x="326.0" y="1018.0"/>
+            <next x="277.0" y="1033.0"/>
+            <end x="277.0" y="1033.0"/>
+        </arc>
+        <arc class="production" id="arc_295_output_294" source="reactionVertex_5654659.2" target="entityVertex_5654191_295">
+            <start x="3685.0" y="61.0"/>
+            <end x="3753.0" y="61.0"/>
+        </arc>
+        <arc class="consumption" id="arc_301_input_299" source="entityVertex_113592_301" target="reactionVertex_5654717.1">
+            <start x="4278.0" y="488.0"/>
+            <next x="4375.0" y="394.0"/>
+            <end x="4375.0" y="394.0"/>
+        </arc>
+        <arc class="production" id="arc_391_output_389" source="reactionVertex_1295613.2" target="entityVertex_1295625_391">
+            <start x="5753.0" y="1012.0"/>
+            <end x="5738.0" y="1050.0"/>
+        </arc>
+        <arc class="consumption" id="arc_189_input_661" source="entityVertex_109796_189" target="reactionVertex_5654426.1">
+            <start x="2688.0" y="671.0"/>
+            <next x="2722.0" y="690.0"/>
+            <end x="2722.0" y="690.0"/>
+        </arc>
+        <arc class="consumption" id="arc_220_input_219" source="entityVertex_1295587_220" target="reactionVertex_1295604.1">
+            <start x="3286.0" y="1135.0"/>
+            <end x="3332.0" y="1132.0"/>
+        </arc>
+        <arc class="consumption" id="arc_24_input_26" source="entityVertex_1307953_24" target="reactionVertex_1307963.1">
+            <start x="273.0" y="996.0"/>
+            <next x="277.0" y="1033.0"/>
+            <end x="277.0" y="1033.0"/>
+        </arc>
+        <arc class="consumption" id="arc_235_input_234" source="entityVertex_1295598_235" target="reactionVertex_1295634.1">
+            <start x="3091.0" y="1143.0"/>
+            <end x="3120.0" y="1139.0"/>
+        </arc>
+        <arc class="production" id="arc_19_output_16" source="reactionVertex_190326.2" target="entityVertex_29370_19">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_190326">
+                <label text="10"/>
+                <bbox w="12.0" h="12.0" x="301.0" y="718.0"/>
+            </glyph>
+            <start x="326.0" y="725.0"/>
+            <next x="289.0" y="724.0"/>
+            <end x="289.0" y="724.0"/>
+        </arc>
+        <arc class="production" id="arc_178_output_173" source="reactionVertex_5654664.2" target="entityVertex_5654327_178">
+            <start x="2445.0" y="240.0"/>
+            <end x="2577.0" y="235.0"/>
+        </arc>
+        <arc class="consumption" id="arc_134_input_133" source="entityVertex_113592_134" target="reactionVertex_5654418.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_5654418">
+                <label text="6"/>
+                <bbox w="12.0" h="12.0" x="1826.0" y="175.0"/>
+            </glyph>
+            <start x="1823.0" y="167.0"/>
+            <next x="1842.0" y="196.0"/>
+            <end x="1842.0" y="196.0"/>
+        </arc>
+        <arc class="consumption" id="arc_157_input_156" source="entityVertex_1169480_157" target="reactionVertex_5654425.1">
+            <start x="1286.0" y="469.0"/>
+            <next x="1367.0" y="406.0"/>
+            <end x="1367.0" y="406.0"/>
+        </arc>
+        <arc class="consumption" id="arc_128_input_127" source="entityVertex_170963_128" target="reactionVertex_5654422.1">
+            <start x="1521.0" y="187.0"/>
+            <next x="1562.0" y="196.0"/>
+            <end x="1562.0" y="196.0"/>
+        </arc>
+        <arc class="consumption" id="arc_21_input_20" source="entityVertex_189888_21" target="reactionVertex_1307955.1">
+            <glyph class="stoichiometry" id="Stoichiometry_189888_INPUT_1307955">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="170.0" y="785.0"/>
+            </glyph>
+            <start x="89.0" y="752.0"/>
+            <next x="264.0" y="830.0"/>
+            <end x="264.0" y="830.0"/>
+        </arc>
+        <arc class="production" id="arc_29_output_26" source="reactionVertex_1307963.2" target="entityVertex_29370_29">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_1307963">
+                <label text="10"/>
+                <bbox w="12.0" h="12.0" x="292.0" y="1078.0"/>
+            </glyph>
+            <start x="320.0" y="1087.0"/>
+            <next x="277.0" y="1082.0"/>
+            <end x="277.0" y="1082.0"/>
+        </arc>
+        <arc class="stimulation" id="arc_25_activator_20" source="entityVertex_190915_25" target="reactionVertex_1307955_20">
+            <start x="101.0" y="886.0"/>
+            <next x="260.0" y="871.0"/>
+            <end x="260.0" y="871.0"/>
+        </arc>
+        <arc class="consumption" id="arc_134_input_146" source="entityVertex_113592_134" target="reactionVertex_5654653.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_5654653">
+                <label text="5"/>
+                <bbox w="12.0" h="12.0" x="1821.0" y="99.0"/>
+            </glyph>
+            <start x="1819.0" y="131.0"/>
+            <next x="1835.0" y="79.0"/>
+            <end x="1835.0" y="79.0"/>
+        </arc>
+        <arc class="production" id="arc_397_output_396" source="reactionVertex_934604.2" target="entityVertex_934572_397">
+            <start x="5734.0" y="1367.0"/>
+            <end x="5738.0" y="1401.0"/>
+        </arc>
+        <arc class="production" id="arc_135_output_133" source="reactionVertex_5654418.2" target="entityVertex_5654193_135">
+            <start x="1975.0" y="197.0"/>
+            <next x="1907.0" y="195.0"/>
+            <end x="1907.0" y="195.0"/>
+        </arc>
+        <arc class="consumption" id="arc_397_input_408" source="entityVertex_934572_397" target="reactionVertex_1295621.1">
+            <start x="5683.0" y="1433.0"/>
+            <end x="5600.0" y="1439.0"/>
+        </arc>
+        <arc class="production" id="arc_162_output_159" source="reactionVertex_5654566.2" target="entityVertex_29370_162">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_5654566">
+                <label text="8"/>
+                <bbox w="12.0" h="12.0" x="1936.0" y="454.0"/>
+            </glyph>
+            <start x="1958.0" y="472.0"/>
+            <next x="1926.0" y="448.0"/>
+            <end x="1926.0" y="448.0"/>
+        </arc>
+        <arc class="production" id="arc_220_output_234" source="reactionVertex_1295634.2" target="entityVertex_1295587_220">
+            <start x="3120.0" y="1139.0"/>
+            <end x="3154.0" y="1139.0"/>
+        </arc>
+        <arc class="production" id="arc_351_output_349" source="reactionVertex_5654734.2" target="entityVertex_5654335_351">
+            <start x="4736.0" y="231.0"/>
+            <end x="4780.0" y="233.0"/>
+        </arc>
+        <arc class="consumption" id="arc_132_input_146" source="entityVertex_5654319_132" target="reactionVertex_5654653.1">
+            <start x="1810.0" y="80.0"/>
+            <next x="1835.0" y="79.0"/>
+            <end x="1835.0" y="79.0"/>
+        </arc>
+        <arc class="consumption" id="arc_395_input_396" source="entityVertex_934576_395" target="reactionVertex_934604.1">
+            <start x="5731.0" y="1323.0"/>
+            <next x="5730.0" y="1345.0"/>
+            <end x="5730.0" y="1345.0"/>
+        </arc>
+        <arc class="production" id="arc_192_output_508" source="reactionVertex_8941613.2" target="entityVertex_109783_192">
+            <start x="2950.0" y="619.0"/>
+            <next x="2916.0" y="590.0"/>
+            <end x="2916.0" y="590.0"/>
+        </arc>
+        <arc class="production" id="arc_28_output_26" source="reactionVertex_1307963.2" target="entityVertex_1307958_28">
+            <start x="275.0" y="1132.0"/>
+            <next x="277.0" y="1082.0"/>
+            <end x="277.0" y="1082.0"/>
+        </arc>
+        <arc class="consumption" id="arc_393_input_392" source="entityVertex_112199_393" target="reactionVertex_1295622.1">
+            <start x="5579.0" y="1114.0"/>
+            <next x="5691.0" y="1164.0"/>
+            <end x="5691.0" y="1164.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_395_catalyst_396" source="entityVertex_934576_395" target="reactionVertex_934604_396">
+            <start x="5752.0" y="1323.0"/>
+            <next x="5777.0" y="1348.0"/>
+            <next x="5749.0" y="1361.0"/>
+            <end x="5749.0" y="1361.0"/>
+        </arc>
+        <arc class="consumption" id="arc_189_input_508" source="entityVertex_109796_189" target="reactionVertex_8941613.1">
+            <start x="2677.0" y="623.0"/>
+            <next x="2727.0" y="574.0"/>
+            <end x="2727.0" y="574.0"/>
+        </arc>
+        <arc class="consumption" id="arc_374_input_373" source="entityVertex_1295605_374" target="reactionVertex_1295632.1">
+            <start x="5350.0" y="535.0"/>
+            <end x="5349.0" y="573.0"/>
+        </arc>
+        <arc class="production" id="arc_239_output_236" source="reactionVertex_5654428.2" target="entityVertex_29370_239">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_5654428">
+                <label text="3"/>
+                <bbox w="12.0" h="12.0" x="1675.0" y="434.0"/>
+            </glyph>
+            <start x="1692.0" y="473.0"/>
+            <next x="1670.0" y="408.0"/>
+            <end x="1670.0" y="408.0"/>
+        </arc>
+        <arc class="stimulation" id="arc_163_activator_234" source="entityVertex_1268261_163" target="reactionVertex_1295634_234">
+            <start x="2941.0" y="1046.0"/>
+            <next x="3007.0" y="972.0"/>
+            <next x="3115.0" y="1132.0"/>
+            <end x="3115.0" y="1132.0"/>
+        </arc>
+        <arc class="consumption" id="arc_308_input_307" source="entityVertex_5654330_308" target="reactionVertex_5654667.1">
+            <start x="3432.0" y="323.0"/>
+            <next x="3674.0" y="323.0"/>
+            <end x="3674.0" y="323.0"/>
+        </arc>
+        <arc class="consumption" id="arc_390_input_389" source="entityVertex_74686_390" target="reactionVertex_1295613.1">
+            <start x="5629.0" y="931.0"/>
+            <next x="5748.0" y="964.0"/>
+            <end x="5748.0" y="964.0"/>
+        </arc>
+        <arc class="consumption" id="arc_17_input_16" source="entityVertex_113592_17" target="reactionVertex_190326.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_190326">
+                <label text="10"/>
+                <bbox w="12.0" h="12.0" x="296.0" y="657.0"/>
+            </glyph>
+            <start x="320.0" y="665.0"/>
+            <next x="285.0" y="662.0"/>
+            <end x="285.0" y="662.0"/>
+        </arc>
+        <arc class="production" id="arc_93_output_90" source="reactionVertex_5654151.2" target="entityVertex_29370_93">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_5654151">
+                <label text="4"/>
+                <bbox w="12.0" h="12.0" x="764.0" y="274.0"/>
+            </glyph>
+            <start x="765.0" y="263.0"/>
+            <next x="776.0" y="297.0"/>
+            <end x="776.0" y="297.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_383_catalyst_379" source="entityVertex_65043_383" target="reactionVertex_1295609_379">
+            <start x="5299.0" y="860.0"/>
+            <next x="5463.0" y="861.0"/>
+            <end x="5463.0" y="861.0"/>
+        </arc>
+        <arc class="production" id="arc_18_output_16" source="reactionVertex_190326.2" target="entityVertex_190328_18">
+            <start x="289.0" y="776.0"/>
+            <next x="289.0" y="724.0"/>
+            <end x="289.0" y="724.0"/>
+        </arc>
+        <arc class="production" id="arc_378_output_377" source="reactionVertex_1295599.2" target="entityVertex_934550_378">
+            <start x="5499.0" y="656.0"/>
+            <end x="5668.0" y="654.0"/>
+        </arc>
+        <arc class="production" id="arc_92_output_90" source="reactionVertex_5654151.2" target="entityVertex_5654168_92">
+            <start x="739.0" y="292.0"/>
+            <next x="776.0" y="297.0"/>
+            <end x="776.0" y="297.0"/>
+        </arc>
+        <arc class="production" id="arc_395_output_392" source="reactionVertex_1295622.2" target="entityVertex_934576_395">
+            <start x="5718.0" y="1270.0"/>
+            <next x="5696.0" y="1238.0"/>
+            <end x="5696.0" y="1238.0"/>
+        </arc>
+        <arc class="consumption" id="arc_292_input_290" source="entityVertex_74789_292" target="reactionVertex_177931.1">
+            <start x="3704.0" y="633.0"/>
+            <next x="3649.0" y="586.0"/>
+            <end x="3649.0" y="586.0"/>
+        </arc>
+        <arc class="production" id="arc_132_output_130" source="reactionVertex_5654651.2" target="entityVertex_5654319_132">
+            <start x="1609.0" y="89.0"/>
+            <end x="1693.0" y="85.0"/>
+        </arc>
+        <arc class="production" id="arc_311_output_310" source="reactionVertex_5654669.2" target="entityVertex_5654331_311">
+            <start x="4002.0" y="354.0"/>
+            <end x="4056.0" y="352.0"/>
+        </arc>
+        <arc class="consumption" id="arc_12_input_11" source="entityVertex_189921_12" target="reactionVertex_190265.1">
+            <glyph class="stoichiometry" id="Stoichiometry_189921_INPUT_190265">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="269.0" y="470.0"/>
+            </glyph>
+            <start x="274.0" y="452.0"/>
+            <next x="276.0" y="500.0"/>
+            <end x="276.0" y="500.0"/>
+        </arc>
+        <arc class="consumption" id="arc_381_input_392" source="entityVertex_934598_381" target="reactionVertex_1295622.1">
+            <start x="5797.0" y="896.0"/>
+            <next x="5835.0" y="899.0"/>
+            <next x="5835.0" y="1146.0"/>
+            <next x="5691.0" y="1164.0"/>
+            <end x="5691.0" y="1164.0"/>
+        </arc>
+        <arc class="consumption" id="arc_76_input_130" source="entityVertex_5654158_76" target="reactionVertex_5654651.1">
+            <start x="1306.0" y="276.0"/>
+            <next x="1534.0" y="88.0"/>
+            <end x="1534.0" y="88.0"/>
+        </arc>
+        <arc class="consumption" id="arc_386_input_385" source="entityVertex_113592_386" target="reactionVertex_934559.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_934559">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="5743.0" y="697.0"/>
+            </glyph>
+            <start x="5779.0" y="699.0"/>
+            <next x="5719.0" y="707.0"/>
+            <end x="5719.0" y="707.0"/>
+        </arc>
+        <arc class="consumption" id="arc_375_input_377" source="entityVertex_1295593_375" target="reactionVertex_1295599.1">
+            <start x="5405.0" y="657.0"/>
+            <end x="5499.0" y="656.0"/>
+        </arc>
+        <arc class="production" id="arc_381_output_379" source="reactionVertex_1295609.2" target="entityVertex_934598_381">
+            <start x="5685.0" y="890.0"/>
+            <next x="5486.0" y="883.0"/>
+            <end x="5486.0" y="883.0"/>
+        </arc>
+        <arc class="consumption" id="arc_80_input_90" source="entityVertex_5654166_80" target="reactionVertex_5654151.1">
+            <start x="894.0" y="289.0"/>
+            <next x="851.0" y="289.0"/>
+            <end x="851.0" y="289.0"/>
+        </arc>
+        <arc class="production" id="arc_302_output_321" source="reactionVertex_5654714.2" target="entityVertex_29370_302">
+            <start x="4494.0" y="499.0"/>
+            <next x="4436.0" y="452.0"/>
+            <end x="4436.0" y="452.0"/>
+        </arc>
+        <arc class="production" id="arc_393_output_408" source="reactionVertex_1295621.2" target="entityVertex_112199_393">
+            <start x="5543.0" y="1120.0"/>
+            <next x="5490.0" y="1440.0"/>
+            <end x="5490.0" y="1440.0"/>
+        </arc>
+        <arc class="consumption" id="arc_350_input_349" source="entityVertex_182964_350" target="reactionVertex_5654734.1">
+            <start x="4633.0" y="419.0"/>
+            <next x="4700.0" y="231.0"/>
+            <end x="4700.0" y="231.0"/>
+        </arc>
+        <arc class="production" id="arc_309_output_307" source="reactionVertex_5654667.2" target="entityVertex_5654333_309">
+            <start x="3701.0" y="323.0"/>
+            <end x="3735.0" y="327.0"/>
+        </arc>
+        <arc class="consumption" id="arc_12_input_20" source="entityVertex_189921_12" target="reactionVertex_1307955.1">
+            <glyph class="stoichiometry" id="Stoichiometry_189921_INPUT_1307955">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="361.0" y="402.0"/>
+            </glyph>
+            <start x="322.0" y="420.0"/>
+            <next x="412.0" y="397.0"/>
+            <next x="414.0" y="870.0"/>
+            <next x="264.0" y="830.0"/>
+            <end x="264.0" y="830.0"/>
+        </arc>
+        <arc class="consumption" id="arc_351_input_361" source="entityVertex_5654335_351" target="reactionVertex_5654684.1">
+            <start x="4903.0" y="234.0"/>
+            <next x="4924.0" y="233.0"/>
+            <end x="4924.0" y="233.0"/>
+        </arc>
+        <arc class="stimulation" id="arc_278_activator_508" source="entityVertex_5654339_278" target="reactionVertex_8941613_508">
+            <start x="3240.0" y="208.0"/>
+            <next x="2868.0" y="564.0"/>
+            <end x="2868.0" y="564.0"/>
+        </arc>
+        <arc class="production" id="arc_80_output_74" source="reactionVertex_5654163.2" target="entityVertex_5654166_80">
+            <start x="1074.0" y="294.0"/>
+            <end x="1020.0" y="291.0"/>
+        </arc>
+        <arc class="consumption" id="arc_177_input_243" source="entityVertex_109797_177" target="reactionVertex_5654423.1">
+            <start x="2200.0" y="488.0"/>
+            <next x="2294.0" y="550.0"/>
+            <end x="2294.0" y="550.0"/>
+        </arc>
+        <arc class="production" id="arc_15_output_11" source="reactionVertex_190265.2" target="entityVertex_190223_15">
+            <start x="276.0" y="530.0"/>
+            <end x="279.0" y="575.0"/>
+        </arc>
+        <arc class="consumption" id="arc_92_input_94" source="entityVertex_5654168_92" target="reactionVertex_5654169.1">
+            <start x="656.0" y="267.0"/>
+            <end x="580.0" y="202.0"/>
+        </arc>
+        <arc class="production" id="arc_158_output_156" source="reactionVertex_5654425.2" target="entityVertex_5654320_158">
+            <start x="1405.0" y="411.0"/>
+            <end x="1479.0" y="409.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_374_catalyst_373" source="entityVertex_1295605_374" target="reactionVertex_1295632_373">
+            <start x="5308.0" y="530.0"/>
+            <next x="5290.0" y="545.0"/>
+            <next x="5335.0" y="566.0"/>
+            <end x="5335.0" y="566.0"/>
+        </arc>
+        <arc class="consumption" id="arc_135_input_294" source="entityVertex_5654193_135" target="reactionVertex_5654659.1">
+            <start x="2051.0" y="177.0"/>
+            <next x="2184.0" y="47.0"/>
+            <next x="3645.0" y="62.0"/>
+            <end x="3645.0" y="62.0"/>
+        </arc>
+        <arc class="consumption" id="arc_76_input_127" source="entityVertex_5654158_76" target="reactionVertex_5654422.1">
+            <start x="1338.0" y="276.0"/>
+            <next x="1562.0" y="196.0"/>
+            <end x="1562.0" y="196.0"/>
+        </arc>
+        <arc class="consumption" id="arc_300_input_299" source="entityVertex_179856_300" target="reactionVertex_5654717.1">
+            <start x="4292.0" y="388.0"/>
+            <next x="4375.0" y="394.0"/>
+            <end x="4375.0" y="394.0"/>
+        </arc>
+        <arc class="consumption" id="arc_189_input_188" source="entityVertex_109796_189" target="reactionVertex_5654663.1">
+            <start x="2694.0" y="647.0"/>
+            <next x="2759.0" y="647.0"/>
+            <end x="2759.0" y="647.0"/>
+        </arc>
+        <arc class="production" id="arc_293_output_290" source="reactionVertex_177931.2" target="entityVertex_179864_293">
+            <start x="3648.0" y="555.0"/>
+            <end x="3647.0" y="518.0"/>
+        </arc>
+        <arc class="production" id="arc_191_output_188" source="reactionVertex_5654663.2" target="entityVertex_29420_191">
+            <start x="2881.0" y="721.0"/>
+            <next x="2853.0" y="651.0"/>
+            <end x="2853.0" y="651.0"/>
+        </arc>
+        <arc class="consumption" id="arc_277_input_276" source="entityVertex_113592_277" target="reactionVertex_5654655.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_5654655">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="3043.0" y="182.0"/>
+            </glyph>
+            <start x="3039.0" y="207.0"/>
+            <next x="3060.0" y="169.0"/>
+            <end x="3060.0" y="169.0"/>
+        </arc>
+        <arc class="consumption" id="arc_274_input_273" source="entityVertex_162563_274" target="reactionVertex_5654658.1">
+            <start x="2862.0" y="454.0"/>
+            <next x="2810.0" y="173.0"/>
+            <end x="2810.0" y="173.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_178_catalyst_188" source="entityVertex_5654327_178" target="reactionVertex_5654663_188">
+            <start x="2674.0" y="264.0"/>
+            <next x="2795.0" y="355.0"/>
+            <next x="2814.0" y="632.0"/>
+            <end x="2814.0" y="632.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_129_catalyst_133" source="entityVertex_5654182_129" target="reactionVertex_5654418_133">
+            <start x="1791.0" y="212.0"/>
+            <next x="1824.0" y="225.0"/>
+            <next x="1865.0" y="204.0"/>
+            <end x="1865.0" y="204.0"/>
+        </arc>
+        <arc class="consumption" id="arc_25_input_20" source="entityVertex_190915_25" target="reactionVertex_1307955.1">
+            <start x="101.0" y="879.0"/>
+            <next x="264.0" y="830.0"/>
+            <end x="264.0" y="830.0"/>
+        </arc>
+        <arc class="production" id="arc_24_output_20" source="reactionVertex_1307955.2" target="entityVertex_1307953_24">
+            <start x="269.0" y="870.0"/>
+            <end x="271.0" y="949.0"/>
+        </arc>
+        <arc class="consumption" id="arc_381_input_389" source="entityVertex_934598_381" target="reactionVertex_1295613.1">
+            <start x="5743.0" y="921.0"/>
+            <next x="5748.0" y="964.0"/>
+            <end x="5748.0" y="964.0"/>
+        </arc>
+        <arc class="consumption" id="arc_131_input_130" source="entityVertex_191482_131" target="reactionVertex_5654651.1">
+            <start x="1491.0" y="73.0"/>
+            <next x="1534.0" y="88.0"/>
+            <end x="1534.0" y="88.0"/>
+        </arc>
+        <arc class="production" id="arc_390_output_410" source="reactionVertex_1549564.2" target="entityVertex_74686_390">
+            <start x="5612.0" y="938.0"/>
+            <next x="5687.0" y="971.0"/>
+            <end x="5687.0" y="971.0"/>
+        </arc>
+        <arc class="consumption" id="arc_308_input_349" source="entityVertex_5654330_308" target="reactionVertex_5654734.1">
+            <start x="3379.0" y="288.0"/>
+            <next x="3464.0" y="6.0"/>
+            <next x="4639.0" y="15.0"/>
+            <next x="4700.0" y="231.0"/>
+            <end x="4700.0" y="231.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_311_catalyst_321" source="entityVertex_5654331_311" target="reactionVertex_5654714_321">
+            <start x="4217.0" y="333.0"/>
+            <next x="4297.0" y="314.0"/>
+            <next x="4398.0" y="440.0"/>
+            <end x="4398.0" y="440.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_274_catalyst_410" source="entityVertex_162563_274" target="reactionVertex_1549564_410">
+            <start x="2917.0" y="497.0"/>
+            <next x="3595.0" y="753.0"/>
+            <next x="5669.0" y="1018.0"/>
+            <end x="5669.0" y="1018.0"/>
+        </arc>
+        <arc class="production" id="arc_302_output_299" source="reactionVertex_5654717.2" target="entityVertex_29370_302">
+            <start x="4503.0" y="499.0"/>
+            <next x="4441.0" y="392.0"/>
+            <end x="4441.0" y="392.0"/>
+        </arc>
+        <arc class="consumption" id="arc_295_input_296" source="entityVertex_5654191_295" target="reactionVertex_5654662.1">
+            <start x="3905.0" y="65.0"/>
+            <next x="3956.0" y="68.0"/>
+            <end x="3956.0" y="68.0"/>
+        </arc>
+        <arc class="production" id="arc_148_output_146" source="reactionVertex_5654653.2" target="entityVertex_5654326_148">
+            <start x="1962.0" y="82.0"/>
+            <next x="1932.0" y="81.0"/>
+            <end x="1932.0" y="81.0"/>
+        </arc>
+        <arc class="production" id="arc_192_output_188" source="reactionVertex_5654663.2" target="entityVertex_109783_192">
+            <start x="2932.0" y="644.0"/>
+            <next x="2853.0" y="651.0"/>
+            <end x="2853.0" y="651.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_244_catalyst_661" source="entityVertex_5654343_244" target="reactionVertex_5654426_661">
+            <start x="2663.0" y="422.0"/>
+            <next x="2782.0" y="676.0"/>
+            <end x="2782.0" y="676.0"/>
+        </arc>
+        <arc class="consumption" id="arc_275_input_276" source="entityVertex_5654337_275" target="reactionVertex_5654655.1">
+            <start x="3024.0" y="169.0"/>
+            <next x="3060.0" y="169.0"/>
+            <end x="3060.0" y="169.0"/>
+        </arc>
+        <arc class="consumption" id="arc_160_input_159" source="entityVertex_113592_160" target="reactionVertex_5654566.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_5654566">
+                <label text="8"/>
+                <bbox w="12.0" h="12.0" x="1840.0" y="456.0"/>
+            </glyph>
+            <start x="1839.0" y="476.0"/>
+            <next x="1853.0" y="448.0"/>
+            <end x="1853.0" y="448.0"/>
+        </arc>
+        <arc class="consumption" id="arc_76_input_156" source="entityVertex_5654158_76" target="reactionVertex_5654425.1">
+            <start x="1299.0" y="334.0"/>
+            <next x="1367.0" y="406.0"/>
+            <end x="1367.0" y="406.0"/>
+        </arc>
+        <arc class="production" id="arc_76_output_94" source="reactionVertex_5654169.2" target="entityVertex_5654158_76">
+            <start x="1286.0" y="276.0"/>
+            <next x="640.0" y="112.0"/>
+            <next x="700.0" y="37.0"/>
+            <next x="1359.0" y="58.0"/>
+            <end x="640.0" y="112.0"/>
+        </arc>
+        <arc class="production" id="arc_298_output_296" source="reactionVertex_5654662.2" target="entityVertex_5654187_298">
+            <start x="3998.0" y="67.0"/>
+            <end x="4058.0" y="77.0"/>
+        </arc>
+        <arc class="consumption" id="arc_75_input_74" source="entityVertex_179838_75" target="reactionVertex_5654163.1">
+            <start x="1125.0" y="286.0"/>
+            <next x="1090.0" y="320.0"/>
+            <end x="1090.0" y="320.0"/>
+        </arc>
+        <arc class="production" id="arc_275_output_273" source="reactionVertex_5654658.2" target="entityVertex_5654337_275">
+            <start x="2858.0" y="173.0"/>
+            <end x="2909.0" y="172.0"/>
+        </arc>
+        <arc class="consumption" id="arc_398_input_396" source="entityVertex_113595_398" target="reactionVertex_934604.1">
+            <start x="5609.0" y="1363.0"/>
+            <next x="5730.0" y="1345.0"/>
+            <end x="5730.0" y="1345.0"/>
+        </arc>
+        <arc class="consumption" id="arc_293_input_307" source="entityVertex_179864_293" target="reactionVertex_5654667.1">
+            <start x="3651.0" y="460.0"/>
+            <next x="3674.0" y="323.0"/>
+            <end x="3674.0" y="323.0"/>
+        </arc>
+        <arc class="production" id="arc_384_output_385" source="reactionVertex_934559.2" target="entityVertex_934578_384">
+            <start x="5722.0" y="806.0"/>
+            <next x="5720.0" y="765.0"/>
+            <end x="5720.0" y="765.0"/>
+        </arc>
+        <arc class="production" id="arc_387_output_385" source="reactionVertex_934559.2" target="entityVertex_29370_387">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_934559">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="5752.0" y="759.0"/>
+            </glyph>
+            <start x="5796.0" y="766.0"/>
+            <next x="5720.0" y="765.0"/>
+            <end x="5720.0" y="765.0"/>
+        </arc>
+        <arc class="production" id="arc_136_output_146" source="reactionVertex_5654653.2" target="entityVertex_29370_136">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_5654653">
+                <label text="5"/>
+                <bbox w="12.0" h="12.0" x="1936.0" y="100.0"/>
+            </glyph>
+            <start x="1952.0" y="131.0"/>
+            <next x="1932.0" y="81.0"/>
+            <end x="1932.0" y="81.0"/>
+        </arc>
+        <arc class="consumption" id="arc_23_input_20" source="entityVertex_1307932_23" target="reactionVertex_1307955.1">
+            <glyph class="stoichiometry" id="Stoichiometry_1307932_INPUT_1307955">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="189.0" y="822.0"/>
+            </glyph>
+            <start x="126.0" y="826.0"/>
+            <next x="264.0" y="830.0"/>
+            <end x="264.0" y="830.0"/>
+        </arc>
+        <arc class="consumption" id="arc_297_input_310" source="entityVertex_74787_297" target="reactionVertex_5654669.1">
+            <start x="3944.0" y="489.0"/>
+            <next x="3977.0" y="351.0"/>
+            <end x="3977.0" y="351.0"/>
+        </arc>
+        <arc class="consumption" id="arc_309_input_310" source="entityVertex_5654333_309" target="reactionVertex_5654669.1">
+            <start x="3894.0" y="343.0"/>
+            <next x="3977.0" y="351.0"/>
+            <end x="3977.0" y="351.0"/>
+        </arc>
+        <arc class="consumption" id="arc_378_input_385" source="entityVertex_934550_378" target="reactionVertex_934559.1">
+            <start x="5719.0" y="683.0"/>
+            <next x="5719.0" y="707.0"/>
+            <end x="5719.0" y="707.0"/>
+        </arc>
+        <arc class="production" id="arc_394_output_392" source="reactionVertex_1295622.2" target="entityVertex_934544_394">
+            <start x="5619.0" y="1270.0"/>
+            <next x="5696.0" y="1238.0"/>
+            <end x="5696.0" y="1238.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_80_catalyst_90" source="entityVertex_5654166_80" target="reactionVertex_5654151_90">
+            <start x="940.0" y="317.0"/>
+            <next x="906.0" y="368.0"/>
+            <next x="831.0" y="304.0"/>
+            <end x="831.0" y="304.0"/>
+        </arc>
+        <arc class="consumption" id="arc_300_input_321" source="entityVertex_179856_300" target="reactionVertex_5654714.1">
+            <start x="4292.0" y="402.0"/>
+            <next x="4376.0" y="451.0"/>
+            <end x="4376.0" y="451.0"/>
+        </arc>
+        <arc class="production" id="arc_95_output_94" source="reactionVertex_5654169.2" target="entityVertex_167679_95">
+            <start x="607.0" y="104.0"/>
+            <next x="640.0" y="112.0"/>
+            <end x="640.0" y="112.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_351_catalyst_361" source="entityVertex_5654335_351" target="reactionVertex_5654684_361">
+            <start x="4903.0" y="208.0"/>
+            <next x="4924.0" y="197.0"/>
+            <next x="4939.0" y="220.0"/>
+            <end x="4939.0" y="220.0"/>
+        </arc>
+        <arc class="consumption" id="arc_391_input_410" source="entityVertex_1295625_391" target="reactionVertex_1549564.1">
+            <start x="5708.0" y="1050.0"/>
+            <end x="5685.0" y="1020.0"/>
+        </arc>
+        <arc class="consumption" id="arc_174_input_273" source="entityVertex_5654324_174" target="reactionVertex_5654658.1">
+            <start x="2331.0" y="192.0"/>
+            <next x="2459.0" y="161.0"/>
+            <next x="2810.0" y="173.0"/>
+            <end x="2810.0" y="173.0"/>
+        </arc>
+        <arc class="consumption" id="arc_174_input_173" source="entityVertex_5654324_174" target="reactionVertex_5654664.1">
+            <start x="2331.0" y="221.0"/>
+            <next x="2392.0" y="240.0"/>
+            <end x="2392.0" y="240.0"/>
+        </arc>
+        <arc class="consumption" id="arc_79_input_74" source="entityVertex_167682_79" target="reactionVertex_5654163.1">
+            <start x="1044.0" y="349.0"/>
+            <next x="1090.0" y="320.0"/>
+            <end x="1090.0" y="320.0"/>
+        </arc>
+        <arc class="consumption" id="arc_190_input_661" source="entityVertex_29438_190" target="reactionVertex_5654426.1">
+            <start x="2704.0" y="708.0"/>
+            <next x="2722.0" y="690.0"/>
+            <end x="2722.0" y="690.0"/>
+        </arc>
+        <arc class="inhibition" id="arc_384_inhibitor_379" source="entityVertex_934578_384" target="reactionVertex_1295609_379">
+            <start x="5656.0" y="835.0"/>
+            <next x="5488.0" y="860.0"/>
+            <end x="5488.0" y="860.0"/>
+        </arc>
+        <arc class="consumption" id="arc_129_input_133" source="entityVertex_5654182_129" target="reactionVertex_5654418.1">
+            <start x="1791.0" y="194.0"/>
+            <next x="1842.0" y="196.0"/>
+            <end x="1842.0" y="196.0"/>
+        </arc>
+        <arc class="consumption" id="arc_15_input_16" source="entityVertex_190223_15" target="reactionVertex_190326.1">
+            <start x="283.0" y="645.0"/>
+            <next x="285.0" y="662.0"/>
+            <end x="285.0" y="662.0"/>
+        </arc>
+        <arc class="consumption" id="arc_129_input_159" source="entityVertex_5654182_129" target="reactionVertex_5654566.1">
+            <start x="1742.0" y="219.0"/>
+            <next x="1853.0" y="448.0"/>
+            <end x="1853.0" y="448.0"/>
+        </arc>
+        <arc class="consumption" id="arc_158_input_236" source="entityVertex_5654320_158" target="reactionVertex_5654428.1">
+            <start x="1596.0" y="408.0"/>
+            <next x="1619.0" y="408.0"/>
+            <end x="1619.0" y="408.0"/>
+        </arc>
+        <arc class="production" id="arc_363_output_361" source="reactionVertex_5654684.2" target="entityVertex_5654363_363">
+            <start x="4947.0" y="234.0"/>
+            <end x="4982.0" y="233.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_388_catalyst_385" source="entityVertex_947860_388" target="reactionVertex_934559_385">
+            <start x="5616.0" y="761.0"/>
+            <next x="5704.0" y="741.0"/>
+            <end x="5704.0" y="741.0"/>
+        </arc>
+        <arc class="consumption" id="arc_301_input_321" source="entityVertex_113592_301" target="reactionVertex_5654714.1">
+            <start x="4295.0" y="491.0"/>
+            <next x="4376.0" y="451.0"/>
+            <end x="4376.0" y="451.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_132_catalyst_146" source="entityVertex_5654319_132" target="reactionVertex_5654653_146">
+            <start x="1787.0" y="62.0"/>
+            <next x="1837.0" y="38.0"/>
+            <next x="1873.0" y="71.0"/>
+            <end x="1873.0" y="71.0"/>
+        </arc>
+        <arc class="consumption" id="arc_91_input_90" source="entityVertex_113592_91" target="reactionVertex_5654151.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_5654151">
+                <label text="4"/>
+                <bbox w="12.0" h="12.0" x="848.0" y="267.0"/>
+            </glyph>
+            <start x="857.0" y="258.0"/>
+            <next x="851.0" y="289.0"/>
+            <end x="851.0" y="289.0"/>
+        </arc>
+        <arc class="production" id="arc_303_output_321" source="reactionVertex_5654714.2" target="entityVertex_179838_303">
+            <start x="4489.0" y="389.0"/>
+            <next x="4436.0" y="452.0"/>
+            <end x="4436.0" y="452.0"/>
+        </arc>
+        <arc class="stimulation" id="arc_13_activator_11" source="entityVertex_190915_13" target="reactionVertex_190265_11">
+            <start x="131.0" y="506.0"/>
+            <next x="191.0" y="550.0"/>
+            <next x="267.0" y="532.0"/>
+            <end x="267.0" y="532.0"/>
+        </arc>
+        <arc class="consumption" id="arc_293_input_294" source="entityVertex_179864_293" target="reactionVertex_5654659.1">
+            <start x="3646.0" y="460.0"/>
+            <next x="3645.0" y="62.0"/>
+            <end x="3645.0" y="62.0"/>
+        </arc>
+        <arc class="production" id="arc_191_output_661" source="reactionVertex_5654426.2" target="entityVertex_29420_191">
+            <start x="2876.0" y="721.0"/>
+            <next x="2855.0" y="690.0"/>
+            <end x="2855.0" y="690.0"/>
+        </arc>
+        <arc class="production" id="arc_129_output_127" source="reactionVertex_5654422.2" target="entityVertex_5654182_129">
+            <start x="1609.0" y="197.0"/>
+            <end x="1671.0" y="194.0"/>
+        </arc>
+        <arc class="production" id="arc_409_output_408" source="reactionVertex_1295621.2" target="entityVertex_1370875_409">
+            <start x="5443.0" y="1441.0"/>
+            <next x="5490.0" y="1440.0"/>
+            <end x="5490.0" y="1440.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_298_catalyst_299" source="entityVertex_5654187_298" target="reactionVertex_5654717_299">
+            <start x="4195.0" y="106.0"/>
+            <next x="4329.0" y="142.0"/>
+            <next x="4399.0" y="378.0"/>
+            <end x="4399.0" y="378.0"/>
+        </arc>
+        <arc class="production" id="arc_221_output_219" source="reactionVertex_1295604.2" target="entityVertex_167224_221">
+            <start x="3445.0" y="1054.0"/>
+            <next x="3370.0" y="1127.0"/>
+            <end x="3370.0" y="1127.0"/>
+        </arc>
+        <arc class="consumption" id="arc_14_input_11" source="entityVertex_189959_14" target="reactionVertex_190265.1">
+            <glyph class="stoichiometry" id="Stoichiometry_189959_INPUT_190265">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="181.0" y="451.0"/>
+            </glyph>
+            <start x="99.0" y="415.0"/>
+            <next x="276.0" y="500.0"/>
+            <end x="276.0" y="500.0"/>
+        </arc>
+        <arc class="production" id="arc_278_output_276" source="reactionVertex_5654655.2" target="entityVertex_5654339_278">
+            <start x="3213.0" y="170.0"/>
+            <next x="3140.0" y="168.0"/>
+            <end x="3140.0" y="168.0"/>
+        </arc>
+        <arc class="consumption" id="arc_291_input_290" source="entityVertex_179849_291" target="reactionVertex_177931.1">
+            <start x="3605.0" y="624.0"/>
+            <next x="3649.0" y="586.0"/>
+            <end x="3649.0" y="586.0"/>
+        </arc>
+        <arc class="production" id="arc_244_output_243" source="reactionVertex_5654423.2" target="entityVertex_5654343_244">
+            <start x="2395.0" y="512.0"/>
+            <end x="2594.0" y="416.0"/>
+        </arc>
+        <arc class="consumption" id="arc_237_input_236" source="entityVertex_113592_237" target="reactionVertex_5654428.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_5654428">
+                <label text="3"/>
+                <bbox w="12.0" h="12.0" x="1598.0" y="430.0"/>
+            </glyph>
+            <start x="1589.0" y="464.0"/>
+            <next x="1619.0" y="408.0"/>
+            <end x="1619.0" y="408.0"/>
+        </arc>
+        <arc class="consumption" id="arc_13_input_11" source="entityVertex_190915_13" target="reactionVertex_190265.1">
+            <start x="145.0" y="486.0"/>
+            <next x="276.0" y="500.0"/>
+            <end x="276.0" y="500.0"/>
+        </arc>
+        <arc class="production" id="arc_279_output_276" source="reactionVertex_5654655.2" target="entityVertex_29370_279">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_5654655">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="3139.0" y="185.0"/>
+            </glyph>
+            <start x="3150.0" y="215.0"/>
+            <next x="3140.0" y="168.0"/>
+            <end x="3140.0" y="168.0"/>
+        </arc>
+        <arc class="production" id="arc_192_output_661" source="reactionVertex_5654426.2" target="entityVertex_109783_192">
+            <start x="2932.0" y="657.0"/>
+            <next x="2855.0" y="690.0"/>
+            <end x="2855.0" y="690.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_15_catalyst_16" source="entityVertex_190223_15" target="reactionVertex_190326_16">
+            <start x="248.0" y="645.0"/>
+            <next x="218.0" y="672.0"/>
+            <next x="271.0" y="694.0"/>
+            <end x="271.0" y="694.0"/>
+        </arc>
+        <arc class="production" id="arc_381_output_410" source="reactionVertex_1549564.2" target="entityVertex_934598_381">
+            <start x="5723.0" y="921.0"/>
+            <next x="5687.0" y="971.0"/>
+            <end x="5687.0" y="971.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_275_catalyst_276" source="entityVertex_5654337_275" target="reactionVertex_5654655_276">
+            <start x="3014.0" y="144.0"/>
+            <next x="3053.0" y="127.0"/>
+            <next x="3084.0" y="158.0"/>
+            <end x="3084.0" y="158.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_163_catalyst_159" source="entityVertex_1268261_163" target="reactionVertex_5654566_159">
+            <start x="2878.0" y="1067.0"/>
+            <next x="1976.0" y="1054.0"/>
+            <next x="1896.0" y="465.0"/>
+            <end x="1896.0" y="465.0"/>
+        </arc>
+        <arc class="inhibition" id="arc_161_inhibitor_133" source="entityVertex_5654322_161" target="reactionVertex_5654418_133">
+            <start x="2010.0" y="382.0"/>
+            <next x="1884.0" y="204.0"/>
+            <end x="1884.0" y="204.0"/>
+        </arc>
+        <arc class="production" id="arc_238_output_236" source="reactionVertex_5654428.2" target="entityVertex_5654340_238">
+            <start x="1711.0" y="408.0"/>
+            <next x="1670.0" y="408.0"/>
+            <end x="1670.0" y="408.0"/>
+        </arc>
+        <arc class="production" id="arc_375_output_373" source="reactionVertex_1295632.2" target="entityVertex_1295593_375">
+            <start x="5351.0" y="638.0"/>
+            <next x="5352.0" y="599.0"/>
+            <end x="5352.0" y="599.0"/>
+        </arc>
+        <arc class="consumption" id="arc_238_input_243" source="entityVertex_5654340_238" target="reactionVertex_5654423.1">
+            <start x="1772.0" y="438.0"/>
+            <next x="1808.0" y="546.0"/>
+            <next x="2294.0" y="550.0"/>
+            <end x="2294.0" y="550.0"/>
+        </arc>
+        <arc class="consumption" id="arc_76_input_74" source="entityVertex_5654158_76" target="reactionVertex_5654163.1">
+            <start x="1212.0" y="309.0"/>
+            <next x="1090.0" y="320.0"/>
+            <end x="1090.0" y="320.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_24_catalyst_26" source="entityVertex_1307953_24" target="reactionVertex_1307963_26">
+            <start x="258.0" y="996.0"/>
+            <next x="233.0" y="1030.0"/>
+            <next x="262.0" y="1051.0"/>
+            <end x="262.0" y="1051.0"/>
+        </arc>
+        <arc class="production" id="arc_303_output_299" source="reactionVertex_5654717.2" target="entityVertex_179838_303">
+            <start x="4475.0" y="374.0"/>
+            <next x="4441.0" y="392.0"/>
+            <end x="4441.0" y="392.0"/>
+        </arc>
+        <arc class="production" id="arc_382_output_379" source="reactionVertex_1295609.2" target="entityVertex_29370_382">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_1295609">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="5474.0" y="893.0"/>
+            </glyph>
+            <start x="5474.0" y="916.0"/>
+            <next x="5486.0" y="883.0"/>
+            <end x="5486.0" y="883.0"/>
+        </arc>
+        <arc class="consumption" id="arc_297_input_296" source="entityVertex_74787_297" target="reactionVertex_5654662.1">
+            <start x="3940.0" y="489.0"/>
+            <next x="3956.0" y="68.0"/>
+            <end x="3956.0" y="68.0"/>
+        </arc>
+        <arc class="production" id="arc_222_output_219" source="reactionVertex_1295604.2" target="entityVertex_1295590_222">
+            <start x="3417.0" y="1134.0"/>
+            <next x="3370.0" y="1127.0"/>
+            <end x="3370.0" y="1127.0"/>
+        </arc>
+        <arc class="consumption" id="arc_362_input_361" source="entityVertex_113595_362" target="reactionVertex_5654684.1">
+            <start x="4872.0" y="454.0"/>
+            <next x="4924.0" y="233.0"/>
+            <end x="4924.0" y="233.0"/>
+        </arc>
+        <arc class="production" id="arc_136_output_133" source="reactionVertex_5654418.2" target="entityVertex_29370_136">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_5654418">
+                <label text="6"/>
+                <bbox w="12.0" h="12.0" x="1918.0" y="175.0"/>
+            </glyph>
+            <start x="1941.0" y="167.0"/>
+            <next x="1907.0" y="195.0"/>
+            <end x="1907.0" y="195.0"/>
+        </arc>
+        <arc class="production" id="arc_376_output_373" source="reactionVertex_1295632.2" target="entityVertex_29372_376">
+            <glyph class="stoichiometry" id="Stoichiometry_29372_OUTPUT_1295632">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="5368.0" y="599.0"/>
+            </glyph>
+            <start x="5397.0" y="612.0"/>
+            <next x="5352.0" y="599.0"/>
+            <end x="5352.0" y="599.0"/>
+        </arc>
+    </map>
+</sbgn>

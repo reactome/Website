@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_21" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="360.0" y="566.0"/>
+            </label>
+            <bbox w="322.0" h="660.0" x="123.0" y="15.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_435464_275">
+            <label text="GpIb-IX-V:Collagen type I fibril:vWF"/>
+            <bbox w="127.0" h="36.0" x="380.0" y="95.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_443938_269">
+            <label text="MPL"/>
+            <bbox w="69.0" h="20.0" x="405.0" y="363.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_443940_271">
+            <label text="TPO:Thrombopoietin receptor"/>
+            <bbox w="110.0" h="50.0" x="382.0" y="476.0"/>
+        </glyph>
+        <glyph class="submap" id="entityVertex_354192_218">
+            <label text="Integrin alphaIIb beta3 signaling"/>
+            <bbox w="135.0" h="72.0" x="153.0" y="0.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_390664_67">
+            <label text="ADRA2A,B,C"/>
+            <bbox w="86.0" h="38.0" x="97.0" y="150.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_390627_66">
+            <label text="ADR, NAd"/>
+            <bbox w="107.0" h="31.0" x="0.0" y="98.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_443917_270">
+            <label text="THPO"/>
+            <bbox w="63.0" h="22.0" x="501.0" y="362.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_429532_217">
+            <label text="GP1b-IX-V complex:activated thrombin (factor IIa)"/>
+            <bbox w="86.0" h="83.0" x="400.0" y="229.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_390663_65">
+            <label text="ADRA2A,B,C bind ADR,NAd"/>
+            <bbox w="10.0" h="10.0" x="47.0" y="222.0"/>
+            <port id="reactionVertex_390663.1" x="52.0" y="227.0"/>
+            <port id="reactionVertex_390663.2" x="103.0" y="287.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_156786_215">
+            <label text="activated thrombin (factor IIa)"/>
+            <bbox w="123.0" h="38.0" x="464.0" y="153.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_429529_214">
+            <label text="Thrombin binding to GP1b:IX:V"/>
+            <bbox w="10.0" h="10.0" x="434.0" y="188.0"/>
+            <port id="reactionVertex_429529.1" x="439.0" y="181.0"/>
+            <port id="reactionVertex_429529.2" x="440.0" y="226.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_390700_68">
+            <label text="ADRA2A,B,C:ADR,NAd"/>
+            <bbox w="98.0" h="53.0" x="77.0" y="290.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_443926_268">
+            <label text="Thrombopoietin binds the thrombopoietin receptor"/>
+            <bbox w="10.0" h="10.0" x="464.0" y="439.0"/>
+            <port id="reactionVertex_443926.1" x="473.0" y="417.0"/>
+            <port id="reactionVertex_443926.2" x="451.0" y="473.0"/>
+        </glyph>
+        <arc class="production" id="arc_271_output_268" source="reactionVertex_443926.2" target="entityVertex_443940_271">
+            <start x="469.0" y="444.0"/>
+            <end x="451.0" y="473.0"/>
+        </arc>
+        <arc class="consumption" id="arc_270_input_268" source="entityVertex_443917_270" target="reactionVertex_443926.1">
+            <start x="517.0" y="387.0"/>
+            <next x="473.0" y="417.0"/>
+            <end x="473.0" y="417.0"/>
+        </arc>
+        <arc class="consumption" id="arc_275_input_214" source="entityVertex_435464_275" target="reactionVertex_429529.1">
+            <start x="441.0" y="134.0"/>
+            <next x="439.0" y="181.0"/>
+            <end x="439.0" y="181.0"/>
+        </arc>
+        <arc class="production" id="arc_217_output_214" source="reactionVertex_429529.2" target="entityVertex_429532_217">
+            <start x="439.0" y="193.0"/>
+            <end x="440.0" y="226.0"/>
+        </arc>
+        <arc class="consumption" id="arc_67_input_65" source="entityVertex_390664_67" target="reactionVertex_390663.1">
+            <start x="111.0" y="194.0"/>
+            <end x="52.0" y="227.0"/>
+        </arc>
+        <arc class="consumption" id="arc_215_input_214" source="entityVertex_156786_215" target="reactionVertex_429529.1">
+            <start x="461.0" y="178.0"/>
+            <next x="439.0" y="181.0"/>
+            <end x="439.0" y="181.0"/>
+        </arc>
+        <arc class="consumption" id="arc_269_input_268" source="entityVertex_443938_269" target="reactionVertex_443926.1">
+            <start x="446.0" y="386.0"/>
+            <next x="473.0" y="417.0"/>
+            <end x="473.0" y="417.0"/>
+        </arc>
+        <arc class="consumption" id="arc_66_input_65" source="entityVertex_390627_66" target="reactionVertex_390663.1">
+            <start x="52.0" y="135.0"/>
+            <end x="52.0" y="227.0"/>
+        </arc>
+        <arc class="production" id="arc_68_output_65" source="reactionVertex_390663.2" target="entityVertex_390700_68">
+            <start x="52.0" y="227.0"/>
+            <end x="103.0" y="287.0"/>
+        </arc>
+    </map>
+</sbgn>

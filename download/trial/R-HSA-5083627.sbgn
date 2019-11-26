@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17963_1" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="543.0" y="375.0"/>
+            </label>
+            <bbox w="1566.0" h="1080.0" x="60.0" y="109.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_756" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="1672.0" y="224.0"/>
+            </label>
+            <bbox w="906.0" h="344.0" x="1659.0" y="110.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_810" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="1981.0" y="838.0"/>
+            </label>
+            <bbox w="2596.0" h="1330.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_742353_124520">
+            <label text="UDP-Xyl"/>
+            <bbox w="65.0" h="30.0" x="785.0" y="1050.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9638091_124521">
+            <label text="B4GAT1:LARGE mutants"/>
+            <bbox w="103.0" h="36.0" x="970.0" y="1168.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_6785668_124519">
+            <label text="Defective LARGE does not transfer Xyl from UDP-Xyl to GlcA"/>
+            <bbox w="12.0" h="12.0" x="729.0" y="1121.0"/>
+            <port id="reactionVertex_6785668.1" x="824.0" y="1127.0"/>
+            <port id="reactionVertex_6785668.2" x="645.0" y="1127.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_124520_input_124519" source="entityVertex_742353_124520" target="reactionVertex_6785668.1">
+            <start x="818.0" y="1083.0"/>
+            <next x="824.0" y="1127.0"/>
+            <end x="824.0" y="1127.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_124521_catalyst_124519" source="entityVertex_9638091_124521" target="reactionVertex_6785668_124519">
+            <start x="967.0" y="1175.0"/>
+            <next x="751.0" y="1130.0"/>
+            <end x="751.0" y="1130.0"/>
+        </arc>
+    </map>
+</sbgn>

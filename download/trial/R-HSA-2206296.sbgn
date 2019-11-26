@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17963_1584" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1704.0" y="1136.0"/>
+            </label>
+            <bbox w="2278.0" h="164.0" x="262.0" y="1028.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_1" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="4779.0" y="721.0"/>
+            </label>
+            <bbox w="2842.0" h="750.0" x="3043.0" y="223.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_977" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1707.0" y="482.0"/>
+            </label>
+            <bbox w="2656.0" h="761.0" x="111.0" y="172.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_39" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="71.0" y="1154.0"/>
+            </label>
+            <bbox w="5913.0" h="1102.0" x="0.0" y="115.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_2065213_615">
+            <label text="ChEBI:63517 chain"/>
+            <bbox w="115.0" h="44.0" x="4377.0" y="497.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2262743_94432">
+            <label text="Defective IDS does not hydrolyse dermatan sulfate (Chebi:63517 chain)"/>
+            <bbox w="12.0" h="12.0" x="4581.0" y="512.0"/>
+            <port id="reactionVertex_2262743.1" x="4554.0" y="518.0"/>
+            <port id="reactionVertex_2262743.2" x="4628.0" y="518.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_1605715_944">
+            <label text="H2O"/>
+            <bbox w="49.0" h="30.0" x="4483.0" y="384.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9036046_94434">
+            <label text="Defective IDS does not hydrolyse Heparan sulfate chain(5)"/>
+            <bbox w="12.0" h="12.0" x="4582.0" y="315.0"/>
+            <port id="reactionVertex_9036046.1" x="4555.0" y="321.0"/>
+            <port id="reactionVertex_9036046.2" x="4622.0" y="320.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_2090080_943">
+            <label text="Heparan sulfate chain(5)"/>
+            <bbox w="126.0" h="44.0" x="4401.0" y="297.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9631735_94433">
+            <label text="Ca2+:Ca2+:IDS mutants:IDS mutants"/>
+            <bbox w="127.0" h="36.0" x="4526.0" y="382.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_615_input_94432" source="entityVertex_2065213_615" target="reactionVertex_2262743.1">
+            <start x="4495.0" y="518.0"/>
+            <next x="4554.0" y="518.0"/>
+            <end x="4554.0" y="518.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_94433_catalyst_94434" source="entityVertex_9631735_94433" target="reactionVertex_9036046_94434">
+            <start x="4588.0" y="379.0"/>
+            <next x="4588.0" y="337.0"/>
+            <end x="4588.0" y="337.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_94433_catalyst_94432" source="entityVertex_9631735_94433" target="reactionVertex_2262743_94432">
+            <start x="4588.0" y="421.0"/>
+            <next x="4587.0" y="502.0"/>
+            <end x="4587.0" y="502.0"/>
+        </arc>
+        <arc class="consumption" id="arc_943_input_94434" source="entityVertex_2090080_943" target="reactionVertex_9036046.1">
+            <start x="4530.0" y="320.0"/>
+            <next x="4555.0" y="321.0"/>
+            <end x="4555.0" y="321.0"/>
+        </arc>
+        <arc class="consumption" id="arc_944_input_94432" source="entityVertex_1605715_944" target="reactionVertex_2262743.1">
+            <start x="4512.0" y="417.0"/>
+            <next x="4554.0" y="518.0"/>
+            <end x="4554.0" y="518.0"/>
+        </arc>
+        <arc class="consumption" id="arc_944_input_94434" source="entityVertex_1605715_944" target="reactionVertex_9036046.1">
+            <start x="4516.0" y="381.0"/>
+            <next x="4555.0" y="321.0"/>
+            <end x="4555.0" y="321.0"/>
+        </arc>
+    </map>
+</sbgn>

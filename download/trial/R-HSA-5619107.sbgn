@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_7" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="2200.0" y="2237.0"/>
+            </label>
+            <bbox w="2493.0" h="2248.0" x="0.0" y="66.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_10" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="88.0" y="1722.0"/>
+            </label>
+            <bbox w="533.0" h="800.0" x="68.0" y="1361.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_602" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="790.0" y="123.0"/>
+            </label>
+            <bbox w="590.0" h="234.0" x="580.0" y="104.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_587" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="2227.0" y="550.0"/>
+            </label>
+            <bbox w="237.0" h="253.0" x="2212.0" y="344.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_170827_578">
+            <label text="GCK1:GKRP complex"/>
+            <bbox w="82.0" h="36.0" x="2098.0" y="396.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5661474_162324">
+            <label text="Defective NPC does not transport GCK1:GKRP from cytosol to nucleoplasm"/>
+            <bbox w="12.0" h="12.0" x="2211.0" y="408.0"/>
+            <port id="reactionVertex_5661474.1" x="2183.0" y="414.0"/>
+            <port id="reactionVertex_5661474.2" x="2262.0" y="414.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9631759_162325">
+            <label text="Defective NPC"/>
+            <bbox w="103.0" h="36.0" x="2166.0" y="342.0"/>
+        </glyph>
+        <arc class="catalysis" id="arc_162325_catalyst_162324" source="entityVertex_9631759_162325" target="reactionVertex_5661474_162324">
+            <start x="2217.0" y="381.0"/>
+            <next x="2217.0" y="398.0"/>
+            <end x="2217.0" y="398.0"/>
+        </arc>
+        <arc class="consumption" id="arc_578_input_162324" source="entityVertex_170827_578" target="reactionVertex_5661474.1">
+            <start x="2183.0" y="414.0"/>
+            <end x="2217.0" y="414.0"/>
+        </arc>
+    </map>
+</sbgn>

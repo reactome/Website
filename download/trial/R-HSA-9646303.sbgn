@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_1" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="45.0" y="984.0"/>
+            </label>
+            <bbox w="1765.0" h="1069.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_2" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="142.0" y="708.0"/>
+            </label>
+            <bbox w="1121.0" h="685.0" x="125.0" y="311.0"/>
+        </glyph>
+        <glyph class="submap" id="entityVertex_6802957_919">
+            <label text="Oncogenic MAPK signaling"/>
+            <bbox w="141.0" h="54.0" x="341.0" y="120.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9646295_194361">
+            <label text="p14ARF mutant does not translocate to the nucleus"/>
+            <bbox w="12.0" h="12.0" x="984.0" y="319.0"/>
+            <port id="reactionVertex_9646295.1" x="979.0" y="301.0"/>
+            <port id="reactionVertex_9646295.2" x="1010.0" y="392.0"/>
+        </glyph>
+        <glyph class="submap" id="entityVertex_2559580_425">
+            <label text="Oxidative Stress Induced Senescence"/>
+            <bbox w="150.0" h="61.0" x="498.0" y="280.0"/>
+        </glyph>
+        <glyph class="submap" id="entityVertex_2559586_427">
+            <label text="DNA Damage/Telomere Stress Induced Senescence"/>
+            <bbox w="207.0" h="76.0" x="529.0" y="169.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_9646285_194362">
+            <label text="p14ARF R21RfsTER47"/>
+            <bbox w="90.0" h="36.0" x="928.0" y="262.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_194362_input_194361" source="entityVertex_9646285_194362" target="reactionVertex_9646295.1">
+            <start x="979.0" y="301.0"/>
+            <end x="990.0" y="325.0"/>
+        </arc>
+    </map>
+</sbgn>

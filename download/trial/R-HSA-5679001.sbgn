@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17957_864" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="1142.0" y="826.0"/>
+            </label>
+            <bbox w="592.0" h="86.0" x="893.0" y="803.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_1" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="819.0" y="279.0"/>
+            </label>
+            <bbox w="505.0" h="305.0" x="545.0" y="257.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17951_2" compartmentOrder="10.0">
+            <label text="peroxisomal matrix">
+                <bbox w="150.0" h="24.0" x="1353.0" y="418.0"/>
+            </label>
+            <bbox w="160.0" h="218.0" x="1338.0" y="329.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_3" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="1544.0" y="553.0"/>
+            </label>
+            <bbox w="1718.0" h="1094.0" x="159.0" y="92.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_600" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="518.0" y="760.0"/>
+            </label>
+            <bbox w="273.0" h="195.0" x="375.0" y="610.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_432051_509" compartmentOrder="10.0">
+            <label text="transport vesicle">
+                <bbox w="130.0" h="24.0" x="1520.0" y="383.0"/>
+            </label>
+            <bbox w="149.0" h="55.0" x="1511.0" y="374.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_80738_846" compartmentOrder="10.0">
+            <label text="lamellar body">
+                <bbox w="102.0" h="24.0" x="749.0" y="983.0"/>
+            </label>
+            <bbox w="152.0" h="156.0" x="737.0" y="970.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_811">
+            <label text="ATP"/>
+            <bbox w="36.0" h="30.0" x="1201.0" y="1111.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5679031_174590">
+            <label text="Defective ABCC2 does not transport BMG,BDG from cytosol to extracellular region"/>
+            <bbox w="12.0" h="12.0" x="1299.0" y="1168.0"/>
+            <port id="reactionVertex_5679031.1" x="1305.0" y="1143.0"/>
+            <port id="reactionVertex_5679031.2" x="1334.0" y="1174.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5679042_812">
+            <label text="BMG,BDG"/>
+            <bbox w="68.0" h="22.0" x="1271.0" y="1058.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29356_810">
+            <label text="H2O"/>
+            <bbox w="38.0" h="32.0" x="1241.0" y="1095.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5679025_174591">
+            <label text="ABCC2 mutants"/>
+            <bbox w="98.0" h="22.0" x="1189.0" y="1164.0"/>
+        </glyph>
+        <arc class="catalysis" id="arc_174591_catalyst_174590" source="entityVertex_5679025_174591" target="reactionVertex_5679031_174590">
+            <start x="1293.0" y="1174.0"/>
+            <next x="1289.0" y="1174.0"/>
+            <end x="1289.0" y="1174.0"/>
+        </arc>
+        <arc class="consumption" id="arc_812_input_174590" source="entityVertex_5679042_812" target="reactionVertex_5679031.1">
+            <start x="1305.0" y="1086.0"/>
+            <next x="1305.0" y="1143.0"/>
+            <end x="1305.0" y="1143.0"/>
+        </arc>
+        <arc class="consumption" id="arc_810_input_174590" source="entityVertex_29356_810" target="reactionVertex_5679031.1">
+            <start x="1282.0" y="1124.0"/>
+            <next x="1305.0" y="1143.0"/>
+            <end x="1305.0" y="1143.0"/>
+        </arc>
+        <arc class="consumption" id="arc_811_input_174590" source="entityVertex_113592_811" target="reactionVertex_5679031.1">
+            <start x="1240.0" y="1129.0"/>
+            <next x="1305.0" y="1143.0"/>
+            <end x="1305.0" y="1143.0"/>
+        </arc>
+    </map>
+</sbgn>

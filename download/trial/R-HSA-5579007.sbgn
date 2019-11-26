@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_1" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="473.0" y="466.0"/>
+            </label>
+            <bbox w="1292.0" h="1017.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_3" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="468.0" y="32.0"/>
+            </label>
+            <bbox w="999.0" h="46.0" x="63.0" y="32.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_212" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="443.0" y="575.0"/>
+            </label>
+            <bbox w="219.0" h="61.0" x="426.0" y="563.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_4" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="66.0" y="701.0"/>
+            </label>
+            <bbox w="250.0" h="250.0" x="48.0" y="501.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29356_523">
+            <label text="H2O"/>
+            <bbox w="43.0" h="30.0" x="744.0" y="698.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9638048_133747">
+            <label text="ACY1 mutants:Zn2+ dimer"/>
+            <bbox w="130.0" h="36.0" x="942.0" y="687.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5490236_519">
+            <label text="AFXBO-NAC,AFNBO-NAC"/>
+            <bbox w="157.0" h="36.0" x="704.0" y="850.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5579081_133746">
+            <label text="Defective ACY1 does not hydrolyse mercapturic acids"/>
+            <bbox w="12.0" h="12.0" x="946.0" y="755.0"/>
+            <port id="reactionVertex_5579081.1" x="828.0" y="761.0"/>
+            <port id="reactionVertex_5579081.2" x="1052.0" y="761.0"/>
+        </glyph>
+        <arc class="catalysis" id="arc_133747_catalyst_133746" source="entityVertex_9638048_133747" target="reactionVertex_5579081_133746">
+            <start x="989.0" y="726.0"/>
+            <next x="964.0" y="750.0"/>
+            <end x="964.0" y="750.0"/>
+        </arc>
+        <arc class="consumption" id="arc_519_input_133746" source="entityVertex_5490236_519" target="reactionVertex_5579081.1">
+            <start x="789.0" y="844.0"/>
+            <next x="828.0" y="761.0"/>
+            <end x="828.0" y="761.0"/>
+        </arc>
+        <arc class="consumption" id="arc_523_input_133746" source="entityVertex_29356_523" target="reactionVertex_5579081.1">
+            <start x="784.0" y="731.0"/>
+            <next x="828.0" y="761.0"/>
+            <end x="828.0" y="761.0"/>
+        </arc>
+    </map>
+</sbgn>

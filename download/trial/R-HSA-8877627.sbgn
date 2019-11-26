@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_161320_166" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="46.0" y="277.0"/>
+            </label>
+            <bbox w="250.0" h="250.0" x="13.0" y="121.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_167" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="412.0" y="111.0"/>
+            </label>
+            <bbox w="545.0" h="449.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8874714_160">
+            <label text="TTPA:alpha-TOH"/>
+            <bbox w="109.0" h="22.0" x="205.0" y="238.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_8874705_163">
+            <label text="TTPA transports alpha-TOH from lysosomal membrane to plasma membrane"/>
+            <bbox w="12.0" h="12.0" x="361.0" y="242.0"/>
+            <port id="reactionVertex_8874705.1" x="317.0" y="248.0"/>
+            <port id="reactionVertex_8874705.2" x="475.0" y="248.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_8874708_164">
+            <label text="alpha-TOH"/>
+            <bbox w="82.0" h="30.0" x="146.0" y="114.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8874722_161">
+            <label text="TTPA:alpha-TOH"/>
+            <bbox w="109.0" h="22.0" x="478.0" y="237.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_2980979_162">
+            <label text="TTPA"/>
+            <bbox w="40.0" h="22.0" x="239.0" y="63.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_8874718_165">
+            <label text="TTPA binds alpha-TOH"/>
+            <bbox w="10.0" h="10.0" x="254.0" y="141.0"/>
+            <port id="reactionVertex_8874718.1" x="259.0" y="145.0"/>
+            <port id="reactionVertex_8874718.2" x="259.0" y="235.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_160_input_163" source="entityVertex_8874714_160" target="reactionVertex_8874705.1">
+            <start x="317.0" y="248.0"/>
+            <end x="367.0" y="248.0"/>
+        </arc>
+        <arc class="consumption" id="arc_162_input_165" source="entityVertex_2980979_162" target="reactionVertex_8874718.1">
+            <start x="259.0" y="88.0"/>
+            <end x="259.0" y="145.0"/>
+        </arc>
+        <arc class="production" id="arc_160_output_165" source="reactionVertex_8874718.2" target="entityVertex_8874714_160">
+            <start x="259.0" y="146.0"/>
+            <end x="259.0" y="235.0"/>
+        </arc>
+        <arc class="consumption" id="arc_164_input_165" source="entityVertex_8874708_164" target="reactionVertex_8874718.1">
+            <start x="231.0" y="138.0"/>
+            <end x="259.0" y="145.0"/>
+        </arc>
+        <arc class="production" id="arc_161_output_163" source="reactionVertex_8874705.2" target="entityVertex_8874722_161">
+            <start x="367.0" y="248.0"/>
+            <end x="475.0" y="248.0"/>
+        </arc>
+    </map>
+</sbgn>

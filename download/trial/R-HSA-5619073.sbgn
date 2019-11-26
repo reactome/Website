@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_7" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="2200.0" y="2237.0"/>
+            </label>
+            <bbox w="2493.0" h="2248.0" x="0.0" y="66.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_10" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="88.0" y="1722.0"/>
+            </label>
+            <bbox w="533.0" h="800.0" x="68.0" y="1361.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_602" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="790.0" y="123.0"/>
+            </label>
+            <bbox w="590.0" h="234.0" x="580.0" y="104.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_587" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="2227.0" y="550.0"/>
+            </label>
+            <bbox w="237.0" h="253.0" x="2212.0" y="344.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_565">
+            <label text="ATP"/>
+            <bbox w="41.0" h="30.0" x="1138.0" y="376.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_70113_571">
+            <label text="Glc"/>
+            <bbox w="37.0" h="30.0" x="1194.0" y="361.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5621837_155731">
+            <label text="GCK mutants"/>
+            <bbox w="81.0" h="43.0" x="1079.0" y="417.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5621918_155730">
+            <label text="Defective GCK does not phosphorylate Glc to form G6P"/>
+            <bbox w="12.0" h="12.0" x="1209.0" y="436.0"/>
+            <port id="reactionVertex_5621918.1" x="1213.0" y="421.0"/>
+            <port id="reactionVertex_5621918.2" x="1217.0" y="470.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_565_input_155730" source="entityVertex_113592_565" target="reactionVertex_5621918.1">
+            <start x="1182.0" y="402.0"/>
+            <next x="1213.0" y="421.0"/>
+            <end x="1213.0" y="421.0"/>
+        </arc>
+        <arc class="consumption" id="arc_571_input_155730" source="entityVertex_70113_571" target="reactionVertex_5621918.1">
+            <start x="1212.0" y="394.0"/>
+            <next x="1213.0" y="421.0"/>
+            <end x="1213.0" y="421.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_155731_catalyst_155730" source="entityVertex_5621837_155731" target="reactionVertex_5621918_155730">
+            <start x="1166.0" y="439.0"/>
+            <next x="1199.0" y="441.0"/>
+            <end x="1199.0" y="441.0"/>
+        </arc>
+    </map>
+</sbgn>

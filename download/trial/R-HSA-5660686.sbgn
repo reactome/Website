@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_16" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="5864.0" y="1277.0"/>
+            </label>
+            <bbox w="5772.0" h="1190.0" x="180.0" y="159.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_171043_66" compartmentOrder="10.0">
+            <label text="early endosome lumen">
+                <bbox w="176.0" h="24.0" x="752.0" y="654.0"/>
+            </label>
+            <bbox w="225.0" h="220.0" x="718.0" y="491.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_290" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="2954.0" y="665.0"/>
+            </label>
+            <bbox w="617.0" h="161.0" x="2614.0" y="551.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_173031_67" compartmentOrder="10.0">
+            <label text="late endosome lumen">
+                <bbox w="166.0" h="24.0" x="1698.0" y="689.0"/>
+            </label>
+            <bbox w="227.0" h="232.0" x="1685.0" y="511.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_516" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="3499.0" y="599.0"/>
+            </label>
+            <bbox w="715.0" h="246.0" x="3387.0" y="450.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_68" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="2126.0" y="713.0"/>
+            </label>
+            <bbox w="315.0" h="316.0" x="2064.0" y="482.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_20600_283" compartmentOrder="10.0">
+            <label text="synaptic vesicle">
+                <bbox w="121.0" h="24.0" x="1350.0" y="654.0"/>
+            </label>
+            <bbox w="254.0" h="400.0" x="1219.0" y="400.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17927_652" compartmentOrder="10.0">
+            <label text="mitochondrial intermembrane space">
+                <bbox w="280.0" h="24.0" x="3371.0" y="708.0"/>
+            </label>
+            <bbox w="809.0" h="321.0" x="3355.0" y="437.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_352033_161">
+            <label text="L-Pro"/>
+            <bbox w="49.0" h="30.0" x="2452.0" y="1417.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5660705_170634">
+            <label text="SLC6A20 T199M"/>
+            <bbox w="107.0" h="22.0" x="2385.0" y="1331.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_74113_165">
+            <label text="Na+"/>
+            <bbox w="43.0" h="30.0" x="2536.0" y="1416.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5660694_170633">
+            <label text="Variant SLC6A20 does not cotransport L-Pro, Na+ from extracellulare region to cytosol"/>
+            <bbox w="12.0" h="12.0" x="2500.0" y="1336.0"/>
+            <port id="reactionVertex_5660694.1" x="2506.0" y="1375.0"/>
+            <port id="reactionVertex_5660694.2" x="2505.0" y="1306.0"/>
+        </glyph>
+        <arc class="catalysis" id="arc_170634_catalyst_170633" source="entityVertex_5660705_170634" target="reactionVertex_5660694_170633">
+            <start x="2495.0" y="1342.0"/>
+            <next x="2490.0" y="1342.0"/>
+            <end x="2490.0" y="1342.0"/>
+        </arc>
+        <arc class="consumption" id="arc_161_input_170633" source="entityVertex_352033_161" target="reactionVertex_5660694.1">
+            <start x="2483.0" y="1414.0"/>
+            <next x="2506.0" y="1375.0"/>
+            <end x="2506.0" y="1375.0"/>
+        </arc>
+        <arc class="consumption" id="arc_165_input_170633" source="entityVertex_74113_165" target="reactionVertex_5660694.1">
+            <start x="2543.0" y="1413.0"/>
+            <next x="2506.0" y="1375.0"/>
+            <end x="2506.0" y="1375.0"/>
+        </arc>
+    </map>
+</sbgn>

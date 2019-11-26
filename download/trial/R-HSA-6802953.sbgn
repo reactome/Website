@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_304" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="711.0" y="1219.0"/>
+            </label>
+            <bbox w="4428.0" h="1701.0" x="318.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_171907_2854" compartmentOrder="10.0">
+            <label text="endosome lumen">
+                <bbox w="134.0" h="24.0" x="2661.0" y="1000.0"/>
+            </label>
+            <bbox w="477.0" h="135.0" x="2611.0" y="942.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_2905" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1609.0" y="1313.0"/>
+            </label>
+            <bbox w="249.0" h="341.0" x="1529.0" y="1171.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_2906" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="3743.0" y="1097.0"/>
+            </label>
+            <bbox w="639.0" h="277.0" x="3702.0" y="1024.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_6802562_181633">
+            <label text="NF1 loss-of-function variants"/>
+            <bbox w="132.0" h="36.0" x="524.0" y="670.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_6802837_181632">
+            <label text="Loss-of-function NF1 variants don't stimulate RAS GTPase activity"/>
+            <bbox w="12.0" h="12.0" x="621.0" y="822.0"/>
+            <port id="reactionVertex_6802837.1" x="693.0" y="735.0"/>
+            <port id="reactionVertex_6802837.2" x="521.0" y="856.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_167204_181634">
+            <label text="RAS:GTP"/>
+            <bbox w="76.0" h="38.0" x="575.0" y="416.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_181634_input_181632" source="entityVertex_167204_181634" target="reactionVertex_6802837.1">
+            <start x="618.0" y="457.0"/>
+            <next x="693.0" y="735.0"/>
+            <end x="693.0" y="735.0"/>
+        </arc>
+        <arc class="consumption" id="arc_181633_input_181632" source="entityVertex_6802562_181633" target="reactionVertex_6802837.1">
+            <start x="629.0" y="712.0"/>
+            <next x="693.0" y="735.0"/>
+            <end x="693.0" y="735.0"/>
+        </arc>
+    </map>
+</sbgn>

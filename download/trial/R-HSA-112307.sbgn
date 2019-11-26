@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_38" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="354.0" y="155.0"/>
+            </label>
+            <bbox w="767.0" h="344.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_375340_34">
+            <label text="Connexin 62 mediated neuronal gap junction communication"/>
+            <bbox w="12.0" h="12.0" x="652.0" y="218.0"/>
+            <port id="reactionVertex_375340.1" x="422.0" y="128.0"/>
+            <port id="reactionVertex_375340.2" x="657.0" y="162.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_375342_29">
+            <label text="Connexin 36 mediated neuronal gap junction communication"/>
+            <bbox w="12.0" h="12.0" x="487.0" y="213.0"/>
+            <port id="reactionVertex_375342.1" x="416.0" y="219.0"/>
+            <port id="reactionVertex_375342.2" x="401.0" y="128.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_375341_35">
+            <label text="Connexin 62 Gap Junction Complex"/>
+            <bbox w="113.0" h="36.0" x="601.0" y="319.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_375351_31">
+            <label text="Connexin 36 Gap Junction Complex"/>
+            <bbox w="113.0" h="36.0" x="436.0" y="319.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_375339_36">
+            <label text="Pannexin 1/Pannexin2 mediated neuronal gap junction communication"/>
+            <bbox w="12.0" h="12.0" x="110.0" y="206.0"/>
+            <port id="reactionVertex_375339.1" x="347.0" y="123.0"/>
+            <port id="reactionVertex_375339.2" x="115.0" y="165.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_375330_32">
+            <label text="Connexin 45/Connexin 36 mediated neuronal gap junction communication"/>
+            <bbox w="12.0" h="12.0" x="284.0" y="212.0"/>
+            <port id="reactionVertex_375330.1" x="377.0" y="218.0"/>
+            <port id="reactionVertex_375330.2" x="373.0" y="128.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_375333_33">
+            <label text="Connexin 36/Connexin 45 Gap Junction Complex"/>
+            <bbox w="107.0" h="64.0" x="238.0" y="306.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_375332_37">
+            <label text="Pannexin 1/Pannexin 2 Gap Junction Complex"/>
+            <bbox w="134.0" h="50.0" x="47.0" y="310.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29804_30">
+            <label text="K+"/>
+            <bbox w="74.0" h="30.0" x="350.0" y="95.0"/>
+        </glyph>
+        <arc class="catalysis" id="arc_33_catalyst_32" source="entityVertex_375333_33" target="reactionVertex_375330_32">
+            <start x="290.0" y="303.0"/>
+            <next x="290.0" y="234.0"/>
+            <end x="290.0" y="234.0"/>
+        </arc>
+        <arc class="consumption" id="arc_30_input_32" source="entityVertex_29804_30" target="reactionVertex_375330.1">
+            <start x="385.0" y="128.0"/>
+            <next x="377.0" y="218.0"/>
+            <end x="377.0" y="218.0"/>
+        </arc>
+        <arc class="consumption" id="arc_30_input_36" source="entityVertex_29804_30" target="reactionVertex_375339.1">
+            <start x="347.0" y="123.0"/>
+            <end x="116.0" y="212.0"/>
+        </arc>
+        <arc class="consumption" id="arc_30_input_34" source="entityVertex_29804_30" target="reactionVertex_375340.1">
+            <start x="422.0" y="128.0"/>
+            <end x="658.0" y="224.0"/>
+        </arc>
+        <arc class="consumption" id="arc_30_input_29" source="entityVertex_29804_30" target="reactionVertex_375342.1">
+            <start x="390.0" y="128.0"/>
+            <next x="416.0" y="219.0"/>
+            <end x="416.0" y="219.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_31_catalyst_29" source="entityVertex_375351_31" target="reactionVertex_375342_29">
+            <start x="492.0" y="316.0"/>
+            <next x="493.0" y="235.0"/>
+            <end x="493.0" y="235.0"/>
+        </arc>
+        <arc class="production" id="arc_30_output_34" source="reactionVertex_375340.2" target="entityVertex_29804_30">
+            <start x="658.0" y="224.0"/>
+            <next x="657.0" y="162.0"/>
+            <end x="657.0" y="162.0"/>
+        </arc>
+        <arc class="production" id="arc_30_output_32" source="reactionVertex_375330.2" target="entityVertex_29804_30">
+            <start x="377.0" y="218.0"/>
+            <end x="290.0" y="218.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_35_catalyst_34" source="entityVertex_375341_35" target="reactionVertex_375340_34">
+            <start x="657.0" y="316.0"/>
+            <next x="658.0" y="240.0"/>
+            <end x="658.0" y="240.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_37_catalyst_36" source="entityVertex_375332_37" target="reactionVertex_375339_36">
+            <start x="114.0" y="307.0"/>
+            <next x="116.0" y="228.0"/>
+            <end x="116.0" y="228.0"/>
+        </arc>
+        <arc class="production" id="arc_30_output_36" source="reactionVertex_375339.2" target="entityVertex_29804_30">
+            <start x="116.0" y="212.0"/>
+            <next x="115.0" y="165.0"/>
+            <end x="115.0" y="165.0"/>
+        </arc>
+        <arc class="production" id="arc_30_output_29" source="reactionVertex_375342.2" target="entityVertex_29804_30">
+            <start x="416.0" y="219.0"/>
+            <end x="493.0" y="219.0"/>
+        </arc>
+    </map>
+</sbgn>

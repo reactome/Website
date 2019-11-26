@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17963_1584" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1704.0" y="1136.0"/>
+            </label>
+            <bbox w="2278.0" h="164.0" x="262.0" y="1028.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_1" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="4779.0" y="721.0"/>
+            </label>
+            <bbox w="2842.0" h="750.0" x="3043.0" y="223.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_977" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1707.0" y="482.0"/>
+            </label>
+            <bbox w="2656.0" h="761.0" x="111.0" y="172.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_39" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="71.0" y="1154.0"/>
+            </label>
+            <bbox w="5913.0" h="1102.0" x="0.0" y="115.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_1922">
+            <label text="ATP"/>
+            <bbox w="49.0" h="30.0" x="2891.0" y="1066.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_3621782_107944">
+            <label text="PAPSS2 mutants"/>
+            <bbox w="101.0" h="22.0" x="2788.0" y="1035.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_1927">
+            <label text="ATP"/>
+            <bbox w="49.0" h="30.0" x="2703.0" y="1124.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_3560785_107943">
+            <label text="Defective PAPSS2 does not transfer PO4(2-) group from ATP to APS to form PAPS"/>
+            <bbox w="12.0" h="12.0" x="2662.0" y="1103.0"/>
+            <port id="reactionVertex_3560785.1" x="2698.0" y="1108.0"/>
+            <port id="reactionVertex_3560785.2" x="2641.0" y="1110.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_3560794_107945">
+            <label text="Defective PAPSS2 does not transfer SO4(2-) group to ATP to form APS"/>
+            <bbox w="12.0" h="12.0" x="2832.0" y="1096.0"/>
+            <port id="reactionVertex_3560794.1" x="2874.0" y="1102.0"/>
+            <port id="reactionVertex_3560794.2" x="2809.0" y="1102.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_174375_1918">
+            <label text="SO4(2-)"/>
+            <bbox w="71.0" h="30.0" x="2876.0" y="1120.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_1918_input_107945" source="entityVertex_174375_1918" target="reactionVertex_3560794.1">
+            <start x="2894.0" y="1117.0"/>
+            <next x="2874.0" y="1102.0"/>
+            <end x="2874.0" y="1102.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_107944_catalyst_107943" source="entityVertex_3621782_107944" target="reactionVertex_3560785_107943">
+            <start x="2782.0" y="1046.0"/>
+            <next x="2667.0" y="1048.0"/>
+            <next x="2668.0" y="1093.0"/>
+            <end x="2668.0" y="1093.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1922_input_107945" source="entityVertex_113592_1922" target="reactionVertex_3560794.1">
+            <start x="2888.0" y="1093.0"/>
+            <next x="2874.0" y="1102.0"/>
+            <end x="2874.0" y="1102.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1927_input_107943" source="entityVertex_113592_1927" target="reactionVertex_3560785.1">
+            <start x="2712.0" y="1121.0"/>
+            <next x="2698.0" y="1108.0"/>
+            <end x="2698.0" y="1108.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_107944_catalyst_107945" source="entityVertex_3621782_107944" target="reactionVertex_3560794_107945">
+            <start x="2838.0" y="1063.0"/>
+            <next x="2838.0" y="1086.0"/>
+            <end x="2838.0" y="1086.0"/>
+        </arc>
+    </map>
+</sbgn>

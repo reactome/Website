@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_73" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="165.0" y="1323.0"/>
+            </label>
+            <bbox w="1464.0" h="1412.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_315" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="1225.0" y="797.0"/>
+            </label>
+            <bbox w="882.0" h="549.0" x="515.0" y="320.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_4827388_127265">
+            <label text="CTNNB1 S45 mutants aren't phosphorylated by CK1alpha"/>
+            <bbox w="12.0" h="12.0" x="327.0" y="674.0"/>
+            <port id="reactionVertex_4827388.1" x="330.0" y="654.0"/>
+            <port id="reactionVertex_4827388.2" x="329.0" y="703.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_2954">
+            <label text="ATP"/>
+            <bbox w="40.0" h="30.0" x="228.0" y="625.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_4827387_127266">
+            <label text="CTNNB1 S45 mutants:AXIN:GSK3:CK1alpha:APC:PP2A:AMER1 complex"/>
+            <bbox w="130.0" h="64.0" x="262.0" y="552.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_127266_input_127265" source="entityVertex_4827387_127266" target="reactionVertex_4827388.1">
+            <start x="328.0" y="619.0"/>
+            <next x="330.0" y="654.0"/>
+            <end x="330.0" y="654.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2954_input_127265" source="entityVertex_113592_2954" target="reactionVertex_4827388.1">
+            <start x="271.0" y="643.0"/>
+            <next x="330.0" y="654.0"/>
+            <end x="330.0" y="654.0"/>
+        </arc>
+    </map>
+</sbgn>

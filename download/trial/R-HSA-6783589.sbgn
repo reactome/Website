@@ -1,0 +1,1042 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_7660_81" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="1970.0" y="1067.0"/>
+            </label>
+            <bbox w="466.0" h="205.0" x="1949.0" y="921.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_181" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="571.0" y="1130.0"/>
+            </label>
+            <bbox w="2454.0" h="1032.0" x="108.0" y="205.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_1112510_43">
+            <label text="IL6ST is tyrosine phosphorylated"/>
+            <bbox w="12.0" h="12.0" x="1627.0" y="251.0"/>
+            <port id="reactionVertex_1112510.1" x="1603.0" y="257.0"/>
+            <port id="reactionVertex_1112510.2" x="1665.0" y="257.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1067646_2">
+            <label text="JAK1,JAK2,(TYK2) bind IL6ST"/>
+            <bbox w="10.0" h="10.0" x="426.0" y="257.0"/>
+            <port id="reactionVertex_1067646.1" x="392.0" y="262.0"/>
+            <port id="reactionVertex_1067646.2" x="476.0" y="228.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_6783681_2155">
+            <label text="LIF binds LIFR"/>
+            <bbox w="10.0" h="10.0" x="44.0" y="375.0"/>
+            <port id="reactionVertex_6783681.1" x="48.0" y="350.0"/>
+            <port id="reactionVertex_6783681.2" x="88.0" y="390.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_448654_2188">
+            <label text="OSMR"/>
+            <bbox w="44.0" h="22.0" x="91.0" y="1192.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_52">
+            <label text="ATP"/>
+            <bbox w="40.0" h="30.0" x="2440.0" y="434.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_1067661_8">
+            <label text="IL6R-2"/>
+            <bbox w="66.0" h="29.0" x="224.0" y="53.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_53">
+            <label text="ADP"/>
+            <bbox w="39.0" h="37.0" x="2433.0" y="534.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1112718_55">
+            <label text="Tyrosine phosphorylated IL6 receptor hexamer:Activated JAKs:SOCS3"/>
+            <bbox w="124.0" h="78.0" x="1930.0" y="176.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_1112574_69">
+            <label text="STAT1/3 homo and heterodimers"/>
+            <bbox w="122.0" h="50.0" x="1971.0" y="955.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_1112538_66">
+            <label text="Phosphorylated STAT1, STAT3 form dimers"/>
+            <bbox w="12.0" h="12.0" x="2022.0" y="706.0"/>
+            <port id="reactionVertex_1112538.1" x="2028.0" y="658.0"/>
+            <port id="reactionVertex_1112538.2" x="2029.0" y="739.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_6784189_2129">
+            <label text="JAKs bind LIFR"/>
+            <bbox w="10.0" h="10.0" x="162.0" y="322.0"/>
+            <port id="reactionVertex_6784189.1" x="168.0" y="300.0"/>
+            <port id="reactionVertex_6784189.2" x="148.0" y="333.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1067676_10">
+            <label text="IL6:IL6R-2 binds IL6ST-2"/>
+            <bbox w="10.0" h="10.0" x="615.0" y="53.0"/>
+            <port id="reactionVertex_1067676.1" x="591.0" y="58.0"/>
+            <port id="reactionVertex_1067676.2" x="651.0" y="57.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1067691_17">
+            <label text="IL6:sIL6R:IL6RB:JAKs"/>
+            <bbox w="95.0" h="37.0" x="691.0" y="192.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_447097_2468">
+            <label text="IL11"/>
+            <bbox w="34.0" h="22.0" x="959.0" y="136.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_1112571_63">
+            <label text="p-Y701-STAT1, p-Y705-STAT3"/>
+            <bbox w="124.0" h="50.0" x="1966.0" y="602.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1067690_5">
+            <label text="IL6ST:JAK1, JAK2, (TYK2)"/>
+            <bbox w="85.0" h="37.0" x="457.0" y="188.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_449799_2470">
+            <label text="IL11RA:IL11"/>
+            <bbox w="79.0" h="22.0" x="809.0" y="198.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6783596_2123">
+            <label text="CNTFR:CRLF1:CLCF1"/>
+            <bbox w="129.0" h="22.0" x="2424.0" y="197.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1112690_78">
+            <label text="PTPN11 binds CBL"/>
+            <bbox w="10.0" h="10.0" x="1366.0" y="800.0"/>
+            <port id="reactionVertex_1112690.1" x="1418.0" y="805.0"/>
+            <port id="reactionVertex_1112690.2" x="1325.0" y="806.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_45">
+            <label text="ADP"/>
+            <bbox w="41.0" h="30.0" x="1679.0" y="277.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1112753_77">
+            <label text="IL6:Tyrosine phosphorylated hexameric IL-6 receptor:Activated JAKs:p-Y546,Y584-PTPN11"/>
+            <bbox w="171.0" h="79.0" x="1727.0" y="805.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_449829_2467">
+            <label text="IL11 binds IL11RA"/>
+            <bbox w="10.0" h="10.0" x="906.0" y="168.0"/>
+            <port id="reactionVertex_449829.1" x="944.0" y="172.0"/>
+            <port id="reactionVertex_449829.2" x="867.0" y="195.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5696490_2122">
+            <label text="CRLF1:CLCF1 binds CNTRF"/>
+            <bbox w="10.0" h="10.0" x="2374.0" y="284.0"/>
+            <port id="reactionVertex_5696490.1" x="2339.0" y="290.0"/>
+            <port id="reactionVertex_5696490.2" x="2473.0" y="222.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_6783699_2178">
+            <label text="LIF,OSM,CTF1 receptor complex"/>
+            <bbox w="115.0" h="36.0" x="62.0" y="767.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1067687_9">
+            <label text="IL6:IL6R-2"/>
+            <bbox w="76.0" h="27.0" x="509.0" y="87.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_1112602_51">
+            <label text="Tyrosine phosphorylation of STAT1, STAT3 by IL6 receptor"/>
+            <bbox w="12.0" h="12.0" x="2524.0" y="504.0"/>
+            <port id="reactionVertex_1112602.1" x="2530.0" y="473.0"/>
+            <port id="reactionVertex_1112602.2" x="2530.0" y="539.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1112515_41">
+            <label text="IL6 receptor hexamer:Activated JAKs"/>
+            <bbox w="136.0" h="50.0" x="1494.0" y="185.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_873794_57">
+            <label text="SOCS3"/>
+            <bbox w="46.0" h="22.0" x="1840.0" y="247.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_6783524_2177">
+            <label text="OSM,LIF,CTF1 receptor complex binds gp130"/>
+            <bbox w="10.0" h="10.0" x="341.0" y="936.0"/>
+            <port id="reactionVertex_6783524.1" x="346.0" y="852.0"/>
+            <port id="reactionVertex_6783524.2" x="152.0" y="1030.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_1112537_67">
+            <label text="p-Y701-STAT1 dimer,p-Y705-STAT3 dimer,p-Y701-STAT1:p-Y705-STAT3"/>
+            <bbox w="130.0" h="79.0" x="1967.0" y="745.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_448565_2540">
+            <label text="IL31:IL31RA:JAK1:OSMR:JAK1"/>
+            <bbox w="115.0" h="36.0" x="610.0" y="1217.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6784198_2131">
+            <label text="JAKs:LIFR"/>
+            <bbox w="64.0" h="22.0" x="81.0" y="331.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1067638_15">
+            <label text="IL6:IL6R"/>
+            <bbox w="66.0" h="24.0" x="342.0" y="196.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_76">
+            <label text="ADP"/>
+            <bbox w="41.0" h="30.0" x="1732.0" y="743.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_6783556_2153">
+            <label text="LIFR:JAKs bind gp130:JAKs:CNTFR"/>
+            <bbox w="10.0" h="10.0" x="238.0" y="563.0"/>
+            <port id="reactionVertex_6783556.1" x="238.0" y="447.0"/>
+            <port id="reactionVertex_6783556.2" x="191.0" y="568.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_1112514_38">
+            <label text="JAK activation"/>
+            <bbox w="12.0" h="12.0" x="1412.0" y="250.0"/>
+            <port id="reactionVertex_1112514.1" x="1387.0" y="256.0"/>
+            <port id="reactionVertex_1112514.2" x="1452.0" y="256.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_1112559_48">
+            <label text="STAT1, STAT3"/>
+            <bbox w="93.0" h="22.0" x="1880.0" y="431.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1067674_12">
+            <label text="IL6:IL6R-2:IL6ST-2"/>
+            <bbox w="119.0" h="27.0" x="654.0" y="44.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_6783670_2118">
+            <label text="CRLF1 binds CLCF1"/>
+            <bbox w="10.0" h="10.0" x="2356.0" y="171.0"/>
+            <port id="reactionVertex_6783670.1" x="2333.0" y="177.0"/>
+            <port id="reactionVertex_6783670.2" x="2366.0" y="193.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1112758_73">
+            <label text="Tyrosine phosphorylated IL6 receptor hexamer:Activated JAKs:PTPN11"/>
+            <bbox w="126.0" h="77.0" x="1478.0" y="801.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_197824_85">
+            <label text="IL6R"/>
+            <bbox w="53.0" h="24.0" x="179.0" y="197.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_6783530_2124">
+            <label text="gp130:JAKs bind CNTFR"/>
+            <bbox w="10.0" h="10.0" x="222.0" y="471.0"/>
+            <port id="reactionVertex_6783530.1" x="229.0" y="632.0"/>
+            <port id="reactionVertex_6783530.2" x="209.0" y="469.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1112755_56">
+            <label text="SOCS3 binds IL6ST"/>
+            <bbox w="10.0" h="10.0" x="1890.0" y="231.0"/>
+            <port id="reactionVertex_1112755.1" x="1869.0" y="236.0"/>
+            <port id="reactionVertex_1112755.2" x="1927.0" y="228.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_449948_2472">
+            <label text="IL6RA:IL6:IL6RB:JAKs"/>
+            <bbox w="71.0" h="36.0" x="1053.0" y="184.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8983748_2507">
+            <label text="OSMR:JAK1"/>
+            <bbox w="94.0" h="24.0" x="160.0" y="1220.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_1112604_62">
+            <label text="Phosphorylated STATs are released"/>
+            <bbox w="10.0" h="10.0" x="2319.0" y="590.0"/>
+            <port id="reactionVertex_1112604.1" x="2481.0" y="596.0"/>
+            <port id="reactionVertex_1112604.2" x="1805.0" y="463.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1112565_47">
+            <label text="Tyrosine phosphorylated IL6ST binds STAT1,STAT3"/>
+            <bbox w="10.0" h="10.0" x="2307.0" y="384.0"/>
+            <port id="reactionVertex_1112565.1" x="1953.0" y="385.0"/>
+            <port id="reactionVertex_1112565.2" x="2504.0" y="392.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6784202_2189">
+            <label text="JAKs:OSMR"/>
+            <bbox w="75.0" h="22.0" x="84.0" y="1109.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_39">
+            <label text="ATP"/>
+            <bbox w="40.0" h="30.0" x="1328.0" y="285.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1112594_46">
+            <label text="Tyrosine phosphorylated IL6 receptor hexamer:Activated JAKs"/>
+            <bbox w="124.0" h="64.0" x="1714.0" y="182.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6783608_2117">
+            <label text="CNTF:CNTFR"/>
+            <bbox w="86.0" h="26.0" x="2168.0" y="194.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_448660_2539">
+            <label text="IL31:IL31RA:JAK1 binds OSMR:JAK1"/>
+            <bbox w="12.0" h="12.0" x="573.0" y="1352.0"/>
+            <port id="reactionVertex_448660.1" x="408.0" y="1358.0"/>
+            <port id="reactionVertex_448660.2" x="654.0" y="1256.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5693174_2119">
+            <label text="CRLF1"/>
+            <bbox w="45.0" h="22.0" x="2264.0" y="197.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_162563_72">
+            <label text="PTPN11"/>
+            <bbox w="56.0" h="22.0" x="1633.0" y="603.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1067659_35">
+            <label text="Assembly of hexameric IL-6 receptor"/>
+            <bbox w="10.0" h="10.0" x="1314.0" y="153.0"/>
+            <port id="reactionVertex_1067659.1" x="1257.0" y="187.0"/>
+            <port id="reactionVertex_1067659.2" x="1342.0" y="191.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6783569_2180">
+            <label text="LIF,OSM receptor complex:gp130"/>
+            <bbox w="115.0" h="36.0" x="58.0" y="1033.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1112576_49">
+            <label text="Tyrosine phosphorylated IL6 receptor hexamer:Activated JAKs:STAT1,STAT3"/>
+            <bbox w="124.0" h="78.0" x="2507.0" y="354.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1067640_6">
+            <label text="IL6 binds IL6R-2"/>
+            <bbox w="10.0" h="10.0" x="390.0" y="97.0"/>
+            <port id="reactionVertex_1067640.1" x="337.0" y="101.0"/>
+            <port id="reactionVertex_1067640.2" x="506.0" y="100.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5696437_2192">
+            <label text="CTF1"/>
+            <bbox w="39.0" h="22.0" x="56.0" y="676.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_6784204_2187">
+            <label text="JAKs bind OSMR"/>
+            <bbox w="10.0" h="10.0" x="239.0" y="1038.0"/>
+            <port id="reactionVertex_6784204.1" x="383.0" y="971.0"/>
+            <port id="reactionVertex_6784204.2" x="138.0" y="1106.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5696440_2184">
+            <label text="OSM"/>
+            <bbox w="36.0" h="22.0" x="7.0" y="883.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6783585_2185">
+            <label text="OSM:OSMR,LIFR"/>
+            <bbox w="102.0" h="22.0" x="63.0" y="986.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_449976_2471">
+            <label text="IL11:IL11RA binds IL6ST:JAK1,JAK2,(TYK2)"/>
+            <bbox w="10.0" h="10.0" x="1008.0" y="106.0"/>
+            <port id="reactionVertex_449976.1" x="873.0" y="113.0"/>
+            <port id="reactionVertex_449976.2" x="1073.0" y="181.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_447100_7">
+            <label text="IL6"/>
+            <bbox w="42.0" h="26.0" x="234.0" y="109.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5696491_2114">
+            <label text="CNTF binds CNTFR complex"/>
+            <bbox w="10.0" h="10.0" x="2178.0" y="175.0"/>
+            <port id="reactionVertex_5696491.1" x="2154.0" y="180.0"/>
+            <port id="reactionVertex_5696491.2" x="2197.0" y="191.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_6783627_2182">
+            <label text="LIFR:JAKs,OSMR:JAKs"/>
+            <bbox w="106.0" h="36.0" x="75.0" y="871.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1067654_19">
+            <label text="IL6:IL6RA:IL6RB:JAKs"/>
+            <bbox w="83.0" h="35.0" x="573.0" y="193.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1112744_80">
+            <label text="Tyrosine phosphorylated IL6 receptor hexamer:Activated JAKs:PTPN11:CBL"/>
+            <bbox w="179.0" h="56.0" x="1143.0" y="782.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_1067656_3">
+            <label text="JAK1, JAK2, (TYK2)"/>
+            <bbox w="86.0" h="39.0" x="317.0" y="283.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_1112703_74">
+            <label text="PTPN11 is phosphorylated"/>
+            <bbox w="12.0" h="12.0" x="1662.0" y="799.0"/>
+            <port id="reactionVertex_1112703.1" x="1642.0" y="805.0"/>
+            <port id="reactionVertex_1112703.2" x="1697.0" y="805.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_44">
+            <label text="ATP"/>
+            <bbox w="40.0" h="30.0" x="1558.0" y="278.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5696436_2156">
+            <label text="LIF"/>
+            <bbox w="25.0" h="22.0" x="0.0" y="320.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1067667_13">
+            <label text="IL6 binds IL6R"/>
+            <bbox w="10.0" h="10.0" x="317.0" y="158.0"/>
+            <port id="reactionVertex_1067667.1" x="281.0" y="164.0"/>
+            <port id="reactionVertex_1067667.2" x="360.0" y="193.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6783544_2154">
+            <label text="CNTF:CNTFR,CRLF1:CLCF1:CNTFR:gp130:JAKs:LIFR:JAKs"/>
+            <bbox w="126.0" h="64.0" x="62.0" y="536.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_1112587_2112">
+            <label text="STAT1 and STAT3 dimers translocate to the nucleus"/>
+            <bbox w="12.0" h="12.0" x="2025.0" y="867.0"/>
+            <port id="reactionVertex_1112587.1" x="2031.0" y="830.0"/>
+            <port id="reactionVertex_1112587.2" x="2031.0" y="949.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1112759_61">
+            <label text="Tyrosine phosphorylated IL6 receptor hexamer:Activated JAKs:Tyrosine/serine phosphorylated STAT1/3"/>
+            <bbox w="175.0" h="70.0" x="2493.0" y="770.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5696441_2116">
+            <label text="CNTF"/>
+            <bbox w="39.0" h="22.0" x="2096.0" y="151.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5693175_2120">
+            <label text="CLCF1"/>
+            <bbox w="46.0" h="22.0" x="2260.0" y="150.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_6783659_2125">
+            <label text="CNTF:CNTFR,CRLF1:CLCF1:CNTFR"/>
+            <bbox w="126.0" h="36.0" x="57.0" y="617.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_1112727_58">
+            <label text="Serine phosphorylation of STATs"/>
+            <bbox w="12.0" h="12.0" x="2540.0" y="694.0"/>
+            <port id="reactionVertex_1112727.1" x="2546.0" y="669.0"/>
+            <port id="reactionVertex_1112727.2" x="2546.0" y="727.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_112199_79">
+            <label text="CBL"/>
+            <bbox w="30.0" h="22.0" x="1441.0" y="751.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1112524_54">
+            <label text="Tyrosine phosphorylated IL6 receptor hexamer:Activated JAKs:Tyrosine phosphorylated STAT1,STAT3"/>
+            <bbox w="190.0" h="64.0" x="2484.0" y="565.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5693181_2130">
+            <label text="LIFR"/>
+            <bbox w="32.0" h="22.0" x="100.0" y="222.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6783635_2157">
+            <label text="LIF:LIFR:JAKs"/>
+            <bbox w="84.0" h="22.0" x="79.0" y="393.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_448453_84">
+            <label text="IL6ST"/>
+            <bbox w="54.0" h="23.0" x="258.0" y="199.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_6783552_2181">
+            <label text="OSM binds LIFR:JAKs,OSMR:JAKs"/>
+            <bbox w="10.0" h="10.0" x="47.0" y="961.0"/>
+            <port id="reactionVertex_6783552.1" x="50.0" y="930.0"/>
+            <port id="reactionVertex_6783552.2" x="92.0" y="983.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5696438_2115">
+            <label text="CNTFR"/>
+            <bbox w="47.0" h="22.0" x="2083.0" y="201.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_1067653_11">
+            <label text="IL6ST-2"/>
+            <bbox w="61.0" h="27.0" x="521.0" y="6.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5696496_2121">
+            <label text="CRLF1:CLCF1"/>
+            <bbox w="86.0" h="22.0" x="2327.0" y="196.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8983441_2538">
+            <label text="IL31:IL31RA:JAK1"/>
+            <bbox w="123.0" h="23.0" x="472.0" y="1221.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1112708_71">
+            <label text="PTPN11 binds p-Y759-IL6ST"/>
+            <bbox w="10.0" h="10.0" x="1580.0" y="681.0"/>
+            <port id="reactionVertex_1112708.1" x="1598.0" y="645.0"/>
+            <port id="reactionVertex_1112708.2" x="1552.0" y="798.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1067688_18">
+            <label text="IL6:IL6R binds IL6ST:JAK1,JAK2,(TYK2)"/>
+            <bbox w="10.0" h="10.0" x="548.0" y="254.0"/>
+            <port id="reactionVertex_1067688.1" x="499.0" y="260.0"/>
+            <port id="reactionVertex_1067688.2" x="592.0" y="231.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1067651_16">
+            <label text="IL6:IL6R-2 binds IL6ST:JAK1, JAK2, (TYK2)"/>
+            <bbox w="10.0" h="10.0" x="711.0" y="126.0"/>
+            <port id="reactionVertex_1067651.1" x="677.0" y="131.0"/>
+            <port id="reactionVertex_1067651.2" x="732.0" y="189.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6783533_2193">
+            <label text="CTF1:LIFR:JAKs"/>
+            <bbox w="97.0" h="22.0" x="75.0" y="718.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5696482_2191">
+            <label text="CTF1 binds LIFR:JAKs"/>
+            <bbox w="10.0" h="10.0" x="244.0" y="722.0"/>
+            <port id="reactionVertex_5696482.1" x="251.0" y="687.0"/>
+            <port id="reactionVertex_5696482.2" x="175.0" y="728.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6783658_2128">
+            <label text="CNTF:CNTFR,CRLF1:CLCF1:CNTFR:IL6ST:JAK1, JAK2, (TYK2)"/>
+            <bbox w="127.0" h="50.0" x="79.0" y="426.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_1112523_36">
+            <label text="IL6 receptor trimer:JAKs"/>
+            <bbox w="128.0" h="36.0" x="1162.0" y="193.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_60">
+            <label text="ADP"/>
+            <bbox w="41.0" h="30.0" x="2428.0" y="777.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_449842_2469">
+            <label text="IL11RA"/>
+            <bbox w="50.0" h="22.0" x="946.0" y="197.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_59">
+            <label text="ATP"/>
+            <bbox w="40.0" h="30.0" x="2438.0" y="639.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_40">
+            <label text="ADP"/>
+            <bbox w="41.0" h="30.0" x="1480.0" y="282.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1112588_37">
+            <label text="IL6 receptor hexamer:JAKs"/>
+            <bbox w="101.0" h="38.0" x="1305.0" y="194.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_75">
+            <label text="ATP"/>
+            <bbox w="40.0" h="30.0" x="1587.0" y="749.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_7_input_13" source="entityVertex_447100_7" target="reactionVertex_1067667.1">
+            <start x="263.0" y="138.0"/>
+            <next x="281.0" y="164.0"/>
+            <end x="281.0" y="164.0"/>
+        </arc>
+        <arc class="consumption" id="arc_44_input_43" source="entityVertex_113592_44" target="reactionVertex_1112510.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_1112510">
+                <label text="20"/>
+                <bbox w="12.0" h="12.0" x="1589.0" y="260.0"/>
+            </glyph>
+            <start x="1588.0" y="275.0"/>
+            <next x="1603.0" y="257.0"/>
+            <end x="1603.0" y="257.0"/>
+        </arc>
+        <arc class="consumption" id="arc_37_input_38" source="entityVertex_1112588_37" target="reactionVertex_1112514.1">
+            <start x="1369.0" y="235.0"/>
+            <next x="1387.0" y="256.0"/>
+            <end x="1387.0" y="256.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2115_input_2122" source="entityVertex_5696438_2115" target="reactionVertex_5696490.1">
+            <start x="2133.0" y="219.0"/>
+            <next x="2339.0" y="290.0"/>
+            <end x="2339.0" y="290.0"/>
+        </arc>
+        <arc class="consumption" id="arc_46_input_56" source="entityVertex_1112594_46" target="reactionVertex_1112755.1">
+            <start x="1841.0" y="228.0"/>
+            <next x="1869.0" y="236.0"/>
+            <end x="1869.0" y="236.0"/>
+        </arc>
+        <arc class="consumption" id="arc_3_input_2129" source="entityVertex_1067656_3" target="reactionVertex_6784189.1">
+            <start x="311.0" y="301.0"/>
+            <next x="168.0" y="300.0"/>
+            <end x="168.0" y="300.0"/>
+        </arc>
+        <arc class="consumption" id="arc_57_input_56" source="entityVertex_873794_57" target="reactionVertex_1112755.1">
+            <start x="1866.0" y="244.0"/>
+            <next x="1869.0" y="236.0"/>
+            <end x="1869.0" y="236.0"/>
+        </arc>
+        <arc class="production" id="arc_46_output_62" source="reactionVertex_1112604.2" target="entityVertex_1112594_46">
+            <start x="1779.0" y="249.0"/>
+            <next x="1805.0" y="463.0"/>
+            <end x="1805.0" y="463.0"/>
+        </arc>
+        <arc class="production" id="arc_54_output_51" source="reactionVertex_1112602.2" target="entityVertex_1112524_54">
+            <start x="2551.0" y="562.0"/>
+            <next x="2530.0" y="539.0"/>
+            <end x="2530.0" y="539.0"/>
+        </arc>
+        <arc class="consumption" id="arc_39_input_38" source="entityVertex_113592_39" target="reactionVertex_1112514.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_1112514">
+                <label text="12"/>
+                <bbox w="12.0" h="12.0" x="1368.0" y="263.0"/>
+            </glyph>
+            <start x="1361.0" y="282.0"/>
+            <next x="1387.0" y="256.0"/>
+            <end x="1387.0" y="256.0"/>
+        </arc>
+        <arc class="consumption" id="arc_36_input_35" source="entityVertex_1112523_36" target="reactionVertex_1067659.1">
+            <glyph class="stoichiometry" id="Stoichiometry_1112523_INPUT_1067659">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="1282.0" y="166.0"/>
+            </glyph>
+            <start x="1257.0" y="187.0"/>
+            <end x="1319.0" y="158.0"/>
+        </arc>
+        <arc class="production" id="arc_19_output_18" source="reactionVertex_1067688.2" target="entityVertex_1067654_19">
+            <start x="553.0" y="259.0"/>
+            <end x="592.0" y="231.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2120_input_2118" source="entityVertex_5693175_2120" target="reactionVertex_6783670.1">
+            <start x="2309.0" y="168.0"/>
+            <next x="2333.0" y="177.0"/>
+            <end x="2333.0" y="177.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_2124" source="entityVertex_1067690_5" target="reactionVertex_6783530.1">
+            <start x="487.0" y="228.0"/>
+            <next x="229.0" y="632.0"/>
+            <end x="229.0" y="632.0"/>
+        </arc>
+        <arc class="production" id="arc_12_output_10" source="reactionVertex_1067676.2" target="entityVertex_1067674_12">
+            <start x="620.0" y="58.0"/>
+            <end x="651.0" y="57.0"/>
+        </arc>
+        <arc class="production" id="arc_80_output_78" source="reactionVertex_1112690.2" target="entityVertex_1112744_80">
+            <start x="1371.0" y="805.0"/>
+            <end x="1325.0" y="806.0"/>
+        </arc>
+        <arc class="production" id="arc_67_output_66" source="reactionVertex_1112538.2" target="entityVertex_1112537_67">
+            <start x="2028.0" y="712.0"/>
+            <end x="2029.0" y="739.0"/>
+        </arc>
+        <arc class="production" id="arc_60_output_58" source="reactionVertex_1112727.2" target="entityVertex_29370_60">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_1112727">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="2503.0" y="746.0"/>
+            </glyph>
+            <start x="2472.0" y="778.0"/>
+            <next x="2546.0" y="727.0"/>
+            <end x="2546.0" y="727.0"/>
+        </arc>
+        <arc class="consumption" id="arc_15_input_18" source="entityVertex_1067638_15" target="reactionVertex_1067688.1">
+            <start x="403.0" y="223.0"/>
+            <next x="499.0" y="260.0"/>
+            <end x="499.0" y="260.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_73_catalyst_74" source="entityVertex_1112758_73" target="reactionVertex_1112703_74">
+            <start x="1607.0" y="857.0"/>
+            <next x="1667.0" y="876.0"/>
+            <next x="1668.0" y="821.0"/>
+            <end x="1668.0" y="821.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2116_input_2114" source="entityVertex_5696441_2116" target="reactionVertex_5696491.1">
+            <start x="2138.0" y="171.0"/>
+            <next x="2154.0" y="180.0"/>
+            <end x="2154.0" y="180.0"/>
+        </arc>
+        <arc class="production" id="arc_2121_output_2118" source="reactionVertex_6783670.2" target="entityVertex_5696496_2121">
+            <start x="2361.0" y="176.0"/>
+            <end x="2366.0" y="193.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_49_catalyst_51" source="entityVertex_1112576_49" target="reactionVertex_1112602_51">
+            <start x="2569.0" y="435.0"/>
+            <next x="2570.0" y="480.0"/>
+            <next x="2543.0" y="500.0"/>
+            <end x="2543.0" y="500.0"/>
+        </arc>
+        <arc class="production" id="arc_2185_output_2181" source="reactionVertex_6783552.2" target="entityVertex_6783585_2185">
+            <start x="52.0" y="966.0"/>
+            <end x="92.0" y="983.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2128_input_2153" source="entityVertex_6783658_2128" target="reactionVertex_6783556.1">
+            <start x="209.0" y="448.0"/>
+            <next x="238.0" y="447.0"/>
+            <end x="238.0" y="447.0"/>
+        </arc>
+        <arc class="inhibition" id="arc_12_inhibitor_16" source="entityVertex_1067674_12" target="reactionVertex_1067651_16">
+            <start x="713.0" y="74.0"/>
+            <next x="716.0" y="122.0"/>
+            <end x="716.0" y="122.0"/>
+        </arc>
+        <arc class="consumption" id="arc_9_input_10" source="entityVertex_1067687_9" target="reactionVertex_1067676.1">
+            <start x="561.0" y="84.0"/>
+            <next x="591.0" y="58.0"/>
+            <end x="591.0" y="58.0"/>
+        </arc>
+        <arc class="production" id="arc_61_output_58" source="reactionVertex_1112727.2" target="entityVertex_1112759_61">
+            <start x="2564.0" y="767.0"/>
+            <next x="2546.0" y="727.0"/>
+            <end x="2546.0" y="727.0"/>
+        </arc>
+        <arc class="consumption" id="arc_52_input_51" source="entityVertex_113592_52" target="reactionVertex_1112602.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_1112602">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="2500.0" y="458.0"/>
+            </glyph>
+            <start x="2483.0" y="455.0"/>
+            <next x="2530.0" y="473.0"/>
+            <end x="2530.0" y="473.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2184_input_2181" source="entityVertex_5696440_2184" target="reactionVertex_6783552.1">
+            <start x="32.0" y="908.0"/>
+            <next x="50.0" y="930.0"/>
+            <end x="50.0" y="930.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2131_input_2153" source="entityVertex_6784198_2131" target="reactionVertex_6783556.1">
+            <start x="126.0" y="356.0"/>
+            <next x="238.0" y="447.0"/>
+            <end x="238.0" y="447.0"/>
+        </arc>
+        <arc class="production" id="arc_2157_output_2155" source="reactionVertex_6783681.2" target="entityVertex_6783635_2157">
+            <start x="49.0" y="380.0"/>
+            <end x="88.0" y="390.0"/>
+        </arc>
+        <arc class="consumption" id="arc_3_input_2187" source="entityVertex_1067656_3" target="reactionVertex_6784204.1">
+            <start x="360.0" y="328.0"/>
+            <next x="383.0" y="971.0"/>
+            <end x="383.0" y="971.0"/>
+        </arc>
+        <arc class="consumption" id="arc_9_input_16" source="entityVertex_1067687_9" target="reactionVertex_1067651.1">
+            <start x="588.0" y="109.0"/>
+            <next x="677.0" y="131.0"/>
+            <end x="677.0" y="131.0"/>
+        </arc>
+        <arc class="consumption" id="arc_59_input_58" source="entityVertex_113592_59" target="reactionVertex_1112727.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_1112727">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="2507.0" y="657.0"/>
+            </glyph>
+            <start x="2481.0" y="657.0"/>
+            <next x="2546.0" y="669.0"/>
+            <end x="2546.0" y="669.0"/>
+        </arc>
+        <arc class="production" id="arc_2180_output_2177" source="reactionVertex_6783524.2" target="entityVertex_6783569_2180">
+            <start x="346.0" y="941.0"/>
+            <end x="152.0" y="1030.0"/>
+        </arc>
+        <arc class="production" id="arc_53_output_51" source="reactionVertex_1112602.2" target="entityVertex_29370_53">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_1112602">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="2496.0" y="537.0"/>
+            </glyph>
+            <start x="2475.0" y="548.0"/>
+            <next x="2530.0" y="539.0"/>
+            <end x="2530.0" y="539.0"/>
+        </arc>
+        <arc class="consumption" id="arc_79_input_78" source="entityVertex_112199_79" target="reactionVertex_1112690.1">
+            <start x="1446.0" y="776.0"/>
+            <next x="1418.0" y="805.0"/>
+            <end x="1418.0" y="805.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2507_input_2539" source="entityVertex_8983748_2507" target="reactionVertex_448660.1">
+            <start x="226.0" y="1247.0"/>
+            <next x="408.0" y="1358.0"/>
+            <end x="408.0" y="1358.0"/>
+        </arc>
+        <arc class="production" id="arc_5_output_2" source="reactionVertex_1067646.2" target="entityVertex_1067690_5">
+            <start x="431.0" y="262.0"/>
+            <end x="476.0" y="228.0"/>
+        </arc>
+        <arc class="consumption" id="arc_54_input_58" source="entityVertex_1112524_54" target="reactionVertex_1112727.1">
+            <start x="2564.0" y="632.0"/>
+            <next x="2546.0" y="669.0"/>
+            <end x="2546.0" y="669.0"/>
+        </arc>
+        <arc class="production" id="arc_17_output_16" source="reactionVertex_1067651.2" target="entityVertex_1067691_17">
+            <start x="716.0" y="131.0"/>
+            <end x="732.0" y="189.0"/>
+        </arc>
+        <arc class="production" id="arc_63_output_62" source="reactionVertex_1112604.2" target="entityVertex_1112571_63">
+            <start x="1994.0" y="596.0"/>
+            <next x="1805.0" y="463.0"/>
+            <end x="1805.0" y="463.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2192_input_2191" source="entityVertex_5696437_2192" target="reactionVertex_5696482.1">
+            <start x="98.0" y="687.0"/>
+            <next x="251.0" y="687.0"/>
+            <end x="251.0" y="687.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2182_input_2181" source="entityVertex_6783627_2182" target="reactionVertex_6783552.1">
+            <start x="93.0" y="913.0"/>
+            <next x="50.0" y="930.0"/>
+            <end x="50.0" y="930.0"/>
+        </arc>
+        <arc class="consumption" id="arc_8_input_6" source="entityVertex_1067661_8" target="reactionVertex_1067640.1">
+            <start x="293.0" y="81.0"/>
+            <next x="337.0" y="101.0"/>
+            <end x="337.0" y="101.0"/>
+        </arc>
+        <arc class="production" id="arc_73_output_71" source="reactionVertex_1112708.2" target="entityVertex_1112758_73">
+            <start x="1585.0" y="686.0"/>
+            <end x="1552.0" y="798.0"/>
+        </arc>
+        <arc class="production" id="arc_2123_output_2122" source="reactionVertex_5696490.2" target="entityVertex_6783596_2123">
+            <start x="2379.0" y="289.0"/>
+            <end x="2473.0" y="222.0"/>
+        </arc>
+        <arc class="consumption" id="arc_7_input_6" source="entityVertex_447100_7" target="reactionVertex_1067640.1">
+            <start x="279.0" y="116.0"/>
+            <next x="337.0" y="101.0"/>
+            <end x="337.0" y="101.0"/>
+        </arc>
+        <arc class="production" id="arc_2472_output_2471" source="reactionVertex_449976.2" target="entityVertex_449948_2472">
+            <start x="1013.0" y="111.0"/>
+            <end x="1073.0" y="181.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2119_input_2118" source="entityVertex_5693174_2119" target="reactionVertex_6783670.1">
+            <start x="2302.0" y="194.0"/>
+            <next x="2333.0" y="177.0"/>
+            <end x="2333.0" y="177.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2115_input_2114" source="entityVertex_5696438_2115" target="reactionVertex_5696491.1">
+            <start x="2122.0" y="198.0"/>
+            <next x="2154.0" y="180.0"/>
+            <end x="2154.0" y="180.0"/>
+        </arc>
+        <arc class="consumption" id="arc_11_input_10" source="entityVertex_1067653_11" target="reactionVertex_1067676.1">
+            <start x="564.0" y="36.0"/>
+            <next x="591.0" y="58.0"/>
+            <end x="591.0" y="58.0"/>
+        </arc>
+        <arc class="production" id="arc_15_output_13" source="reactionVertex_1067667.2" target="entityVertex_1067638_15">
+            <start x="322.0" y="163.0"/>
+            <end x="360.0" y="193.0"/>
+        </arc>
+        <arc class="production" id="arc_2470_output_2467" source="reactionVertex_449829.2" target="entityVertex_449799_2470">
+            <start x="911.0" y="173.0"/>
+            <end x="867.0" y="195.0"/>
+        </arc>
+        <arc class="production" id="arc_49_output_47" source="reactionVertex_1112565.2" target="entityVertex_1112576_49">
+            <start x="2312.0" y="389.0"/>
+            <end x="2504.0" y="392.0"/>
+        </arc>
+        <arc class="production" id="arc_55_output_56" source="reactionVertex_1112755.2" target="entityVertex_1112718_55">
+            <start x="1895.0" y="236.0"/>
+            <end x="1927.0" y="228.0"/>
+        </arc>
+        <arc class="production" id="arc_45_output_43" source="reactionVertex_1112510.2" target="entityVertex_29370_45">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_1112510">
+                <label text="20"/>
+                <bbox w="12.0" h="12.0" x="1668.0" y="259.0"/>
+            </glyph>
+            <start x="1684.0" y="274.0"/>
+            <next x="1665.0" y="257.0"/>
+            <end x="1665.0" y="257.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2156_input_2155" source="entityVertex_5696436_2156" target="reactionVertex_6783681.1">
+            <start x="28.0" y="337.0"/>
+            <next x="48.0" y="350.0"/>
+            <end x="48.0" y="350.0"/>
+        </arc>
+        <arc class="production" id="arc_77_output_74" source="reactionVertex_1112703.2" target="entityVertex_1112753_77">
+            <start x="1724.0" y="815.0"/>
+            <next x="1697.0" y="805.0"/>
+            <end x="1697.0" y="805.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2121_input_2122" source="entityVertex_5696496_2121" target="reactionVertex_5696490.1">
+            <start x="2365.0" y="221.0"/>
+            <next x="2339.0" y="290.0"/>
+            <end x="2339.0" y="290.0"/>
+        </arc>
+        <arc class="consumption" id="arc_73_input_74" source="entityVertex_1112758_73" target="reactionVertex_1112703.1">
+            <start x="1607.0" y="817.0"/>
+            <next x="1642.0" y="805.0"/>
+            <end x="1642.0" y="805.0"/>
+        </arc>
+        <arc class="production" id="arc_2189_output_2187" source="reactionVertex_6784204.2" target="entityVertex_6784202_2189">
+            <start x="244.0" y="1043.0"/>
+            <end x="138.0" y="1106.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2125_input_2124" source="entityVertex_6783659_2125" target="reactionVertex_6783530.1">
+            <start x="189.0" y="633.0"/>
+            <next x="229.0" y="632.0"/>
+            <end x="229.0" y="632.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2470_input_2471" source="entityVertex_449799_2470" target="reactionVertex_449976.1">
+            <start x="850.0" y="195.0"/>
+            <next x="873.0" y="113.0"/>
+            <end x="873.0" y="113.0"/>
+        </arc>
+        <arc class="consumption" id="arc_67_input_2112" source="entityVertex_1112537_67" target="reactionVertex_1112587.1">
+            <start x="2031.0" y="830.0"/>
+            <end x="2031.0" y="873.0"/>
+        </arc>
+        <arc class="consumption" id="arc_46_input_47" source="entityVertex_1112594_46" target="reactionVertex_1112565.1">
+            <start x="1809.0" y="249.0"/>
+            <next x="1953.0" y="385.0"/>
+            <end x="1953.0" y="385.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2538_input_2539" source="entityVertex_8983441_2538" target="reactionVertex_448660.1">
+            <start x="521.0" y="1247.0"/>
+            <next x="408.0" y="1358.0"/>
+            <end x="408.0" y="1358.0"/>
+        </arc>
+        <arc class="consumption" id="arc_46_input_71" source="entityVertex_1112594_46" target="reactionVertex_1112708.1">
+            <start x="1762.0" y="249.0"/>
+            <next x="1598.0" y="645.0"/>
+            <end x="1598.0" y="645.0"/>
+        </arc>
+        <arc class="production" id="arc_2154_output_2153" source="reactionVertex_6783556.2" target="entityVertex_6783544_2154">
+            <start x="243.0" y="568.0"/>
+            <end x="191.0" y="568.0"/>
+        </arc>
+        <arc class="consumption" id="arc_84_input_2" source="entityVertex_448453_84" target="reactionVertex_1067646.1">
+            <start x="308.0" y="225.0"/>
+            <next x="392.0" y="262.0"/>
+            <end x="392.0" y="262.0"/>
+        </arc>
+        <arc class="production" id="arc_37_output_35" source="reactionVertex_1067659.2" target="entityVertex_1112588_37">
+            <start x="1319.0" y="158.0"/>
+            <end x="1342.0" y="191.0"/>
+        </arc>
+        <arc class="consumption" id="arc_3_input_2" source="entityVertex_1067656_3" target="reactionVertex_1067646.1">
+            <start x="375.0" y="277.0"/>
+            <next x="392.0" y="262.0"/>
+            <end x="392.0" y="262.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_2471" source="entityVertex_1067690_5" target="reactionVertex_449976.1">
+            <start x="545.0" y="195.0"/>
+            <next x="873.0" y="113.0"/>
+            <end x="873.0" y="113.0"/>
+        </arc>
+        <arc class="consumption" id="arc_49_input_51" source="entityVertex_1112576_49" target="reactionVertex_1112602.1">
+            <start x="2549.0" y="435.0"/>
+            <next x="2530.0" y="473.0"/>
+            <end x="2530.0" y="473.0"/>
+        </arc>
+        <arc class="production" id="arc_40_output_38" source="reactionVertex_1112514.2" target="entityVertex_29370_40">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_1112514">
+                <label text="12"/>
+                <bbox w="12.0" h="12.0" x="1461.0" y="261.0"/>
+            </glyph>
+            <start x="1482.0" y="279.0"/>
+            <next x="1452.0" y="256.0"/>
+            <end x="1452.0" y="256.0"/>
+        </arc>
+        <arc class="consumption" id="arc_73_input_78" source="entityVertex_1112758_73" target="reactionVertex_1112690.1">
+            <start x="1475.0" y="821.0"/>
+            <next x="1418.0" y="805.0"/>
+            <end x="1418.0" y="805.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2130_input_2129" source="entityVertex_5693181_2130" target="reactionVertex_6784189.1">
+            <start x="124.0" y="247.0"/>
+            <next x="168.0" y="300.0"/>
+            <end x="168.0" y="300.0"/>
+        </arc>
+        <arc class="consumption" id="arc_54_input_62" source="entityVertex_1112524_54" target="reactionVertex_1112604.1">
+            <start x="2481.0" y="596.0"/>
+            <end x="2324.0" y="595.0"/>
+        </arc>
+        <arc class="consumption" id="arc_41_input_43" source="entityVertex_1112515_41" target="reactionVertex_1112510.1">
+            <start x="1583.0" y="238.0"/>
+            <next x="1603.0" y="257.0"/>
+            <end x="1603.0" y="257.0"/>
+        </arc>
+        <arc class="production" id="arc_2540_output_2539" source="reactionVertex_448660.2" target="entityVertex_448565_2540">
+            <start x="579.0" y="1358.0"/>
+            <end x="654.0" y="1256.0"/>
+        </arc>
+        <arc class="production" id="arc_46_output_43" source="reactionVertex_1112510.2" target="entityVertex_1112594_46">
+            <start x="1711.0" y="238.0"/>
+            <next x="1665.0" y="257.0"/>
+            <end x="1665.0" y="257.0"/>
+        </arc>
+        <arc class="consumption" id="arc_84_input_2177" source="entityVertex_448453_84" target="reactionVertex_6783524.1">
+            <start x="286.0" y="225.0"/>
+            <next x="346.0" y="852.0"/>
+            <end x="346.0" y="852.0"/>
+        </arc>
+        <arc class="production" id="arc_2131_output_2129" source="reactionVertex_6784189.2" target="entityVertex_6784198_2131">
+            <start x="167.0" y="327.0"/>
+            <end x="148.0" y="333.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2469_input_2467" source="entityVertex_449842_2469" target="reactionVertex_449829.1">
+            <start x="962.0" y="194.0"/>
+            <next x="944.0" y="172.0"/>
+            <end x="944.0" y="172.0"/>
+        </arc>
+        <arc class="production" id="arc_2193_output_2191" source="reactionVertex_5696482.2" target="entityVertex_6783533_2193">
+            <start x="249.0" y="727.0"/>
+            <end x="175.0" y="728.0"/>
+        </arc>
+        <arc class="consumption" id="arc_85_input_13" source="entityVertex_197824_85" target="reactionVertex_1067667.1">
+            <start x="225.0" y="194.0"/>
+            <next x="281.0" y="164.0"/>
+            <end x="281.0" y="164.0"/>
+        </arc>
+        <arc class="production" id="arc_76_output_74" source="reactionVertex_1112703.2" target="entityVertex_29370_76">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_1112703">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="1709.0" y="784.0"/>
+            </glyph>
+            <start x="1734.0" y="776.0"/>
+            <next x="1697.0" y="805.0"/>
+            <end x="1697.0" y="805.0"/>
+        </arc>
+        <arc class="production" id="arc_69_output_2112" source="reactionVertex_1112587.2" target="entityVertex_1112574_69">
+            <start x="2031.0" y="873.0"/>
+            <end x="2031.0" y="949.0"/>
+        </arc>
+        <arc class="consumption" id="arc_63_input_66" source="entityVertex_1112571_63" target="reactionVertex_1112538.1">
+            <glyph class="stoichiometry" id="Stoichiometry_1112571_INPUT_1112538">
+                <label text="3"/>
+                <bbox w="12.0" h="12.0" x="2022.0" y="679.0"/>
+            </glyph>
+            <start x="2028.0" y="658.0"/>
+            <end x="2028.0" y="712.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2468_input_2467" source="entityVertex_447097_2468" target="reactionVertex_449829.1">
+            <start x="961.0" y="161.0"/>
+            <next x="944.0" y="172.0"/>
+            <end x="944.0" y="172.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2178_input_2177" source="entityVertex_6783699_2178" target="reactionVertex_6783524.1">
+            <start x="183.0" y="801.0"/>
+            <next x="346.0" y="852.0"/>
+            <end x="346.0" y="852.0"/>
+        </arc>
+        <arc class="production" id="arc_9_output_6" source="reactionVertex_1067640.2" target="entityVertex_1067687_9">
+            <start x="395.0" y="102.0"/>
+            <end x="506.0" y="100.0"/>
+        </arc>
+        <arc class="consumption" id="arc_72_input_71" source="entityVertex_162563_72" target="reactionVertex_1112708.1">
+            <start x="1638.0" y="628.0"/>
+            <next x="1598.0" y="645.0"/>
+            <end x="1598.0" y="645.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2131_input_2155" source="entityVertex_6784198_2131" target="reactionVertex_6783681.1">
+            <start x="78.0" y="345.0"/>
+            <next x="48.0" y="350.0"/>
+            <end x="48.0" y="350.0"/>
+        </arc>
+        <arc class="production" id="arc_2117_output_2114" source="reactionVertex_5696491.2" target="entityVertex_6783608_2117">
+            <start x="2183.0" y="180.0"/>
+            <end x="2197.0" y="191.0"/>
+        </arc>
+        <arc class="inhibition" id="arc_55_inhibitor_51" source="entityVertex_1112718_55" target="reactionVertex_1112602_51">
+            <start x="2057.0" y="234.0"/>
+            <next x="2409.0" y="347.0"/>
+            <next x="2410.0" y="506.0"/>
+            <next x="2521.0" y="510.0"/>
+            <end x="2521.0" y="510.0"/>
+        </arc>
+        <arc class="production" id="arc_41_output_38" source="reactionVertex_1112514.2" target="entityVertex_1112515_41">
+            <start x="1502.0" y="238.0"/>
+            <next x="1452.0" y="256.0"/>
+            <end x="1452.0" y="256.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2188_input_2187" source="entityVertex_448654_2188" target="reactionVertex_6784204.1">
+            <start x="125.0" y="1189.0"/>
+            <next x="383.0" y="971.0"/>
+            <end x="383.0" y="971.0"/>
+        </arc>
+        <arc class="consumption" id="arc_48_input_47" source="entityVertex_1112559_48" target="reactionVertex_1112565.1">
+            <start x="1931.0" y="425.0"/>
+            <next x="1953.0" y="385.0"/>
+            <end x="1953.0" y="385.0"/>
+        </arc>
+        <arc class="production" id="arc_2128_output_2124" source="reactionVertex_6783530.2" target="entityVertex_6783658_2128">
+            <start x="227.0" y="476.0"/>
+            <end x="209.0" y="469.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2131_input_2191" source="entityVertex_6784198_2131" target="reactionVertex_5696482.1">
+            <start x="134.0" y="356.0"/>
+            <next x="262.0" y="418.0"/>
+            <next x="251.0" y="687.0"/>
+            <end x="251.0" y="687.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_16" source="entityVertex_1067690_5" target="reactionVertex_1067651.1">
+            <start x="542.0" y="185.0"/>
+            <next x="677.0" y="131.0"/>
+            <end x="677.0" y="131.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_18" source="entityVertex_1067690_5" target="reactionVertex_1067688.1">
+            <start x="499.0" y="228.0"/>
+            <next x="499.0" y="260.0"/>
+            <end x="499.0" y="260.0"/>
+        </arc>
+        <arc class="consumption" id="arc_75_input_74" source="entityVertex_113592_75" target="reactionVertex_1112703.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_1112703">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="1624.0" y="787.0"/>
+            </glyph>
+            <start x="1619.0" y="782.0"/>
+            <next x="1642.0" y="805.0"/>
+            <end x="1642.0" y="805.0"/>
+        </arc>
+    </map>
+</sbgn>

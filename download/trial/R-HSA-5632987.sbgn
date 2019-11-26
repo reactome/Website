@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_7660_1" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="71.0" y="1099.0"/>
+            </label>
+            <bbox w="1093.0" h="1124.0" x="55.0" y="28.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_459_114" compartmentOrder="10.0">
+            <label text="cytoplasm">
+                <bbox w="80.0" h="24.0" x="1053.0" y="1171.0"/>
+            </label>
+            <bbox w="1171.0" h="1216.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5632957_165364">
+            <label text="PMS2 Variants"/>
+            <bbox w="91.0" h="22.0" x="615.0" y="286.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_912495_197">
+            <label text="MLH1"/>
+            <bbox w="44.0" h="22.0" x="528.0" y="284.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5632958_165363">
+            <label text="PMS2 variants-defective DNA mismatch repair"/>
+            <bbox w="12.0" h="12.0" x="585.0" y="373.0"/>
+            <port id="reactionVertex_5632958.1" x="592.0" y="353.0"/>
+            <port id="reactionVertex_5632958.2" x="591.0" y="417.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_165364_input_165363" source="entityVertex_5632957_165364" target="reactionVertex_5632958.1">
+            <start x="646.0" y="314.0"/>
+            <next x="592.0" y="353.0"/>
+            <end x="592.0" y="353.0"/>
+        </arc>
+        <arc class="consumption" id="arc_197_input_165363" source="entityVertex_912495_197" target="reactionVertex_5632958.1">
+            <start x="557.0" y="309.0"/>
+            <next x="592.0" y="353.0"/>
+            <end x="592.0" y="353.0"/>
+        </arc>
+    </map>
+</sbgn>
