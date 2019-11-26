@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17963_1584" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1704.0" y="1136.0"/>
+            </label>
+            <bbox w="2278.0" h="164.0" x="262.0" y="1028.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_1" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="4779.0" y="721.0"/>
+            </label>
+            <bbox w="2842.0" h="750.0" x="3043.0" y="223.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_977" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1707.0" y="482.0"/>
+            </label>
+            <bbox w="2656.0" h="761.0" x="111.0" y="172.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_39" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="71.0" y="1154.0"/>
+            </label>
+            <bbox w="5913.0" h="1102.0" x="0.0" y="115.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2064075_1262">
+            <label text="chondroitin(3)-core proteins"/>
+            <bbox w="107.0" h="36.0" x="2112.0" y="222.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_3636853_108741">
+            <label text="CHST3 mutants"/>
+            <bbox w="98.0" h="22.0" x="2710.0" y="362.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_741440_1277">
+            <label text="PAPS"/>
+            <bbox w="60.0" h="30.0" x="2406.0" y="258.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_3595175_108740">
+            <label text="Defective CHST3 does not transfer SO4(2-) to chondroitin"/>
+            <bbox w="12.0" h="12.0" x="2488.0" y="314.0"/>
+            <port id="reactionVertex_3595175.1" x="2465.0" y="320.0"/>
+            <port id="reactionVertex_3595175.2" x="2528.0" y="319.0"/>
+        </glyph>
+        <arc class="catalysis" id="arc_108741_catalyst_108740" source="entityVertex_3636853_108741" target="reactionVertex_3595175_108740">
+            <start x="2704.0" y="369.0"/>
+            <next x="2494.0" y="352.0"/>
+            <next x="2494.0" y="336.0"/>
+            <end x="2494.0" y="336.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1277_input_108740" source="entityVertex_741440_1277" target="reactionVertex_3595175.1">
+            <start x="2445.0" y="291.0"/>
+            <next x="2465.0" y="320.0"/>
+            <end x="2465.0" y="320.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1262_input_108740" source="entityVertex_2064075_1262" target="reactionVertex_3595175.1">
+            <start x="2170.0" y="264.0"/>
+            <next x="2188.0" y="322.0"/>
+            <next x="2465.0" y="320.0"/>
+            <end x="2465.0" y="320.0"/>
+        </arc>
+    </map>
+</sbgn>

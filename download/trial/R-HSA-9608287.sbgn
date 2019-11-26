@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_7660_1" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="412.0" y="1600.0"/>
+            </label>
+            <bbox w="1811.0" h="1606.0" x="396.0" y="41.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_1672" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="29.0" y="1632.0"/>
+            </label>
+            <bbox w="2277.0" h="1687.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_1774" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="65.0" y="241.0"/>
+            </label>
+            <bbox w="318.0" h="250.0" x="53.0" y="222.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_110198_589">
+            <label text="(OGUA:Ade)-dsDNA"/>
+            <bbox w="129.0" h="26.0" x="575.0" y="372.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9608288_191836">
+            <label text="Defective MUTYH mutants do not bind adenine mispaired with 8-oxoguanine"/>
+            <bbox w="12.0" h="12.0" x="655.0" y="423.0"/>
+            <port id="reactionVertex_9608288.1" x="639.0" y="428.0"/>
+            <port id="reactionVertex_9608288.2" x="714.0" y="428.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_9608300_191837">
+            <label text="MUTYH binding LOF mutants"/>
+            <bbox w="127.0" h="36.0" x="512.0" y="415.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_589_input_191836" source="entityVertex_110198_589" target="reactionVertex_9608288.1">
+            <start x="639.0" y="401.0"/>
+            <next x="639.0" y="428.0"/>
+            <end x="639.0" y="428.0"/>
+        </arc>
+        <arc class="consumption" id="arc_191837_input_191836" source="entityVertex_9608300_191837" target="reactionVertex_9608288.1">
+            <start x="645.0" y="428.0"/>
+            <next x="639.0" y="428.0"/>
+            <end x="639.0" y="428.0"/>
+        </arc>
+    </map>
+</sbgn>

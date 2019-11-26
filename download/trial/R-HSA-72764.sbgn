@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_12" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="658.0" y="195.0"/>
+            </label>
+            <bbox w="1391.0" h="299.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29356_42">
+            <label text="H2O"/>
+            <bbox w="39.0" h="30.0" x="981.0" y="236.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_143396_10">
+            <label text="Me-Q185-ETF1 dimer:eRF3:GDP:80S Ribosome:mRNA:tRNA Complex"/>
+            <bbox w="131.0" h="72.0" x="1076.0" y="73.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_5691517_44">
+            <label text="NAc-Ser residue"/>
+            <bbox w="64.0" h="37.0" x="1239.0" y="160.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6800133_63">
+            <label text="N6AMT1:TRMT112"/>
+            <bbox w="83.0" h="35.0" x="152.0" y="29.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_6800138_58">
+            <label text="N6AMT1:TRMT112 transfers CH3 group from AdoMet to ETF1 dimer"/>
+            <bbox w="12.0" h="12.0" x="185.0" y="103.0"/>
+            <port id="reactionVertex_6800138.1" x="164.0" y="109.0"/>
+            <port id="reactionVertex_6800138.2" x="231.0" y="109.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6800154_61">
+            <label text="Me-Q185-ETF1 dimer:eRF3:GTP"/>
+            <bbox w="104.0" h="36.0" x="293.0" y="91.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_71285_62">
+            <label text="AdoHcy"/>
+            <bbox w="59.0" h="30.0" x="234.0" y="145.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_143397_5">
+            <label text="Me-Q185-ETF1 dimer:eRF3:GTP:80S Ribosome:mRNA:peptidyl-tRNA"/>
+            <bbox w="123.0" h="79.0" x="489.0" y="70.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5691510_45">
+            <label text="APEH"/>
+            <bbox w="47.0" h="22.0" x="1104.0" y="244.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_6785226_46">
+            <label text="protein"/>
+            <bbox w="58.0" h="30.0" x="1229.0" y="226.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29372_7">
+            <label text="Pi"/>
+            <bbox w="32.0" h="29.0" x="737.0" y="43.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5691512_41">
+            <label text="APEH hydrolyses NAc-Ser-protein"/>
+            <bbox w="12.0" h="12.0" x="1120.0" y="204.0"/>
+            <port id="reactionVertex_5691512.1" x="1068.0" y="210.0"/>
+            <port id="reactionVertex_5691512.2" x="1176.0" y="209.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6800132_60">
+            <label text="ETF1 dimer:eRF3:GTP"/>
+            <bbox w="111.0" h="36.0" x="17.0" y="91.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_141952_3">
+            <label text="80S Ribosome:mRNA:peptidyl-tRNA with elongating peptide"/>
+            <bbox w="121.0" h="58.0" x="322.0" y="151.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_143381_8">
+            <label text="Me-Q185-ETF1 dimer:eRF3:GDP:80S Ribosome:mRNA:peptidyl-tRNA Complex"/>
+            <bbox w="126.0" h="81.0" x="770.0" y="74.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29356_118">
+            <label text="H2O"/>
+            <bbox w="43.0" h="30.0" x="610.0" y="43.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_71284_59">
+            <label text="AdoMet"/>
+            <bbox w="59.0" h="30.0" x="91.0" y="152.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5691496_31">
+            <label text="NAc-Ser:protein"/>
+            <bbox w="65.0" h="33.0" x="937.0" y="194.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_141673_6">
+            <label text="GTP Hydrolysis by eRF3 bound to the eRF1:mRNA:polypeptide:80S Ribosome complex"/>
+            <bbox w="12.0" h="12.0" x="667.0" y="102.0"/>
+            <port id="reactionVertex_141673.1" x="644.0" y="108.0"/>
+            <port id="reactionVertex_141673.2" x="708.0" y="108.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_141671_9">
+            <label text="Polypeptide release from the eRF3-GDP:eRF1:mRNA:80S Ribosome complex"/>
+            <bbox w="10.0" h="10.0" x="937.0" y="104.0"/>
+            <port id="reactionVertex_141671.1" x="899.0" y="111.0"/>
+            <port id="reactionVertex_141671.2" x="1016.0" y="109.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_141691_1">
+            <label text="GTP bound eRF3:eRF1 complex binds the peptidyl tRNA:mRNA:80S Ribosome complex"/>
+            <bbox w="10.0" h="10.0" x="438.0" y="102.0"/>
+            <port id="reactionVertex_141691.1" x="443.0" y="107.0"/>
+            <port id="reactionVertex_141691.2" x="486.0" y="107.0"/>
+        </glyph>
+        <arc class="production" id="arc_44_output_41" source="reactionVertex_5691512.2" target="entityVertex_5691517_44">
+            <start x="1236.0" y="188.0"/>
+            <next x="1176.0" y="209.0"/>
+            <end x="1176.0" y="209.0"/>
+        </arc>
+        <arc class="production" id="arc_5_output_1" source="reactionVertex_141691.2" target="entityVertex_143397_5">
+            <start x="443.0" y="107.0"/>
+            <end x="486.0" y="107.0"/>
+        </arc>
+        <arc class="production" id="arc_62_output_58" source="reactionVertex_6800138.2" target="entityVertex_71285_62">
+            <glyph class="stoichiometry" id="Stoichiometry_71285_OUTPUT_6800138">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="236.0" y="119.0"/>
+            </glyph>
+            <start x="253.0" y="142.0"/>
+            <next x="231.0" y="109.0"/>
+            <end x="231.0" y="109.0"/>
+        </arc>
+        <arc class="production" id="arc_7_output_6" source="reactionVertex_141673.2" target="entityVertex_29372_7">
+            <start x="740.0" y="75.0"/>
+            <next x="708.0" y="108.0"/>
+            <end x="708.0" y="108.0"/>
+        </arc>
+        <arc class="production" id="arc_46_output_41" source="reactionVertex_5691512.2" target="entityVertex_6785226_46">
+            <start x="1226.0" y="229.0"/>
+            <next x="1176.0" y="209.0"/>
+            <end x="1176.0" y="209.0"/>
+        </arc>
+        <arc class="production" id="arc_61_output_58" source="reactionVertex_6800138.2" target="entityVertex_6800154_61">
+            <start x="290.0" y="109.0"/>
+            <next x="231.0" y="109.0"/>
+            <end x="231.0" y="109.0"/>
+        </arc>
+        <arc class="consumption" id="arc_3_input_1" source="entityVertex_141952_3" target="reactionVertex_141691.1">
+            <start x="406.0" y="148.0"/>
+            <end x="443.0" y="107.0"/>
+        </arc>
+        <arc class="consumption" id="arc_42_input_41" source="entityVertex_29356_42" target="reactionVertex_5691512.1">
+            <start x="1023.0" y="239.0"/>
+            <next x="1068.0" y="210.0"/>
+            <end x="1068.0" y="210.0"/>
+        </arc>
+        <arc class="production" id="arc_31_output_9" source="reactionVertex_141671.2" target="entityVertex_5691496_31">
+            <start x="976.0" y="191.0"/>
+            <next x="1016.0" y="109.0"/>
+            <end x="1016.0" y="109.0"/>
+        </arc>
+        <arc class="consumption" id="arc_31_input_41" source="entityVertex_5691496_31" target="reactionVertex_5691512.1">
+            <start x="1005.0" y="210.0"/>
+            <next x="1068.0" y="210.0"/>
+            <end x="1068.0" y="210.0"/>
+        </arc>
+        <arc class="consumption" id="arc_118_input_6" source="entityVertex_29356_118" target="reactionVertex_141673.1">
+            <start x="634.0" y="76.0"/>
+            <next x="644.0" y="108.0"/>
+            <end x="644.0" y="108.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_45_catalyst_41" source="entityVertex_5691510_45" target="reactionVertex_5691512_41">
+            <start x="1126.0" y="241.0"/>
+            <next x="1126.0" y="226.0"/>
+            <end x="1126.0" y="226.0"/>
+        </arc>
+        <arc class="consumption" id="arc_60_input_58" source="entityVertex_6800132_60" target="reactionVertex_6800138.1">
+            <start x="131.0" y="109.0"/>
+            <next x="164.0" y="109.0"/>
+            <end x="164.0" y="109.0"/>
+        </arc>
+        <arc class="consumption" id="arc_8_input_9" source="entityVertex_143381_8" target="reactionVertex_141671.1">
+            <start x="899.0" y="111.0"/>
+            <end x="942.0" y="109.0"/>
+        </arc>
+        <arc class="consumption" id="arc_61_input_1" source="entityVertex_6800154_61" target="reactionVertex_141691.1">
+            <start x="400.0" y="107.0"/>
+            <end x="443.0" y="107.0"/>
+        </arc>
+        <arc class="production" id="arc_8_output_6" source="reactionVertex_141673.2" target="entityVertex_143381_8">
+            <start x="767.0" y="110.0"/>
+            <next x="708.0" y="108.0"/>
+            <end x="708.0" y="108.0"/>
+        </arc>
+        <arc class="production" id="arc_10_output_9" source="reactionVertex_141671.2" target="entityVertex_143396_10">
+            <start x="1073.0" y="109.0"/>
+            <next x="1016.0" y="109.0"/>
+            <end x="1016.0" y="109.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_6" source="entityVertex_143397_5" target="reactionVertex_141673.1">
+            <start x="615.0" y="108.0"/>
+            <next x="644.0" y="108.0"/>
+            <end x="644.0" y="108.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_63_catalyst_58" source="entityVertex_6800133_63" target="reactionVertex_6800138_58">
+            <start x="192.0" y="67.0"/>
+            <next x="191.0" y="93.0"/>
+            <end x="191.0" y="93.0"/>
+        </arc>
+        <arc class="consumption" id="arc_59_input_58" source="entityVertex_71284_59" target="reactionVertex_6800138.1">
+            <glyph class="stoichiometry" id="Stoichiometry_71284_INPUT_6800138">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="141.0" y="123.0"/>
+            </glyph>
+            <start x="131.0" y="149.0"/>
+            <next x="164.0" y="109.0"/>
+            <end x="164.0" y="109.0"/>
+        </arc>
+    </map>
+</sbgn>

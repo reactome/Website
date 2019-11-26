@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17963_640" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="2939.0" y="263.0"/>
+            </label>
+            <bbox w="3367.0" h="350.0" x="1167.0" y="120.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_1604" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="642.0" y="195.0"/>
+            </label>
+            <bbox w="631.0" h="177.0" x="472.0" y="108.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_5" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="725.0" y="443.0"/>
+            </label>
+            <bbox w="5631.0" h="1256.0" x="0.0" y="88.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_6" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="1071.0" y="966.0"/>
+            </label>
+            <bbox w="5161.0" h="451.0" x="423.0" y="675.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_927893_957" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum quality control compartment">
+                <bbox w="400.0" h="24.0" x="3203.0" y="1055.0"/>
+            </label>
+            <bbox w="1106.0" h="324.0" x="2440.0" y="780.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_4549394_117083">
+            <label text="ALG1 mutants"/>
+            <bbox w="90.0" h="22.0" x="1623.0" y="674.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_162860_39">
+            <label text="GDP-Man"/>
+            <bbox w="73.0" h="30.0" x="1528.0" y="531.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_449293_13">
+            <label text="N,N'-DCDOLDP"/>
+            <bbox w="106.0" h="30.0" x="1443.0" y="656.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_4549382_117082">
+            <label text="Defective ALG1 does not transfer the first Man to the N-glycan precursor"/>
+            <bbox w="12.0" h="12.0" x="1664.0" y="602.0"/>
+            <port id="reactionVertex_4549382.1" x="1604.0" y="608.0"/>
+            <port id="reactionVertex_4549382.2" x="1722.0" y="608.0"/>
+        </glyph>
+        <arc class="catalysis" id="arc_117083_catalyst_117082" source="entityVertex_4549394_117083" target="reactionVertex_4549382_117082">
+            <start x="1668.0" y="668.0"/>
+            <next x="1669.0" y="624.0"/>
+            <end x="1669.0" y="624.0"/>
+        </arc>
+        <arc class="consumption" id="arc_13_input_117082" source="entityVertex_449293_13" target="reactionVertex_4549382.1">
+            <start x="1521.0" y="653.0"/>
+            <next x="1604.0" y="608.0"/>
+            <end x="1604.0" y="608.0"/>
+        </arc>
+        <arc class="consumption" id="arc_39_input_117082" source="entityVertex_162860_39" target="reactionVertex_4549382.1">
+            <start x="1573.0" y="564.0"/>
+            <next x="1604.0" y="608.0"/>
+            <end x="1604.0" y="608.0"/>
+        </arc>
+    </map>
+</sbgn>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17963_1584" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1704.0" y="1136.0"/>
+            </label>
+            <bbox w="2278.0" h="164.0" x="262.0" y="1028.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_1" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="4779.0" y="721.0"/>
+            </label>
+            <bbox w="2842.0" h="750.0" x="3043.0" y="223.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_977" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1707.0" y="482.0"/>
+            </label>
+            <bbox w="2656.0" h="761.0" x="111.0" y="172.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_39" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="71.0" y="1154.0"/>
+            </label>
+            <bbox w="5913.0" h="1102.0" x="0.0" y="115.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_2318714_92025">
+            <label text="HYAL1 E268K/V251_V262delinsFRVA Q263fs*20"/>
+            <bbox w="124.0" h="64.0" x="5058.0" y="564.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2318585_92024">
+            <label text="Defective HYAL1 does not hydrolyse Chondroitin chains"/>
+            <bbox w="12.0" h="12.0" x="5115.0" y="638.0"/>
+            <port id="reactionVertex_2318585.1" x="5086.0" y="644.0"/>
+            <port id="reactionVertex_2318585.2" x="5149.0" y="644.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_1605715_904">
+            <label text="H2O"/>
+            <bbox w="49.0" h="30.0" x="5049.0" y="672.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_2318714_92023">
+            <label text="HYAL1 E268K/V251_V262delinsFRVA Q263fs*20"/>
+            <bbox w="124.0" h="64.0" x="5659.0" y="304.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2065257_905">
+            <label text="Chondroitin chains"/>
+            <bbox w="85.0" h="36.0" x="4946.0" y="626.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2160864_1668">
+            <label text="(HA)50"/>
+            <bbox w="52.0" h="22.0" x="5769.0" y="281.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9036077_92022">
+            <label text="Defective HYAL1 does not hydrolyse (HA)50"/>
+            <bbox w="12.0" h="12.0" x="5788.0" y="331.0"/>
+            <port id="reactionVertex_9036077.1" x="5794.0" y="321.0"/>
+            <port id="reactionVertex_9036077.2" x="5794.0" y="371.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_1605715_2615">
+            <label text="H2O"/>
+            <bbox w="43.0" h="30.0" x="5692.0" y="272.0"/>
+        </glyph>
+        <arc class="catalysis" id="arc_92025_catalyst_92024" source="entityVertex_2318714_92025" target="reactionVertex_2318585_92024">
+            <start x="5120.0" y="631.0"/>
+            <next x="5120.0" y="628.0"/>
+            <end x="5120.0" y="628.0"/>
+        </arc>
+        <arc class="consumption" id="arc_905_input_92024" source="entityVertex_2065257_905" target="reactionVertex_2318585.1">
+            <start x="5037.0" y="644.0"/>
+            <next x="5086.0" y="644.0"/>
+            <end x="5086.0" y="644.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_92023_catalyst_92022" source="entityVertex_2318714_92023" target="reactionVertex_9036077_92022">
+            <start x="5786.0" y="336.0"/>
+            <next x="5778.0" y="335.0"/>
+            <end x="5778.0" y="335.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1668_input_92022" source="entityVertex_2160864_1668" target="reactionVertex_9036077.1">
+            <start x="5794.0" y="306.0"/>
+            <next x="5794.0" y="321.0"/>
+            <end x="5794.0" y="321.0"/>
+        </arc>
+        <arc class="consumption" id="arc_904_input_92024" source="entityVertex_1605715_904" target="reactionVertex_2318585.1">
+            <start x="5077.0" y="669.0"/>
+            <next x="5086.0" y="644.0"/>
+            <end x="5086.0" y="644.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2615_input_92022" source="entityVertex_1605715_2615" target="reactionVertex_9036077.1">
+            <start x="5738.0" y="296.0"/>
+            <next x="5794.0" y="321.0"/>
+            <end x="5794.0" y="321.0"/>
+        </arc>
+    </map>
+</sbgn>

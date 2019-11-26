@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_543" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="593.0" y="1282.0"/>
+            </label>
+            <bbox w="3429.0" h="1714.0" x="54.0" y="57.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1225979_1933">
+            <label text="EGF-like ligands:EGFR Dimer:Covalent EGFR TKIs"/>
+            <bbox w="126.0" h="57.0" x="1078.0" y="244.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1248675_2343">
+            <label text="EGFR:Cetuximab"/>
+            <bbox w="89.0" h="39.0" x="131.0" y="264.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_1216522_1584">
+            <label text="Covalent EGFR tyrosine kinase inhibitors"/>
+            <bbox w="113.0" h="56.0" x="815.0" y="493.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9624420_2306">
+            <label text="EGF-like ligands:EGFR dimer"/>
+            <bbox w="140.0" h="53.0" x="793.0" y="44.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_179837_1898">
+            <label text="EGFR"/>
+            <bbox w="126.0" h="51.0" x="324.0" y="70.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1225978_1932">
+            <label text="Covalent tyrosine kinase inhibitors bind and inhibit wild-type EGF:EGFR dimers"/>
+            <bbox w="10.0" h="10.0" x="1019.0" y="274.0"/>
+            <port id="reactionVertex_1225978.1" x="1007.0" y="317.0"/>
+            <port id="reactionVertex_1225978.2" x="1075.0" y="275.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_1248673_2342">
+            <label text="Cetuximab"/>
+            <bbox w="102.0" h="22.0" x="19.0" y="16.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_1248677_2341">
+            <label text="Inactivation of over-expressed wild type EGFR by Cetuximab recombinant antibody"/>
+            <bbox w="10.0" h="10.0" x="174.0" y="201.0"/>
+            <port id="reactionVertex_1248677.1" x="180.0" y="180.0"/>
+            <port id="reactionVertex_1248677.2" x="176.0" y="261.0"/>
+        </glyph>
+        <arc class="production" id="arc_1933_output_1932" source="reactionVertex_1225978.2" target="entityVertex_1225979_1933">
+            <start x="1024.0" y="279.0"/>
+            <end x="1075.0" y="275.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2342_input_2341" source="entityVertex_1248673_2342" target="reactionVertex_1248677.1">
+            <start x="77.0" y="41.0"/>
+            <next x="180.0" y="180.0"/>
+            <end x="180.0" y="180.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1898_input_2341" source="entityVertex_179837_1898" target="reactionVertex_1248677.1">
+            <start x="321.0" y="120.0"/>
+            <next x="180.0" y="180.0"/>
+            <end x="180.0" y="180.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2306_input_1932" source="entityVertex_9624420_2306" target="reactionVertex_1225978.1">
+            <start x="888.0" y="100.0"/>
+            <next x="974.0" y="186.0"/>
+            <next x="1007.0" y="317.0"/>
+            <end x="1007.0" y="317.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1584_input_1932" source="entityVertex_1216522_1584" target="reactionVertex_1225978.1">
+            <glyph class="stoichiometry" id="Stoichiometry_1216522_INPUT_1225978">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="942.0" y="396.0"/>
+            </glyph>
+            <start x="889.0" y="487.0"/>
+            <next x="1007.0" y="317.0"/>
+            <end x="1007.0" y="317.0"/>
+        </arc>
+        <arc class="production" id="arc_2343_output_2341" source="reactionVertex_1248677.2" target="entityVertex_1248675_2343">
+            <start x="179.0" y="206.0"/>
+            <end x="176.0" y="261.0"/>
+        </arc>
+    </map>
+</sbgn>

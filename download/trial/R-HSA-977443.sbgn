@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_5" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="122.0" y="777.0"/>
+            </label>
+            <bbox w="1902.0" h="780.0" x="89.0" y="83.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1013019_27">
+            <label text="G-protein beta-gamma subunits"/>
+            <bbox w="104.0" h="36.0" x="44.0" y="300.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_975448_49">
+            <label text="GABRR pentamer:GABA"/>
+            <bbox w="113.0" h="36.0" x="267.0" y="177.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_170656_22">
+            <label text="(Gi alpha1:GDP:Adenylate cyclase):(G alpha-olf:GDP)"/>
+            <bbox w="119.0" h="50.0" x="1630.0" y="182.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_170666_18">
+            <label text="Adenylate cyclase increases the GTPase activity of G alpha-olf"/>
+            <bbox w="12.0" h="12.0" x="1533.0" y="147.0"/>
+            <port id="reactionVertex_170666.1" x="1465.0" y="151.0"/>
+            <port id="reactionVertex_170666.2" x="1562.0" y="151.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_396910_14">
+            <label text="G-protein alpha (i):GTP:Adenylate cyclase"/>
+            <bbox w="121.0" h="50.0" x="1102.0" y="123.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_975268_4">
+            <label text="GABR heteropentamers:GABA"/>
+            <bbox w="112.0" h="50.0" x="277.0" y="98.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_170683_17">
+            <label text="(Gi alpha1:GTP:Adenylate cyclase):(G alpha-olf:GTP)"/>
+            <bbox w="119.0" h="50.0" x="1343.0" y="126.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1013011_31">
+            <label text="GABA B receptor G-protein beta-gamma and Kir3 channel complex"/>
+            <bbox w="134.0" h="64.0" x="190.0" y="811.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29372_19">
+            <label text="Pi"/>
+            <bbox w="27.0" h="30.0" x="1568.0" y="244.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_352003_8">
+            <label text="GABA"/>
+            <bbox w="49.0" h="30.0" x="617.0" y="1.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_352022_3">
+            <label text="Cl-"/>
+            <bbox w="35.0" h="30.0" x="436.0" y="252.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_1013012_29">
+            <label text="Binding of Gbeta/gamma to GIRK/Kir3 channels"/>
+            <bbox w="12.0" h="12.0" x="425.0" y="725.0"/>
+            <port id="reactionVertex_1013012.1" x="97.0" y="611.0"/>
+            <port id="reactionVertex_1013012.2" x="306.0" y="808.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_420748_7">
+            <label text="GABAB receptor"/>
+            <bbox w="101.0" h="22.0" x="520.0" y="79.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_170669_24">
+            <label text="G alpha-olf:GDP complex"/>
+            <bbox w="108.0" h="36.0" x="1871.0" y="131.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_8856422_51">
+            <label text="NPTN"/>
+            <bbox w="42.0" h="22.0" x="173.0" y="88.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_1013013_26">
+            <label text="Association of GABA B receptor with G protein beta-gamma subunits"/>
+            <bbox w="12.0" h="12.0" x="81.0" y="435.0"/>
+            <port id="reactionVertex_1013013.1" x="92.0" y="394.0"/>
+            <port id="reactionVertex_1013013.2" x="71.0" y="529.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_1013020_32">
+            <label text="Activation of GIRK/Kir3 Channels"/>
+            <bbox w="12.0" h="12.0" x="454.0" y="844.0"/>
+            <port id="reactionVertex_1013020.1" x="456.0" y="807.0"/>
+            <port id="reactionVertex_1013020.2" x="453.0" y="903.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_975340_1">
+            <label text="GABR heteropentamers:GABA transport Cl- from extracellular region to cytosol"/>
+            <bbox w="12.0" h="12.0" x="439.0" y="123.0"/>
+            <port id="reactionVertex_975340.1" x="433.0" y="49.0"/>
+            <port id="reactionVertex_975340.2" x="452.0" y="249.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_420688_6">
+            <label text="GABAB heterodimeric receptor binds GABA"/>
+            <bbox w="10.0" h="10.0" x="689.0" y="87.0"/>
+            <port id="reactionVertex_420688.1" x="658.0" y="91.0"/>
+            <port id="reactionVertex_420688.2" x="759.0" y="91.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_975449_48">
+            <label text="GABRR pentamer:GABA transports extracellular Cl- to cytosol"/>
+            <bbox w="12.0" h="12.0" x="514.0" y="120.0"/>
+            <port id="reactionVertex_975449.1" x="445.0" y="49.0"/>
+            <port id="reactionVertex_975449.2" x="460.0" y="249.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_74126_34">
+            <label text="K+"/>
+            <bbox w="35.0" h="30.0" x="435.0" y="906.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_170659_20">
+            <label text="(Gi alpha1:GTP:Adenylate cyclase):(G alpha-olf:GDP)"/>
+            <bbox w="119.0" h="50.0" x="1619.0" y="111.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_170665_12">
+            <label text="Adenylate cyclase (Mg2+ cofactor)"/>
+            <bbox w="115.0" h="36.0" x="917.0" y="81.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_392206_11">
+            <label text="G alpha (i) inhibits adenylate cyclase"/>
+            <bbox w="10.0" h="10.0" x="1054.0" y="152.0"/>
+            <port id="reactionVertex_392206.1" x="1030.0" y="158.0"/>
+            <port id="reactionVertex_392206.2" x="1099.0" y="153.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_420698_9">
+            <label text="GABAB receptor:GABA"/>
+            <bbox w="125.0" h="41.0" x="762.0" y="71.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29804_33">
+            <label text="K+"/>
+            <bbox w="35.0" h="30.0" x="438.0" y="774.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_8856398_50">
+            <label text="NPTN binds GABA A receptors"/>
+            <bbox w="10.0" h="10.0" x="225.0" y="156.0"/>
+            <port id="reactionVertex_8856398.1" x="233.0" y="137.0"/>
+            <port id="reactionVertex_8856398.2" x="181.0" y="175.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_170661_16">
+            <label text="G alpha-olf:GTP"/>
+            <bbox w="103.0" h="22.0" x="1144.0" y="197.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_975294_30">
+            <label text="Kir heterotetramers"/>
+            <bbox w="122.0" h="22.0" x="38.0" y="696.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_170671_15">
+            <label text="G alpha-olf:GTP binds to Gi alpha1:GTP:adenylate cyclase complex"/>
+            <bbox w="10.0" h="10.0" x="1295.0" y="155.0"/>
+            <port id="reactionVertex_170671.1" x="1272.0" y="159.0"/>
+            <port id="reactionVertex_170671.2" x="1340.0" y="156.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_392164_25">
+            <label text="G-protein alpha (i):GDP"/>
+            <bbox w="121.0" h="36.0" x="1867.0" y="193.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_188972_2">
+            <label text="Cl-"/>
+            <bbox w="35.0" h="30.0" x="415.0" y="16.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_392161_13">
+            <label text="G alpha (i): GTP"/>
+            <bbox w="101.0" h="22.0" x="897.0" y="165.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1013017_28">
+            <label text="GABA B receptor G-protein beta-gamma complex"/>
+            <bbox w="134.0" h="50.0" x="0.0" y="532.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_170686_21">
+            <label text="Adenylate cyclase increases the GTPase activity of Gi alpha"/>
+            <bbox w="12.0" h="12.0" x="1532.0" y="173.0"/>
+            <port id="reactionVertex_170686.1" x="1465.0" y="163.0"/>
+            <port id="reactionVertex_170686.2" x="1557.0" y="191.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8856431_52">
+            <label text="GABR heteropentamers:GABA:NPTN"/>
+            <bbox w="112.0" h="50.0" x="66.0" y="167.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_170674_23">
+            <label text="Dissociation of the Gi alpha:G olf complex"/>
+            <bbox w="10.0" h="10.0" x="1809.0" y="178.0"/>
+            <port id="reactionVertex_170674.1" x="1752.0" y="195.0"/>
+            <port id="reactionVertex_170674.2" x="1827.0" y="184.0"/>
+        </glyph>
+        <arc class="production" id="arc_9_output_6" source="reactionVertex_420688.2" target="entityVertex_420698_9">
+            <start x="694.0" y="92.0"/>
+            <end x="759.0" y="91.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_17_catalyst_18" source="entityVertex_170683_17" target="reactionVertex_170666_18">
+            <start x="1465.0" y="126.0"/>
+            <next x="1503.0" y="110.0"/>
+            <next x="1529.0" y="141.0"/>
+            <end x="1529.0" y="141.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_17_catalyst_21" source="entityVertex_170683_17" target="reactionVertex_170686_21">
+            <start x="1465.0" y="135.0"/>
+            <next x="1497.0" y="127.0"/>
+            <next x="1528.0" y="166.0"/>
+            <end x="1528.0" y="166.0"/>
+        </arc>
+        <arc class="consumption" id="arc_22_input_23" source="entityVertex_170656_22" target="reactionVertex_170674.1">
+            <start x="1752.0" y="195.0"/>
+            <end x="1814.0" y="183.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_49_catalyst_48" source="entityVertex_975448_49" target="reactionVertex_975449_48">
+            <start x="374.0" y="174.0"/>
+            <next x="505.0" y="131.0"/>
+            <end x="505.0" y="131.0"/>
+        </arc>
+        <arc class="production" id="arc_25_output_23" source="reactionVertex_170674.2" target="entityVertex_392164_25">
+            <start x="1864.0" y="194.0"/>
+            <next x="1827.0" y="184.0"/>
+            <end x="1827.0" y="184.0"/>
+        </arc>
+        <arc class="consumption" id="arc_30_input_29" source="entityVertex_975294_30" target="reactionVertex_1013012.1">
+            <start x="98.0" y="690.0"/>
+            <next x="97.0" y="611.0"/>
+            <end x="97.0" y="611.0"/>
+        </arc>
+        <arc class="consumption" id="arc_12_input_11" source="entityVertex_170665_12" target="reactionVertex_392206.1">
+            <start x="991.0" y="120.0"/>
+            <next x="1030.0" y="158.0"/>
+            <end x="1030.0" y="158.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_9_catalyst_29" source="entityVertex_420698_9" target="reactionVertex_1013012_29">
+            <start x="811.0" y="115.0"/>
+            <next x="439.0" y="717.0"/>
+            <end x="439.0" y="717.0"/>
+        </arc>
+        <arc class="consumption" id="arc_8_input_6" source="entityVertex_352003_8" target="reactionVertex_420688.1">
+            <start x="644.0" y="34.0"/>
+            <next x="658.0" y="91.0"/>
+            <end x="658.0" y="91.0"/>
+        </arc>
+        <arc class="production" id="arc_28_output_26" source="reactionVertex_1013013.2" target="entityVertex_1013017_28">
+            <start x="87.0" y="441.0"/>
+            <end x="71.0" y="529.0"/>
+        </arc>
+        <arc class="production" id="arc_52_output_50" source="reactionVertex_8856398.2" target="entityVertex_8856431_52">
+            <start x="230.0" y="161.0"/>
+            <end x="181.0" y="175.0"/>
+        </arc>
+        <arc class="consumption" id="arc_13_input_11" source="entityVertex_392161_13" target="reactionVertex_392206.1">
+            <start x="997.0" y="162.0"/>
+            <next x="1030.0" y="158.0"/>
+            <end x="1030.0" y="158.0"/>
+        </arc>
+        <arc class="production" id="arc_24_output_23" source="reactionVertex_170674.2" target="entityVertex_170669_24">
+            <start x="1874.0" y="170.0"/>
+            <next x="1827.0" y="184.0"/>
+            <end x="1827.0" y="184.0"/>
+        </arc>
+        <arc class="production" id="arc_31_output_29" source="reactionVertex_1013012.2" target="entityVertex_1013011_31">
+            <start x="431.0" y="731.0"/>
+            <end x="306.0" y="808.0"/>
+        </arc>
+        <arc class="consumption" id="arc_51_input_50" source="entityVertex_8856422_51" target="reactionVertex_8856398.1">
+            <start x="205.0" y="113.0"/>
+            <next x="233.0" y="137.0"/>
+            <end x="233.0" y="137.0"/>
+        </arc>
+        <arc class="consumption" id="arc_14_input_15" source="entityVertex_396910_14" target="reactionVertex_170671.1">
+            <start x="1226.0" y="154.0"/>
+            <next x="1272.0" y="159.0"/>
+            <end x="1272.0" y="159.0"/>
+        </arc>
+        <arc class="production" id="arc_14_output_11" source="reactionVertex_392206.2" target="entityVertex_396910_14">
+            <start x="1059.0" y="157.0"/>
+            <end x="1099.0" y="153.0"/>
+        </arc>
+        <arc class="consumption" id="arc_7_input_6" source="entityVertex_420748_7" target="reactionVertex_420688.1">
+            <start x="624.0" y="90.0"/>
+            <next x="658.0" y="91.0"/>
+            <end x="658.0" y="91.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_31_catalyst_32" source="entityVertex_1013011_31" target="reactionVertex_1013020_32">
+            <start x="327.0" y="845.0"/>
+            <next x="444.0" y="849.0"/>
+            <end x="444.0" y="849.0"/>
+        </arc>
+        <arc class="consumption" id="arc_33_input_32" source="entityVertex_29804_33" target="reactionVertex_1013020.1">
+            <start x="456.0" y="807.0"/>
+            <end x="460.0" y="850.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_4_catalyst_1" source="entityVertex_975268_4" target="reactionVertex_975340_1">
+            <start x="392.0" y="126.0"/>
+            <next x="429.0" y="128.0"/>
+            <end x="429.0" y="128.0"/>
+        </arc>
+        <arc class="consumption" id="arc_27_input_26" source="entityVertex_1013019_27" target="reactionVertex_1013013.1">
+            <start x="95.0" y="339.0"/>
+            <next x="92.0" y="394.0"/>
+            <end x="92.0" y="394.0"/>
+        </arc>
+        <arc class="production" id="arc_20_output_18" source="reactionVertex_170666.2" target="entityVertex_170659_20">
+            <start x="1616.0" y="143.0"/>
+            <next x="1562.0" y="151.0"/>
+            <end x="1562.0" y="151.0"/>
+        </arc>
+        <arc class="consumption" id="arc_17_input_18" source="entityVertex_170683_17" target="reactionVertex_170666.1">
+            <start x="1465.0" y="151.0"/>
+            <end x="1539.0" y="153.0"/>
+        </arc>
+        <arc class="production" id="arc_17_output_15" source="reactionVertex_170671.2" target="entityVertex_170683_17">
+            <start x="1300.0" y="160.0"/>
+            <end x="1340.0" y="156.0"/>
+        </arc>
+        <arc class="production" id="arc_19_output_18" source="reactionVertex_170666.2" target="entityVertex_29372_19">
+            <start x="1578.0" y="241.0"/>
+            <next x="1562.0" y="151.0"/>
+            <end x="1562.0" y="151.0"/>
+        </arc>
+        <arc class="consumption" id="arc_16_input_15" source="entityVertex_170661_16" target="reactionVertex_170671.1">
+            <start x="1212.0" y="194.0"/>
+            <next x="1272.0" y="159.0"/>
+            <end x="1272.0" y="159.0"/>
+        </arc>
+        <arc class="consumption" id="arc_28_input_29" source="entityVertex_1013017_28" target="reactionVertex_1013012.1">
+            <start x="80.0" y="585.0"/>
+            <next x="97.0" y="611.0"/>
+            <end x="97.0" y="611.0"/>
+        </arc>
+        <arc class="consumption" id="arc_17_input_21" source="entityVertex_170683_17" target="reactionVertex_170686.1">
+            <start x="1465.0" y="163.0"/>
+            <end x="1538.0" y="179.0"/>
+        </arc>
+        <arc class="production" id="arc_19_output_21" source="reactionVertex_170686.2" target="entityVertex_29372_19">
+            <start x="1575.0" y="241.0"/>
+            <next x="1557.0" y="191.0"/>
+            <end x="1557.0" y="191.0"/>
+        </arc>
+        <arc class="production" id="arc_3_output_1" source="reactionVertex_975340.2" target="entityVertex_352022_3">
+            <start x="445.0" y="129.0"/>
+            <end x="452.0" y="249.0"/>
+        </arc>
+        <arc class="production" id="arc_3_output_48" source="reactionVertex_975449.2" target="entityVertex_352022_3">
+            <start x="520.0" y="126.0"/>
+            <end x="460.0" y="249.0"/>
+        </arc>
+        <arc class="consumption" id="arc_9_input_26" source="entityVertex_420698_9" target="reactionVertex_1013013.1">
+            <start x="803.0" y="115.0"/>
+            <next x="564.0" y="347.0"/>
+            <next x="92.0" y="394.0"/>
+            <end x="92.0" y="394.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_9_catalyst_26" source="entityVertex_420698_9" target="reactionVertex_1013013_26">
+            <start x="808.0" y="115.0"/>
+            <next x="604.0" y="384.0"/>
+            <next x="103.0" y="439.0"/>
+            <end x="103.0" y="439.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2_input_1" source="entityVertex_188972_2" target="reactionVertex_975340.1">
+            <start x="433.0" y="49.0"/>
+            <end x="445.0" y="129.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2_input_48" source="entityVertex_188972_2" target="reactionVertex_975449.1">
+            <start x="445.0" y="49.0"/>
+            <end x="520.0" y="126.0"/>
+        </arc>
+        <arc class="consumption" id="arc_4_input_50" source="entityVertex_975268_4" target="reactionVertex_8856398.1">
+            <start x="274.0" y="130.0"/>
+            <next x="233.0" y="137.0"/>
+            <end x="233.0" y="137.0"/>
+        </arc>
+        <arc class="production" id="arc_12_output_23" source="reactionVertex_170674.2" target="entityVertex_170665_12">
+            <start x="998.0" y="78.0"/>
+            <next x="1827.0" y="184.0"/>
+            <next x="1739.0" y="55.0"/>
+            <next x="1041.0" y="49.0"/>
+            <end x="1827.0" y="184.0"/>
+        </arc>
+        <arc class="production" id="arc_22_output_21" source="reactionVertex_170686.2" target="entityVertex_170656_22">
+            <start x="1627.0" y="199.0"/>
+            <next x="1557.0" y="191.0"/>
+            <end x="1557.0" y="191.0"/>
+        </arc>
+        <arc class="production" id="arc_34_output_32" source="reactionVertex_1013020.2" target="entityVertex_74126_34">
+            <start x="460.0" y="850.0"/>
+            <end x="453.0" y="903.0"/>
+        </arc>
+    </map>
+</sbgn>

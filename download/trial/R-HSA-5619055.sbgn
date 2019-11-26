@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_16" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="5864.0" y="1277.0"/>
+            </label>
+            <bbox w="5772.0" h="1190.0" x="180.0" y="159.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_171043_66" compartmentOrder="10.0">
+            <label text="early endosome lumen">
+                <bbox w="176.0" h="24.0" x="752.0" y="654.0"/>
+            </label>
+            <bbox w="225.0" h="220.0" x="718.0" y="491.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_290" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="2954.0" y="665.0"/>
+            </label>
+            <bbox w="617.0" h="161.0" x="2614.0" y="551.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_173031_67" compartmentOrder="10.0">
+            <label text="late endosome lumen">
+                <bbox w="166.0" h="24.0" x="1698.0" y="689.0"/>
+            </label>
+            <bbox w="227.0" h="232.0" x="1685.0" y="511.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_516" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="3499.0" y="599.0"/>
+            </label>
+            <bbox w="715.0" h="246.0" x="3387.0" y="450.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_68" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="2126.0" y="713.0"/>
+            </label>
+            <bbox w="315.0" h="316.0" x="2064.0" y="482.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_20600_283" compartmentOrder="10.0">
+            <label text="synaptic vesicle">
+                <bbox w="121.0" h="24.0" x="1350.0" y="654.0"/>
+            </label>
+            <bbox w="254.0" h="400.0" x="1219.0" y="400.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17927_652" compartmentOrder="10.0">
+            <label text="mitochondrial intermembrane space">
+                <bbox w="280.0" h="24.0" x="3371.0" y="708.0"/>
+            </label>
+            <bbox w="809.0" h="321.0" x="3355.0" y="437.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_74113_42">
+            <label text="Na+"/>
+            <bbox w="43.0" h="30.0" x="2377.0" y="29.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5626270_152422">
+            <label text="Defective SLC24A4 does not exchange extracellular 4Na+ for cytosolic Ca2+, K+"/>
+            <bbox w="12.0" h="12.0" x="2459.0" y="158.0"/>
+            <port id="reactionVertex_5626270.1" x="2466.0" y="198.0"/>
+            <port id="reactionVertex_5626270.2" x="2466.0" y="124.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_74016_35">
+            <label text="Ca2+"/>
+            <bbox w="50.0" h="30.0" x="2440.0" y="280.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5626236_152423">
+            <label text="SLC24A4 mutants"/>
+            <bbox w="111.0" h="22.0" x="2494.0" y="153.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29804_44">
+            <label text="K+"/>
+            <bbox w="35.0" h="30.0" x="2519.0" y="278.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_42_input_152422" source="entityVertex_74113_42" target="reactionVertex_5626270.1">
+            <glyph class="stoichiometry" id="Stoichiometry_74113_INPUT_5626270">
+                <label text="4"/>
+                <bbox w="12.0" h="12.0" x="2429.0" y="124.0"/>
+            </glyph>
+            <start x="2404.0" y="62.0"/>
+            <next x="2466.0" y="198.0"/>
+            <end x="2466.0" y="198.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_152423_catalyst_152422" source="entityVertex_5626236_152423" target="reactionVertex_5626270_152422">
+            <start x="2488.0" y="164.0"/>
+            <next x="2481.0" y="164.0"/>
+            <end x="2481.0" y="164.0"/>
+        </arc>
+        <arc class="consumption" id="arc_35_input_152422" source="entityVertex_74016_35" target="reactionVertex_5626270.1">
+            <start x="2465.0" y="277.0"/>
+            <next x="2466.0" y="198.0"/>
+            <end x="2466.0" y="198.0"/>
+        </arc>
+        <arc class="consumption" id="arc_44_input_152422" source="entityVertex_29804_44" target="reactionVertex_5626270.1">
+            <start x="2524.0" y="275.0"/>
+            <next x="2466.0" y="198.0"/>
+            <end x="2466.0" y="198.0"/>
+        </arc>
+    </map>
+</sbgn>

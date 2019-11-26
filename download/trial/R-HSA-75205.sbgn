@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_876_91" compartmentOrder="10.0">
+            <label text="plasma membrane">
+                <bbox w="144.0" h="24.0" x="7.0" y="81.0"/>
+            </label>
+            <bbox w="191.0" h="769.0" x="0.0" y="18.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_158946_55">
+            <label text="N-glycyl-glycosylphosphatidylinositolethanolamine-PLAUR"/>
+            <bbox w="130.0" h="64.0" x="113.0" y="6.0"/>
+            <glyph class="unit of information" id="entityVertex_158924_1_mt">
+                <label text="PI"/>
+                <bbox w="15.0" h="16.0" x="123.0" y="0.0"/>
+            </glyph>
+        </glyph>
+        <glyph class="complex" id="entityVertex_158926_76">
+            <label text="urokinase plasminogen activator (one-chain):uPAR"/>
+            <bbox w="124.0" h="64.0" x="113.0" y="147.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_158747_65">
+            <label text="crosslinked fibrin multimer:tissue plasminogen activator (one-chain) -&gt; crosslinked fibrin multimer:tissue plasminogen activator (two-chain)"/>
+            <bbox w="12.0" h="12.0" x="589.0" y="320.0"/>
+            <port id="reactionVertex_158747.1" x="631.0" y="229.0"/>
+            <port id="reactionVertex_158747.2" x="579.0" y="421.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_158795_74">
+            <label text="fibrin multimer, crosslinked:tissue plasminogen activator (one-chain) + plasminogen activator inhibitor 1 -&gt; fibrin multimer, crosslinked:tissue plasminogen activator (one-chain):plasminogen activator inhibitor 1"/>
+            <bbox w="12.0" h="12.0" x="778.0" y="571.0"/>
+            <port id="reactionVertex_158795.1" x="766.0" y="536.0"/>
+            <port id="reactionVertex_158795.2" x="809.0" y="627.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_158997_78">
+            <label text="SERPINB2"/>
+            <bbox w="116.0" h="38.0" x="224.0" y="634.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_158969_47">
+            <label text="urokinase plasminogen activator (two-chain):uPAR"/>
+            <bbox w="121.0" h="62.0" x="116.0" y="420.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_158699_81">
+            <label text="HRG"/>
+            <bbox w="80.0" h="42.0" x="970.0" y="100.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_158925_51">
+            <label text="plasminogen:histidine-rich glycoprotein -&gt; plasmin + histidine-rich glycoprotein (uPA [two-chain] catalyst)"/>
+            <bbox w="12.0" h="12.0" x="169.0" y="383.0"/>
+            <port id="reactionVertex_158925.1" x="175.0" y="352.0"/>
+            <port id="reactionVertex_158925.2" x="272.0" y="389.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_158766_80">
+            <label text="fibrin multimer, crosslinked -&gt; fibrin digestion products (plasmin)"/>
+            <bbox w="12.0" h="12.0" x="549.0" y="340.0"/>
+            <port id="reactionVertex_158766.1" x="551.0" y="126.0"/>
+            <port id="reactionVertex_158766.2" x="524.0" y="346.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_158927_61">
+            <label text="HRG"/>
+            <bbox w="78.0" h="47.0" x="296.0" y="301.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_158721_50">
+            <label text="histidine-rich glycoprotein:plasminogen &lt;-&gt; histidine-rich glycoprotein + plasminogen"/>
+            <bbox w="10.0" h="10.0" x="940.0" y="205.0"/>
+            <port id="reactionVertex_158721.1" x="962.0" y="246.0"/>
+            <port id="reactionVertex_158721.2" x="955.0" y="176.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_158764_79">
+            <label text="fibrin multimer, crosslinked:tissue plasminogen activator (one-chain)"/>
+            <bbox w="126.0" h="78.0" x="583.0" y="148.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_158941_75">
+            <label text="plasminogen + histidine-rich glycoprotein -&gt; plasminogen:histidine-rich glycoprotein"/>
+            <bbox w="10.0" h="10.0" x="330.0" y="211.0"/>
+            <port id="reactionVertex_158941.1" x="402.0" y="174.0"/>
+            <port id="reactionVertex_158941.2" x="213.0" y="295.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_158959_70">
+            <label text="urokinase plasminogen activator + urokinase plasminogen activator receptor (uPAR) -&gt; urokinase plasminogen activator:uPAR"/>
+            <bbox w="10.0" h="10.0" x="174.0" y="114.0"/>
+            <port id="reactionVertex_158959.1" x="179.0" y="93.0"/>
+            <port id="reactionVertex_158959.2" x="177.0" y="144.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_158744_90">
+            <label text="crosslinked fibrin multimer:tissue plasminogen activator (two-chain):plasminogen -&gt; crosslinked fibrin multimer:tissue plasminogen activator (two-chain) + plasmin"/>
+            <bbox w="12.0" h="12.0" x="776.0" y="514.0"/>
+            <port id="reactionVertex_158744.1" x="863.0" y="522.0"/>
+            <port id="reactionVertex_158744.2" x="781.0" y="479.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_158781_88">
+            <label text="crosslinked fibrin multimer + tissue plasminogen activator (one-chain) -&gt; crosslinked fibrin multimer:tissue plasminogen activator (one-chain)"/>
+            <bbox w="10.0" h="10.0" x="639.0" y="110.0"/>
+            <port id="reactionVertex_158781.1" x="644.0" y="95.0"/>
+            <port id="reactionVertex_158781.2" x="644.0" y="145.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_158745_66">
+            <label text="fibrin multimer, crosslinked:tissue plasminogen activator (two-chain)"/>
+            <bbox w="126.0" h="78.0" x="511.0" y="424.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_158893_59">
+            <label text="alpha-2-antiplasmin + plasmin -&gt; alpha-2-antiplasmin:plasmin"/>
+            <bbox w="12.0" h="12.0" x="445.0" y="485.0"/>
+            <port id="reactionVertex_158893.1" x="451.0" y="419.0"/>
+            <port id="reactionVertex_158893.2" x="451.0" y="539.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_158961_72">
+            <label text="plasminogen:histidine-rich glycoprotein"/>
+            <bbox w="116.0" h="51.0" x="118.0" y="298.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_158756_87">
+            <label text="crosslinked fibrin multimer:tissue plasminogen activator (two-chain) + plasminogen -&gt; crosslinked fibrin multimer:tissue plasminogen activator (two-chain):plasminogen"/>
+            <bbox w="10.0" h="10.0" x="923.0" y="454.0"/>
+            <port id="reactionVertex_158756.1" x="901.0" y="460.0"/>
+            <port id="reactionVertex_158756.2" x="928.0" y="492.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_159009_85">
+            <label text="PAI-2:urokinase plasminogen activator (two-chain):uPAR"/>
+            <bbox w="116.0" h="69.0" x="116.0" y="697.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_158417_48">
+            <label text="Zn2+"/>
+            <bbox w="43.0" h="31.0" x="312.0" y="148.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_158770_57">
+            <label text="Plasmin"/>
+            <bbox w="56.0" h="25.0" x="615.0" y="376.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_158722_89">
+            <label text="histidine-rich glycoprotein + plasminogen &lt;-&gt; histidine-rich glycoprotein:plasminogen"/>
+            <bbox w="10.0" h="10.0" x="992.0" y="204.0"/>
+            <port id="reactionVertex_158722.1" x="988.0" y="179.0"/>
+            <port id="reactionVertex_158722.2" x="983.0" y="246.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_159005_64">
+            <label text="urokinase plasminogen activator (two-chain):uPAR + plasminogen activator inhibitor 1 (PAI-1) -&gt; PAI-1:urokinase plasminogen activator (two-chain):uPAR"/>
+            <bbox w="12.0" h="12.0" x="170.0" y="520.0"/>
+            <port id="reactionVertex_159005.1" x="176.0" y="501.0"/>
+            <port id="reactionVertex_159005.2" x="176.0" y="550.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_158982_60">
+            <label text="plasminogen:histidine-rich glycoprotein -&gt; plasmin + histidine-rich glycoprotein (uPA [one-chain] catalyst)"/>
+            <bbox w="12.0" h="12.0" x="167.0" y="255.0"/>
+            <port id="reactionVertex_158982.1" x="174.0" y="295.0"/>
+            <port id="reactionVertex_158982.2" x="304.0" y="260.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_158878_49">
+            <label text="alpha-2-antiplasmin:plasmin"/>
+            <bbox w="107.0" h="50.0" x="399.0" y="542.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_158777_84">
+            <label text="fibrin multimer, crosslinked:tissue plasminogen activator (one-chain):plasminogen"/>
+            <bbox w="128.0" h="92.0" x="770.0" y="264.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_4127462_95">
+            <label text="SERPINE1-like proteins"/>
+            <bbox w="90.0" h="36.0" x="45.0" y="507.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_158800_63">
+            <label text="fibrin multimer, crosslinked:tissue plasminogen activator (two-chain) + plasminogen activator inhibitor 1 -&gt; fibrin multimer, crosslinked:tissue plasminogen activator (two-chain):plasminogen activator inhibitor 1"/>
+            <bbox w="12.0" h="12.0" x="567.0" y="582.0"/>
+            <port id="reactionVertex_158800.1" x="573.0" y="539.0"/>
+            <port id="reactionVertex_158800.2" x="573.0" y="630.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_158774_45">
+            <label text="fibrin digestion products (plasmin)"/>
+            <bbox w="127.0" h="36.0" x="394.0" y="329.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_158784_53">
+            <label text="crosslinked fibrin multimer:tissue plasminogen activator (one-chain) + plasminogen -&gt; crosslinked fibrin multimer:tissue plasminogen activator (one-chain):plasminogen"/>
+            <bbox w="10.0" h="10.0" x="793.0" y="223.0"/>
+            <port id="reactionVertex_158784.1" x="797.0" y="195.0"/>
+            <port id="reactionVertex_158784.2" x="813.0" y="261.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_141760_52">
+            <label text="SERPINF2"/>
+            <bbox w="105.0" h="30.0" x="321.0" y="442.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_158701_86">
+            <label text="PLG(20-810)"/>
+            <bbox w="88.0" h="29.0" x="850.0" y="110.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_158942_73">
+            <label text="urokinase plasminogen activator (one-chain):uPAR -&gt; urokinase plasminogen activator (two-chain):uPAR"/>
+            <bbox w="12.0" h="12.0" x="104.0" y="230.0"/>
+            <port id="reactionVertex_158942.1" x="138.0" y="214.0"/>
+            <port id="reactionVertex_158942.2" x="110.0" y="387.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_158797_77">
+            <label text="SERPINE1"/>
+            <bbox w="116.0" h="38.0" x="588.0" y="518.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_157771_67">
+            <label text="fibrin multimer, crosslinked"/>
+            <bbox w="102.0" h="32.0" x="516.0" y="47.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2990857_92">
+            <label text="plasminogen activator inhibitor"/>
+            <bbox w="119.0" h="36.0" x="20.0" y="638.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_158703_44">
+            <label text="histidine-rich glycoprotein:plasminogen"/>
+            <bbox w="91.0" h="54.0" x="929.0" y="249.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_158754_62">
+            <label text="PLAT(36-562)"/>
+            <bbox w="122.0" h="42.0" x="681.0" y="36.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_158791_68">
+            <label text="fibrin multimer, crosslinked:tissue plasminogen activator (one-chain):plasminogen activator inhibitor 1"/>
+            <bbox w="131.0" h="106.0" x="769.0" y="630.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5336141_96">
+            <label text="ANXA2:S100A10 tetramer"/>
+            <bbox w="112.0" h="36.0" x="752.0" y="381.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_158750_71">
+            <label text="crosslinked fibrin multimer:tissue plasminogen activator (one-chain):plasminogen -&gt; crosslinked fibrin multimer:tissue plasminogen activator (one-chain) + plasmin"/>
+            <bbox w="12.0" h="12.0" x="723.0" y="307.0"/>
+            <port id="reactionVertex_158750.1" x="767.0" y="304.0"/>
+            <port id="reactionVertex_158750.2" x="705.0" y="314.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_159001_56">
+            <label text="urokinase plasminogen activator (two-chain):uPAR + plasminogen activator inhibitor 2 (PAI-2) -&gt; PAI-2:urokinase plasminogen activator (two-chain):uPAR"/>
+            <bbox w="12.0" h="12.0" x="169.0" y="652.0"/>
+            <port id="reactionVertex_159001.1" x="174.0" y="631.0"/>
+            <port id="reactionVertex_159001.2" x="174.0" y="694.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_158789_46">
+            <label text="fibrin multimer, crosslinked:tissue plasminogen activator (two-chain):plasminogen activator inhibitor 1"/>
+            <bbox w="131.0" h="106.0" x="508.0" y="633.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_158979_54">
+            <label text="PLAU(21-431)"/>
+            <bbox w="124.0" h="48.0" x="218.0" y="70.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_4127463_93">
+            <label text="SERPINE1-like proteins"/>
+            <bbox w="92.0" h="37.0" x="647.0" y="579.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_159013_58">
+            <label text="PAI-1:urokinase plasminogen activator (two-chain):uPAR"/>
+            <bbox w="116.0" h="63.0" x="120.0" y="553.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_158786_82">
+            <label text="fibrin multimer, crosslinked:tissue plasminogen activator (two-chain):plasminogen"/>
+            <bbox w="128.0" h="85.0" x="866.0" y="495.0"/>
+        </glyph>
+        <arc class="catalysis" id="arc_57_catalyst_80" source="entityVertex_158770_57" target="reactionVertex_158766_80">
+            <start x="616.0" y="373.0"/>
+            <next x="570.0" y="352.0"/>
+            <end x="570.0" y="352.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_95_catalyst_64" source="entityVertex_4127462_95" target="reactionVertex_159005_64">
+            <start x="141.0" y="525.0"/>
+            <next x="160.0" y="526.0"/>
+            <end x="160.0" y="526.0"/>
+        </arc>
+        <arc class="consumption" id="arc_66_input_87" source="entityVertex_158745_66" target="reactionVertex_158756.1">
+            <start x="640.0" y="462.0"/>
+            <next x="901.0" y="460.0"/>
+            <end x="901.0" y="460.0"/>
+        </arc>
+        <arc class="consumption" id="arc_86_input_89" source="entityVertex_158701_86" target="reactionVertex_158722.1">
+            <start x="918.0" y="142.0"/>
+            <next x="988.0" y="179.0"/>
+            <end x="988.0" y="179.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_57_catalyst_73" source="entityVertex_158770_57" target="reactionVertex_158942_73">
+            <start x="636.0" y="373.0"/>
+            <next x="566.0" y="231.0"/>
+            <next x="126.0" y="236.0"/>
+            <end x="126.0" y="236.0"/>
+        </arc>
+        <arc class="production" id="arc_82_output_87" source="reactionVertex_158756.2" target="entityVertex_158786_82">
+            <start x="928.0" y="459.0"/>
+            <end x="928.0" y="492.0"/>
+        </arc>
+        <arc class="production" id="arc_66_output_90" source="reactionVertex_158744.2" target="entityVertex_158745_66">
+            <start x="640.0" y="467.0"/>
+            <next x="781.0" y="479.0"/>
+            <end x="781.0" y="479.0"/>
+        </arc>
+        <arc class="stimulation" id="arc_48_activator_75" source="entityVertex_158417_48" target="reactionVertex_158941_75">
+            <start x="333.0" y="182.0"/>
+            <next x="334.0" y="207.0"/>
+            <end x="334.0" y="207.0"/>
+        </arc>
+        <arc class="production" id="arc_81_output_50" source="reactionVertex_158721.2" target="entityVertex_158699_81">
+            <start x="989.0" y="145.0"/>
+            <next x="955.0" y="176.0"/>
+            <end x="955.0" y="176.0"/>
+        </arc>
+        <arc class="consumption" id="arc_52_input_59" source="entityVertex_141760_52" target="reactionVertex_158893.1">
+            <start x="403.0" y="439.0"/>
+            <next x="451.0" y="419.0"/>
+            <end x="451.0" y="419.0"/>
+        </arc>
+        <arc class="production" id="arc_86_output_50" source="reactionVertex_158721.2" target="entityVertex_158701_86">
+            <start x="911.0" y="142.0"/>
+            <next x="955.0" y="176.0"/>
+            <end x="955.0" y="176.0"/>
+        </arc>
+        <arc class="consumption" id="arc_86_input_87" source="entityVertex_158701_86" target="reactionVertex_158756.1">
+            <start x="894.0" y="142.0"/>
+            <next x="901.0" y="460.0"/>
+            <end x="901.0" y="460.0"/>
+        </arc>
+        <arc class="consumption" id="arc_61_input_75" source="entityVertex_158927_61" target="reactionVertex_158941.1">
+            <start x="345.0" y="298.0"/>
+            <next x="402.0" y="174.0"/>
+            <end x="402.0" y="174.0"/>
+        </arc>
+        <arc class="production" id="arc_45_output_80" source="reactionVertex_158766.2" target="entityVertex_158774_45">
+            <start x="551.0" y="126.0"/>
+            <end x="555.0" y="346.0"/>
+        </arc>
+        <arc class="consumption" id="arc_76_input_73" source="entityVertex_158926_76" target="reactionVertex_158942.1">
+            <start x="138.0" y="214.0"/>
+            <end x="110.0" y="236.0"/>
+        </arc>
+        <arc class="production" id="arc_61_output_51" source="reactionVertex_158925.2" target="entityVertex_158927_61">
+            <start x="323.0" y="351.0"/>
+            <next x="272.0" y="389.0"/>
+            <next x="304.0" y="389.0"/>
+            <end x="304.0" y="389.0"/>
+        </arc>
+        <arc class="production" id="arc_57_output_71" source="reactionVertex_158750.2" target="entityVertex_158770_57">
+            <start x="653.0" y="373.0"/>
+            <next x="705.0" y="314.0"/>
+            <end x="705.0" y="314.0"/>
+        </arc>
+        <arc class="consumption" id="arc_44_input_50" source="entityVertex_158703_44" target="reactionVertex_158721.1">
+            <start x="962.0" y="246.0"/>
+            <end x="945.0" y="210.0"/>
+        </arc>
+        <arc class="consumption" id="arc_62_input_88" source="entityVertex_158754_62" target="reactionVertex_158781.1">
+            <start x="687.0" y="81.0"/>
+            <next x="644.0" y="95.0"/>
+            <end x="644.0" y="95.0"/>
+        </arc>
+        <arc class="consumption" id="arc_79_input_74" source="entityVertex_158764_79" target="reactionVertex_158795.1">
+            <start x="659.0" y="229.0"/>
+            <next x="766.0" y="536.0"/>
+            <end x="766.0" y="536.0"/>
+        </arc>
+        <arc class="production" id="arc_46_output_63" source="reactionVertex_158800.2" target="entityVertex_158789_46">
+            <start x="573.0" y="588.0"/>
+            <end x="573.0" y="630.0"/>
+        </arc>
+        <arc class="consumption" id="arc_55_input_70" source="entityVertex_158946_55" target="reactionVertex_158959.1">
+            <start x="178.0" y="73.0"/>
+            <next x="179.0" y="93.0"/>
+            <end x="179.0" y="93.0"/>
+        </arc>
+        <arc class="production" id="arc_58_output_64" source="reactionVertex_159005.2" target="entityVertex_159013_58">
+            <start x="176.0" y="526.0"/>
+            <end x="176.0" y="550.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_57_catalyst_65" source="entityVertex_158770_57" target="reactionVertex_158747_65">
+            <start x="640.0" y="373.0"/>
+            <next x="630.0" y="329.0"/>
+            <next x="611.0" y="327.0"/>
+            <end x="611.0" y="327.0"/>
+        </arc>
+        <arc class="consumption" id="arc_47_input_64" source="entityVertex_158969_47" target="reactionVertex_159005.1">
+            <start x="176.0" y="485.0"/>
+            <next x="176.0" y="501.0"/>
+            <end x="176.0" y="501.0"/>
+        </arc>
+        <arc class="consumption" id="arc_81_input_89" source="entityVertex_158699_81" target="reactionVertex_158722.1">
+            <start x="1002.0" y="145.0"/>
+            <next x="988.0" y="179.0"/>
+            <end x="988.0" y="179.0"/>
+        </arc>
+        <arc class="consumption" id="arc_54_input_70" source="entityVertex_158979_54" target="reactionVertex_158959.1">
+            <start x="215.0" y="93.0"/>
+            <next x="179.0" y="93.0"/>
+            <end x="179.0" y="93.0"/>
+        </arc>
+        <arc class="production" id="arc_57_output_51" source="reactionVertex_158925.2" target="entityVertex_158770_57">
+            <start x="612.0" y="388.0"/>
+            <next x="272.0" y="389.0"/>
+            <next x="304.0" y="389.0"/>
+            <end x="304.0" y="389.0"/>
+        </arc>
+        <arc class="consumption" id="arc_57_input_59" source="entityVertex_158770_57" target="reactionVertex_158893.1">
+            <start x="612.0" y="392.0"/>
+            <next x="451.0" y="419.0"/>
+            <end x="451.0" y="419.0"/>
+        </arc>
+        <arc class="consumption" id="arc_79_input_53" source="entityVertex_158764_79" target="reactionVertex_158784.1">
+            <start x="712.0" y="190.0"/>
+            <next x="797.0" y="195.0"/>
+            <end x="797.0" y="195.0"/>
+        </arc>
+        <arc class="consumption" id="arc_86_input_53" source="entityVertex_158701_86" target="reactionVertex_158784.1">
+            <start x="874.0" y="142.0"/>
+            <next x="797.0" y="195.0"/>
+            <end x="797.0" y="195.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_52_catalyst_59" source="entityVertex_141760_52" target="reactionVertex_158893_59">
+            <start x="407.0" y="475.0"/>
+            <next x="436.0" y="486.0"/>
+            <end x="436.0" y="486.0"/>
+        </arc>
+        <arc class="consumption" id="arc_72_input_60" source="entityVertex_158961_72" target="reactionVertex_158982.1">
+            <start x="174.0" y="295.0"/>
+            <end x="173.0" y="261.0"/>
+        </arc>
+        <arc class="production" id="arc_61_output_60" source="reactionVertex_158982.2" target="entityVertex_158927_61">
+            <start x="323.0" y="298.0"/>
+            <next x="304.0" y="260.0"/>
+            <end x="304.0" y="260.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_84_catalyst_71" source="entityVertex_158777_84" target="reactionVertex_158750_71">
+            <start x="767.0" y="311.0"/>
+            <next x="745.0" y="312.0"/>
+            <end x="745.0" y="312.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_93_catalyst_63" source="entityVertex_4127463_93" target="reactionVertex_158800_63">
+            <start x="641.0" y="593.0"/>
+            <next x="589.0" y="589.0"/>
+            <end x="589.0" y="589.0"/>
+        </arc>
+        <arc class="production" id="arc_76_output_70" source="reactionVertex_158959.2" target="entityVertex_158926_76">
+            <start x="179.0" y="119.0"/>
+            <end x="177.0" y="144.0"/>
+        </arc>
+        <arc class="production" id="arc_47_output_73" source="reactionVertex_158942.2" target="entityVertex_158969_47">
+            <start x="110.0" y="236.0"/>
+            <next x="110.0" y="387.0"/>
+            <end x="110.0" y="387.0"/>
+        </arc>
+        <arc class="consumption" id="arc_72_input_51" source="entityVertex_158961_72" target="reactionVertex_158925.1">
+            <start x="175.0" y="352.0"/>
+            <end x="175.0" y="389.0"/>
+        </arc>
+        <arc class="consumption" id="arc_77_input_74" source="entityVertex_158797_77" target="reactionVertex_158795.1">
+            <start x="707.0" y="536.0"/>
+            <next x="766.0" y="536.0"/>
+            <end x="766.0" y="536.0"/>
+        </arc>
+        <arc class="stimulation" id="arc_96_activator_71" source="entityVertex_5336141_96" target="reactionVertex_158750_71">
+            <start x="791.0" y="378.0"/>
+            <next x="735.0" y="320.0"/>
+            <end x="735.0" y="320.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_47_catalyst_51" source="entityVertex_158969_47" target="reactionVertex_158925_51">
+            <start x="175.0" y="417.0"/>
+            <next x="175.0" y="405.0"/>
+            <end x="175.0" y="405.0"/>
+        </arc>
+        <arc class="consumption" id="arc_77_input_64" source="entityVertex_158797_77" target="reactionVertex_159005.1">
+            <start x="639.0" y="559.0"/>
+            <next x="621.0" y="612.0"/>
+            <next x="387.0" y="612.0"/>
+            <next x="176.0" y="501.0"/>
+            <end x="176.0" y="501.0"/>
+        </arc>
+        <arc class="production" id="arc_79_output_71" source="reactionVertex_158750.2" target="entityVertex_158764_79">
+            <start x="664.0" y="229.0"/>
+            <next x="705.0" y="314.0"/>
+            <end x="705.0" y="314.0"/>
+        </arc>
+        <arc class="production" id="arc_85_output_56" source="reactionVertex_159001.2" target="entityVertex_159009_85">
+            <start x="175.0" y="658.0"/>
+            <end x="174.0" y="694.0"/>
+        </arc>
+        <arc class="production" id="arc_72_output_75" source="reactionVertex_158941.2" target="entityVertex_158961_72">
+            <start x="335.0" y="216.0"/>
+            <end x="213.0" y="295.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_82_catalyst_90" source="entityVertex_158786_82" target="reactionVertex_158744_90">
+            <start x="863.0" y="529.0"/>
+            <next x="798.0" y="522.0"/>
+            <end x="798.0" y="522.0"/>
+        </arc>
+        <arc class="production" id="arc_44_output_89" source="reactionVertex_158722.2" target="entityVertex_158703_44">
+            <start x="997.0" y="209.0"/>
+            <end x="983.0" y="246.0"/>
+        </arc>
+        <arc class="production" id="arc_49_output_59" source="reactionVertex_158893.2" target="entityVertex_158878_49">
+            <start x="451.0" y="491.0"/>
+            <end x="451.0" y="539.0"/>
+        </arc>
+        <arc class="consumption" id="arc_77_input_63" source="entityVertex_158797_77" target="reactionVertex_158800.1">
+            <start x="585.0" y="538.0"/>
+            <next x="573.0" y="539.0"/>
+            <end x="573.0" y="539.0"/>
+        </arc>
+        <arc class="production" id="arc_57_output_60" source="reactionVertex_158982.2" target="entityVertex_158770_57">
+            <start x="627.0" y="373.0"/>
+            <next x="304.0" y="260.0"/>
+            <next x="480.0" y="259.0"/>
+            <end x="304.0" y="260.0"/>
+        </arc>
+        <arc class="consumption" id="arc_86_input_75" source="entityVertex_158701_86" target="reactionVertex_158941.1">
+            <start x="894.0" y="107.0"/>
+            <next x="895.0" y="22.0"/>
+            <next x="482.0" y="26.0"/>
+            <next x="402.0" y="174.0"/>
+            <end x="402.0" y="174.0"/>
+        </arc>
+        <arc class="consumption" id="arc_66_input_63" source="entityVertex_158745_66" target="reactionVertex_158800.1">
+            <start x="573.0" y="505.0"/>
+            <next x="573.0" y="539.0"/>
+            <end x="573.0" y="539.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_76_catalyst_60" source="entityVertex_158926_76" target="reactionVertex_158982_60">
+            <start x="174.0" y="214.0"/>
+            <next x="173.0" y="245.0"/>
+            <end x="173.0" y="245.0"/>
+        </arc>
+        <arc class="production" id="arc_79_output_88" source="reactionVertex_158781.2" target="entityVertex_158764_79">
+            <start x="644.0" y="115.0"/>
+            <end x="644.0" y="145.0"/>
+        </arc>
+        <arc class="consumption" id="arc_78_input_56" source="entityVertex_158997_78" target="reactionVertex_159001.1">
+            <start x="221.0" y="641.0"/>
+            <next x="174.0" y="631.0"/>
+            <end x="174.0" y="631.0"/>
+        </arc>
+        <arc class="consumption" id="arc_47_input_56" source="entityVertex_158969_47" target="reactionVertex_159001.1">
+            <start x="113.0" y="462.0"/>
+            <next x="22.0" y="481.0"/>
+            <next x="23.0" y="620.0"/>
+            <next x="174.0" y="631.0"/>
+            <end x="174.0" y="631.0"/>
+        </arc>
+        <arc class="production" id="arc_57_output_90" source="reactionVertex_158744.2" target="entityVertex_158770_57">
+            <start x="661.0" y="404.0"/>
+            <next x="781.0" y="479.0"/>
+            <end x="781.0" y="479.0"/>
+        </arc>
+        <arc class="consumption" id="arc_82_input_90" source="entityVertex_158786_82" target="reactionVertex_158744.1">
+            <start x="863.0" y="522.0"/>
+            <end x="782.0" y="520.0"/>
+        </arc>
+        <arc class="consumption" id="arc_67_input_88" source="entityVertex_157771_67" target="reactionVertex_158781.1">
+            <start x="605.0" y="82.0"/>
+            <next x="644.0" y="95.0"/>
+            <end x="644.0" y="95.0"/>
+        </arc>
+        <arc class="production" id="arc_84_output_53" source="reactionVertex_158784.2" target="entityVertex_158777_84">
+            <start x="798.0" y="228.0"/>
+            <end x="813.0" y="261.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_92_catalyst_56" source="entityVertex_2990857_92" target="reactionVertex_159001_56">
+            <start x="145.0" y="657.0"/>
+            <next x="159.0" y="657.0"/>
+            <end x="159.0" y="657.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_93_catalyst_74" source="entityVertex_4127463_93" target="reactionVertex_158795_74">
+            <start x="745.0" y="586.0"/>
+            <next x="768.0" y="581.0"/>
+            <end x="768.0" y="581.0"/>
+        </arc>
+        <arc class="consumption" id="arc_67_input_80" source="entityVertex_157771_67" target="reactionVertex_158766.1">
+            <start x="562.0" y="82.0"/>
+            <next x="551.0" y="126.0"/>
+            <end x="551.0" y="126.0"/>
+        </arc>
+        <arc class="production" id="arc_68_output_74" source="reactionVertex_158795.2" target="entityVertex_158791_68">
+            <start x="784.0" y="577.0"/>
+            <end x="809.0" y="627.0"/>
+        </arc>
+        <arc class="consumption" id="arc_84_input_71" source="entityVertex_158777_84" target="reactionVertex_158750.1">
+            <start x="767.0" y="304.0"/>
+            <end x="729.0" y="313.0"/>
+        </arc>
+        <arc class="consumption" id="arc_79_input_65" source="entityVertex_158764_79" target="reactionVertex_158747.1">
+            <start x="631.0" y="229.0"/>
+            <end x="595.0" y="326.0"/>
+        </arc>
+        <arc class="production" id="arc_66_output_65" source="reactionVertex_158747.2" target="entityVertex_158745_66">
+            <start x="595.0" y="326.0"/>
+            <end x="579.0" y="421.0"/>
+        </arc>
+    </map>
+</sbgn>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_7" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="2200.0" y="2237.0"/>
+            </label>
+            <bbox w="2493.0" h="2248.0" x="0.0" y="66.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_10" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="88.0" y="1722.0"/>
+            </label>
+            <bbox w="533.0" h="800.0" x="68.0" y="1361.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_602" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="790.0" y="123.0"/>
+            </label>
+            <bbox w="590.0" h="234.0" x="580.0" y="104.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_587" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="2227.0" y="550.0"/>
+            </label>
+            <bbox w="237.0" h="253.0" x="2212.0" y="344.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_3274535_99785">
+            <label text="G6PC mutants"/>
+            <bbox w="91.0" h="22.0" x="536.0" y="153.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_3274540_99784">
+            <label text="Defective G6PC does not hydrolyze glucose 6-phosphate"/>
+            <bbox w="12.0" h="12.0" x="659.0" y="170.0"/>
+            <port id="reactionVertex_3274540.1" x="666.0" y="223.0"/>
+            <port id="reactionVertex_3274540.2" x="679.0" y="146.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113782_606">
+            <label text="G6P"/>
+            <bbox w="41.0" h="30.0" x="707.0" y="241.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113519_609">
+            <label text="H2O"/>
+            <bbox w="41.0" h="30.0" x="632.0" y="241.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_606_input_99784" source="entityVertex_113782_606" target="reactionVertex_3274540.1">
+            <start x="704.0" y="244.0"/>
+            <next x="666.0" y="223.0"/>
+            <end x="666.0" y="223.0"/>
+        </arc>
+        <arc class="consumption" id="arc_609_input_99784" source="entityVertex_113519_609" target="reactionVertex_3274540.1">
+            <start x="658.0" y="238.0"/>
+            <next x="666.0" y="223.0"/>
+            <end x="666.0" y="223.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_99785_catalyst_99784" source="entityVertex_3274535_99785" target="reactionVertex_3274540_99784">
+            <start x="633.0" y="170.0"/>
+            <next x="649.0" y="173.0"/>
+            <end x="649.0" y="173.0"/>
+        </arc>
+    </map>
+</sbgn>

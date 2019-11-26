@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_1" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="37.0" y="240.0"/>
+            </label>
+            <bbox w="1025.0" h="299.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_390597_13">
+            <label text="Release Of ADP From Myosin"/>
+            <bbox w="10.0" h="10.0" x="766.0" y="213.0"/>
+            <port id="reactionVertex_390597.1" x="825.0" y="218.0"/>
+            <port id="reactionVertex_390597.2" x="527.0" y="218.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_390593_9">
+            <label text="ATP Hydrolysis By Myosin"/>
+            <bbox w="12.0" h="12.0" x="756.0" y="130.0"/>
+            <port id="reactionVertex_390593.1" x="679.0" y="134.0"/>
+            <port id="reactionVertex_390593.2" x="808.0" y="139.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_14">
+            <label text="ADP"/>
+            <bbox w="40.0" h="30.0" x="450.0" y="254.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_390591_11">
+            <label text="ADP:Calcium Bound Sarcomere Protein Complex"/>
+            <bbox w="125.0" h="50.0" x="828.0" y="194.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_390590_3">
+            <label text="Inactive Sarcomere Protein Complex"/>
+            <bbox w="120.0" h="36.0" x="25.0" y="158.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_390575_12">
+            <label text="Myosin Complex"/>
+            <bbox w="102.0" h="22.0" x="707.0" y="52.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_390595_2">
+            <label text="Calcium Binds Troponin-C"/>
+            <bbox w="10.0" h="10.0" x="224.0" y="122.0"/>
+            <port id="reactionVertex_390595.1" x="185.0" y="127.0"/>
+            <port id="reactionVertex_390595.2" x="280.0" y="126.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29372_10">
+            <label text="Pi"/>
+            <bbox w="109.0" h="30.0" x="845.0" y="81.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_390596_8">
+            <label text="ATP:Calcium Bound Sarcomere Protein Complex"/>
+            <bbox w="124.0" h="50.0" x="552.0" y="109.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_74016_4">
+            <label text="Ca2+"/>
+            <bbox w="61.0" h="30.0" x="83.0" y="55.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_7">
+            <label text="ATP"/>
+            <bbox w="39.0" h="30.0" x="402.0" y="48.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_390592_5">
+            <label text="Calcium Bound Sarcomere Protein Complex"/>
+            <bbox w="117.0" h="50.0" x="283.0" y="101.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_390598_6">
+            <label text="Myosin Binds ATP"/>
+            <bbox w="10.0" h="10.0" x="493.0" y="124.0"/>
+            <port id="reactionVertex_390598.1" x="450.0" y="127.0"/>
+            <port id="reactionVertex_390598.2" x="549.0" y="131.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_7_input_6" source="entityVertex_113592_7" target="reactionVertex_390598.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_390598">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="432.0" y="98.0"/>
+            </glyph>
+            <start x="427.0" y="81.0"/>
+            <next x="450.0" y="127.0"/>
+            <end x="450.0" y="127.0"/>
+        </arc>
+        <arc class="production" id="arc_8_output_6" source="reactionVertex_390598.2" target="entityVertex_390596_8">
+            <start x="498.0" y="129.0"/>
+            <end x="549.0" y="131.0"/>
+        </arc>
+        <arc class="consumption" id="arc_11_input_13" source="entityVertex_390591_11" target="reactionVertex_390597.1">
+            <start x="825.0" y="218.0"/>
+            <end x="771.0" y="218.0"/>
+        </arc>
+        <arc class="consumption" id="arc_8_input_9" source="entityVertex_390596_8" target="reactionVertex_390593.1">
+            <start x="679.0" y="134.0"/>
+            <end x="762.0" y="136.0"/>
+        </arc>
+        <arc class="production" id="arc_10_output_9" source="reactionVertex_390593.2" target="entityVertex_29372_10">
+            <glyph class="stoichiometry" id="Stoichiometry_29372_OUTPUT_390593">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="831.0" y="120.0"/>
+            </glyph>
+            <start x="867.0" y="114.0"/>
+            <next x="808.0" y="139.0"/>
+            <end x="808.0" y="139.0"/>
+        </arc>
+        <arc class="production" id="arc_14_output_13" source="reactionVertex_390597.2" target="entityVertex_29370_14">
+            <glyph class="stoichiometry" id="Stoichiometry_29370_OUTPUT_390597">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="500.0" y="228.0"/>
+            </glyph>
+            <start x="486.0" y="251.0"/>
+            <next x="527.0" y="218.0"/>
+            <end x="527.0" y="218.0"/>
+        </arc>
+        <arc class="consumption" id="arc_4_input_2" source="entityVertex_74016_4" target="reactionVertex_390595.1">
+            <glyph class="stoichiometry" id="Stoichiometry_74016_INPUT_390595">
+                <label text="4"/>
+                <bbox w="12.0" h="12.0" x="152.0" y="101.0"/>
+            </glyph>
+            <start x="131.0" y="88.0"/>
+            <next x="185.0" y="127.0"/>
+            <end x="185.0" y="127.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_12_catalyst_9" source="entityVertex_390575_12" target="reactionVertex_390593_9">
+            <start x="758.0" y="77.0"/>
+            <next x="761.0" y="120.0"/>
+            <end x="761.0" y="120.0"/>
+        </arc>
+        <arc class="production" id="arc_5_output_2" source="reactionVertex_390595.2" target="entityVertex_390592_5">
+            <start x="229.0" y="127.0"/>
+            <end x="280.0" y="126.0"/>
+        </arc>
+        <arc class="consumption" id="arc_3_input_2" source="entityVertex_390590_3" target="reactionVertex_390595.1">
+            <start x="121.0" y="155.0"/>
+            <next x="185.0" y="127.0"/>
+            <end x="185.0" y="127.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_6" source="entityVertex_390592_5" target="reactionVertex_390598.1">
+            <start x="403.0" y="126.0"/>
+            <next x="450.0" y="127.0"/>
+            <end x="450.0" y="127.0"/>
+        </arc>
+        <arc class="production" id="arc_5_output_13" source="reactionVertex_390597.2" target="entityVertex_390592_5">
+            <start x="391.0" y="154.0"/>
+            <next x="527.0" y="218.0"/>
+            <end x="527.0" y="218.0"/>
+        </arc>
+        <arc class="production" id="arc_11_output_9" source="reactionVertex_390593.2" target="entityVertex_390591_11">
+            <start x="864.0" y="191.0"/>
+            <next x="808.0" y="139.0"/>
+            <end x="808.0" y="139.0"/>
+        </arc>
+    </map>
+</sbgn>

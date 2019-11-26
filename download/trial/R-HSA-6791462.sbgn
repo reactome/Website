@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_7" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="1714.0" y="785.0"/>
+            </label>
+            <bbox w="1789.0" h="864.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5660002_180467">
+            <label text="TALDO1 mutant dimers"/>
+            <bbox w="105.0" h="36.0" x="1425.0" y="487.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29512_511">
+            <label text="Fru(6)P"/>
+            <bbox w="62.0" h="30.0" x="1671.0" y="554.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29878_506">
+            <label text="E4P"/>
+            <bbox w="41.0" h="30.0" x="1657.0" y="436.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5659998_180466">
+            <label text="Defective TALDO1 does not transform Fru(6)P, E4P to SH7P, GA3P"/>
+            <bbox w="12.0" h="12.0" x="1469.0" y="445.0"/>
+            <port id="reactionVertex_5659998.1" x="1517.0" y="451.0"/>
+            <port id="reactionVertex_5659998.2" x="1434.0" y="451.0"/>
+        </glyph>
+        <arc class="catalysis" id="arc_180467_catalyst_180466" source="entityVertex_5660002_180467" target="reactionVertex_5659998_180466">
+            <start x="1476.0" y="481.0"/>
+            <next x="1476.0" y="467.0"/>
+            <end x="1476.0" y="467.0"/>
+        </arc>
+        <arc class="consumption" id="arc_511_input_180466" source="entityVertex_29512_511" target="reactionVertex_5659998.1">
+            <start x="1678.0" y="551.0"/>
+            <next x="1517.0" y="451.0"/>
+            <end x="1517.0" y="451.0"/>
+        </arc>
+        <arc class="consumption" id="arc_506_input_180466" source="entityVertex_29878_506" target="reactionVertex_5659998.1">
+            <start x="1654.0" y="451.0"/>
+            <next x="1517.0" y="451.0"/>
+            <end x="1517.0" y="451.0"/>
+        </arc>
+    </map>
+</sbgn>

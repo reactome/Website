@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17963_640" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="2939.0" y="263.0"/>
+            </label>
+            <bbox w="3367.0" h="350.0" x="1167.0" y="120.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_1604" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="642.0" y="195.0"/>
+            </label>
+            <bbox w="631.0" h="177.0" x="472.0" y="108.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_5" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="725.0" y="443.0"/>
+            </label>
+            <bbox w="5631.0" h="1256.0" x="0.0" y="88.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_6" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="1071.0" y="966.0"/>
+            </label>
+            <bbox w="5161.0" h="451.0" x="423.0" y="675.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_927893_957" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum quality control compartment">
+                <bbox w="400.0" h="24.0" x="3203.0" y="1055.0"/>
+            </label>
+            <bbox w="1106.0" h="324.0" x="2440.0" y="780.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_449298_9">
+            <label text="(GlcNAc)2 (Man)5 (PP-Dol)1"/>
+            <bbox w="122.0" h="44.0" x="2856.0" y="654.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_4686998_118333">
+            <label text="Defective MPDU1 does not promote transfer of Man to N-glycan precursor (GlcNAc)2 (Man)7 (PP-Dol)1 by ALG12"/>
+            <bbox w="12.0" h="12.0" x="3947.0" y="721.0"/>
+            <port id="reactionVertex_4686998.1" x="3907.0" y="726.0"/>
+            <port id="reactionVertex_4686998.2" x="3993.0" y="726.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9036020_118335">
+            <label text="Defective MPDU1 does not promote transfer of Man to (GlcNAc)2 (Man)8 (PP-Dol)1 by ALG9"/>
+            <bbox w="12.0" h="12.0" x="4155.0" y="709.0"/>
+            <port id="reactionVertex_9036020.1" x="4139.0" y="715.0"/>
+            <port id="reactionVertex_9036020.2" x="4214.0" y="714.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9036021_118334">
+            <label text="Defective MPDU1 does not promote transfer of Man to (GlcNAc)2 (Man)6 (PP-Dol)1 by ALG9"/>
+            <bbox w="12.0" h="12.0" x="3578.0" y="723.0"/>
+            <port id="reactionVertex_9036021.1" x="3524.0" y="729.0"/>
+            <port id="reactionVertex_9036021.2" x="3631.0" y="729.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9036025_118331">
+            <label text="Defective MPDU1 does not promote transfer of Man to (GlcNAc)2 (Man)5 (PP-Dol)1 by ALG3"/>
+            <bbox w="12.0" h="12.0" x="3188.0" y="741.0"/>
+            <port id="reactionVertex_9036025.1" x="3132.0" y="747.0"/>
+            <port id="reactionVertex_9036025.2" x="3227.0" y="748.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_4717371_118332">
+            <label text="MPDU1 mutants"/>
+            <bbox w="101.0" h="22.0" x="3987.0" y="846.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_449229_40">
+            <label text="DOLP-Man"/>
+            <bbox w="65.0" h="30.0" x="3079.0" y="681.0"/>
+        </glyph>
+        <arc class="stimulation" id="arc_118332_activator_118334" source="entityVertex_4717371_118332" target="reactionVertex_9036021_118334">
+            <start x="3998.0" y="840.0"/>
+            <next x="3593.0" y="731.0"/>
+            <end x="3593.0" y="731.0"/>
+        </arc>
+        <arc class="consumption" id="arc_40_input_118333" source="entityVertex_449229_40" target="reactionVertex_4686998.1">
+            <start x="3147.0" y="701.0"/>
+            <next x="3398.0" y="743.0"/>
+            <next x="3848.0" y="743.0"/>
+            <next x="3907.0" y="726.0"/>
+            <end x="3907.0" y="726.0"/>
+        </arc>
+        <arc class="consumption" id="arc_9_input_118331" source="entityVertex_449298_9" target="reactionVertex_9036025.1">
+            <start x="2981.0" y="696.0"/>
+            <next x="3132.0" y="747.0"/>
+            <end x="3132.0" y="747.0"/>
+        </arc>
+        <arc class="consumption" id="arc_40_input_118335" source="entityVertex_449229_40" target="reactionVertex_9036020.1">
+            <start x="3147.0" y="702.0"/>
+            <next x="3378.0" y="752.0"/>
+            <next x="4088.0" y="752.0"/>
+            <next x="4139.0" y="715.0"/>
+            <end x="4139.0" y="715.0"/>
+        </arc>
+        <arc class="consumption" id="arc_40_input_118331" source="entityVertex_449229_40" target="reactionVertex_9036025.1">
+            <start x="3117.0" y="714.0"/>
+            <next x="3132.0" y="747.0"/>
+            <end x="3132.0" y="747.0"/>
+        </arc>
+        <arc class="stimulation" id="arc_118332_activator_118335" source="entityVertex_4717371_118332" target="reactionVertex_9036020_118335">
+            <start x="4046.0" y="840.0"/>
+            <next x="4155.0" y="722.0"/>
+            <end x="4155.0" y="722.0"/>
+        </arc>
+        <arc class="stimulation" id="arc_118332_activator_118331" source="entityVertex_4717371_118332" target="reactionVertex_9036025_118331">
+            <start x="3981.0" y="850.0"/>
+            <next x="3203.0" y="748.0"/>
+            <end x="3203.0" y="748.0"/>
+        </arc>
+        <arc class="stimulation" id="arc_118332_activator_118333" source="entityVertex_4717371_118332" target="reactionVertex_4686998_118333">
+            <start x="4029.0" y="840.0"/>
+            <next x="3958.0" y="734.0"/>
+            <end x="3958.0" y="734.0"/>
+        </arc>
+        <arc class="consumption" id="arc_40_input_118334" source="entityVertex_449229_40" target="reactionVertex_9036021.1">
+            <start x="3147.0" y="699.0"/>
+            <next x="3398.0" y="729.0"/>
+            <next x="3524.0" y="729.0"/>
+            <end x="3524.0" y="729.0"/>
+        </arc>
+    </map>
+</sbgn>

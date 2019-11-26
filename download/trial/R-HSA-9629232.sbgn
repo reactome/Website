@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_7660_1" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="412.0" y="1600.0"/>
+            </label>
+            <bbox w="1811.0" h="1606.0" x="396.0" y="41.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_1672" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="29.0" y="1632.0"/>
+            </label>
+            <bbox w="2277.0" h="1687.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_1774" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="65.0" y="241.0"/>
+            </label>
+            <bbox w="318.0" h="250.0" x="53.0" y="222.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9629264_193057">
+            <label text="NEIL3 D132V:Gh-DNA"/>
+            <bbox w="116.0" h="36.0" x="757.0" y="1286.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9629245_193056">
+            <label text="NEIL3 D132V does not cleave 5-guanidinohydantoin (Gh)"/>
+            <bbox w="12.0" h="12.0" x="986.0" y="1310.0"/>
+            <port id="reactionVertex_9629245.1" x="876.0" y="1307.0"/>
+            <port id="reactionVertex_9629245.2" x="1038.0" y="1321.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_193057_input_193056" source="entityVertex_9629264_193057" target="reactionVertex_9629245.1">
+            <start x="876.0" y="1307.0"/>
+            <end x="992.0" y="1316.0"/>
+        </arc>
+    </map>
+</sbgn>

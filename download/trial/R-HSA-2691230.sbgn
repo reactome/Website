@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_6" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="713.0" y="750.0"/>
+            </label>
+            <bbox w="1418.0" h="1514.0" x="366.0" y="6.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_22" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="700.0" y="685.0"/>
+            </label>
+            <bbox w="1040.0" h="616.0" x="682.0" y="124.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_7" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="21.0" y="1455.0"/>
+            </label>
+            <bbox w="275.0" h="1512.0" x="0.0" y="6.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2737729_2929">
+            <label text="Ub-DLL/JAG:NOTCH1 HD domain mutants"/>
+            <bbox w="180.0" h="33.0" x="237.0" y="587.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2691218_98692">
+            <label text="JAG2:NOTCH1 HD domain mutants"/>
+            <bbox w="175.0" h="36.0" x="234.0" y="360.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_2691219_98695">
+            <label text="NOTCH1 HD domain mutants bind DLL1"/>
+            <bbox w="10.0" h="10.0" x="300.0" y="97.0"/>
+            <port id="reactionVertex_2691219.1" x="304.0" y="86.0"/>
+            <port id="reactionVertex_2691219.2" x="311.0" y="117.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2737725_2928">
+            <label text="DLL/JAG:NOTCH1 HD domain mutants"/>
+            <bbox w="182.0" h="37.0" x="237.0" y="470.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_157098_912">
+            <label text="JAG1"/>
+            <bbox w="41.0" h="22.0" x="239.0" y="323.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_2691226_98693">
+            <label text="NOTCH1 HD domain mutants bind JAG1"/>
+            <bbox w="10.0" h="10.0" x="308.0" y="310.0"/>
+            <port id="reactionVertex_2691226.1" x="315.0" y="338.0"/>
+            <port id="reactionVertex_2691226.2" x="313.0" y="298.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2731153_2939">
+            <label text="NOTCH1 HD domain mutant fragments/Ub-DLL/JAG:NOTCH1 HD domain mutant fragments"/>
+            <bbox w="241.0" h="51.0" x="49.0" y="778.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2737728_2927">
+            <label text="Ubiquitination of DLL/JAG ligands upon binding to NOTCH1 HD domain mutants"/>
+            <bbox w="12.0" h="12.0" x="322.0" y="549.0"/>
+            <port id="reactionVertex_2737728.1" x="329.0" y="534.0"/>
+            <port id="reactionVertex_2737728.2" x="327.0" y="584.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_157120_1083">
+            <label text="JAG2"/>
+            <bbox w="42.0" h="22.0" x="236.0" y="429.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2691215_98694">
+            <label text="JAG1:NOTCH1 HD domain mutants"/>
+            <bbox w="187.0" h="36.0" x="220.0" y="259.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2717729_2937">
+            <label text="NOTCH1 HD domain mutants/Ub-DLL/JAG:NOTCH1 HD domain mutants"/>
+            <bbox w="261.0" h="36.0" x="199.0" y="640.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2220961_98691">
+            <label text="NOTCH1 HD domain mutants"/>
+            <bbox w="140.0" h="27.0" x="366.0" y="319.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_1911464_1307">
+            <label text="MIB/NEURL"/>
+            <bbox w="75.0" h="22.0" x="175.0" y="547.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2691221_98689">
+            <label text="DLL4:NOTCH1 HD domain mutants"/>
+            <bbox w="181.0" h="27.0" x="229.0" y="225.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1852620_132">
+            <label text="ADAM10/17:Zn2+"/>
+            <bbox w="133.0" h="21.0" x="364.0" y="685.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2730752_2936">
+            <label text="NOTCH1 HD domain mutants are cleaved to produce NEXT1 irrespective of ligand binding"/>
+            <bbox w="12.0" h="12.0" x="322.0" y="689.0"/>
+            <port id="reactionVertex_2730752.1" x="328.0" y="682.0"/>
+            <port id="reactionVertex_2730752.2" x="326.0" y="724.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2691216_98696">
+            <label text="DLL1:NOTCH1 HD domain mutants"/>
+            <bbox w="154.0" h="36.0" x="241.0" y="120.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2220961_98688">
+            <label text="NOTCH1 HD domain mutants"/>
+            <bbox w="213.0" h="23.0" x="328.0" y="67.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_157200_13">
+            <label text="NEXT1"/>
+            <bbox w="89.0" h="22.0" x="360.0" y="801.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_158437_895">
+            <label text="DLL4"/>
+            <bbox w="41.0" h="22.0" x="231.0" y="172.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_2691214_98690">
+            <label text="NOTCH1 HD domain mutants bind JAG2"/>
+            <bbox w="10.0" h="10.0" x="316.0" y="394.0"/>
+            <port id="reactionVertex_2691214.1" x="322.0" y="435.0"/>
+            <port id="reactionVertex_2691214.2" x="321.0" y="399.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_157089_1073">
+            <label text="DLL1"/>
+            <bbox w="41.0" h="22.0" x="236.0" y="60.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_2691211_98687">
+            <label text="NOTCH1 HD domain mutants bind DLL4"/>
+            <bbox w="10.0" h="10.0" x="312.0" y="186.0"/>
+            <port id="reactionVertex_2691211.1" x="314.0" y="173.0"/>
+            <port id="reactionVertex_2691211.2" x="318.0" y="222.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_113595_266">
+            <label text="Ub"/>
+            <bbox w="61.0" h="21.0" x="165.0" y="511.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_2928_input_2927" source="entityVertex_2737725_2928" target="reactionVertex_2737728.1">
+            <start x="328.0" y="513.0"/>
+            <next x="329.0" y="534.0"/>
+            <end x="329.0" y="534.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1083_input_98690" source="entityVertex_157120_1083" target="reactionVertex_2691214.1">
+            <start x="281.0" y="438.0"/>
+            <next x="322.0" y="435.0"/>
+            <end x="322.0" y="435.0"/>
+        </arc>
+        <arc class="production" id="arc_2929_output_2927" source="reactionVertex_2737728.2" target="entityVertex_2737729_2929">
+            <start x="328.0" y="555.0"/>
+            <end x="327.0" y="584.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_1307_catalyst_2927" source="entityVertex_1911464_1307" target="reactionVertex_2737728_2927">
+            <start x="256.0" y="557.0"/>
+            <next x="312.0" y="555.0"/>
+            <end x="312.0" y="555.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2937_input_2936" source="entityVertex_2717729_2937" target="reactionVertex_2730752.1">
+            <start x="328.0" y="682.0"/>
+            <end x="328.0" y="695.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1073_input_98695" source="entityVertex_157089_1073" target="reactionVertex_2691219.1">
+            <start x="280.0" y="77.0"/>
+            <next x="304.0" y="86.0"/>
+            <end x="304.0" y="86.0"/>
+        </arc>
+        <arc class="production" id="arc_2939_output_2936" source="reactionVertex_2730752.2" target="entityVertex_2731153_2939">
+            <start x="219.0" y="772.0"/>
+            <next x="326.0" y="724.0"/>
+            <end x="326.0" y="724.0"/>
+        </arc>
+        <arc class="consumption" id="arc_895_input_98687" source="entityVertex_158437_895" target="reactionVertex_2691211.1">
+            <start x="275.0" y="179.0"/>
+            <next x="314.0" y="173.0"/>
+            <end x="314.0" y="173.0"/>
+        </arc>
+        <arc class="consumption" id="arc_98688_input_98687" source="entityVertex_2220961_98688" target="reactionVertex_2691211.1">
+            <start x="434.0" y="96.0"/>
+            <next x="436.0" y="170.0"/>
+            <next x="314.0" y="173.0"/>
+            <end x="314.0" y="173.0"/>
+        </arc>
+        <arc class="production" id="arc_13_output_2936" source="reactionVertex_2730752.2" target="entityVertex_157200_13">
+            <start x="394.0" y="798.0"/>
+            <next x="326.0" y="724.0"/>
+            <end x="326.0" y="724.0"/>
+        </arc>
+        <arc class="production" id="arc_98689_output_98687" source="reactionVertex_2691211.2" target="entityVertex_2691221_98689">
+            <start x="317.0" y="191.0"/>
+            <end x="318.0" y="222.0"/>
+        </arc>
+        <arc class="consumption" id="arc_98688_input_98695" source="entityVertex_2220961_98688" target="reactionVertex_2691219.1">
+            <start x="322.0" y="84.0"/>
+            <next x="304.0" y="86.0"/>
+            <end x="304.0" y="86.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_132_catalyst_2936" source="entityVertex_1852620_132" target="reactionVertex_2730752_2936">
+            <start x="361.0" y="695.0"/>
+            <next x="344.0" y="695.0"/>
+            <end x="344.0" y="695.0"/>
+        </arc>
+        <arc class="consumption" id="arc_98691_input_98690" source="entityVertex_2220961_98691" target="reactionVertex_2691214.1">
+            <start x="435.0" y="352.0"/>
+            <next x="432.0" y="437.0"/>
+            <next x="322.0" y="435.0"/>
+            <end x="322.0" y="435.0"/>
+        </arc>
+        <arc class="production" id="arc_98694_output_98693" source="reactionVertex_2691226.2" target="entityVertex_2691215_98694">
+            <start x="313.0" y="315.0"/>
+            <end x="313.0" y="298.0"/>
+        </arc>
+        <arc class="consumption" id="arc_98691_input_98693" source="entityVertex_2220961_98691" target="reactionVertex_2691226.1">
+            <start x="360.0" y="335.0"/>
+            <next x="315.0" y="338.0"/>
+            <end x="315.0" y="338.0"/>
+        </arc>
+        <arc class="consumption" id="arc_266_input_2927" source="entityVertex_113595_266" target="reactionVertex_2737728.1">
+            <start x="232.0" y="523.0"/>
+            <next x="329.0" y="534.0"/>
+            <end x="329.0" y="534.0"/>
+        </arc>
+        <arc class="production" id="arc_98696_output_98695" source="reactionVertex_2691219.2" target="entityVertex_2691216_98696">
+            <start x="305.0" y="102.0"/>
+            <end x="311.0" y="117.0"/>
+        </arc>
+        <arc class="consumption" id="arc_912_input_98693" source="entityVertex_157098_912" target="reactionVertex_2691226.1">
+            <start x="283.0" y="335.0"/>
+            <next x="315.0" y="338.0"/>
+            <end x="315.0" y="338.0"/>
+        </arc>
+        <arc class="production" id="arc_98692_output_98690" source="reactionVertex_2691214.2" target="entityVertex_2691218_98692">
+            <start x="322.0" y="435.0"/>
+            <end x="321.0" y="399.0"/>
+        </arc>
+    </map>
+</sbgn>

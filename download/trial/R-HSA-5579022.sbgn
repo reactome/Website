@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_1" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="1523.0" y="914.0"/>
+            </label>
+            <bbox w="4380.0" h="1800.0" x="0.0" y="74.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_1554" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="4119.0" y="597.0"/>
+            </label>
+            <bbox w="246.0" h="304.0" x="4108.0" y="338.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17927_308" compartmentOrder="10.0">
+            <label text="mitochondrial intermembrane space">
+                <bbox w="280.0" h="24.0" x="1792.0" y="1107.0"/>
+            </label>
+            <bbox w="1743.0" h="611.0" x="1775.0" y="1104.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_27" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="84.0" y="1095.0"/>
+            </label>
+            <bbox w="557.0" h="887.0" x="67.0" y="726.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_733" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="2574.0" y="106.0"/>
+            </label>
+            <bbox w="660.0" h="152.0" x="2401.0" y="93.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_223" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="2391.0" y="1154.0"/>
+            </label>
+            <bbox w="1681.0" h="549.0" x="1804.0" y="1141.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9035966_141721">
+            <label text="Defective GGT1 does not hydrolyse GSH"/>
+            <bbox w="12.0" h="12.0" x="1033.0" y="1920.0"/>
+            <port id="reactionVertex_9035966.1" x="991.0" y="1926.0"/>
+            <port id="reactionVertex_9035966.2" x="1076.0" y="1926.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5602933_141722">
+            <label text="GGT1 mutants"/>
+            <bbox w="93.0" h="22.0" x="994.0" y="1860.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_109276_1569">
+            <label text="H2O"/>
+            <bbox w="43.0" h="30.0" x="958.0" y="1948.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_1247892_429">
+            <label text="GSH"/>
+            <bbox w="41.0" h="30.0" x="915.0" y="1912.0"/>
+        </glyph>
+        <arc class="catalysis" id="arc_141722_catalyst_141721" source="entityVertex_5602933_141722" target="reactionVertex_9035966_141721">
+            <start x="1039.0" y="1888.0"/>
+            <next x="1039.0" y="1910.0"/>
+            <end x="1039.0" y="1910.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1569_input_141721" source="entityVertex_109276_1569" target="reactionVertex_9035966.1">
+            <start x="983.0" y="1945.0"/>
+            <next x="991.0" y="1926.0"/>
+            <end x="991.0" y="1926.0"/>
+        </arc>
+        <arc class="consumption" id="arc_429_input_141721" source="entityVertex_1247892_429" target="reactionVertex_9035966.1">
+            <start x="959.0" y="1926.0"/>
+            <next x="991.0" y="1926.0"/>
+            <end x="991.0" y="1926.0"/>
+        </arc>
+    </map>
+</sbgn>

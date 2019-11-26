@@ -1,0 +1,1002 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_161320_161" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="1021.0" y="696.0"/>
+            </label>
+            <bbox w="1074.0" h="252.0" x="228.0" y="505.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_20592_163" compartmentOrder="10.0">
+            <label text="clathrin-coated endocytic vesicle">
+                <bbox w="252.0" h="24.0" x="827.0" y="119.0"/>
+            </label>
+            <bbox w="230.0" h="91.0" x="819.0" y="107.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_564" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="156.0" y="1022.0"/>
+            </label>
+            <bbox w="927.0" h="205.0" x="110.0" y="878.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_20593_166" compartmentOrder="10.0">
+            <label text="endocytic vesicle">
+                <bbox w="131.0" h="24.0" x="970.0" y="296.0"/>
+            </label>
+            <bbox w="322.0" h="124.0" x="783.0" y="275.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_168" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="382.0" y="425.0"/>
+            </label>
+            <bbox w="2075.0" h="1092.0" x="0.0" y="70.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_432051_169" compartmentOrder="10.0">
+            <label text="transport vesicle">
+                <bbox w="130.0" h="24.0" x="1675.0" y="248.0"/>
+            </label>
+            <bbox w="183.0" h="140.0" x="1658.0" y="161.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_13959_154" compartmentOrder="10.0">
+            <label text="COPII-coated ER to Golgi transport vesicle">
+                <bbox w="328.0" h="24.0" x="1197.0" y="1044.0"/>
+            </label>
+            <bbox w="206.0" h="113.0" x="1188.0" y="978.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_20699_156" compartmentOrder="10.0">
+            <label text="Golgi membrane">
+                <bbox w="127.0" h="24.0" x="1679.0" y="754.0"/>
+            </label>
+            <bbox w="204.0" h="125.0" x="1596.0" y="665.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_263163_157" compartmentOrder="10.0">
+            <label text="trans-Golgi network membrane">
+                <bbox w="243.0" h="24.0" x="1738.0" y="396.0"/>
+            </label>
+            <bbox w="647.0" h="107.0" x="1394.0" y="393.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2029135_145">
+            <label text="Dynein:Dynactin:microtubule"/>
+            <bbox w="109.0" h="36.0" x="38.0" y="255.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2213189_180">
+            <label text="MHC class II alpha/beta dimer"/>
+            <bbox w="107.0" h="51.0" x="1714.0" y="49.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2130544_108">
+            <label text="Cathepsin"/>
+            <bbox w="69.0" h="22.0" x="872.0" y="558.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_2130500_82">
+            <label text="Insertion of MHC II:Ii complex in to the plasma membrane"/>
+            <bbox w="12.0" h="12.0" x="1683.0" y="117.0"/>
+            <port id="reactionVertex_2130500.1" x="1725.0" y="155.0"/>
+            <port id="reactionVertex_2130500.2" x="1652.0" y="104.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2130682_137">
+            <label text="Cathepsin"/>
+            <bbox w="69.0" h="22.0" x="459.0" y="566.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29438_96">
+            <label text="GTP"/>
+            <bbox w="40.0" h="30.0" x="1345.0" y="155.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_2130640_84">
+            <label text="Recruitment of clathrin coated vesicle by Ii"/>
+            <bbox w="10.0" h="10.0" x="1429.0" y="13.0"/>
+            <port id="reactionVertex_2130640.1" x="1474.0" y="18.0"/>
+            <port id="reactionVertex_2130640.2" x="1380.0" y="49.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29420_93">
+            <label text="GDP"/>
+            <bbox w="41.0" h="30.0" x="1139.0" y="182.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_2130627_117">
+            <label text="MHC class II antigen internalization"/>
+            <bbox w="12.0" h="12.0" x="580.0" y="294.0"/>
+            <port id="reactionVertex_2130627.1" x="584.0" y="25.0"/>
+            <port id="reactionVertex_2130627.2" x="584.0" y="539.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2130336_103">
+            <label text="Initial proteolyis of Ii by aspartic proteases to lip22"/>
+            <bbox w="12.0" h="12.0" x="1089.0" y="508.0"/>
+            <port id="reactionVertex_2130336.1" x="1132.0" y="513.0"/>
+            <port id="reactionVertex_2130336.2" x="1050.0" y="513.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2130718_2">
+            <label text="HLA II alpha chain"/>
+            <bbox w="112.0" h="22.0" x="127.0" y="918.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_203999_13">
+            <label text="COPII"/>
+            <bbox w="60.0" h="24.0" x="1005.0" y="975.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_201340_67">
+            <label text="Arf1-GDP"/>
+            <bbox w="66.0" h="22.0" x="1579.0" y="519.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2213230_113">
+            <label text="HLA-DM/HLA-DO"/>
+            <bbox w="115.0" h="22.0" x="629.0" y="745.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_199981_63">
+            <label text="Arf1-GTP"/>
+            <bbox w="65.0" h="22.0" x="1598.0" y="659.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_8951498_1176">
+            <label text="Dissociation of Arf1:GDP, AP-1 Clathrin coated nonameric complex"/>
+            <bbox w="10.0" h="10.0" x="1753.0" y="471.0"/>
+            <port id="reactionVertex_8951498.1" x="1777.0" y="471.0"/>
+            <port id="reactionVertex_8951498.2" x="1731.0" y="475.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2130349_109">
+            <label text="Generation of CLIP from lip10"/>
+            <bbox w="12.0" h="12.0" x="811.0" y="665.0"/>
+            <port id="reactionVertex_2130349.1" x="820.0" y="532.0"/>
+            <port id="reactionVertex_2130349.2" x="817.0" y="741.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_177505_85">
+            <label text="Clathrin:AP-2 complex"/>
+            <bbox w="106.0" h="36.0" x="1433.0" y="60.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8856203_181">
+            <label text="LAG3:MHC II"/>
+            <bbox w="95.0" h="22.0" x="1918.0" y="65.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_195906_6">
+            <label text="CANX"/>
+            <bbox w="56.0" h="22.0" x="376.0" y="1018.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29372_95">
+            <label text="Pi"/>
+            <bbox w="27.0" h="30.0" x="1080.0" y="176.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29370_177">
+            <label text="ADP"/>
+            <bbox w="41.0" h="30.0" x="291.0" y="155.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130532_78">
+            <label text="Nonameric complex"/>
+            <bbox w="127.0" h="22.0" x="1135.0" y="502.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2213227_115">
+            <label text="peptide free MHC II:HLA-DM"/>
+            <bbox w="124.0" h="36.0" x="426.0" y="733.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130552_68">
+            <label text="AP-1 Clathrin coated nonameric complex"/>
+            <bbox w="119.0" h="50.0" x="1619.0" y="408.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_446847_91">
+            <label text="Dynamin-1/2/3"/>
+            <bbox w="104.0" h="22.0" x="916.0" y="70.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2213186_4">
+            <label text="MHC II alpha beta heterodimer"/>
+            <bbox w="118.0" h="36.0" x="317.0" y="890.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2228747_176">
+            <label text="ARP-1"/>
+            <bbox w="47.0" h="22.0" x="189.0" y="302.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2213211_14">
+            <label text="Nonameric complex in COPII vesicle"/>
+            <bbox w="128.0" h="36.0" x="1221.0" y="1012.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8951497_955">
+            <label text="AP-1 Complex:Arf1-GTP:Clathrin Triskelion:Nonameric complex"/>
+            <bbox w="132.0" h="67.0" x="1780.0" y="424.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_350827_64">
+            <label text="Clathrin Triskelion"/>
+            <bbox w="119.0" h="22.0" x="1436.0" y="588.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130331_90">
+            <label text="Clathrin coated MHC class II alpha/beta/Ii nonamer"/>
+            <bbox w="141.0" h="50.0" x="869.0" y="161.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_175">
+            <label text="ATP"/>
+            <bbox w="40.0" h="30.0" x="282.0" y="439.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29420_72">
+            <label text="GDP"/>
+            <bbox w="41.0" h="30.0" x="1486.0" y="312.0"/>
+        </glyph>
+        <glyph class="uncertain process" id="reactionVertex_2130619_62">
+            <label text="TGN-lysosomal vesicle coat assembly"/>
+            <bbox w="12.0" h="12.0" x="1798.0" y="533.0"/>
+            <port id="reactionVertex_2130619.1" x="1781.0" y="579.0"/>
+            <port id="reactionVertex_2130619.2" x="1828.0" y="494.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2130672_3">
+            <label text="HLA II beta chain"/>
+            <bbox w="106.0" h="22.0" x="123.0" y="981.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2213212_8">
+            <label text="alpha beta dimer:Ii trimer:calnexin"/>
+            <bbox w="123.0" h="36.0" x="587.0" y="889.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2213219_142">
+            <label text="Kinesins:Dynactin:microtubule"/>
+            <bbox w="117.0" h="36.0" x="433.0" y="314.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8980062_1177">
+            <label text="2xMHC II alpha beta heterodimer:alpha beta dimer:Ii trimer"/>
+            <bbox w="130.0" h="50.0" x="746.0" y="1021.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_983667_118">
+            <label text="Antigen"/>
+            <bbox w="55.0" h="22.0" x="557.0" y="0.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2130641_70">
+            <label text="Translocation of TGN-lysosome vesicle to lysosome"/>
+            <bbox w="12.0" h="12.0" x="1586.0" y="361.0"/>
+            <port id="reactionVertex_2130641.1" x="1631.0" y="368.0"/>
+            <port id="reactionVertex_2130641.2" x="1560.0" y="367.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130431_81">
+            <label text="MHC class II alpha/beta/Ii nonamer"/>
+            <bbox w="90.0" h="50.0" x="1707.0" y="158.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_177495_89">
+            <label text="SH3GL2"/>
+            <bbox w="72.0" h="22.0" x="1181.0" y="141.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_167717_66">
+            <label text="AP-1 Complex"/>
+            <bbox w="95.0" h="22.0" x="1400.0" y="639.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29372_69">
+            <label text="Pi"/>
+            <bbox w="27.0" h="30.0" x="1665.0" y="521.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_8951500_578">
+            <label text="Dissociation of CANX from nonameric complex"/>
+            <bbox w="10.0" h="10.0" x="823.0" y="979.0"/>
+            <port id="reactionVertex_8951500.1" x="854.0" y="942.0"/>
+            <port id="reactionVertex_8951500.2" x="690.0" y="1024.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2213215_143">
+            <label text="RAB7:RILP:ORP1L complex"/>
+            <bbox w="113.0" h="36.0" x="35.0" y="355.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2213240_132">
+            <label text="Reduction of disulphide bonds in MHC II antigens"/>
+            <bbox w="12.0" h="12.0" x="580.0" y="590.0"/>
+            <port id="reactionVertex_2213240.1" x="584.0" y="567.0"/>
+            <port id="reactionVertex_2213240.2" x="584.0" y="631.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_2130478_5">
+            <label text="Interaction of invariant chain trimer and MHC II alpha beta dimer"/>
+            <bbox w="10.0" h="10.0" x="455.0" y="954.0"/>
+            <port id="reactionVertex_2130478.1" x="424.0" y="959.0"/>
+            <port id="reactionVertex_2130478.2" x="584.0" y="924.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2130682_111">
+            <label text="Cathepsin"/>
+            <bbox w="69.0" h="22.0" x="870.0" y="649.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_2213236_77">
+            <label text="TGN-lysosome vesicle uncoating and release of nonameric complex to lysosome"/>
+            <bbox w="10.0" h="10.0" x="1349.0" y="434.0"/>
+            <port id="reactionVertex_2213236.1" x="1392.0" y="439.0"/>
+            <port id="reactionVertex_2213236.2" x="1307.0" y="440.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_8856157_178">
+            <label text="LAG3 (CD233) binds MHC II"/>
+            <bbox w="10.0" h="10.0" x="1890.0" y="45.0"/>
+            <port id="reactionVertex_8856157.1" x="1864.0" y="50.0"/>
+            <port id="reactionVertex_8856157.2" x="1935.0" y="62.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2130504_106">
+            <label text="Cleavage of lip22 to lip10"/>
+            <bbox w="12.0" h="12.0" x="900.0" y="506.0"/>
+            <port id="reactionVertex_2130504.1" x="961.0" y="512.0"/>
+            <port id="reactionVertex_2130504.2" x="866.0" y="511.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_2130725_87">
+            <label text="Internalization of MHC II:Ii clathrin coated vesicle"/>
+            <bbox w="12.0" h="12.0" x="1176.0" y="72.0"/>
+            <port id="reactionVertex_2130725.1" x="1223.0" y="78.0"/>
+            <port id="reactionVertex_2130725.2" x="1139.0" y="78.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130531_99">
+            <label text="Nonameric complex"/>
+            <bbox w="127.0" h="22.0" x="978.0" y="380.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130574_110">
+            <label text="MHC II:CLIP"/>
+            <bbox w="75.0" h="22.0" x="780.0" y="744.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2213223_139">
+            <label text="peptide loaded MHC class II"/>
+            <bbox w="131.0" h="36.0" x="167.0" y="575.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_2213239_1">
+            <label text="Formation of MHC II alpha beta heterodimer"/>
+            <bbox w="10.0" h="10.0" x="280.0" y="939.0"/>
+            <port id="reactionVertex_2213239.1" x="257.0" y="956.0"/>
+            <port id="reactionVertex_2213239.2" x="330.0" y="929.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_2213248_141">
+            <label text="Transport of antigen loaded MHC II molecules to surface"/>
+            <bbox w="12.0" h="12.0" x="255.0" y="276.0"/>
+            <port id="reactionVertex_2213248.1" x="261.0" y="427.0"/>
+            <port id="reactionVertex_2213248.2" x="261.0" y="193.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2213246_112">
+            <label text="Disassociation of CLIP from MHC II"/>
+            <bbox w="12.0" h="12.0" x="659.0" y="709.0"/>
+            <port id="reactionVertex_2213246.1" x="704.0" y="715.0"/>
+            <port id="reactionVertex_2213246.2" x="631.0" y="715.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_2213243_15">
+            <label text="Fusion of COPII vesicle with Golgi complex"/>
+            <bbox w="10.0" h="10.0" x="1422.0" y="1008.0"/>
+            <port id="reactionVertex_2213243.1" x="1352.0" y="1022.0"/>
+            <port id="reactionVertex_2213243.2" x="1423.0" y="962.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130599_7">
+            <label text="Invariant chain trimer"/>
+            <bbox w="131.0" h="22.0" x="445.0" y="889.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2213226_136">
+            <label text="MHC class II epitopes"/>
+            <bbox w="83.0" h="36.0" x="335.0" y="627.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2213186_11">
+            <label text="MHC II alpha beta heterodimer"/>
+            <bbox w="118.0" h="36.0" x="549.0" y="1036.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29438_71">
+            <label text="GTP"/>
+            <bbox w="40.0" h="30.0" x="1638.0" y="323.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2213232_148">
+            <label text="peptide loaded MHC class II"/>
+            <bbox w="131.0" h="36.0" x="195.0" y="66.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_2130393_60">
+            <label text="Transport of MHC II:Ii complex along Golgi to TGN"/>
+            <bbox w="12.0" h="12.0" x="1866.0" y="578.0"/>
+            <port id="reactionVertex_2130393.1" x="1735.0" y="694.0"/>
+            <port id="reactionVertex_2130393.2" x="1974.0" y="475.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_2213235_102">
+            <label text="Trafficking of nonameric complex in the endocytic pathway"/>
+            <bbox w="12.0" h="12.0" x="1122.0" y="451.0"/>
+            <port id="reactionVertex_2213235.1" x="1055.0" y="405.0"/>
+            <port id="reactionVertex_2213235.2" x="1184.0" y="499.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_2130378_80">
+            <label text="Transport of MHC II:Ii complex to plasma membrane"/>
+            <bbox w="12.0" h="12.0" x="1860.0" y="327.0"/>
+            <port id="reactionVertex_2130378.1" x="1974.0" y="447.0"/>
+            <port id="reactionVertex_2130378.2" x="1771.0" y="211.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2213225_133">
+            <label text="unfolded antigen"/>
+            <bbox w="110.0" h="22.0" x="529.0" y="634.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130671_100">
+            <label text="Clathrin:AP2 complex"/>
+            <bbox w="106.0" h="36.0" x="804.0" y="377.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130467_83">
+            <label text="MHC class II alpha/beta/Ii nonamer"/>
+            <bbox w="90.0" h="50.0" x="1559.0" y="58.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_197837_179">
+            <label text="LAG3"/>
+            <bbox w="52.0" h="24.0" x="1845.0" y="64.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_2130629_101">
+            <label text="SH3GL2"/>
+            <bbox w="72.0" h="22.0" x="761.0" y="329.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2213244_138">
+            <label text="Loading of antigenic peptides"/>
+            <bbox w="12.0" h="12.0" x="300.0" y="696.0"/>
+            <port id="reactionVertex_2213244.1" x="342.0" y="702.0"/>
+            <port id="reactionVertex_2213244.2" x="260.0" y="702.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2213185_65">
+            <label text="Dynamin"/>
+            <bbox w="61.0" h="22.0" x="1475.0" y="540.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130309_86">
+            <label text="Clathrin coated MHC class II alpha/beta/Ii nonamer"/>
+            <bbox w="103.0" h="64.0" x="1274.0" y="46.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_2130486_98">
+            <label text="Uncoating of clathrin-coated vesicles and fusion with endosomes"/>
+            <bbox w="10.0" h="10.0" x="933.0" y="272.0"/>
+            <port id="reactionVertex_2130486.1" x="938.0" y="214.0"/>
+            <port id="reactionVertex_2130486.2" x="937.0" y="318.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130723_107">
+            <label text="MHC II:lip10 nonamer"/>
+            <bbox w="83.0" h="36.0" x="780.0" y="493.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130477_10">
+            <label text="Nonameric complex"/>
+            <bbox w="124.0" h="22.0" x="901.0" y="1048.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_350135_105">
+            <label text="LGMN"/>
+            <bbox w="66.0" h="22.0" x="1062.0" y="567.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2130706_135">
+            <label text="MHC class II antigen processing"/>
+            <bbox w="12.0" h="12.0" x="486.0" y="639.0"/>
+            <port id="reactionVertex_2130706.1" x="526.0" y="645.0"/>
+            <port id="reactionVertex_2130706.2" x="421.0" y="645.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8951502_476">
+            <label text="2xMHC II alpha beta heterodimer:alpha beta dimer:Ii trimer:calnexin"/>
+            <bbox w="283.0" h="48.0" x="728.0" y="891.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_420049_144">
+            <label text="SPTBN2"/>
+            <bbox w="76.0" h="23.0" x="311.0" y="308.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2213234_73">
+            <label text="TGN-lysosome vesicle with nonameric complex"/>
+            <bbox w="126.0" h="50.0" x="1395.0" y="414.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130680_104">
+            <label text="MHC II:lip22 nonamer"/>
+            <bbox w="83.0" h="36.0" x="964.0" y="495.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_2213220_114">
+            <label text="CD74(81-104)"/>
+            <bbox w="112.0" h="25.0" x="435.0" y="682.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29356_88">
+            <label text="H2O"/>
+            <bbox w="43.0" h="30.0" x="1302.0" y="176.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_1031704_134">
+            <label text="IFI30"/>
+            <bbox w="48.0" h="22.0" x="630.0" y="587.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2213221_119">
+            <label text="Antigen"/>
+            <bbox w="55.0" h="22.0" x="557.0" y="542.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_2130731_12">
+            <label text="Formation of COPII vesicle"/>
+            <bbox w="10.0" h="10.0" x="1113.0" y="1024.0"/>
+            <port id="reactionVertex_2130731.1" x="1062.0" y="1029.0"/>
+            <port id="reactionVertex_2130731.2" x="1218.0" y="1029.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29372_75">
+            <label text="Pi"/>
+            <bbox w="27.0" h="30.0" x="1451.0" y="352.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_2213241_9">
+            <label text="Formation of nonameric complex"/>
+            <bbox w="10.0" h="10.0" x="691.0" y="979.0"/>
+            <port id="reactionVertex_2213241.1" x="657.0" y="984.0"/>
+            <port id="reactionVertex_2213241.2" x="808.0" y="942.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2214394_52">
+            <label text="Nonameric complex"/>
+            <bbox w="87.0" h="43.0" x="1666.0" y="697.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2130491_61">
+            <label text="Nonameric complex"/>
+            <bbox w="124.0" h="22.0" x="1923.0" y="450.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_133_input_135" source="entityVertex_2213225_133" target="reactionVertex_2130706.1">
+            <start x="526.0" y="645.0"/>
+            <end x="492.0" y="645.0"/>
+        </arc>
+        <arc class="consumption" id="arc_104_input_106" source="entityVertex_2130680_104" target="reactionVertex_2130504.1">
+            <start x="961.0" y="512.0"/>
+            <end x="906.0" y="512.0"/>
+        </arc>
+        <arc class="consumption" id="arc_8_input_9" source="entityVertex_2213212_8" target="reactionVertex_2213241.1">
+            <start x="650.0" y="928.0"/>
+            <next x="657.0" y="984.0"/>
+            <end x="657.0" y="984.0"/>
+        </arc>
+        <arc class="production" id="arc_142_output_141" source="reactionVertex_2213248.2" target="entityVertex_2213219_142">
+            <start x="461.0" y="311.0"/>
+            <next x="261.0" y="193.0"/>
+            <end x="261.0" y="193.0"/>
+        </arc>
+        <arc class="consumption" id="arc_145_input_141" source="entityVertex_2029135_145" target="reactionVertex_2213248.1">
+            <start x="111.0" y="294.0"/>
+            <next x="261.0" y="427.0"/>
+            <end x="261.0" y="427.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2_input_1" source="entityVertex_2130718_2" target="reactionVertex_2213239.1">
+            <start x="213.0" y="946.0"/>
+            <next x="257.0" y="956.0"/>
+            <end x="257.0" y="956.0"/>
+        </arc>
+        <arc class="production" id="arc_6_output_578" source="reactionVertex_8951500.2" target="entityVertex_195906_6">
+            <start x="435.0" y="1028.0"/>
+            <next x="690.0" y="1024.0"/>
+            <end x="690.0" y="1024.0"/>
+        </arc>
+        <arc class="production" id="arc_78_output_77" source="reactionVertex_2213236.2" target="entityVertex_2130532_78">
+            <start x="1214.0" y="499.0"/>
+            <next x="1307.0" y="440.0"/>
+            <end x="1307.0" y="440.0"/>
+        </arc>
+        <arc class="production" id="arc_107_output_106" source="reactionVertex_2130504.2" target="entityVertex_2130723_107">
+            <start x="906.0" y="512.0"/>
+            <end x="866.0" y="511.0"/>
+        </arc>
+        <arc class="production" id="arc_110_output_109" source="reactionVertex_2130349.2" target="entityVertex_2130574_110">
+            <glyph class="stoichiometry" id="Stoichiometry_2130574_OUTPUT_2130349">
+                <label text="3"/>
+                <bbox w="12.0" h="12.0" x="811.0" y="700.0"/>
+            </glyph>
+            <start x="817.0" y="671.0"/>
+            <end x="817.0" y="741.0"/>
+        </arc>
+        <arc class="consumption" id="arc_78_input_103" source="entityVertex_2130532_78" target="reactionVertex_2130336.1">
+            <start x="1132.0" y="513.0"/>
+            <end x="1095.0" y="514.0"/>
+        </arc>
+        <arc class="production" id="arc_104_output_103" source="reactionVertex_2130336.2" target="entityVertex_2130680_104">
+            <start x="1095.0" y="514.0"/>
+            <end x="1050.0" y="513.0"/>
+        </arc>
+        <arc class="consumption" id="arc_175_input_141" source="entityVertex_113592_175" target="reactionVertex_2213248.1">
+            <start x="279.0" y="440.0"/>
+            <next x="261.0" y="427.0"/>
+            <end x="261.0" y="427.0"/>
+        </arc>
+        <arc class="consumption" id="arc_113_input_112" source="entityVertex_2213230_113" target="reactionVertex_2213246.1">
+            <start x="690.0" y="739.0"/>
+            <next x="704.0" y="715.0"/>
+            <end x="704.0" y="715.0"/>
+        </arc>
+        <arc class="consumption" id="arc_3_input_1" source="entityVertex_2130672_3" target="reactionVertex_2213239.1">
+            <start x="200.0" y="975.0"/>
+            <next x="257.0" y="956.0"/>
+            <end x="257.0" y="956.0"/>
+        </arc>
+        <arc class="consumption" id="arc_144_input_141" source="entityVertex_420049_144" target="reactionVertex_2213248.1">
+            <start x="339.0" y="334.0"/>
+            <next x="261.0" y="427.0"/>
+            <end x="261.0" y="427.0"/>
+        </arc>
+        <arc class="consumption" id="arc_89_input_87" source="entityVertex_177495_89" target="reactionVertex_2130725.1">
+            <start x="1217.0" y="138.0"/>
+            <next x="1223.0" y="78.0"/>
+            <end x="1223.0" y="78.0"/>
+        </arc>
+        <arc class="consumption" id="arc_96_input_87" source="entityVertex_29438_96" target="reactionVertex_2130725.1">
+            <start x="1342.0" y="157.0"/>
+            <next x="1223.0" y="78.0"/>
+            <end x="1223.0" y="78.0"/>
+        </arc>
+        <arc class="consumption" id="arc_119_input_132" source="entityVertex_2213221_119" target="reactionVertex_2213240.1">
+            <start x="584.0" y="567.0"/>
+            <end x="586.0" y="596.0"/>
+        </arc>
+        <arc class="consumption" id="arc_7_input_5" source="entityVertex_2130599_7" target="reactionVertex_2130478.1">
+            <start x="493.0" y="914.0"/>
+            <next x="424.0" y="959.0"/>
+            <end x="424.0" y="959.0"/>
+        </arc>
+        <arc class="consumption" id="arc_88_input_87" source="entityVertex_29356_88" target="reactionVertex_2130725.1">
+            <start x="1309.0" y="173.0"/>
+            <next x="1223.0" y="78.0"/>
+            <end x="1223.0" y="78.0"/>
+        </arc>
+        <arc class="consumption" id="arc_4_input_5" source="entityVertex_2213186_4" target="reactionVertex_2130478.1">
+            <start x="392.0" y="929.0"/>
+            <next x="424.0" y="959.0"/>
+            <end x="424.0" y="959.0"/>
+        </arc>
+        <arc class="production" id="arc_113_output_138" source="reactionVertex_2213244.2" target="entityVertex_2213230_113">
+            <start x="676.0" y="773.0"/>
+            <next x="260.0" y="702.0"/>
+            <next x="190.0" y="798.0"/>
+            <next x="653.0" y="795.0"/>
+            <end x="260.0" y="702.0"/>
+        </arc>
+        <arc class="production" id="arc_177_output_141" source="reactionVertex_2213248.2" target="entityVertex_29370_177">
+            <start x="288.0" y="179.0"/>
+            <next x="261.0" y="193.0"/>
+            <end x="261.0" y="193.0"/>
+        </arc>
+        <arc class="production" id="arc_4_output_1" source="reactionVertex_2213239.2" target="entityVertex_2213186_4">
+            <start x="285.0" y="944.0"/>
+            <end x="330.0" y="929.0"/>
+        </arc>
+        <arc class="production" id="arc_181_output_178" source="reactionVertex_8856157.2" target="entityVertex_8856203_181">
+            <start x="1895.0" y="50.0"/>
+            <end x="1935.0" y="62.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_65_catalyst_70" source="entityVertex_2213185_65" target="reactionVertex_2130641_70">
+            <start x="1511.0" y="534.0"/>
+            <next x="1592.0" y="401.0"/>
+            <next x="1592.0" y="383.0"/>
+            <end x="1592.0" y="383.0"/>
+        </arc>
+        <arc class="production" id="arc_78_output_102" source="reactionVertex_2213235.2" target="entityVertex_2130532_78">
+            <start x="1128.0" y="457.0"/>
+            <end x="1184.0" y="499.0"/>
+        </arc>
+        <arc class="production" id="arc_143_output_141" source="reactionVertex_2213248.2" target="entityVertex_2213215_143">
+            <start x="108.0" y="352.0"/>
+            <next x="261.0" y="193.0"/>
+            <end x="261.0" y="193.0"/>
+        </arc>
+        <arc class="consumption" id="arc_955_input_1176" source="entityVertex_8951497_955" target="reactionVertex_8951498.1">
+            <start x="1777.0" y="471.0"/>
+            <end x="1758.0" y="476.0"/>
+        </arc>
+        <arc class="consumption" id="arc_10_input_12" source="entityVertex_2130477_10" target="reactionVertex_2130731.1">
+            <start x="999.0" y="1045.0"/>
+            <next x="1062.0" y="1029.0"/>
+            <end x="1062.0" y="1029.0"/>
+        </arc>
+        <arc class="consumption" id="arc_139_input_141" source="entityVertex_2213223_139" target="reactionVertex_2213248.1">
+            <start x="235.0" y="572.0"/>
+            <next x="261.0" y="427.0"/>
+            <end x="261.0" y="427.0"/>
+        </arc>
+        <arc class="production" id="arc_13_output_15" source="reactionVertex_2213243.2" target="entityVertex_203999_13">
+            <start x="1068.0" y="985.0"/>
+            <next x="1423.0" y="962.0"/>
+            <end x="1423.0" y="962.0"/>
+        </arc>
+        <arc class="production" id="arc_72_output_70" source="reactionVertex_2130641.2" target="entityVertex_29420_72">
+            <start x="1526.0" y="345.0"/>
+            <next x="1560.0" y="367.0"/>
+            <end x="1560.0" y="367.0"/>
+        </arc>
+        <arc class="production" id="arc_95_output_87" source="reactionVertex_2130725.2" target="entityVertex_29372_95">
+            <start x="1099.0" y="173.0"/>
+            <next x="1139.0" y="78.0"/>
+            <end x="1139.0" y="78.0"/>
+        </arc>
+        <arc class="production" id="arc_90_output_87" source="reactionVertex_2130725.2" target="entityVertex_2130331_90">
+            <start x="985.0" y="158.0"/>
+            <next x="1139.0" y="78.0"/>
+            <end x="1139.0" y="78.0"/>
+        </arc>
+        <arc class="consumption" id="arc_13_input_12" source="entityVertex_203999_13" target="reactionVertex_2130731.1">
+            <start x="1042.0" y="1002.0"/>
+            <next x="1062.0" y="1029.0"/>
+            <end x="1062.0" y="1029.0"/>
+        </arc>
+        <arc class="consumption" id="arc_107_input_109" source="entityVertex_2130723_107" target="reactionVertex_2130349.1">
+            <start x="820.0" y="532.0"/>
+            <end x="817.0" y="671.0"/>
+        </arc>
+        <arc class="consumption" id="arc_115_input_138" source="entityVertex_2213227_115" target="reactionVertex_2213244.1">
+            <start x="434.0" y="730.0"/>
+            <next x="342.0" y="702.0"/>
+            <end x="342.0" y="702.0"/>
+        </arc>
+        <arc class="production" id="arc_148_output_141" source="reactionVertex_2213248.2" target="entityVertex_2213232_148">
+            <start x="260.0" y="105.0"/>
+            <next x="261.0" y="193.0"/>
+            <end x="261.0" y="193.0"/>
+        </arc>
+        <arc class="consumption" id="arc_11_input_9" source="entityVertex_2213186_11" target="reactionVertex_2213241.1">
+            <glyph class="stoichiometry" id="Stoichiometry_2213186_INPUT_2213241">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="632.0" y="1002.0"/>
+            </glyph>
+            <start x="620.0" y="1033.0"/>
+            <next x="657.0" y="984.0"/>
+            <end x="657.0" y="984.0"/>
+        </arc>
+        <arc class="production" id="arc_144_output_141" source="reactionVertex_2213248.2" target="entityVertex_420049_144">
+            <start x="340.0" y="305.0"/>
+            <next x="261.0" y="193.0"/>
+            <end x="261.0" y="193.0"/>
+        </arc>
+        <arc class="consumption" id="arc_61_input_80" source="entityVertex_2130491_61" target="reactionVertex_2130378.1">
+            <start x="1974.0" y="447.0"/>
+            <end x="1866.0" y="333.0"/>
+        </arc>
+        <arc class="consumption" id="arc_136_input_138" source="entityVertex_2213226_136" target="reactionVertex_2213244.1">
+            <start x="365.0" y="666.0"/>
+            <next x="342.0" y="702.0"/>
+            <end x="342.0" y="702.0"/>
+        </arc>
+        <arc class="production" id="arc_75_output_70" source="reactionVertex_2130641.2" target="entityVertex_29372_75">
+            <start x="1481.0" y="367.0"/>
+            <next x="1560.0" y="367.0"/>
+            <end x="1560.0" y="367.0"/>
+        </arc>
+        <arc class="consumption" id="arc_176_input_141" source="entityVertex_2228747_176" target="reactionVertex_2213248.1">
+            <start x="216.0" y="330.0"/>
+            <next x="261.0" y="427.0"/>
+            <end x="261.0" y="427.0"/>
+        </arc>
+        <arc class="production" id="arc_136_output_135" source="reactionVertex_2130706.2" target="entityVertex_2213226_136">
+            <glyph class="stoichiometry" id="Stoichiometry_2213226_OUTPUT_2130706">
+                <label text="3"/>
+                <bbox w="12.0" h="12.0" x="450.0" y="639.0"/>
+            </glyph>
+            <start x="492.0" y="645.0"/>
+            <end x="421.0" y="645.0"/>
+        </arc>
+        <arc class="production" id="arc_64_output_77" source="reactionVertex_2213236.2" target="entityVertex_350827_64">
+            <start x="1481.0" y="585.0"/>
+            <next x="1307.0" y="440.0"/>
+            <end x="1307.0" y="440.0"/>
+        </arc>
+        <arc class="consumption" id="arc_81_input_82" source="entityVertex_2130431_81" target="reactionVertex_2130500.1">
+            <start x="1725.0" y="155.0"/>
+            <end x="1689.0" y="123.0"/>
+        </arc>
+        <arc class="production" id="arc_69_output_1176" source="reactionVertex_8951498.2" target="entityVertex_29372_69">
+            <start x="1691.0" y="518.0"/>
+            <next x="1731.0" y="475.0"/>
+            <end x="1731.0" y="475.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_111_catalyst_109" source="entityVertex_2130682_111" target="reactionVertex_2130349_109">
+            <start x="864.0" y="664.0"/>
+            <next x="833.0" y="669.0"/>
+            <end x="833.0" y="669.0"/>
+        </arc>
+        <arc class="consumption" id="arc_142_input_141" source="entityVertex_2213219_142" target="reactionVertex_2213248.1">
+            <start x="447.0" y="353.0"/>
+            <next x="261.0" y="427.0"/>
+            <end x="261.0" y="427.0"/>
+        </arc>
+        <arc class="production" id="arc_83_output_82" source="reactionVertex_2130500.2" target="entityVertex_2130467_83">
+            <start x="1689.0" y="123.0"/>
+            <end x="1652.0" y="104.0"/>
+        </arc>
+        <arc class="production" id="arc_68_output_1176" source="reactionVertex_8951498.2" target="entityVertex_2130552_68">
+            <start x="1709.0" y="461.0"/>
+            <next x="1731.0" y="475.0"/>
+            <end x="1731.0" y="475.0"/>
+        </arc>
+        <arc class="production" id="arc_81_output_80" source="reactionVertex_2130378.2" target="entityVertex_2130431_81">
+            <start x="1866.0" y="333.0"/>
+            <end x="1771.0" y="211.0"/>
+        </arc>
+        <arc class="consumption" id="arc_110_input_112" source="entityVertex_2130574_110" target="reactionVertex_2213246.1">
+            <start x="785.0" y="741.0"/>
+            <next x="704.0" y="715.0"/>
+            <end x="704.0" y="715.0"/>
+        </arc>
+        <arc class="consumption" id="arc_68_input_70" source="entityVertex_2130552_68" target="reactionVertex_2130641.1">
+            <start x="1659.0" y="405.0"/>
+            <next x="1631.0" y="368.0"/>
+            <end x="1631.0" y="368.0"/>
+        </arc>
+        <arc class="production" id="arc_1177_output_578" source="reactionVertex_8951500.2" target="entityVertex_8980062_1177">
+            <start x="743.0" y="1034.0"/>
+            <next x="690.0" y="1024.0"/>
+            <end x="690.0" y="1024.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_91_catalyst_87" source="entityVertex_446847_91" target="reactionVertex_2130725_87">
+            <start x="999.0" y="64.0"/>
+            <next x="1181.0" y="7.0"/>
+            <next x="1182.0" y="62.0"/>
+            <end x="1182.0" y="62.0"/>
+        </arc>
+        <arc class="consumption" id="arc_118_input_117" source="entityVertex_983667_118" target="reactionVertex_2130627.1">
+            <start x="584.0" y="25.0"/>
+            <end x="586.0" y="300.0"/>
+        </arc>
+        <arc class="consumption" id="arc_14_input_15" source="entityVertex_2213211_14" target="reactionVertex_2213243.1">
+            <start x="1352.0" y="1022.0"/>
+            <end x="1427.0" y="1013.0"/>
+        </arc>
+        <arc class="consumption" id="arc_73_input_77" source="entityVertex_2213234_73" target="reactionVertex_2213236.1">
+            <start x="1392.0" y="439.0"/>
+            <end x="1354.0" y="439.0"/>
+        </arc>
+        <arc class="consumption" id="arc_66_input_62" source="entityVertex_167717_66" target="reactionVertex_2130619.1">
+            <start x="1498.0" y="639.0"/>
+            <next x="1781.0" y="579.0"/>
+            <end x="1781.0" y="579.0"/>
+        </arc>
+        <arc class="consumption" id="arc_90_input_98" source="entityVertex_2130331_90" target="reactionVertex_2130486.1">
+            <start x="938.0" y="214.0"/>
+            <end x="938.0" y="277.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_137_catalyst_135" source="entityVertex_2130682_137" target="reactionVertex_2130706_135">
+            <start x="492.0" y="594.0"/>
+            <next x="492.0" y="629.0"/>
+            <end x="492.0" y="629.0"/>
+        </arc>
+        <arc class="consumption" id="arc_143_input_141" source="entityVertex_2213215_143" target="reactionVertex_2213248.1">
+            <start x="147.0" y="394.0"/>
+            <next x="261.0" y="427.0"/>
+            <end x="261.0" y="427.0"/>
+        </arc>
+        <arc class="production" id="arc_139_output_138" source="reactionVertex_2213244.2" target="entityVertex_2213223_139">
+            <start x="236.0" y="614.0"/>
+            <next x="260.0" y="702.0"/>
+            <end x="260.0" y="702.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_108_catalyst_106" source="entityVertex_2130544_108" target="reactionVertex_2130504_106">
+            <start x="906.0" y="552.0"/>
+            <next x="906.0" y="528.0"/>
+            <end x="906.0" y="528.0"/>
+        </arc>
+        <arc class="production" id="arc_66_output_77" source="reactionVertex_2213236.2" target="entityVertex_167717_66">
+            <start x="1439.0" y="636.0"/>
+            <next x="1307.0" y="440.0"/>
+            <end x="1307.0" y="440.0"/>
+        </arc>
+        <arc class="consumption" id="arc_99_input_102" source="entityVertex_2130531_99" target="reactionVertex_2213235.1">
+            <start x="1055.0" y="405.0"/>
+            <end x="1128.0" y="457.0"/>
+        </arc>
+        <arc class="production" id="arc_52_output_15" source="reactionVertex_2213243.2" target="entityVertex_2214394_52">
+            <start x="1683.0" y="743.0"/>
+            <next x="1423.0" y="962.0"/>
+            <end x="1423.0" y="962.0"/>
+        </arc>
+        <arc class="consumption" id="arc_71_input_70" source="entityVertex_29438_71" target="reactionVertex_2130641.1">
+            <start x="1644.0" y="356.0"/>
+            <next x="1631.0" y="368.0"/>
+            <end x="1631.0" y="368.0"/>
+        </arc>
+        <arc class="production" id="arc_86_output_84" source="reactionVertex_2130640.2" target="entityVertex_2130309_86">
+            <start x="1434.0" y="18.0"/>
+            <end x="1380.0" y="49.0"/>
+        </arc>
+        <arc class="production" id="arc_114_output_112" source="reactionVertex_2213246.2" target="entityVertex_2213220_114">
+            <start x="550.0" y="702.0"/>
+            <next x="631.0" y="715.0"/>
+            <end x="631.0" y="715.0"/>
+        </arc>
+        <arc class="consumption" id="arc_6_input_5" source="entityVertex_195906_6" target="reactionVertex_2130478.1">
+            <start x="407.0" y="1015.0"/>
+            <next x="424.0" y="959.0"/>
+            <end x="424.0" y="959.0"/>
+        </arc>
+        <arc class="production" id="arc_61_output_60" source="reactionVertex_2130393.2" target="entityVertex_2130491_61">
+            <start x="1872.0" y="584.0"/>
+            <end x="1974.0" y="475.0"/>
+        </arc>
+        <arc class="consumption" id="arc_85_input_84" source="entityVertex_177505_85" target="reactionVertex_2130640.1">
+            <start x="1482.0" y="57.0"/>
+            <next x="1474.0" y="18.0"/>
+            <end x="1474.0" y="18.0"/>
+        </arc>
+        <arc class="consumption" id="arc_86_input_87" source="entityVertex_2130309_86" target="reactionVertex_2130725.1">
+            <start x="1271.0" y="78.0"/>
+            <next x="1223.0" y="78.0"/>
+            <end x="1223.0" y="78.0"/>
+        </arc>
+        <arc class="production" id="arc_955_output_62" source="reactionVertex_2130619.2" target="entityVertex_8951497_955">
+            <start x="1804.0" y="539.0"/>
+            <end x="1828.0" y="494.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_105_catalyst_103" source="entityVertex_350135_105" target="reactionVertex_2130336_103">
+            <start x="1095.0" y="564.0"/>
+            <next x="1095.0" y="530.0"/>
+            <end x="1095.0" y="530.0"/>
+        </arc>
+        <arc class="production" id="arc_145_output_141" source="reactionVertex_2213248.2" target="entityVertex_2029135_145">
+            <start x="130.0" y="252.0"/>
+            <next x="261.0" y="193.0"/>
+            <end x="261.0" y="193.0"/>
+        </arc>
+        <arc class="consumption" id="arc_179_input_178" source="entityVertex_197837_179" target="reactionVertex_8856157.1">
+            <start x="1867.0" y="61.0"/>
+            <next x="1864.0" y="50.0"/>
+            <end x="1864.0" y="50.0"/>
+        </arc>
+        <arc class="production" id="arc_115_output_112" source="reactionVertex_2213246.2" target="entityVertex_2213227_115">
+            <start x="553.0" y="735.0"/>
+            <next x="631.0" y="715.0"/>
+            <end x="631.0" y="715.0"/>
+        </arc>
+        <arc class="production" id="arc_8_output_5" source="reactionVertex_2130478.2" target="entityVertex_2213212_8">
+            <start x="460.0" y="959.0"/>
+            <end x="584.0" y="924.0"/>
+        </arc>
+        <arc class="production" id="arc_14_output_12" source="reactionVertex_2130731.2" target="entityVertex_2213211_14">
+            <start x="1118.0" y="1029.0"/>
+            <end x="1218.0" y="1029.0"/>
+        </arc>
+        <arc class="production" id="arc_73_output_70" source="reactionVertex_2130641.2" target="entityVertex_2213234_73">
+            <start x="1493.0" y="411.0"/>
+            <next x="1560.0" y="367.0"/>
+            <end x="1560.0" y="367.0"/>
+        </arc>
+        <arc class="consumption" id="arc_52_input_60" source="entityVertex_2214394_52" target="reactionVertex_2130393.1">
+            <start x="1735.0" y="694.0"/>
+            <end x="1872.0" y="584.0"/>
+        </arc>
+        <arc class="production" id="arc_99_output_98" source="reactionVertex_2130486.2" target="entityVertex_2130531_99">
+            <start x="1025.0" y="377.0"/>
+            <next x="937.0" y="318.0"/>
+            <end x="937.0" y="318.0"/>
+        </arc>
+        <arc class="consumption" id="arc_180_input_178" source="entityVertex_2213189_180" target="reactionVertex_8856157.1">
+            <start x="1824.0" y="60.0"/>
+            <next x="1864.0" y="50.0"/>
+            <end x="1864.0" y="50.0"/>
+        </arc>
+        <arc class="production" id="arc_476_output_9" source="reactionVertex_2213241.2" target="entityVertex_8951502_476">
+            <start x="696.0" y="984.0"/>
+            <end x="808.0" y="942.0"/>
+        </arc>
+        <arc class="production" id="arc_176_output_141" source="reactionVertex_2213248.2" target="entityVertex_2228747_176">
+            <start x="216.0" y="296.0"/>
+            <next x="261.0" y="193.0"/>
+            <end x="261.0" y="193.0"/>
+        </arc>
+        <arc class="production" id="arc_133_output_132" source="reactionVertex_2213240.2" target="entityVertex_2213225_133">
+            <start x="586.0" y="596.0"/>
+            <end x="584.0" y="631.0"/>
+        </arc>
+        <arc class="consumption" id="arc_63_input_62" source="entityVertex_199981_63" target="reactionVertex_2130619.1">
+            <start x="1648.0" y="656.0"/>
+            <next x="1781.0" y="579.0"/>
+            <end x="1781.0" y="579.0"/>
+        </arc>
+        <arc class="production" id="arc_119_output_117" source="reactionVertex_2130627.2" target="entityVertex_2213221_119">
+            <start x="586.0" y="300.0"/>
+            <end x="584.0" y="539.0"/>
+        </arc>
+        <arc class="production" id="arc_65_output_70" source="reactionVertex_2130641.2" target="entityVertex_2213185_65">
+            <start x="1508.0" y="534.0"/>
+            <next x="1560.0" y="367.0"/>
+            <end x="1560.0" y="367.0"/>
+        </arc>
+        <arc class="consumption" id="arc_83_input_84" source="entityVertex_2130467_83" target="reactionVertex_2130640.1">
+            <start x="1556.0" y="60.0"/>
+            <next x="1474.0" y="18.0"/>
+            <end x="1474.0" y="18.0"/>
+        </arc>
+        <arc class="production" id="arc_93_output_87" source="reactionVertex_2130725.2" target="entityVertex_29420_93">
+            <start x="1156.0" y="179.0"/>
+            <next x="1139.0" y="78.0"/>
+            <end x="1139.0" y="78.0"/>
+        </arc>
+        <arc class="consumption" id="arc_65_input_62" source="entityVertex_2213185_65" target="reactionVertex_2130619.1">
+            <start x="1542.0" y="554.0"/>
+            <next x="1781.0" y="579.0"/>
+            <end x="1781.0" y="579.0"/>
+        </arc>
+        <arc class="consumption" id="arc_64_input_62" source="entityVertex_350827_64" target="reactionVertex_2130619.1">
+            <start x="1558.0" y="594.0"/>
+            <next x="1781.0" y="579.0"/>
+            <end x="1781.0" y="579.0"/>
+        </arc>
+        <arc class="production" id="arc_67_output_1176" source="reactionVertex_8951498.2" target="entityVertex_201340_67">
+            <start x="1635.0" y="516.0"/>
+            <next x="1731.0" y="475.0"/>
+            <end x="1731.0" y="475.0"/>
+        </arc>
+        <arc class="production" id="arc_100_output_98" source="reactionVertex_2130486.2" target="entityVertex_2130671_100">
+            <start x="875.0" y="374.0"/>
+            <next x="937.0" y="318.0"/>
+            <end x="937.0" y="318.0"/>
+        </arc>
+        <arc class="production" id="arc_101_output_98" source="reactionVertex_2130486.2" target="entityVertex_2130629_101">
+            <start x="836.0" y="334.0"/>
+            <next x="937.0" y="318.0"/>
+            <end x="937.0" y="318.0"/>
+        </arc>
+        <arc class="consumption" id="arc_476_input_578" source="entityVertex_8951502_476" target="reactionVertex_8951500.1">
+            <start x="854.0" y="942.0"/>
+            <end x="828.0" y="984.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_134_catalyst_132" source="entityVertex_1031704_134" target="reactionVertex_2213240_132">
+            <start x="627.0" y="597.0"/>
+            <next x="602.0" y="596.0"/>
+            <end x="602.0" y="596.0"/>
+        </arc>
+        <arc class="consumption" id="arc_61_input_62" source="entityVertex_2130491_61" target="reactionVertex_2130619.1">
+            <start x="1965.0" y="475.0"/>
+            <next x="1781.0" y="579.0"/>
+            <end x="1781.0" y="579.0"/>
+        </arc>
+    </map>
+</sbgn>

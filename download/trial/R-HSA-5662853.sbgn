@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_7" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="1657.0" y="286.0"/>
+            </label>
+            <bbox w="1739.0" h="331.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_5660036_1187">
+            <label text="L-xylulose"/>
+            <bbox w="90.0" h="30.0" x="814.0" y="143.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5662851_172177">
+            <label text="Defective DCXR does not reduce L-xylulose to xylitol"/>
+            <bbox w="12.0" h="12.0" x="996.0" y="152.0"/>
+            <port id="reactionVertex_5662851.1" x="955.0" y="157.0"/>
+            <port id="reactionVertex_5662851.2" x="1052.0" y="158.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29364_1192">
+            <label text="NADPH"/>
+            <bbox w="57.0" h="30.0" x="871.0" y="93.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_70106_1197">
+            <label text="H+"/>
+            <bbox w="33.0" h="30.0" x="930.0" y="66.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5662854_172178">
+            <label text="DCXR H195Tfs*7"/>
+            <bbox w="111.0" h="22.0" x="950.0" y="218.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_1197_input_172177" source="entityVertex_70106_1197" target="reactionVertex_5662851.1">
+            <start x="947.0" y="99.0"/>
+            <next x="955.0" y="157.0"/>
+            <end x="955.0" y="157.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_172178_catalyst_172177" source="entityVertex_5662854_172178" target="reactionVertex_5662851_172177">
+            <start x="1004.0" y="215.0"/>
+            <next x="1003.0" y="174.0"/>
+            <end x="1003.0" y="174.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1187_input_172177" source="entityVertex_5660036_1187" target="reactionVertex_5662851.1">
+            <start x="907.0" y="157.0"/>
+            <next x="955.0" y="157.0"/>
+            <end x="955.0" y="157.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1192_input_172177" source="entityVertex_29364_1192" target="reactionVertex_5662851.1">
+            <start x="916.0" y="126.0"/>
+            <next x="955.0" y="157.0"/>
+            <end x="955.0" y="157.0"/>
+        </arc>
+    </map>
+</sbgn>

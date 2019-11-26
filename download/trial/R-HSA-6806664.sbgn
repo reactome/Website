@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_32" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="72.0" y="35.0"/>
+            </label>
+            <bbox w="692.0" h="498.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_2" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="222.0" y="419.0"/>
+            </label>
+            <bbox w="546.0" h="364.0" x="47.0" y="102.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_6806657_4">
+            <label text="GGPP"/>
+            <bbox w="49.0" h="30.0" x="82.0" y="327.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_9035082_109">
+            <label text="VKORC1 inhibitors"/>
+            <bbox w="115.0" h="22.0" x="526.0" y="54.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_156540_10">
+            <label text="H+"/>
+            <bbox w="36.0" h="30.0" x="430.0" y="280.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_6806674_3">
+            <label text="UBIA1D prenylates menadione to form MK4 (vitamin K hydroquinone)"/>
+            <bbox w="12.0" h="12.0" x="152.0" y="287.0"/>
+            <port id="reactionVertex_6806674.1" x="158.0" y="316.0"/>
+            <port id="reactionVertex_6806674.2" x="158.0" y="225.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_6806362_7">
+            <label text="MK4"/>
+            <bbox w="44.0" h="30.0" x="283.0" y="211.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_6806366_11">
+            <label text="MK4 epoxide"/>
+            <bbox w="99.0" h="30.0" x="452.0" y="344.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_159790_9">
+            <label text="VKORC1 reduces vitamin K epoxide to MK4 (vitamin K hydroquinone)"/>
+            <bbox w="12.0" h="12.0" x="388.0" y="219.0"/>
+            <port id="reactionVertex_159790.1" x="394.0" y="269.0"/>
+            <port id="reactionVertex_159790.2" x="330.0" y="225.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_6806371_12">
+            <label text="VKORC1 dimer"/>
+            <bbox w="99.0" h="22.0" x="544.0" y="187.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_9026967_108">
+            <label text="VKORC1 inhibitors binds VKORC1 dimer"/>
+            <bbox w="10.0" h="10.0" x="524.0" y="106.0"/>
+            <port id="reactionVertex_9026967.1" x="530.0" y="111.0"/>
+            <port id="reactionVertex_9026967.2" x="457.0" y="111.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_6806891_20">
+            <label text="menadione"/>
+            <bbox w="85.0" h="30.0" x="116.0" y="360.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_6806656_6">
+            <label text="PPi"/>
+            <bbox w="34.0" h="30.0" x="183.0" y="160.0"/>
+        </glyph>
+        <glyph class="submap" id="entityVertex_163841_21">
+            <label text="Gamma carboxylation, hypusine formation and arylsulfatase activation"/>
+            <bbox w="111.0" h="100.0" x="253.0" y="308.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_2980965_8">
+            <label text="UBIAD1"/>
+            <bbox w="54.0" h="22.0" x="38.0" y="281.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_2980944_14">
+            <label text="VKORC1L1"/>
+            <bbox w="74.0" h="22.0" x="564.0" y="241.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9035037_106">
+            <label text="VKORC1 inhibitors:VKORC1 dimer"/>
+            <bbox w="119.0" h="36.0" x="335.0" y="94.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_6806647_13">
+            <label text="VKORC1L1 reduces vitamin K epoxide to MK4 (vitamin K hydroquinone)"/>
+            <bbox w="12.0" h="12.0" x="495.0" y="246.0"/>
+            <port id="reactionVertex_6806647.1" x="501.0" y="299.0"/>
+            <port id="reactionVertex_6806647.2" x="330.0" y="228.0"/>
+        </glyph>
+        <arc class="production" id="arc_7_output_13" source="reactionVertex_6806647.2" target="entityVertex_6806362_7">
+            <start x="501.0" y="252.0"/>
+            <end x="330.0" y="228.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_12_catalyst_9" source="entityVertex_6806371_12" target="reactionVertex_159790_9">
+            <start x="541.0" y="204.0"/>
+            <next x="410.0" y="223.0"/>
+            <end x="410.0" y="223.0"/>
+        </arc>
+        <arc class="consumption" id="arc_20_input_3" source="entityVertex_6806891_20" target="reactionVertex_6806674.1">
+            <start x="158.0" y="357.0"/>
+            <next x="158.0" y="316.0"/>
+            <end x="158.0" y="316.0"/>
+        </arc>
+        <arc class="production" id="arc_7_output_3" source="reactionVertex_6806674.2" target="entityVertex_6806362_7">
+            <start x="280.0" y="225.0"/>
+            <next x="158.0" y="225.0"/>
+            <end x="158.0" y="225.0"/>
+        </arc>
+        <arc class="production" id="arc_7_output_9" source="reactionVertex_159790.2" target="entityVertex_6806362_7">
+            <start x="394.0" y="225.0"/>
+            <end x="330.0" y="225.0"/>
+        </arc>
+        <arc class="consumption" id="arc_4_input_3" source="entityVertex_6806657_4" target="reactionVertex_6806674.1">
+            <start x="134.0" y="329.0"/>
+            <next x="158.0" y="316.0"/>
+            <end x="158.0" y="316.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_8_catalyst_3" source="entityVertex_2980965_8" target="reactionVertex_6806674_3">
+            <start x="95.0" y="292.0"/>
+            <next x="142.0" y="293.0"/>
+            <end x="142.0" y="293.0"/>
+        </arc>
+        <arc class="production" id="arc_106_output_108" source="reactionVertex_9026967.2" target="entityVertex_9035037_106">
+            <start x="529.0" y="111.0"/>
+            <end x="457.0" y="111.0"/>
+        </arc>
+        <arc class="consumption" id="arc_11_input_9" source="entityVertex_6806366_11" target="reactionVertex_159790.1">
+            <start x="466.0" y="341.0"/>
+            <next x="394.0" y="312.0"/>
+            <next x="394.0" y="269.0"/>
+            <end x="394.0" y="269.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_14_catalyst_13" source="entityVertex_2980944_14" target="reactionVertex_6806647_13">
+            <start x="561.0" y="252.0"/>
+            <next x="517.0" y="252.0"/>
+            <end x="517.0" y="252.0"/>
+        </arc>
+        <arc class="consumption" id="arc_10_input_9" source="entityVertex_156540_10" target="reactionVertex_159790.1">
+            <glyph class="stoichiometry" id="Stoichiometry_156540_INPUT_159790">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="404.0" y="271.0"/>
+            </glyph>
+            <start x="427.0" y="286.0"/>
+            <next x="394.0" y="269.0"/>
+            <end x="394.0" y="269.0"/>
+        </arc>
+        <arc class="consumption" id="arc_11_input_13" source="entityVertex_6806366_11" target="reactionVertex_6806647.1">
+            <start x="501.0" y="341.0"/>
+            <next x="501.0" y="299.0"/>
+            <end x="501.0" y="299.0"/>
+        </arc>
+        <arc class="consumption" id="arc_109_input_108" source="entityVertex_9035082_109" target="reactionVertex_9026967.1">
+            <start x="570.0" y="82.0"/>
+            <end x="530.0" y="111.0"/>
+        </arc>
+        <arc class="production" id="arc_6_output_3" source="reactionVertex_6806674.2" target="entityVertex_6806656_6">
+            <start x="187.0" y="193.0"/>
+            <next x="158.0" y="225.0"/>
+            <end x="158.0" y="225.0"/>
+        </arc>
+        <arc class="inhibition" id="arc_106_inhibitor_9" source="entityVertex_9035037_106" target="reactionVertex_159790_9">
+            <start x="394.0" y="133.0"/>
+            <next x="394.0" y="216.0"/>
+            <end x="394.0" y="216.0"/>
+        </arc>
+        <arc class="consumption" id="arc_12_input_108" source="entityVertex_6806371_12" target="reactionVertex_9026967.1">
+            <start x="585.0" y="184.0"/>
+            <end x="530.0" y="111.0"/>
+        </arc>
+        <arc class="consumption" id="arc_10_input_13" source="entityVertex_156540_10" target="reactionVertex_6806647.1">
+            <glyph class="stoichiometry" id="Stoichiometry_156540_INPUT_6806647">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="479.0" y="291.0"/>
+            </glyph>
+            <start x="469.0" y="296.0"/>
+            <next x="501.0" y="299.0"/>
+            <end x="501.0" y="299.0"/>
+        </arc>
+    </map>
+</sbgn>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_73" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="165.0" y="1323.0"/>
+            </label>
+            <bbox w="1464.0" h="1412.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_315" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="1225.0" y="797.0"/>
+            </label>
+            <bbox w="882.0" h="549.0" x="515.0" y="320.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5246650_127782">
+            <label text="APC polyubiquitination mutants"/>
+            <bbox w="115.0" h="50.0" x="516.0" y="51.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5246696_127781">
+            <label text="APC truncation mutants are not K63 polyubiquitinated"/>
+            <bbox w="12.0" h="12.0" x="462.0" y="89.0"/>
+            <port id="reactionVertex_5246696.1" x="489.0" y="98.0"/>
+            <port id="reactionVertex_5246696.2" x="371.0" y="90.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_127782_input_127781" source="entityVertex_5246650_127782" target="reactionVertex_5246696.1">
+            <start x="510.0" y="91.0"/>
+            <next x="489.0" y="98.0"/>
+            <end x="489.0" y="98.0"/>
+        </arc>
+    </map>
+</sbgn>

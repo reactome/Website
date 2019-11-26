@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17906_1728" compartmentOrder="10.0">
+            <label text="mitochondrial outer membrane">
+                <bbox w="241.0" h="24.0" x="2635.0" y="1444.0"/>
+            </label>
+            <bbox w="418.0" h="128.0" x="2488.0" y="1366.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_216798_277" compartmentOrder="10.0">
+            <label text="secretory granule">
+                <bbox w="138.0" h="24.0" x="2747.0" y="825.0"/>
+            </label>
+            <bbox w="297.0" h="401.0" x="2733.0" y="472.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17957_279" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum lumen">
+                <bbox w="226.0" h="24.0" x="2256.0" y="1128.0"/>
+            </label>
+            <bbox w="338.0" h="296.0" x="2228.0" y="954.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_14" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="1333.0" y="775.0"/>
+            </label>
+            <bbox w="847.0" h="557.0" x="1310.0" y="277.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_15" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="211.0" y="1624.0"/>
+            </label>
+            <bbox w="2913.0" h="1595.0" x="183.0" y="97.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5683210_1037">
+            <label text="ABCC8 mutants (PNDM, TNDM2)"/>
+            <bbox w="99.0" h="57.0" x="2413.0" y="72.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5683095_175775">
+            <label text="KCNJ11 tetramer:ABCC8 mutants"/>
+            <bbox w="135.0" h="49.0" x="2610.0" y="77.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5683209_1019">
+            <label text="Activating ABCC8 mutants cause hyperglycemia in permanent neonatal diabetes mellitus (PNDM) and transient neonatal DM (TNDM)."/>
+            <bbox w="12.0" h="12.0" x="2547.0" y="98.0"/>
+            <port id="reactionVertex_5683209.1" x="2569.0" y="211.0"/>
+            <port id="reactionVertex_5683209.2" x="2564.0" y="34.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_74126_1016">
+            <label text="K+"/>
+            <bbox w="35.0" h="30.0" x="2550.0" y="1.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_113592_267">
+            <label text="ATP"/>
+            <bbox w="40.0" h="30.0" x="2726.0" y="183.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29804_1015">
+            <label text="K+"/>
+            <bbox w="35.0" h="30.0" x="2555.0" y="214.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5683113_175774">
+            <label text="Defective ABCC8 does not form functional KATP channels, causing hyperinsulinemic hypoglycemia"/>
+            <bbox w="12.0" h="12.0" x="2912.0" y="193.0"/>
+            <port id="reactionVertex_5683113.1" x="2836.0" y="199.0"/>
+            <port id="reactionVertex_5683113.2" x="2965.0" y="199.0"/>
+        </glyph>
+        <arc class="production" id="arc_1016_output_1019" source="reactionVertex_5683209.2" target="entityVertex_74126_1016">
+            <start x="2553.0" y="104.0"/>
+            <end x="2564.0" y="34.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_1037_catalyst_1019" source="entityVertex_5683210_1037" target="reactionVertex_5683209_1019">
+            <start x="2518.0" y="102.0"/>
+            <next x="2537.0" y="103.0"/>
+            <end x="2537.0" y="103.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1015_input_1019" source="entityVertex_29804_1015" target="reactionVertex_5683209.1">
+            <start x="2569.0" y="211.0"/>
+            <end x="2553.0" y="104.0"/>
+        </arc>
+        <arc class="consumption" id="arc_175775_input_175774" source="entityVertex_5683095_175775" target="reactionVertex_5683113.1">
+            <start x="2716.0" y="129.0"/>
+            <next x="2836.0" y="199.0"/>
+            <end x="2836.0" y="199.0"/>
+        </arc>
+        <arc class="consumption" id="arc_267_input_175774" source="entityVertex_113592_267" target="reactionVertex_5683113.1">
+            <glyph class="stoichiometry" id="Stoichiometry_113592_INPUT_5683113">
+                <label text="4"/>
+                <bbox w="12.0" h="12.0" x="2796.0" y="192.0"/>
+            </glyph>
+            <start x="2769.0" y="198.0"/>
+            <next x="2836.0" y="199.0"/>
+            <end x="2836.0" y="199.0"/>
+        </arc>
+    </map>
+</sbgn>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17963_1584" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1704.0" y="1136.0"/>
+            </label>
+            <bbox w="2278.0" h="164.0" x="262.0" y="1028.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_1" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="4779.0" y="721.0"/>
+            </label>
+            <bbox w="2842.0" h="750.0" x="3043.0" y="223.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17963_977" compartmentOrder="10.0">
+            <label text="Golgi lumen">
+                <bbox w="90.0" h="24.0" x="1707.0" y="482.0"/>
+            </label>
+            <bbox w="2656.0" h="761.0" x="111.0" y="172.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_39" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="71.0" y="1154.0"/>
+            </label>
+            <bbox w="5913.0" h="1102.0" x="0.0" y="115.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_76183_55">
+            <label text="Ac-CoA"/>
+            <bbox w="82.0" h="30.0" x="3927.0" y="180.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_2245239_93634">
+            <label text="HGSNAT mutants"/>
+            <bbox w="128.0" h="22.0" x="4017.0" y="218.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9036056_93633">
+            <label text="Defective HGSNAT does not acetylate Heparan sulfate chain(3)"/>
+            <bbox w="12.0" h="12.0" x="4076.0" y="314.0"/>
+            <port id="reactionVertex_9036056.1" x="4061.0" y="321.0"/>
+            <port id="reactionVertex_9036056.2" x="4112.0" y="320.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_2090040_949">
+            <label text="Heparan sulfate chain(3)"/>
+            <bbox w="126.0" h="44.0" x="3901.0" y="297.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_2090045_1021">
+            <label text="Heparan chain(1)"/>
+            <bbox w="136.0" h="30.0" x="5207.0" y="304.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_76183_1032">
+            <label text="Ac-CoA"/>
+            <bbox w="82.0" h="30.0" x="5262.0" y="185.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2263492_93635">
+            <label text="Defective HGSNAT does not acetylate Heparan chain(1)"/>
+            <bbox w="12.0" h="12.0" x="5404.0" y="313.0"/>
+            <port id="reactionVertex_2263492.1" x="5376.0" y="319.0"/>
+            <port id="reactionVertex_2263492.2" x="5445.0" y="319.0"/>
+        </glyph>
+        <arc class="catalysis" id="arc_93634_catalyst_93635" source="entityVertex_2245239_93634" target="reactionVertex_2263492_93635">
+            <start x="4151.0" y="229.0"/>
+            <next x="5410.0" y="229.0"/>
+            <next x="5410.0" y="303.0"/>
+            <end x="5410.0" y="303.0"/>
+        </arc>
+        <arc class="consumption" id="arc_55_input_93633" source="entityVertex_76183_55" target="reactionVertex_9036056.1">
+            <start x="3979.0" y="213.0"/>
+            <next x="4061.0" y="321.0"/>
+            <end x="4061.0" y="321.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1021_input_93635" source="entityVertex_2090045_1021" target="reactionVertex_2263492.1">
+            <start x="5346.0" y="319.0"/>
+            <next x="5376.0" y="319.0"/>
+            <end x="5376.0" y="319.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1032_input_93635" source="entityVertex_76183_1032" target="reactionVertex_2263492.1">
+            <start x="5312.0" y="218.0"/>
+            <next x="5376.0" y="319.0"/>
+            <end x="5376.0" y="319.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_93634_catalyst_93633" source="entityVertex_2245239_93634" target="reactionVertex_9036056_93633">
+            <start x="4081.0" y="246.0"/>
+            <next x="4082.0" y="304.0"/>
+            <end x="4082.0" y="304.0"/>
+        </arc>
+        <arc class="consumption" id="arc_949_input_93633" source="entityVertex_2090040_949" target="reactionVertex_9036056.1">
+            <start x="4030.0" y="320.0"/>
+            <next x="4061.0" y="321.0"/>
+            <end x="4061.0" y="321.0"/>
+        </arc>
+    </map>
+</sbgn>

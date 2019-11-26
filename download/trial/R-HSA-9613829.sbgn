@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_72" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="1076.0" y="214.0"/>
+            </label>
+            <bbox w="2078.0" h="1645.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_76" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="1596.0" y="1392.0"/>
+            </label>
+            <bbox w="1520.0" h="1022.0" x="409.0" y="458.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_9622831_50">
+            <label text="Substrate:LAMP2a binds HSP90"/>
+            <bbox w="10.0" h="10.0" x="1001.0" y="507.0"/>
+            <port id="reactionVertex_9622831.1" x="983.0" y="512.0"/>
+            <port id="reactionVertex_9622831.2" x="1040.0" y="489.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_9625195_48">
+            <label text="GFAP"/>
+            <bbox w="107.0" h="36.0" x="1188.0" y="531.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9615717_40">
+            <label text="HSPA8 bound autophagic substrates"/>
+            <bbox w="120.0" h="50.0" x="473.0" y="346.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_9626026_37">
+            <label text="LAMP2a multimer complex"/>
+            <bbox w="126.0" h="50.0" x="357.0" y="1010.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_9625197_30">
+            <label text="GFAP binds LAMP2a multimer"/>
+            <bbox w="10.0" h="10.0" x="1337.0" y="510.0"/>
+            <port id="reactionVertex_9625197.1" x="1304.0" y="515.0"/>
+            <port id="reactionVertex_9625197.2" x="1379.0" y="494.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_9622845_67">
+            <label text="HSP90AA1, HSP90AB1"/>
+            <bbox w="112.0" h="50.0" x="867.0" y="530.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_9626034_56">
+            <label text="EEF1A1 dissociates from p-GFAP"/>
+            <bbox w="10.0" h="10.0" x="850.0" y="1426.0"/>
+            <port id="reactionVertex_9626034.1" x="810.0" y="1451.0"/>
+            <port id="reactionVertex_9626034.2" x="880.0" y="1431.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9626023_58">
+            <label text="LAMP2a:HSP90"/>
+            <bbox w="112.0" h="36.0" x="370.0" y="596.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9626253_44">
+            <label text="HSPA8 binds LAMP2a multimers"/>
+            <bbox w="12.0" h="12.0" x="327.0" y="867.0"/>
+            <port id="reactionVertex_9626253.1" x="307.0" y="873.0"/>
+            <port id="reactionVertex_9626253.2" x="371.0" y="874.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_9615721_31">
+            <label text="HSPA8 binds substrate"/>
+            <bbox w="10.0" h="10.0" x="527.0" y="316.0"/>
+            <port id="reactionVertex_9615721.1" x="533.0" y="297.0"/>
+            <port id="reactionVertex_9615721.2" x="532.0" y="343.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_9626038_64">
+            <label text="EEF1A1 binds GTP"/>
+            <bbox w="10.0" h="10.0" x="695.0" y="1523.0"/>
+            <port id="reactionVertex_9626038.1" x="827.0" y="1529.0"/>
+            <port id="reactionVertex_9626038.2" x="628.0" y="1494.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9626246_29">
+            <label text="HSPA8:LAMP2a multimers"/>
+            <bbox w="117.0" h="36.0" x="368.0" y="742.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_9626039_34">
+            <label text="pGFAP binds GFAP in LAMP2a multimer"/>
+            <bbox w="10.0" h="10.0" x="581.0" y="1291.0"/>
+            <port id="reactionVertex_9626039.1" x="681.0" y="1296.0"/>
+            <port id="reactionVertex_9626039.2" x="478.0" y="1297.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_9626247_52">
+            <label text="HSPA8:LAMP2a multimers"/>
+            <bbox w="117.0" h="36.0" x="374.0" y="859.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9622836_57">
+            <label text="Substrate:LAMP2a:HSP90"/>
+            <bbox w="117.0" h="50.0" x="1015.0" y="436.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_9620197_65">
+            <label text="HSPA8:Substrate binds LAMP2a"/>
+            <bbox w="10.0" h="10.0" x="610.0" y="414.0"/>
+            <port id="reactionVertex_9620197.1" x="591.0" y="419.0"/>
+            <port id="reactionVertex_9620197.2" x="642.0" y="419.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_9626046_71">
+            <label text="p-GFAP binds EEF1A1"/>
+            <bbox w="10.0" h="10.0" x="822.0" y="1416.0"/>
+            <port id="reactionVertex_9626046.1" x="909.0" y="1422.0"/>
+            <port id="reactionVertex_9626046.2" x="787.0" y="1447.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_9625196_39">
+            <label text="Unfolded substrate in LAMP2a multimeric complex binds HSPA8"/>
+            <bbox w="10.0" h="10.0" x="1511.0" y="517.0"/>
+            <port id="reactionVertex_9625196.1" x="1485.0" y="521.0"/>
+            <port id="reactionVertex_9625196.2" x="1550.0" y="504.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9626049_51">
+            <label text="HSPA8:Substrates for CMA"/>
+            <bbox w="135.0" h="50.0" x="1598.0" y="603.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_9625182_32">
+            <label text="HSPA8"/>
+            <bbox w="115.0" h="36.0" x="1389.0" y="539.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_9626235_25">
+            <label text="HSPA8 dissociates from LAMP2a"/>
+            <bbox w="10.0" h="10.0" x="328.0" y="689.0"/>
+            <port id="reactionVertex_9626235.1" x="400.0" y="739.0"/>
+            <port id="reactionVertex_9626235.2" x="332.0" y="655.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_9624156_68">
+            <label text="LAMP2a multimer complex"/>
+            <bbox w="126.0" h="50.0" x="1179.0" y="439.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_9626276_35">
+            <label text="HSP90 dissociates from LAMP2a"/>
+            <bbox w="10.0" h="10.0" x="464.0" y="570.0"/>
+            <port id="reactionVertex_9626276.1" x="445.0" y="593.0"/>
+            <port id="reactionVertex_9626276.2" x="495.0" y="554.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9624158_46">
+            <label text="Substrate:LAMP2a:HSP90 polymerizes"/>
+            <bbox w="12.0" h="12.0" x="1141.0" y="501.0"/>
+            <port id="reactionVertex_9624158.1" x="1113.0" y="489.0"/>
+            <port id="reactionVertex_9624158.2" x="1186.0" y="492.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_2029007_66">
+            <label text="LAMP2"/>
+            <bbox w="116.0" h="36.0" x="481.0" y="443.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_9626060_41">
+            <label text="HSPA8:Substrate dissociates from LAMP2a multimer"/>
+            <bbox w="10.0" h="10.0" x="1777.0" y="547.0"/>
+            <port id="reactionVertex_9626060.1" x="1782.0" y="496.0"/>
+            <port id="reactionVertex_9626060.2" x="1782.0" y="583.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_9615715_49">
+            <label text="Substrates for chaperone mediated autophagy"/>
+            <bbox w="133.0" h="50.0" x="324.0" y="217.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9626070_33">
+            <label text="p-GFAP:EEF1A1"/>
+            <bbox w="106.0" h="50.0" x="701.0" y="1450.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9626245_42">
+            <label text="p-GFAP:GFAP"/>
+            <bbox w="92.0" h="50.0" x="365.0" y="1109.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9626061_28">
+            <label text="EEF1A1:GTP"/>
+            <bbox w="85.0" h="50.0" x="540.0" y="1451.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_9622840_36">
+            <label text="HSPA8 dissociates from LAMP2A-bound substrate"/>
+            <bbox w="10.0" h="10.0" x="788.0" y="396.0"/>
+            <port id="reactionVertex_9622840.1" x="770.0" y="430.0"/>
+            <port id="reactionVertex_9622840.2" x="793.0" y="401.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_9626022_45">
+            <label text="EEF1A1"/>
+            <bbox w="121.0" h="36.0" x="859.0" y="1458.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9626058_69">
+            <label text="LAMP2a multimer complex:GFAP"/>
+            <bbox w="114.0" h="64.0" x="1843.0" y="585.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9625189_43">
+            <label text="HSPA8:LAMP2a multimeric complex"/>
+            <bbox w="126.0" h="50.0" x="1719.0" y="443.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_264476_63">
+            <label text="HSPA8"/>
+            <bbox w="98.0" h="22.0" x="537.0" y="236.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9626256_47">
+            <label text="HSPA8:LAMP2a multimers depolymerizes to monomers"/>
+            <bbox w="12.0" h="12.0" x="460.0" y="820.0"/>
+            <port id="reactionVertex_9626256.1" x="444.0" y="856.0"/>
+            <port id="reactionVertex_9626256.2" x="436.0" y="781.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9625181_61">
+            <label text="LAMP2a multimer complex:GFAP"/>
+            <bbox w="114.0" h="64.0" x="1382.0" y="433.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29438_62">
+            <label text="GTP"/>
+            <bbox w="92.0" h="30.0" x="852.0" y="1555.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9620204_26">
+            <label text="HSPA8:Substrate:LAMP2a"/>
+            <bbox w="123.0" h="50.0" x="692.0" y="433.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9625165_59">
+            <label text="HSPA8:LAMP2a multimeric complex"/>
+            <bbox w="126.0" h="64.0" x="1540.0" y="437.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_9626054_27">
+            <label text="p-GFAP"/>
+            <bbox w="122.0" h="36.0" x="1014.0" y="1458.0"/>
+            <glyph class="unit of information" id="entityVertex_9613532_1_mt">
+                <label text="P"/>
+                <bbox w="10.0" h="16.0" x="1024.0" y="1452.0"/>
+            </glyph>
+        </glyph>
+        <glyph class="submap" id="entityVertex_9613354_77">
+            <label text="Lipophagy"/>
+            <bbox w="119.0" h="66.0" x="76.0" y="117.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9622841_54">
+            <label text="Substrate:LAMP2a"/>
+            <bbox w="117.0" h="50.0" x="859.0" y="435.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9626048_70">
+            <label text="p-GFAP:GFAP:LAMP2a multimer"/>
+            <bbox w="114.0" h="64.0" x="361.0" y="1266.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9626067_38">
+            <label text="EEF1A1:GTP translocates from lysosomal membrane to cytosol"/>
+            <bbox w="12.0" h="12.0" x="486.0" y="1508.0"/>
+            <port id="reactionVertex_9626067.1" x="537.0" y="1493.0"/>
+            <port id="reactionVertex_9626067.2" x="436.0" y="1540.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_9625188_53">
+            <label text="HSPA8 transports unfolded substrate to lysosomal lumen for degradation"/>
+            <bbox w="12.0" h="12.0" x="1687.0" y="523.0"/>
+            <port id="reactionVertex_9625188.1" x="1651.0" y="504.0"/>
+            <port id="reactionVertex_9625188.2" x="1745.0" y="496.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9626045_60">
+            <label text="EEF1A1:GTP"/>
+            <bbox w="85.0" h="36.0" x="360.0" y="1543.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_9626242_55">
+            <label text="p-GFAP:GFAP dissociates from LAMP2a multimer"/>
+            <bbox w="10.0" h="10.0" x="494.0" y="1218.0"/>
+            <port id="reactionVertex_9626242.1" x="452.0" y="1263.0"/>
+            <port id="reactionVertex_9626242.2" x="500.0" y="1165.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_52_input_47" source="entityVertex_9626247_52" target="reactionVertex_9626256.1">
+            <start x="444.0" y="856.0"/>
+            <end x="466.0" y="826.0"/>
+        </arc>
+        <arc class="production" id="arc_37_output_55" source="reactionVertex_9626242.2" target="entityVertex_9626026_37">
+            <start x="435.0" y="1063.0"/>
+            <next x="500.0" y="1165.0"/>
+            <end x="500.0" y="1165.0"/>
+        </arc>
+        <arc class="consumption" id="arc_63_input_44" source="entityVertex_264476_63" target="reactionVertex_9626253.1">
+            <start x="553.0" y="261.0"/>
+            <next x="313.0" y="339.0"/>
+            <next x="307.0" y="873.0"/>
+            <end x="307.0" y="873.0"/>
+        </arc>
+        <arc class="production" id="arc_68_output_46" source="reactionVertex_9624158.2" target="entityVertex_9624156_68">
+            <start x="1147.0" y="507.0"/>
+            <end x="1186.0" y="492.0"/>
+        </arc>
+        <arc class="production" id="arc_45_output_56" source="reactionVertex_9626034.2" target="entityVertex_9626022_45">
+            <start x="903.0" y="1455.0"/>
+            <next x="880.0" y="1431.0"/>
+            <end x="880.0" y="1431.0"/>
+        </arc>
+        <arc class="consumption" id="arc_57_input_46" source="entityVertex_9622836_57" target="reactionVertex_9624158.1">
+            <start x="1113.0" y="489.0"/>
+            <end x="1147.0" y="507.0"/>
+        </arc>
+        <arc class="consumption" id="arc_28_input_38" source="entityVertex_9626061_28" target="reactionVertex_9626067.1">
+            <start x="537.0" y="1493.0"/>
+            <end x="492.0" y="1514.0"/>
+        </arc>
+        <arc class="consumption" id="arc_45_input_71" source="entityVertex_9626022_45" target="reactionVertex_9626046.1">
+            <start x="915.0" y="1455.0"/>
+            <next x="909.0" y="1422.0"/>
+            <end x="909.0" y="1422.0"/>
+        </arc>
+        <arc class="production" id="arc_69_output_41" source="reactionVertex_9626060.2" target="entityVertex_9626058_69">
+            <start x="1840.0" y="600.0"/>
+            <next x="1782.0" y="583.0"/>
+            <end x="1782.0" y="583.0"/>
+        </arc>
+        <arc class="production" id="arc_42_output_55" source="reactionVertex_9626242.2" target="entityVertex_9626245_42">
+            <start x="460.0" y="1150.0"/>
+            <next x="500.0" y="1165.0"/>
+            <end x="500.0" y="1165.0"/>
+        </arc>
+        <arc class="consumption" id="arc_58_input_35" source="entityVertex_9626023_58" target="reactionVertex_9626276.1">
+            <start x="445.0" y="593.0"/>
+            <end x="469.0" y="575.0"/>
+        </arc>
+        <arc class="production" id="arc_58_output_25" source="reactionVertex_9626235.2" target="entityVertex_9626023_58">
+            <start x="384.0" y="635.0"/>
+            <next x="332.0" y="655.0"/>
+            <end x="332.0" y="655.0"/>
+        </arc>
+        <arc class="production" id="arc_60_output_38" source="reactionVertex_9626067.2" target="entityVertex_9626045_60">
+            <start x="492.0" y="1514.0"/>
+            <end x="436.0" y="1540.0"/>
+        </arc>
+        <arc class="production" id="arc_29_output_47" source="reactionVertex_9626256.2" target="entityVertex_9626246_29">
+            <start x="466.0" y="826.0"/>
+            <end x="436.0" y="781.0"/>
+        </arc>
+        <arc class="consumption" id="arc_37_input_44" source="entityVertex_9626026_37" target="reactionVertex_9626253.1">
+            <start x="402.0" y="1007.0"/>
+            <next x="307.0" y="873.0"/>
+            <end x="307.0" y="873.0"/>
+        </arc>
+        <arc class="consumption" id="arc_27_input_71" source="entityVertex_9626054_27" target="reactionVertex_9626046.1">
+            <start x="1019.0" y="1455.0"/>
+            <next x="909.0" y="1422.0"/>
+            <end x="909.0" y="1422.0"/>
+        </arc>
+        <arc class="production" id="arc_63_output_25" source="reactionVertex_9626235.2" target="entityVertex_264476_63">
+            <start x="567.0" y="261.0"/>
+            <next x="332.0" y="655.0"/>
+            <next x="333.0" y="396.0"/>
+            <end x="332.0" y="655.0"/>
+        </arc>
+        <arc class="consumption" id="arc_45_input_64" source="entityVertex_9626022_45" target="reactionVertex_9626038.1">
+            <start x="887.0" y="1497.0"/>
+            <next x="827.0" y="1529.0"/>
+            <end x="827.0" y="1529.0"/>
+        </arc>
+        <arc class="production" id="arc_63_output_36" source="reactionVertex_9622840.2" target="entityVertex_264476_63">
+            <start x="600.0" y="261.0"/>
+            <end x="793.0" y="401.0"/>
+        </arc>
+        <arc class="consumption" id="arc_63_input_31" source="entityVertex_264476_63" target="reactionVertex_9615721.1">
+            <start x="574.0" y="261.0"/>
+            <next x="533.0" y="297.0"/>
+            <end x="533.0" y="297.0"/>
+        </arc>
+        <arc class="consumption" id="arc_66_input_65" source="entityVertex_2029007_66" target="reactionVertex_9620197.1">
+            <start x="561.0" y="440.0"/>
+            <next x="591.0" y="419.0"/>
+            <end x="591.0" y="419.0"/>
+        </arc>
+        <arc class="production" id="arc_70_output_34" source="reactionVertex_9626039.2" target="entityVertex_9626048_70">
+            <start x="586.0" y="1296.0"/>
+            <end x="478.0" y="1297.0"/>
+        </arc>
+        <arc class="consumption" id="arc_62_input_64" source="entityVertex_29438_62" target="reactionVertex_9626038.1">
+            <start x="872.0" y="1552.0"/>
+            <next x="827.0" y="1529.0"/>
+            <end x="827.0" y="1529.0"/>
+        </arc>
+        <arc class="consumption" id="arc_29_input_25" source="entityVertex_9626246_29" target="reactionVertex_9626235.1">
+            <start x="400.0" y="739.0"/>
+            <end x="333.0" y="694.0"/>
+        </arc>
+        <arc class="production" id="arc_66_output_35" source="reactionVertex_9626276.2" target="entityVertex_2029007_66">
+            <start x="530.0" y="482.0"/>
+            <next x="495.0" y="554.0"/>
+            <end x="495.0" y="554.0"/>
+        </arc>
+        <arc class="production" id="arc_52_output_44" source="reactionVertex_9626253.2" target="entityVertex_9626247_52">
+            <start x="333.0" y="873.0"/>
+            <end x="371.0" y="874.0"/>
+        </arc>
+        <arc class="production" id="arc_67_output_35" source="reactionVertex_9626276.2" target="entityVertex_9622845_67">
+            <start x="861.0" y="554.0"/>
+            <next x="495.0" y="554.0"/>
+            <end x="495.0" y="554.0"/>
+        </arc>
+        <arc class="production" id="arc_51_output_41" source="reactionVertex_9626060.2" target="entityVertex_9626049_51">
+            <start x="1730.0" y="600.0"/>
+            <next x="1782.0" y="583.0"/>
+            <end x="1782.0" y="583.0"/>
+        </arc>
+        <arc class="consumption" id="arc_67_input_50" source="entityVertex_9622845_67" target="reactionVertex_9622831.1">
+            <start x="957.0" y="524.0"/>
+            <next x="983.0" y="512.0"/>
+            <end x="983.0" y="512.0"/>
+        </arc>
+        <arc class="consumption" id="arc_69_input_34" source="entityVertex_9626058_69" target="reactionVertex_9626039.1">
+            <start x="1840.0" y="648.0"/>
+            <next x="681.0" y="1296.0"/>
+            <end x="681.0" y="1296.0"/>
+        </arc>
+        <arc class="consumption" id="arc_61_input_39" source="entityVertex_9625181_61" target="reactionVertex_9625196.1">
+            <start x="1465.0" y="500.0"/>
+            <next x="1485.0" y="521.0"/>
+            <end x="1485.0" y="521.0"/>
+        </arc>
+        <arc class="consumption" id="arc_48_input_30" source="entityVertex_9625195_48" target="reactionVertex_9625197.1">
+            <start x="1274.0" y="528.0"/>
+            <next x="1304.0" y="515.0"/>
+            <end x="1304.0" y="515.0"/>
+        </arc>
+        <arc class="consumption" id="arc_40_input_65" source="entityVertex_9615717_40" target="reactionVertex_9620197.1">
+            <start x="563.0" y="399.0"/>
+            <next x="591.0" y="419.0"/>
+            <end x="591.0" y="419.0"/>
+        </arc>
+        <arc class="consumption" id="arc_68_input_30" source="entityVertex_9624156_68" target="reactionVertex_9625197.1">
+            <start x="1272.0" y="492.0"/>
+            <next x="1304.0" y="515.0"/>
+            <end x="1304.0" y="515.0"/>
+        </arc>
+        <arc class="production" id="arc_27_output_56" source="reactionVertex_9626034.2" target="entityVertex_9626054_27">
+            <start x="1011.0" y="1461.0"/>
+            <next x="880.0" y="1431.0"/>
+            <end x="880.0" y="1431.0"/>
+        </arc>
+        <arc class="consumption" id="arc_59_input_53" source="entityVertex_9625165_59" target="reactionVertex_9625188.1">
+            <start x="1651.0" y="504.0"/>
+            <end x="1693.0" y="529.0"/>
+        </arc>
+        <arc class="consumption" id="arc_54_input_50" source="entityVertex_9622841_54" target="reactionVertex_9622831.1">
+            <start x="948.0" y="488.0"/>
+            <next x="983.0" y="512.0"/>
+            <end x="983.0" y="512.0"/>
+        </arc>
+        <arc class="consumption" id="arc_49_input_31" source="entityVertex_9615715_49" target="reactionVertex_9615721.1">
+            <start x="455.0" y="273.0"/>
+            <next x="533.0" y="297.0"/>
+            <end x="533.0" y="297.0"/>
+        </arc>
+        <arc class="production" id="arc_43_output_53" source="reactionVertex_9625188.2" target="entityVertex_9625189_43">
+            <start x="1693.0" y="529.0"/>
+            <end x="1745.0" y="496.0"/>
+        </arc>
+        <arc class="production" id="arc_33_output_71" source="reactionVertex_9626046.2" target="entityVertex_9626070_33">
+            <start x="827.0" y="1421.0"/>
+            <end x="787.0" y="1447.0"/>
+        </arc>
+        <arc class="consumption" id="arc_70_input_55" source="entityVertex_9626048_70" target="reactionVertex_9626242.1">
+            <start x="452.0" y="1263.0"/>
+            <end x="499.0" y="1223.0"/>
+        </arc>
+        <arc class="production" id="arc_54_output_36" source="reactionVertex_9622840.2" target="entityVertex_9622841_54">
+            <start x="864.0" y="432.0"/>
+            <end x="793.0" y="401.0"/>
+        </arc>
+        <arc class="production" id="arc_61_output_30" source="reactionVertex_9625197.2" target="entityVertex_9625181_61">
+            <start x="1342.0" y="515.0"/>
+            <end x="1379.0" y="494.0"/>
+        </arc>
+        <arc class="production" id="arc_57_output_50" source="reactionVertex_9622831.2" target="entityVertex_9622836_57">
+            <start x="1006.0" y="512.0"/>
+            <end x="1040.0" y="489.0"/>
+        </arc>
+        <arc class="consumption" id="arc_32_input_39" source="entityVertex_9625182_32" target="reactionVertex_9625196.1">
+            <start x="1465.0" y="536.0"/>
+            <next x="1485.0" y="521.0"/>
+            <end x="1485.0" y="521.0"/>
+        </arc>
+        <arc class="consumption" id="arc_26_input_36" source="entityVertex_9620204_26" target="reactionVertex_9622840.1">
+            <start x="770.0" y="430.0"/>
+            <end x="793.0" y="401.0"/>
+        </arc>
+        <arc class="consumption" id="arc_43_input_41" source="entityVertex_9625189_43" target="reactionVertex_9626060.1">
+            <start x="1782.0" y="496.0"/>
+            <end x="1782.0" y="552.0"/>
+        </arc>
+        <arc class="consumption" id="arc_27_input_34" source="entityVertex_9626054_27" target="reactionVertex_9626039.1">
+            <start x="1035.0" y="1455.0"/>
+            <next x="681.0" y="1296.0"/>
+            <end x="681.0" y="1296.0"/>
+        </arc>
+        <arc class="production" id="arc_40_output_31" source="reactionVertex_9615721.2" target="entityVertex_9615717_40">
+            <start x="532.0" y="321.0"/>
+            <end x="532.0" y="343.0"/>
+        </arc>
+        <arc class="consumption" id="arc_33_input_56" source="entityVertex_9626070_33" target="reactionVertex_9626034.1">
+            <start x="810.0" y="1451.0"/>
+            <end x="855.0" y="1431.0"/>
+        </arc>
+        <arc class="production" id="arc_26_output_65" source="reactionVertex_9620197.2" target="entityVertex_9620204_26">
+            <start x="615.0" y="419.0"/>
+            <next x="642.0" y="419.0"/>
+            <end x="642.0" y="419.0"/>
+        </arc>
+        <arc class="production" id="arc_28_output_64" source="reactionVertex_9626038.2" target="entityVertex_9626061_28">
+            <start x="700.0" y="1528.0"/>
+            <end x="628.0" y="1494.0"/>
+        </arc>
+        <arc class="production" id="arc_59_output_39" source="reactionVertex_9625196.2" target="entityVertex_9625165_59">
+            <start x="1516.0" y="522.0"/>
+            <end x="1550.0" y="504.0"/>
+        </arc>
+    </map>
+</sbgn>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_7660_1" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="70.0" y="427.0"/>
+            </label>
+            <bbox w="884.0" h="444.0" x="41.0" y="30.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_40" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="15.0" y="497.0"/>
+            </label>
+            <bbox w="1238.0" h="546.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17906_46" compartmentOrder="10.0">
+            <label text="mitochondrial outer membrane">
+                <bbox w="241.0" h="24.0" x="963.0" y="102.0"/>
+            </label>
+            <bbox w="239.0" h="80.0" x="960.0" y="99.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_12045_47" compartmentOrder="10.0">
+            <label text="endoplasmic reticulum membrane">
+                <bbox w="263.0" h="24.0" x="962.0" y="233.0"/>
+            </label>
+            <bbox w="237.0" h="90.0" x="960.0" y="230.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_1368081_38">
+            <label text="Expression of SREBF1 (SREBP1)"/>
+            <bbox w="12.0" h="12.0" x="656.0" y="285.0"/>
+            <port id="reactionVertex_1368081.1" x="374.0" y="295.0"/>
+            <port id="reactionVertex_1368081.2" x="987.0" y="288.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5641206_22">
+            <label text="SREBF1 gene"/>
+            <bbox w="82.0" h="51.0" x="283.0" y="293.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_1801587_36">
+            <label text="Expression of CPT1A"/>
+            <bbox w="12.0" h="12.0" x="667.0" y="141.0"/>
+            <port id="reactionVertex_1801587.1" x="366.0" y="148.0"/>
+            <port id="reactionVertex_1801587.2" x="999.0" y="152.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5663244_20">
+            <label text="RORA:EP300:CPT1A gene"/>
+            <bbox w="179.0" h="22.0" x="489.0" y="191.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_400325_3">
+            <label text="RORA"/>
+            <bbox w="74.0" h="25.0" x="95.0" y="202.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_1368141_39">
+            <label text="SREBF1(1-1147)"/>
+            <bbox w="134.0" h="30.0" x="990.0" y="273.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_400154_30">
+            <label text="PPARA:RXRA Coactivator complex"/>
+            <bbox w="153.0" h="36.0" x="600.0" y="78.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5663264_18">
+            <label text="RORA, EP300 bind CPT1A gene"/>
+            <bbox w="10.0" h="10.0" x="445.0" y="204.0"/>
+            <port id="reactionVertex_5663264.1" x="396.0" y="209.0"/>
+            <port id="reactionVertex_5663264.2" x="486.0" y="206.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_381325_5">
+            <label text="EP300"/>
+            <bbox w="74.0" h="23.0" x="77.0" y="249.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5641230_19">
+            <label text="CPT1A gene"/>
+            <bbox w="75.0" h="51.0" x="282.0" y="146.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_400161_37">
+            <label text="CPT1A"/>
+            <bbox w="76.0" h="29.0" x="1002.0" y="139.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5663293_21">
+            <label text="RORA, EP300 bind SREBF1 gene"/>
+            <bbox w="10.0" h="10.0" x="440.0" y="347.0"/>
+            <port id="reactionVertex_5663293.1" x="403.0" y="354.0"/>
+            <port id="reactionVertex_5663293.2" x="475.0" y="353.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5663295_23">
+            <label text="RORA:EP300:SREBF1 gene"/>
+            <bbox w="183.0" h="21.0" x="478.0" y="346.0"/>
+        </glyph>
+        <arc class="stimulation" id="arc_20_activator_36" source="entityVertex_5663244_20" target="reactionVertex_1801587_36">
+            <start x="597.0" y="188.0"/>
+            <next x="665.0" y="151.0"/>
+            <end x="665.0" y="151.0"/>
+        </arc>
+        <arc class="production" id="arc_20_output_18" source="reactionVertex_5663264.2" target="entityVertex_5663244_20">
+            <start x="450.0" y="209.0"/>
+            <end x="486.0" y="206.0"/>
+        </arc>
+        <arc class="consumption" id="arc_3_input_21" source="entityVertex_400325_3" target="reactionVertex_5663293.1">
+            <start x="143.0" y="230.0"/>
+            <next x="260.0" y="354.0"/>
+            <next x="403.0" y="354.0"/>
+            <end x="403.0" y="354.0"/>
+        </arc>
+        <arc class="production" id="arc_23_output_21" source="reactionVertex_5663293.2" target="entityVertex_5663295_23">
+            <start x="445.0" y="352.0"/>
+            <end x="475.0" y="353.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_21" source="entityVertex_381325_5" target="reactionVertex_5663293.1">
+            <start x="124.0" y="275.0"/>
+            <next x="210.0" y="362.0"/>
+            <next x="403.0" y="354.0"/>
+            <end x="403.0" y="354.0"/>
+        </arc>
+        <arc class="consumption" id="arc_19_input_18" source="entityVertex_5641230_19" target="reactionVertex_5663264.1">
+            <start x="366.0" y="148.0"/>
+            <next x="396.0" y="209.0"/>
+            <end x="396.0" y="209.0"/>
+        </arc>
+        <arc class="production" id="arc_39_output_38" source="reactionVertex_1368081.2" target="entityVertex_1368141_39">
+            <start x="662.0" y="291.0"/>
+            <end x="987.0" y="288.0"/>
+        </arc>
+        <arc class="consumption" id="arc_22_input_38" source="entityVertex_5641206_22" target="reactionVertex_1368081.1">
+            <start x="374.0" y="295.0"/>
+            <end x="662.0" y="291.0"/>
+        </arc>
+        <arc class="production" id="arc_37_output_36" source="reactionVertex_1801587.2" target="entityVertex_400161_37">
+            <start x="673.0" y="147.0"/>
+            <end x="999.0" y="152.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_18" source="entityVertex_381325_5" target="reactionVertex_5663264.1">
+            <start x="154.0" y="253.0"/>
+            <next x="396.0" y="209.0"/>
+            <end x="396.0" y="209.0"/>
+        </arc>
+        <arc class="consumption" id="arc_3_input_18" source="entityVertex_400325_3" target="reactionVertex_5663264.1">
+            <start x="172.0" y="213.0"/>
+            <next x="396.0" y="209.0"/>
+            <end x="396.0" y="209.0"/>
+        </arc>
+        <arc class="stimulation" id="arc_30_activator_36" source="entityVertex_400154_30" target="reactionVertex_1801587_36">
+            <start x="674.0" y="117.0"/>
+            <next x="673.0" y="138.0"/>
+            <end x="673.0" y="138.0"/>
+        </arc>
+        <arc class="stimulation" id="arc_23_activator_38" source="entityVertex_5663295_23" target="reactionVertex_1368081_38">
+            <start x="584.0" y="343.0"/>
+            <next x="655.0" y="296.0"/>
+            <end x="655.0" y="296.0"/>
+        </arc>
+        <arc class="consumption" id="arc_22_input_21" source="entityVertex_5641206_22" target="reactionVertex_5663293.1">
+            <start x="374.0" y="295.0"/>
+            <next x="403.0" y="354.0"/>
+            <end x="403.0" y="354.0"/>
+        </arc>
+        <arc class="consumption" id="arc_19_input_36" source="entityVertex_5641230_19" target="reactionVertex_1801587.1">
+            <start x="366.0" y="148.0"/>
+            <end x="673.0" y="147.0"/>
+        </arc>
+    </map>
+</sbgn>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_6" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="713.0" y="750.0"/>
+            </label>
+            <bbox w="1418.0" h="1514.0" x="366.0" y="6.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_22" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="700.0" y="685.0"/>
+            </label>
+            <bbox w="1040.0" h="616.0" x="682.0" y="124.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_7" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="21.0" y="1455.0"/>
+            </label>
+            <bbox w="275.0" h="1512.0" x="0.0" y="6.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_2220978_98145">
+            <label text="FBXW7 WD mutants do not bind NICD1"/>
+            <bbox w="12.0" h="12.0" x="1562.0" y="540.0"/>
+            <port id="reactionVertex_2220978.1" x="1567.0" y="545.0"/>
+            <port id="reactionVertex_2220978.2" x="1603.0" y="545.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_1604444_130">
+            <label text="p-NICD1"/>
+            <bbox w="70.0" h="27.0" x="1498.0" y="505.0"/>
+            <glyph class="unit of information" id="entityVertex_1604443_1_mt">
+                <label text="P"/>
+                <bbox w="10.0" h="16.0" x="1508.0" y="499.0"/>
+            </glyph>
+        </glyph>
+        <glyph class="complex" id="entityVertex_2220975_98146">
+            <label text="FBXW7 WD mutants:SKP1:CUL1:RBX1"/>
+            <bbox w="125.0" h="36.0" x="1480.0" y="630.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_98146_input_98145" source="entityVertex_2220975_98146" target="reactionVertex_2220978.1">
+            <start x="1546.0" y="627.0"/>
+            <end x="1567.0" y="545.0"/>
+        </arc>
+        <arc class="consumption" id="arc_130_input_98145" source="entityVertex_1604444_130" target="reactionVertex_2220978.1">
+            <start x="1550.0" y="535.0"/>
+            <end x="1567.0" y="545.0"/>
+        </arc>
+    </map>
+</sbgn>

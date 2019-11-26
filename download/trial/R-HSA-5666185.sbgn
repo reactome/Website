@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_1" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="647.0" y="325.0"/>
+            </label>
+            <bbox w="768.0" h="402.0" x="13.0" y="8.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17940_488" compartmentOrder="10.0">
+            <label text="endosome">
+                <bbox w="82.0" h="24.0" x="402.0" y="285.0"/>
+            </label>
+            <bbox w="131.0" h="127.0" x="371.0" y="210.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5666197_153">
+            <label text="RHOA:GTP:RTKN binds LIN7B"/>
+            <bbox w="10.0" h="10.0" x="407.0" y="56.0"/>
+            <port id="reactionVertex_5666197.1" x="412.0" y="59.0"/>
+            <port id="reactionVertex_5666197.2" x="495.0" y="38.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5667052_660">
+            <label text="ROPN1 binds RHOA:GTP:RHPN1"/>
+            <bbox w="10.0" h="10.0" x="161.0" y="324.0"/>
+            <port id="reactionVertex_5667052.1" x="168.0" y="327.0"/>
+            <port id="reactionVertex_5667052.2" x="205.0" y="344.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5667007_485">
+            <label text="RHPN2"/>
+            <bbox w="50.0" h="22.0" x="208.0" y="215.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5667059_663">
+            <label text="RHOA:GTP:RHPN1:ROPN1"/>
+            <bbox w="77.0" h="50.0" x="208.0" y="334.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5666217_239">
+            <label text="TAX1BP3"/>
+            <bbox w="69.0" h="21.0" x="303.0" y="165.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5666178_2">
+            <label text="RTKN binds RHOA, RHOC or RHOB"/>
+            <bbox w="10.0" h="10.0" x="153.0" y="55.0"/>
+            <port id="reactionVertex_5666178.1" x="156.0" y="57.0"/>
+            <port id="reactionVertex_5666178.2" x="202.0" y="45.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5667060_661">
+            <label text="RHOA:GTP:RHPN1"/>
+            <bbox w="79.0" h="37.0" x="41.0" y="335.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5667037_483">
+            <label text="RHPN2 binds RHOB:GTP"/>
+            <bbox w="10.0" h="10.0" x="287.0" y="262.0"/>
+            <port id="reactionVertex_5667037.1" x="292.0" y="266.0"/>
+            <port id="reactionVertex_5667037.2" x="327.0" y="282.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5667005_429">
+            <label text="RHPN1,RHPN2"/>
+            <bbox w="55.0" h="34.0" x="123.0" y="209.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5666216_238">
+            <label text="RHOA:GTP:RTKN binds TAX1BP3"/>
+            <bbox w="10.0" h="10.0" x="361.0" y="62.0"/>
+            <port id="reactionVertex_5666216.1" x="364.0" y="67.0"/>
+            <port id="reactionVertex_5666216.2" x="492.0" y="91.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5666081_484">
+            <label text="RHOB:GTP"/>
+            <bbox w="70.0" h="22.0" x="327.0" y="235.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5666184_3">
+            <label text="RTKN"/>
+            <bbox w="59.0" h="24.0" x="72.0" y="144.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5667061_662">
+            <label text="ROPN1"/>
+            <bbox w="50.0" h="22.0" x="154.0" y="280.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_419161_4">
+            <label text="RHOA/B/C:GTP"/>
+            <bbox w="100.0" h="24.0" x="56.0" y="5.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5666210_240">
+            <label text="RHOA:GTP:RTKN:TAX1BP3"/>
+            <bbox w="83.0" h="50.0" x="495.0" y="74.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5666199_157">
+            <label text="RHOA:GTP:RTKN"/>
+            <bbox w="81.0" h="36.0" x="315.0" y="5.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5216107_155">
+            <label text="LIN7B"/>
+            <bbox w="43.0" h="22.0" x="423.0" y="6.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5665993_428">
+            <label text="RHOA:GTP"/>
+            <bbox w="71.0" h="22.0" x="0.0" y="212.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5666198_156">
+            <label text="RHOA:GTP:RTKN:LIN7B"/>
+            <bbox w="74.0" h="51.0" x="498.0" y="4.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5667010_430">
+            <label text="RHOA:GTP:RHPN1,RHPN2"/>
+            <bbox w="85.0" h="51.0" x="5.0" y="271.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5666177_5">
+            <label text="RHOA,B,C:GTP:RTKN"/>
+            <bbox w="98.0" h="40.0" x="202.0" y="2.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5667030_487">
+            <label text="RHOB:GTP:RHPN2"/>
+            <bbox w="77.0" h="35.0" x="325.0" y="285.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_5667008_427">
+            <label text="RHOA:GTP binds RHPN1 or RHPN2"/>
+            <bbox w="10.0" h="10.0" x="87.0" y="244.0"/>
+            <port id="reactionVertex_5667008.1" x="92.0" y="249.0"/>
+            <port id="reactionVertex_5667008.2" x="71.0" y="268.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_157_input_238" source="entityVertex_5666199_157" target="reactionVertex_5666216.1">
+            <start x="358.0" y="44.0"/>
+            <end x="364.0" y="67.0"/>
+        </arc>
+        <arc class="consumption" id="arc_239_input_238" source="entityVertex_5666217_239" target="reactionVertex_5666216.1">
+            <start x="339.0" y="162.0"/>
+            <end x="364.0" y="67.0"/>
+        </arc>
+        <arc class="production" id="arc_156_output_153" source="reactionVertex_5666197.2" target="entityVertex_5666198_156">
+            <start x="412.0" y="61.0"/>
+            <end x="495.0" y="38.0"/>
+        </arc>
+        <arc class="production" id="arc_5_output_2" source="reactionVertex_5666178.2" target="entityVertex_5666177_5">
+            <start x="158.0" y="60.0"/>
+            <end x="202.0" y="45.0"/>
+        </arc>
+        <arc class="consumption" id="arc_429_input_427" source="entityVertex_5667005_429" target="reactionVertex_5667008.1">
+            <start x="117.0" y="236.0"/>
+            <end x="92.0" y="249.0"/>
+        </arc>
+        <arc class="production" id="arc_240_output_238" source="reactionVertex_5666216.2" target="entityVertex_5666210_240">
+            <start x="366.0" y="67.0"/>
+            <end x="492.0" y="91.0"/>
+        </arc>
+        <arc class="consumption" id="arc_662_input_660" source="entityVertex_5667061_662" target="reactionVertex_5667052.1">
+            <start x="175.0" y="305.0"/>
+            <end x="168.0" y="327.0"/>
+        </arc>
+        <arc class="consumption" id="arc_661_input_660" source="entityVertex_5667060_661" target="reactionVertex_5667052.1">
+            <start x="123.0" y="341.0"/>
+            <end x="168.0" y="327.0"/>
+        </arc>
+        <arc class="consumption" id="arc_4_input_2" source="entityVertex_419161_4" target="reactionVertex_5666178.1">
+            <start x="121.0" y="32.0"/>
+            <end x="156.0" y="57.0"/>
+        </arc>
+        <arc class="production" id="arc_430_output_427" source="reactionVertex_5667008.2" target="entityVertex_5667010_430">
+            <start x="92.0" y="249.0"/>
+            <end x="71.0" y="268.0"/>
+        </arc>
+        <arc class="consumption" id="arc_485_input_483" source="entityVertex_5667007_485" target="reactionVertex_5667037.1">
+            <start x="249.0" y="240.0"/>
+            <end x="292.0" y="266.0"/>
+        </arc>
+        <arc class="consumption" id="arc_3_input_2" source="entityVertex_5666184_3" target="reactionVertex_5666178.1">
+            <start x="107.0" y="141.0"/>
+            <end x="156.0" y="57.0"/>
+        </arc>
+        <arc class="consumption" id="arc_428_input_427" source="entityVertex_5665993_428" target="reactionVertex_5667008.1">
+            <start x="59.0" y="237.0"/>
+            <end x="92.0" y="249.0"/>
+        </arc>
+        <arc class="consumption" id="arc_157_input_153" source="entityVertex_5666199_157" target="reactionVertex_5666197.1">
+            <start x="383.0" y="44.0"/>
+            <end x="412.0" y="59.0"/>
+        </arc>
+        <arc class="production" id="arc_487_output_483" source="reactionVertex_5667037.2" target="entityVertex_5667030_487">
+            <start x="292.0" y="267.0"/>
+            <end x="327.0" y="282.0"/>
+        </arc>
+        <arc class="consumption" id="arc_484_input_483" source="entityVertex_5666081_484" target="reactionVertex_5667037.1">
+            <start x="324.0" y="256.0"/>
+            <end x="292.0" y="266.0"/>
+        </arc>
+        <arc class="production" id="arc_663_output_660" source="reactionVertex_5667052.2" target="entityVertex_5667059_663">
+            <start x="166.0" y="329.0"/>
+            <end x="205.0" y="344.0"/>
+        </arc>
+        <arc class="consumption" id="arc_155_input_153" source="entityVertex_5216107_155" target="reactionVertex_5666197.1">
+            <start x="435.0" y="31.0"/>
+            <end x="412.0" y="59.0"/>
+        </arc>
+    </map>
+</sbgn>

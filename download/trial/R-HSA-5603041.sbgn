@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_6" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="542.0" y="478.0"/>
+            </label>
+            <bbox w="1418.0" h="882.0" x="83.0" y="29.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5602353_146271">
+            <label text="IRAK4 deficiency blocks formation of the MyD88-IRAK4 Myddosome in TLR2/4 pathway"/>
+            <bbox w="12.0" h="12.0" x="105.0" y="581.0"/>
+            <port id="reactionVertex_5602353.1" x="112.0" y="559.0"/>
+            <port id="reactionVertex_5602353.2" x="84.0" y="607.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_166062_146273">
+            <label text="MyD88:TIRAP:BTK:activated TLR2/4"/>
+            <bbox w="126.0" h="36.0" x="4.0" y="511.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5602672_146274">
+            <label text="Defective IRAK4 does not bind MyD88 within the TLR2/4 complex"/>
+            <bbox w="12.0" h="12.0" x="105.0" y="581.0"/>
+            <port id="reactionVertex_5602672.1" x="112.0" y="559.0"/>
+            <port id="reactionVertex_5602672.2" x="84.0" y="607.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5602412_146272">
+            <label text="IRAK4 variants"/>
+            <bbox w="93.0" h="22.0" x="127.0" y="539.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5602511_146275">
+            <label text="IRAK4 R12C"/>
+            <bbox w="80.0" h="22.0" x="133.0" y="539.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_937033_746">
+            <label text="oligo-MyD88:TIRAP:BTK:activated TLR"/>
+            <bbox w="126.0" h="36.0" x="4.0" y="511.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_146273_input_146271" source="entityVertex_166062_146273" target="reactionVertex_5602353.1">
+            <start x="94.0" y="550.0"/>
+            <next x="112.0" y="559.0"/>
+            <end x="112.0" y="559.0"/>
+        </arc>
+        <arc class="consumption" id="arc_146275_input_146274" source="entityVertex_5602511_146275" target="reactionVertex_5602672.1">
+            <glyph class="stoichiometry" id="Stoichiometry_5602511_INPUT_5602672">
+                <label text="4"/>
+                <bbox w="12.0" h="12.0" x="115.0" y="551.0"/>
+            </glyph>
+            <start x="130.0" y="555.0"/>
+            <next x="112.0" y="559.0"/>
+            <end x="112.0" y="559.0"/>
+        </arc>
+        <arc class="consumption" id="arc_746_input_146274" source="entityVertex_937033_746" target="reactionVertex_5602672.1">
+            <start x="94.0" y="550.0"/>
+            <next x="112.0" y="559.0"/>
+            <end x="112.0" y="559.0"/>
+        </arc>
+        <arc class="consumption" id="arc_146272_input_146271" source="entityVertex_5602412_146272" target="reactionVertex_5602353.1">
+            <glyph class="stoichiometry" id="Stoichiometry_5602412_INPUT_5602353">
+                <label text="4"/>
+                <bbox w="12.0" h="12.0" x="110.0" y="551.0"/>
+            </glyph>
+            <start x="121.0" y="556.0"/>
+            <next x="112.0" y="559.0"/>
+            <end x="112.0" y="559.0"/>
+        </arc>
+    </map>
+</sbgn>

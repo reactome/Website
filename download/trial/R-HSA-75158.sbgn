@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_61" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="115.0" y="553.0"/>
+            </label>
+            <bbox w="1117.0" h="589.0" x="66.0" y="66.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_54639_47">
+            <label text="FADD"/>
+            <bbox w="52.0" h="22.0" x="560.0" y="124.0"/>
+        </glyph>
+        <glyph class="submap" id="entityVertex_140534_135">
+            <label text="Caspase activation via Death Receptors in the presence of ligand"/>
+            <bbox w="166.0" h="79.0" x="939.0" y="494.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_51925_43">
+            <label text="CFLAR(1-376)"/>
+            <bbox w="132.0" h="29.0" x="656.0" y="159.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_57031_53">
+            <label text="CASP8(1-479)"/>
+            <bbox w="108.0" h="20.0" x="821.0" y="218.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5637465_55">
+            <label text="TNFSF10:TNFRSF10A,B"/>
+            <bbox w="128.0" h="36.0" x="282.0" y="55.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_75187_50">
+            <label text="TRAIL:TRAIL receptor trimers bind FADD"/>
+            <bbox w="10.0" h="10.0" x="713.0" y="90.0"/>
+            <port id="reactionVertex_75187.1" x="685.0" y="95.0"/>
+            <port id="reactionVertex_75187.2" x="791.0" y="76.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_141316_39">
+            <label text="TRAIL:TRAIL-Receptor2 Trimer:FADD complex binds procaspase-10"/>
+            <bbox w="10.0" h="10.0" x="1005.0" y="112.0"/>
+            <port id="reactionVertex_141316.1" x="950.0" y="118.0"/>
+            <port id="reactionVertex_141316.2" x="1060.0" y="93.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_75146_41">
+            <label text="TRAIL:TRAIL Receptor Trimer:FADD complex binds procaspase-8"/>
+            <bbox w="10.0" h="10.0" x="1017.0" y="163.0"/>
+            <port id="reactionVertex_75146.1" x="971.0" y="168.0"/>
+            <port id="reactionVertex_75146.2" x="1112.0" y="223.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_933453_56">
+            <label text="CASP10(1-521)"/>
+            <bbox w="115.0" h="20.0" x="802.0" y="164.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_75238_38">
+            <label text="TRAIL binds TRAIL receptors"/>
+            <bbox w="10.0" h="10.0" x="225.0" y="38.0"/>
+            <port id="reactionVertex_75238.1" x="196.0" y="42.0"/>
+            <port id="reactionVertex_75238.2" x="279.0" y="56.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_5633374_106">
+            <label text="TNFRSF10D"/>
+            <bbox w="92.0" h="21.0" x="172.0" y="641.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5634815_54">
+            <label text="TNFRSF10A,TNFRSF10B"/>
+            <bbox w="99.0" h="35.0" x="92.0" y="57.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5637464_57">
+            <label text="TNFSF10:TNFRSF10A,B:FADD"/>
+            <bbox w="128.0" h="36.0" x="794.0" y="43.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5637463_58">
+            <label text="TNFSF10:TNFRSF10A,B:FADD:CASP10(1-521)"/>
+            <bbox w="128.0" h="50.0" x="1043.0" y="40.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_5635741_105">
+            <label text="TRAIL receptor-4 binds TRAIL receptor-1 or TRAIL receptor-2"/>
+            <bbox w="12.0" h="12.0" x="324.0" y="604.0"/>
+            <port id="reactionVertex_5635741.1" x="282.0" y="624.0"/>
+            <port id="reactionVertex_5635741.2" x="377.0" y="625.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_5635735_107">
+            <label text="TNFRSF10A,B:TNFRSF10D"/>
+            <bbox w="114.0" h="37.0" x="383.0" y="625.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5637468_59">
+            <label text="TNFSF10:TNFRSF10A,B:FADD:CASP8(1-479)"/>
+            <bbox w="133.0" h="54.0" x="1089.0" y="226.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_66186_49">
+            <label text="TNFSF10"/>
+            <bbox w="69.0" h="24.0" x="0.0" y="6.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_5637469_60">
+            <label text="TNFSF10:TNFRSF10A,B Trimer"/>
+            <bbox w="128.0" h="47.0" x="504.0" y="36.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_141139_45">
+            <label text="Trimerization of TRAIL:TRAIL receptor complex"/>
+            <bbox w="10.0" h="10.0" x="412.0" y="37.0"/>
+            <port id="reactionVertex_141139.1" x="387.0" y="52.0"/>
+            <port id="reactionVertex_141139.2" x="501.0" y="51.0"/>
+        </glyph>
+        <arc class="production" id="arc_55_output_38" source="reactionVertex_75238.2" target="entityVertex_5637465_55">
+            <start x="230.0" y="43.0"/>
+            <end x="279.0" y="56.0"/>
+        </arc>
+        <arc class="production" id="arc_58_output_39" source="reactionVertex_141316.2" target="entityVertex_5637463_58">
+            <start x="1010.0" y="117.0"/>
+            <end x="1060.0" y="93.0"/>
+        </arc>
+        <arc class="consumption" id="arc_57_input_41" source="entityVertex_5637464_57" target="reactionVertex_75146.1">
+            <start x="877.0" y="82.0"/>
+            <next x="971.0" y="168.0"/>
+            <end x="971.0" y="168.0"/>
+        </arc>
+        <arc class="consumption" id="arc_55_input_45" source="entityVertex_5637465_55" target="reactionVertex_141139.1">
+            <glyph class="stoichiometry" id="Stoichiometry_5637465_INPUT_141139">
+                <label text="3"/>
+                <bbox w="12.0" h="12.0" x="396.0" y="41.0"/>
+            </glyph>
+            <start x="387.0" y="52.0"/>
+            <end x="417.0" y="42.0"/>
+        </arc>
+        <arc class="production" id="arc_107_output_105" source="reactionVertex_5635741.2" target="entityVertex_5635735_107">
+            <start x="330.0" y="610.0"/>
+            <end x="377.0" y="625.0"/>
+        </arc>
+        <arc class="production" id="arc_60_output_45" source="reactionVertex_141139.2" target="entityVertex_5637469_60">
+            <start x="417.0" y="42.0"/>
+            <end x="501.0" y="51.0"/>
+        </arc>
+        <arc class="consumption" id="arc_106_input_105" source="entityVertex_5633374_106" target="reactionVertex_5635741.1">
+            <glyph class="stoichiometry" id="Stoichiometry_5633374_INPUT_5635741">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="256.0" y="625.0"/>
+            </glyph>
+            <start x="242.0" y="638.0"/>
+            <next x="282.0" y="624.0"/>
+            <end x="282.0" y="624.0"/>
+        </arc>
+        <arc class="consumption" id="arc_54_input_105" source="entityVertex_5634815_54" target="reactionVertex_5635741.1">
+            <start x="145.0" y="98.0"/>
+            <next x="282.0" y="624.0"/>
+            <end x="282.0" y="624.0"/>
+        </arc>
+        <arc class="consumption" id="arc_49_input_38" source="entityVertex_66186_49" target="reactionVertex_75238.1">
+            <start x="72.0" y="23.0"/>
+            <next x="196.0" y="42.0"/>
+            <end x="196.0" y="42.0"/>
+        </arc>
+        <arc class="consumption" id="arc_56_input_39" source="entityVertex_933453_56" target="reactionVertex_141316.1">
+            <start x="875.0" y="161.0"/>
+            <next x="950.0" y="118.0"/>
+            <end x="950.0" y="118.0"/>
+        </arc>
+        <arc class="consumption" id="arc_54_input_38" source="entityVertex_5634815_54" target="reactionVertex_75238.1">
+            <start x="171.0" y="51.0"/>
+            <next x="196.0" y="42.0"/>
+            <end x="196.0" y="42.0"/>
+        </arc>
+        <arc class="production" id="arc_59_output_41" source="reactionVertex_75146.2" target="entityVertex_5637468_59">
+            <start x="1022.0" y="168.0"/>
+            <end x="1112.0" y="223.0"/>
+        </arc>
+        <arc class="consumption" id="arc_53_input_41" source="entityVertex_57031_53" target="reactionVertex_75146.1">
+            <start x="891.0" y="215.0"/>
+            <next x="971.0" y="168.0"/>
+            <end x="971.0" y="168.0"/>
+        </arc>
+        <arc class="consumption" id="arc_57_input_39" source="entityVertex_5637464_57" target="reactionVertex_141316.1">
+            <start x="887.0" y="82.0"/>
+            <next x="950.0" y="118.0"/>
+            <end x="950.0" y="118.0"/>
+        </arc>
+        <arc class="inhibition" id="arc_43_inhibitor_50" source="entityVertex_51925_43" target="reactionVertex_75187_50">
+            <start x="721.0" y="156.0"/>
+            <next x="718.0" y="104.0"/>
+            <end x="718.0" y="104.0"/>
+        </arc>
+        <arc class="consumption" id="arc_47_input_50" source="entityVertex_54639_47" target="reactionVertex_75187.1">
+            <glyph class="stoichiometry" id="Stoichiometry_54639_INPUT_75187">
+                <label text="2"/>
+                <bbox w="12.0" h="12.0" x="644.0" y="103.0"/>
+            </glyph>
+            <start x="615.0" y="124.0"/>
+            <next x="685.0" y="95.0"/>
+            <end x="685.0" y="95.0"/>
+        </arc>
+        <arc class="consumption" id="arc_60_input_50" source="entityVertex_5637469_60" target="reactionVertex_75187.1">
+            <start x="635.0" y="78.0"/>
+            <next x="685.0" y="95.0"/>
+            <end x="685.0" y="95.0"/>
+        </arc>
+        <arc class="production" id="arc_57_output_50" source="reactionVertex_75187.2" target="entityVertex_5637464_57">
+            <start x="718.0" y="95.0"/>
+            <end x="791.0" y="76.0"/>
+        </arc>
+    </map>
+</sbgn>

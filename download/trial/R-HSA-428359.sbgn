@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_1" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="34.0" y="381.0"/>
+            </label>
+            <bbox w="1070.0" h="417.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_428313_11">
+            <label text="IGF2BP3"/>
+            <bbox w="129.0" h="63.0" x="866.0" y="56.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_428366_4">
+            <label text="IGF2BP1"/>
+            <bbox w="129.0" h="63.0" x="218.0" y="54.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_428296_2">
+            <label text="IGF2BP1 binds specific RNAs"/>
+            <bbox w="10.0" h="10.0" x="187.0" y="239.0"/>
+            <port id="reactionVertex_428296.1" x="192.0" y="174.0"/>
+            <port id="reactionVertex_428296.2" x="193.0" y="321.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_428302_7">
+            <label text="IGF2BP2"/>
+            <bbox w="129.0" h="63.0" x="532.0" y="55.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_428335_9">
+            <label text="IGF2BP2:RNA"/>
+            <bbox w="125.0" h="35.0" x="443.0" y="328.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_428384_12">
+            <label text="RNAs bound by IGF2BP3"/>
+            <bbox w="129.0" h="63.0" x="698.0" y="58.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_428328_8">
+            <label text="RNAs bound by IGF2BP2"/>
+            <bbox w="129.0" h="63.0" x="378.0" y="57.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_428308_3">
+            <label text="RNAs bound by IGF2BP1"/>
+            <bbox w="129.0" h="63.0" x="67.0" y="54.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_428327_5">
+            <label text="IGF2BP1:RNA"/>
+            <bbox w="125.0" h="35.0" x="132.0" y="324.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_428287_10">
+            <label text="IGF2BP3 binds specific RNAs"/>
+            <bbox w="10.0" h="10.0" x="858.0" y="242.0"/>
+            <port id="reactionVertex_428287.1" x="860.0" y="169.0"/>
+            <port id="reactionVertex_428287.2" x="864.0" y="324.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_428310_13">
+            <label text="IGF2BP3:RNA"/>
+            <bbox w="125.0" h="35.0" x="803.0" y="327.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_428293_6">
+            <label text="IGF2BP2 binds specific RNAs"/>
+            <bbox w="10.0" h="10.0" x="500.0" y="241.0"/>
+            <port id="reactionVertex_428293.1" x="508.0" y="176.0"/>
+            <port id="reactionVertex_428293.2" x="505.0" y="325.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_3_input_2" source="entityVertex_428308_3" target="reactionVertex_428296.1">
+            <start x="152.0" y="123.0"/>
+            <next x="192.0" y="174.0"/>
+            <end x="192.0" y="174.0"/>
+        </arc>
+        <arc class="consumption" id="arc_7_input_6" source="entityVertex_428302_7" target="reactionVertex_428293.1">
+            <start x="565.0" y="121.0"/>
+            <next x="508.0" y="176.0"/>
+            <end x="508.0" y="176.0"/>
+        </arc>
+        <arc class="production" id="arc_9_output_6" source="reactionVertex_428293.2" target="entityVertex_428335_9">
+            <start x="505.0" y="246.0"/>
+            <end x="505.0" y="325.0"/>
+        </arc>
+        <arc class="consumption" id="arc_4_input_2" source="entityVertex_428366_4" target="reactionVertex_428296.1">
+            <start x="250.0" y="120.0"/>
+            <next x="192.0" y="174.0"/>
+            <end x="192.0" y="174.0"/>
+        </arc>
+        <arc class="consumption" id="arc_8_input_6" source="entityVertex_428328_8" target="reactionVertex_428293.1">
+            <start x="465.0" y="126.0"/>
+            <next x="508.0" y="176.0"/>
+            <end x="508.0" y="176.0"/>
+        </arc>
+        <arc class="consumption" id="arc_11_input_10" source="entityVertex_428313_11" target="reactionVertex_428287.1">
+            <start x="903.0" y="122.0"/>
+            <next x="860.0" y="169.0"/>
+            <end x="860.0" y="169.0"/>
+        </arc>
+        <arc class="production" id="arc_5_output_2" source="reactionVertex_428296.2" target="entityVertex_428327_5">
+            <start x="192.0" y="244.0"/>
+            <end x="193.0" y="321.0"/>
+        </arc>
+        <arc class="consumption" id="arc_12_input_10" source="entityVertex_428384_12" target="reactionVertex_428287.1">
+            <start x="800.0" y="127.0"/>
+            <next x="860.0" y="169.0"/>
+            <end x="860.0" y="169.0"/>
+        </arc>
+        <arc class="production" id="arc_13_output_10" source="reactionVertex_428287.2" target="entityVertex_428310_13">
+            <start x="863.0" y="247.0"/>
+            <end x="864.0" y="324.0"/>
+        </arc>
+    </map>
+</sbgn>

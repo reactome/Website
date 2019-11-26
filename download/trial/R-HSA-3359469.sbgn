@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_17940_737" compartmentOrder="10.0">
+            <label text="endosome">
+                <bbox w="82.0" h="24.0" x="60.0" y="440.0"/>
+            </label>
+            <bbox w="145.0" h="124.0" x="49.0" y="362.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17940_833" compartmentOrder="10.0">
+            <label text="endosome">
+                <bbox w="82.0" h="24.0" x="1218.0" y="287.0"/>
+            </label>
+            <bbox w="235.0" h="111.0" x="1092.0" y="223.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17927_5170" compartmentOrder="10.0">
+            <label text="mitochondrial intermembrane space">
+                <bbox w="280.0" h="24.0" x="1573.0" y="619.0"/>
+            </label>
+            <bbox w="434.0" h="230.0" x="1531.0" y="600.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_883" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="174.0" y="861.0"/>
+            </label>
+            <bbox w="387.0" h="369.0" x="39.0" y="539.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_851" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="1397.0" y="294.0"/>
+            </label>
+            <bbox w="216.0" h="119.0" x="1383.0" y="222.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17951_5557" compartmentOrder="10.0">
+            <label text="peroxisomal matrix">
+                <bbox w="150.0" h="24.0" x="2332.0" y="1099.0"/>
+            </label>
+            <bbox w="206.0" h="332.0" x="2280.0" y="1083.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_1719" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="3220.0" y="567.0"/>
+            </label>
+            <bbox w="240.0" h="388.0" x="3198.0" y="226.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_161320_759" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="223.0" y="452.0"/>
+            </label>
+            <bbox w="180.0" h="148.0" x="207.0" y="349.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_13" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="1432.0" y="944.0"/>
+            </label>
+            <bbox w="2435.0" h="1361.0" x="1033.0" y="200.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_5460_14" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="1775.0" y="747.0"/>
+            </label>
+            <bbox w="354.0" h="137.0" x="1574.0" y="656.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_702" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="655.0" y="734.0"/>
+            </label>
+            <bbox w="769.0" h="846.0" x="18.0" y="306.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_174369_1102">
+            <label text="HCYS"/>
+            <bbox w="47.0" h="30.0" x="359.0" y="947.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_3322140_103413">
+            <label text="Defective MTR does not transfer CH3 group from MeCbl to HCYS"/>
+            <bbox w="12.0" h="12.0" x="296.0" y="984.0"/>
+            <port id="reactionVertex_3322140.1" x="341.0" y="990.0"/>
+            <port id="reactionVertex_3322140.2" x="267.0" y="991.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9013303_103412">
+            <label text="MTRR:mutant MTR(cob(I)alamin)"/>
+            <bbox w="116.0" h="36.0" x="81.0" y="1027.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_3321918_103411">
+            <label text="Defective MTR does not transfer CH3 group from MTHF to cob(I)alamin"/>
+            <bbox w="12.0" h="12.0" x="244.0" y="1074.0"/>
+            <port id="reactionVertex_3321918.1" x="217.0" y="1080.0"/>
+            <port id="reactionVertex_3321918.2" x="288.0" y="1080.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9013305_103414">
+            <label text="MTRR:mutant MTR(MeCbl)"/>
+            <bbox w="117.0" h="36.0" x="322.0" y="1013.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_200665_1098">
+            <label text="5-methyl-THF"/>
+            <bbox w="116.0" h="30.0" x="82.0" y="1090.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_1102_input_103413" source="entityVertex_174369_1102" target="reactionVertex_3322140.1">
+            <start x="360.0" y="980.0"/>
+            <next x="341.0" y="990.0"/>
+            <end x="341.0" y="990.0"/>
+        </arc>
+        <arc class="consumption" id="arc_103414_input_103413" source="entityVertex_9013305_103414" target="reactionVertex_3322140.1">
+            <start x="362.0" y="1010.0"/>
+            <next x="341.0" y="990.0"/>
+            <end x="341.0" y="990.0"/>
+        </arc>
+        <arc class="consumption" id="arc_103412_input_103411" source="entityVertex_9013303_103412" target="reactionVertex_3321918.1">
+            <start x="179.0" y="1066.0"/>
+            <next x="217.0" y="1080.0"/>
+            <end x="217.0" y="1080.0"/>
+        </arc>
+        <arc class="consumption" id="arc_1098_input_103411" source="entityVertex_200665_1098" target="reactionVertex_3321918.1">
+            <start x="186.0" y="1087.0"/>
+            <next x="217.0" y="1080.0"/>
+            <end x="217.0" y="1080.0"/>
+        </arc>
+    </map>
+</sbgn>

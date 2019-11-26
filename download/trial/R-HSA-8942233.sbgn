@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_97" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="223.0" y="92.0"/>
+            </label>
+            <bbox w="370.0" h="84.0" x="0.0" y="62.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8936213_93">
+            <label text="GUCY2C trimer"/>
+            <bbox w="96.0" h="22.0" x="37.0" y="57.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_8936356_95">
+            <label text="GUCY2C trimer binds sta1"/>
+            <bbox w="10.0" h="10.0" x="157.0" y="62.0"/>
+            <port id="reactionVertex_8936356.1" x="162.0" y="66.0"/>
+            <port id="reactionVertex_8936356.2" x="207.0" y="67.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8936363_96">
+            <label text="GUCY2C trimer:sta1"/>
+            <bbox w="125.0" h="22.0" x="210.0" y="57.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_8936232_94">
+            <label text="sta1"/>
+            <bbox w="34.0" h="22.0" x="93.0" y="6.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_8936367_98">
+            <label text="PDZD3"/>
+            <bbox w="49.0" h="22.0" x="139.0" y="127.0"/>
+        </glyph>
+        <arc class="production" id="arc_96_output_95" source="reactionVertex_8936356.2" target="entityVertex_8936363_96">
+            <start x="162.0" y="67.0"/>
+            <end x="207.0" y="67.0"/>
+        </arc>
+        <arc class="inhibition" id="arc_98_inhibitor_95" source="entityVertex_8936367_98" target="reactionVertex_8936356_95">
+            <start x="162.0" y="124.0"/>
+            <next x="162.0" y="76.0"/>
+            <end x="162.0" y="76.0"/>
+        </arc>
+        <arc class="consumption" id="arc_94_input_95" source="entityVertex_8936232_94" target="reactionVertex_8936356.1">
+            <start x="121.0" y="31.0"/>
+            <end x="162.0" y="66.0"/>
+        </arc>
+        <arc class="consumption" id="arc_93_input_95" source="entityVertex_8936213_93" target="reactionVertex_8936356.1">
+            <start x="136.0" y="66.0"/>
+            <end x="162.0" y="66.0"/>
+        </arc>
+    </map>
+</sbgn>

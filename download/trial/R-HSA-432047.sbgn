@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_2" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="224.0" y="497.0"/>
+            </label>
+            <bbox w="515.0" h="555.0" x="138.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_432051_3" compartmentOrder="10.0">
+            <label text="transport vesicle">
+                <bbox w="130.0" h="24.0" x="420.0" y="310.0"/>
+            </label>
+            <bbox w="232.0" h="153.0" x="393.0" y="206.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_432034_17">
+            <label text="Aquaporin-6 passively transports anions into vesicles"/>
+            <bbox w="12.0" h="12.0" x="412.0" y="207.0"/>
+            <port id="reactionVertex_432034.1" x="473.0" y="176.0"/>
+            <port id="reactionVertex_432034.2" x="480.0" y="253.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29514_31">
+            <label text="Urea"/>
+            <bbox w="44.0" h="30.0" x="266.0" y="418.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_507869_24">
+            <label text="Aquaporins passively transport glycerol into cells"/>
+            <bbox w="12.0" h="12.0" x="176.0" y="231.0"/>
+            <port id="reactionVertex_507869.1" x="93.0" y="277.0"/>
+            <port id="reactionVertex_507869.2" x="292.0" y="278.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_432036_21">
+            <label text="Aquaporin-6 passively transports anions out of vesicles"/>
+            <bbox w="12.0" h="12.0" x="594.0" y="205.0"/>
+            <port id="reactionVertex_432036.1" x="535.0" y="253.0"/>
+            <port id="reactionVertex_432036.2" x="536.0" y="176.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_192438_25">
+            <label text="glycerol"/>
+            <bbox w="64.0" h="30.0" x="31.0" y="280.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_432253_20">
+            <label text="AQP6 tetramer"/>
+            <bbox w="112.0" h="20.0" x="453.0" y="201.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_76116_26">
+            <label text="Glycerol"/>
+            <bbox w="65.0" h="30.0" x="295.0" y="275.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_8862069_53">
+            <label text="AQP0,1,2,3,4,5,7,8,9,10,11,12A"/>
+            <bbox w="100.0" h="55.0" x="129.0" y="73.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_109276_5">
+            <label text="H2O"/>
+            <bbox w="43.0" h="30.0" x="0.0" y="83.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_507871_28">
+            <label text="Aquaporins passively transport glycerol out of cells"/>
+            <bbox w="12.0" h="12.0" x="173.0" y="343.0"/>
+            <port id="reactionVertex_507871.1" x="292.0" y="302.0"/>
+            <port id="reactionVertex_507871.2" x="98.0" y="309.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_879874_35">
+            <label text="Anions transported by Aquaporin-6"/>
+            <bbox w="173.0" h="41.0" x="422.0" y="259.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_507868_4">
+            <label text="Aquaporins passively transport water into cells"/>
+            <bbox w="12.0" h="12.0" x="171.0" y="8.0"/>
+            <port id="reactionVertex_507868.1" x="46.0" y="86.0"/>
+            <port id="reactionVertex_507868.2" x="325.0" y="84.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_507870_8">
+            <label text="Aquaporins passively transport water out of cells"/>
+            <bbox w="12.0" h="12.0" x="172.0" y="179.0"/>
+            <port id="reactionVertex_507870.1" x="325.0" y="105.0"/>
+            <port id="reactionVertex_507870.2" x="46.0" y="109.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_507875_29">
+            <label text="Aquaporins passively transport urea into cells"/>
+            <bbox w="12.0" h="12.0" x="173.0" y="379.0"/>
+            <port id="reactionVertex_507875.1" x="116.0" y="424.0"/>
+            <port id="reactionVertex_507875.2" x="263.0" y="423.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_879865_34">
+            <label text="Anions transported by Aquaporin-6"/>
+            <bbox w="167.0" h="45.0" x="419.0" y="125.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_507873_33">
+            <label text="Aquaporins passively transport urea out of cells"/>
+            <bbox w="12.0" h="12.0" x="173.0" y="477.0"/>
+            <port id="reactionVertex_507873.1" x="263.0" y="443.0"/>
+            <port id="reactionVertex_507873.2" x="116.0" y="449.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_507881_32">
+            <label text="AQP9,10"/>
+            <bbox w="64.0" h="22.0" x="147.0" y="423.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29356_52">
+            <label text="H2O"/>
+            <bbox w="43.0" h="30.0" x="328.0" y="79.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_507882_27">
+            <label text="AQP3,7,9,10"/>
+            <bbox w="93.0" h="22.0" x="134.0" y="280.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_432019_30">
+            <label text="Urea"/>
+            <bbox w="44.0" h="30.0" x="69.0" y="423.0"/>
+        </glyph>
+        <arc class="production" id="arc_26_output_24" source="reactionVertex_507869.2" target="entityVertex_76116_26">
+            <start x="182.0" y="237.0"/>
+            <end x="292.0" y="278.0"/>
+        </arc>
+        <arc class="production" id="arc_31_output_29" source="reactionVertex_507875.2" target="entityVertex_29514_31">
+            <start x="179.0" y="385.0"/>
+            <end x="263.0" y="423.0"/>
+        </arc>
+        <arc class="consumption" id="arc_25_input_24" source="entityVertex_192438_25" target="reactionVertex_507869.1">
+            <start x="93.0" y="277.0"/>
+            <end x="182.0" y="237.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_4" source="entityVertex_109276_5" target="reactionVertex_507868.1">
+            <start x="46.0" y="86.0"/>
+            <end x="177.0" y="14.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_20_catalyst_17" source="entityVertex_432253_20" target="reactionVertex_432034_17">
+            <start x="450.0" y="212.0"/>
+            <next x="434.0" y="213.0"/>
+            <end x="434.0" y="213.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_32_catalyst_33" source="entityVertex_507881_32" target="reactionVertex_507873_33">
+            <start x="179.0" y="451.0"/>
+            <next x="179.0" y="467.0"/>
+            <end x="179.0" y="467.0"/>
+        </arc>
+        <arc class="production" id="arc_30_output_33" source="reactionVertex_507873.2" target="entityVertex_432019_30">
+            <start x="179.0" y="483.0"/>
+            <end x="116.0" y="449.0"/>
+        </arc>
+        <arc class="consumption" id="arc_35_input_21" source="entityVertex_879874_35" target="reactionVertex_432036.1">
+            <start x="535.0" y="253.0"/>
+            <end x="600.0" y="211.0"/>
+        </arc>
+        <arc class="consumption" id="arc_30_input_29" source="entityVertex_432019_30" target="reactionVertex_507875.1">
+            <start x="116.0" y="424.0"/>
+            <end x="179.0" y="385.0"/>
+        </arc>
+        <arc class="consumption" id="arc_31_input_33" source="entityVertex_29514_31" target="reactionVertex_507873.1">
+            <start x="263.0" y="443.0"/>
+            <end x="179.0" y="483.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_32_catalyst_29" source="entityVertex_507881_32" target="reactionVertex_507875_29">
+            <start x="179.0" y="417.0"/>
+            <next x="179.0" y="401.0"/>
+            <end x="179.0" y="401.0"/>
+        </arc>
+        <arc class="production" id="arc_34_output_21" source="reactionVertex_432036.2" target="entityVertex_879865_34">
+            <start x="600.0" y="211.0"/>
+            <end x="536.0" y="176.0"/>
+        </arc>
+        <arc class="production" id="arc_52_output_4" source="reactionVertex_507868.2" target="entityVertex_29356_52">
+            <start x="177.0" y="14.0"/>
+            <end x="325.0" y="84.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_27_catalyst_28" source="entityVertex_507882_27" target="reactionVertex_507871_28">
+            <start x="179.0" y="308.0"/>
+            <next x="179.0" y="333.0"/>
+            <end x="179.0" y="333.0"/>
+        </arc>
+        <arc class="production" id="arc_5_output_8" source="reactionVertex_507870.2" target="entityVertex_109276_5">
+            <start x="178.0" y="185.0"/>
+            <end x="46.0" y="109.0"/>
+        </arc>
+        <arc class="production" id="arc_35_output_17" source="reactionVertex_432034.2" target="entityVertex_879874_35">
+            <start x="418.0" y="213.0"/>
+            <end x="480.0" y="253.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_53_catalyst_4" source="entityVertex_8862069_53" target="reactionVertex_507868_4">
+            <start x="178.0" y="67.0"/>
+            <next x="177.0" y="30.0"/>
+            <end x="177.0" y="30.0"/>
+        </arc>
+        <arc class="consumption" id="arc_52_input_8" source="entityVertex_29356_52" target="reactionVertex_507870.1">
+            <start x="325.0" y="105.0"/>
+            <end x="178.0" y="185.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_53_catalyst_8" source="entityVertex_8862069_53" target="reactionVertex_507870_8">
+            <start x="178.0" y="134.0"/>
+            <next x="178.0" y="169.0"/>
+            <end x="178.0" y="169.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_20_catalyst_21" source="entityVertex_432253_20" target="reactionVertex_432036_21">
+            <start x="568.0" y="211.0"/>
+            <next x="584.0" y="211.0"/>
+            <end x="584.0" y="211.0"/>
+        </arc>
+        <arc class="consumption" id="arc_26_input_28" source="entityVertex_76116_26" target="reactionVertex_507871.1">
+            <start x="292.0" y="302.0"/>
+            <end x="179.0" y="349.0"/>
+        </arc>
+        <arc class="consumption" id="arc_34_input_17" source="entityVertex_879865_34" target="reactionVertex_432034.1">
+            <start x="473.0" y="176.0"/>
+            <end x="418.0" y="213.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_27_catalyst_24" source="entityVertex_507882_27" target="reactionVertex_507869_24">
+            <start x="180.0" y="274.0"/>
+            <next x="181.0" y="253.0"/>
+            <end x="181.0" y="253.0"/>
+        </arc>
+        <arc class="production" id="arc_25_output_28" source="reactionVertex_507871.2" target="entityVertex_192438_25">
+            <start x="179.0" y="349.0"/>
+            <end x="98.0" y="309.0"/>
+        </arc>
+    </map>
+</sbgn>

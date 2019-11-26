@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_70101_372" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="284.0" y="382.0"/>
+            </label>
+            <bbox w="1138.0" h="519.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_7660_2516" compartmentOrder="10.0">
+            <label text="nucleoplasm">
+                <bbox w="97.0" h="24.0" x="461.0" y="382.0"/>
+            </label>
+            <bbox w="524.0" h="364.0" x="442.0" y="83.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_8936852_2512">
+            <label text="TCDD"/>
+            <bbox w="43.0" h="30.0" x="136.0" y="118.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_8937169_2514">
+            <label text="AHR:TCDD:2xHSP90AB1:AIP:PTGES3 translocates from cytosol to nucleoplasm"/>
+            <bbox w="12.0" h="12.0" x="446.0" y="173.0"/>
+            <port id="reactionVertex_8937169.1" x="415.0" y="179.0"/>
+            <port id="reactionVertex_8937169.2" x="498.0" y="179.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_8936849_2510">
+            <label text="AHR:2xHSP90:AIP:PTGES3 binds TCDD"/>
+            <bbox w="10.0" h="10.0" x="262.0" y="173.0"/>
+            <port id="reactionVertex_8936849.1" x="268.0" y="178.0"/>
+            <port id="reactionVertex_8936849.2" x="312.0" y="178.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_8937177_2520">
+            <label text="AHR:TCDD binds ARNT"/>
+            <bbox w="10.0" h="10.0" x="801.0" y="236.0"/>
+            <port id="reactionVertex_8937177.1" x="806.0" y="239.0"/>
+            <port id="reactionVertex_8937177.2" x="848.0" y="241.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8936846_2513">
+            <label text="AHR:TCDD:2xHSP90AB1:AIP:PTGES3"/>
+            <bbox w="97.0" h="50.0" x="315.0" y="155.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8937201_2518">
+            <label text="2xHSP90AB1:AIP:PTGES3"/>
+            <bbox w="89.0" h="38.0" x="679.0" y="108.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8936844_2511">
+            <label text="AHR:2xHSP90AB1:AIP:PTGES3"/>
+            <bbox w="94.0" h="50.0" x="100.0" y="196.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_8936851_2523">
+            <label text="AHRR binds ARNT"/>
+            <bbox w="10.0" h="10.0" x="791.0" y="319.0"/>
+            <port id="reactionVertex_8936851.1" x="796.0" y="323.0"/>
+            <port id="reactionVertex_8936851.2" x="849.0" y="324.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8937203_2522">
+            <label text="AHR:TCDD:ARNT"/>
+            <bbox w="76.0" h="36.0" x="851.0" y="223.0"/>
+        </glyph>
+        <glyph class="dissociation" id="reactionVertex_8937191_2517">
+            <label text="AHR:TCDD:2xHSP90AB1:AIP:PTGES3 dissociates"/>
+            <bbox w="10.0" h="10.0" x="628.0" y="172.0"/>
+            <port id="reactionVertex_8937191.1" x="599.0" y="177.0"/>
+            <port id="reactionVertex_8937191.2" x="678.0" y="177.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_8936837_2521">
+            <label text="ARNT, ARNT2"/>
+            <bbox w="55.0" h="29.0" x="705.0" y="264.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8937150_2519">
+            <label text="AHR:TCDD"/>
+            <bbox w="72.0" h="22.0" x="682.0" y="204.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8936835_2525">
+            <label text="AHRR:ARNT"/>
+            <bbox w="46.0" h="37.0" x="852.0" y="307.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_8936841_2524">
+            <label text="AHRR"/>
+            <bbox w="55.0" h="22.0" x="711.0" y="343.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8937154_2515">
+            <label text="AHR:TCDD:2xHSP90AB1:AIP:PTGES3"/>
+            <bbox w="95.0" h="52.0" x="501.0" y="153.0"/>
+        </glyph>
+        <arc class="production" id="arc_2522_output_2520" source="reactionVertex_8937177.2" target="entityVertex_8937203_2522">
+            <start x="806.0" y="241.0"/>
+            <end x="848.0" y="241.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2524_input_2523" source="entityVertex_8936841_2524" target="reactionVertex_8936851.1">
+            <start x="758.0" y="340.0"/>
+            <end x="796.0" y="323.0"/>
+        </arc>
+        <arc class="production" id="arc_2525_output_2523" source="reactionVertex_8936851.2" target="entityVertex_8936835_2525">
+            <start x="796.0" y="324.0"/>
+            <end x="849.0" y="324.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2515_input_2517" source="entityVertex_8937154_2515" target="reactionVertex_8937191.1">
+            <start x="599.0" y="177.0"/>
+            <end x="633.0" y="177.0"/>
+        </arc>
+        <arc class="production" id="arc_2518_output_2517" source="reactionVertex_8937191.2" target="entityVertex_8937201_2518">
+            <start x="705.0" y="149.0"/>
+            <next x="678.0" y="177.0"/>
+            <end x="678.0" y="177.0"/>
+        </arc>
+        <arc class="production" id="arc_2519_output_2517" source="reactionVertex_8937191.2" target="entityVertex_8937150_2519">
+            <start x="706.0" y="201.0"/>
+            <next x="678.0" y="177.0"/>
+            <end x="678.0" y="177.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2513_input_2514" source="entityVertex_8936846_2513" target="reactionVertex_8937169.1">
+            <start x="415.0" y="179.0"/>
+            <end x="452.0" y="179.0"/>
+        </arc>
+        <arc class="production" id="arc_2515_output_2514" source="reactionVertex_8937169.2" target="entityVertex_8937154_2515">
+            <start x="452.0" y="179.0"/>
+            <end x="498.0" y="179.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2521_input_2520" source="entityVertex_8936837_2521" target="reactionVertex_8937177.1">
+            <start x="759.0" y="258.0"/>
+            <end x="806.0" y="239.0"/>
+        </arc>
+        <arc class="production" id="arc_2513_output_2510" source="reactionVertex_8936849.2" target="entityVertex_8936846_2513">
+            <start x="267.0" y="178.0"/>
+            <end x="312.0" y="178.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2512_input_2510" source="entityVertex_8936852_2512" target="reactionVertex_8936849.1">
+            <start x="182.0" y="141.0"/>
+            <end x="268.0" y="178.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2511_input_2510" source="entityVertex_8936844_2511" target="reactionVertex_8936849.1">
+            <start x="197.0" y="204.0"/>
+            <end x="268.0" y="178.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2521_input_2523" source="entityVertex_8936837_2521" target="reactionVertex_8936851.1">
+            <start x="752.0" y="299.0"/>
+            <end x="796.0" y="323.0"/>
+        </arc>
+        <arc class="consumption" id="arc_2519_input_2520" source="entityVertex_8937150_2519" target="reactionVertex_8937177.1">
+            <start x="757.0" y="224.0"/>
+            <end x="806.0" y="239.0"/>
+        </arc>
+    </map>
+</sbgn>

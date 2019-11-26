@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_161320_1090" compartmentOrder="10.0">
+            <label text="lysosomal lumen">
+                <bbox w="129.0" h="24.0" x="66.0" y="1130.0"/>
+            </label>
+            <bbox w="500.0" h="194.0" x="40.0" y="984.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_70101_7" compartmentOrder="10.0">
+            <label text="cytosol">
+                <bbox w="56.0" h="24.0" x="1503.0" y="1382.0"/>
+            </label>
+            <bbox w="1590.0" h="1431.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="simple chemical" id="entityVertex_29410_990">
+            <label text="UDP-Glc"/>
+            <bbox w="70.0" h="30.0" x="821.0" y="541.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_9628615_113437">
+            <label text="oligoGlc-GYG1:GYS1 R462* tetramer"/>
+            <bbox w="132.0" h="36.0" x="879.0" y="501.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_3828061_113436">
+            <label text="Defective GYS1 does not transfer glucose to growing glycogen chains"/>
+            <bbox w="12.0" h="12.0" x="940.0" y="598.0"/>
+            <port id="reactionVertex_3828061.1" x="945.0" y="580.0"/>
+            <port id="reactionVertex_3828061.2" x="945.0" y="626.0"/>
+        </glyph>
+        <arc class="consumption" id="arc_990_input_113436" source="entityVertex_29410_990" target="reactionVertex_3828061.1">
+            <glyph class="stoichiometry" id="Stoichiometry_29410_INPUT_3828061">
+                <label text="8"/>
+                <bbox w="12.0" h="12.0" x="913.0" y="566.0"/>
+            </glyph>
+            <start x="894.0" y="565.0"/>
+            <next x="945.0" y="580.0"/>
+            <end x="945.0" y="580.0"/>
+        </arc>
+        <arc class="consumption" id="arc_113437_input_113436" source="entityVertex_9628615_113437" target="reactionVertex_3828061.1">
+            <start x="945.0" y="540.0"/>
+            <next x="945.0" y="580.0"/>
+            <end x="945.0" y="580.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_113437_catalyst_113436" source="entityVertex_9628615_113437" target="reactionVertex_3828061_113436">
+            <start x="952.0" y="540.0"/>
+            <next x="980.0" y="608.0"/>
+            <next x="962.0" y="606.0"/>
+            <end x="962.0" y="606.0"/>
+        </arc>
+    </map>
+</sbgn>

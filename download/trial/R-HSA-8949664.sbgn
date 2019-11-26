@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="process description">
+        <glyph class="compartment" id="compartmentVertex_5460_2" compartmentOrder="10.0">
+            <label text="mitochondrial matrix">
+                <bbox w="160.0" h="24.0" x="35.0" y="247.0"/>
+            </label>
+            <bbox w="699.0" h="293.0" x="24.0" y="18.0"/>
+        </glyph>
+        <glyph class="compartment" id="compartmentVertex_17927_3" compartmentOrder="10.0">
+            <label text="mitochondrial intermembrane space">
+                <bbox w="280.0" h="24.0" x="14.0" y="315.0"/>
+            </label>
+            <bbox w="741.0" h="363.0" x="0.0" y="0.0"/>
+        </glyph>
+        <glyph class="unspecified entity" id="entityVertex_8956344_43">
+            <label text="MICU2,3"/>
+            <bbox w="59.0" h="22.0" x="605.0" y="49.0"/>
+        </glyph>
+        <glyph class="process" id="reactionVertex_8949649_8">
+            <label text="PMPCA:PMPCB cleaves the transit peptide of proSMDT1 (proEMRE)"/>
+            <bbox w="12.0" h="12.0" x="328.0" y="154.0"/>
+            <port id="reactionVertex_8949649.1" x="305.0" y="159.0"/>
+            <port id="reactionVertex_8949649.2" x="478.0" y="157.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_8949227_10">
+            <label text="SMDT1"/>
+            <bbox w="51.0" h="22.0" x="512.0" y="127.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_1299458_11">
+            <label text="Mitochondrial processing peptidase"/>
+            <bbox w="97.0" h="50.0" x="295.0" y="205.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_8953461_18">
+            <label text="SMDT1 assists in assembling MCU, MCUB, MICU1, MICU2 (or MICU3) yielding the MCU complex"/>
+            <bbox w="10.0" h="10.0" x="627.0" y="202.0"/>
+            <port id="reactionVertex_8953461.1" x="634.0" y="163.0"/>
+            <port id="reactionVertex_8953461.2" x="641.0" y="246.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_8949642_9">
+            <label text="SMDT1 transit peptide"/>
+            <bbox w="62.0" h="52.0" x="454.0" y="209.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_8949668_26">
+            <label text="YME1L1 proteolyzes unassembled proSMDT1"/>
+            <bbox w="12.0" h="12.0" x="63.0" y="118.0"/>
+            <port id="reactionVertex_8949668.1" x="68.0" y="64.0"/>
+            <port id="reactionVertex_8949668.2" x="69.0" y="161.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8949643_7">
+            <label text="proSMDT1:C2orf47:AFG3L2:SPG7:PHB:PHB2"/>
+            <bbox w="121.0" h="51.0" x="181.0" y="134.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_8949184_20">
+            <label text="MCU"/>
+            <bbox w="36.0" h="22.0" x="674.0" y="87.0"/>
+        </glyph>
+        <glyph class="association" id="reactionVertex_8949661_4">
+            <label text="C2orf47:AFG3L2 binds the transit peptide of SMDT1"/>
+            <bbox w="10.0" h="10.0" x="231.0" y="98.0"/>
+            <port id="reactionVertex_8949661.1" x="237.0" y="74.0"/>
+            <port id="reactionVertex_8949661.2" x="238.0" y="131.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_8949153_21">
+            <label text="MCUB"/>
+            <bbox w="44.0" h="22.0" x="671.0" y="132.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_8949655_6">
+            <label text="proSMDT1"/>
+            <bbox w="78.0" h="27.0" x="29.0" y="34.0"/>
+        </glyph>
+        <glyph class="omitted process" id="reactionVertex_8949659_25">
+            <label text="AFG3L2 (m-AAA protease) degrades SMDT1 that is not assembled in MCU"/>
+            <bbox w="12.0" h="12.0" x="529.0" y="68.0"/>
+            <port id="reactionVertex_8949659.1" x="536.0" y="124.0"/>
+            <port id="reactionVertex_8949659.2" x="535.0" y="33.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8949645_5">
+            <label text="C2orf47:AFG3L2:SPG7:PHB:PHB2"/>
+            <bbox w="117.0" h="33.0" x="282.0" y="33.0"/>
+        </glyph>
+        <glyph class="macromolecule" id="entityVertex_8949180_23">
+            <label text="MICU1"/>
+            <bbox w="46.0" h="22.0" x="553.0" y="86.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8953745_42">
+            <label text="STOML2:PARL:YME1L"/>
+            <bbox w="66.0" h="52.0" x="100.0" y="100.0"/>
+        </glyph>
+        <glyph class="complex" id="entityVertex_8949151_24">
+            <label text="MCU complex"/>
+            <bbox w="153.0" h="27.0" x="569.0" y="249.0"/>
+        </glyph>
+        <arc class="catalysis" id="arc_5_catalyst_25" source="entityVertex_8949645_5" target="reactionVertex_8949659_25">
+            <start x="402.0" y="56.0"/>
+            <next x="519.0" y="72.0"/>
+            <end x="519.0" y="72.0"/>
+        </arc>
+        <arc class="production" id="arc_9_output_8" source="reactionVertex_8949649.2" target="entityVertex_8949642_9">
+            <start x="482.0" y="206.0"/>
+            <next x="478.0" y="157.0"/>
+            <end x="478.0" y="157.0"/>
+        </arc>
+        <arc class="consumption" id="arc_6_input_4" source="entityVertex_8949655_6" target="reactionVertex_8949661.1">
+            <start x="110.0" y="53.0"/>
+            <next x="237.0" y="74.0"/>
+            <end x="237.0" y="74.0"/>
+        </arc>
+        <arc class="consumption" id="arc_6_input_26" source="entityVertex_8949655_6" target="reactionVertex_8949668.1">
+            <start x="68.0" y="64.0"/>
+            <end x="69.0" y="124.0"/>
+        </arc>
+        <arc class="consumption" id="arc_5_input_4" source="entityVertex_8949645_5" target="reactionVertex_8949661.1">
+            <start x="279.0" y="63.0"/>
+            <next x="237.0" y="74.0"/>
+            <end x="237.0" y="74.0"/>
+        </arc>
+        <arc class="consumption" id="arc_7_input_8" source="entityVertex_8949643_7" target="reactionVertex_8949649.1">
+            <start x="305.0" y="159.0"/>
+            <end x="334.0" y="160.0"/>
+        </arc>
+        <arc class="production" id="arc_24_output_18" source="reactionVertex_8953461.2" target="entityVertex_8949151_24">
+            <start x="632.0" y="207.0"/>
+            <end x="641.0" y="246.0"/>
+        </arc>
+        <arc class="consumption" id="arc_10_input_25" source="entityVertex_8949227_10" target="reactionVertex_8949659.1">
+            <start x="536.0" y="124.0"/>
+            <end x="535.0" y="74.0"/>
+        </arc>
+        <arc class="consumption" id="arc_23_input_18" source="entityVertex_8949180_23" target="reactionVertex_8953461.1">
+            <start x="585.0" y="111.0"/>
+            <next x="634.0" y="163.0"/>
+            <end x="634.0" y="163.0"/>
+        </arc>
+        <arc class="production" id="arc_5_output_8" source="reactionVertex_8949649.2" target="entityVertex_8949645_5">
+            <start x="361.0" y="69.0"/>
+            <next x="478.0" y="157.0"/>
+            <end x="478.0" y="157.0"/>
+        </arc>
+        <arc class="consumption" id="arc_43_input_18" source="entityVertex_8956344_43" target="reactionVertex_8953461.1">
+            <start x="634.0" y="77.0"/>
+            <next x="634.0" y="163.0"/>
+            <end x="634.0" y="163.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_42_catalyst_26" source="entityVertex_8953745_42" target="reactionVertex_8949668_26">
+            <start x="97.0" y="124.0"/>
+            <next x="85.0" y="124.0"/>
+            <end x="85.0" y="124.0"/>
+        </arc>
+        <arc class="consumption" id="arc_20_input_18" source="entityVertex_8949184_20" target="reactionVertex_8953461.1">
+            <start x="682.0" y="112.0"/>
+            <next x="634.0" y="163.0"/>
+            <end x="634.0" y="163.0"/>
+        </arc>
+        <arc class="production" id="arc_10_output_8" source="reactionVertex_8949649.2" target="entityVertex_8949227_10">
+            <start x="509.0" y="146.0"/>
+            <next x="478.0" y="157.0"/>
+            <end x="478.0" y="157.0"/>
+        </arc>
+        <arc class="consumption" id="arc_10_input_18" source="entityVertex_8949227_10" target="reactionVertex_8953461.1">
+            <start x="566.0" y="144.0"/>
+            <next x="634.0" y="163.0"/>
+            <end x="634.0" y="163.0"/>
+        </arc>
+        <arc class="production" id="arc_7_output_4" source="reactionVertex_8949661.2" target="entityVertex_8949643_7">
+            <start x="236.0" y="103.0"/>
+            <end x="238.0" y="131.0"/>
+        </arc>
+        <arc class="consumption" id="arc_21_input_18" source="entityVertex_8949153_21" target="reactionVertex_8953461.1">
+            <start x="668.0" y="150.0"/>
+            <next x="634.0" y="163.0"/>
+            <end x="634.0" y="163.0"/>
+        </arc>
+        <arc class="catalysis" id="arc_11_catalyst_8" source="entityVertex_1299458_11" target="reactionVertex_8949649_8">
+            <start x="339.0" y="202.0"/>
+            <next x="336.0" y="176.0"/>
+            <end x="336.0" y="176.0"/>
+        </arc>
+    </map>
+</sbgn>
