@@ -93,6 +93,8 @@ class WFFileBrowser extends JObject
         $this->setRequest(array($this, 'getTree'));
         $this->setRequest(array($this, 'getTreeItem'));
 
+        $this->setRequest(array($this, 'searchItems'));
+
         $this->setRequest(array($this, 'upload'));
     }
 
@@ -369,8 +371,6 @@ class WFFileBrowser extends JObject
 
                     // filter match
                     if (false === empty(array_intersect_assoc($filter_parts, $path_parts))) {
-                        
-                        
                         return true;
                     }
 
@@ -413,12 +413,16 @@ class WFFileBrowser extends JObject
      *
      * @return array list array
      */
-    private function getFiles($relative, $filter = '.', $sort = '')
+    private function getFiles($relative, $filter = '.', $sort = '', $limit = 0, $start = 0)
     {
         $filesystem = $this->getFileSystem();
-        $list = $filesystem->getFiles($relative, $filter, $sort);
+        $list = $filesystem->getFiles($relative, $filter, $sort, $limit, $start);
 
         $list = array_filter($list, function ($item) {
+            if (empty($item['id'])) {
+                return true;
+            }
+            
             return $this->checkPathAccess(dirname($item['id']));
         });
 
@@ -432,16 +436,117 @@ class WFFileBrowser extends JObject
      *
      * @return array list array
      */
-    private function getFolders($relative, $filter = '', $sort = '')
+    private function getFolders($relative, $filter = '', $sort = '', $limit = 0, $start = 0)
     {
         $filesystem = $this->getFileSystem();
-        $list = $filesystem->getFolders($relative, $filter, $sort);
+        $list = $filesystem->getFolders($relative, $filter, $sort, $limit, $start);
 
         $list = array_filter($list, function ($item) {
+            if (empty($item['id'])) {
+                return true;
+            }
+            
             return $this->checkPathAccess($item['id']);
         });
 
         return $list;
+    }
+
+    private static function sanitizeSearchTerm($query)
+    {
+        try {
+            $q = preg_replace('#[^a-zA-Z0-9_\.\-\:~\pL\pM\pN\s\* ]#u', '', $query);
+        } catch (\Exception $e) {
+            // PCRE replace failed, use ASCII
+            $q = preg_replace('#[^a-zA-Z0-9_\.\-\:~\s\* ]#', '', $query);
+        }
+
+        // PCRE replace failed, use ASCII
+        if (is_null($q) || $q === false) {
+            $q = preg_replace('#[^a-zA-Z0-9_\.\-\:~\s\* ]#', '', $query);
+        }
+
+        // trim and return
+        return trim($q);
+    }
+
+    public function searchItems($path, $limit = 25, $start = 0, $query = '', $sort = '')
+    {
+        $result = array(
+            'folders' => array(),
+            'files' => array(),
+            'total' => array(
+                'folders' => 0,
+                'files' => 0,
+            ),
+        );
+
+        // no query value? bail...
+        if ($query == '') {
+            return $result;
+        }
+
+        $filesystem = $this->getFileSystem();
+
+        if (method_exists($filesystem, 'searchFiles') === false) {
+            return $this->getItems($path, $limit, $start, $query, $sort);
+        }
+
+        // trim leading slash
+        $path = ltrim($path, '/');
+
+        // get source dir from path eg: images/stories/fruit.jpg = images/stories
+        $dir = $filesystem->getSourceDir($path);
+
+        $filetypes = (array) $this->getFileTypes('array');
+
+        // copy query
+        $keyword = self::sanitizeSearchTerm($query);
+
+        // allow for wildcards 
+        $keyword = str_replace('*', '.*', $keyword);
+            
+        // query filter
+        $keyword = '^(?i).*' . $keyword . '.*';
+
+        if ($query[0] === '.') {
+            // clean query removing leading .
+            $extension = WFUtility::makeSafe($query);
+
+            $filetypes = array_filter($filetypes, function($value) use ($extension) {
+                return $value === $extension;
+            });
+
+            // reset keyword
+            $keyword = '';
+        }
+
+        // get search depth
+        $depth = (int) $this->get('search_depth', 3);
+
+        $list   = $filesystem->searchFiles($path, $keyword . '\.(?i)(' . implode('|', $filetypes) . ')$', $sort, $depth);
+        $total  = count($list);
+
+        if (intval($limit) > 0) {
+            $list = array_slice($list, $start, $limit);
+        }
+
+        // get properties for found items
+        array_walk($list, function(&$item) use ($filesystem) {
+            $item['classes']    = '';
+
+            if (empty($item['properties'])) {
+                $item['properties'] = $filesystem->getFileDetails($item);
+            }
+        });
+
+        $result['files'] = $list;
+        $result['total']['files'] = $total;
+
+        // Fire Event passing result as reference
+        $this->fireEvent('onSearchItems', array(&$result));
+
+        return $result;
     }
 
     /**
@@ -492,11 +597,11 @@ class WFFileBrowser extends JObject
         }
 
         // get file list by filter
-        $files = $this->getFiles($dir, $name . '\.(?i)(' . implode('|', $filetypes) . ')$', $sort);
+        $files = $this->getFiles($dir, $name . '\.(?i)(' . implode('|', $filetypes) . ')$', $sort, $limit, $start);
 
         if (empty($filter) || $filter[0] != '.') {
             // get folder list
-            $folders = $this->getFolders($dir, '^(?i).*' . WFUtility::makeSafe($filter) . '.*', $sort);
+            $folders = $this->getFolders($dir, '^(?i).*' . WFUtility::makeSafe($filter) . '.*', $sort, $limit, $start);
         }
 
         $folderArray = array();
@@ -504,18 +609,28 @@ class WFFileBrowser extends JObject
 
         $items = array_merge($folders, $files);
 
-        if ($items) {
-            if (is_numeric($limit)) {
+        if (count($items)) {
+            if (intval($limit) > 0) {
                 $items = array_slice($items, $start, $limit);
             }
 
             foreach ($items as $item) {
                 $item['classes'] = '';
+
                 if ($item['type'] == 'folders') {
+                    if (empty($item['properties'])) {
+                        $item['properties'] = $filesystem->getFolderDetails($item);
+                    }
+
                     $folderArray[] = $item;
                 } else {
                     // check for selected item
-                    $item['selected'] = $filesystem->isMatch($item['url'], $path);
+                    $item['selected']   = $filesystem->isMatch($item['url'], $path);
+
+                    if (empty($item['properties'])) {
+                        $item['properties'] = $filesystem->getFileDetails($item);
+                    }
+
                     $fileArray[] = $item;
                 }
             }
@@ -638,8 +753,8 @@ class WFFileBrowser extends JObject
                 . '       <i class="uk-icon uk-icon-home"></i>'
                 . '     </span>'
                 . '     <span class="uk-tree-text">' . JText::_('WF_LABEL_HOME', 'Home') . '</span>'
-                . '   </a>'
-                . ' </div>';
+                    . '   </a>'
+                    . ' </div>';
 
                 $dir = '/';
             }
