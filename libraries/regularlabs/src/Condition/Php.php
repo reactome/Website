@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         19.10.11711
+ * @version         19.12.9182
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -139,7 +139,7 @@ class Php
 		include_once $temp_file;
 
 		// Delete file
-		if ( ! defined('JDEBUG') || ! JDEBUG)
+		if ( ! JFactory::getApplication()->get('debug'))
 		{
 			@chmod($temp_file, 0777);
 			@unlink($temp_file);

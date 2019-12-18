@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.5.6
+ * @version         11.5.7
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -29,7 +29,7 @@ class Link
 		if (isset($data['image']))
 		{
 			$attributes->href = $data['image'];
-			unset($data['image']);
+			$data['image']    = 'true';
 
 		}
 
@@ -43,7 +43,7 @@ class Link
 		}
 
 		$isexternal = RL_File::isExternal($attributes->href);
-		$ismedia    = RL_File::isMedia($attributes->href, $params->mediafiles);
+		$ismedia    = isset($data['image']) || RL_File::isMedia($attributes->href, $params->mediafiles);
 		$isvideo    = File::isVideo($attributes->href, $data);
 		$fullpage   = (empty($data['fullpage']) || $isexternal) ? false : (bool) $data['fullpage'];
 		$isiframe   = $fullpage || File::isIframe($attributes->href, $data);

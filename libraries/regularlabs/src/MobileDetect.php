@@ -18,7 +18,7 @@
  * @author  Nick Ilyin <nick.ilyin@gmail.com>
  * Original author: Victor Stanciu <vic.stanciu@gmail.com>
  *
- * @version 2.8.32
+ * @version 2.8.33
  */
 
 namespace RegularLabs\Library;
