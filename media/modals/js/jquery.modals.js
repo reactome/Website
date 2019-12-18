@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         11.5.6
+ * @version         11.5.7
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -660,8 +660,8 @@
 
 	// ****************
 	// PUBLIC FUNCTIONS
-	// Usage format: $.rl_modals.close();
-	// Usage from within an iframe: parent.jQuery.colorbox.close();
+	// Usage format: jQuery.rl_modals.close();
+	// Usage from within an iframe: parent.jQuery.rl_modals.close();
 	// ****************
 
 	publicMethod = $.fn[colorbox] = $[colorbox] = function(options, callback) {
