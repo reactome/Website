@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright    Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright    Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license    GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -77,6 +77,8 @@ defined('JPATH_PLATFORM') or die;
             </button>
 
             <div class="uk-navbar uk-padding-remove uk-text-right uk-position-top-right">
+              <!-- Toggle Mode -->
+              <button class="uk-button view-mode" id="view-mode" aria-label="View Mode"><i class="uk-icon-list"></i><i class="uk-icon-grid"></i></button>
               <!-- Toggle Details -->
               <button class="uk-button uk-active" id="show-details" aria-label="Toggle Details">
                 <i class="uk-icon-columns details"></i>
