@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -74,8 +74,15 @@ class JceModelProfile extends JModelAdmin
             return;
         }
 
-        if (!empty($config['editor']['toolbar_theme']) && $config['editor']['toolbar_theme'] === 'mobile') {
-            $config['editor']['toolbar_theme'] = 'default.touch';
+        // editor parameters
+        if (isset($config['editor'])) {
+            if (!empty($config['editor']['toolbar_theme']) && $config['editor']['toolbar_theme'] === 'mobile') {
+                $config['editor']['toolbar_theme'] = 'default.touch';
+            }
+    
+            if (isset($config['editor']['relative_urls']) && !isset($config['editor']['convert_urls'])) {
+                $config['editor']['convert_urls'] = $config['editor']['relative_urls'] == 0 ? 'absolute' : 'relative';
+            }
         }
 
         $data->config = $config;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -32,24 +32,15 @@ class WFJoomlaPluginConfig
                 continue;
             }
 
-            JPluginHelper::importPlugin('editors-xtd', $plugin->name, false);
-
-            $className = 'PlgEditorsXtd' . $plugin->name;
-
-            if (!class_exists($className)) {
-                $className = 'PlgButton' . $plugin->name;
-            }
-
-            if (class_exists($className)) {
-                $plugin = new $className($editor, (array) $plugin);
-            }
+            // fully load plugin instance
+            $instance = JPluginHelper::importPlugin('editors-xtd', $plugin->name, true);
 
             // check that the button is valid
-            if (!method_exists($plugin, 'onDisplay')) {
+            if (!$instance || !method_exists($instance, 'onDisplay')) {
                 continue;
             }
 
-            $button = $plugin->onDisplay('__jce__', null, null);
+            $button = $instance->onDisplay('__jce__', null, null);
 
             if (empty($button) || !is_object($button)) {
                 continue;
