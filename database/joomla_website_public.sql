@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
 --
 -- Host: localhost    Database: website
 -- ------------------------------------------------------
--- Server version	5.7.28-0ubuntu0.18.04.4
+-- Server version	5.7.29-0ubuntu0.18.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
