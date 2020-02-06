@@ -952,6 +952,18 @@ class WFEditor
         return $assigned;
     }
 
+    private static function isEditorStylesheet($path)
+    {
+        // check for editor.css file and return first one found
+        $file = $path . '/editor.css';
+
+        if (is_file($file) && filesize($file) > 0) {
+            return $file;
+        }
+
+        return false;
+    }
+
     private static function getGantryTemplateFiles(&$files, $template)
     {
         $path = JPATH_SITE . '/templates/' . $template->name;
@@ -962,6 +974,14 @@ class WFEditor
             return false;
         }
 
+        // check editor.css file first
+        $file = self::isEditorStylesheet($path . '/css');
+
+        if ($file) {
+            $files[] = 'templates/' . $template->name . '/css/editor.css';
+            return true;
+        }
+
         // try Gantry5 templates
         $gantry5 = glob($path . '/custom/css-compiled/' . $name . '_*.css');
         $gantry4 = glob($path . '/css-compiled/master-*.css');
@@ -969,14 +989,43 @@ class WFEditor
         if (!empty($gantry5)) {  
             // update url
             $url =  'templates/' . $template->name . '/custom/css-compiled';
+
+            $path = dirname($gantry5[0]);
+            $file = basename($gantry5[0]);
+
+            // check for editor.css file
+            $css = self::isEditorStylesheet($path);
+
+            if ($css) {
+                $files[] = $url . '/' . basename($css);
+                return true;
+            }
+
+            // check for editor.css file
+            $css = self::isEditorStylesheet(dirname($path) . '/css');
+
+            if ($css) {
+                $files[] = $url . '/' . basename($css);
+                return true;
+            }
+
             // load gantry base files
             $files[] = 'media/gantry5/assets/css/bootstrap-gantry.css';
             $files[] = 'media/gantry5/engines/nucleus/css-compiled/nucleus.css';
+
             // load css files
-            $files[] = $url . '/' . basename($gantry5[0]);
+            $files[] = $url . '/' . $file;
+
+            // create name of possible custom.css file
+            $custom = str_replace($name, 'custom', $file);
+            
+            // load custom css file if it exists
+            if (is_file($path . '/' . $custom))  {
+                $files[] = $url . '/' . $custom;
+            }
         }
 
-        if (!empty($gantry4)) {  
+        if (!empty($gantry4)) { 
             // update url
             $url =  'templates/' . $template->name . '/css-compiled';
             // load gantry bootstrap files
@@ -997,6 +1046,14 @@ class WFEditor
         // not a yootheme template
         if (!is_dir($path . '/warp') && !is_dir($path . '/vendor/yootheme')) {
             return false;
+        }
+
+        // check for editor.css file
+        $css = self::isEditorStylesheet($path . '/css');
+
+        if ($css) {
+            $files[] = 'templates/' . $template->name . '/css/' . basename($css);
+            return true;
         }
 
         if (is_dir($path . '/warp')) {
@@ -1025,7 +1082,36 @@ class WFEditor
 
     private static function getHelixTemplateFiles(&$files, $template)
     {
+        $path = JPATH_SITE . '/templates/' . $template->name;
 
+        if (!is_dir($path . '/scss') && !is_file($path . '/comingsoon.php')) {
+            return false;
+        }
+
+        // check for editor.css file
+        $css = self::isEditorStylesheet($path . '/css');
+
+        if ($css) {
+            $files[] = 'templates/' . $template->name . '/css/' . basename($css);
+            return true;
+        }
+
+        // add bootstrap
+        $files[] = 'templates/' . $template->name . '/css/bootstrap.min.css';
+
+        // add base template.css file
+        $files[] = 'templates/' . $template->name . '/css/template.css';
+
+        $params = new JRegistry($template->params);
+        $preset  = $params->get('preset', '');
+
+        $data = json_decode($preset);
+
+        if ($data) {
+            if (isset($data->preset)) {
+                $files[] = 'templates/' . $template->name . '/css/presets/' . $data->preset . '.css';
+            }
+        }
     }
 
     private static function getWrightTemplateFiles(&$files, $template)
@@ -1037,11 +1123,11 @@ class WFEditor
             return false;
         }
 
-        // check editor.css file first
-        $file = $path . '/css/editor.css';
+        // check for editor.css file
+        $css = self::isEditorStylesheet($path . '/css');
 
-        if (is_file($file) && filesize($file) > 0) {
-            $files[] = 'templates/' . $template->name . '/css/editor.css';
+        if ($css) {
+            $files[] = 'templates/' . $template->name . '/css/' . basename($css);
             return true;
         }
 
@@ -1073,13 +1159,11 @@ class WFEditor
         }
 
         // check for editor.css file
-        if (is_file($path . '/editor.css')) {
-            // empty file...?
-            if (filesize($path . '/editor.css') > 0) {
-                $files[] = 'templates/' . $template->name . '/css/editor.css';
+        $css = self::isEditorStylesheet($path);
 
-                return true;
-            }
+        if ($css) {
+            $files[] = 'templates/' . $template->name . '/css/' . basename($css);
+            return true;
         }
  
         $css = JFolder::files($path, '(base|core|template|template_css)\.(css|less)$', false, true);

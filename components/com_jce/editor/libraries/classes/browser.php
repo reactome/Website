@@ -195,7 +195,7 @@ class WFFileBrowser extends JObject
 
     private function getViewable()
     {
-        return 'jpeg,jpg,gif,png,webp,avi,wmv,wm,asf,asx,wmx,wvx,mov,qt,mpg,mp3,mp4,m4v,mpeg,ogg,ogv,webm,swf,flv,f4v,xml,dcr,rm,ra,ram,divx,html,htm,txt,rtf,pdf,doc,docx,xls,xlsx,ppt,pptx';
+        return 'jpeg,jpg,gif,png,webp,apng,svg,avi,wmv,wm,asf,asx,wmx,wvx,mov,qt,mpg,mp3,mp4,m4v,mpeg,ogg,ogv,webm,swf,flv,f4v,xml,dcr,rm,ra,ram,divx,html,htm,txt,rtf,pdf,doc,docx,xls,xlsx,ppt,pptx';
     }
 
     /**
@@ -235,7 +235,7 @@ class WFFileBrowser extends JObject
                 // create flattened array, eg: ["jpg", "jpeg", "gif", "png"]
                 if ($format === 'array' || $format === 'list') {
                     $data = array_merge($data, array_map('strtolower', $items));
-                    // create associative array, eg:  or ["images" => ["jpg", "jpeg", "gif", "png"]]
+                // create associative array, eg:  or ["images" => ["jpg", "jpeg", "gif", "png"]]
                 } else {
                     $data[$type] = $items;
                 }
@@ -251,7 +251,10 @@ class WFFileBrowser extends JObject
         if ($format === 'json') {
             return json_encode($data);
         }
+
         // return array
+        $data = array_values($data);
+        
         return $data;
     }
 
