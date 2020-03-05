@@ -26,6 +26,9 @@ $doc->addStyleSheet($this->baseurl . '/media/jui/css/bootstrap-responsive.css');
 JHtml::_('jquery.framework');
 $doc->addStyleSheet($this->baseurl. '/templates/' .$this->template. '/bootstrap/favth-bootstrap.css');
 $doc->addScript($this->baseurl. '/templates/' .$this->template. '/bootstrap/favth-bootstrap.js');
+// adding the js files for the citation project
+$doc->addScript($this->baseurl. '/templates/' .$this->template. '/js/clipboard.min.js');
+$doc->addScript($this->baseurl. '/templates/' .$this->template. '/citation-query.js');
 
 // Custom: Adding autocomplete javascript
 JHtml::_('script', 'jui/jquery.autocomplete.min.js', array('version' => 'auto', 'relative' => true));
@@ -85,7 +88,7 @@ $favcolumns = 6;
     <link href="//fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
     <!-- custom: icon for phone app -->
     <link rel="apple-touch-icon" sizes="128x128" href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template;?>/images/logo/icon.png">
-
+  
   <!-- PARAMETERS -->
   <?php require("admin/params.php"); ?>
 
@@ -520,6 +523,52 @@ $favcolumns = 6;
                     </div>
                 </div>
 		    <?php } ?>
+
+
+
+        <?php if ($this->countModules('cite-me')) {  ?>
+                <!-- CITE-ME -->
+                <!-- <div id="fav-citemewrap" class="padding0 top30">
+                    <div class="favth-container">
+                        <div class="favth-row">
+                            <div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12">
+                                CITE ME!
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+<!--             <button id="mybtn" type="button" class="favth-btn favth-btn-small" data-toggle="modal" data-target="#myModal">Cite Us!</button>
+ -->         
+             <button id="mybtn" type="button" class="favth-btn favth-btn-small" style="position:absolute; top:50%" onClick=getCitation()>Cite Us!</button>
+
+              <!-- Modal -->
+              <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-header favth-col-xs-12">
+                      <div class="favth-col-xs-7 padding0">
+                        <h4 class="modal-title" style="font-weight:bold"> Cite Us!</h4>
+                      </div>
+                      <div class="favth-col-xs-5" style="margin-top:20px; margin-bottom:10px; text-align:right; padding:0">
+                        <a id="clipboardButton" data-clipboard-target=".modal-body" title="Copy"><i class="fa fa-clipboard"></i></a> 
+                        <a id="mailButton" onClick="sendMail()" title="Email"><i class="fa fa-envelope"></i></a>
+                      </div>
+                    </div>
+                    <div class="modal-body" style="padding:20px">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="favth-btn favth-btn-small" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+        <?php } ?>
+
+
 
 
   			<!-- PROMO -->
