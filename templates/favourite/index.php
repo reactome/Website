@@ -526,19 +526,7 @@ $favcolumns = 6;
 
 
 
-        <?php if ($this->countModules('cite-me')) {  ?>
-                <!-- CITE-ME -->
-                <!-- <div id="fav-citemewrap" class="padding0 top30">
-                    <div class="favth-container">
-                        <div class="favth-row">
-                            <div class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12">
-                                CITE ME!
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-<!--             <button id="mybtn" type="button" class="favth-btn favth-btn-small" data-toggle="modal" data-target="#myModal">Cite Us!</button>
- -->         
+        <?php if ($this->countModules('cite-us')) {  ?>
              <button id="mybtn" type="button" class="favth-btn favth-btn-small" style="position:absolute; top:50%" onClick=getCitation()>Cite Us!</button>
 
               <!-- Modal -->
@@ -552,19 +540,41 @@ $favcolumns = 6;
                         <h4 class="modal-title" style="font-weight:bold"> Cite Us!</h4>
                       </div>
                       <div class="favth-col-xs-5" style="margin-top:20px; margin-bottom:10px; text-align:right; padding:0">
-                        <a id="clipboardButton" data-clipboard-target=".modal-body" title="Copy"><i class="fa fa-clipboard"></i></a> 
+                        <a id="clipboardButton" data-clipboard-target="#citationText" title="Copy"><i class="fa fa-clipboard"></i></a> 
                         <a id="mailButton" onClick="sendMail()" title="Email"><i class="fa fa-envelope"></i></a>
                       </div>
                     </div>
-                    <div class="modal-body" style="padding:20px">
+                    <div class="modal-body">
+                      <div id="citationText" style="white-space:pre-line"></div>
+                      <!-- gotta fix the styling for this!! -->
+                      <!-- https://stackoverflow.com/questions/2306117/radio-buttons-and-label-to-display-in-same-line/27072115 -->
+                      <form id="exportCitationForm">
+                        <fieldset>
+                          <legend><h5 style="font-weight:bold">Export As:</h5></legend>
+                            <span class="list-radio-button-class">
+                              <input type="radio" class="radio" id="exportCitationAsBibTeX" name="exportOption" value="bib" onClick="enableExportCitationButton()"/>
+                              <label for="exportCitationAsBibTeX">BibTeX</label>
+                            </span>
+                            <span class="list-radio-button-class">
+                              <input type="radio" class="radio" id="exportCitationAsRIS" name="exportOption" value="ris" onClick="enableExportCitationButton()"/>
+                              <label for="exportCitationAsRIS">RIS</label>
+                            </span>
+                            <span class="list-radio-button-class">
+                              <input type="radio" class="radio" id="exportCitationAsText" name="exportOption" value="txt" onClick="enableExportCitationButton()"/>
+                              <label for="exportCitationAsText">Text</label>
+                            </span>
+                        </fieldset>
+                        <button id="exportCitationButton" type="button" class="favth-btn favth-btn-small" disabled style="cursor:not-allowed;" onClick="exportCitation()">Export</button>
+                      </form>
                     </div>
-                    <div class="modal-footer">
+
+                  <div class="modal-footer">
                       <button type="button" class="favth-btn favth-btn-small" data-dismiss="modal">Close</button>
-                    </div>
                   </div>
 
                 </div>
               </div>
+            </div>
 
         <?php } ?>
 
