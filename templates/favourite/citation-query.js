@@ -35,7 +35,7 @@ var PATHWAY_CITATION_REQUEST_RESPONSE = {
     text: {
         parseResponse: function(response) {
             var windowLocation = window.location;
-            var authors = response["authorsxf"].map(function(author) {
+            var authors = response["authors"].map(function(author) {
                 return author["lastName"] + "," + " " +  author["initials"];
             });
             // checking that authors key exists, the value is not undefined or null and the list is not empty
@@ -216,7 +216,7 @@ function exportCitation() {
 function enableExportCitationButton() {
     jQuery("#myModal").find(".modal-body").find("#exportCitationForm").find("#exportCitationButton")[0].disabled = false;
     // refactor code so that so that a custom css class can get made for disabled and enabled buttons
-    jQuery("#myModal").find(".modal-body").find("#exportCitationForm").find("#exportCitationButton")[0].style["cursor"] = "default";
+    //jQuery("#myModal").find(".modal-body").find("#exportCitationForm").find("#exportCitationButton")[0].style["cursor"] = "default";
    
 }
 
