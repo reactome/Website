@@ -216,7 +216,7 @@ function exportCitation() {
 function enableExportCitationButton() {
     jQuery("#myModal").find(".modal-body").find("#exportCitationForm").find("#exportCitationButton")[0].disabled = false;
     // refactor code so that so that a custom css class can get made for disabled and enabled buttons
-    //jQuery("#myModal").find(".modal-body").find("#exportCitationForm").find("#exportCitationButton")[0].style["cursor"] = "default";
+    jQuery("#myModal").find(".modal-body").find("#exportCitationForm").find("#exportCitationButton")[0].style["cursor"] = "default";
    
 }
 
