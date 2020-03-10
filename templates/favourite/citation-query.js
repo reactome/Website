@@ -35,25 +35,23 @@ var PATHWAY_CITATION_REQUEST_RESPONSE = {
     text: {
         parseResponse: function(response) {
             var windowLocation = window.location;
-            var authors = response["authors"].map(function(author) {
-                return author["lastName"] + "," + " " +  author["initials"];
-            });
-            // checking that authors key exists, the value is not undefined or null and the list is not empty
-            var authorCitation = "";
 
-            if (authors && authors.length > 0) {
+            // default value
+            var authorCitation = "The Reactome Consortium";;
+
+            // checking that authors key exists, the value is not undefined or null and the list is not empty
+            if (response["authors"] && response["authors"].length > 0) {
+                var authors = response["authors"].map(function(author) {
+                    return author["lastName"] + "," + " " +  author["initials"];
+                });
+
                 authorCitation = authors[authors.length-1];
 
                 if (authors.length > 1) {
-                    authors.slice(0, authors.length-1).join(" , ").concat(" & ", authorCitation);
+                    authorCitation = authors.slice(0, authors.length-1).join(" , ").concat(" & ", authorCitation);
                 }
 
             }
-            else {
-                authorCitation = "The Reactome Consortium";
-            }
-
-
 
             var doi = response["doi"];
             // checking that doi key exists and the value is not undefined or null 
@@ -316,11 +314,11 @@ function preprocessForExport(json) {
         citationDetails["doi"] = json["doi"];
         citationDetails["urls"] = [DOI_BASE_URL.concat(json["doi"])];
     }
-    else if (json["stid"])
-        citationDetails["urls"] = (citationDetails["urls"]) ? citationDetails.push(window.location.href) : [].push(window.location.href);
+    if (json["stid"])
+        (citationDetails["urls"]) ? citationDetails["urls"].push(window.location.href) : citationDetails["urls"] = [window.location.href];
 
     citationDetails["authors"] = (json["authorList"] || {})["author"] || json["authors"] || "The Reactome Consortium"; 
-    citationDetails["type"] = (!!json["isPathway"]) ? EXPORT_FORMATS["BIBTEX"]["web"] : EXPORT_FORMATS["BIBTEX"]["journal"];
+    citationDetails["isPathway"] = json["isPathway"];
 
     return citationDetails;
 }
@@ -362,7 +360,7 @@ function convertJSONToRIS(json) {
     var newline = "\n";
 
     // start the RIS document
-    var ris = "TY" + keyValueSeparator + json["type"] + newline;
+    var ris = "TY" + keyValueSeparator + (!!json["isPathway"] ? EXPORT_FORMATS["RIS"]["web"] : EXPORT_FORMATS["RIS"]["journal"]) + newline;
 
     // adding the title
     ris += "TI" + keyValueSeparator + json["title"] + newline
@@ -372,12 +370,11 @@ function convertJSONToRIS(json) {
     if (json["authors"] instanceof Array) {
         json["authors"].forEach(function(author) {
             authorString += "AU" + keyValueSeparator + 
-                            author["lastName"] + comma + space +  (author["firstName"] || author["initials"]) +
-                            newline;
+                            author["lastName"] + comma + space +  (author["firstName"] || author["initials"]) + newline;                      
         })
     }
     else {
-        authorString = json["authors"];
+        authorString = "AU" + keyValueSeparator + json["authors"] + newline;
     }
     ris += authorString;
 
@@ -429,7 +426,7 @@ function convertJSONToBibTeX(json) {
     // start bibtex document
     // IMPORTANT: DISCUSS THE TYPE WRT PATHWAY. WOULD THE TYPE BE ARTICLE FOR PATHWAY AS WELL?
     // https://tex.stackexchange.com/questions/3587/how-can-i-use-bibtex-to-cite-a-web-page
-    var bibtex = "@" + json["type"] + openBracket + json["id"] + comma + newline;
+    var bibtex = "@" + (!!json["isPathway"] ? EXPORT_FORMATS["BIBTEX"]["web"] : EXPORT_FORMATS["BIBTEX"]["journal"]) + openBracket + json["id"] + comma + newline;
 
     bibtex += "Title = " + openBracket + json["title"] + endLine; // added title
 
