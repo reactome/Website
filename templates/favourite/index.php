@@ -530,7 +530,7 @@ $favcolumns = 6;
              <button id="mybtn" type="button" class="favth-btn favth-btn-small" style="position:absolute; top:50%" onClick=getCitation()>Cite Us!</button>
 
               <!-- Modal -->
-              <div id="myModal" class="modal fade" role="dialog">
+              <div id="myModal" class="modal fade" role="dialog" style="display:none">
                 <div class="modal-dialog">
 
                   <!-- Modal content-->
