@@ -3,7 +3,7 @@
  * @Copyright
  * @package     Field - Kubik-Rubik Pro Available
  * @author      Viktor Vogel <admin@kubik-rubik.de>
- * @version     Joomla! 3 - 3.0.0 - 2019-06-16
+ * @version     Joomla! 3 - 3.1.0 - 2020-01-02
  * @link        https://kubik-rubik.de/
  *
  * @license     GNU/GPL
@@ -22,11 +22,13 @@
  */
 defined('JPATH_PLATFORM') || die('Restricted access');
 
+use Joomla\CMS\{Form\FormField, Factory};
+
 /**
  * Form Field class for Kubik-Rubik Joomla! Extensions.
  * Adds a Pro action button with a link to the Pro landing page.
  */
-class JFormFieldKRProButton extends JFormField
+class JFormFieldKRProButton extends FormField
 {
     protected $type = 'krprobutton';
 
@@ -39,7 +41,7 @@ class JFormFieldKRProButton extends JFormField
     {
         $proLink = 'https://kubik-rubik.de/pro';
 
-        if (JFactory::getApplication()->getLanguage()->getTag() === 'de-DE') {
+        if (Factory::getApplication()->getLanguage()->getTag() === 'de-DE') {
             $proLink = 'https://kubik-rubik.de/de/pro';
         }
 
@@ -49,7 +51,7 @@ class JFormFieldKRProButton extends JFormField
 
         $proButton = '<div class="btn-wrapper" id="toolbar-pro"><a href="' . $proLink . '" title="Kubik-Rubik Joomla! Pro Extensions" target="_blank"><button class="btn btn-small btn-inverse"><span class="icon-cube icon-white" aria-hidden="true"></span> PRO</button></a></div>';
 
-        $document = JFactory::getDocument();
+        $document = Factory::getDocument();
         $scriptDeclaration = 'jQuery(function($){$("#toolbar").append(\'' . $proButton . '\');});';
         $document->addScriptDeclaration($scriptDeclaration);
 

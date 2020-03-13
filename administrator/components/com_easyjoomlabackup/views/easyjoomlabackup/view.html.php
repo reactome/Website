@@ -1,8 +1,8 @@
 <?php
 /**
- * @package    EJB - Easy Joomla Backup for Joomal! 3.x
+ * @package    EJB PRO - Easy Joomla Backup PRO for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.2.6 - 2019-06-30
+ * @version    3.3.0-FREE - 2020-01-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -19,43 +19,57 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-defined('_JEXEC') or die('Restricted access');
+defined('_JEXEC') || die('Restricted access');
 
-class EasyJoomlaBackupViewEasyJoomlaBackup extends JViewLegacy
+use Joomla\CMS\{Factory, Language\Text, MVC\View\HtmlView, Toolbar\ToolbarHelper};
+
+class EasyJoomlaBackupViewEasyJoomlaBackup extends HtmlView
 {
-    protected $_state;
+    protected $state;
+    protected $pluginState;
+    protected $items;
+    protected $pagination;
+    protected $downloadAllowed;
+    protected $dbType;
+    protected $sessionHandler;
+    protected $donationCodeMessage;
 
+    /**
+     * @param null|string $tpl
+     *
+     * @return mixed|void
+     */
     function display($tpl = null)
     {
-        JToolbarHelper::title(JText::_('COM_EASYJOOMLABACKUP') . " - " . JText::_('COM_EASYJOOMLABACKUP_SUBMENU_ENTRIES'), 'easyjoomlabackup');
+        ToolbarHelper::title(Text::_('COM_EASYJOOMLABACKUP') . " - " . Text::_('COM_EASYJOOMLABACKUP_SUBMENU_ENTRIES'), 'easyjoomlabackup');
 
-        if (JFactory::getUser()->authorise('easyjoomlabackup.fullbackup', 'com_easyjoomlabackup')) {
-            JToolbarHelper::custom('fullbackup', 'new', 'new', JText::_('COM_EASYJOOMLABACKUP_FULLBACKUP'), false);
+        if (Factory::getUser()->authorise('easyjoomlabackup.fullbackup', 'com_easyjoomlabackup')) {
+            ToolbarHelper::custom('fullbackup', 'new', 'new', Text::_('COM_EASYJOOMLABACKUP_FULLBACKUP'), false);
         }
 
-        if (JFactory::getUser()->authorise('easyjoomlabackup.databasebackup', 'com_easyjoomlabackup')) {
-            JToolbarHelper::custom('databasebackup', 'new', 'new', JText::_('COM_EASYJOOMLABACKUP_DATABASEBACKUP'), false);
+        if (Factory::getUser()->authorise('easyjoomlabackup.databasebackup', 'com_easyjoomlabackup')) {
+            ToolbarHelper::custom('databasebackup', 'new', 'new', Text::_('COM_EASYJOOMLABACKUP_DATABASEBACKUP'), false);
         }
 
-        if (JFactory::getUser()->authorise('easyjoomlabackup.filebackup', 'com_easyjoomlabackup')) {
-            JToolbarHelper::custom('filebackup', 'new', 'new', JText::_('COM_EASYJOOMLABACKUP_FILEBACKUP'), false);
+        if (Factory::getUser()->authorise('easyjoomlabackup.filebackup', 'com_easyjoomlabackup')) {
+            ToolbarHelper::custom('filebackup', 'new', 'new', Text::_('COM_EASYJOOMLABACKUP_FILEBACKUP'), false);
         }
 
-        if (JFactory::getUser()->authorise('easyjoomlabackup.discover', 'com_easyjoomlabackup')) {
-            JToolbarHelper::custom('discover', 'refresh', 'refresh', JText::_('COM_EASYJOOMLABACKUP_DISCOVER'), false);
+        if (Factory::getUser()->authorise('easyjoomlabackup.discover', 'com_easyjoomlabackup')) {
+            ToolbarHelper::custom('discover', 'refresh', 'refresh', Text::_('COM_EASYJOOMLABACKUP_DISCOVER'), false);
         }
 
-        if (JFactory::getUser()->authorise('core.delete', 'com_easyjoomlabackup')) {
-            JToolbarHelper::deleteList();
+        if (Factory::getUser()->authorise('core.delete', 'com_easyjoomlabackup')) {
+            ToolbarHelper::deleteList();
         }
 
-        if (JFactory::getUser()->authorise('core.admin', 'com_easyjoomlabackup')) {
-            JToolbarHelper::preferences('com_easyjoomlabackup', '500');
+        if (Factory::getUser()->authorise('core.admin', 'com_easyjoomlabackup')) {
+            ToolbarHelper::preferences('com_easyjoomlabackup', '500');
         }
 
         $downloadAllowed = false;
 
-        if (JFactory::getUser()->authorise('easyjoomlabackup.download', 'com_easyjoomlabackup')) {
+        if (Factory::getUser()->authorise('easyjoomlabackup.download', 'com_easyjoomlabackup')) {
             $downloadAllowed = true;
         }
 
@@ -64,18 +78,17 @@ class EasyJoomlaBackupViewEasyJoomlaBackup extends JViewLegacy
         $this->state = $this->get('State');
         $this->pluginState = $this->get('PluginStatus');
 
-        $document = JFactory::getDocument();
+        $document = Factory::getDocument();
         $document->addStyleSheet('components/com_easyjoomlabackup/css/easyjoomlabackup.css');
 
         $this->items = $items;
         $this->pagination = $pagination;
         $this->downloadAllowed = $downloadAllowed;
 
-        // Check for database type
-        $this->dbType = JFactory::getConfig()->get('dbtype');
+        $this->dbType = Factory::getConfig()->get('dbtype');
+        $this->sessionHandler = Factory::getConfig()->get('session_handler');
 
-        // Get donation code message
-        require_once JPATH_COMPONENT . '/helpers/easyjoomlabackup.php';
+        EasyJoomlaBackupHelper::showMessages();
         $this->donationCodeMessage = EasyJoomlaBackupHelper::getDonationCodeMessage();
 
         parent::display($tpl);

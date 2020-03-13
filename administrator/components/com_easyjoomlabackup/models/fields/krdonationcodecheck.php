@@ -3,7 +3,7 @@
  * @Copyright
  * @package     Field - Donation Code Check
  * @author      Viktor Vogel <admin@kubik-rubik.de>
- * @version     Joomla! 3 - 3.2.1 - 2019-06-03
+ * @version     Joomla! 3 - 3.3.0 - 2020-01-02
  * @link        https://kubik-rubik.de/
  *
  * @license     GNU/GPL
@@ -22,18 +22,22 @@
  */
 defined('JPATH_PLATFORM') || die('Restricted access');
 
+use Joomla\CMS\{Form\FormField, Factory, Uri\Uri, Language\Text, User\UserHelper, Http\HttpFactory};
 use Joomla\Registry\Registry;
 
 /**
  * Form Field class for Kubik-Rubik Joomla! Extensions.
  * Provides a donation code check.
  */
-class JFormFieldKRDonationCodeCheck extends JFormField
+class JFormFieldKRDonationCodeCheck extends FormField
 {
     protected $type = 'krdonationcodecheck';
     protected $validationDomain = 'https://check.kubik-rubik.de';
     protected $validationDomainFallBack = 'http://check.kubik-rubik.eu';
 
+    /**
+     * @return mixed|string
+     */
     protected function getInput()
     {
         $fieldSet = $this->form->getFieldset();
@@ -45,7 +49,7 @@ class JFormFieldKRDonationCodeCheck extends JFormField
             $donationCode = $fieldSet['jform_params_donation_code']->value;
         }
 
-        $session = JFactory::getSession();
+        $session = Factory::getSession();
         $fieldValueSession = $session->get('field_value', '', 'krdonationcodecheck');
         $fieldValueHeadSession = $session->get('field_value_head', '', 'krdonationcodecheck');
         $donationCodeSession = $session->get('donation_code', '', 'krdonationcodecheck');
@@ -54,7 +58,7 @@ class JFormFieldKRDonationCodeCheck extends JFormField
             $fieldValue = '';
 
             if ($this->id == 'jform_params_donation' || $this->id == 'jform_donation') {
-                $fieldValue .= '<div class="' . $this->randomClassName($session, 'success') . '">' . JText::_('KR_DONATION_CODE_CHECK_SUCCESS') . '</div>';
+                $fieldValue .= '<div class="' . $this->randomClassName($session, 'success') . '">' . Text::_('KR_DONATION_CODE_CHECK_SUCCESS') . '</div>';
                 $this->setHeadDataSession($session);
             }
 
@@ -69,14 +73,14 @@ class JFormFieldKRDonationCodeCheck extends JFormField
         $session->clear('field_value_head', 'krdonationcodecheck');
         $session->clear('donation_code', 'krdonationcodecheck');
 
-        $host = JUri::getInstance()->getHost();
+        $host = Uri::getInstance()->getHost();
         $session->set('donation_code', $donationCode, 'krdonationcodecheck');
 
         if ($host == 'localhost') {
-            $fieldValue = '<div class="' . $this->randomClassName($session) . '">' . JText::_('KR_DONATION_CODE_CHECK_DEFAULT_LOCALHOST') . '</div>';
+            $fieldValue = '<div class="' . $this->randomClassName($session) . '">' . Text::_('KR_DONATION_CODE_CHECK_DEFAULT_LOCALHOST') . '</div>';
 
             if (!empty($donationCode)) {
-                $fieldValue .= '<div class="' . $this->randomClassName($session, 'warning') . '">' . JText::_('KR_DONATION_CODE_CHECK_ERROR_LOCALHOST') . '</div>';
+                $fieldValue .= '<div class="' . $this->randomClassName($session, 'warning') . '">' . Text::_('KR_DONATION_CODE_CHECK_ERROR_LOCALHOST') . '</div>';
             }
 
             $session->set('field_value', $fieldValue, 'krdonationcodecheck');
@@ -88,14 +92,14 @@ class JFormFieldKRDonationCodeCheck extends JFormField
         $donationCodeCheck = $this->getDonationCodeStatus($host, $donationCode);
 
         if ($donationCodeCheck !== 1) {
-            $fieldValue = '<div class="' . $this->randomClassName($session) . '">' . JText::sprintf('KR_DONATION_CODE_CHECK_DEFAULT', $host) . '</div>';
+            $fieldValue = '<div class="' . $this->randomClassName($session) . '">' . Text::sprintf('KR_DONATION_CODE_CHECK_DEFAULT', $host) . '</div>';
 
             if ($donationCodeCheck === -1) {
-                $fieldValue .= '<div class="' . $this->randomClassName($session, 'warning') . '">' . JText::_('KR_DONATION_CODE_CHECK_ERROR_SERVER') . '</div>';
+                $fieldValue .= '<div class="' . $this->randomClassName($session, 'warning') . '">' . Text::_('KR_DONATION_CODE_CHECK_ERROR_SERVER') . '</div>';
             }
 
             if ($donationCodeCheck === -2) {
-                $fieldValue .= '<div class="' . $this->randomClassName($session, 'warning') . '">' . JText::_('KR_DONATION_CODE_CHECK_ERROR') . '</div>';
+                $fieldValue .= '<div class="' . $this->randomClassName($session, 'warning') . '">' . Text::_('KR_DONATION_CODE_CHECK_ERROR') . '</div>';
             }
 
             $session->set('field_value', $fieldValue, 'krdonationcodecheck');
@@ -107,7 +111,7 @@ class JFormFieldKRDonationCodeCheck extends JFormField
         $fieldValue = '';
 
         if ($this->id == 'jform_params_donation' || $this->id == 'jform_donation') {
-            $fieldValue .= '<div class="' . $this->randomClassName($session, 'success') . '">' . JText::_('KR_DONATION_CODE_CHECK_SUCCESS') . '</div>';
+            $fieldValue .= '<div class="' . $this->randomClassName($session, 'success') . '">' . Text::_('KR_DONATION_CODE_CHECK_SUCCESS') . '</div>';
         }
 
         $session->set('field_value', 1, 'krdonationcodecheck');
@@ -124,14 +128,14 @@ class JFormFieldKRDonationCodeCheck extends JFormField
      *
      * @return string
      */
-    private function randomClassName($session, $type = 'error')
+    private function randomClassName(object $session, $type = 'error'): string
     {
         $fieldValueHeadSession = $session->get('field_value_head', '', 'krdonationcodecheck');
 
         $characters = range('a', 'z');
         $className = $characters[mt_rand(0, count($characters) - 1)];
         $classNameLength = mt_rand(6, 12);
-        $className .= @JUserHelper::genRandomPassword($classNameLength);
+        $className .= UserHelper::genRandomPassword($classNameLength);
 
         $headData = '<style type="text/css">div.' . $className . '{border-radius: 2px; padding: 5px; font-size: 120%; margin: 4px 0 4px;';
 
@@ -155,7 +159,7 @@ class JFormFieldKRDonationCodeCheck extends JFormField
      *
      * @param object $session
      */
-    private function setHeadDataSession($session)
+    private function setHeadDataSession(object $session)
     {
         // Set the style data to the head of the page
         $fieldValueHeadSession = $session->get('field_value_head', '', 'krdonationcodecheck');
@@ -170,12 +174,12 @@ class JFormFieldKRDonationCodeCheck extends JFormField
      *
      * @param string $data
      */
-    private function addHeadData($data)
+    private function addHeadData(string $data)
     {
         static $dataLoaded = false;
 
         if (empty($dataLoaded)) {
-            $document = JFactory::getDocument();
+            $document = Factory::getDocument();
             $document->addCustomTag($data);
 
             $dataLoaded = true;
@@ -190,11 +194,11 @@ class JFormFieldKRDonationCodeCheck extends JFormField
      *
      * @return int|string
      */
-    private function getDonationCodeStatus($host, $donationCode)
+    private function getDonationCodeStatus(string $host, string $donationCode)
     {
         $donationCodeCheck = 0;
 
-        if (JHttpFactory::getAvailableDriver(new Registry) == false) {
+        if (HttpFactory::getAvailableDriver(new Registry) == false) {
             return -2;
         }
 
@@ -203,13 +207,13 @@ class JFormFieldKRDonationCodeCheck extends JFormField
             $urlCheck = $this->validationDomain . '/donationcode/validation.php?key=' . rawurlencode($donationCode) . '&host=' . rawurlencode($host);
 
             try {
-                $donationCodeRequest = JHttpFactory::getHttp()->get($urlCheck);
+                $donationCodeRequest = HttpFactory::getHttp()->get($urlCheck);
             } catch (Exception $e) {
                 // Try it with the fall back server and without HTTPS
                 $urlCheckFallback = $this->validationDomainFallBack . '/donationcode/validation.php?key=' . rawurlencode($donationCode) . '&host=' . rawurlencode($host);
 
                 try {
-                    $donationCodeRequest = JHttpFactory::getHttp()->get($urlCheckFallback);
+                    $donationCodeRequest = HttpFactory::getHttp()->get($urlCheckFallback);
                 } catch (Exception $e) {
                     return -1;
                 }
@@ -227,6 +231,9 @@ class JFormFieldKRDonationCodeCheck extends JFormField
         return $donationCodeCheck;
     }
 
+    /**
+     * @return string|void
+     */
     protected function getLabel()
     {
         return;

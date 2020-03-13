@@ -1,8 +1,8 @@
 <?php
 /**
- * @package    EJB - Easy Joomla Backup for Joomal! 3.x
+ * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.2.6 - 2019-06-30
+ * @version    3.3.0-FREE - 2020-01-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -20,15 +20,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 defined('_JEXEC') || die('Restricted access');
-define('_EASYJOOMLABACKUP_VERSION', '3.2.6');
+define('EASYJOOMLABACKUP_FREE_VERSION', '3.3.0-FREE');
 
-if (!JFactory::getUser()->authorise('core.manage', 'com_easyjoomlabackup')) {
-    throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
+use Joomla\CMS\{Factory, Language\Text};
+
+if (!Factory::getUser()->authorise('core.manage', 'com_easyjoomlabackup')) {
+    throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
 }
 
 require_once JPATH_COMPONENT . '/controller.php';
+require_once JPATH_COMPONENT . '/helpers/easyjoomlabackup.php';
 
-if ($controller = JFactory::getApplication()->input->getWord('controller', '')) {
+if ($controller = Factory::getApplication()->input->getWord('controller', '')) {
     $pathController = JPATH_COMPONENT . '/controllers/' . $controller . '.php';
 
     if (file_exists($pathController)) {
@@ -38,5 +41,5 @@ if ($controller = JFactory::getApplication()->input->getWord('controller', '')) 
 
 $className = 'EasyJoomlaBackupController' . $controller;
 $controller = new $className();
-$controller->execute(JFactory::getApplication()->input->get('task', ''));
+$controller->execute(Factory::getApplication()->input->get('task', ''));
 $controller->redirect();

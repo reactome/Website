@@ -1,8 +1,8 @@
 <?php
 /**
- * @package    EJB - Easy Joomla Backup for Joomal! 3.x
+ * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.2.6 - 2019-06-30
+ * @version    3.3.0-FREE - 2020-01-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -21,22 +21,21 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-class PlgSystemEasyJoomlaBackupCronjob extends JPlugin
+use Joomla\CMS\{Factory, Uri\Uri, Plugin\CMSPlugin, MVC\Model\BaseDatabaseModel};
+
+class PlgSystemEasyJoomlaBackupCronjob extends CMSPlugin
 {
     /**
      * PlgSystemEasyJoomlaBackupCronjob constructor.
      *
-     * @param object $subject
-     * @param array  $config
+     * @param JEventDispatcher $subject
+     * @param array            $config
      *
      * @throws Exception
      */
-    function __construct(&$subject, $config)
+    function __construct(&$subject, array $config)
     {
-        // Do not execute the plugin in the administration
-        $app = JFactory::getApplication();
-
-        if ($app->isAdmin()) {
+        if (Factory::getApplication()->isClient('administrator')) {
             return;
         }
 
@@ -45,38 +44,33 @@ class PlgSystemEasyJoomlaBackupCronjob extends JPlugin
 
     /**
      * The backup process via a cronjob is executed in the trigger onAfterRender
+     *
+     * @throws Exception
      */
     public function onAfterRender()
     {
-        // Is the a token provided via the URL?
-        $tokenRequest = JFactory::getApplication()->input->get('ejbtoken', null, 'STRING');
+        $tokenRequest = Factory::getApplication()->input->get('ejbtoken', null, 'STRING');
 
         if (!empty($tokenRequest)) {
-            $token = $this->params->get('token');
+            $token = (string) $this->params->get('token');
 
-            // Compare the provided token from the GET request with the saved one from the settings
-            if ($tokenRequest == $token) {
-                // Which type of backup is requested?
-                $type = JFactory::getApplication()->input->get('ejbtype', null, 'INTEGER');
+            if ($tokenRequest === $token) {
+                $type = Factory::getApplication()->input->get('ejbtype', null, 'INTEGER');
 
-                if (empty($type) || (!in_array($type, array(1, 2, 3)))) {
+                if (empty($type) || (!in_array($type, [1, 2, 3]))) {
                     $type = (int) $this->params->get('type');
                 }
 
-                // Set the correct type name how it is used in the component
-                if ($type == 1) {
+                if ($type === 1) {
                     $type = 'fullbackup';
-                } elseif ($type == 2) {
+                } elseif ($type === 2) {
                     $type = 'databasebackup';
-                } elseif ($type == 3) {
+                } elseif ($type === 3) {
                     $type = 'filebackup';
                 }
 
-                // Okay, we have everything to start the backup process - let's do it!
                 $this->backupCreate($type);
-
-                // Redirect without the query to remove the cronjob parameters
-                JFactory::getApplication()->redirect(JUri::getInstance()->current());
+                Factory::getApplication()->redirect(Uri::getInstance()->current());
             }
         }
     }
@@ -86,22 +80,21 @@ class PlgSystemEasyJoomlaBackupCronjob extends JPlugin
      * Based on the original controller function of the component
      *
      * @param string $type
+     *
+     * @throws Exception
      */
-    private function backupCreate($type)
+    private function backupCreate(string $type)
     {
-        // Try to increase all relevant settings to prevent timeouts on big sites
-        @ini_set('memory_limit', '512M');
+        @ini_set('memory_limit', -1);
         @ini_set('error_reporting', 0);
-        @set_time_limit(3600);
+        @set_time_limit(0);
 
-        // Load the correct model from the component
+        require_once JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/helpers/easyjoomlabackup.php';
+
         JLoader::import('createbackup', JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/models');
-        $model = JModelLegacy::getInstance('createbackup', 'EasyJoomlaBackupModel');
-
-        // Execute the backup process
+        /* @var EasyJoomlaBackupModelCreatebackup $model */
+        $model = BaseDatabaseModel::getInstance('createbackup', 'EasyJoomlaBackupModel');
         $model->createBackup($type, 'plugin');
-
-        // Remove unneeded backup files
         $model->removeBackupFilesMax();
     }
 }

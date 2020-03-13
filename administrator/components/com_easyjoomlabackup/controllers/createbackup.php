@@ -1,8 +1,8 @@
 <?php
 /**
- * @package    EJB - Easy Joomla Backup for Joomal! 3.x
+ * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.2.6 - 2019-06-30
+ * @version    3.3.0-FREE - 2020-01-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -21,15 +21,22 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-class EasyJoomlaBackupControllerCreatebackup extends JControllerLegacy
+use Joomla\CMS\{Factory, Router\Route, Language\Text, Session\Session, Response\JsonResponse, MVC\Controller\BaseController};
+
+class EasyJoomlaBackupControllerCreatebackup extends BaseController
 {
     protected $input;
 
+    /**
+     * EasyJoomlaBackupControllerCreatebackup constructor.
+     *
+     * @throws Exception
+     */
     function __construct()
     {
         parent::__construct();
 
-        $this->input = JFactory::getApplication()->input;
+        $this->input = Factory::getApplication()->input;
     }
 
     /**
@@ -39,8 +46,8 @@ class EasyJoomlaBackupControllerCreatebackup extends JControllerLegacy
      */
     public function fullbackup()
     {
-        if (!JFactory::getUser()->authorise('easyjoomlabackup.fullbackup', 'com_easyjoomlabackup')) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
+        if (!Factory::getUser()->authorise('easyjoomlabackup.fullbackup', 'com_easyjoomlabackup')) {
+            throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
         }
 
         $this->input->set('view', 'createbackup');
@@ -55,8 +62,8 @@ class EasyJoomlaBackupControllerCreatebackup extends JControllerLegacy
      */
     public function databasebackup()
     {
-        if (!JFactory::getUser()->authorise('easyjoomlabackup.databasebackup', 'com_easyjoomlabackup')) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
+        if (!Factory::getUser()->authorise('easyjoomlabackup.databasebackup', 'com_easyjoomlabackup')) {
+            throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
         }
 
         $this->input->set('view', 'createbackup');
@@ -71,8 +78,8 @@ class EasyJoomlaBackupControllerCreatebackup extends JControllerLegacy
      */
     public function filebackup()
     {
-        if (!JFactory::getUser()->authorise('easyjoomlabackup.filebackup', 'com_easyjoomlabackup')) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
+        if (!Factory::getUser()->authorise('easyjoomlabackup.filebackup', 'com_easyjoomlabackup')) {
+            throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
         }
 
         $this->input->set('view', 'createbackup');
@@ -87,23 +94,24 @@ class EasyJoomlaBackupControllerCreatebackup extends JControllerLegacy
      */
     public function discover()
     {
-        JSession::checkToken() || jexit('Invalid Token');
+        Session::checkToken() || jexit('Invalid Token');
 
-        if (!JFactory::getUser()->authorise('easyjoomlabackup.discover', 'com_easyjoomlabackup')) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
+        if (!Factory::getUser()->authorise('easyjoomlabackup.discover', 'com_easyjoomlabackup')) {
+            throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
         }
 
+        /* @var EasyJoomlaBackupModelEasyJoomlaBackup $model */
         $model = $this->getModel('easyjoomlabackup');
 
-        $message = JText::_('COM_EASYJOOMLABACKUP_DISCOVER_SUCCESS');
+        $msg = Text::_('COM_EASYJOOMLABACKUP_DISCOVER_SUCCESS');
         $type = 'message';
 
         if (!$model->discover()) {
-            $message = JText::_('COM_EASYJOOMLABACKUP_DISCOVER_NOTICE');
+            $msg = Text::_('COM_EASYJOOMLABACKUP_DISCOVER_NOTICE');
             $type = 'notice';
         }
 
-        $this->setRedirect(JRoute::_('index.php?option=com_easyjoomlabackup', false), $message, $type);
+        $this->setRedirect(Route::_('index.php?option=com_easyjoomlabackup', false), $msg, $type);
     }
 
     /**
@@ -113,23 +121,24 @@ class EasyJoomlaBackupControllerCreatebackup extends JControllerLegacy
      */
     public function remove()
     {
-        JSession::checkToken() || jexit('Invalid Token');
+        Session::checkToken() || jexit('Invalid Token');
 
-        if (!JFactory::getUser()->authorise('core.delete', 'com_easyjoomlabackup')) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
+        if (!Factory::getUser()->authorise('core.delete', 'com_easyjoomlabackup')) {
+            throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
         }
 
+        /* @var EasyJoomlaBackupModelCreatebackup $model */
         $model = $this->getModel('createbackup');
 
-        $message = JText::_('COM_EASYJOOMLABACKUP_BACKUP_DELETED');
+        $msg = Text::_('COM_EASYJOOMLABACKUP_BACKUP_DELETED');
         $type = 'message';
 
         if (!$model->delete()) {
-            $message = JText::_('COM_EASYJOOMLABACKUP_BACKUP_DELETED_ERROR');
+            $msg = Text::_('COM_EASYJOOMLABACKUP_BACKUP_DELETED_ERROR');
             $type = 'error';
         }
 
-        $this->setRedirect(JRoute::_('index.php?option=com_easyjoomlabackup', false), $message, $type);
+        $this->setRedirect(Route::_('index.php?option=com_easyjoomlabackup', false), $msg, $type);
     }
 
     /**
@@ -139,16 +148,17 @@ class EasyJoomlaBackupControllerCreatebackup extends JControllerLegacy
      */
     public function download()
     {
-        if (!JFactory::getUser()->authorise('easyjoomlabackup.download', 'com_easyjoomlabackup')) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
+        if (!Factory::getUser()->authorise('easyjoomlabackup.download', 'com_easyjoomlabackup')) {
+            throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
         }
 
+        /* @var EasyJoomlaBackupModelCreatebackup $model */
         $model = $this->getModel('createbackup');
 
         if (!$model->download()) {
-            $message = JText::_('COM_EASYJOOMLABACKUP_DOWNLOAD_ERROR');
+            $msg = Text::_('COM_EASYJOOMLABACKUP_DOWNLOAD_ERROR');
             $type = 'error';
-            $this->setRedirect(JRoute::_('index.php?option=com_easyjoomlabackup', false), $message, $type);
+            $this->setRedirect(Route::_('index.php?option=com_easyjoomlabackup', false), $msg, $type);
         }
     }
 
@@ -157,14 +167,13 @@ class EasyJoomlaBackupControllerCreatebackup extends JControllerLegacy
      */
     public function cancel()
     {
-        $message = JText::_('COM_EASYJOOMLABACKUP_BACKUP_CANCELLED');
-        $this->setRedirect('index.php?option=com_easyjoomlabackup', $message, 'notice');
+        $msg = Text::_('COM_EASYJOOMLABACKUP_BACKUP_CANCELLED');
+        $this->setRedirect('index.php?option=com_easyjoomlabackup', $msg, 'notice');
     }
 
     /**
      * Starts the full backup process with an ACL check
      *
-     * @return object
      * @throws Exception
      * @deprecated Use backupCreateFullbackup() instead
      */
@@ -176,48 +185,49 @@ class EasyJoomlaBackupControllerCreatebackup extends JControllerLegacy
     /**
      * Starts the full backup process with an ACL check
      *
-     * @return object
      * @throws Exception
      */
     public function backupCreateFullbackup()
     {
-        if (!JFactory::getUser()->authorise('easyjoomlabackup.fullbackup', 'com_easyjoomlabackup')) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
+        if (!Factory::getUser()->authorise('easyjoomlabackup.' . EasyJoomlaBackupHelper::BACKUP_TYPE_FULL, 'com_easyjoomlabackup')) {
+            throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
         }
 
-        $this->backupCreate('fullbackup');
+        $this->backupCreate(EasyJoomlaBackupHelper::BACKUP_TYPE_FULL);
     }
 
     /**
      * Creates the backup archive in dependence on the submitted type
      *
      * @param string $backupType
+     *
+     * @throws Exception
      */
-    private function backupCreate($backupType)
+    private function backupCreate(string $backupType)
     {
-        JSession::checkToken() || jexit('Invalid Token');
+        Session::checkToken('get') || jexit('Invalid Token');
 
         // Try to increase all relevant settings to prevent timeouts on big sites
         @ini_set('memory_limit', '512M');
         @ini_set('error_reporting', 0);
         @set_time_limit(3600);
 
+        /* @var EasyJoomlaBackupModelCreatebackup $model */
         $model = $this->getModel('createbackup');
 
-        $message = JText::_('COM_EASYJOOMLABACKUP_BACKUP_SAVED_ERROR');
-        $type = 'error';
+        $hash = $this->input->get('hash', '');
+        $result = $model->createBackupAjax($backupType, $hash);
 
-        if ($model->createBackup($backupType)) {
-            $message = JText::_('COM_EASYJOOMLABACKUP_BACKUP_SAVED');
-            $type = 'message';
+        if ($result['finished']) {
+            EasyJoomlaBackupHelper::addMessage(Text::_('COM_EASYJOOMLABACKUP_BACKUP_SAVED'));
 
             // Remove unneeded backup files
             if ($model->removeBackupFilesMax()) {
-                $message .= ' ' . JText::_('COM_EASYJOOMLABACKUP_MAXNUMBERBACKUPS_REMOVED');
+                EasyJoomlaBackupHelper::addMessage(Text::_('COM_EASYJOOMLABACKUP_MAXNUMBERBACKUPS_REMOVED'), EasyJoomlaBackupHelper::MESSAGE_TYPE_NOTICE);
             }
         }
 
-        $this->setRedirect('index.php?option=com_easyjoomlabackup', $message, $type);
+        echo new JsonResponse($result);
     }
 
     /**
@@ -238,11 +248,11 @@ class EasyJoomlaBackupControllerCreatebackup extends JControllerLegacy
      */
     public function backupCreateDatabasebackup()
     {
-        if (!JFactory::getUser()->authorise('easyjoomlabackup.databasebackup', 'com_easyjoomlabackup')) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
+        if (!Factory::getUser()->authorise('easyjoomlabackup.' . EasyJoomlaBackupHelper::BACKUP_TYPE_DATABASE, 'com_easyjoomlabackup')) {
+            throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
         }
 
-        $this->backupCreate('databasebackup');
+        $this->backupCreate(EasyJoomlaBackupHelper::BACKUP_TYPE_DATABASE);
     }
 
     /**
@@ -263,10 +273,10 @@ class EasyJoomlaBackupControllerCreatebackup extends JControllerLegacy
      */
     public function backupCreateFilebackup()
     {
-        if (!JFactory::getUser()->authorise('easyjoomlabackup.filebackup', 'com_easyjoomlabackup')) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
+        if (!Factory::getUser()->authorise('easyjoomlabackup.' . EasyJoomlaBackupHelper::BACKUP_TYPE_FILE, 'com_easyjoomlabackup')) {
+            throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
         }
 
-        $this->backupCreate('filebackup');
+        $this->backupCreate(EasyJoomlaBackupHelper::BACKUP_TYPE_FILE);
     }
 }

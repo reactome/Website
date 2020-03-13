@@ -1,8 +1,8 @@
 <?php
 /**
- * @package    EJB - Easy Joomla Backup for Joomal! 3.x
+ * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.2.6 - 2019-06-30
+ * @version    3.3.0-FREE - 2020-01-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -21,61 +21,56 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-JHtml::_('behavior.framework');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+use Joomla\CMS\{Router\Route, Language\Text, HTML\HTMLHelper};
+
+HTMLHelper::_('behavior.framework');
+HTMLHelper::_('behavior.tooltip');
+HTMLHelper::_('behavior.formvalidation');
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function(task) {
-        if(task == 'cancel' || document.formvalidator.isValid(document.id('easyjoomlabackup-form')))
+        if(task === 'cancel' || document.formvalidator.isValid(document.id('easyjoomlabackup-form')))
         {
             Joomla.submitform(task, document.getElementById('easyjoomlabackup-form'));
         }
         else
         {
-            alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
+            alert('<?php echo $this->escape(Text::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
         }
     };
 
-    // Load the loading animation after a click on the create button
-    window.addEvent('domready', function() {
-        var loading = document.id('loading');
-        var backup_notice = document.id('backup_notice');
-        var backup_comment = document.id('backup_comment');
-
-        document.id('toolbar-new').addEvent('click', function(event) {
-            loading.setStyle('display', '');
-            backup_notice.setStyle('opacity', '0.3');
-            backup_comment.setStyle('opacity', '0.3');
+    jQuery(document).ready(function() {
+        jQuery('a#create-backup').click(function() {
+            jQuery(this).attr('href', '#create-backup-modal');
         });
     });
 </script>
-<form action="<?php echo JRoute::_('index.php?option=com_easyjoomlabackup'); ?>" method="post" name="adminForm"
-      id="easyjoomlabackup-form" class="form-validate">
+<form action="<?php echo Route::_('index.php?option=com_easyjoomlabackup'); ?>" method="post" name="adminForm" id="easyjoomlabackup-form" class="form-validate">
     <div class="row-fluid">
         <div class="span12 form-horizontal">
             <fieldset class="adminform">
-                <div id="loading" style="display: none; text-align: center; margin">
-                    <h2><?php echo JText::_('COM_EASYJOOMLABACKUP_PLEASE_WAIT'); ?></h2>
-                    <img src="components/com_easyjoomlabackup/images/loading.gif" style="float: none;" alt="Loading..."/><br/><br/>
-                    <?php echo JText::_('COM_EASYJOOMLABACKUP_CREATEBACKUPWAIT'); ?>
-                </div>
                 <div id="backup_comment">
                     <label for="comment">
-                        <h4><?php echo JText::_('COM_EASYJOOMLABACKUP_COMMENT'); ?></h4>
+                        <h4><?php echo Text::_('COM_EASYJOOMLABACKUP_COMMENT'); ?></h4>
                     </label>
-                    <textarea rows="5" cols="140" maxlength="" id="comment" name="comment" placeholder="<?php echo JText::_('COM_EASYJOOMLABACKUP_COMMENT_PLACEHOLDER'); ?>"></textarea>
+                    <textarea rows="5" cols="140" maxlength="" id="comment" name="comment" placeholder="<?php echo Text::_('COM_EASYJOOMLABACKUP_COMMENT_PLACEHOLDER'); ?>"></textarea>
                 </div>
                 <div id="backup_notice" style="display: inherit;">
-                    <?php echo JText::_('COM_EASYJOOMLABACKUP_CREATEBACKUPNOTES'); ?>
+                    <?php echo Text::_('COM_EASYJOOMLABACKUP_CREATEBACKUPNOTES'); ?>
                 </div>
             </fieldset>
         </div>
     </div>
+    <?php $params = ['title' => Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_TITLE'), 'backdrop' => 'static', 'closeButton' => false, 'footer' => Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_FOOTER')]; ?>
+    <?php $body = $this->loadTemplate('modal'); ?>
+    <?php echo HTMLHelper::_('bootstrap.renderModal', 'create-backup-modal', $params, $body); ?>
     <input type="hidden" name="option" value="com_easyjoomlabackup"/>
     <input type="hidden" name="id" value=""/>
     <input type="hidden" name="task" value=""/>
     <input type="hidden" name="controller" value="createbackup"/>
-    <?php echo JHtml::_('form.token'); ?>
+    <?php echo HTMLHelper::_('form.token'); ?>
 </form>
+<div style="text-align: center; margin-top: 10px;">
+    <p><?php echo Text::sprintf('COM_EASYJOOMLABACKUP_VERSION', EASYJOOMLABACKUP_FREE_VERSION); ?></p>
+</div>
 <?php echo $this->donationCodeMessage; ?>

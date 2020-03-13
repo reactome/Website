@@ -1,8 +1,8 @@
 <?php
 /**
- * @package    EJB - Easy Joomla Backup for Joomal! 3.x
+ * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.2.6 - 2019-06-30
+ * @version    3.3.0-FREE - 2020-01-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -21,25 +21,23 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-class EasyJoomlaBackupModelEasyJoomlaBackup extends JModelLegacy
+use Joomla\CMS\{MVC\Model\BaseDatabaseModel, Factory, Uri\Uri, Pagination\Pagination, Application\WebApplication};
+
+class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
 {
     protected $db;
     protected $data;
     protected $total;
     protected $pagination;
 
-    /**
-     * EasyJoomlaBackupModelEasyJoomlaBackup constructor.
-     *
-     * @throws Exception
-     */
     function __construct()
     {
         parent::__construct();
 
-        $this->db = JFactory::getDbo();
-        $app = JFactory::getApplication();
-        $limit = $app->getUserStateFromRequest('global.list.limit', 'limit', JApplicationWeb::getInstance()->get('list_limit'), 'int');
+        $this->db = Factory::getDbo();
+
+        $app = Factory::getApplication();
+        $limit = $app->getUserStateFromRequest('global.list.limit', 'limit', WebApplication::getInstance()->get('list_limit'), 'int');
         $limitstart = $app->getUserStateFromRequest('easyjoomlabackup.limitstart', 'limitstart', 0, 'int');
         $limitstart = ($limit != 0 ? (floor($limitstart / $limit) * $limit) : 0);
         $search = $app->getUserStateFromRequest('easyfrontendseo.filter.search', 'filter_search', null);
@@ -52,13 +50,12 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends JModelLegacy
     /**
      * Creates the pagination in the footer of the list
      *
-     * @return JPagination
+     * @return Pagination
      */
-    public function getPagination()
+    public function getPagination(): Pagination
     {
         if (empty($this->pagination)) {
-            jimport('joomla.html.pagination');
-            $this->pagination = new JPagination($this->getTotal(), (int) $this->getState('limitstart'), (int) $this->getState('limit'));
+            $this->pagination = new Pagination($this->getTotal(), (int) $this->getState('limitstart'), (int) $this->getState('limit'));
         }
 
         return $this->pagination;
@@ -69,17 +66,18 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends JModelLegacy
      *
      * @return int
      */
-    public function getTotal()
+    public function getTotal(): int
     {
         if (empty($this->total)) {
             $query = $this->db->getQuery(true);
 
             $query->select('*');
             $query->from('#__easyjoomlabackup AS a');
+
             $search = $this->getState('filter.search');
 
             if (!empty($search)) {
-                $search = $this->db->Quote('%' . $this->db->escape($search, true) . '%');
+                $search = $this->db->quote('%' . $this->db->escape($search, true) . '%');
                 $query->where('(a.date LIKE ' . $search . ') OR (a.comment LIKE ' . $search . ') OR (a.type LIKE ' . $search . ') OR (a.size LIKE ' . $search . ') OR (a.name LIKE ' . $search . ')');
             }
 
@@ -93,12 +91,12 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends JModelLegacy
     /**
      * Finds backup files without entry in the database or entries without backup files
      *
-     * @return boolean
+     * @return bool
      */
-    public function discover()
+    public function discover(): bool
     {
         // Get all backup files
-        $backupFiles = array();
+        $backupFiles = [];
         $dir = @opendir(JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/backups/');
 
         while ($file = readdir($dir)) {
@@ -116,9 +114,9 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends JModelLegacy
             return false;
         }
 
-        $entriesArray = array();
+        $entriesArray = [];
 
-        // Check whether an entry has to be removed - case: backup archive does not exist but entry in the database does
+        // Check whether an entry has to be removed - Case: Backup archive does not exist but entry in the database does
         foreach ($entries as $entry) {
             $entriesArray[] = $entry->name;
 
@@ -128,7 +126,7 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends JModelLegacy
             }
         }
 
-        // Check whether an entry has to be added - case: entry in the database does not exist but backup archive does
+        // Check whether an entry has to be added - Case: Entry in the database does not exist but backup archive does
         foreach ($backupFiles as $backupFile) {
             if (!in_array($backupFile, $entriesArray)) {
                 $this->addEntry($backupFile);
@@ -144,17 +142,18 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends JModelLegacy
      *
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         if (empty($this->data)) {
             $query = $this->db->getQuery(true);
 
             $query->select('*');
             $query->from('#__easyjoomlabackup AS a');
+
             $search = $this->getState('filter.search');
 
             if (!empty($search)) {
-                $search = $this->db->Quote('%' . $this->db->escape($search, true) . '%');
+                $search = $this->db->quote('%' . $this->db->escape($search, true) . '%');
                 $query->where('(a.date LIKE ' . $search . ') OR (a.comment LIKE ' . $search . ') OR (a.type LIKE ' . $search . ') OR (a.size LIKE ' . $search . ') OR (a.name LIKE ' . $search . ')');
             }
 
@@ -170,9 +169,9 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends JModelLegacy
      *
      * @param int $id
      *
-     * @return boolean
+     * @return bool
      */
-    private function removeEntry($id)
+    private function removeEntry(int $id): bool
     {
         $query = "DELETE FROM " . $this->db->quoteName('#__easyjoomlabackup') . " WHERE " . $this->db->quoteName('id') . " = " . $this->db->quote($id);
         $this->db->setQuery($query);
@@ -186,9 +185,9 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends JModelLegacy
      *
      * @param string $fileName
      *
-     * @return boolean
+     * @return bool
      */
-    private function addEntry($fileName)
+    private function addEntry(string $fileName): bool
     {
         $date = date("Y-m-d H:i:s.", filemtime(JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/backups/' . $fileName));
         $size = filesize(JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/backups/' . $fileName);
@@ -205,18 +204,19 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends JModelLegacy
      *
      * @return array
      */
-    public function getPluginStatus()
+    public function getPluginStatus(): array
     {
-        $pluginState = array();
+        $pluginState = [];
         $query = $this->db->getQuery(true);
 
         $query->select('*');
         $query->from('#__extensions');
         $query->where('folder = ' . $this->db->quote('system') . ' AND element = ' . $this->db->quote('easyjoomlabackupcronjob'));
+
         $result = $this->_getList($query);
 
         if (!empty($result)) {
-            $pluginState = array('enabled' => (boolean) $result[0]->enabled, 'url_settings' => JUri::base() . 'index.php?option=com_plugins&task=plugin.edit&extension_id=' . $result[0]->extension_id);
+            $pluginState = ['enabled' => (boolean) $result[0]->enabled, 'url_settings' => Uri::base() . 'index.php?option=com_plugins&task=plugin.edit&extension_id=' . $result[0]->extension_id];
         }
 
         return $pluginState;
