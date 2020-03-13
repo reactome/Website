@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.2.0
+ * @version         8.2.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -13,10 +13,11 @@ namespace RegularLabs\Plugin\System\Sourcerer;
 
 defined('_JEXEC') or die;
 
-use JFile;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Filesystem\File as JFile;
 use Joomla\CMS\Version;
+use RegularLabs\Library\File as RL_File;
 
 class Code
 {
@@ -76,7 +77,7 @@ class Code
 
 		if ( ! defined('JDEBUG') || ! JDEBUG)
 		{
-			JFile::delete($temp_file);
+			RL_File::delete($temp_file);
 		}
 
 		if ( ! function_exists($function_name))

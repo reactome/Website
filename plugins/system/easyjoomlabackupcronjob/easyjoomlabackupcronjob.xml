@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension type="plugin" version="3.0" group="system" method="upgrade">
-    <name>PLG_EASYJOOMLABACKUPCRONJOB</name>
-    <version>3.2.6</version>
-    <creationDate>2019-06-30</creationDate>
+<extension type="plugin" version="3.9" group="system" method="upgrade">
+    <name>PLG_SYSTEM_EASYJOOMLABACKUPCRONJOB</name>
+    <version>3.3.0-FREE</version>
+    <creationDate>2020-01-03</creationDate>
     <license>http://www.gnu.org/licenses/gpl</license>
-    <copyright>Copyright 2019 Viktor Vogel. All rights reserved.</copyright>
+    <copyright>Copyright 2020 Viktor Vogel. All rights reserved.</copyright>
     <author>Viktor Vogel</author>
     <authoremail>admin@kubik-rubik.de</authoremail>
     <authorurl>https://kubik-rubik.de/</authorurl>
-    <description>PLG_EASYJOOMLABACKUPCRONJOB_XML_DESCRIPTION</description>
+    <description>PLG_SYSTEM_EASYJOOMLABACKUPCRONJOB_XML_DESCRIPTION</description>
     <files>
         <filename plugin="easyjoomlabackupcronjob">easyjoomlabackupcronjob.php</filename>
         <filename plugin="easyjoomlabackupcronjob">index.html</filename>
@@ -24,11 +24,11 @@
         <fields name="params" addfieldpath="/plugins/system/easyjoomlabackupcronjob/fields">
             <fieldset name="settings">
                 <field type="krdonationcodecheck"/>
-                <field name="token" type="text" default="" size="40" filter="raw" label="PLG_EASYJOOMLABACKUPCRONJOB_TOKEN" description="PLG_EASYJOOMLABACKUPCRONJOB_TOKENDESC"/>
-                <field name="type" type="list" default="1" label="PLG_EASYJOOMLABACKUPCRONJOB_TYPE" description="PLG_EASYJOOMLABACKUPCRONJOB_TYPEDESC">
-                    <option value="1">PLG_EASYJOOMLABACKUPCRONJOB_FULLBACKUP</option>
-                    <option value="2">PLG_EASYJOOMLABACKUPCRONJOB_DATABASEBACKUP</option>
-                    <option value="3">PLG_EASYJOOMLABACKUPCRONJOB_FILEBACKUP</option>
+                <field name="token" type="text" default="" size="40" filter="raw" label="PLG_SYSTEM_EASYJOOMLABACKUPCRONJOB_TOKEN" description="PLG_SYSTEM_EASYJOOMLABACKUPCRONJOB_TOKEN_DESC"/>
+                <field name="type" type="list" default="1" label="PLG_SYSTEM_EASYJOOMLABACKUPCRONJOB_TYPE" description="PLG_SYSTEM_EASYJOOMLABACKUPCRONJOB_TYPE_DESC">
+                    <option value="1">PLG_SYSTEM_EASYJOOMLABACKUPCRONJOB_FULLBACKUP</option>
+                    <option value="2">PLG_SYSTEM_EASYJOOMLABACKUPCRONJOB_DATABASEBACKUP</option>
+                    <option value="3">PLG_SYSTEM_EASYJOOMLABACKUPCRONJOB_FILEBACKUP</option>
                 </field>
             </fieldset>
             <fieldset name="donation">

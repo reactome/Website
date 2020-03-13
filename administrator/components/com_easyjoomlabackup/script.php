@@ -1,8 +1,8 @@
 <?php
 /**
- * @package    EJB - Easy Joomla Backup for Joomal! 3.x
+ * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.2.6 - 2019-06-30
+ * @version    3.3.0-FREE - 2020-01-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -21,56 +21,124 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Installer\Installer;
+
 class Com_EasyJoomlaBackupInstallerScript
 {
-	function install($parent)
-	{
-		$manifest = $parent->get('manifest');
-		$parent = $parent->getParent();
-		$source = $parent->getPath('source');
+    const MIN_VERSION_JOOMLA = '3.9.0';
+    const MIN_VERSION_PHP = '7.3.0';
 
-		$installer = new JInstaller();
+    /**
+     * Name of extension that is used in the error message
+     *
+     * @var string
+     */
+    protected $extensionName = 'Easy Joomla Backup';
 
-		foreach($manifest->plugins->plugin as $plugin)
-		{
-			$attributes = $plugin->attributes();
-			$plg = $source.'/'.$attributes['folder'].'/'.$attributes['plugin'];
-			$installer->install($plg);
-		}
-	}
+    /**
+     * Checks compatibility in the preflight event
+     *
+     * @param $type
+     * @param $parent
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function preflight($type, $parent)
+    {
+        if (!$this->checkVersionJoomla()) {
+            return false;
+        }
 
-	function update($parent)
-	{
-		$manifest = $parent->get('manifest');
-		$parent = $parent->getParent();
-		$source = $parent->getPath('source');
+        if (!$this->checkVersionPhp()) {
+            return false;
+        }
 
-		$installer = new JInstaller();
+        return true;
+    }
 
-		foreach($manifest->plugins->plugin as $plugin)
-		{
-			$attributes = $plugin->attributes();
-			$plg = $source.'/'.$attributes['folder'].'/'.$attributes['plugin'];
-			$installer->install($plg);
-		}
-	}
+    /**
+     * Checks whether the Joomla! version meets the requirement
+     *
+     * @return bool
+     * @throws Exception
+     */
+    private function checkVersionJoomla()
+    {
+        // Using deprecated JVersion, JFactory and JText classes to avoid exceptions in old Joomla! versions
+        $version = new JVersion();
 
-	function postflight($type, $parent)
-	{
-		$db = JFactory::getDbo();
+        if (!$version->isCompatible(self::MIN_VERSION_JOOMLA)) {
+            JFactory::getApplication()->enqueueMessage(JText::sprintf('KRJE_FREE_ERROR_JOOMLA_VERSION', $this->extensionName, self::MIN_VERSION_JOOMLA), 'error');
 
-		// Enable the cronjob plugin
-		$db->setQuery("UPDATE ".$db->quoteName('#__extensions')." SET ".$db->quoteName('enabled')." = 1 WHERE ".$db->quoteName('element')." = 'easyjoomlabackupcronjob' AND ".$db->quoteName('type')." = 'plugin'");
-		$db->execute();
+            return false;
+        }
 
-		// Move CLI script to the CLI folder
-		jimport('joomla.filesystem.file');
+        return true;
+    }
 
-		if(JFile::exists(JPATH_ROOT.'/cli/ejb_cli.php'))
-		{
-			JFile::delete(JPATH_ROOT.'/cli/ejb_cli.php');
-		}
+    /**
+     * Checks whether the PHP version meets the requirement
+     *
+     * @return bool
+     * @throws Exception
+     */
+    private function checkVersionPhp()
+    {
+        if (!version_compare(phpversion(), self::MIN_VERSION_PHP, 'ge')) {
+            JFactory::getApplication()->enqueueMessage(JText::sprintf('KRJE_FREE_ERROR_PHP_VERSION', $this->extensionName, self::MIN_VERSION_PHP), 'error');
 
-		JFile::move(JPATH_ROOT.'/administrator/components/com_easyjoomlabackup/ejb_cli.php', JPATH_ROOT.'/cli/ejb_cli.php');
-	}
+            return false;
+        }
+
+        return true;
+    }
+
+    public function install($parent)
+    {
+        $manifest = $parent->get('manifest');
+        $parent = $parent->getParent();
+        $source = $parent->getPath('source');
+
+        $installer = new Installer();
+
+        foreach ($manifest->plugins->plugin as $plugin) {
+            $attributes = $plugin->attributes();
+            $plg = $source . '/' . $attributes['folder'] . '/' . $attributes['plugin'];
+            $installer->install($plg);
+        }
+    }
+
+    public function update($parent)
+    {
+        $manifest = $parent->get('manifest');
+        $parent = $parent->getParent();
+        $source = $parent->getPath('source');
+
+        $installer = new Installer();
+
+        foreach ($manifest->plugins->plugin as $plugin) {
+            $attributes = $plugin->attributes();
+            $plg = $source . '/' . $attributes['folder'] . '/' . $attributes['plugin'];
+            $installer->install($plg);
+        }
+    }
+
+    public function postflight($type, $parent)
+    {
+        $db = Factory::getDbo();
+
+        // Enable the cronjob plugin
+        $db->setQuery("UPDATE " . $db->quoteName('#__extensions') . " SET " . $db->quoteName('enabled') . " = 1 WHERE " . $db->quoteName('element') . " = 'easyjoomlabackupcronjob' AND " . $db->quoteName('type') . " = 'plugin'");
+        $db->execute();
+
+        // Move CLI script to the CLI folder
+        if (File::exists(JPATH_ROOT . '/cli/ejbCli.php')) {
+            File::delete(JPATH_ROOT . '/cli/ejbCli.php');
+        }
+
+        File::move(JPATH_ROOT . '/administrator/components/com_easyjoomlabackup/ejbCli.php', JPATH_ROOT . '/cli/ejbCli.php');
+    }
 }

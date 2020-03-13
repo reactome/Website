@@ -1,8 +1,8 @@
 <?php
 /**
- * @package    EJB - Easy Joomla Backup for Joomal! 3.x
+ * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.2.6 - 2019-06-30
+ * @version    3.3.0-FREE - 2020-01-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -21,7 +21,9 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-class EasyJoomlaBackupController extends JControllerLegacy
+use Joomla\CMS\MVC\Controller\BaseController;
+
+class EasyJoomlaBackupController extends BaseController
 {
     public function display($cachable = false, $urlparams = false)
     {

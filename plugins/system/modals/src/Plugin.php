@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         11.5.7
+ * @version         11.5.8
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -341,8 +341,8 @@ class Plugin extends JPlugin
 			return;
 		}
 
-		if (version_compare($plugin['version'], '19.12.9182', '<')
-			|| version_compare($library['version'], '19.12.9182', '<'))
+		if (version_compare($plugin['version'], '20.2.1812', '<')
+			|| version_compare($library['version'], '20.2.1812', '<'))
 		{
 			define('REGULAR_LABS_LIBRARY_INSTALLED', 'outdated');
 

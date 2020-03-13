@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.2.0
+ * @version         8.2.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -75,7 +75,7 @@ class Helper
 			return;
 		}
 
-		$buffer = Area::tag($buffer, 'component');
+		Area::tag($buffer, 'component');
 
 		RL_Document::setBuffer($buffer);
 	}

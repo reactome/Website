@@ -3,7 +3,7 @@
  * @Copyright
  * @package     Field - Kubik-Rubik Title
  * @author      Viktor Vogel <admin@kubik-rubik.de>
- * @version     Joomla! 3 - 3.4.1 - 2019-06-03
+ * @version     Joomla! 3 - 3.5.0 - 2020-01-02
  * @link        https://kubik-rubik.de/
  *
  * @license     GNU/GPL
@@ -22,11 +22,13 @@
  */
 defined('JPATH_PLATFORM') || die('Restricted access');
 
+use Joomla\CMS\{Form\FormField, Factory, Language\Text};
+
 /**
  * Form Field class for Kubik-Rubik Joomla! Extensions.
  * Provides a custom title and description field.
  */
-class JFormFieldKRTitle extends JFormField
+class JFormFieldKRTitle extends FormField
 {
     protected $type = 'krtitle';
 
@@ -41,7 +43,7 @@ class JFormFieldKRTitle extends JFormField
         static $executeOnce = false;
 
         if (empty($executeOnce)) {
-            $document = JFactory::getDocument();
+            $document = Factory::getDocument();
 
             // Set label instruction only for option tabs
             $fieldsets = $this->form->getFieldsets();
@@ -71,7 +73,7 @@ class JFormFieldKRTitle extends JFormField
         $filterDonationCode = (string) $this->element['filter'];
 
         if ($filterDonationCode === 'donation') {
-            $fieldValueSession = JFactory::getSession()->get('field_value', '', 'krdonationcodecheck');
+            $fieldValueSession = Factory::getSession()->get('field_value', '', 'krdonationcodecheck');
 
             if ($fieldValueSession === 1) {
                 return '<div class="krtitle-hidden"></div>';
@@ -81,13 +83,13 @@ class JFormFieldKRTitle extends JFormField
         $label = '<div class="clr"></div>';
 
         if ($this->element['label']) {
-            $label .= '<div class="krtitle-title">' . JText::_((string) $this->element['label']) . '</div>';
+            $label .= '<div class="krtitle-title">' . Text::_((string) $this->element['label']) . '</div>';
         } else {
             $label .= parent::getLabel();
         }
 
         if ($this->element['description']) {
-            $label .= '<div class="krtitle-description">' . JText::_((string) $this->element['description']) . '</div>';
+            $label .= '<div class="krtitle-description">' . Text::_((string) $this->element['description']) . '</div>';
         }
 
         return $label;

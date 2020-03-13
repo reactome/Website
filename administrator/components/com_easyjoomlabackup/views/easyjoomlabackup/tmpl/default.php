@@ -1,8 +1,8 @@
 <?php
 /**
- * @package    EJB - Easy Joomla Backup for Joomal! 3.x
+ * @package    EJB PRO - Easy Joomla Backup PRO for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.2.6 - 2019-06-30
+ * @version    3.3.0-FREE - 2020-01-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -21,30 +21,31 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-JHtml::_('bootstrap.tooltip');
-JHtml::_('behavior.multiselect');
+use Joomla\CMS\{Router\Route, Language\Text, HTML\HTMLHelper};
+
+HTMLHelper::_('bootstrap.tooltip');
+HTMLHelper::_('behavior.multiselect');
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_easyjoomlabackup'); ?>" method="post" name="adminForm"
-      id="adminForm">
+<form action="<?php echo Route::_('index.php?option=com_easyjoomlabackup'); ?>" method="post" name="adminForm" id="adminForm">
     <div id="j-main-container">
         <div id="filter-bar" class="btn-toolbar">
             <div class="filter-search btn-group pull-left">
                 <label for="filter_search" class="element-invisible">
-                    <?php echo JText::_('JSEARCH_FILTER'); ?>
+                    <?php echo Text::_('JSEARCH_FILTER'); ?>
                 </label>
-                <input type="text" name="filter_search" id="filter_search" placeholder="<?php echo JText::_('JSEARCH_FILTER'); ?>" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" class="hasTooltip" title="<?php echo JText::_('JSEARCH_FILTER'); ?>"/>
+                <input type="text" name="filter_search" id="filter_search" placeholder="<?php echo Text::_('JSEARCH_FILTER'); ?>" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" class="hasTooltip" title="<?php echo Text::_('JSEARCH_FILTER'); ?>"/>
             </div>
             <div class="btn-group pull-left hidden-phone">
-                <button type="submit" class="btn hasTooltip" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>">
+                <button type="submit" class="btn hasTooltip" title="<?php echo Text::_('JSEARCH_FILTER_SUBMIT'); ?>">
                     <i class="icon-search"></i>
                 </button>
-                <button type="button" class="btn hasTooltip" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>" onclick="document.getElementById('filter_search').value = ''; this.form.submit();">
+                <button type="button" class="btn hasTooltip" title="<?php echo Text::_('JSEARCH_FILTER_CLEAR'); ?>" onclick="document.getElementById('filter_search').value = ''; this.form.submit();">
                     <i class="icon-remove"></i>
                 </button>
             </div>
             <div class="btn-group pull-right hidden-phone">
                 <label for="limit" class="element-invisible">
-                    <?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
+                    <?php echo Text::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
                 </label>
                 <?php echo $this->pagination->getLimitBox(); ?>
             </div>
@@ -54,25 +55,25 @@ JHtml::_('behavior.multiselect');
             <thead>
             <tr>
                 <th width="20">
-                    <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
+                    <input type="checkbox" name="checkall-toggle" value="" title="<?php echo Text::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
                 </th>
                 <th width="15%">
-                    <?php echo JText::_('COM_EASYJOOMLABACKUP_DATE'); ?>
+                    <?php echo Text::_('COM_EASYJOOMLABACKUP_DATE'); ?>
                 </th>
                 <th width="35%">
-                    <?php echo JText::_('COM_EASYJOOMLABACKUP_COMMENT'); ?>
+                    <?php echo Text::_('COM_EASYJOOMLABACKUP_COMMENT'); ?>
                 </th>
                 <th width="10%">
-                    <?php echo JText::_('COM_EASYJOOMLABACKUP_TYPE'); ?>
+                    <?php echo Text::_('COM_EASYJOOMLABACKUP_TYPE'); ?>
                 </th>
                 <th width="6%">
-                    <?php echo JText::_('COM_EASYJOOMLABACKUP_SIZE'); ?>
+                    <?php echo Text::_('COM_EASYJOOMLABACKUP_SIZE'); ?>
                 </th>
                 <th width="6%">
-                    <?php echo JText::_('COM_EASYJOOMLABACKUP_DURATION'); ?>
+                    <?php echo Text::_('COM_EASYJOOMLABACKUP_DURATION'); ?>
                 </th>
                 <th>
-                    <?php echo JText::_('COM_EASYJOOMLABACKUP_DOWNLOAD'); ?>
+                    <?php echo Text::_('COM_EASYJOOMLABACKUP_DOWNLOAD'); ?>
                 </th>
             </tr>
             </thead>
@@ -81,15 +82,15 @@ JHtml::_('behavior.multiselect');
             <?php $n = count($this->items); ?>
             <?php for ($i = 0; $i < $n; $i++) : ?>
                 <?php $row = $this->items[$i]; ?>
-                <?php $checked = JHtml::_('grid.id', $i, $row->id, false, 'id'); ?>
-                <?php $download = JRoute::_('index.php?option=com_easyjoomlabackup&controller=createbackup&task=download&id=' . $row->id); ?>
+                <?php $checked = HTMLHelper::_('grid.id', $i, $row->id, false, 'id'); ?>
+                <?php $download = Route::_('index.php?option=com_easyjoomlabackup&controller=createbackup&task=download&id=' . $row->id); ?>
                 <tr class="<?php echo 'row' . $k; ?>">
                     <td>
                         <?php echo $checked; ?>
                     </td>
                     <td class="small">
                         <span class="hasTooltip" title="<?php echo $row->date; ?>">
-                            <?php echo JHtml::_('date', $row->date, JText::_('DATE_FORMAT_LC2')); ?>
+                            <?php echo HTMLHelper::_('date', $row->date, Text::_('DATE_FORMAT_LC2')); ?>
                         </span>
                     </td>
                     <td class="small">
@@ -104,13 +105,13 @@ JHtml::_('behavior.multiselect');
                     <td class="small">
                         <span class="hasTooltip" title="<?php echo htmlspecialchars($row->type); ?>">
                             <?php if ($row->type == 'fullbackup') : ?>
-                                <?php echo JText::_('COM_EASYJOOMLABACKUP_FULLBACKUP'); ?>
+                                <?php echo Text::_('COM_EASYJOOMLABACKUP_FULLBACKUP'); ?>
                             <?php elseif ($row->type == 'databasebackup') : ?>
-                                <?php echo JText::_('COM_EASYJOOMLABACKUP_DATABASEBACKUP'); ?>
+                                <?php echo Text::_('COM_EASYJOOMLABACKUP_DATABASEBACKUP'); ?>
                             <?php elseif ($row->type == 'filebackup') : ?>
-                                <?php echo JText::_('COM_EASYJOOMLABACKUP_FILEBACKUP'); ?>
+                                <?php echo Text::_('COM_EASYJOOMLABACKUP_FILEBACKUP'); ?>
                             <?php elseif ($row->type == 'discovered') : ?>
-                                <?php echo JText::_('COM_EASYJOOMLABACKUP_DISCOVERED_ARCHIVE'); ?>
+                                <?php echo Text::_('COM_EASYJOOMLABACKUP_DISCOVERED_ARCHIVE'); ?>
                             <?php endif; ?>
                         </span>
                     </td>
@@ -130,7 +131,7 @@ JHtml::_('behavior.multiselect');
                             <?php elseif ($row->duration <= 60 && $row->duration > 0) : ?>
                                 <?php echo $row->duration . ' s'; ?>
                             <?php else : ?>
-                                <?php echo JText::_('COM_EASYJOOMLABACKUP_UNKNOWN'); ?>
+                                <?php echo Text::_('COM_EASYJOOMLABACKUP_UNKNOWN'); ?>
                             <?php endif; ?>
                         </span>
                     </td>
@@ -159,25 +160,34 @@ JHtml::_('behavior.multiselect');
                     <p>
                         <?php if (class_exists('ZipArchive')) : ?>
                             <span class="text-success">
-                                <?php echo JText::_('COM_EASYJOOMLABACKUP_ZIPARCHIVE_ACTIVATED'); ?>
+									<?php echo Text::_('COM_EASYJOOMLABACKUP_ZIPARCHIVE_ACTIVATED'); ?>
                                 <span class="icon-easyjoomlabackup-success"></span>
                             </span>
                         <?php else : ?>
                             <span class="text-error">
-                                <?php echo JText::_('COM_EASYJOOMLABACKUP_ZIPARCHIVE_DEACTIVATED'); ?>
+									<?php echo Text::_('COM_EASYJOOMLABACKUP_ZIPARCHIVE_DEACTIVATED'); ?>
                                 <span class="icon-easyjoomlabackup-error"></span>
                             </span>
                         <?php endif; ?>
-                    </p>
-                    <p>
                         <?php if ($this->dbType == 'mysqli') : ?>
                             <span class="text-success">
-                                <?php echo JText::_('COM_EASYJOOMLABACKUP_DBTYPE_MYSQLI'); ?>
+									<?php echo Text::_('COM_EASYJOOMLABACKUP_DBTYPE_MYSQLI'); ?>
                                 <span class="icon-easyjoomlabackup-success"></span>
                             </span>
                         <?php else : ?>
-                            <span class="text-error">
-                                <?php echo JText::_('COM_EASYJOOMLABACKUP_DBTYPE_NOT_MYSQLI'); ?>
+                            <span class="text-info">
+									<?php echo Text::_('COM_EASYJOOMLABACKUP_DBTYPE_NOT_MYSQLI'); ?>
+                                <span class="icon-easyjoomlabackup-error"></span>
+                            </span>
+                        <?php endif; ?>
+                        <?php if ($this->sessionHandler == 'none' || $this->sessionHandler == 'php') : ?>
+                            <span class="text-success">
+									<?php echo Text::_('COM_EASYJOOMLABACKUP_SESSIONHANDLER_PHP'); ?>
+                                <span class="icon-easyjoomlabackup-success"></span>
+                            </span>
+                        <?php else : ?>
+                            <span class="text-info">
+									<?php echo Text::_('COM_EASYJOOMLABACKUP_SESSIONHANDLER_NOT_PHP'); ?>
                                 <span class="icon-easyjoomlabackup-error"></span>
                             </span>
                         <?php endif; ?>
@@ -186,13 +196,13 @@ JHtml::_('behavior.multiselect');
                         <p class="footer-tip">
                             <?php if ($this->pluginState['enabled'] == true) : ?>
                                 <span class="text-success">
-                                    <span class="icon-easyfrontendseo-success"></span>
-                                    <?php echo JText::sprintf('COM_EASYJOOMLABACKUP_PLUGIN_ENABLED', $this->pluginState['url_settings']); ?>
+										<span class="icon-easyfrontendseo-success"></span>
+                                    <?php echo Text::sprintf('COM_EASYJOOMLABACKUP_PLUGIN_ENABLED', $this->pluginState['url_settings']); ?>
                                 </span>
                             <?php else : ?>
-                                <span class="text-error">
-                                    <span class="icon-easyfrontendseo-error"></span>
-                                    <?php echo JText::sprintf('COM_EASYJOOMLABACKUP_PLUGIN_DISABLED', $this->pluginState['url_settings']); ?>
+                                <span class="text-info">
+										<span class="icon-easyfrontendseo-error"></span>
+                                    <?php echo Text::sprintf('COM_EASYJOOMLABACKUP_PLUGIN_DISABLED', $this->pluginState['url_settings']); ?>
                                 </span>
                             <?php endif; ?>
                         </p>
@@ -205,10 +215,10 @@ JHtml::_('behavior.multiselect');
         <input type="hidden" name="task" value=""/>
         <input type="hidden" name="boxchecked" value="0"/>
         <input type="hidden" name="controller" value="createbackup"/>
-        <?php echo JHtml::_('form.token'); ?>
+        <?php echo HTMLHelper::_('form.token'); ?>
     </div>
 </form>
 <div style="text-align: center; margin-top: 10px;">
-    <p><?php echo JText::sprintf('COM_EASYJOOMLABACKUP_VERSION', _EASYJOOMLABACKUP_VERSION) ?></p>
+    <p><?php echo Text::sprintf('COM_EASYJOOMLABACKUP_VERSION', EASYJOOMLABACKUP_FREE_VERSION); ?></p>
 </div>
 <?php echo $this->donationCodeMessage; ?>
