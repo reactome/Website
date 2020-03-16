@@ -108,7 +108,7 @@ jQuery(document).ready(function() {
 
     // instantiating the clipboard button here
     var clipboard = new ClipboardJS('#clipboardButton', {
-        container: jQuery('#myModal').find(".modal-body").find("#citationText")
+        container: jQuery('#citationModal').find("#citationText")
     });
 
     var clipboardButton = jQuery('#clipboardButton');
@@ -120,7 +120,6 @@ jQuery(document).ready(function() {
         // clears selection and changes icon back to the copy icon after 2 seconds have passed
         setTimeout(function() {
             clipboardButton.attr("disabled", false);
-            // clipboardButton.find("i").removeClass("fas fa-check").addClass("fas fa-copy");
             clipboardButton.find("i").removeClass("fa fa-check").addClass("fa fa-clipboard");
 
             e.clearSelection();
@@ -141,7 +140,7 @@ event order:
     3) we call the appropriate function to get citation data
 */
 function getCitation() {
-    var modal = jQuery('#myModal');
+    var modal = jQuery('#citationModal');
     // passing the current page url to parseURL which will give us a citation promise 
     // that we can resolve
     var d = parseURL(url=window.location.href, mode=EUROPE_PMC_QUERY_MODES["TEXT"]);
@@ -152,27 +151,27 @@ function getCitation() {
             // clearing any radio button selection before modal gets opened
             jQuery("input[name=exportOption]:checked").prop("checked", false); 
             modal.modal("show");
-            modal.find(".modal-body").find("#citationText").html(citation);
+            modal.find("#citationText").html(citation);
         },
         // on failure
         function() {
             // hide the copy to clipboard and mail buttons
-            modal.find(".modal-header").find("#clipboardButton").hide();
-            modal.find(".modal-header").find("#mailButton").hide();
+            modal.find("#clipboardButton").hide();
+            modal.find("#mailButton").hide();
             modal.modal('show');
             // make `help@reactome.org` a mailto link
             var helpEmail = jQuery("<a />");
             helpEmail.attr("href", "mailto:help@reactome.org");
             helpEmail.text("help@reactome.org");
             // show the error message
-            modal.find(".modal-body").find("#citationText").text("Sorry, we could not process your request. Please email the error code to ").append(helpEmail);
+            modal.find("#citationText").text("Sorry, we could not process your request. Please email the error code to ").append(helpEmail);
         }
     );
 }
 
 // handles the mail-to functionality
 function sendMail() {
-    window.location = "mailto:?subject=Reactome Citation&body=" + encodeURIComponent(jQuery('#myModal').find('.modal-body').find("#citationText").text());
+    window.location = "mailto:?subject=Reactome Citation&body=" + encodeURIComponent(jQuery('#citationModal').find("#citationText").text());
 }
 
 
@@ -187,7 +186,7 @@ function exportCitation() {
         return;
     }
 
-    var modal = jQuery('#myModal');
+    var modal = jQuery('#citationModal');
     // passing the current page url to parseURL which will give us a citation promise 
     // that we can resolve
     var d = parseURL(url=window.location.href, mode=EUROPE_PMC_QUERY_MODES["EXPORT"]);
@@ -204,7 +203,7 @@ function exportCitation() {
                     downloadFile(data, format=EXPORT_FORMATS["RIS"]["mimeType"], filename);
                     break;
                 default:
-                    data = jQuery('#myModal').find(".modal-body").find("#citationText").text();
+                    data = jQuery('#citationModal').find("#citationText").text();
                     downloadFile(data, format=exportFormat, filename);
             }
         });
@@ -213,17 +212,14 @@ function exportCitation() {
 
 // enables the export citation button when one of the citation formats is selected
 function enableExportCitationButton() {
-    jQuery("#myModal").find(".modal-body").find("#exportCitationForm").find("#exportCitationButton")[0].disabled = false;
-    // refactor code so that so that a custom css class can get made for disabled and enabled buttons
-    jQuery("#myModal").find(".modal-body").find("#exportCitationForm").find("#exportCitationButton")[0].style["cursor"] = "default";
-   
-}
+    jQuery("#citationModal").find("#exportCitationButton")[0].disabled = false;
+ }
 
 // functions being called from html end
 
 
 // function that does the heavy lifting of figuring out which page we are on,
-// and returning the approriate citation promise
+// and returning the appropriate citation promise
 function parseURL(url, mode) {
     if (generalCitation.some(function(regex) {return regex.test(url)})) {
         return getCitationFromEuropePMC(EUROPE_PMC_BASE_URL, GENERAL_CITATION_ID, mode);
