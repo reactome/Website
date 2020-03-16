@@ -546,6 +546,7 @@ $favcolumns = 6;
                     </div>
                     <div class="modal-body">
                       <div id="citationText" style="white-space:pre-line"></div>
+                      <hr>
                       <!-- gotta fix the styling for this!! -->
                       <!-- https://stackoverflow.com/questions/2306117/radio-buttons-and-label-to-display-in-same-line/27072115 -->
                       <form id="exportCitationForm">

@@ -59,10 +59,9 @@ var PATHWAY_CITATION_REQUEST_RESPONSE = {
 
             var dateOfAccess = new Date().toDateString();
             var commonCitation = response["pathwayTitle"].concat(". Reactome, ",  response["releaseVersion"], ", ", urls.join(", ")," (", dateOfAccess, ")");
-            var pathwayCitation = "Pathway Citation".concat(": ", authorCitation, " (", response["publicationYear"], "). ",  commonCitation);
-            var imageCitation =  "Image Citation".concat(": Image Citation for ", commonCitation);
+            var pathwayCitation = "<h5 style='font-weight:bold'>Pathway Citation: </h5>".concat(authorCitation, " (", response["publicationYear"], "). ",  commonCitation);
+            var imageCitation =  "<h5 style='font-weight:bold'>Image Citation: </h5>".concat("Image Citation for ", commonCitation);
 
-            // line break not working
             return pathwayCitation.concat("\n", imageCitation);
         }
     }
@@ -151,7 +150,7 @@ function getCitation() {
             // clearing any radio button selection before modal gets opened
             jQuery("input[name=exportOption]:checked").prop("checked", false); 
             modal.modal("show");
-            modal.find(".modal-body").find("#citationText").text(citation);
+            modal.find(".modal-body").find("#citationText").html(citation);
         },
         // on failure
         function() {
