@@ -26,7 +26,7 @@ $doc->addStyleSheet($this->baseurl . '/media/jui/css/bootstrap-responsive.css');
 JHtml::_('jquery.framework');
 $doc->addStyleSheet($this->baseurl. '/templates/' .$this->template. '/bootstrap/favth-bootstrap.css');
 $doc->addScript($this->baseurl. '/templates/' .$this->template. '/bootstrap/favth-bootstrap.js');
-// adding the js files for the citation project
+//Custom: adding the js files for the citation project
 $doc->addScript($this->baseurl. '/templates/' .$this->template. '/js/clipboard.min.js');
 $doc->addScript($this->baseurl. '/templates/' .$this->template. '/citation-query.js');
 
@@ -527,7 +527,7 @@ $favcolumns = 6;
 
 
         <?php if ($this->countModules('cite-us')) {  ?>
-             <button id="citationButton" type="button" class="favth-btn favth-btn-small" style="position:absolute; top:50%" onClick="getCitation();">Cite Us!</button>
+            <button id="citationButton" type="button" class="favth-btn favth-btn-small" style="position:fixed; top:50%" onClick="getCitation();">Cite Us!</button>
 
               <!-- Modal -->
               <div id="citationModal" class="modal fade" role="dialog" style="display:none">
