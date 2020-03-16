@@ -55,7 +55,7 @@ var PATHWAY_CITATION_REQUEST_RESPONSE = {
 
             var doi = response["doi"];
             // checking that doi key exists and the value is not undefined or null 
-            var urls = doi ? [windowLocation.href, DOI_BASE_URL.concat(doi)] : [windowLocation.href];
+            var urls = doi ? [DOI_BASE_URL.concat(doi)] : [windowLocation.href];
 
             var dateOfAccess = new Date().toDateString();
             var commonCitation = response["pathwayTitle"].concat(". Reactome, ",  response["releaseVersion"], ", ", urls.join(", ")," (", dateOfAccess, ")");
@@ -80,18 +80,6 @@ var PATHWAY_ANALYSIS_CITATION_ID = 28249561
 var FIVIZ_CITATION_ID = 28150241
 var GRAPH_DATABASE_CITATION_ID = 29377902
 
-// export formats
-var EXPORT_FORMATS = {
-    BIBTEX: {fileExt: "bib", mimeType: "application/x-bibtex", web: "misc", journal: "article"},
-    TEXT: {fileExt: "txt", mimeType: "text/plain"},
-    // for pathways, the Type in the RIS files ahas been set as `ELEC`, and the type for static citations
-    //has been set as 
-    RIS: {fileExt: "ris", mimeType: "application/x-research-info-systems", web: "ELEC", journal: "JOUR"}
-};
-
-
-// constants declaration end
-
 var generalCitation = [/what-is-reactome/, /about/, /sab/, /license/, /orcid/, /community/]; 
 var downloadCitation = [/download-data/];
 var iconCitation = [/icon-lib/, /R-ICO/]; 
@@ -99,6 +87,20 @@ var pathwayAnalysisCitation = [/AnalysisService/];
 var fivizCitation = [/reactome-fiviz/]; 
 var graphDatabaseCitation = [/ContentService/, /graph-database/];
 var pathwayCitation = [/content\/detail\/R-/];
+
+// export formats
+var EXPORT_FORMATS = {
+    // for pathways, the Type in the bib files has been set as `misc`, and the type for static citations
+    //has been set as `article`
+    BIBTEX: {fileExt: "bib", mimeType: "application/x-bibtex", web: "misc", journal: "article"},
+    TEXT: {fileExt: "txt", mimeType: "text/plain"},
+    // for pathways, the Type in the RIS files has been set as `ELEC`, and the type for static citations
+    //has been set as `JOUR`
+    RIS: {fileExt: "ris", mimeType: "application/x-research-info-systems", web: "ELEC", journal: "JOUR"}
+};
+
+
+// constants declaration end
 
 
 // event based work:
@@ -313,8 +315,9 @@ function preprocessForExport(json) {
         citationDetails["doi"] = json["doi"];
         citationDetails["urls"] = [DOI_BASE_URL.concat(json["doi"])];
     }
-    if (json["stid"])
-        (citationDetails["urls"]) ? citationDetails["urls"].push(window.location.href) : citationDetails["urls"] = [window.location.href];
+    else if (json["stid"]) {
+        citationDetails["urls"] = [window.location.href];
+    }
 
     citationDetails["authors"] = (json["authorList"] || {})["author"] || json["authors"] || "The Reactome Consortium"; 
     citationDetails["isPathway"] = json["isPathway"];
