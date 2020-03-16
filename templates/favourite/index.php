@@ -527,10 +527,10 @@ $favcolumns = 6;
 
 
         <?php if ($this->countModules('cite-us')) {  ?>
-             <button id="mybtn" type="button" class="favth-btn favth-btn-small" style="position:absolute; top:50%" onClick=getCitation()>Cite Us!</button>
+             <button id="citationButton" type="button" class="favth-btn favth-btn-small" style="position:absolute; top:50%" onClick="getCitation();">Cite Us!</button>
 
               <!-- Modal -->
-              <div id="myModal" class="modal fade" role="dialog" style="display:none">
+              <div id="citationModal" class="modal fade" role="dialog" style="display:none">
                 <div class="modal-dialog">
 
                   <!-- Modal content-->
@@ -547,29 +547,23 @@ $favcolumns = 6;
                     <div class="modal-body">
                       <div id="citationText" style="white-space:pre-line"></div>
                       <hr>
-                      <!-- gotta fix the styling for this!! -->
-                      <!-- https://stackoverflow.com/questions/2306117/radio-buttons-and-label-to-display-in-same-line/27072115 -->
                       <form id="exportCitationForm">
-                        <fieldset>
-                          <legend><h5 style="font-weight:bold">Export As:</h5></legend>
-                            <span class="list-radio-button-class">
-                              <input type="radio" class="radio" id="exportCitationAsBibTeX" name="exportOption" value="bib" onClick="enableExportCitationButton()"/>
-                              <label for="exportCitationAsBibTeX">BibTeX</label>
-                            </span>
-                            <span class="list-radio-button-class">
-                              <input type="radio" class="radio" id="exportCitationAsRIS" name="exportOption" value="ris" onClick="enableExportCitationButton()"/>
-                              <label for="exportCitationAsRIS">RIS</label>
-                            </span>
-                            <span class="list-radio-button-class">
-                              <input type="radio" class="radio" id="exportCitationAsText" name="exportOption" value="txt" onClick="enableExportCitationButton()"/>
-                              <label for="exportCitationAsText">Text</label>
-                            </span>
-                        </fieldset>
-                        <button id="exportCitationButton" type="button" class="favth-btn favth-btn-small" disabled style="cursor:not-allowed;" onClick="exportCitation()">Export</button>
+                        <h5 style="font-weight:bold">Export As:</h5>
+                        <div class="radio-button">
+                          <input type="radio" class="radio" id="exportCitationAsBibTeX" name="exportOption" value="bib" onClick="enableExportCitationButton()"/>
+                          <label for="exportCitationAsBibTeX">BibTeX</label>
+                          
+                          <input type="radio" class="radio" id="exportCitationAsRIS" name="exportOption" value="ris" onClick="enableExportCitationButton()"/>
+                          <label for="exportCitationAsRIS">RIS</label>
+
+                          <input type="radio" class="radio" id="exportCitationAsText" name="exportOption" value="txt" onClick="enableExportCitationButton()"/>
+                          <label for="exportCitationAsText">Text</label>
+                        </div>
                       </form>
                     </div>
 
                   <div class="modal-footer">
+                      <button id="exportCitationButton" type="button" class="favth-btn favth-btn-small" disabled onClick="exportCitation();">Export</button>
                       <button type="button" class="favth-btn favth-btn-small" data-dismiss="modal">Close</button>
                   </div>
 

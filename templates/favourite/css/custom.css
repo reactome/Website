@@ -792,30 +792,6 @@ video.responsive-vid {
     color: red !important;
 }
 
-
-fieldset {
-      overflow: hidden
-    }
-    
-    .list-radio-button-class {
-      float: left;
-      clear: none;
-    }
-    
-    label {
-      float: left;
-      clear: none;
-      display: block;
-      padding: 0px 1em 0px 8px;
-    }
-    
-    input[type=radio],
-    input.radio {
-      float: left;
-      clear: none;
-      margin: 2px 0 0 2px;
-    }
-
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
     .twitter-timeline {
         height: 568px !important;
@@ -831,6 +807,28 @@ fieldset {
     }
 }
 /* ### END TWITTER WIDGET ### */
+
+/** ### CSS for the citation project ### **/ 
+.radio-button input[type="radio"],
+input.radio {
+  float: left;
+  clear: none;
+  margin: 2px 0 0 2px; 
+}
+
+.radio-button label {
+  float: left;
+  clear: none;
+  display: block;
+  padding: 0px 1em 0px 8px;
+  margin: 2px 0 0 0; /** this is causing issues. This postions the labels correctly locally but not on dev. on dev, not setting this attribute fixes the issue..**/
+  font-weight: normal;
+}
+
+#exportCitationButton[disabled] {
+   cursor: not-allowed;
+}
+
 
 @media only screen and (max-width: 1024px) {
     .fav2buttons div[id^="favglyph-box"] i,
