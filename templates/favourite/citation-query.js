@@ -1,6 +1,9 @@
 //TO-DO:
-// refactor code so that the dom indentifiers are less generic
-// work on the CSS, mode code from html to proper style sheets
+// refactor code so that the dom indentifiers are less generic -- done
+// work on the CSS, mode code from html to proper style sheets\
+// add comments here
+// document stuff in the gdoc file 
+// fix button position
 
 // constants declaration
 var EUROPE_PMC_BASE_URL = "https://www.ebi.ac.uk/europepmc/webservices/rest/search?";
@@ -149,7 +152,10 @@ function getCitation() {
         // on success
         function(citation) {
             // clearing any radio button selection before modal gets opened
-            jQuery("input[name=exportOption]:checked").prop("checked", false); 
+            jQuery("input[name=exportOption]:checked").prop("checked", false);
+            // disabling export button
+            jQuery("#citationModal").find("#exportCitationButton")[0].disabled = true;
+
             modal.modal("show");
             modal.find("#citationText").html(citation);
         },
