@@ -548,7 +548,7 @@ $favcolumns = 6;
                       <div id="citationText" style="white-space:pre-line"></div>
                       <hr>
                       <form id="exportCitationForm">
-                        <h5 style="font-weight:bold">Export As:</h5>
+                        <h5 style="font-weight:bold">Download As:</h5>
                         <div class="radio-button">
                           <input type="radio" class="radio" id="exportCitationAsBibTeX" name="exportOption" value="bib" onClick="enableExportCitationButton()"/>
                           <label for="exportCitationAsBibTeX">BibTeX</label>
@@ -563,7 +563,7 @@ $favcolumns = 6;
                     </div>
 
                   <div class="modal-footer">
-                      <button id="exportCitationButton" type="button" class="favth-btn favth-btn-small" disabled onClick="exportCitation();">Export</button>
+                      <button id="exportCitationButton" type="button" class="favth-btn favth-btn-small" disabled onClick="exportCitation();">Download</button>
                       <button type="button" class="favth-btn favth-btn-small" data-dismiss="modal">Close</button>
                   </div>
 
