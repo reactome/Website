@@ -821,7 +821,6 @@ input.radio {
   clear: none;
   display: block;
   padding: 0px 1em 0px 8px;
-  margin: 2px 0 0 0; /** this is causing issues. This postions the labels correctly locally but not on dev. on dev, not setting this attribute fixes the issue..**/
   font-weight: normal;
 }
 
@@ -829,6 +828,11 @@ input.radio {
    cursor: not-allowed;
 }
 
+@-moz-document url-prefix() {
+    .radio-button label {
+        margin: 2px 0 0 0;
+    }
+}
 
 @media only screen and (max-width: 1024px) {
     .fav2buttons div[id^="favglyph-box"] i,
