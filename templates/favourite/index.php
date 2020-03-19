@@ -524,58 +524,6 @@ $favcolumns = 6;
                 </div>
 		    <?php } ?>
 
-
-
-        <?php if ($this->countModules('cite-us')) {  ?>
-            <button id="citationButton" type="button" class="favth-btn favth-btn-small" style="position:fixed; top:50%" onClick="getCitation();">Cite Us!</button>
-
-              <!-- Modal -->
-              <div id="citationModal" class="modal fade" role="dialog" style="display:none">
-                <div class="modal-dialog">
-
-                  <!-- Modal content-->
-                  <div class="modal-content">
-                    <div class="modal-header favth-col-xs-12">
-                      <div class="favth-col-xs-7 padding0">
-                        <h4 class="modal-title" style="font-weight:bold"> Cite Us!</h4>
-                      </div>
-                      <div class="favth-col-xs-5" style="margin-top:20px; margin-bottom:10px; text-align:right; padding:0">
-                        <a id="clipboardButton" data-clipboard-target="#citationText" title="Copy"><i class="fa fa-clipboard"></i></a> 
-                        <a id="mailButton" onClick="sendMail()" title="Email"><i class="fa fa-envelope"></i></a>
-                      </div>
-                    </div>
-                    <div class="modal-body">
-                      <div id="citationText" style="white-space:pre-line"></div>
-                      <hr>
-                      <form id="exportCitationForm">
-                        <h5 style="font-weight:bold">Download As:</h5>
-                        <div class="radio-button">
-                          <input type="radio" class="radio" id="exportCitationAsBibTeX" name="exportOption" value="bib" onClick="enableExportCitationButton()"/>
-                          <label for="exportCitationAsBibTeX">BibTeX</label>
-                          
-                          <input type="radio" class="radio" id="exportCitationAsRIS" name="exportOption" value="ris" onClick="enableExportCitationButton()"/>
-                          <label for="exportCitationAsRIS">RIS</label>
-
-                          <input type="radio" class="radio" id="exportCitationAsText" name="exportOption" value="txt" onClick="enableExportCitationButton()"/>
-                          <label for="exportCitationAsText">Text</label>
-                        </div>
-                      </form>
-                    </div>
-
-                  <div class="modal-footer">
-                      <button id="exportCitationButton" type="button" class="favth-btn favth-btn-small" disabled onClick="exportCitation();">Download</button>
-                      <button type="button" class="favth-btn favth-btn-small" data-dismiss="modal">Close</button>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
-        <?php } ?>
-
-
-
-
   			<!-- PROMO -->
         <?php
         $promoactive = 0;
@@ -1430,11 +1378,66 @@ $favcolumns = 6;
           </div>
         <?php } ?>
 
+
+        <?php if ($this->countModules('cite-us')) {  ?>
+            
+          <a class="citation-button-large favth-visible-md favth-visible-lg" onClick="getCitation();">
+            <span>Cite Us!</span>
+            <i class="fa fa-quote-left"></i>
+          </a> 
+
+          <button type="button" class="favth-btn favth-visible-xs favth-visible-sm" style= "width: 100%; padding: 10px; padding-bottom: 10px;" onClick="getCitation();">Cite Us!</button>
+
+          <!-- Modal -->
+          <div id="citationModal" class="modal fade" role="dialog" style="display:none;">
+            <div class="modal-dialog">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header favth-col-xs-12">
+                  <div class="favth-col-xs-7 padding0">
+                    <h4 class="modal-title" style="font-weight:bold"> Cite Us!</h4>
+                  </div>
+                  <div class="favth-col-xs-5" style="margin-top:20px; margin-bottom:10px; text-align:right; padding:0">
+                    <a id="clipboardButton" data-clipboard-target="#citationText" title="Copy"><i class="fa fa-clipboard"></i></a> 
+                    <a id="mailButton" onClick="sendMail()" title="Email"><i class="fa fa-envelope"></i></a>
+                  </div>
+                </div>
+                <div class="modal-body">
+                  <div id="citationText" style="white-space:pre-line"></div>
+                  <hr>
+                  <form id="exportCitationForm">
+                    <h5 style="font-weight:bold">Download As:</h5>
+                    <div class="radio-button">
+                      <input type="radio" class="radio" id="exportCitationAsBibTeX" name="exportOption" value="bib" onClick="enableExportCitationButton()"/>
+                      <label for="exportCitationAsBibTeX">BibTeX</label>
+
+                      <input type="radio" class="radio" id="exportCitationAsRIS" name="exportOption" value="ris" onClick="enableExportCitationButton()"/>
+                      <label for="exportCitationAsRIS">RIS</label>
+
+                      <input type="radio" class="radio" id="exportCitationAsText" name="exportOption" value="txt" onClick="enableExportCitationButton()"/>
+                      <label for="exportCitationAsText">Text</label>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="modal-footer">
+                  <button id="exportCitationButton" type="button" class="favth-btn favth-btn-small" disabled onClick="exportCitation();">Download</button>
+                  <button type="button" class="favth-btn favth-btn-small" data-dismiss="modal">Close</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        <?php } ?>
+
+
   			<!-- BACKTOP -->
         <div id="fav-backtopwrap">
     			<div class="favth-container">
     				<div class="favth-row">
-    					<?php if (($show_back_to_top) !=0) : ?>
+     					<?php if (($show_back_to_top) !=0) : ?>
     						<div id="fav-backtop" class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12">
     							<a href="#" class="btn backtop" title="<?php echo htmlspecialchars($back_to_top_text);?>">
                     <i class="fa fa-angle-up"></i>

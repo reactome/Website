@@ -1,9 +1,9 @@
-//TO-DO:
-// refactor code so that the dom indentifiers are less generic -- done
-// work on the CSS, mode code from html to proper style sheets\
-// add comments here
-// document stuff in the gdoc file 
-// fix button position
+/*
+
+
+TO-DO: add comments here
+
+*/
 
 // constants declaration
 var EUROPE_PMC_BASE_URL = "https://www.ebi.ac.uk/europepmc/webservices/rest/search?";
@@ -132,6 +132,19 @@ jQuery(document).ready(function() {
     clipboard.on('error', function(e) {
         console.error("Whoops.Couldn't copy");
     });
+
+    // showing the backtop button again after the modal closes
+    jQuery("#citationModal").on("hidden.bs.modal", function (e) {
+        jQuery("#fav-backtop").css("right", "" ).css("left", "" );
+
+    });
+
+    // hiding the backtop button after the modal opens
+    jQuery("#citationModal").on("show.bs.modal", function (e) {
+        jQuery("#fav-backtop").css("right", "-1000em" ).css("left", "-1000em");
+
+    });
+
 });
 
 // functions being called from the html file
@@ -143,7 +156,7 @@ event order:
     3) we call the appropriate function to get citation data
 */
 function getCitation() {
-    var modal = jQuery('#citationModal');
+    var modal = jQuery("#citationModal");
     // passing the current page url to parseURL which will give us a citation promise 
     // that we can resolve
     var d = parseURL(url=window.location.href, mode=EUROPE_PMC_QUERY_MODES["TEXT"]);
@@ -153,9 +166,8 @@ function getCitation() {
         function(citation) {
             // clearing any radio button selection before modal gets opened
             jQuery("input[name=exportOption]:checked").prop("checked", false);
-            // disabling export button
+            // disabling export buttons
             jQuery("#citationModal").find("#exportCitationButton")[0].disabled = true;
-
             modal.modal("show");
             modal.find("#citationText").html(citation);
         },
@@ -232,7 +244,7 @@ function parseURL(url, mode) {
     }
 
     else if (downloadCitation.some(function(regex) {return regex.test(url)})) {
-        document.getElementById("exportCitationForm").style.display="none";
+        jQuery("#exportCitationForm").hide();
         var d = jQuery.get(window.location.origin.concat(DOWNLOAD_CITATION_ENDPOINT)).then(function(response) { return response + " (" + new Date().toDateString() + ")";})
         return d;
 
@@ -469,5 +481,3 @@ function convertJSONToBibTeX(json) {
 
     return bibtex;
 }
-
-
