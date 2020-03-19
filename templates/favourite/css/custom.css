@@ -834,6 +834,47 @@ input.radio {
     }
 }
 
+/* class for citation button on big screens */
+.citation-button-large {
+    position:fixed;
+    top:50%;
+    display: block; 
+    background-color:#2F9EC2; 
+    color:white; 
+    padding: 16px; 
+    border-radius: 0 10px 10px 0;
+    transition: 0.5s; 
+}
+
+.citation-button-large i {
+    padding: 1px 2px 1px 2px;
+}
+
+.citation-button-large span {
+    font-family: Arial;
+    font-weight: 700;
+    display: none;
+    font-size: 25px;
+}
+
+.citation-button-large:hover {
+    padding-right: 25px;
+    color: white;
+}
+
+.citation-button-large:hover span {
+    display: block;
+    color: white;
+}
+
+.citation-button-large:hover i {
+    display: none;
+}
+
+
+/* ### CSS for Citation Project Ends Here ###*/
+
+
 @media only screen and (max-width: 1024px) {
     .fav2buttons div[id^="favglyph-box"] i,
     .fav2buttons div[id*=" favglyph-box"] i {
