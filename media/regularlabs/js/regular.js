@@ -248,7 +248,7 @@ if (typeof window.Regular === 'undefined'
 		 * @param oncomplete  Optional callback function to execute when effect is completed.
 		 */
 		this.fadeOut = function(selector, duration = 250, oncomplete) {
-			if (!selector()) {
+			if (!selector) {
 				return;
 			}
 

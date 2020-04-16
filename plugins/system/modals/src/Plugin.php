@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.5.8
+ * @version         11.5.9
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -233,6 +233,20 @@ class Plugin extends JPlugin
 
 	public function extraChecks()
 	{
+		$input = JFactory::getApplication()->input;
+
+		// Disable on Gridbox edit form: option=com_gridbox&view=gridbox
+		if ($input->get('option') == 'com_gridbox' && $input->get('view') == 'gridbox')
+		{
+			return false;
+		}
+
+		// Disable on SP PageBuilder edit form: option=com_sppagebuilder&view=form
+		if ($input->get('option') == 'com_sppagebuilder' && $input->get('view') == 'form')
+		{
+			return false;
+		}
+
 		return true;
 	}
 
@@ -341,8 +355,8 @@ class Plugin extends JPlugin
 			return;
 		}
 
-		if (version_compare($plugin['version'], '20.2.1812', '<')
-			|| version_compare($library['version'], '20.2.1812', '<'))
+		if (version_compare($plugin['version'], '20.3.22936', '<')
+			|| version_compare($library['version'], '20.3.22936', '<'))
 		{
 			define('REGULAR_LABS_LIBRARY_INSTALLED', 'outdated');
 

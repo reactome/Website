@@ -1,6 +1,6 @@
 /**
  * @package         Sourcerer
- * @version         8.2.1
+ * @version         8.2.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -32,7 +32,9 @@ var RegularLabsSourcererPopup = null;
 
 			if (editor_textarea) {
 				var iframes = editor_textarea.parentNode.getElementsByTagName('iframe');
+
 				if (!iframes.length) {
+					$('.reglab-overlay').css('cursor', '').fadeOut();
 					return;
 				}
 
@@ -58,15 +60,18 @@ var RegularLabsSourcererPopup = null;
 				string = this.cleanRange(selection);
 			}
 
-			if (string) {
-				// Handle indentation
-				string = string.replace(/^\t/gm, '    ');
-
-				this.setAttributes(string);
-				var code = this.removeSourceTags(string);
-
-				$editor.setValue(code);
+			if (!string) {
+				$('.reglab-overlay').css('cursor', '').fadeOut();
+				return;
 			}
+
+			// Handle indentation
+			string = string.replace(/^\t/gm, '    ');
+
+			this.setAttributes(string);
+			var code = this.removeSourceTags(string);
+
+			$editor.setValue(code);
 
 			$('.reglab-overlay').css('cursor', '').fadeOut();
 		},

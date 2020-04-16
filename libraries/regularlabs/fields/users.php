@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.2.1812
+ * @version         20.3.22936
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -72,7 +72,7 @@ class JFormFieldRL_Users extends \RegularLabs\Library\Field
 
 		if ($total > $this->max_list_count)
 		{
-			return -1;
+			return [];
 		}
 
 		$query->clear('select')

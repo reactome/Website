@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.2.1
+ * @version         8.2.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,11 +11,12 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory as JFactory;
 use RegularLabs\Plugin\System\Sourcerer\Plugin;
 
 // Do not instantiate plugin on install pages
 // to prevent installation/update breaking because of potential breaking changes
-$input = \Joomla\CMS\Factory::getApplication()->input;
+$input = JFactory::getApplication()->input;
 if (in_array($input->get('option'), ['com_installer', 'com_regularlabsmanager']) && $input->get('action') != '')
 {
 	return;
