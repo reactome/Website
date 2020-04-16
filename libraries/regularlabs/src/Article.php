@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.2.1812
+ * @version         20.3.22936
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -145,10 +145,10 @@ class Article
 		if (isset($data->attribs))
 		{
 			// Convert parameter field to object.
-			$data->params   = new Registry($data->attribs);
+			$data->params = new Registry($data->attribs);
 		}
 
-		if ( isset($data->metadata))
+		if (isset($data->metadata))
 		{
 			// Convert metadata field to object.
 			$data->metadata = new Registry($data->metadata);

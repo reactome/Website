@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.2.1
+ * @version         8.2.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -233,6 +233,20 @@ class Plugin extends JPlugin
 
 	public function extraChecks()
 	{
+		$input = JFactory::getApplication()->input;
+
+		// Disable on Gridbox edit form: option=com_gridbox&view=gridbox
+		if ($input->get('option') == 'com_gridbox' && $input->get('view') == 'gridbox')
+		{
+			return false;
+		}
+
+		// Disable on SP PageBuilder edit form: option=com_sppagebuilder&view=form
+		if ($input->get('option') == 'com_sppagebuilder' && $input->get('view') == 'form')
+		{
+			return false;
+		}
+
 		return true;
 	}
 
@@ -341,8 +355,8 @@ class Plugin extends JPlugin
 			return;
 		}
 
-		if (version_compare($plugin['version'], '20.2.10719', '<')
-			|| version_compare($library['version'], '20.2.10719', '<'))
+		if (version_compare($plugin['version'], '20.3.22179', '<')
+			|| version_compare($library['version'], '20.3.22179', '<'))
 		{
 			define('REGULAR_LABS_LIBRARY_INSTALLED', 'outdated');
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.2.1812
+ * @version         20.3.22936
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -28,11 +28,11 @@ class JFormFieldRL_Range extends \JFormFieldRange
 	{
 		$this->value = (float) ($this->value ?: $this->default);
 
-		if(!empty($this->max))
+		if ( ! empty($this->max))
 		{
 			$this->value = min($this->value, $this->max);
 		}
-		if(!empty($this->min))
+		if ( ! empty($this->min))
 		{
 			$this->value = max($this->value, $this->min);
 		}
@@ -53,10 +53,10 @@ class JFormFieldRL_Range extends \JFormFieldRange
 		$data = parent::getLayoutData();
 
 		// Initialize some field attributes.
-		$extraData = array(
+		$extraData = [
 			'prepend' => isset($this->element['prepend']) ? (string) $this->element['prepend'] : '',
-			'append' => isset($this->element['append']) ? (string) $this->element['append'] : '',
-		);
+			'append'  => isset($this->element['append']) ? (string) $this->element['append'] : '',
+		];
 
 		return array_merge($data, $extraData);
 	}

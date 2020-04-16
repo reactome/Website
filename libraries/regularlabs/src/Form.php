@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.2.1812
+ * @version         20.3.22936
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -381,24 +381,27 @@ class Form
 
 		$remove_spinner = "$('#" . $id . "_spinner').remove();";
 		$replace_field  = "$('#" . $id . "').replaceWith(data);";
+		$init_chosen    = 'document.getElementById("' . $id . '").nodeName == "SELECT" && $("#' . $id . '").chosen();';
 
-		$error   = $remove_spinner;
-		$success = "if(data)\{" . $replace_field . "\}" . $remove_spinner;
-
-//			$success .= "console.log('#" . $id . "');";
-//			$success .= "console.log(data);";
+		$success = $replace_field;
 
 		if ($simple)
 		{
-			$success .= "if(data.indexOf('</select>') > -1)\{$('#" . $id . "').chosen();\}";
+			$success .= $init_chosen;
 		}
 		else
 		{
 			Document::script('regularlabs/multiselect.min.js');
 			Document::stylesheet('regularlabs/multiselect.min.css');
 
-			$success .= "if(data.indexOf('rl_multiselect') > -1)\{RegularLabsMultiSelect.init($('#" . $id . "'));\}";
+			$success .= "if(data.indexOf('rl_multiselect') > -1)\{RegularLabsMultiSelect.init($('#" . $id . "'));\} else { " . $init_chosen . "}";
 		}
+
+//		$success .= "console.log('#" . $id . "');";
+//		$success .= "console.log(data);";
+
+		$error   = $remove_spinner;
+		$success = "if(data)\{" . $success . "\}" . $remove_spinner;
 
 		$script = "jQuery(document).ready(function() {"
 			. "RegularLabsScripts.addToLoadAjaxList("
