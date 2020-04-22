@@ -8,10 +8,12 @@
 	.fade {
 		opacity: 0;
 		.transition(opacity 1ms linear);
+
 		&.in {
 			opacity: 1;
 		}
 	}
+
 	&.has_effects .fade {
 		.transition(opacity .15s linear);
 	}
@@ -22,10 +24,12 @@
 		height:   auto;
 		overflow: hidden;
 		.transition(height 1ms ease);
+
 		&.in {
 			height: auto;
 		}
 	}
+
 	&.has_effects .collapse {
 		.transition(height .35s ease);
 	}
@@ -42,6 +46,7 @@
 
 			.accordion-heading {
 				border-bottom: 0;
+
 				.accordion-toggle {
 					display: block;
 					padding: 8px 15px;

@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.7.8
+ * @version         7.7.9
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -42,6 +42,7 @@ class PlgSystemSlidersInstallerScriptHelper
 		JFactory::getLanguage()->load('plg_system_regularlabsinstaller', JPATH_PLUGINS . '/system/regularlabsinstaller');
 
 		$this->installed_version = $this->getVersion($this->getInstalledXMLFile());
+
 
 		if ($this->show_message && $this->isInstalled())
 		{
@@ -533,6 +534,7 @@ class PlgSystemSlidersInstallerScriptHelper
 
 	public function onAfterInstall($route)
 	{
+		return true;
 	}
 
 	public function delete($files = [])

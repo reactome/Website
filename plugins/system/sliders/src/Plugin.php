@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.7.8
+ * @version         7.7.9
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -233,6 +233,20 @@ class Plugin extends JPlugin
 
 	public function extraChecks()
 	{
+		$input = JFactory::getApplication()->input;
+
+		// Disable on Gridbox edit form: option=com_gridbox&view=gridbox
+		if ($input->get('option') == 'com_gridbox' && $input->get('view') == 'gridbox')
+		{
+			return false;
+		}
+
+		// Disable on SP PageBuilder edit form: option=com_sppagebuilder&view=form
+		if ($input->get('option') == 'com_sppagebuilder' && $input->get('view') == 'form')
+		{
+			return false;
+		}
+
 		return true;
 	}
 
@@ -341,8 +355,8 @@ class Plugin extends JPlugin
 			return;
 		}
 
-		if (version_compare($plugin['version'], '19.9.15966', '<')
-			|| version_compare($library['version'], '19.9.15966', '<'))
+		if (version_compare($plugin['version'], '20.4.17841', '<')
+			|| version_compare($library['version'], '20.4.17841', '<'))
 		{
 			define('REGULAR_LABS_LIBRARY_INSTALLED', 'outdated');
 

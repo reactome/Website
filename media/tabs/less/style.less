@@ -1,10 +1,10 @@
 /**
  * @package         Tabs
- * @version         7.5.10
+ * @version         7.5.11
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 /*
@@ -32,6 +32,7 @@ span.rl_tabs-title-active {
 	.clearfix();
 
 	margin-bottom: 1em;
+
 	&:last-child {
 		margin-bottom: 0;
 	}
@@ -48,22 +49,26 @@ span.rl_tabs-title-active {
 			list-style-image: none !important;
 			background:       none !important;
 			overflow-y:       visible !important;
+
 			&:before {
 				content: "";
 				margin:  0;
 				padding: 0;
 			}
+
 			> a {
 				display:         block !important;
 				.transition-duration(.2s);
 				color:           @linkColor;
 				text-decoration: none;
 				line-height:     inherit;
+
 				&:hover {
 					color:           @linkColorHover;
 					text-decoration: none;
 				}
 			}
+
 			> a:focus,
 			&.active > a:focus {
 				outline:      none;
@@ -74,24 +79,30 @@ span.rl_tabs-title-active {
 				span.rl_tabs-title-inactive {
 					display: none;
 				}
+
 				span.rl_tabs-title-active {
 					display: inherit;
 				}
 			}
 		}
 	}
+
 	> .tab-content {
 		padding: 0;
+
 		> .tab-pane {
 			padding:    12px 0;
 			overflow-x: auto;
 			overflow-y: hidden;
+
 			& > :first-child {
 				margin-top: 0;
 			}
+
 			& > :last-child {
 				margin-bottom: 0;
 			}
+
 			.rl_tabs-title {
 				display: none;
 			}
@@ -111,6 +122,7 @@ span.rl_tabs-title-active {
 			border:     1px solid @border-color;
 			border-top: none;
 			.border-radius(0 0 4px 4px);
+
 			> .tab-pane {
 				padding: 12px;
 			}
@@ -137,10 +149,12 @@ span.rl_tabs-title-active {
 				> a {
 					background-color: @background-color;
 					margin-right:     5px;
+
 					&:hover {
 						background-color: @background-color-hover;
 					}
 				}
+
 				&.active {
 					> a,
 					> a:hover {
@@ -156,6 +170,7 @@ span.rl_tabs-title-active {
 		> ul.nav-tabs {
 			> li {
 				float: right;
+
 				> a {
 					margin-left:  2px;
 					margin-right: 0;
@@ -168,6 +183,7 @@ span.rl_tabs-title-active {
 	&.align_center {
 		> ul.nav-tabs {
 			text-align: center;
+
 			> li {
 				float:        none;
 				display:      inline-block;
@@ -185,32 +201,40 @@ span.rl_tabs-title-active {
 			display:       table;
 			width:         100%;
 			margin-bottom: -1px;
+
 			> .rl_tabs-scroll {
 				display: table-cell;
 			}
+
 			> li {
 				float:   none;
 				display: table-cell;
+
 				&:last-child > a {
 					margin-right: 0;
 				}
+
 				a,
 				a:hover {
 					margin-bottom: -1px;
 					border-bottom: 1px solid transparent;
 				}
 			}
+
 			&:before {
 				display: none;
 			}
+
 			&:after {
 				display: none;
 			}
 		}
+
 		&.bottom {
 			> ul.nav-tabs {
 				margin-bottom: 0;
 				margin-top:    -1px;
+
 				> li {
 					a,
 					a:hover {
@@ -236,6 +260,7 @@ span.rl_tabs-title-active {
 						padding-top: 4px;
 						.border-radius(5px 5px 0 0);
 					}
+
 					> a:hover, // Hover state
 					&.active > a {
 						// Active state
@@ -250,12 +275,14 @@ span.rl_tabs-title-active {
 				> a {
 					border-bottom-color: @border-color;
 				}
+
 				> a:focus,
 				&.active > a:focus {
 					border-bottom-color: transparent;
 					.box-shadow(0 -2px 2px rgba(234, 176, 63, 0.5));
 				}
 			}
+
 			> li.active {
 				a,
 				a:hover {
@@ -277,6 +304,7 @@ span.rl_tabs-title-active {
 						padding-bottom: 4px;
 						.border-radius(0 0 5px 5px);
 					}
+
 					> a:hover, // Hover state
 					&.active > a {
 						// Active state
@@ -290,6 +318,7 @@ span.rl_tabs-title-active {
 			border-bottom: 0;
 			margin-bottom: 18px !important;
 			border-top:    1px solid @border-color;
+
 			> li {
 				margin-top:    -1px !important;
 				margin-bottom: 0 !important;
@@ -297,17 +326,20 @@ span.rl_tabs-title-active {
 				> a {
 					border-top-color: @border-color;
 					.border-radius(0 0 4px 4px);
+
 					&:hover {
 						border-color:     transparent;
 						border-top-color: @border-color;
 					}
 				}
+
 				// Active state, and it's :hover to override normal :hover
 				&.active > a,
 				&.active > a:hover {
 					border-color:     @border-color;
 					border-top-color: transparent;
 				}
+
 				> a:focus,
 				&.active > a:focus {
 					border-top-color: transparent;
@@ -333,8 +365,10 @@ span.rl_tabs-title-active {
 		> .nav-tabs {
 			border-bottom: 0;
 			margin-bottom: 18px !important;
+
 			> li {
 				float: none;
+
 				> a {
 					min-width:     74px;
 					margin-right:  0 !important;
@@ -360,6 +394,7 @@ span.rl_tabs-title-active {
 						padding-left: 7px;
 						.border-radius(5px 0 0 5px);
 					}
+
 					> a:hover, // Hover state
 					&.active > a {
 						// Active state
@@ -373,22 +408,27 @@ span.rl_tabs-title-active {
 			float:        left;
 			margin-right: 19px;
 			border-right: 1px solid @border-color;
+
 			> li {
 				margin-right:  -1px !important;
 				margin-bottom: 0 !important;
+
 				> a {
 					.border-radius(4px 0 0 4px);
+
 					&:hover {
 						border-color:       transparent;
 						border-right-color: @border-color;
 					}
 				}
+
 				// Active state, and it's :hover to override normal :hover
 				&.active > a,
 				&.active > a:hover {
 					border-color:       @border-color;
 					border-right-color: transparent;
 				}
+
 				> a:focus,
 				&.active > a:focus {
 					border-right-color: transparent;
@@ -416,6 +456,7 @@ span.rl_tabs-title-active {
 						padding-right: 7px;
 						.border-radius(0 5px 5px 0);
 					}
+
 					> a:hover, // Hover state
 					&.active > a {
 						// Active state
@@ -429,21 +470,26 @@ span.rl_tabs-title-active {
 			float:       right;
 			margin-left: 19px;
 			border-left: 1px solid @border-color;
+
 			> li {
 				margin-left:   -1px !important;
 				margin-bottom: 0 !important;
+
 				> a {
 					.border-radius(0 4px 4px 0);
+
 					&:hover {
 						border-color:      transparent;
 						border-left-color: @border-color;
 					}
 				}
+
 				&.active > a,
 				&.active > a:hover {
 					border-color:      @border-color;
 					border-left-color: transparent;
 				}
+
 				> a:focus,
 				&.active > a:focus {
 					border-left-color: transparent;
@@ -471,6 +517,7 @@ span.rl_tabs-title-active {
 						border-color:     lighten(@color, 20%);
 						color:            #ffffff;
 					}
+
 					> a:hover, // Hover state
 					&.active > a {
 						// Active state
@@ -520,6 +567,7 @@ ul.rl_tabs-sm {
 				> .tab-pane {
 					display:    block;
 					visibility: visible;
+
 					.rl_tabs-title {
 						display: block;
 					}
@@ -534,6 +582,7 @@ ul.rl_tabs-sm {
 			&.outline_content {
 				> .tab-content {
 					border: none;
+
 					> .tab-pane {
 						border:        1px solid @border-color;
 						.border-radius(4px);
@@ -552,10 +601,12 @@ ul.rl_tabs-sm {
 						border:              2px solid lighten(@color, 20%);
 						border-bottom-width: 3px;
 					}
+
 					&:last-child > a,
 					> a:hover {
 						border-bottom-width: 2px;
 					}
+
 					&.solid {
 						> a,
 						> a:hover {
@@ -563,6 +614,7 @@ ul.rl_tabs-sm {
 							border-color:     lighten(@color, 20%);
 							color:            #ffffff;
 						}
+
 						> a:hover, // Hover state
 						&.active > a {
 							// Active state

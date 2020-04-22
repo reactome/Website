@@ -1,10 +1,10 @@
 /**
  * @package         Sliders
- * @version         7.7.8
+ * @version         7.7.9
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 /*
@@ -24,11 +24,13 @@
 					.transition-duration(0s);
 					font-size: 22px;
 					#gradient > .vertical(#ff9999, #ffffff);
+
 					&:hover {
 						#gradient > .vertical(#9999ff, #ffffff);
 					}
 				}
 			}
+
 			&.active {
 				> .accordion-heading {
 					> a.accordion-toggle {
@@ -36,6 +38,7 @@
 					}
 				}
 			}
+
 			> .accordion-body > .accordion-inner {
 				border-top: none;
 				#gradient > .vertical-three-colors(#ffffff, #ffffff, 25%, #ccffcc);
@@ -50,6 +53,7 @@
 		> .accordion-group.mystyle2 {
 			.border-radius(0 0 0 0);
 			border-color: #666666;
+
 			> .accordion-heading {
 				> a.accordion-toggle {
 					.transition-duration(1s);
@@ -57,12 +61,14 @@
 					padding:          8px 20px;
 					background-color: #aaaaaa;
 					color:            #ffffff !important;
+
 					&:hover {
 						background-color: #999999;
 						color:            #ffffff;
 					}
 				}
 			}
+
 			&.active {
 				> .accordion-heading {
 					> a.accordion-toggle {
@@ -71,6 +77,7 @@
 					}
 				}
 			}
+
 			> .accordion-body > .accordion-inner {
 				.transition-duration(1s);
 				font-family:      @monoFontFamily;
@@ -78,6 +85,7 @@
 				background-color: #999999;
 				color:            #ffffff;
 			}
+
 			&.active {
 				> .accordion-body > .accordion-inner {
 					background-color: #666666;
