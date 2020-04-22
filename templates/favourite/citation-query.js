@@ -1,87 +1,118 @@
 /*
-
-
 TO-DO: add comments here
-
 */
 
+
+
 // constants declaration
-var EUROPE_PMC_BASE_URL = "https://www.ebi.ac.uk/europepmc/webservices/rest/search?";
-var EUROPE_PMC_QUERY_MODES = {
+var BASE_URL = window.location.origin;
+
+var PATHWAY_CITATION_ENDPOINT = "/ContentService/citation/pathway/";
+var DOWNLOAD_CITATION_ENDPOINT = "/ContentService/citation/download/";
+var STATIC_CITATION_ENDPOINT = "/ContentService/citation/static/";
+var EXPORT_CITATION_ENDPOINT = "/ContentService/citation/export?";
+var CONTENT_SERVICE_QUERY_ENDPOINT = "/ContentService/data/query/";
+var CONTENT_SERVICE_QUERY_ATTRIBUTE = "/schemaClass";
+
+
+var QUERY_MODES = {
     EXPORT: "export",
     TEXT: "text"
 }
-var EUROPE_PMC_REQUEST_RESPONSE = {
-    // for the export functionality of the citations we querying Europe PMC's api with format `json` and 
-    // resultType `core` so that we get all the data, specifically so that we get the author names
-    // in full detail
+
+// export formats
+var EXPORT_FORMATS = {
+    BIBTEX: "bib",
+    TEXT: "txt",
+    RIS: "ris"
+};
+
+
+var STATIC_CITATION_REQUEST_RESPONSE = {
     export : {
-        format: "json",
-        resultType: "core",
-        parseResponse: function(response) {return response["resultList"]["result"][0];}
-    },
-
-    // for the textual citation, we are querying Europe PMC's api with format `dc` so to get citation related metadata
-    // and use the `dcterms:bibliographicCitation` tag
-    // the `dc` format by default uses `resultType` = `core`. I specified that here for clarity
-    text: {
-        format: "dc",
-        resultType: "core",
-        parseResponse: function(response) {return response.getElementsByTagName("dcterms:bibliographicCitation")[0].childNodes[0].nodeValue;}
-    }
-}
-
-var PATHWAY_CITATION_REQUEST_RESPONSE = {
-    export: {
-        parseResponse: function(response) {return response;}
+        callFunction: function(citation, ext) {
+            var d = jQuery.get(BASE_URL.concat(EXPORT_CITATION_ENDPOINT, jQuery.param({id:citation["id"], ext: ext, isPathway: "false", dateAccessed: new Date().toDateString()})))
+                    .then(function(response) {
+                        downloadFile(response, ext, "reactome_citation_".concat(citation["id"],".",ext));
+                    })
+            return d;
+        }
     },
     text: {
-        parseResponse: function(response) {
-            var windowLocation = window.location;
-
-            // default value
-            var authorCitation = "The Reactome Consortium";;
-
-            // checking that authors key exists, the value is not undefined or null and the list is not empty
-            if (response["authors"] && response["authors"].length > 0) {
-                var authors = response["authors"].map(function(author) {
-                    return author["lastName"] + "," + " " +  author["initials"];
-                });
-
-                authorCitation = authors[authors.length-1];
-
-                if (authors.length > 1) {
-                    authorCitation = authors.slice(0, authors.length-1).join(" , ").concat(" & ", authorCitation);
-                }
-
-            }
-
-            var doi = response["doi"];
-            // checking that doi key exists and the value is not undefined or null 
-            var urls = doi ? [DOI_BASE_URL.concat(doi)] : [windowLocation.href];
-
-            var dateOfAccess = new Date().toDateString();
-            var commonCitation = response["pathwayTitle"].concat(". Reactome, ",  response["releaseVersion"], ", ", urls.join(", ")," (", dateOfAccess, ")");
-            var pathwayCitation = "<h5 style='font-weight:bold'>Pathway Citation: </h5>".concat(authorCitation, " (", response["publicationYear"], "). ",  commonCitation);
-            var imageCitation =  "<h5 style='font-weight:bold'>Image Citation: </h5>".concat("Image Citation for ", commonCitation);
-
-            return pathwayCitation.concat("\n", imageCitation);
+        callFunction: function(citation) {
+            var d = jQuery.get(BASE_URL.concat(STATIC_CITATION_ENDPOINT, citation["id"]))
+                    .then(
+                        function(response) {
+                            return response;
+                        },
+                        function() {
+                            return citation["fallback"];
+                        }
+                    )
+            return d;
         }
     }
 }
 
-var DOI_BASE_URL = "https://doi.org/"
-var PATHWAY_CITATION_ENDPOINT = "/ContentService/citation/pathway/";
-var QUERY_ENDPOINT = "/ContentService/data/query/";
-var QUERY_ATTRIBUTE = "/schemaClass";
-var DOWNLOAD_CITATION_ENDPOINT = "/ContentService/citation/download/";
+
+var PATHWAY_CITATION_REQUEST_RESPONSE = {
+    export: {
+        callFunction: function(id, ext) {
+            var d = jQuery.get(BASE_URL.concat(EXPORT_CITATION_ENDPOINT, jQuery.param({id:id, ext: ext, isPathway: "true", dateAccessed: new Date().toDateString()})))
+                    .then(function(response) {
+                        downloadFile(response, ext, "reactome_citation_".concat(id,".",ext));
+                    })
+            return d;
+        }    
+    },
+    text: {
+        callFunction: function(id) {
+            var d = jQuery.get(BASE_URL.concat(PATHWAY_CITATION_ENDPOINT, id))
+                    .then(function(response) {
+
+                 // default value
+                var authorCitation = "The Reactome Consortium";;
+
+                // checking that authors key exists, the value is not undefined or null and the list is not empty
+                if (response["authors"] && response["authors"].length > 0) {
+                    var authors = response["authors"].map(function(author) {
+                        return author["lastName"] + "," + " " +  author["initials"];
+                    });
+
+                    authorCitation = authors[authors.length-1];
+
+                    if (authors.length > 1) {
+                        authorCitation = authors.slice(0, authors.length-1).join(" , ").concat(" & ", authorCitation);
+                    }
+                }
+
+                 // checking that urls key exists, the value is not undefined or null and the list is not empty
+                urls = "";
+                if (response["urls"] && response["urls"].length > 0) {
+                    urls = response["urls"].join(", ")
+                }
 
 
-var GENERAL_CITATION_ID = 31691815
-var ICON_CITATION_ID = 29077811
-var PATHWAY_ANALYSIS_CITATION_ID = 28249561
-var FIVIZ_CITATION_ID = 28150241
-var GRAPH_DATABASE_CITATION_ID = 29377902
+                var dateOfAccess = new Date().toDateString();
+                var commonCitation = response["title"].concat(". Reactome, ",  response["reactomeReleaseVersion"], ", ", urls," (", dateOfAccess, ")");
+                var pathwayCitation = "<h5 style='font-weight:bold'>Pathway Citation: </h5>".concat(authorCitation, " (", response["year"], "). ",  commonCitation);
+                var imageCitation =  "<h5 style='font-weight:bold'>Image Citation: </h5>".concat("Image Citation for ", commonCitation);
+
+                return pathwayCitation.concat("\n", imageCitation);
+            })
+        return d;
+        }
+    }
+}
+
+
+var CITATIONS = {
+    GENERAL_CITATION: {id: "31691815", fallback: "Jassal B, Matthews L, Viteri G, Gong C, Lorente P, Fabregat A, Sidiropoulos K, Cook J, Gillespie M, Haw R, Loney F, May B, Milacic M, Rothfels K, Sevilla C, Shamovsky V, Shorser S, Varusai T, Weiser J, Wu G, Stein L, Hermjakob H, D'Eustachio P. The reactome pathway knowledgebase. Nucleic Acids Res. 2020 Jan 8;48(D1):D498-D503. doi: 10.1093/nar/gkz1031. PubMed PMID: 31691815"},
+    ICON_CITATION: {id: "29077811", fallback: "Sidiropoulos K, Viteri G, Sevilla C, Jupe S, Webber M, Orlic-Milacic M, Jassal B, May B, Shamovsky V, Duenas C, Rothfels K, Matthews L, Song H, Stein L, Haw R, D'Eustachio P, Ping P, Hermjakob H, Fabregat A. Reactome enhanced pathway visualization. Bioinformatics. 2017 Nov 1;33(21):3461-3467. doi: 10.1093/bioinformatics/btx441. PubMed PMID: 29077811"},
+    PATHWAY_ANALYSIS_CITATION: {id: "28249561", fallback: "Fabregat A, Sidiropoulos K, Viteri G, Forner O, Marin-Garcia P, Arnau V, D'Eustachio P, Stein L, Hermjakob H. Reactome pathway analysis: a high-performance in-memory approach. BMC Bioinformatics. 2017 Mar 2;18(1):142. doi: 10.1186/s12859-017-1559-2. PubMed PMID: 28249561"},
+    FIVIZ_CITATION: {id: "28150241", fallback: "Wu G, Haw R. Functional Interaction Network Construction and Analysis for Disease Discovery. Methods Mol Biol. 2017;1558:235-253. doi: 10.1007/978-1-4939-6783-4_11. PubMed PMID: 28150241"},
+    GRAPH_DATABASE: {id: "29377902", fallback: "Fabregat A, Korninger F, Viteri G, Sidiropoulos K, Marin-Garcia P, Ping P, Wu G, Stein L, D'Eustachio P, Hermjakob H. Reactome graph database: Efficient accessto complex pathway data. PLoS Comput Biol. 2018 Jan 29;14(1):e1005968. doi: 10.1371/journal.pcbi.1005968. eCollection 2018 Jan. PubMed PMID: 29377902"}
+}
 
 var generalCitation = [/what-is-reactome/, /about/, /sab/, /license/, /orcid/, /community/]; 
 var downloadCitation = [/download-data/];
@@ -90,18 +121,6 @@ var pathwayAnalysisCitation = [/AnalysisService/];
 var fivizCitation = [/reactome-fiviz/]; 
 var graphDatabaseCitation = [/ContentService/, /graph-database/];
 var pathwayCitation = [/content\/detail\/R-/];
-
-// export formats
-var EXPORT_FORMATS = {
-    // for pathways, the Type in the bib files has been set as `misc`, and the type for static citations
-    //has been set as `article`
-    BIBTEX: {fileExt: "bib", mimeType: "application/x-bibtex", web: "misc", journal: "article"},
-    TEXT: {fileExt: "txt", mimeType: "text/plain"},
-    // for pathways, the Type in the RIS files has been set as `ELEC`, and the type for static citations
-    //has been set as `JOUR`
-    RIS: {fileExt: "ris", mimeType: "application/x-research-info-systems", web: "ELEC", journal: "JOUR"}
-};
-
 
 // constants declaration end
 
@@ -149,17 +168,12 @@ jQuery(document).ready(function() {
 
 // functions being called from the html file
 
-/* main method that gets called when the modal button is clicked
-event order:
-    1) someone clicks on the button
-    2) we check what page we are on
-    3) we call the appropriate function to get citation data
-*/
+//main method that gets called when the modal button is clicked
 function getCitation() {
     var modal = jQuery("#citationModal");
     // passing the current page url to parseURL which will give us a citation promise 
     // that we can resolve
-    var d = parseURL(url=window.location.href, mode=EUROPE_PMC_QUERY_MODES["TEXT"]);
+    var d = parseURL(url=window.location.href, mode=QUERY_MODES["TEXT"]);
 
     d.then(
         // on success
@@ -167,22 +181,30 @@ function getCitation() {
             // clearing any radio button selection before modal gets opened
             jQuery("input[name=exportOption]:checked").prop("checked", false);
             // disabling export buttons
-            jQuery("#citationModal").find("#exportCitationButton")[0].disabled = true;
+            modal.find("#exportCitationButton")[0].disabled = true;
             modal.modal("show");
             modal.find("#citationText").html(citation);
         },
         // on failure
-        function() {
+        function(failure) {
             // hide the copy to clipboard and mail buttons
             modal.find("#clipboardButton").hide();
             modal.find("#mailButton").hide();
+            hideExportSection();
+            // make warning alert visible
+            modal.find("#citationWarning").show();
             modal.modal('show');
-            // make `help@reactome.org` a mailto link
-            var helpEmail = jQuery("<a />");
-            helpEmail.attr("href", "mailto:help@reactome.org");
-            helpEmail.text("help@reactome.org");
-            // show the error message
-            modal.find("#citationText").text("Sorry, we could not process your request. Please email the error code to ").append(helpEmail);
+
+            if (!failure) {
+                // make `help@reactome.org` a mailto link
+                var helpEmail = jQuery("<a />");
+                helpEmail.attr("href", "mailto:help@reactome.org");
+                helpEmail.text("help@reactome.org");
+                modal.find("#citationText").text("Sorry, we could not process your request. Please email the error code to ").append(helpEmail);
+            }
+            else {
+                modal.find("#citationText").text(failure);
+            }            
         }
     );
 }
@@ -197,34 +219,13 @@ function sendMail() {
 function exportCitation() {
 
     var exportFormat = jQuery("input[name=exportOption]:checked", "#exportCitationForm").val();
-    var filename = "reactome_citation." + exportFormat;
-    var data = "This is a Reactome Citation"; // putting in a default citation
 
     if (!exportFormat) {
         return;
     }
 
-    var modal = jQuery('#citationModal');
-    // passing the current page url to parseURL which will give us a citation promise 
-    // that we can resolve
-    var d = parseURL(url=window.location.href, mode=EUROPE_PMC_QUERY_MODES["EXPORT"]);
-    d.then(
-    //on success
-        function(citation) {
-            switch(exportFormat) {
-                case EXPORT_FORMATS["BIBTEX"]["fileExt"]:
-                    data = convertJSONToBibTeX(preprocessForExport(citation));
-                    downloadFile(data, format=EXPORT_FORMATS["BIBTEX"]["mimeType"], filename);
-                    break;
-                case EXPORT_FORMATS["RIS"]["fileExt"]:
-                    data = convertJSONToRIS(preprocessForExport(citation));
-                    downloadFile(data, format=EXPORT_FORMATS["RIS"]["mimeType"], filename);
-                    break;
-                default:
-                    data = jQuery('#citationModal').find("#citationText").text();
-                    downloadFile(data, format=exportFormat, filename);
-            }
-        });
+     var modal = jQuery('#citationModal');
+     var d =  parseURL(url=window.location.href, mode=QUERY_MODES["EXPORT"], exportFormat);
 }
 
 
@@ -238,111 +239,85 @@ function enableExportCitationButton() {
 
 // function that does the heavy lifting of figuring out which page we are on,
 // and returning the appropriate citation promise
-function parseURL(url, mode) {
+function parseURL(url, mode, ext= EXPORT_FORMATS["TEXT"]) {
     if (generalCitation.some(function(regex) {return regex.test(url)})) {
-        return getCitationFromEuropePMC(EUROPE_PMC_BASE_URL, GENERAL_CITATION_ID, mode);
+        return getStaticCitation(CITATIONS["GENERAL_CITATION"], mode, ext);
     }
 
     else if (downloadCitation.some(function(regex) {return regex.test(url)})) {
-        jQuery("#exportCitationForm").hide();
-        var d = jQuery.get(window.location.origin.concat(DOWNLOAD_CITATION_ENDPOINT)).then(function(response) { return response + " (" + new Date().toDateString() + ")";})
-        return d;
+        hideExportSection();
+        return getDownloadCitation();
 
     }
 
     else if (iconCitation.some(function(regex) {return regex.test(url)})) {
-        return getCitationFromEuropePMC(EUROPE_PMC_BASE_URL, ICON_CITATION_ID, mode);
+        return getStaticCitation(CITATIONS["ICON_CITATION"]
+            , mode, ext);
     }
 
     else if (pathwayAnalysisCitation.some(function(regex) {return regex.test(url)})) {
-        return getCitationFromEuropePMC(EUROPE_PMC_BASE_URL, PATHWAY_ANALYSIS_CITATION_ID, mode);
+        return getStaticCitation(CITATIONS["PATHWAY_ANALYSIS_CITATION"], mode, ext);
     }
 
     else if (fivizCitation.some(function(regex) {return regex.test(url)})) {
-        return getCitationFromEuropePMC(EUROPE_PMC_BASE_URL, FIVIZ_CITATION_ID, mode);
+        return getStaticCitation(CITATIONS["FIVIZ_CITATION"], mode, ext);
     }
 
     else if (graphDatabaseCitation.some(function(regex) {return regex.test(url)})) {
-        return getCitationFromEuropePMC(EUROPE_PMC_BASE_URL, GRAPH_DATABASE_CITATION_ID, mode);
+        return getStaticCitation(CITATIONS["GRAPH_DATABASE_CITATION"], mode, ext);
     }
 
     else if (pathwayCitation.some(function(regex) {return regex.test(url)})) {
 
         var pathwayStId = window.location.href.split("/").pop();
-        return jQuery.get(QUERY_ENDPOINT.concat(pathwayStId, QUERY_ATTRIBUTE)).then(
+        return jQuery.get(BASE_URL.concat(CONTENT_SERVICE_QUERY_ENDPOINT, pathwayStId, CONTENT_SERVICE_QUERY_ATTRIBUTE)).then(
             function(response) {
                 if (response.toLowerCase().indexOf("pathway") != -1) {
                     // return the promise for pathway citation
-                    return getPathwayCitationObj(PATHWAY_CITATION_ENDPOINT, pathwayStId, mode);
+                    return getPathwayCitation(pathwayStId, mode, ext);
                 }
                 else { 
                     // return promise for general citation
-                    return getCitationFromEuropePMC(EUROPE_PMC_BASE_URL, GENERAL_CITATION_ID, mode);
+                    return getStaticCitation(CITATIONS["GENERAL_CITATION"], mode, ext);
+
                 }
             });
     }
 
     // default case
     else {
-        return getCitationFromEuropePMC(EUROPE_PMC_BASE_URL, GENERAL_CITATION_ID, mode);
+        return getStaticCitation(CITATIONS["GENERAL_CITATION"], mode, ext);
     }
 }
 
 
 // helper functions
 
-// returns promise with the citation from Europe PMC and how to parse that response
-function getCitationFromEuropePMC(baseUrl, searchId, mode) {
-     var settings = EUROPE_PMC_REQUEST_RESPONSE[mode];
-     var d = jQuery.get(baseUrl.concat(jQuery.param({query:searchId, format: settings["format"],resultType: settings["resultType"]}))).then(settings["parseResponse"]);
-     return d;
+
+function getStaticCitation(citation, mode, ext= EXPORT_FORMATS["TEXT"]) {
+    if (mode === QUERY_MODES["EXPORT"]) {
+        return STATIC_CITATION_REQUEST_RESPONSE[mode]["callFunction"](citation, ext);
+    }
+    else {
+         return STATIC_CITATION_REQUEST_RESPONSE[mode]["callFunction"](citation);
+    }
 }
 
+function getPathwayCitation(id, mode, ext= EXPORT_FORMATS["TEXT"]) {
+    if (mode === QUERY_MODES["EXPORT"]) {
+        return PATHWAY_CITATION_REQUEST_RESPONSE[mode]["callFunction"](id, ext);
+    }
+    else {
+         return PATHWAY_CITATION_REQUEST_RESPONSE[mode]["callFunction"](id);
+    }
+}
 
-//returns promise with the pathway citation response and how to parse that response
-function getPathwayCitationObj(pathwayCitationEndpoint, pathwayStId, mode) {
-    var settings = PATHWAY_CITATION_REQUEST_RESPONSE[mode];
-    var d = jQuery.get(window.location.origin.concat(pathwayCitationEndpoint, pathwayStId)).then(function(response) {return settings["parseResponse"](response);});
+function getDownloadCitation() {
+    var d = jQuery.get(BASE_URL.concat(DOWNLOAD_CITATION_ENDPOINT)).then(function(response) { return response + " (" + new Date().toDateString() + ")";})
     return d;
-
 }
 
-
-// takes json, that is either the response from Europe PMC's endpoint or the response from the 
-// pathway citation and makes a dictionary that the export functions can use
-function preprocessForExport(json) {
-
-    // all the checks here follow the order: are we getting the citation from Europe PMC? or are we getting it from our pathway citation endpoint? citationDetails gets populated accordingly
-    var citationDetails = {};
-    citationDetails["id"] = json["id"] || json["stid"]; // the id. compulsory field
-    citationDetails["title"] = json["title"] || json["pathwayTitle"]; //title of article. compulsory field
-
-    citationDetails["journal"] = ((json["journalInfo"] || {})["journal"] || {})["title"]; 
-    citationDetails["year"] = (json["journalInfo"] || {})["yearOfPublication"] || json["publicationYear"]; // publication year. compulsory field
-    citationDetails["month"] = (json["journalInfo"] || {})["monthOfPublication"] || json["publicationMonth"]; // publication month
-    citationDetails["number"] = (json["journalInfo"] || {})["issue"];
-    citationDetails["volume"] = (json["journalInfo"] || {})["volume"]
-    citationDetails["issn"] = ((json["journalInfo"] || {})["journal"] || {})["issn"]; // ISSN number
-    citationDetails["pages"] = json["pageInfo"]; // pages
-
-    if (json["doi"]) {
-        citationDetails["doi"] = json["doi"];
-        citationDetails["urls"] = [DOI_BASE_URL.concat(json["doi"])];
-    }
-    else if (json["stid"]) {
-        citationDetails["urls"] = [window.location.href];
-    }
-
-    citationDetails["authors"] = (json["authorList"] || {})["author"] || json["authors"] || "The Reactome Consortium"; 
-    citationDetails["isPathway"] = json["isPathway"];
-
-    return citationDetails;
-}
-
-
-// download file code taken from here: https://stackoverflow.com/a/33542499/3240056
-// there are other export options worth evaluating
-// browser compaability will have to be more throughly checked
+// download file code taken from here: https://stackoverflow.com/a/33542499/3240056 and https://stackoverflow.com/a/9834261/3240056
 function downloadFile(data, format, filename) {
     var blob = new Blob([data], {type: format});
     if(window.navigator.msSaveOrOpenBlob) {
@@ -358,126 +333,14 @@ function downloadFile(data, format, filename) {
     }
 }
 
+function hideExportSection(modal) {
+    var modal = jQuery("#citationModal");
+    // hide the line break before the export form
+    modal.find("#breakLine").hide();
+    // hide the export form as well
+    jQuery("#exportCitationForm").hide();
+}
+
 // helper functions end
 
 
-// export functions
-
-// takes a json and converts that to RIS string
-// RIS file specs were taken from: 
-// https://web.archive.org/web/20100704171416/http://www.refman.com/support/risformat_intro.asp
-// https://en.wikipedia.org/wiki/RIS_(file_format)
-function convertJSONToRIS(json) {
-    var doubleSpace = "  ";
-    var space = " ";
-    var dash = "-";
-    var keyValueSeparator = doubleSpace + dash + space;
-    var comma = ",";
-    var newline = "\n";
-
-    // start the RIS document
-    var ris = "TY" + keyValueSeparator + (!!json["isPathway"] ? EXPORT_FORMATS["RIS"]["web"] : EXPORT_FORMATS["RIS"]["journal"]) + newline;
-
-    // adding the title
-    ris += "TI" + keyValueSeparator + json["title"] + newline
-
-    // adding the authors
-    var authorString = "";
-    if (json["authors"] instanceof Array) {
-        json["authors"].forEach(function(author) {
-            authorString += "AU" + keyValueSeparator + 
-                            author["lastName"] + comma + space +  (author["firstName"] || author["initials"]) + newline;                      
-        })
-    }
-    else {
-        authorString = "AU" + keyValueSeparator + json["authors"] + newline;
-    }
-    ris += authorString;
-
-
-    // adding unique identifiers
-    // Accession Number
-    ris += "AN" + keyValueSeparator + (json["id"] || json["stid"]) + newline;
-    // DOI
-    if (json["doi"]) ris += "DO" + keyValueSeparator + json["doi"] + newline;
-    // URL
-    if (json["urls"] && json["urls"].length != 0) {
-        var urlstring = ""
-        json["urls"].forEach(function(url){ urlstring += "UR" + keyValueSeparator + url.trim() + newline});
-        ris += urlstring;
-    } 
-
-    //all the pub time related info
-    // publishing year
-    ris += "PY" + keyValueSeparator + json["year"] + newline;
-    if (json["month"]) ris += "DA" + keyValueSeparator + json["year"] + "/" + json["month"] + "//" + newline;
-
-    // all the journal related fields
-    if (json["journal"]) ris += "JO" + keyValueSeparator + json["journal"] + newline;
-    if (json["number"]) ris += "IS" + keyValueSeparator + json["number"] + newline;
-    if (json["volume"]) ris += "VL" + keyValueSeparator + json["volume"] + newline;
-    if (json["issn"]) ris += "SN" + keyValueSeparator + json["issn"] + newline;
-    if (json["pages"]) ris += "SP" + keyValueSeparator + json["pages"] + newline;
-
-    // end of RIS document
-    ris += "ER" + keyValueSeparator + newline;
-
-    return ris;
-} 
-
-// takes a json and converts that into a BibTeX string
-// BibTe files specs were taken from:
-// LaTeX - User's Guide and Reference Manual-lamport94.pdf, Appendix B
-// https://www.economics.utoronto.ca/osborne/latex/BIBTEX.HTM
-// https://en.wikipedia.org/wiki/BibTeX
-function convertJSONToBibTeX(json) {
-    var newline = "\n"
-    var openBracket = "{"
-    var closeBracket = "}";
-    var comma = ","
-    var endLine = closeBracket + comma + newline;
-    var space = " ";
-    var and = "and";
-
-    // start bibtex document
-    // IMPORTANT: DISCUSS THE TYPE WRT PATHWAY. WOULD THE TYPE BE ARTICLE FOR PATHWAY AS WELL?
-    // https://tex.stackexchange.com/questions/3587/how-can-i-use-bibtex-to-cite-a-web-page
-    var bibtex = "@" + (!!json["isPathway"] ? EXPORT_FORMATS["BIBTEX"]["web"] : EXPORT_FORMATS["BIBTEX"]["journal"]) + openBracket + json["id"] + comma + newline;
-
-    bibtex += "Title = " + openBracket + json["title"] + endLine; // added title
-
-    // prepping author string
-    var authorString = "";
-    if (json["authors"] instanceof Array) {
-        var authors = json["authors"].map(function(author) {
-            return author["lastName"] + comma + space +  (author["firstName"] || author["initials"]);
-        })
-
-        authorString = authors.join(space + and + space) 
-    }
-    else {
-        authorString = json["authors"];
-    }
-    
-    bibtex += "Author = " + openBracket + authorString + endLine;
-
-    // all the journal related info
-    if (json["journal"]) bibtex += "Journal = " + openBracket + json["journal"] + endLine;
-    if (json["number"]) bibtex += "Number = " + openBracket + json["number"] + endLine;
-    if (json["volume"]) bibtex += "Volume = " + openBracket + json["volume"] + endLine;
-    if (json["issn"]) bibtex += "ISSN = " + openBracket + json["issn"] + endLine;
-    if (json["pages"]) bibtex += "Pages = " + openBracket + json["pages"] + endLine;
-
-    // all the pub time related info
-    bibtex += "Year = " + openBracket + json["year"] + endLine;
-    if (json["month"]) bibtex += "Month = " + openBracket + json["month"] + endLine;
-
-    // any unique identifiers
-    if (json["doi"]) bibtex += "DOI = " + openBracket + json["doi"] + endLine;
-    if (json["urls"] && json["urls"].length != 0) bibtex += "URL = " + openBracket + json["urls"][0] + endLine;
-
-    // end bibtex document
-    bibtex += closeBracket;
-
-    return bibtex;
-}
