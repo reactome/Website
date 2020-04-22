@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.3.22936
+ * @version         20.4.17841
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -146,6 +146,11 @@ class Ip
 
 	private function getIP()
 	{
+		if ( ! empty($_SERVER['HTTP_X_FORWARDED_FOR']) && $this->isValidIp($_SERVER['HTTP_X_FORWARDED_FOR']))
+		{
+			return $_SERVER['HTTP_X_FORWARDED_FOR'];
+		}
+
 		if ( ! empty($_SERVER['HTTP_X_REAL_IP']) && $this->isValidIp($_SERVER['HTTP_X_REAL_IP']))
 		{
 			return $_SERVER['HTTP_X_REAL_IP'];

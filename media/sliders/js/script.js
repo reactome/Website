@@ -1,10 +1,10 @@
 /**
  * @package         Sliders
- * @version         7.7.8
+ * @version         7.7.9
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -378,7 +378,7 @@ var RegularLabsSliders = null;
 
 		getElementArray: function($el) {
 			var id   = $el.attr('data-toggle') ? $el.attr('data-id') : $el.attr('id');
-			var type = ($el.hasClass('rl_tabs-pane') || $el.hasClass('rl_tabs-toggle')) ? 'tab' : 'slider'
+			var type = ($el.hasClass('rl_tabs-pane') || $el.hasClass('rl_tabs-toggle')) ? 'tab' : 'slider';
 
 			return {
 				'type': type,

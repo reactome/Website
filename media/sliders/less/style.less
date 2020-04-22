@@ -1,10 +1,10 @@
 /**
  * @package         Sliders
- * @version         7.7.8
+ * @version         7.7.9
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 /*
@@ -18,18 +18,21 @@
 	.clearfix();
 
 	margin-bottom: 1em;
+
 	&:last-child {
 		margin-bottom: 0;
 	}
 
 	> .accordion-group {
 		.transition-duration(.2s);
+
 		.panel-heading {
 			padding: 0;
 		}
 
 		> .accordion-heading > a.accordion-toggle {
 			.transition-duration(.2s);
+
 			&:hover {
 				background-color: @grayLighter;
 				color:            @linkColorHover;
@@ -39,6 +42,7 @@
 			span.rl_sliders-title-inactive {
 				display: inherit;
 			}
+
 			span.rl_sliders-title-active {
 				display: none;
 			}
@@ -51,6 +55,7 @@
 			span.rl_sliders-title-inactive {
 				display: none;
 			}
+
 			span.rl_sliders-title-active {
 				display: inherit;
 			}
@@ -68,12 +73,15 @@
 			overflow-y: hidden !important;
 			overflow-x: auto;
 			.clearfix();
+
 			& > :first-child {
 				margin-top: 0;
 			}
+
 			& > :last-child {
 				margin-bottom: 0;
 			}
+
 			.rl_sliders-title {
 				display: none;
 			}
@@ -90,6 +98,7 @@
 			content:       "\2a";
 			// float: right; // Use to make the icons display on the right side
 		}
+
 		&.icon.active > .accordion-heading > a.accordion-toggle span.rl_sliders-toggle-inner:before {
 			content: "\4b";
 		}
@@ -106,16 +115,20 @@
 				&.active {
 					border-top-color: @color;
 				}
+
 				&.solid {
 					border-color: lighten(@color, 20%);
+
 					> .accordion-heading > a.accordion-toggle {
 						background-color: lighten(@color, 20%);
 						color:            #ffffff;
+
 						&:focus {
 							-webkit-box-shadow: none;
 							box-shadow:         none;
 						}
 					}
+
 					&.solid.color_content {
 						> .accordion-body > .accordion-inner {
 							background-color: lighten(@color, 50%);
@@ -123,11 +136,13 @@
 							.border-radius(0 0 3px 3px);
 						}
 					}
+
 					&:hover,
 					&.active {
 						border-color: @color;
 					}
 				}
+
 				&:hover,
 				&.active {
 					&.solid {
@@ -155,17 +170,21 @@
 		.rl_sliders-group {
 			border: 0 !important;
 		}
+
 		.accordion-heading {
 			display: none !important;
 		}
+
 		.accordion-body {
 			display: block !important;
 			opacity: 1 !important;
 			height:  auto !important;
 		}
+
 		.rl_sliders-title {
 			display: block !important;
 		}
+
 		.accordion-inner {
 			border:  0 !important;
 			padding: 0 !important;

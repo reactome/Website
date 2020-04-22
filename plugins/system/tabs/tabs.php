@@ -1,21 +1,22 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.5.10
+ * @version         7.5.11
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2019 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory as JFactory;
 use RegularLabs\Plugin\System\Tabs\Plugin;
 
 // Do not instantiate plugin on install pages
 // to prevent installation/update breaking because of potential breaking changes
-$input = \Joomla\CMS\Factory::getApplication()->input;
+$input = JFactory::getApplication()->input;
 if (in_array($input->get('option'), ['com_installer', 'com_regularlabsmanager']) && $input->get('action') != '')
 {
 	return;
