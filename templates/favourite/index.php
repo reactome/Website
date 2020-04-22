@@ -1403,9 +1403,12 @@ $favcolumns = 6;
                     <a id="mailButton" onClick="sendMail()" title="Email"><i class="fa fa-envelope"></i></a>
                   </div>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body"> 
+                <div id="citationWarning" class="alert alert-warning" style="display:none;">
+                  <strong>Warning!</strong> Unable to extract citation. Please try again later.
+                </div>
                   <div id="citationText" style="white-space:pre-line"></div>
-                  <hr>
+                  <hr id="breakLine">
                   <form id="exportCitationForm">
                     <h5 style="font-weight:bold">Download As:</h5>
                     <div class="radio-button">
