@@ -938,6 +938,22 @@ $favcolumns = 6;
   								<div id="fav-sidebar2" class="favth-col-lg-3 favth-col-md-3 favth-col-sm-3 favth-col-xs-12">
   										<jdoc:include type="modules" name="sidebar2" style="fav" />
   									</div>
+                                          
+                            	<!-- CUSTOM SIDEBAR FOR TOC -->		
+						     <?php elseif ( $this->countModules('sidebar1-toc')): ?>	
+								
+  					                <div id="fav-sidebar1-toc" class="favth-col-lg-3 favth-col-md-3 favth-col-sm-3 favth-col-xs-12">
+  										<jdoc:include type="modules" name="sidebar1-toc" style="fav" />
+  									</div>
+	  						
+  								<div id="fav-maincontent" class="favth-col-lg-9 favth-col-md-9 favth-col-sm-9 favth-col-xs-12">
+  									<jdoc:include type="message" />
+  									<jdoc:include type="component" />
+  								</div>
+                                     
+								<!-- CUSTOM SIDEBAR FOR TOC ENDs -->	
+								
+							             
   							<?php elseif ( $this->countModules('sidebar1')) : ?>
   								<div id="fav-sidebar1" class="favth-col-lg-3 favth-col-md-3 favth-col-sm-3 favth-col-xs-12">
   										<jdoc:include type="modules" name="sidebar1" style="fav" />

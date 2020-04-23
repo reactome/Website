@@ -792,6 +792,17 @@ video.responsive-vid {
     color: red !important;
 }
 
+
+/** fav-sidebar1-toc div: sticky the toc **/
+#fav-sidebar1-toc {
+   position:sticky !important;
+   top:0px;
+}
+
+.is-active-link::before {
+    background-color: #2F9EC2 !important;
+}
+
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
     .twitter-timeline {
         height: 568px !important;
