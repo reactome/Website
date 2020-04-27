@@ -67,60 +67,45 @@ var PATHWAY_CITATION_REQUEST_RESPONSE = {
     },
     text: {
         callFunction: function(id) {
-            var d = jQuery.get(BASE_URL.concat(PATHWAY_CITATION_ENDPOINT, id))
+            var d = jQuery.get(BASE_URL.concat(PATHWAY_CITATION_ENDPOINT, id, "?", jQuery.param({dateAccessed: new Date().toDateString()})))
                     .then(function(response) {
 
-                 // default value
-                var authorCitation = "The Reactome Consortium";;
+                        var citation = "";
+                        if (response) {
+                            var pathwayCitation = "<h5 style='font-weight:bold'>Pathway Citation: </h5>".concat(response["pathwayCitation"]);
+                            var imageCitation =  "<h5 style='font-weight:bold'>Image Citation: </h5>".concat(response["imageCitation"]);
+                            citation = pathwayCitation.concat("\n", imageCitation);
+                        }
+                        else {
+                            citation = "Not a pathway"
+                        }
 
-                // checking that authors key exists, the value is not undefined or null and the list is not empty
-                if (response["authors"] && response["authors"].length > 0) {
-                    var authors = response["authors"].map(function(author) {
-                        return author["lastName"] + "," + " " +  author["initials"];
-                    });
-
-                    authorCitation = authors[authors.length-1];
-
-                    if (authors.length > 1) {
-                        authorCitation = authors.slice(0, authors.length-1).join(" , ").concat(" & ", authorCitation);
-                    }
-                }
-
-                 // checking that urls key exists, the value is not undefined or null and the list is not empty
-                urls = "";
-                if (response["urls"] && response["urls"].length > 0) {
-                    urls = response["urls"].join(", ")
-                }
-
-
-                var dateOfAccess = new Date().toDateString();
-                var commonCitation = response["title"].concat(". Reactome, ",  response["reactomeReleaseVersion"], ", ", urls," (", dateOfAccess, ")");
-                var pathwayCitation = "<h5 style='font-weight:bold'>Pathway Citation: </h5>".concat(authorCitation, " (", response["year"], "). ",  commonCitation);
-                var imageCitation =  "<h5 style='font-weight:bold'>Image Citation: </h5>".concat("Image Citation for ", commonCitation);
-
-                return pathwayCitation.concat("\n", imageCitation);
+                        return citation;
             })
         return d;
         }
     }
 }
 
-
+// note that all fallbacks are texts from the `Citing Us` page
+// that is except for the ORCID_CITATION fallback, as we don't have a citation for that on the `Citing Us` page. The fallback citation for that was taken from Europe PMC (http://europepmc.org/article/MED/31802127)
 var CITATIONS = {
     GENERAL_CITATION: {id: "31691815", fallback: "Jassal B, Matthews L, Viteri G, Gong C, Lorente P, Fabregat A, Sidiropoulos K, Cook J, Gillespie M, Haw R, Loney F, May B, Milacic M, Rothfels K, Sevilla C, Shamovsky V, Shorser S, Varusai T, Weiser J, Wu G, Stein L, Hermjakob H, D'Eustachio P. The reactome pathway knowledgebase. Nucleic Acids Res. 2020 Jan 8;48(D1):D498-D503. doi: 10.1093/nar/gkz1031. PubMed PMID: 31691815"},
     ICON_CITATION: {id: "29077811", fallback: "Sidiropoulos K, Viteri G, Sevilla C, Jupe S, Webber M, Orlic-Milacic M, Jassal B, May B, Shamovsky V, Duenas C, Rothfels K, Matthews L, Song H, Stein L, Haw R, D'Eustachio P, Ping P, Hermjakob H, Fabregat A. Reactome enhanced pathway visualization. Bioinformatics. 2017 Nov 1;33(21):3461-3467. doi: 10.1093/bioinformatics/btx441. PubMed PMID: 29077811"},
     PATHWAY_ANALYSIS_CITATION: {id: "28249561", fallback: "Fabregat A, Sidiropoulos K, Viteri G, Forner O, Marin-Garcia P, Arnau V, D'Eustachio P, Stein L, Hermjakob H. Reactome pathway analysis: a high-performance in-memory approach. BMC Bioinformatics. 2017 Mar 2;18(1):142. doi: 10.1186/s12859-017-1559-2. PubMed PMID: 28249561"},
     FIVIZ_CITATION: {id: "28150241", fallback: "Wu G, Haw R. Functional Interaction Network Construction and Analysis for Disease Discovery. Methods Mol Biol. 2017;1558:235-253. doi: 10.1007/978-1-4939-6783-4_11. PubMed PMID: 28150241"},
-    GRAPH_DATABASE: {id: "29377902", fallback: "Fabregat A, Korninger F, Viteri G, Sidiropoulos K, Marin-Garcia P, Ping P, Wu G, Stein L, D'Eustachio P, Hermjakob H. Reactome graph database: Efficient accessto complex pathway data. PLoS Comput Biol. 2018 Jan 29;14(1):e1005968. doi: 10.1371/journal.pcbi.1005968. eCollection 2018 Jan. PubMed PMID: 29377902"}
+    GRAPH_DATABASE_CITATION: {id: "29377902", fallback: "Fabregat A, Korninger F, Viteri G, Sidiropoulos K, Marin-Garcia P, Ping P, Wu G, Stein L, D'Eustachio P, Hermjakob H. Reactome graph database: Efficient accessto complex pathway data. PLoS Comput Biol. 2018 Jan 29;14(1):e1005968. doi: 10.1371/journal.pcbi.1005968. eCollection 2018 Jan. PubMed PMID: 29377902"},
+    ORCID_CITATION: {id: "31802127", fallback: "Viteri G, Matthews L, Varusai T, et al. Reactome and ORCID-fine-grained credit attribution for community curation. Database : the Journal of Biological Databases and Curation. 2019 Jan;2019 DOI: 10.1093/database/baz123"}
 }
 
-var generalCitation = [/what-is-reactome/, /about/, /sab/, /license/, /orcid/, /community/]; 
+var generalCitation = [/what-is-reactome/, /about/, /sab/, /license/, /community/]; 
 var downloadCitation = [/download-data/];
 var iconCitation = [/icon-lib/, /R-ICO/]; 
 var pathwayAnalysisCitation = [/AnalysisService/]; 
 var fivizCitation = [/reactome-fiviz/]; 
 var graphDatabaseCitation = [/ContentService/, /graph-database/];
 var pathwayCitation = [/content\/detail\/R-/];
+var orcidCitation = [/orcid/];
 
 // constants declaration end
 
@@ -265,6 +250,10 @@ function parseURL(url, mode, ext= EXPORT_FORMATS["TEXT"]) {
 
     else if (graphDatabaseCitation.some(function(regex) {return regex.test(url)})) {
         return getStaticCitation(CITATIONS["GRAPH_DATABASE_CITATION"], mode, ext);
+    }
+
+    else if (orcidCitation.some(function(regex) {return regex.test(url)})) {
+        return getStaticCitation(CITATIONS["ORCID_CITATION"], mode, ext);
     }
 
     else if (pathwayCitation.some(function(regex) {return regex.test(url)})) {
