@@ -1,5 +1,15 @@
 /*
-TO-DO: add comments here
+    This script powers the citation functionality on the Joomla website
+
+    To have the citation button `visible` on a new page, add the `Cite Us` module to that particular page from Joomla admin dashboard
+
+    To control which citation appears on which page, the `CITATIONS` object is used alongside the variables with the matching regex
+
+    For example, to add a new citation `foo` which will appear on all pages where the url contains the string `bar`:
+
+    1) add FOO_CITATION: {id: <citation id>, fallback: <fallback citation text in case our query fails>} to CITATIONS constant
+    2) create a new variable fooCitation = [/bar/], with the (list of) matching regexes to display FOO_CITATION
+    3) add the appropriate condition in parseURL function
 */
 
 
@@ -7,6 +17,7 @@ TO-DO: add comments here
 // constants declaration
 var BASE_URL = window.location.origin;
 
+// the various endpoints we query
 var PATHWAY_CITATION_ENDPOINT = "/ContentService/citation/pathway/";
 var DOWNLOAD_CITATION_ENDPOINT = "/ContentService/citation/download/";
 var STATIC_CITATION_ENDPOINT = "/ContentService/citation/static/";
@@ -14,7 +25,8 @@ var EXPORT_CITATION_ENDPOINT = "/ContentService/citation/export?";
 var CONTENT_SERVICE_QUERY_ENDPOINT = "/ContentService/data/query/";
 var CONTENT_SERVICE_QUERY_ATTRIBUTE = "/schemaClass";
 
-
+// we cam query pathway and static citations to get 
+// vanila text or to export them in bib, ris or txt formats
 var QUERY_MODES = {
     EXPORT: "export",
     TEXT: "text"
@@ -28,6 +40,8 @@ var EXPORT_FORMATS = {
 };
 
 
+// the request-response cycle for static citations
+// for both exporting and getting as text
 var STATIC_CITATION_REQUEST_RESPONSE = {
     export : {
         callFunction: function(citation, ext) {
@@ -54,7 +68,8 @@ var STATIC_CITATION_REQUEST_RESPONSE = {
     }
 }
 
-
+// the request-response cycle for pathway citations
+// for both exporting and getting as text
 var PATHWAY_CITATION_REQUEST_RESPONSE = {
     export: {
         callFunction: function(id, ext) {
@@ -98,6 +113,8 @@ var CITATIONS = {
     ORCID_CITATION: {id: "31802127", fallback: "Viteri G, Matthews L, Varusai T, et al. Reactome and ORCID-fine-grained credit attribution for community curation. Database : the Journal of Biological Databases and Curation. 2019 Jan;2019 DOI: 10.1093/database/baz123"}
 }
 
+// the regex that must be matched to show the relevant citation
+// so for example `ORCID_CITATION` will be used when the page url matches the regex(es) in `orcidCitation`
 var generalCitation = [/what-is-reactome/, /about/, /sab/, /license/, /community/]; 
 var downloadCitation = [/download-data/];
 var iconCitation = [/icon-lib/, /R-ICO/]; 
@@ -185,7 +202,7 @@ function getCitation() {
                 var helpEmail = jQuery("<a />");
                 helpEmail.attr("href", "mailto:help@reactome.org");
                 helpEmail.text("help@reactome.org");
-                modal.find("#citationText").text("Sorry, we could not process your request. Please email the error code to ").append(helpEmail);
+                modal.find("#citationText").text("Sorry, we could not process your request. Please email the issue to ").append(helpEmail);
             }
             else {
                 modal.find("#citationText").text(failure);
