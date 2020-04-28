@@ -26,7 +26,7 @@ var CONTENT_SERVICE_QUERY_ENDPOINT = "/ContentService/data/query/";
 var CONTENT_SERVICE_QUERY_ATTRIBUTE = "/schemaClass";
 
 // we cam query pathway and static citations to get 
-// vanila text or to export them in bib, ris or txt formats
+// vanilla text or to export them in bib, ris or txt formats
 var QUERY_MODES = {
     EXPORT: "export",
     TEXT: "text"
