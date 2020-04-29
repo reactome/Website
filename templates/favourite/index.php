@@ -1383,7 +1383,7 @@ $favcolumns = 6;
             
           <a class="citation-button-large favth-visible-md favth-visible-lg" onClick="getCitation();">
             <span>Cite Us!</span>
-            <i class="fa fa-quote-left"></i>
+            <img src="<?php echo $this->baseurl ?>/templates/favourite/images/reactome/citation.png">
           </a> 
 
           <button type="button" class="favth-btn favth-visible-xs favth-visible-sm" style= "width: 100%; padding: 10px; padding-bottom: 10px;" onClick="getCitation();">Cite Us!</button>
