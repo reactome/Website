@@ -838,7 +838,7 @@ input.radio {
 .citation-button-large {
     position:fixed;
     top:50%;
-    display: inline-block; 
+    display: block; 
     background-color:#2F9EC2; 
     color:white; 
     padding: 16px; 
@@ -863,7 +863,7 @@ input.radio {
 }
 
 .citation-button-large:hover span {
-    display: block;
+    display: inline-block;
     color: white;
 }
 
