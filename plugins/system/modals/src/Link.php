@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.5.9
+ * @version         11.5.10
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -163,7 +163,7 @@ class Link
 
 		$is_old_syntax =
 			(strpos($string, '|') !== false)
-			|| (strpos($string, '"') === false && strpos($string, '&quot;') === false);
+			&& (strpos($string, '="') === false && strpos($string, '=&quot;') === false);
 
 		if ($is_old_syntax)
 		{
