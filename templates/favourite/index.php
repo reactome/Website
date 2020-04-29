@@ -28,7 +28,7 @@ $doc->addStyleSheet($this->baseurl. '/templates/' .$this->template. '/bootstrap/
 $doc->addScript($this->baseurl. '/templates/' .$this->template. '/bootstrap/favth-bootstrap.js');
 //Custom: adding the js files for the citation project
 $doc->addScript($this->baseurl. '/templates/' .$this->template. '/js/clipboard.min.js');
-$doc->addScript($this->baseurl. '/templates/' .$this->template. '/citation-query.js');
+$doc->addScript($this->baseurl. '/templates/' .$this->template. '/js/citation-query.js');
 
 // Custom: Adding autocomplete javascript
 JHtml::_('script', 'jui/jquery.autocomplete.min.js', array('version' => 'auto', 'relative' => true));
@@ -1383,7 +1383,7 @@ $favcolumns = 6;
             
           <a class="citation-button-large favth-visible-md favth-visible-lg" onClick="getCitation();">
             <span>Cite Us!</span>
-            <img src="<?php echo $this->baseurl ?>/templates/favourite/images/reactome/citation.png">
+              <img src="<?php echo $this->baseurl ?>/templates/favourite/images/reactome/citation.png">
           </a> 
 
           <button type="button" class="favth-btn favth-visible-xs favth-visible-sm" style= "width: 100%; padding: 10px; padding-bottom: 10px;" onClick="getCitation();">Cite Us!</button>
