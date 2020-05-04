@@ -26,6 +26,9 @@ $doc->addStyleSheet($this->baseurl . '/media/jui/css/bootstrap-responsive.css');
 JHtml::_('jquery.framework');
 $doc->addStyleSheet($this->baseurl. '/templates/' .$this->template. '/bootstrap/favth-bootstrap.css');
 $doc->addScript($this->baseurl. '/templates/' .$this->template. '/bootstrap/favth-bootstrap.js');
+//Custom: adding the js files for the citation project
+$doc->addScript($this->baseurl. '/templates/' .$this->template. '/js/clipboard.min.js');
+$doc->addScript($this->baseurl. '/templates/' .$this->template. '/js/citation-query.js');
 
 // Custom: Adding autocomplete javascript
 JHtml::_('script', 'jui/jquery.autocomplete.min.js', array('version' => 'auto', 'relative' => true));
@@ -85,7 +88,7 @@ $favcolumns = 6;
     <link href="//fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
     <!-- custom: icon for phone app -->
     <link rel="apple-touch-icon" sizes="128x128" href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template;?>/images/logo/icon.png">
-
+  
   <!-- PARAMETERS -->
   <?php require("admin/params.php"); ?>
 
@@ -520,7 +523,6 @@ $favcolumns = 6;
                     </div>
                 </div>
 		    <?php } ?>
-
 
   			<!-- PROMO -->
         <?php
@@ -1392,11 +1394,69 @@ $favcolumns = 6;
           </div>
         <?php } ?>
 
+
+        <?php if ($this->countModules('cite-us')) {  ?>
+            
+          <a class="citation-button-large favth-visible-md favth-visible-lg" onClick="getCitation();">
+            <span>Cite Us!</span>
+              <img src="<?php echo $this->baseurl ?>/templates/favourite/images/reactome/citation.png">
+          </a> 
+
+          <button type="button" class="favth-btn favth-visible-xs favth-visible-sm" style= "width: 100%; padding: 10px; padding-bottom: 10px;" onClick="getCitation();">Cite Us!</button>
+
+          <!-- Modal -->
+          <div id="citationModal" class="modal fade" role="dialog" style="display:none;">
+            <div class="modal-dialog">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header favth-col-xs-12">
+                  <div class="favth-col-xs-7 padding0">
+                    <h4 class="modal-title" style="font-weight:bold"> Cite Us!</h4>
+                  </div>
+                  <div class="favth-col-xs-5" style="margin-top:20px; margin-bottom:10px; text-align:right; padding:0">
+                    <a id="clipboardButton" data-clipboard-target="#citationText" title="Copy"><i class="fa fa-clipboard"></i></a> 
+                    <a id="mailButton" onClick="sendMail()" title="Email"><i class="fa fa-envelope"></i></a>
+                  </div>
+                </div>
+                <div class="modal-body"> 
+                <div id="citationWarning" class="alert alert-warning" style="display:none;">
+                  <strong>Warning!</strong> Unable to extract citation. Please try again later.
+                </div>
+                  <div id="citationText" style="white-space:pre-line"></div>
+                  <hr id="breakLine">
+                  <form id="exportCitationForm">
+                    <h5 style="font-weight:bold">Download As:</h5>
+                    <div class="radio-button">
+                      <input type="radio" class="radio" id="exportCitationAsBibTeX" name="exportOption" value="bib" onClick="enableExportCitationButton()"/>
+                      <label for="exportCitationAsBibTeX">BibTeX</label>
+
+                      <input type="radio" class="radio" id="exportCitationAsRIS" name="exportOption" value="ris" onClick="enableExportCitationButton()"/>
+                      <label for="exportCitationAsRIS">RIS</label>
+
+                      <input type="radio" class="radio" id="exportCitationAsText" name="exportOption" value="txt" onClick="enableExportCitationButton()"/>
+                      <label for="exportCitationAsText">Text</label>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="modal-footer">
+                  <button id="exportCitationButton" type="button" class="favth-btn favth-btn-small" disabled onClick="exportCitation();">Download</button>
+                  <button type="button" class="favth-btn favth-btn-small" data-dismiss="modal">Close</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        <?php } ?>
+
+
   			<!-- BACKTOP -->
         <div id="fav-backtopwrap">
     			<div class="favth-container">
     				<div class="favth-row">
-    					<?php if (($show_back_to_top) !=0) : ?>
+     					<?php if (($show_back_to_top) !=0) : ?>
     						<div id="fav-backtop" class="favth-col-lg-12 favth-col-md-12 favth-col-sm-12 favth-col-xs-12">
     							<a href="#" class="btn backtop" title="<?php echo htmlspecialchars($back_to_top_text);?>">
                     <i class="fa fa-angle-up"></i>
