@@ -115,7 +115,7 @@ Redirect 302 /user/guide /userguide
 # Used in PAPERS
 Redirect 301 /tutorials/pwp https://youtu.be/-skixrvI4nU
 Redirect 301 /documentation/index.php/Glossary_Data_Model /documentation/data-model
-Redirect 301 /cgi-bin/classbrowser /content/schema
+#Redirect 301 /cgi-bin/classbrowser /content/schema
 
 # Redirect eventbrowser to content/detail
 RewriteCond %{REQUEST_URI}  ^/cgi-bin/eventbrowser*$
