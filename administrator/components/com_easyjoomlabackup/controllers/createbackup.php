@@ -1,8 +1,10 @@
 <?php
+
 /**
+ * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.0-FREE - 2020-01-03
+ * @version    3.3.1-FREE - 2020-05-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -21,18 +23,24 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-use Joomla\CMS\{Factory, Router\Route, Language\Text, Session\Session, Response\JsonResponse, MVC\Controller\BaseController};
+use Joomla\CMS\{MVC\Controller\BaseController, Input\Input, Factory, Router\Route, Language\Text, Session\Session, Response\JsonResponse};
+use EasyJoomlaBackup\Helper;
 
 class EasyJoomlaBackupControllerCreatebackup extends BaseController
 {
+    /**
+     * @var Input $input
+     * @since 3.0.0-FREE
+     */
     protected $input;
 
     /**
      * EasyJoomlaBackupControllerCreatebackup constructor.
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
@@ -43,6 +51,7 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
      * Loads the full backup template
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function fullbackup()
     {
@@ -59,6 +68,7 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
      * Loads the database backup template
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function databasebackup()
     {
@@ -75,6 +85,7 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
      * Loads the file backup template
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function filebackup()
     {
@@ -91,6 +102,7 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
      * Discovers backup files without database entries or database entries without corresponding backup archives
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function discover()
     {
@@ -118,6 +130,7 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
      * Deletes selected entries and the corresponding backup archives
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function remove()
     {
@@ -145,6 +158,7 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
      * Calls the download screen for the selected backup entry
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function download()
     {
@@ -164,6 +178,8 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
 
     /**
      * Aborts the selected backup process
+     *
+     * @since 3.0.0-FREE
      */
     public function cancel()
     {
@@ -176,6 +192,7 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
      *
      * @throws Exception
      * @deprecated Use backupCreateFullbackup() instead
+     * @since      3.0.0-FREE
      */
     public function backup_create_fullbackup()
     {
@@ -186,14 +203,15 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
      * Starts the full backup process with an ACL check
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function backupCreateFullbackup()
     {
-        if (!Factory::getUser()->authorise('easyjoomlabackup.' . EasyJoomlaBackupHelper::BACKUP_TYPE_FULL, 'com_easyjoomlabackup')) {
+        if (!Factory::getUser()->authorise('easyjoomlabackup.' . Helper::BACKUP_TYPE_FULL, 'com_easyjoomlabackup')) {
             throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
         }
 
-        $this->backupCreate(EasyJoomlaBackupHelper::BACKUP_TYPE_FULL);
+        $this->backupCreate(Helper::BACKUP_TYPE_FULL);
     }
 
     /**
@@ -202,6 +220,7 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
      * @param string $backupType
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     private function backupCreate(string $backupType)
     {
@@ -219,11 +238,11 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
         $result = $model->createBackupAjax($backupType, $hash);
 
         if ($result['finished']) {
-            EasyJoomlaBackupHelper::addMessage(Text::_('COM_EASYJOOMLABACKUP_BACKUP_SAVED'));
+            Helper::addMessage(Text::_('COM_EASYJOOMLABACKUP_BACKUP_SAVED'));
 
             // Remove unneeded backup files
             if ($model->removeBackupFilesMax()) {
-                EasyJoomlaBackupHelper::addMessage(Text::_('COM_EASYJOOMLABACKUP_MAXNUMBERBACKUPS_REMOVED'), EasyJoomlaBackupHelper::MESSAGE_TYPE_NOTICE);
+                Helper::addMessage(Text::_('COM_EASYJOOMLABACKUP_MAXNUMBERBACKUPS_REMOVED'), Helper::MESSAGE_TYPE_NOTICE);
             }
         }
 
@@ -235,6 +254,7 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
      *
      * @throws Exception
      * @deprecated Use backupCreateDatabasebackup() instead
+     * @since      3.0.0-FREE
      */
     public function backup_create_databasebackup()
     {
@@ -245,14 +265,15 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
      * Starts the database backup process with an ACL check
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function backupCreateDatabasebackup()
     {
-        if (!Factory::getUser()->authorise('easyjoomlabackup.' . EasyJoomlaBackupHelper::BACKUP_TYPE_DATABASE, 'com_easyjoomlabackup')) {
+        if (!Factory::getUser()->authorise('easyjoomlabackup.' . Helper::BACKUP_TYPE_DATABASE, 'com_easyjoomlabackup')) {
             throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
         }
 
-        $this->backupCreate(EasyJoomlaBackupHelper::BACKUP_TYPE_DATABASE);
+        $this->backupCreate(Helper::BACKUP_TYPE_DATABASE);
     }
 
     /**
@@ -260,6 +281,7 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
      *
      * @throws Exception
      * @deprecated Use backupCreateFilebackup() instead
+     * @since      3.0.0-FREE
      */
     public function backup_create_filebackup()
     {
@@ -270,13 +292,14 @@ class EasyJoomlaBackupControllerCreatebackup extends BaseController
      * Starts the file backup process with an ACL check
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function backupCreateFilebackup()
     {
-        if (!Factory::getUser()->authorise('easyjoomlabackup.' . EasyJoomlaBackupHelper::BACKUP_TYPE_FILE, 'com_easyjoomlabackup')) {
+        if (!Factory::getUser()->authorise('easyjoomlabackup.' . Helper::BACKUP_TYPE_FILE, 'com_easyjoomlabackup')) {
             throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
         }
 
-        $this->backupCreate(EasyJoomlaBackupHelper::BACKUP_TYPE_FILE);
+        $this->backupCreate(Helper::BACKUP_TYPE_FILE);
     }
 }

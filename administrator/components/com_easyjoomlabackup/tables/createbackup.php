@@ -1,8 +1,10 @@
 <?php
+
 /**
+ * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.0-FREE - 2020-01-03
+ * @version    3.3.1-FREE - 2020-05-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -25,7 +27,14 @@ use Joomla\CMS\Table\Table;
 
 class EasyJoomlaBackupTableCreatebackup extends Table
 {
-    function __construct(&$db)
+    /**
+     * EasyJoomlaBackupTableCreatebackup constructor.
+     *
+     * @param JDatabaseDriver $db
+     *
+     * @since 3.0.0-FREE
+     */
+    public function __construct(&$db)
     {
         parent::__construct('#__easyjoomlabackup', 'id', $db);
     }

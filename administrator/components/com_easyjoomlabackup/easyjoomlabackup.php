@@ -1,8 +1,9 @@
 <?php
 /**
+ * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.0-FREE - 2020-01-03
+ * @version    3.3.1-FREE - 2020-05-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -20,7 +21,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 defined('_JEXEC') || die('Restricted access');
-define('EASYJOOMLABACKUP_FREE_VERSION', '3.3.0-FREE');
 
 use Joomla\CMS\{Factory, Language\Text};
 
@@ -29,7 +29,7 @@ if (!Factory::getUser()->authorise('core.manage', 'com_easyjoomlabackup')) {
 }
 
 require_once JPATH_COMPONENT . '/controller.php';
-require_once JPATH_COMPONENT . '/helpers/easyjoomlabackup.php';
+require_once JPATH_COMPONENT . '/helpers/Autoload.php';
 
 if ($controller = Factory::getApplication()->input->getWord('controller', '')) {
     $pathController = JPATH_COMPONENT . '/controllers/' . $controller . '.php';

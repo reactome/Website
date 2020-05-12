@@ -1,9 +1,10 @@
 <?php
+
 /**
- * @Copyright
+ * @copyright
  * @package     Field - Kubik-Rubik Pro Input
  * @author      Viktor Vogel <admin@kubik-rubik.de>
- * @version     Joomla! 3 - 3.0.0 - 2020-01-03
+ * @version     Joomla! 3 - 3.0.1 - 2020-05-03
  * @link        https://kubik-rubik.de/
  *
  * @license     GNU/GPL
@@ -33,6 +34,6 @@ class JFormFieldKRProInput extends FormField
 
     protected function getInput()
     {
-        return '<span style="color: red; padding-top: 5px; display: inline-block;">PRO FEATURE</span>';
+        return '<span style="color: #bd4242; padding-top: 5px; display: inline-block;">PRO FEATURE</span>';
     }
 }

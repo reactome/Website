@@ -1,8 +1,10 @@
 <?php
+
 /**
+ * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.0-FREE - 2020-01-03
+ * @version    3.3.1-FREE - 2020-05-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -58,6 +60,8 @@ error_reporting(E_ALL);
 
 /**
  * Command line script to create backup files with Easy Joomla Backup
+ *
+ * @since 3.0.0-FREE
  */
 class EasyJoomlaBackupCronCli extends CliApplication
 {
@@ -65,6 +69,7 @@ class EasyJoomlaBackupCronCli extends CliApplication
      * Entry point for CLI script
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function doExecute()
     {
@@ -74,7 +79,7 @@ class EasyJoomlaBackupCronCli extends CliApplication
             $argv[1] = 1;
         }
 
-        $type = (int) $argv[1];
+        $type = (int)$argv[1];
 
         // Set default backup typ if wrong or no argument is provided
         if (!intval($type) || (!in_array($type, [1, 2, 3]))) {
@@ -104,6 +109,7 @@ class EasyJoomlaBackupCronCli extends CliApplication
      * @param string $type
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     private function backupCreate(string $type)
     {
@@ -111,7 +117,7 @@ class EasyJoomlaBackupCronCli extends CliApplication
         @ini_set('memory_limit', -1);
         @set_time_limit(0);
 
-        require_once JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/helpers/easyjoomlabackup.php';
+        require_once JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/helpers/Autoload.php';
 
         // Load the correct model from the component
         JLoader::import('createbackup', JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/models');
