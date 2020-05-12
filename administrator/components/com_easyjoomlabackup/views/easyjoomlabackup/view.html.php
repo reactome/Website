@@ -1,8 +1,10 @@
 <?php
+
 /**
+ * @copyright
  * @package    EJB PRO - Easy Joomla Backup PRO for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.0-FREE - 2020-01-03
+ * @version    3.3.1-FREE - 2020-05-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -21,25 +23,66 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-use Joomla\CMS\{Factory, Language\Text, MVC\View\HtmlView, Toolbar\ToolbarHelper};
+use Joomla\CMS\{MVC\View\HtmlView, Factory, Language\Text, Toolbar\ToolbarHelper};
+use EasyJoomlaBackup\Helper;
 
 class EasyJoomlaBackupViewEasyJoomlaBackup extends HtmlView
 {
-    protected $state;
-    protected $pluginState;
-    protected $items;
-    protected $pagination;
-    protected $downloadAllowed;
+    /**
+     * @var string $dbType
+     * @since 3.0.0-FREE
+     */
     protected $dbType;
+
+    /**
+     * @var bool $downloadAllowed
+     * @since 3.0.0-FREE
+     */
+    protected $downloadAllowed;
+
+    /**
+     * @var array $items
+     * @since 3.0.0-FREE
+     */
+    protected $items;
+
+    /**
+     * @var object $pagination
+     * @since 3.0.0-FREE
+     */
+    protected $pagination;
+
+    /**
+     * @var array $pluginState
+     * @since 3.0.0-FREE
+     */
+    protected $pluginState;
+
+    /**
+     * @var string $sessionHandler
+     * @since 3.0.0-FREE
+     */
     protected $sessionHandler;
+
+    /**
+     * @var object $state
+     * @since 3.0.0-FREE
+     */
+    protected $state;
+
+    /**
+     * @var string $donationCodeMessage
+     * @since 3.0.0-FREE
+     */
     protected $donationCodeMessage;
 
     /**
      * @param null|string $tpl
      *
-     * @return mixed|void
+     * @return Exception|mixed|string|void
+     * @since 3.0.0-FREE
      */
-    function display($tpl = null)
+    public function display($tpl = null)
     {
         ToolbarHelper::title(Text::_('COM_EASYJOOMLABACKUP') . " - " . Text::_('COM_EASYJOOMLABACKUP_SUBMENU_ENTRIES'), 'easyjoomlabackup');
 
@@ -67,29 +110,19 @@ class EasyJoomlaBackupViewEasyJoomlaBackup extends HtmlView
             ToolbarHelper::preferences('com_easyjoomlabackup', '500');
         }
 
-        $downloadAllowed = false;
-
-        if (Factory::getUser()->authorise('easyjoomlabackup.download', 'com_easyjoomlabackup')) {
-            $downloadAllowed = true;
-        }
-
-        $items = $this->get('Data');
-        $pagination = $this->get('Pagination');
+        $this->items = $this->get('Data');
+        $this->pagination = $this->get('Pagination');
         $this->state = $this->get('State');
         $this->pluginState = $this->get('PluginStatus');
+        $this->downloadAllowed = Factory::getUser()->authorise('easyjoomlabackup.download', 'com_easyjoomlabackup');
+        $this->dbType = Factory::getConfig()->get('dbtype');
+        $this->sessionHandler = Factory::getConfig()->get('session_handler');
 
         $document = Factory::getDocument();
         $document->addStyleSheet('components/com_easyjoomlabackup/css/easyjoomlabackup.css');
 
-        $this->items = $items;
-        $this->pagination = $pagination;
-        $this->downloadAllowed = $downloadAllowed;
-
-        $this->dbType = Factory::getConfig()->get('dbtype');
-        $this->sessionHandler = Factory::getConfig()->get('session_handler');
-
-        EasyJoomlaBackupHelper::showMessages();
-        $this->donationCodeMessage = EasyJoomlaBackupHelper::getDonationCodeMessage();
+        Helper::showMessages();
+        $this->donationCodeMessage = Helper::getDonationCodeMessage();
 
         parent::display($tpl);
     }

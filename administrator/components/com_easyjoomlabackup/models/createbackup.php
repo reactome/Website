@@ -1,8 +1,10 @@
 <?php
+
 /**
+ * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.0-FREE - 2020-01-03
+ * @version    3.3.1-FREE - 2020-05-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -21,53 +23,92 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-use Joomla\CMS\{MVC\Model\BaseDatabaseModel, Application\CMSApplication, Date\Date, Input\Input, Factory, Uri\Uri, Table\Table, Language\Text, User\UserHelper, Component\ComponentHelper, Filesystem\File, Filesystem\Folder};
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\{Application\CMSApplication, Date\Date, Input\Input, Factory, Uri\Uri, Table\Table, Language\Text, User\UserHelper, Component\ComponentHelper, Filesystem\File, Filesystem\Folder};
 use Joomla\Registry\Registry;
+use EasyJoomlaBackup\Helper;
 
 class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
 {
-    const DEFAULT_PREFIX = 'easy-joomla-backup';
+    public const DEFAULT_PREFIX = 'easy-joomla-backup';
 
-    /** @var CMSApplication $app */
+    /**
+     * @var CMSApplication $app
+     * @since 3.0.0-FREE
+     */
     protected $app;
 
-    /** @var Date $backupDatetime */
+    /**
+     * @var Date $backupDatetime
+     * @since 3.0.0-FREE
+     */
     protected $backupDatetime;
 
-    /** @var string $backupFolder */
+    /**
+     * @var string $backupFolder
+     * @since 3.0.0-FREE
+     */
     protected $backupFolder;
 
-    /** @var string $backupPath */
+    /**
+     * @var string $backupPath
+     * @since 3.0.0-FREE
+     */
     protected $backupPath;
 
-    /** @var JDatabaseDriver $db */
+    /**
+     * @var JDatabaseDriver $db
+     * @since 3.0.0-FREE
+     */
     protected $db;
 
-    /** @var bool $externalAttributes */
+    /**
+     * @var bool $externalAttributes
+     * @since 3.0.0-FREE
+     */
     protected $externalAttributes = false;
 
-    /** @var Input $input */
+    /**
+     * @var Input $input
+     * @since 3.0.0-FREE
+     */
     protected $input;
 
-    /** @var int $maximumExecutionLevel */
+    /**
+     * @var int $maximumExecutionLevel
+     * @since 3.3.0-FREE
+     */
     protected $maximumExecutionLevel;
 
-    /** @var float $maximumExecutionTime */
+    /**
+     * @var float $maximumExecutionTime
+     * @since 3.3.0-FREE
+     */
     protected $maximumExecutionTime;
 
-    /** @var float $maximumExecutionTimeDefault */
+    /**
+     * @var float $maximumExecutionTimeDefault
+     * @since 3.3.0-FREE
+     */
     protected $maximumExecutionTimeDefault = 10.0;
 
-    /** @var int $maximumExecutionLevelDefault */
+    /**
+     * @var int $maximumExecutionLevelDefault
+     * @since 3.3.0-FREE
+     */
     protected $maximumExecutionLevelDefault = 6;
 
-    /** @var Registry $params */
+    /**
+     * @var Registry $params
+     * @since 3.0.0-FREE
+     */
     protected $params;
 
     /**
      * EasyJoomlaBackupModelCreatebackup constructor.
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function __construct()
     {
@@ -79,8 +120,30 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
         $this->params = ComponentHelper::getParams('com_easyjoomlabackup');
         $this->backupFolder = JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/backups/';
         $this->backupDatetime = Factory::getDate('now', $this->app->get('offset'));
-        $this->maximumExecutionTime = $this->getMaximumExecutionTime();
-        $this->maximumExecutionLevel = $this->getMaximumExecutionLevel();
+        $this->maximumExecutionTime = (float)$this->getMaximumExecutionTime();
+        $this->maximumExecutionLevel = (int)$this->getMaximumExecutionLevel();
+    }
+
+    /**
+     * Gets the maximum execution time for each batch process
+     *
+     * @return float
+     * @since 3.3.0-FREE
+     */
+    private function getMaximumExecutionTime(): float
+    {
+        return $this->maximumExecutionTimeDefault;
+    }
+
+    /**
+     * Gets the maximum execution level for initial scanning process
+     *
+     * @return int
+     * @since 3.3.0-FREE
+     */
+    private function getMaximumExecutionLevel(): int
+    {
+        return $this->maximumExecutionLevelDefault;
     }
 
     /**
@@ -91,6 +154,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      *
      * @return bool|array
      * @throws Exception
+     * @since 3.3.0-FREE
      */
     public function createBackupAjax(string $type, string $hash)
     {
@@ -120,13 +184,13 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
 
             // Create file system backup
             if ($type == 'filebackup' || $type == 'fullbackup') {
-                $fileBackupDone = (bool) $this->app->getUserState('ejb.' . $hash . '.fileBackupDone', false);
+                $fileBackupDone = (bool)$this->app->getUserState('ejb.' . $hash . '.fileBackupDone', false);
 
                 if (!$fileBackupDone) {
                     $status = $this->createBackupZipArchiveFilesAjax($hash);
 
-                    $foldersIteration = (array) $this->app->getUserState('ejb.' . $hash . '.foldersIteration', []);
-                    $foldersIterationCount = (int) $this->app->getUserState('ejb.' . $hash . '.foldersIterationCount', 1);
+                    $foldersIteration = (array)$this->app->getUserState('ejb.' . $hash . '.foldersIteration', []);
+                    $foldersIterationCount = (int)$this->app->getUserState('ejb.' . $hash . '.foldersIterationCount', 1);
                     $message = Text::sprintf('COM_EASYJOOMLABACKUP_BACKUPMODAL_LASTFOLDER', $foldersIteration[0]['relname']);
                     $totalPercentage = ($type === 'fullbackup') ? 90 : 100;
 
@@ -137,14 +201,12 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
                         $message = ($type === 'fullbackup') ? Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_FILEBACKUPDONE_DB') : Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_FILEBACKUPDONE');
                     }
 
-                    $result = [
+                    return [
                         'hash'     => $hash,
                         'finished' => false,
                         'percent'  => $totalPercentage - round(count($foldersIteration) * $totalPercentage / $foldersIterationCount),
                         'message'  => $message,
                     ];
-
-                    return $result;
                 }
             }
 
@@ -200,189 +262,11 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
     }
 
     /**
-     * Main function for the backup process - used in plugin and CLI script
-     *
-     * @param string $type
-     * @param string $source
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function createBackup(string $type, string $source = ''): bool
-    {
-        // Check whether Zip class exists
-        if (class_exists('ZipArchive')) {
-            $this->externalAttributes = $this->checkExternalAttributes();
-
-            $start = microtime(true);
-            $status = true;
-            $statusDb = true;
-
-            // Create name of the new archive
-            $fileName = $this->createFilename();
-
-            // Get all files and folders
-            if ($type == 'filebackup' || $type == 'fullbackup') {
-                $status = $this->createBackupZipArchiveFiles($fileName);
-            }
-
-            if ($type == 'databasebackup' || $type == 'fullbackup') {
-                $statusDb = $this->createBackupZipArchiveDatabase($fileName);
-            }
-
-            // Zip archive created successfully
-            if (!empty($status) && !empty($statusDb)) {
-                // Add path of table - this is important for the cronjob system plugin
-                Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/tables');
-                $table = $this->getTable('createbackup', 'EasyJoomlaBackupTable');
-
-                $data = [];
-                $data['date'] = $this->backupDatetime->toSql();
-                $data['type'] = $type;
-                $data['name'] = $fileName;
-                $data['size'] = filesize($this->backupFolder . $fileName);
-                $data['duration'] = round(microtime(true) - $start, 2);
-                $data['comment'] = $this->input->get('comment', '', 'STRING');
-
-                if (!empty($source)) {
-                    $language = Factory::getLanguage();
-                    $language->load('com_easyjoomlabackup', JPATH_ADMINISTRATOR);
-
-                    $data['comment'] = Text::_('COM_EASYJOOMLABACKUP_CRONJOBPLUGIN');
-
-                    if ($source == 'cli') {
-                        $data['comment'] = Text::_('COM_EASYJOOMLABACKUP_CLISCRIPT');
-                    }
-                }
-
-                if (!$table->save($data)) {
-                    throw new Exception(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 404);
-                }
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Loads the correct backup archive and creates the download process
-     */
-    public function download()
-    {
-        $id = $this->input->get('id', 0, 'INTEGER');
-        $table = $this->getTable('createbackup', 'EasyJoomlaBackupTable');
-
-        // Get the file with the correct path
-        $table->load($id);
-        $file = $this->backupFolder . $table->get('name');
-
-        if (file_exists($file)) {
-            header('Pragma: public');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-            header('Cache-Control: public');
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/zip', true, 200);
-            header('Content-Disposition: attachment; filename=' . $table->get('name'));
-            header('Content-Transfer-Encoding: binary');
-            header('Content-Length: ' . $table->get('size'));
-
-            $chunkSize = 10 * (1024 * 1024);
-            $handle = fopen($file, 'rb');
-
-            while (!feof($handle)) {
-                $buffer = fread($handle, $chunkSize);
-                echo $buffer;
-                ob_flush();
-                flush();
-            }
-
-            fclose($handle);
-
-            exit();
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks whether more backup files are available than allowed and starts deletion process if required
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function removeBackupFilesMax(): bool
-    {
-        $maxNumberBackups = $this->params->get('max_number_backups', 5);
-        $totalNumberBackups = $this->getTotal();
-
-        // Only execute the process if the max number is not empty and smaller than the total number
-        if (!empty($maxNumberBackups) && $totalNumberBackups > $maxNumberBackups) {
-            // Delete outdated files
-            if ($this->deleteFilesMax($maxNumberBackups, $totalNumberBackups - $maxNumberBackups)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Deletes backup files from the server and the corresponding database entries
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function delete(): bool
-    {
-        $ids = $this->input->get('id', 0, 'ARRAY');
-        $table = $this->getTable('createbackup', 'EasyJoomlaBackupTable');
-
-        foreach ($ids as $id) {
-            // Delete the backup file from the server
-            $table->load($id);
-
-            $filePath = $this->backupFolder . $table->get('name');
-
-            if (File::exists($filePath)) {
-                File::delete($filePath);
-            }
-
-            if (!$table->delete($id)) {
-                throw new Exception(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 404);
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Gets the maximum execution time for each batch process
-     *
-     * @return float
-     */
-    private function getMaximumExecutionTime(): float
-    {
-        return $this->maximumExecutionTimeDefault;
-    }
-
-    /**
-     * Gets the maximum execution level for initial scanning process
-     *
-     * @return int
-     */
-    private function getMaximumExecutionLevel(): int
-    {
-        return $this->maximumExecutionLevelDefault;
-    }
-
-    /**
      * Check whether required function to set the permission rights on UNIX systems is available
      * Since PHP 5 >= 5.6.0, PHP 7, PECL zip >= 1.12.4
      *
      * @return bool
+     * @since 3.0.0-FREE
      */
     private function checkExternalAttributes()
     {
@@ -397,8 +281,9 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param string $hash
      *
      * @return string
+     * @since 3.3.0-FREE
      */
-    private function createFilenameAjax(string &$hash)
+    private function createFilenameAjax(string &$hash): string
     {
         if (!empty($hash)) {
             $fileName = $this->app->getUserState('ejb.' . $hash . '.filename');
@@ -437,18 +322,19 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param bool $hostOnly
      *
      * @return string
+     * @since 3.0.0-FREE
      */
-    private function getFileNamePrefix($hostOnly = false)
+    private function getFileNamePrefix(bool $hostOnly = false): string
     {
         if ($this->params->get('prefix_archive')) {
             return strtolower(preg_replace('@\s+@', '-', $this->params->get('prefix_archive')));
         }
 
         if ($hostOnly) {
-            return Uri::getInstance()->getHost();
+            return (string)Uri::getInstance()->getHost();
         }
 
-        $root = Uri::root();
+        $root = (string)Uri::root();
 
         if (!empty($root)) {
             return implode('-', array_filter(explode('/', str_replace(['http://', 'https://', ':'], '', $root))));
@@ -462,22 +348,27 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      *
      * @param string $backupType
      * @param string $hash
+     *
+     * @since 3.3.0-FREE
      */
     private function prepareBackupProcess(string $backupType, string $hash)
     {
         $this->app->setUserState('ejb.' . $hash . '.startProcess', microtime(true));
 
         // Database information
-        if ($backupType === EasyJoomlaBackupHelper::BACKUP_TYPE_DATABASE || $backupType === EasyJoomlaBackupHelper::BACKUP_TYPE_FULL) {
+        if ($backupType === Helper::BACKUP_TYPE_DATABASE || $backupType === Helper::BACKUP_TYPE_FULL) {
             $prefix = $this->db->getPrefix();
             $tables = $this->db->getTableList();
 
             $additionalDbTables = $this->params->get('add_db_tables');
             $additionalDbTables = array_map('trim', explode("\n", $additionalDbTables));
 
-            $tables = array_filter($tables, function($table) use ($prefix, $additionalDbTables) {
-                return strpos($table, $prefix) === 0 || in_array($table, $additionalDbTables);
-            });
+            $tables = array_filter(
+                $tables,
+                function ($table) use ($prefix, $additionalDbTables) {
+                    return strpos($table, $prefix) === 0 || in_array($table, $additionalDbTables);
+                }
+            );
 
             $this->app->setUserState('ejb.' . $hash . '.dbTables', $tables);
             $this->app->setUserState('ejb.' . $hash . '.dbTablesCount', count($tables));
@@ -485,7 +376,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
         }
 
         // File system information
-        if ($backupType === EasyJoomlaBackupHelper::BACKUP_TYPE_FILE || $backupType === EasyJoomlaBackupHelper::BACKUP_TYPE_FULL) {
+        if ($backupType === Helper::BACKUP_TYPE_FILE || $backupType === Helper::BACKUP_TYPE_FULL) {
             $filesRoot = Folder::files(JPATH_ROOT, '.', false, false, [], []);
             $foldersIteration = Folder::listFolderTree(JPATH_ROOT, '.', $this->maximumExecutionLevel);
 
@@ -513,6 +404,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      *
      * @return bool
      * @throws Exception
+     * @since 3.3.0-FREE
      */
     private function createBackupZipArchiveFilesAjax(string $hash): bool
     {
@@ -534,7 +426,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
             throw new Exception('Error: Root path could not be opened!');
         }
 
-        $filesRoot = (array) $this->app->getUserState('ejb.' . $hash . '.filesRoot', []);
+        $filesRoot = (array)$this->app->getUserState('ejb.' . $hash . '.filesRoot', []);
 
         if (!empty($filesRoot)) {
             $zipFile = new ZipArchive();
@@ -566,7 +458,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
             return false;
         }
 
-        $foldersIteration = (array) $this->app->getUserState('ejb.' . $hash . '.foldersIteration', []);
+        $foldersIteration = (array)$this->app->getUserState('ejb.' . $hash . '.foldersIteration', []);
 
         if (!empty($foldersIteration)) {
             // Create for all folders an own Zip Archive object to avoid memory overflow
@@ -613,6 +505,8 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param object $zipObject
      * @param string $fileName
      * @param int    $filePermission
+     *
+     * @since 3.0.0-FREE
      */
     private function setExternalAttributes(object &$zipObject, string $fileName, int $filePermission)
     {
@@ -632,6 +526,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param array  $excludeFolders
      *
      * @return bool
+     * @since 3.3.0-FREE
      */
     private function zipFoldersAndFilesRecursiveAjax(object $zip, string $folder, string $folderRelative, bool $recursive, array $excludeFiles = [], array $excludeFolders = []): bool
     {
@@ -718,7 +613,6 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
                 }
             } elseif (is_file($folder . '/' . $file)) {
                 if (!empty($excludeFiles)) {
-
                     if (in_array($folderRelative . '/' . $file, $excludeFiles)) {
                         continue;
                     }
@@ -742,6 +636,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param int   $precision
      *
      * @return float|int
+     * @since 3.0.0-FREE
      */
     private function ceilDecimalDigits(float $value, int $precision = 2)
     {
@@ -754,6 +649,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param string $fileName
      *
      * @return bool
+     * @since 3.3.0-FREE
      */
     private function createBackupZipArchiveDatabaseAjax(string $fileName): bool
     {
@@ -791,6 +687,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param string $fileNameDump
      *
      * @return bool
+     * @since 3.0.0-FREE
      */
     private function backupDatabase(string $fileNameDump): bool
     {
@@ -896,9 +793,78 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
     }
 
     /**
+     * Main function for the backup process - used in plugin and CLI script
+     *
+     * @param string $type
+     * @param string $source
+     *
+     * @return bool
+     * @throws Exception
+     * @since 3.0.0-FREE
+     */
+    public function createBackup(string $type, string $source = ''): bool
+    {
+        // Check whether Zip class exists
+        if (class_exists('ZipArchive')) {
+            $this->externalAttributes = $this->checkExternalAttributes();
+
+            $start = microtime(true);
+            $status = true;
+            $statusDb = true;
+
+            // Create name of the new archive
+            $fileName = $this->createFilename();
+
+            // Get all files and folders
+            if ($type == 'filebackup' || $type == 'fullbackup') {
+                $status = $this->createBackupZipArchiveFiles($fileName);
+            }
+
+            if ($type == 'databasebackup' || $type == 'fullbackup') {
+                $statusDb = $this->createBackupZipArchiveDatabase($fileName);
+            }
+
+            // Zip archive created successfully
+            if (!empty($status) && !empty($statusDb)) {
+                // Add path of table - this is important for the cronjob system plugin
+                Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/tables');
+                $table = $this->getTable('createbackup', 'EasyJoomlaBackupTable');
+
+                $data = [];
+                $data['date'] = $this->backupDatetime->toSql();
+                $data['type'] = $type;
+                $data['name'] = $fileName;
+                $data['size'] = filesize($this->backupFolder . $fileName);
+                $data['duration'] = round(microtime(true) - $start, 2);
+                $data['comment'] = $this->input->get('comment', '', 'STRING');
+
+                if (!empty($source)) {
+                    $language = Factory::getLanguage();
+                    $language->load('com_easyjoomlabackup', JPATH_ADMINISTRATOR);
+
+                    $data['comment'] = Text::_('COM_EASYJOOMLABACKUP_CRONJOBPLUGIN');
+
+                    if ($source == 'cli') {
+                        $data['comment'] = Text::_('COM_EASYJOOMLABACKUP_CLISCRIPT');
+                    }
+                }
+
+                if (!$table->save($data)) {
+                    throw new Exception(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 404);
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Creates a filename for the backup archive from the URL, the date and a random string
      *
      * @return string
+     * @since 3.0.0-FREE
      */
     private function createFilename(): string
     {
@@ -928,6 +894,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param string $fileName
      *
      * @return bool
+     * @since 3.0.0-FREE
      */
     private function createBackupZipArchiveFiles(string $fileName): bool
     {
@@ -1021,6 +988,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param string $folderStart
      *
      * @return bool
+     * @since 3.0.0-FREE
      */
     private function zipFoldersAndFilesRecursive(object $zip, string $folder, string $folderRelative, array $excludeFiles = [], array $excludeFolders = [], string $folderStart = ''): bool
     {
@@ -1091,7 +1059,6 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
                 $this->zipFoldersAndFilesRecursive($zip, $folder . '/' . $file, $folderRelative . '/' . $file, $excludeFiles, $excludeFolders);
             } elseif (is_file($folder . '/' . $file)) {
                 if (!empty($excludeFiles)) {
-
                     if (in_array($folderRelative . '/' . $file, $excludeFiles)) {
                         continue;
                     }
@@ -1114,6 +1081,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param string $fileName
      *
      * @return bool
+     * @since 3.0.0-FREE
      */
     private function createBackupZipArchiveDatabase(string $fileName): bool
     {
@@ -1146,9 +1114,78 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
     }
 
     /**
+     * Loads the correct backup archive and creates the download process
+     *
+     * @return bool
+     * @throws Exception
+     * @since 3.0.0-FREE
+     */
+    public function download()
+    {
+        $id = $this->input->get('id', 0, 'INTEGER');
+        $table = $this->getTable('createbackup', 'EasyJoomlaBackupTable');
+
+        // Get the file with the correct path
+        $table->load($id);
+        $file = $this->backupFolder . $table->get('name');
+
+        if (file_exists($file)) {
+            header('Pragma: public');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Cache-Control: public');
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/zip', true, 200);
+            header('Content-Disposition: attachment; filename=' . $table->get('name'));
+            header('Content-Transfer-Encoding: binary');
+            header('Content-Length: ' . $table->get('size'));
+
+            $chunkSize = 10 * (1024 * 1024);
+            $handle = fopen($file, 'rb');
+
+            while (!feof($handle)) {
+                $buffer = fread($handle, $chunkSize);
+                echo $buffer;
+                ob_flush();
+                flush();
+            }
+
+            fclose($handle);
+
+            exit();
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks whether more backup files are available than allowed and starts deletion process if required
+     *
+     * @return bool
+     * @throws Exception
+     * @since 3.0.0-FREE
+     */
+    public function removeBackupFilesMax(): bool
+    {
+        $maxNumberBackups = $this->params->get('max_number_backups', 5);
+        $totalNumberBackups = $this->getTotal();
+
+        // Only execute the process if the max number is not empty and smaller than the total number
+        if (!empty($maxNumberBackups) && $totalNumberBackups > $maxNumberBackups) {
+            // Delete outdated files
+            if ($this->deleteFilesMax($maxNumberBackups, $totalNumberBackups - $maxNumberBackups)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Gets the total number of entries after the backup process was executed
      *
      * @return int
+     * @since 3.0.0-FREE
      */
     private function getTotal(): int
     {
@@ -1167,6 +1204,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      *
      * @return bool
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     private function deleteFilesMax(int $limitstart, int $limit): bool
     {
@@ -1192,5 +1230,34 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
         }
 
         return false;
+    }
+
+    /**
+     * Deletes backup files from the server and the corresponding database entries
+     *
+     * @return bool
+     * @throws Exception
+     * @since 3.0.0-FREE
+     */
+    public function delete(): bool
+    {
+        $ids = $this->input->get('id', 0, 'ARRAY');
+        $table = $this->getTable('createbackup', 'EasyJoomlaBackupTable');
+
+        foreach ($ids as $id) {
+            // Delete the backup file from the server
+            $table->load($id);
+            $filePath = $this->backupFolder . $table->get('name');
+
+            if (File::exists($filePath)) {
+                File::delete($filePath);
+            }
+
+            if (!$table->delete($id)) {
+                throw new Exception(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 404);
+            }
+        }
+
+        return true;
     }
 }

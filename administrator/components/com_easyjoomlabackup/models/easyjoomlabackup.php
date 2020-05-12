@@ -1,8 +1,10 @@
 <?php
+
 /**
+ * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.0-FREE - 2020-01-03
+ * @version    3.3.1-FREE - 2020-05-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -25,12 +27,34 @@ use Joomla\CMS\{MVC\Model\BaseDatabaseModel, Factory, Uri\Uri, Pagination\Pagina
 
 class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
 {
+    /**
+     * @var JDatabaseDriver $db
+     * @since 3.0.0-FREE
+     */
     protected $db;
+    /**
+     * @var array $data
+     * @since 3.0.0-FREE
+     */
     protected $data;
+    /**
+     * @var int $total
+     * @since 3.0.0-FREE
+     */
     protected $total;
+    /**
+     * @var object $pagination
+     * @since 3.0.0-FREE
+     */
     protected $pagination;
 
-    function __construct()
+    /**
+     * EasyJoomlaBackupModelEasyJoomlaBackup constructor.
+     *
+     * @throws Exception
+     * @since 3.0.0-FREE
+     */
+    public function __construct()
     {
         parent::__construct();
 
@@ -50,12 +74,13 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
     /**
      * Creates the pagination in the footer of the list
      *
-     * @return Pagination
+     * @return object
+     * @since 3.0.0-FREE
      */
-    public function getPagination(): Pagination
+    public function getPagination(): object
     {
         if (empty($this->pagination)) {
-            $this->pagination = new Pagination($this->getTotal(), (int) $this->getState('limitstart'), (int) $this->getState('limit'));
+            $this->pagination = new Pagination($this->getTotal(), (int)$this->getState('limitstart'), (int)$this->getState('limit'));
         }
 
         return $this->pagination;
@@ -65,6 +90,7 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
      * Calculates the total number of all loaded entries
      *
      * @return int
+     * @since 3.0.0-FREE
      */
     public function getTotal(): int
     {
@@ -92,6 +118,7 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
      * Finds backup files without entry in the database or entries without backup files
      *
      * @return bool
+     * @since 3.0.0-FREE
      */
     public function discover(): bool
     {
@@ -141,6 +168,7 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
      * Loads all or filtered entries from the database
      *
      * @return array
+     * @since 3.0.0-FREE
      */
     public function getData(): array
     {
@@ -170,6 +198,7 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
      * @param int $id
      *
      * @return bool
+     * @since 3.0.0-FREE
      */
     private function removeEntry(int $id): bool
     {
@@ -186,6 +215,7 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
      * @param string $fileName
      *
      * @return bool
+     * @since 3.0.0-FREE
      */
     private function addEntry(string $fileName): bool
     {
@@ -203,6 +233,7 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
      * Gets the status of the plugin
      *
      * @return array
+     * @since 3.0.0-FREE
      */
     public function getPluginStatus(): array
     {
@@ -216,7 +247,7 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
         $result = $this->_getList($query);
 
         if (!empty($result)) {
-            $pluginState = ['enabled' => (boolean) $result[0]->enabled, 'url_settings' => Uri::base() . 'index.php?option=com_plugins&task=plugin.edit&extension_id=' . $result[0]->extension_id];
+            $pluginState = ['enabled' => (boolean)$result[0]->enabled, 'url_settings' => Uri::base() . 'index.php?option=com_plugins&task=plugin.edit&extension_id=' . $result[0]->extension_id];
         }
 
         return $pluginState;

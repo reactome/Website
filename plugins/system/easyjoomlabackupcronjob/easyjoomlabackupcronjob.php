@@ -1,8 +1,10 @@
 <?php
+
 /**
+ * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.0-FREE - 2020-01-03
+ * @version    3.3.1-FREE - 2020-05-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -21,19 +23,20 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-use Joomla\CMS\{Factory, Uri\Uri, Plugin\CMSPlugin, MVC\Model\BaseDatabaseModel};
+use Joomla\CMS\{Plugin\CMSPlugin, Factory, Uri\Uri, MVC\Model\BaseDatabaseModel};
 
 class PlgSystemEasyJoomlaBackupCronjob extends CMSPlugin
 {
     /**
      * PlgSystemEasyJoomlaBackupCronjob constructor.
      *
-     * @param JEventDispatcher $subject
-     * @param array            $config
+     * @param object $subject
+     * @param array  $config
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
-    function __construct(&$subject, array $config)
+    public function __construct(object &$subject, array $config)
     {
         if (Factory::getApplication()->isClient('administrator')) {
             return;
@@ -45,20 +48,20 @@ class PlgSystemEasyJoomlaBackupCronjob extends CMSPlugin
     /**
      * The backup process via a cronjob is executed in the trigger onAfterRender
      *
-     * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function onAfterRender()
     {
         $tokenRequest = Factory::getApplication()->input->get('ejbtoken', null, 'STRING');
 
         if (!empty($tokenRequest)) {
-            $token = (string) $this->params->get('token');
+            $token = (string)$this->params->get('token');
 
             if ($tokenRequest === $token) {
                 $type = Factory::getApplication()->input->get('ejbtype', null, 'INTEGER');
 
                 if (empty($type) || (!in_array($type, [1, 2, 3]))) {
-                    $type = (int) $this->params->get('type');
+                    $type = (int)$this->params->get('type');
                 }
 
                 if ($type === 1) {
@@ -82,6 +85,7 @@ class PlgSystemEasyJoomlaBackupCronjob extends CMSPlugin
      * @param string $type
      *
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     private function backupCreate(string $type)
     {
@@ -89,7 +93,7 @@ class PlgSystemEasyJoomlaBackupCronjob extends CMSPlugin
         @ini_set('error_reporting', 0);
         @set_time_limit(0);
 
-        require_once JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/helpers/easyjoomlabackup.php';
+        require_once JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/helpers/Autoload.php';
 
         JLoader::import('createbackup', JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/models');
         /* @var EasyJoomlaBackupModelCreatebackup $model */

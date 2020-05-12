@@ -3,7 +3,7 @@
     <fields addfieldpath="/administrator/components/com_easyjoomlabackup/models/fields">
         <fieldset name="component">
             <field type="krdonationcodecheck"/>
-            <field name="ejbtitle_backup_process" type="krtitle" label="COM_EASYJOOMLABACKUP_BACKUPPROCESS"/>
+            <field name="ejbtitleBackupProcess" type="krtitle" label="COM_EASYJOOMLABACKUP_BACKUPPROCESS"/>
             <field name="exclude_files" type="textarea" value="" rows="5" cols="60" filter="raw" label="COM_EASYJOOMLABACKUP_EXCLUDEFILES" description="COM_EASYJOOMLABACKUP_EXCLUDEFILES_DESC"/>
             <field name="exclude_folders" type="textarea" value="" rows="5" cols="60" filter="raw" label="COM_EASYJOOMLABACKUP_EXCLUDEFOLDERS" description="COM_EASYJOOMLABACKUP_EXCLUDEFOLDERS_DESC"/>
             <field name="add_drop_statement" type="list" default="1" label="COM_EASYJOOMLABACKUP_ADDDROPSTATEMENT" description="COM_EASYJOOMLABACKUP_ADDDROPSTATEMENT_DESC">
@@ -17,12 +17,14 @@
                 <option value="1">JYES</option>
                 <option value="0">JNO</option>
             </field>
-            <field name="ejbtitle_execution" type="krtitle" label="COM_EASYJOOMLABACKUP_EXECUTION"/>
+            <field name="ejbtitleExecution" type="krtitle" label="COM_EASYJOOMLABACKUP_EXECUTION"/>
             <field name="maximumExecutionTime" type="krproinput" default="10" label="COM_EASYJOOMLABACKUP_MAXIMUMEXECUTIONTIME" description="COM_EASYJOOMLABACKUP_MAXIMUMEXECUTIONTIME_DESC"/>
             <field name="maximumExecutionLevel" type="krproinput" default="6" label="COM_EASYJOOMLABACKUP_MAXIMUMEXECUTIONLEVEL" description="COM_EASYJOOMLABACKUP_MAXIMUMEXECUTIONLEVEL_DESC"/>
             <field name="ejbtitle_encryption" type="krtitle" label="COM_EASYJOOMLABACKUP_ENCRYPTION"/>
             <field name="encryptBackupArchive" type="krproinput" default="0" label="COM_EASYJOOMLABACKUP_ENCRYPTBACKUPARCHIVE" description="COM_EASYJOOMLABACKUP_ENCRYPTBACKUPARCHIVE_DESC"/>
             <field name="encryptionMethodAlgorithm" type="krproinput" default="EM_AES_128" label="COM_EASYJOOMLABACKUP_ENCRYPTIONMETHODALGORITHM" description="COM_EASYJOOMLABACKUP_ENCRYPTIONMETHODALGORITHM_DESC"/>
+	    <field name="ejbtitleDropboxUpload" type="krtitle" label="COM_EASYJOOMLABACKUP_DROPBOX_UPLOAD_TITLE" description="COM_EASYJOOMLABACKUP_DROPBOX_UPLOAD_TITLE_DESC"/>
+            <field name="dropboxUploadAccessToken" type="krproinput" default="" label="COM_EASYJOOMLABACKUP_DROPBOX_UPLOAD_ACCESS_TOKEN" description="COM_EASYJOOMLABACKUP_DROPBOX_UPLOAD_ACCESS_TOKEN_DESC"/>
         </fieldset>
         <fieldset name="donation">
             <field type="krdonationcodecheck" name="donation"/>

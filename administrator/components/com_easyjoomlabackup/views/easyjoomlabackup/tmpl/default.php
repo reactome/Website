@@ -1,8 +1,10 @@
 <?php
+
 /**
+ * @copyright
  * @package    EJB PRO - Easy Joomla Backup PRO for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.0-FREE - 2020-01-03
+ * @version    3.3.1-FREE - 2020-05-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -22,6 +24,7 @@
 defined('_JEXEC') || die('Restricted access');
 
 use Joomla\CMS\{Router\Route, Language\Text, HTML\HTMLHelper};
+use EasyJoomlaBackup\Helper;
 
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
@@ -139,8 +142,9 @@ HTMLHelper::_('behavior.multiselect');
                         <span class="hasTooltip" title="<?php echo htmlspecialchars($row->name); ?>">
                             <?php if ($this->downloadAllowed == true) : ?>
                                 <a href="<?php echo $download; ?>">
-                                    <?php if (strlen($row->name) > 100) : ?>
-                                        <?php echo substr($row->name, 0, 100) . '...'; ?>
+                                    <span class="icon-download"></span>
+                                    <?php if (strlen($row->name) > 90) : ?>
+                                        <?php echo substr($row->name, 0, 90) . '...'; ?>
                                     <?php else : ?>
                                         <?php echo $row->name; ?>
                                     <?php endif; ?>
@@ -156,7 +160,7 @@ HTMLHelper::_('behavior.multiselect');
             </tbody>
             <tfoot>
             <tr>
-                <td class="center" colspan="8">
+                <td class="center" colspan="7">
                     <p>
                         <?php if (class_exists('ZipArchive')) : ?>
                             <span class="text-success">
@@ -196,12 +200,12 @@ HTMLHelper::_('behavior.multiselect');
                         <p class="footer-tip">
                             <?php if ($this->pluginState['enabled'] == true) : ?>
                                 <span class="text-success">
-										<span class="icon-easyfrontendseo-success"></span>
+										<span class="icon-easyjoomlabackup-success"></span>
                                     <?php echo Text::sprintf('COM_EASYJOOMLABACKUP_PLUGIN_ENABLED', $this->pluginState['url_settings']); ?>
                                 </span>
                             <?php else : ?>
                                 <span class="text-info">
-										<span class="icon-easyfrontendseo-error"></span>
+										<span class="icon-easyjoomlabackup-error"></span>
                                     <?php echo Text::sprintf('COM_EASYJOOMLABACKUP_PLUGIN_DISABLED', $this->pluginState['url_settings']); ?>
                                 </span>
                             <?php endif; ?>
@@ -219,6 +223,6 @@ HTMLHelper::_('behavior.multiselect');
     </div>
 </form>
 <div style="text-align: center; margin-top: 10px;">
-    <p><?php echo Text::sprintf('COM_EASYJOOMLABACKUP_VERSION', EASYJOOMLABACKUP_FREE_VERSION); ?></p>
+    <p><?php echo Text::sprintf('COM_EASYJOOMLABACKUP_VERSION', Helper::EASYJOOMLABACKUP_VERSION); ?></p>
 </div>
 <?php echo $this->donationCodeMessage; ?>

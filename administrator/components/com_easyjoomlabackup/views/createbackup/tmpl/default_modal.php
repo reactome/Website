@@ -1,8 +1,10 @@
 <?php
+
 /**
+ * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.0-FREE - 2020-01-03
+ * @version    3.3.1-FREE - 2020-05-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -47,6 +49,7 @@ $js = "
 			let progress = $('#backupProgress');
 			let progressQueue = $('#backupProgressQueue');
 			let backupLastFile = $('#backupLastFile');
+			let windowTitle = document.title;
 			
 			$('#create-backup-modal').on('shown', function()
 			{
@@ -77,6 +80,7 @@ $js = "
 						progress.width(data.data.percent + '%');
 						progressQueue.width((100 - data.data.percent) + '%');
 						backupLastFile.html(data.data.message);
+						document.title = data.data.percent + '% - ' + windowTitle;
 						
 						if (!data.data.finished)
 						{

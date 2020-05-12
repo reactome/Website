@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @Copyright
+ * @copyright
  * @package     Field - Kubik-Rubik Pro Available
  * @author      Viktor Vogel <admin@kubik-rubik.de>
  * @version     Joomla! 3 - 3.1.0 - 2020-01-02

@@ -1,8 +1,10 @@
 <?php
+
 /**
+ * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.0-FREE - 2020-01-03
+ * @version    3.3.1-FREE - 2020-05-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -22,6 +24,7 @@
 defined('_JEXEC') || die('Restricted access');
 
 use Joomla\CMS\{Router\Route, Language\Text, HTML\HTMLHelper};
+use EasyJoomlaBackup\Helper;
 
 HTMLHelper::_('behavior.framework');
 HTMLHelper::_('behavior.tooltip');
@@ -29,12 +32,10 @@ HTMLHelper::_('behavior.formvalidation');
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function(task) {
-        if(task === 'cancel' || document.formvalidator.isValid(document.id('easyjoomlabackup-form')))
-        {
+        if(task === 'cancel' || document.formvalidator.isValid(document.id('easyjoomlabackup-form'))) {
             Joomla.submitform(task, document.getElementById('easyjoomlabackup-form'));
         }
-        else
-        {
+        else {
             alert('<?php echo $this->escape(Text::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
         }
     };
@@ -51,7 +52,7 @@ HTMLHelper::_('behavior.formvalidation');
             <fieldset class="adminform">
                 <div id="backup_comment">
                     <label for="comment">
-                        <h4><?php echo Text::_('COM_EASYJOOMLABACKUP_COMMENT'); ?></h4>
+                        <p><strong><?php echo Text::_('COM_EASYJOOMLABACKUP_COMMENT'); ?></strong></p>
                     </label>
                     <textarea rows="5" cols="140" maxlength="" id="comment" name="comment" placeholder="<?php echo Text::_('COM_EASYJOOMLABACKUP_COMMENT_PLACEHOLDER'); ?>"></textarea>
                 </div>
@@ -71,6 +72,6 @@ HTMLHelper::_('behavior.formvalidation');
     <?php echo HTMLHelper::_('form.token'); ?>
 </form>
 <div style="text-align: center; margin-top: 10px;">
-    <p><?php echo Text::sprintf('COM_EASYJOOMLABACKUP_VERSION', EASYJOOMLABACKUP_FREE_VERSION); ?></p>
+    <p><?php echo Text::sprintf('COM_EASYJOOMLABACKUP_VERSION', Helper::EASYJOOMLABACKUP_VERSION); ?></p>
 </div>
 <?php echo $this->donationCodeMessage; ?>

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @Copyright
+ * @copyright
  * @package     Field - Donation Code Check
  * @author      Viktor Vogel <admin@kubik-rubik.de>
  * @version     Joomla! 3 - 3.3.0 - 2020-01-02
@@ -198,7 +199,7 @@ class JFormFieldKRDonationCodeCheck extends FormField
     {
         $donationCodeCheck = 0;
 
-        if (HttpFactory::getAvailableDriver(new Registry) == false) {
+        if (HttpFactory::getAvailableDriver(new Registry()) == false) {
             return -2;
         }
 
@@ -224,7 +225,7 @@ class JFormFieldKRDonationCodeCheck extends FormField
                     return -1;
                 }
 
-                $donationCodeCheck = (int) $donationCodeRequest->body;
+                $donationCodeCheck = (int)$donationCodeRequest->body;
             }
         }
 

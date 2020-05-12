@@ -1,8 +1,9 @@
 <?php
 /**
+ * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.0-FREE - 2020-01-03
+ * @version    3.3.1-FREE - 2020-05-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -34,6 +35,7 @@ class Com_EasyJoomlaBackupInstallerScript
      * Name of extension that is used in the error message
      *
      * @var string
+     * @since 3.0.0-FREE
      */
     protected $extensionName = 'Easy Joomla Backup';
 
@@ -45,6 +47,7 @@ class Com_EasyJoomlaBackupInstallerScript
      *
      * @return bool
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function preflight($type, $parent)
     {
@@ -64,6 +67,7 @@ class Com_EasyJoomlaBackupInstallerScript
      *
      * @return bool
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     private function checkVersionJoomla()
     {
@@ -84,6 +88,7 @@ class Com_EasyJoomlaBackupInstallerScript
      *
      * @return bool
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     private function checkVersionPhp()
     {
@@ -96,7 +101,12 @@ class Com_EasyJoomlaBackupInstallerScript
         return true;
     }
 
-    public function install($parent)
+    /**
+     * @param object $parent
+     *
+     * @since 3.0.0-FREE
+     */
+    public function install(object $parent)
     {
         $manifest = $parent->get('manifest');
         $parent = $parent->getParent();
@@ -111,7 +121,12 @@ class Com_EasyJoomlaBackupInstallerScript
         }
     }
 
-    public function update($parent)
+    /**
+     * @param object $parent
+     *
+     * @since 3.0.0-FREE
+     */
+    public function update(object $parent)
     {
         $manifest = $parent->get('manifest');
         $parent = $parent->getParent();
@@ -126,7 +141,13 @@ class Com_EasyJoomlaBackupInstallerScript
         }
     }
 
-    public function postflight($type, $parent)
+    /**
+     * @param string $type
+     * @param object $parent
+     *
+     * @since 3.0.0-FREE
+     */
+    public function postflight(string $type, object $parent)
     {
         $db = Factory::getDbo();
 

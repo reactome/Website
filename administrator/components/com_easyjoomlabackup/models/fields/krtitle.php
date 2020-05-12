@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @Copyright
+ * @copyright
  * @package     Field - Kubik-Rubik Title
  * @author      Viktor Vogel <admin@kubik-rubik.de>
  * @version     Joomla! 3 - 3.5.0 - 2020-01-02
@@ -70,7 +71,7 @@ class JFormFieldKRTitle extends FormField
             $executeOnce = true;
         }
 
-        $filterDonationCode = (string) $this->element['filter'];
+        $filterDonationCode = (string)$this->element['filter'];
 
         if ($filterDonationCode === 'donation') {
             $fieldValueSession = Factory::getSession()->get('field_value', '', 'krdonationcodecheck');
@@ -83,13 +84,13 @@ class JFormFieldKRTitle extends FormField
         $label = '<div class="clr"></div>';
 
         if ($this->element['label']) {
-            $label .= '<div class="krtitle-title">' . Text::_((string) $this->element['label']) . '</div>';
+            $label .= '<div class="krtitle-title">' . Text::_((string)$this->element['label']) . '</div>';
         } else {
             $label .= parent::getLabel();
         }
 
         if ($this->element['description']) {
-            $label .= '<div class="krtitle-description">' . Text::_((string) $this->element['description']) . '</div>';
+            $label .= '<div class="krtitle-description">' . Text::_((string)$this->element['description']) . '</div>';
         }
 
         return $label;

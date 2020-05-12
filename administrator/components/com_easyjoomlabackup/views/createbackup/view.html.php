@@ -1,8 +1,10 @@
 <?php
+
 /**
+ * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.0-FREE - 2020-01-03
+ * @version    3.3.1-FREE - 2020-05-03
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -22,17 +24,28 @@
 defined('_JEXEC') || die('Restricted access');
 
 use Joomla\CMS\{MVC\View\HtmlView, Factory, Language\Text, Toolbar\Toolbar, HTML\HTMLHelper, Toolbar\ToolbarHelper};
+use EasyJoomlaBackup\Helper;
 
 class EasyJoomlaBackupViewCreatebackup extends HtmlView
 {
+    /**
+     * @var string $backupTask
+     * @since 3.0.0-FREE
+     */
     protected $backupTask = '';
+
+    /**
+     * @var string $donationCodeMessage
+     * @since 3.0.0-FREE
+     */
     protected $donationCodeMessage;
 
     /**
      * @param null|string $tpl
      *
-     * @return mixed|void
+     * @return Exception|mixed|string|void
      * @throws Exception
+     * @since 3.0.0-FREE
      */
     public function display($tpl = null)
     {
@@ -58,8 +71,8 @@ class EasyJoomlaBackupViewCreatebackup extends HtmlView
         $document = Factory::getDocument();
         $document->addStyleSheet('components/com_easyjoomlabackup/css/easyjoomlabackup.css');
 
-        EasyJoomlaBackupHelper::showMessages();
-        $this->donationCodeMessage = EasyJoomlaBackupHelper::getDonationCodeMessage();
+        Helper::showMessages();
+        $this->donationCodeMessage = Helper::getDonationCodeMessage();
 
         parent::display($tpl);
     }
