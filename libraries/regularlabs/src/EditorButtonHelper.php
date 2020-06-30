@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.4.20380
+ * @version         20.6.16076
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -64,7 +64,7 @@ class EditorButtonHelper
 		$button = new JObject;
 
 		$button->modal   = true;
-		$button->class   = 'btn';
+		$button->class   = 'btn rl_button_' . $this->_name;
 		$button->link    = $this->getPopupLink($editor_name);
 		$button->text    = $this->getButtonText();
 		$button->name    = $this->getIcon();

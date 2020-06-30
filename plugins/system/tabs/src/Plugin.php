@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.5.11
+ * @version         7.6.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -355,8 +355,8 @@ class Plugin extends JPlugin
 			return;
 		}
 
-		if (version_compare($plugin['version'], '20.4.17841', '<')
-			|| version_compare($library['version'], '20.4.17841', '<'))
+		if (version_compare($plugin['version'], '20.6.16076', '<')
+			|| version_compare($library['version'], '20.6.16076', '<'))
 		{
 			define('REGULAR_LABS_LIBRARY_INSTALLED', 'outdated');
 

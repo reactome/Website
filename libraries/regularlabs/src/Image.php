@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.4.20380
+ * @version         20.6.16076
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -190,7 +190,7 @@ class Image
 			return $source;
 		}
 
-		$clean_source = ltrim(str_replace(JUri::root(), '', $source), '/');
+		$clean_source = self::cleanPath($source);
 		$source_path  = JPATH_SITE . '/' . $clean_source;
 
 		$destination_folder = ltrim($destination_folder ?: File::getDirName($clean_source));
@@ -258,7 +258,7 @@ class Image
 			return false;
 		}
 
-		$clean_source = ltrim(str_replace(JUri::root(), '', $source), '/');
+		$clean_source = self::cleanPath($source);
 		$source_path  = JPATH_SITE . '/' . $clean_source;
 
 		if ( ! file_exists($source_path))
@@ -312,7 +312,10 @@ class Image
 
 	public static function cleanPath($source)
 	{
-		return ltrim(str_replace(JUri::root(), '', $source), '/');
+		$source = ltrim(str_replace(JUri::root(), '', $source), '/');
+		$source = strtok($source, '?');
+
+		return $source;
 	}
 
 	public static function getWidth($source)
