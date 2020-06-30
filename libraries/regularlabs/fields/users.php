@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.4.20380
+ * @version         20.6.16076
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -54,7 +54,7 @@ class JFormFieldRL_Users extends \RegularLabs\Library\Field
 
 		$options = $this->getUsers();
 
-		if ($show_current)
+		if (is_array($options) && $show_current)
 		{
 			array_unshift($options, JHtml::_('select.option', 'current', '- ' . JText::_('RL_CURRENT_USER') . ' -'));
 		}
@@ -72,7 +72,7 @@ class JFormFieldRL_Users extends \RegularLabs\Library\Field
 
 		if ($total > $this->max_list_count)
 		{
-			return [];
+			return -1;
 		}
 
 		$query->clear('select')

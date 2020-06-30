@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.4.20380
+ * @version         20.6.16076
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -61,7 +61,7 @@ class RLFunctions
 
 		$version = '';
 
-		if (JFile::exists(JPATH_SITE . $url))
+		if (file_exists(JPATH_SITE . $url))
 		{
 			$version = filemtime(JPATH_SITE . $url);
 		}
@@ -75,7 +75,7 @@ class RLFunctions
 
 		$version = '';
 
-		if (JFile::exists(JPATH_SITE . $url))
+		if (file_exists(JPATH_SITE . $url))
 		{
 			$version = filemtime(JPATH_SITE . $url);
 		}

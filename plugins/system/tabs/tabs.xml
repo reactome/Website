@@ -2,8 +2,8 @@
 <extension version="3.9" type="plugin" group="system" method="upgrade">
 	<name>plg_system_tabs</name>
 	<description>PLG_SYSTEM_TABS_DESC</description>
-	<version>7.5.11</version>
-	<creationDate>April 2020</creationDate>
+	<version>7.6.0</version>
+	<creationDate>June 2020</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -150,7 +150,7 @@
 					<option value="1">JYES</option>
 				</field>
 				<field name="button_custom_code" type="rl_textareaplus" filter="RAW" texttype="html" width="400" height="300"
-					   default="{tab Tab Title 1}&lt;br />[:SELECTION:]&lt;br />{tab Tab Title 2}&lt;br />Tab text...&lt;br />{/tabs}"
+					   default="&lt;p>{tab Tab Title 1}&lt;/p>[:SELECTION:]&lt;p>{tab Tab Title 2}&lt;/p>&lt;p>Tab text...&lt;/p>&lt;p>{/tabs}&lt;/p>"
 					   label="RL_CUSTOM_CODE"
 					   description="RL_CUSTOM_CODE_DESC"
 					   showon="button_use_custom_code:1" />
