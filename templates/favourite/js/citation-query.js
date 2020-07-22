@@ -109,6 +109,7 @@ var CITATIONS = {
     ICON_CITATION: {id: "29077811", fallback: "Sidiropoulos K, Viteri G, Sevilla C, Jupe S, Webber M, Orlic-Milacic M, Jassal B, May B, Shamovsky V, Duenas C, Rothfels K, Matthews L, Song H, Stein L, Haw R, D'Eustachio P, Ping P, Hermjakob H, Fabregat A. Reactome enhanced pathway visualization. Bioinformatics. 2017 Nov 1;33(21):3461-3467. doi: 10.1093/bioinformatics/btx441. PubMed PMID: 29077811"},
     PATHWAY_ANALYSIS_CITATION: {id: "28249561", fallback: "Fabregat A, Sidiropoulos K, Viteri G, Forner O, Marin-Garcia P, Arnau V, D'Eustachio P, Stein L, Hermjakob H. Reactome pathway analysis: a high-performance in-memory approach. BMC Bioinformatics. 2017 Mar 2;18(1):142. doi: 10.1186/s12859-017-1559-2. PubMed PMID: 28249561"},
     FIVIZ_CITATION: {id: "28150241", fallback: "Wu G, Haw R. Functional Interaction Network Construction and Analysis for Disease Discovery. Methods Mol Biol. 2017;1558:235-253. doi: 10.1007/978-1-4939-6783-4_11. PubMed PMID: 28150241"},
+    GSA_CITATION: {id: "PPR152409", fallback: "Griss J, Viteri G, Sidiropoulos K, et al. ReactomeGSA - Efficient Multi-Omics Comparative Pathway Analysis. bioRxiv; 2020. DOI: 10.1101/2020.04.16.044958."},
     GRAPH_DATABASE_CITATION: {id: "29377902", fallback: "Fabregat A, Korninger F, Viteri G, Sidiropoulos K, Marin-Garcia P, Ping P, Wu G, Stein L, D'Eustachio P, Hermjakob H. Reactome graph database: Efficient accessto complex pathway data. PLoS Comput Biol. 2018 Jan 29;14(1):e1005968. doi: 10.1371/journal.pcbi.1005968. eCollection 2018 Jan. PubMed PMID: 29377902"},
     ORCID_CITATION: {id: "31802127", fallback: "Viteri G, Matthews L, Varusai T, et al. Reactome and ORCID-fine-grained credit attribution for community curation. Database : the Journal of Biological Databases and Curation. 2019 Jan;2019 DOI: 10.1093/database/baz123"}
 }
@@ -120,6 +121,7 @@ var downloadCitation = [/download-data/];
 var iconCitation = [/icon-lib/, /R-ICO/]; 
 var pathwayAnalysisCitation = [/AnalysisService/]; 
 var fivizCitation = [/reactome-fiviz/]; 
+var gsaCitation = [/reactome-gsa/, /gsa/];
 var graphDatabaseCitation = [/ContentService/, /graph-database/];
 var pathwayCitation = [/content\/detail\/R-/];
 var orcidCitation = [/orcid/];
@@ -263,6 +265,10 @@ function parseURL(url, mode, ext= EXPORT_FORMATS["TEXT"]) {
 
     else if (fivizCitation.some(function(regex) {return regex.test(url)})) {
         return getStaticCitation(CITATIONS["FIVIZ_CITATION"], mode, ext);
+    }
+  
+   else if (gsaCitation.some(function(regex) {return regex.test(url)})) {
+        return getStaticCitation(CITATIONS["GSA_CITATION"], mode, ext);
     }
 
     else if (graphDatabaseCitation.some(function(regex) {return regex.test(url)})) {
