@@ -1,6 +1,6 @@
 /**
  * @package         Sourcerer
- * @version         8.2.2
+ * @version         8.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
