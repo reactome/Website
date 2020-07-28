@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.2.2
+ * @version         8.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,11 +13,7 @@ namespace RegularLabs\Plugin\System\Sourcerer;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Application\CMSApplication;
-use Joomla\CMS\Factory as JFactory;
-use Joomla\CMS\Filesystem\File as JFile;
-use Joomla\CMS\Version;
-use RegularLabs\Library\File as RL_File;
+use RegularLabs\Library\Condition\Php as RL_Php;
 
 class Code
 {
@@ -57,30 +53,9 @@ class Code
 		return $src_output;
 	}
 
-	private static function execute($string = '', $src_variables, $tmp_path = '')
+	private static function execute($string, $src_variables, $tmp_path = '')
 	{
-		$function_name = 'sourcerer_php_' . md5($string);
-
-		if (function_exists($function_name))
-		{
-			return $function_name($src_variables);
-		}
-
-		$contents = self::generateFileContents($function_name, $string);
-
-		$tmp_path  = $tmp_path ? $tmp_path : JFactory::getConfig()->get('tmp_path', JPATH_ROOT . '/tmp');
-		$temp_file = $tmp_path . '/' . $function_name;
-
-		JFile::write($temp_file, $contents);
-
-		include_once $temp_file;
-
-		if ( ! defined('JDEBUG') || ! JDEBUG)
-		{
-			RL_File::delete($temp_file);
-		}
-
-		if ( ! function_exists($function_name))
+		if ( ! $function_name = self::getFunctionName($string))
 		{
 			// Something went wrong!
 			return [];
@@ -89,9 +64,30 @@ class Code
 		return $function_name($src_variables);
 	}
 
+	private static function getFunctionName($string)
+	{
+		$function_name = 'regularlabs_php_' . md5($string);
+
+		if (function_exists($function_name))
+		{
+			return $function_name;
+		}
+
+		$contents = self::generateFileContents($function_name, $string);
+		RL_Php::createFunctionInMemory($contents);
+
+		if ( ! function_exists($function_name))
+		{
+			// Something went wrong!
+			return false;
+		}
+
+		return $function_name;
+	}
+
 	private static function generateFileContents($function_name = 'src_function', $string = '')
 	{
-		$init = self::getVarInits();
+		$init = RL_Php::getVarInits();
 
 		$init[] =
 			'if (is_array($src_variables)) {'
@@ -111,48 +107,5 @@ class Code
 		];
 
 		return implode("\n", $contents);
-	}
-
-	private static function getVarInits()
-	{
-		return [
-			'$app = $mainframe = RegularLabs\Plugin\System\Sourcerer\Code::getApplication();',
-			'$document = $doc = RegularLabs\Plugin\System\Sourcerer\Code::getDocument();',
-			'$database = $db = JFactory::getDbo();',
-			'$user = JFactory::getUser();',
-			'$Itemid = $app->input->getInt(\'Itemid\');',
-		];
-	}
-
-	public static function getApplication()
-	{
-		if (JFactory::getApplication()->input->get('option') != 'com_finder')
-		{
-			return JFactory::getApplication();
-		}
-
-		return CMSApplication::getInstance('site');
-	}
-
-	public static function getDocument()
-	{
-		if (JFactory::getApplication()->input->get('option') != 'com_finder')
-		{
-			return JFactory::getDocument();
-		}
-
-		$lang    = JFactory::getLanguage();
-		$version = new Version;
-
-		$attributes = [
-			'charset'      => 'utf-8',
-			'lineend'      => 'unix',
-			'tab'          => "\t",
-			'language'     => $lang->getTag(),
-			'direction'    => $lang->isRtl() ? 'rtl' : 'ltr',
-			'mediaversion' => $version->getMediaVersion(),
-		];
-
-		return \JDocument::getInstance('html', $attributes);
 	}
 }

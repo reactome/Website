@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.6.16076
+ * @version         20.7.20564
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -202,7 +202,7 @@ class Form
 					<a class="rl_multiselect-toggleall" href="javascript:;">' . JText::_('RL_TOGGLE') . '</a>
 				</span>';
 		$html[] = '<span> | </span>';
-		if (!$has_nested)
+		if ($has_nested)
 		{
 			$html[] = '<span class="small">' . JText::_('RL_EXPAND') . ':
 					<a class="rl_multiselect-expandall" href="javascript:;">' . JText::_('JALL') . '</a>,

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.2.2
+ * @version         8.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -355,8 +355,8 @@ class Plugin extends JPlugin
 			return;
 		}
 
-		if (version_compare($plugin['version'], '20.3.22179', '<')
-			|| version_compare($library['version'], '20.3.22179', '<'))
+		if (version_compare($plugin['version'], '20.7.20564', '<')
+			|| version_compare($library['version'], '20.7.20564', '<'))
 		{
 			define('REGULAR_LABS_LIBRARY_INSTALLED', 'outdated');
 
