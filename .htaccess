@@ -135,6 +135,15 @@ RewriteCond %{REQUEST_URI}  ^/cgi-bin/author_contributions*$
 RewriteCond %{QUERY_STRING} ^ID=([0-9]*)$
 RewriteRule ^(.*)$ /content/detail/person/%1? [R=301,L]
 
+# Redirect doi/toc old cgis to /content/doi /content/toc
+RewriteCond %{REQUEST_URI}  ^/cgi-bin/doi_toc*$
+RewriteCond %{QUERY_STRING} ^DB=(.*)$
+RewriteRule ^(.*)$ /content/doi? [R=301,L]
+
+RewriteCond %{REQUEST_URI}  ^/cgi-bin/toc*$
+RewriteCond %{QUERY_STRING} ^DB=(.*)$
+RewriteRule ^(.*)$ /content/toc? [R=301,L]
+
 # Forbidding any url access for the user login component
 RewriteRule index.php/staff index.php [F]
 RewriteRule index.php/component/users index.php [F]
