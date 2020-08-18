@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.3.0
+ * @version         8.4.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -24,33 +24,33 @@ class Clean
 	/**
 	 * Just in case you can't figure the method name out: this cleans the left-over junk
 	 */
-	public static function cleanLeftoverJunk(&$string)
+	public static function cleanFinalHtmlOutput(&$html)
 	{
-		RL_Protect::removeAreaTags($string, 'SRC');
+		RL_Protect::removeAreaTags($html, 'SRC');
 
 		$params = Params::get();
 
 		if ( ! $params->place_comments)
 		{
-			RL_Protect::removeCommentTags($string, 'Sourcerer');
+			RL_Protect::removeCommentTags($html, 'Sourcerer');
 		}
 
-		if (strpos($string, $params->tag_character_start . '/' . $params->tag) === false)
+		if (strpos($html, $params->tag_character_start . '/' . $params->tag) === false)
 		{
-			Protect::unprotectTags($string);
+			Protect::unprotectTags($html);
 
 			return;
 		}
 
 		$regex = Params::getRegex();
 
-		$string = RL_RegEx::replace(
+		$html = RL_RegEx::replace(
 			$regex,
 			Protect::getMessageCommentTag(JText::_('SRC_CODE_REMOVED_NOT_ENABLED')),
-			$string
+			$html
 		);
 
-		Protect::unprotectTags($string);
+		Protect::unprotectTags($html);
 	}
 
 	public static function cleanTagsFromHead(&$string)

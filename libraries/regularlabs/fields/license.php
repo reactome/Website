@@ -38,6 +38,6 @@ class JFormFieldRL_License extends \RegularLabs\Library\Field
 			return '';
 		}
 
-		return '</div><div class="hide">' . RL_License::getMessage($extension, true);
+		return '</div><div>' . RL_License::getMessage($extension, true);
 	}
 }

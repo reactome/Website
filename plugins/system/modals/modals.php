@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.5.10
+ * @version         11.6.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,7 +12,12 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory as JFactory;
-use RegularLabs\Plugin\System\Modals\Plugin;
+use Joomla\CMS\Language\Text as JText;
+use RegularLabs\Library\Html as RL_Html;
+use RegularLabs\Library\Plugin as RL_Plugin;
+use RegularLabs\Plugin\System\Modals\Clean;
+use RegularLabs\Plugin\System\Modals\Document;
+use RegularLabs\Plugin\System\Modals\Replace;
 
 // Do not instantiate plugin on install pages
 // to prevent installation/update breaking because of potential breaking changes
@@ -29,35 +34,63 @@ if ( ! is_file(__DIR__ . '/vendor/autoload.php'))
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-/**
- * System Plugin that places a Modals code block into the text
- */
-class PlgSystemModals extends Plugin
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	public $_alias       = 'modals';
-	public $_title       = 'MODALS';
-	public $_lang_prefix = 'MDL';
+	JFactory::getLanguage()->load('plg_system_modals', __DIR__);
+	JFactory::getApplication()->enqueueMessage(
+		JText::sprintf('MDL_EXTENSION_CAN_NOT_FUNCTION', JText::_('MODALS'))
+		. ' ' . JText::_('MDL_REGULAR_LABS_LIBRARY_NOT_INSTALLED'),
+		'error'
+	);
 
-	public $_has_tags              = true;
-	public $_disable_on_components = true;
+	return;
+}
 
-	/*
-	 * Below are the events that this plugin uses
-	 * All handling is passed along to the parent run method
-	 */
-	public function onContentPrepare()
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+if (true)
+{
+	class PlgSystemModals extends RL_Plugin
 	{
-		$this->run();
-	}
+		public $_lang_prefix           = 'MDL';
+		public $_has_tags              = true;
+		public $_disable_on_components = true;
 
-	public function onAfterDispatch()
-	{
-		$this->run();
-	}
+		public function processArticle(&$string, $area = 'article', $context = '', $article = null)
+		{
+			Replace::replaceTags($string, $area, $context);
+		}
 
-	public function onAfterRender()
-	{
-		$this->run();
+		protected function loadStylesAndScripts($buffer)
+		{
+			Document::addHeadStuff();
+		}
+
+		protected function changeDocumentBuffer(&$buffer)
+		{
+			if (JFactory::getApplication()->input->getInt('ml', 0) && ! JFactory::getApplication()->input->getInt('fullpage', 0))
+			{
+				Document::setTemplate();
+			}
+
+			return Replace::replaceTags($buffer, 'component');
+		}
+
+		protected function changeFinalHtmlOutput(&$html)
+		{
+			// only do stuff in body
+			list($pre, $body, $post) = RL_Html::getBody($html);
+			Replace::replaceTags($body, 'body');
+
+			Clean::cleanFinalHtmlOutput($pre);
+			Clean::cleanFinalHtmlOutput($post);
+
+			$html = $pre . $body . $post;
+
+			Document::removeHeadStuff($html);
+
+			return true;
+		}
 	}
 }
 

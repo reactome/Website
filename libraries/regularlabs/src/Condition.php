@@ -66,10 +66,7 @@ abstract class Condition
 
 	private function getRequest()
 	{
-		if ( ! is_null(self::$_request))
-		{
-			return self::$_request;
-		}
+		$return_early = ! is_null(self::$_request);
 
 		$app   = JFactory::getApplication();
 		$input = $app->input;
@@ -112,6 +109,11 @@ abstract class Condition
 		{
 			$cid                = $input->get('cid', [0], 'array');
 			self::$_request->id = (int) $cid[0];
+		}
+
+		if ($return_early)
+		{
+			return self::$_request;
 		}
 
 		// if no id is found, check if menuitem exists to get view and id
