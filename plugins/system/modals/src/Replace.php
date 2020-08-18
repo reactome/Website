@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.5.10
+ * @version         11.6.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -62,7 +62,7 @@ class Replace
 
 			$string = RL_RegEx::replace($regex, '\4', $string);
 
-			Clean::cleanLeftoverJunk($string);
+			Clean::cleanFinalHtmlOutput($string);
 
 			RL_Protect::unprotect($string);
 
@@ -76,7 +76,7 @@ class Replace
 		{
 			self::replaceInsideModal($string, $area);
 
-			Clean::cleanLeftoverJunk($string);
+			Clean::cleanFinalHtmlOutput($string);
 
 			RL_Protect::unprotect($string);
 
@@ -102,7 +102,7 @@ class Replace
 		$string = $pre_string . $string . $post_string;
 
 
-		Clean::cleanLeftoverJunk($string);
+		Clean::cleanFinalHtmlOutput($string);
 
 		RL_Protect::unprotect($string);
 

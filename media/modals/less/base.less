@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         11.5.10
+ * @version         11.6.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com

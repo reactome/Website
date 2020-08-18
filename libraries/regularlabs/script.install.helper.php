@@ -11,6 +11,12 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Filesystem\File as JFile;
+use Joomla\CMS\Filesystem\Folder as JFolder;
+use Joomla\CMS\Installer\Installer as JInstaller;
+use Joomla\CMS\Language\Text as JText;
+
 class RegularLabsInstallerScriptHelper
 {
 	public $name              = '';
@@ -32,7 +38,7 @@ class RegularLabsInstallerScriptHelper
 		$this->db      = JFactory::getDbo();
 	}
 
-	public function preflight($route, JAdapterInstance $adapter)
+	public function preflight($route, $adapter)
 	{
 		if ( ! in_array($route, ['install', 'update']))
 		{
@@ -42,7 +48,6 @@ class RegularLabsInstallerScriptHelper
 		JFactory::getLanguage()->load('plg_system_regularlabsinstaller', JPATH_PLUGINS . '/system/regularlabsinstaller');
 
 		$this->installed_version = $this->getVersion($this->getInstalledXMLFile());
-
 
 		if ($this->show_message && $this->isInstalled())
 		{
@@ -57,7 +62,7 @@ class RegularLabsInstallerScriptHelper
 		return true;
 	}
 
-	public function postflight($route, JAdapterInstance $adapter)
+	public function postflight($route, $adapter)
 	{
 		$this->removeGlobalLanguageFiles();
 		$this->removeUnusedLanguageFiles();
@@ -239,7 +244,7 @@ class RegularLabsInstallerScriptHelper
 				JText::sprintf(
 					'COM_INSTALLER_UNINSTALL_SUCCESS',
 					JText::_('COM_INSTALLER_TYPE_TYPE_' . strtoupper($type))
-				)
+				), 'success'
 			);
 		}
 	}
@@ -363,7 +368,7 @@ class RegularLabsInstallerScriptHelper
 				'<strong>' . JText::_($this->name) . '</strong>',
 				'<strong>' . $this->getVersion() . '</strong>',
 				$this->getFullType()
-			)
+			), 'success'
 		);
 	}
 
@@ -421,7 +426,7 @@ class RegularLabsInstallerScriptHelper
 			return '';
 		}
 
-		$xml = JApplicationHelper::parseXMLInstallFile($file);
+		$xml = JInstaller::parseXMLInstallFile($file);
 
 		if ( ! $xml || ! isset($xml['version']))
 		{
@@ -564,12 +569,15 @@ class RegularLabsInstallerScriptHelper
 
 		$rules = json_decode($rules);
 
-		if(empty($rules)) {
+		if (empty($rules))
+		{
 			return;
 		}
 
-		foreach($rules as $key => $value) {
-			if(!empty($value)) {
+		foreach ($rules as $key => $value)
+		{
+			if ( ! empty($value))
+			{
 				continue;
 			}
 
@@ -577,7 +585,6 @@ class RegularLabsInstallerScriptHelper
 		}
 
 		$rules = json_encode($rules);
-
 
 		$query = $this->db->getQuery(true)
 			->update($this->db->quoteName('#__assets'))
@@ -852,13 +859,18 @@ class RegularLabsInstallerScriptHelper
 			return;
 		}
 
+		if ( ! is_file(__DIR__ . '/language'))
+		{
+			return;
+		}
+
 		$installed_languages = array_merge(
-			JFolder::folders(JPATH_SITE . '/language'),
-			JFolder::folders(JPATH_ADMINISTRATOR . '/language')
+			is_file(JPATH_SITE . '/language') ? JFolder::folders(JPATH_SITE . '/language') : [],
+			is_file(JPATH_ADMINISTRATOR . '/language') ? JFolder::folders(JPATH_ADMINISTRATOR . '/language') : []
 		);
 
 		$languages = array_diff(
-			JFolder::folders(__DIR__ . '/language'),
+			JFolder::folders(__DIR__ . '/language') ?: [],
 			$installed_languages
 		);
 

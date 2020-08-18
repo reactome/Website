@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.5.10
+ * @version         11.6.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -20,15 +20,15 @@ class Clean
 	/**
 	 * Just in case you can't figure the method name out: this cleans the left-over junk
 	 */
-	public static function cleanLeftoverJunk(&$string)
+	public static function cleanFinalHtmlOutput(&$html)
 	{
 		list($tag_start, $tag_end) = Params::getTagCharacters();
 
-		Protect::unprotectTags($string);
+		Protect::unprotectTags($html);
 
-		RL_Protect::removeFromHtmlTagContent($string, Params::getTags(true));
-		RL_Protect::removeInlineComments($string, 'Modals');
-		RL_Protect::removePluginTags($string,
+		RL_Protect::removeFromHtmlTagContent($html, Params::getTags(true));
+		RL_Protect::removeInlineComments($html, 'Modals');
+		RL_Protect::removePluginTags($html,
 			Params::getTagWords(),
 			$tag_start,
 			$tag_end

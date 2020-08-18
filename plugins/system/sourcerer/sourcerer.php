@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.3.0
+ * @version         8.4.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,7 +12,17 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory as JFactory;
-use RegularLabs\Plugin\System\Sourcerer\Plugin;
+use Joomla\CMS\Language\Text as JText;
+use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\Html as RL_Html;
+use RegularLabs\Library\Plugin as RL_Plugin;
+use RegularLabs\Library\Protect as RL_Protect;
+use RegularLabs\Plugin\System\Sourcerer\Area;
+use RegularLabs\Plugin\System\Sourcerer\Clean;
+use RegularLabs\Plugin\System\Sourcerer\Params;
+use RegularLabs\Plugin\System\Sourcerer\Protect;
+use RegularLabs\Plugin\System\Sourcerer\Replace;
+use RegularLabs\Plugin\System\Sourcerer\Security;
 
 // Do not instantiate plugin on install pages
 // to prevent installation/update breaking because of potential breaking changes
@@ -29,35 +39,109 @@ if ( ! is_file(__DIR__ . '/vendor/autoload.php'))
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-/**
- * Plugin that replaces Sourcerer code with its HTML / CSS / JavaScript / PHP equivalent
- */
-class PlgSystemSourcerer extends Plugin
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	public $_alias       = 'sourcerer';
-	public $_title       = 'SOURCERER';
-	public $_lang_prefix = 'SRC';
+	JFactory::getLanguage()->load('plg_system_sourcerer', __DIR__);
+	JFactory::getApplication()->enqueueMessage(
+		JText::sprintf('SRC_EXTENSION_CAN_NOT_FUNCTION', JText::_('SOURCERER'))
+		. ' ' . JText::_('SRC_REGULAR_LABS_LIBRARY_NOT_INSTALLED'),
+		'error'
+	);
 
-	public $_can_disable_by_url    = false;
-	public $_disable_on_components = true;
-	public $_page_types            = ['html', 'feed', 'pdf', 'xml', 'ajax', 'json', 'raw'];
+	return;
+}
 
-	/*
-	 * Below are the events that this plugin uses
-	 * All handling is passed along to the parent run method
-	 */
-	public function onContentPrepare()
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+if (true)
+{
+	class PlgSystemSourcerer extends RL_Plugin
 	{
-		$this->run();
-	}
+		public $_lang_prefix           = 'SRC';
+		public $_can_disable_by_url    = false;
+		public $_disable_on_components = true;
+		public $_page_types            = ['html', 'feed', 'pdf', 'xml', 'ajax', 'json', 'raw'];
 
-	public function onAfterDispatch()
-	{
-		$this->run();
-	}
+		protected function handleOnContentPrepare($area, $context, &$article, &$params)
+		{
+			$src_params = Params::get();
 
-	public function onAfterRender()
-	{
-		$this->run();
+			$area = isset($article->created_by) ? 'articles' : 'other';
+
+			$remove = $src_params->remove_from_search
+				&& in_array($context, ['com_search.search', 'com_search.search.article', 'com_finder.indexer']);
+
+
+			if (isset($article->description))
+			{
+				Replace::replace($article->description, $area, $article, $remove);
+			}
+
+			if (isset($article->title))
+			{
+				Replace::replace($article->title, $area, $article, $remove);
+			}
+
+			// Don't handle article texts in category list view
+			if (RL_Document::isCategoryList($context))
+			{
+				return;
+			}
+
+			if (isset($article->text))
+			{
+				Replace::replace($article->text, $area, $article, $remove);
+
+				// Don't also do stuff on introtext/fulltext if text is set
+				return;
+			}
+
+			if (isset($article->introtext))
+			{
+				Replace::replace($article->introtext, $area, $article, $remove);
+			}
+
+			if (isset($article->fulltext))
+			{
+				Replace::replace($article->fulltext, $area, $article, $remove);
+			}
+		}
+
+		protected function changeDocumentBuffer(&$buffer)
+		{
+			if ( ! RL_Document::isHtml())
+			{
+				return false;
+			}
+
+			return Area::tag($buffer, 'component');
+		}
+
+		protected function changeFinalHtmlOutput(&$html)
+		{
+			// only in html, pdfs, ajax/raw and feeds
+			if ( ! in_array(JFactory::getDocument()->getType(), ['html', 'pdf', 'ajax', 'raw']) && ! RL_Document::isFeed())
+			{
+				return false;
+			}
+
+			$params = Params::get();
+
+			list($pre, $body, $post) = RL_Html::getBody($html);
+
+			Protect::_($body);
+			Replace::replaceInTheRest($body);
+
+			Clean::cleanFinalHtmlOutput($body);
+			RL_Protect::unprotect($body);
+
+			$params->enable_in_head
+				? Replace::replace($pre, 'head')
+				: Clean::cleanTagsFromHead($pre);
+
+			$html = $pre . $body . $post;
+
+			return true;
+		}
 	}
 }

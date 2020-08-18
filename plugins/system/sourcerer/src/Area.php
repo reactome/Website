@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.3.0
+ * @version         8.4.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -23,14 +23,14 @@ class Area
 	{
 		if (empty($string) || empty($area))
 		{
-			return;
+			return false;
 		}
 
 		$string = '<!-- START: ' . self::$prefix . '_' . strtoupper($area) . ' -->' . $string . '<!-- END: ' . self::$prefix . '_' . strtoupper($area) . ' -->';
 
 		if ($area != 'article_text')
 		{
-			return;
+			return true;
 		}
 
 		$string = RL_RegEx::replace(
@@ -38,6 +38,8 @@ class Area
 			'<!-- END: ' . self::$prefix . '_' . strtoupper($area) . ' -->\1<!-- START: ' . self::$prefix . '_' . strtoupper($area) . ' -->',
 			$string
 		);
+
+		return true;
 	}
 
 	public static function get(&$string, $area = '')

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.6.0
+ * @version         7.7.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,7 +12,14 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory as JFactory;
-use RegularLabs\Plugin\System\Tabs\Plugin;
+use Joomla\CMS\Language\Text as JText;
+use RegularLabs\Library\Html as RL_Html;
+use RegularLabs\Library\Plugin as RL_Plugin;
+use RegularLabs\Library\Protect as RL_Protect;
+use RegularLabs\Plugin\System\Tabs\Document;
+use RegularLabs\Plugin\System\Tabs\Params;
+use RegularLabs\Plugin\System\Tabs\Protect;
+use RegularLabs\Plugin\System\Tabs\Replace;
 
 // Do not instantiate plugin on install pages
 // to prevent installation/update breaking because of potential breaking changes
@@ -29,35 +36,80 @@ if ( ! is_file(__DIR__ . '/vendor/autoload.php'))
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-/**
- * System Plugin that places a Tabs code block into the text
- */
-class PlgSystemTabs extends Plugin
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	public $_alias       = 'tabs';
-	public $_title       = 'TABS';
-	public $_lang_prefix = 'TAB';
+	JFactory::getLanguage()->load('plg_system_tabs', __DIR__);
+	JFactory::getApplication()->enqueueMessage(
+		JText::sprintf('TAB_EXTENSION_CAN_NOT_FUNCTION', JText::_('TABS'))
+		. ' ' . JText::_('TAB_REGULAR_LABS_LIBRARY_NOT_INSTALLED'),
+		'error'
+	);
 
-	public $_has_tags              = true;
-	public $_disable_on_components = true;
+	return;
+}
 
-	/*
-	 * Below are the events that this plugin uses
-	 * All handling is passed along to the parent run method
-	 */
-	public function onContentPrepare()
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+if (true)
+{
+	class PlgSystemTabs extends RL_Plugin
 	{
-		$this->run();
-	}
+		public $_lang_prefix           = 'TAB';
+		public $_has_tags              = true;
+		public $_disable_on_components = true;
 
-	public function onAfterDispatch()
-	{
-		$this->run();
-	}
+		public function processArticle(&$string, $area = 'article', $context = '', $article = null)
+		{
+			Replace::replaceTags($string, $area, $context);
+		}
 
-	public function onAfterRender()
-	{
-		$this->run();
+		protected function loadStylesAndScripts($buffer)
+		{
+			Document::addHeadStuff();
+		}
+
+		protected function changeDocumentBuffer(&$buffer)
+		{
+			return Replace::replaceTags($buffer, 'component');
+		}
+
+		protected function changeFinalHtmlOutput(&$html)
+		{
+			$params = Params::get();
+			list($tag_start, $tag_end) = Params::getTagCharacters();
+
+			if (
+				strpos($html, $tag_start . $params->tag_open) === false
+				&& strpos($html, 'rl_tabs-scrollto') === false
+			)
+			{
+				Document::removeHeadStuff($html);
+
+				return true;
+			}
+
+			// only do stuff in body
+			list($pre, $body, $post) = RL_Html::getBody($html);
+			Replace::replaceTags($body, 'body');
+			$html = $pre . $body . $post;
+
+			return true;
+		}
+
+		protected function cleanFinalHtmlOutput(&$html)
+		{
+			$params = Params::get();
+
+			Protect::unprotectTags($html);
+
+			RL_Protect::removeFromHtmlTagContent($html, Params::getTags(true));
+			RL_Protect::removeInlineComments($html, 'Tabs');
+
+			if ( ! $params->place_comments)
+			{
+				RL_Protect::removeCommentTags($html, 'Tabs');
+			}
+		}
 	}
 }
 

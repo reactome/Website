@@ -177,7 +177,7 @@ class Version
 
 		if ( ! $is_pro)
 		{
-			$msg .= ' <a href="https://www.regularlabs.com/purchase?ext=' . $alias . '" target="_blank" class="btn btn-large btn-primary">'
+			$msg .= ' <a href="https://www.regularlabs.com/purchase/cart/add/' . $alias . '" target="_blank" class="btn btn-large btn-primary">'
 				. '<span class="icon-basket"></span> '
 				. JText::_('RL_GO_PRO')
 				. '</a>';
