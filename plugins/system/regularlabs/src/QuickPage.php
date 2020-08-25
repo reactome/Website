@@ -94,8 +94,12 @@ class QuickPage
 
 		header('Content-Type: ' . $format . '; charset=utf-8');
 		JHtml::_('bootstrap.framework');
-		JFactory::getDocument()->addScript(JUri::root(true) . '/administrator/templates/isis/js/template.js');
-		JFactory::getDocument()->addStylesheet(JUri::root(true) . '/administrator/templates/isis/css/template.css');
+		JFactory::getDocument()->addScript(
+			JUri::root(true) . '/administrator/templates/isis/js/template.js'
+		);
+		JFactory::getDocument()->addStylesheet(
+			JUri::root(true) . '/administrator/templates/isis/css/template' . (JFactory::getDocument()->direction === 'rtl' ? '-rtl' : '') . '.css'
+		);
 
 		RL_Document::style('regularlabs/popup.min.css');
 

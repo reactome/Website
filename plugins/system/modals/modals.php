@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.6.0
+ * @version         11.6.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -56,7 +56,7 @@ if (true)
 		public $_has_tags              = true;
 		public $_disable_on_components = true;
 
-		public function processArticle(&$string, $area = 'article', $context = '', $article = null)
+		public function processArticle(&$string, $area = 'article', $context = '', $article = null, $page = 0)
 		{
 			Replace::replaceTags($string, $area, $context);
 		}
