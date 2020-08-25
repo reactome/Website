@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.4.0
+ * @version         8.4.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -62,7 +62,7 @@ if (true)
 		public $_disable_on_components = true;
 		public $_page_types            = ['html', 'feed', 'pdf', 'xml', 'ajax', 'json', 'raw'];
 
-		protected function handleOnContentPrepare($area, $context, &$article, &$params)
+		protected function handleOnContentPrepare($area, $context, &$article, &$params, $page = 0)
 		{
 			$src_params = Params::get();
 
@@ -85,7 +85,7 @@ if (true)
 			// Don't handle article texts in category list view
 			if (RL_Document::isCategoryList($context))
 			{
-				return;
+				return false;
 			}
 
 			if (isset($article->text))
@@ -93,7 +93,7 @@ if (true)
 				Replace::replace($article->text, $area, $article, $remove);
 
 				// Don't also do stuff on introtext/fulltext if text is set
-				return;
+				return false;
 			}
 
 			if (isset($article->introtext))
@@ -105,6 +105,8 @@ if (true)
 			{
 				Replace::replace($article->fulltext, $area, $article, $remove);
 			}
+
+			return false;
 		}
 
 		protected function changeDocumentBuffer(&$buffer)

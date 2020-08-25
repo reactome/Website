@@ -143,7 +143,7 @@ class Plugin extends JPlugin
 	 *
 	 * @return  bool
 	 */
-	public function onContentPrepare($context, &$article, &$params, $page)
+	public function onContentPrepare($context, &$article, &$params, $page = 0)
 	{
 		if ( ! $this->passChecks())
 		{
@@ -153,12 +153,12 @@ class Plugin extends JPlugin
 		$area    = isset($article->created_by) ? 'article' : 'other';
 		$context = (($params instanceof \JRegistry) && $params->get('rl_search')) ? 'com_search.' . $params->get('readmore_limit') : $context;
 
-		if ( ! $this->handleOnContentPrepare($area, $context, $article, $params))
+		if ( ! $this->handleOnContentPrepare($area, $context, $article, $params, $page))
 		{
 			return false;
 		}
 
-		Article::process($article, $context, $this, 'processArticle', [$area, $context, $article]);
+		Article::process($article, $context, $this, 'processArticle', [$area, $context, $article, $page]);
 
 		return true;
 	}
@@ -234,10 +234,11 @@ class Plugin extends JPlugin
 	 * @param string    $context The context of the content being passed to the plugin.
 	 * @param mixed     $article An object with a "text" property
 	 * @param mixed    &$params  Additional parameters. See {@see PlgContentContent()}.
+	 * @param int     $page    Optional page number. Unused. Defaults to zero.
 	 *
 	 * @return  bool
 	 */
-	protected function handleOnContentPrepare($area, $context, &$article, &$params)
+	protected function handleOnContentPrepare($area, $context, &$article, &$params, $page = 0)
 	{
 		return true;
 	}
@@ -276,10 +277,11 @@ class Plugin extends JPlugin
 	 * @param string  $area
 	 * @param string  $context The context of the content being passed to the plugin.
 	 * @param mixed   $article An object with a "text" property
+	 * @param int     $page    Optional page number. Unused. Defaults to zero.
 	 *
 	 * @return  void
 	 */
-	public function processArticle(&$string, $area = 'article', $context = '', $article = null)
+	public function processArticle(&$string, $area = 'article', $context = '', $article = null, $page = 0)
 	{
 	}
 
