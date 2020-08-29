@@ -631,6 +631,11 @@ ul.menu.footer-menu > li > a:before {
     padding-right: 5px;
 }
 
+/* remove the overlays menu item form footer nav*/
+ul.menu.footer-menu li .overlays {
+   display:none;
+}
+
 /* ########### Style community > publications ########### */
 .article-publications ul {
     list-style-type: lower-roman;
