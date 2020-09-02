@@ -277,4 +277,41 @@ class Article
 
 		call_user_func_array([$helper, $method], array_merge([&$article->{$type}], $params));
 	}
+
+	public static function getPages($string)
+	{
+		return preg_split('#(<hr class="system-pagebreak" .*?>)#s', $string, null, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+	}
+
+	public static function getPageNumber(&$all_pages, $search_string)
+	{
+		if (is_string($all_pages))
+		{
+			$all_pages = self::getPages($all_pages);
+		}
+
+		if (count($all_pages) < 2)
+		{
+			return 0;
+		}
+
+		foreach ($all_pages as $i => $page_text)
+		{
+			if ($i % 2)
+			{
+				continue;
+			}
+
+			if (strpos($page_text, $search_string) === false)
+			{
+				continue;
+			}
+
+			$all_pages[$i] = StringHelper::replaceOnce($search_string, '---', $page_text);
+
+			return $i / 2;
+		}
+
+		return 0;
+	}
 }

@@ -116,7 +116,7 @@ class Uri
 		$user = ! empty($uri['user']) ? $uri['user'] : '';
 		$pass = ! empty($uri['pass']) ? ':' . $uri['pass'] : '';
 
-		return (! empty($uri['scheme']) ? $uri['scheme'] : '')
+		return (! empty($uri['scheme']) ? $uri['scheme'] . '://' : '')
 			. (($user || $pass) ? $user . $pass . '@' : '')
 			. (! empty($uri['host']) ? $uri['host'] : '')
 			. (! empty($uri['port']) ? ':' . $uri['port'] : '')

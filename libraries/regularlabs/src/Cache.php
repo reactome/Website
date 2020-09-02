@@ -76,7 +76,7 @@ class Cache
 	{
 		if (JFactory::getApplication()->get('debug'))
 		{
-			return false;
+			return $data;
 		}
 
 		$hash = md5($id);
