@@ -62,6 +62,8 @@ class Plugin extends JPlugin
 			$this->_id = $config['id'];
 		}
 
+		parent::__construct($subject, $config);
+
 		$this->app = JFactory::getApplication();
 		$this->db  = JFactory::getDbo();
 
@@ -76,8 +78,6 @@ class Plugin extends JPlugin
 		{
 			$this->_title = strtoupper($this->_alias);
 		}
-
-		parent::__construct($subject, $config);
 
 		Language::load('plg_' . $this->_type . '_' . $this->_name);
 	}
