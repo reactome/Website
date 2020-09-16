@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.7.20564
+ * @version         20.9.11663
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -77,18 +77,12 @@ class Protect
 		// return if current page is a JoomFish or Josetta page
 		$is_restricted = (
 			in_array($input->get('format'), $restricted_formats)
-			|| in_array($input->get('view'), ['image', 'img'])
+//			|| in_array($input->get('view'), ['image', 'img'])
 			|| in_array($input->get('type'), ['image', 'img'])
 			|| in_array($input->get('task'), ['install.install', 'install.ajax_upload'])
-			|| ($hastags
-				&& (
-					$input->getInt('rl_qp', 0)
-					|| in_array($input->get('option'), ['com_joomfishplus', 'com_josetta'])
-				)
-			)
-			|| (Document::isClient('administrator')
-				&& in_array($input->get('option'), ['com_jdownloads'])
-			)
+			|| ($hastags && $input->getInt('rl_qp', 0))
+			|| ($hastags && in_array($input->get('option'), ['com_joomfishplus', 'com_josetta']))
+			|| (Document::isClient('administrator') && in_array($input->get('option'), ['com_jdownloads']))
 		);
 
 		return Cache::set(
@@ -125,18 +119,16 @@ class Protect
 			return false;
 		}
 
-		$restricted_components =
-			is_array($restricted_components)
-				? $restricted_components
-				: explode(',', str_replace('|', ',', $restricted_components));
+		$restricted_components = ArrayHelper::toArray(str_replace('|', ',', $restricted_components));
 
-		if (in_array(JFactory::getApplication()->input->get('option'), $restricted_components))
+		if ( ! empty($restricted_components) && in_array(JFactory::getApplication()->input->get('option'), $restricted_components))
 		{
 			return true;
 		}
 
 		if (JFactory::getApplication()->input->get('option') == 'com_acymailing'
 			&& ! in_array(JFactory::getApplication()->input->get('ctrl'), ['user', 'archive'])
+			&& ! in_array(JFactory::getApplication()->input->get('view'), ['user', 'archive'])
 		)
 		{
 			return true;

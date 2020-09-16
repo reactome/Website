@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.7.2
+ * @version         7.7.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -49,11 +49,11 @@ class Document
 
 		RL_Document::scriptOptions($options, 'Tabs');
 
-		RL_Document::script('tabs/script.min.js', ($params->media_versioning ? '7.7.2' : ''));
+		RL_Document::script('tabs/script.min.js', ($params->media_versioning ? '7.7.3' : ''));
 
 		if ($params->load_stylesheet)
 		{
-			RL_Document::stylesheet('tabs/style.min.css', ($params->media_versioning ? '7.7.2' : ''));
+			RL_Document::stylesheet('tabs/style.min.css', ($params->media_versioning ? '7.7.3' : ''));
 		}
 
 	}

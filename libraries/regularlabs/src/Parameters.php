@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.7.20564
+ * @version         20.9.11663
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -253,7 +253,7 @@ class Parameters
 
 		if ( ! $path
 			|| ! file_exists($path)
-			|| ! $file = JFile::read($path)
+			|| ! $file = file_get_contents($path)
 		)
 		{
 			return Cache::set(

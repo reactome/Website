@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.7.20564
+ * @version         20.9.11663
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -34,8 +34,7 @@ class Plugin extends JPlugin
 	public $_disable_on_components = false;
 	public $_protected_formats     = [];
 	public $_page_types            = [];
-
-	public $_params = null;
+	public $_jversion              = 3;
 
 	private $_pass = null;
 
@@ -107,12 +106,14 @@ class Plugin extends JPlugin
 
 		$this->handleOnAfterDispatch();
 
-		if ( ! $buffer = Document::getBuffer())
+		$buffer = Document::getBuffer();
+
+		$this->loadStylesAndScripts($buffer);
+
+		if ( ! $buffer)
 		{
 			return;
 		}
-
-		$this->loadStylesAndScripts($buffer);
 
 		if ( ! $this->changeDocumentBuffer($buffer))
 		{
@@ -169,7 +170,7 @@ class Plugin extends JPlugin
 	 *
 	 * @return  bool
 	 */
-	public function onContentPrepareForm($form, $data)
+	public function onContentPrepareForm(JForm $form, $data)
 	{
 		if ( ! $this->passChecks())
 		{
@@ -234,7 +235,7 @@ class Plugin extends JPlugin
 	 * @param string    $context The context of the content being passed to the plugin.
 	 * @param mixed     $article An object with a "text" property
 	 * @param mixed    &$params  Additional parameters. See {@see PlgContentContent()}.
-	 * @param int     $page    Optional page number. Unused. Defaults to zero.
+	 * @param int       $page    Optional page number. Unused. Defaults to zero.
 	 *
 	 * @return  bool
 	 */
@@ -249,7 +250,7 @@ class Plugin extends JPlugin
 	 *
 	 * @return  bool
 	 */
-	protected function handleOnContentPrepareForm($form, $data)
+	protected function handleOnContentPrepareForm(JForm $form, $data)
 	{
 		return true;
 	}
@@ -259,7 +260,7 @@ class Plugin extends JPlugin
 	 *
 	 * @return  void
 	 */
-	protected function loadStylesAndScripts($buffer)
+	protected function loadStylesAndScripts(&$buffer)
 	{
 	}
 
@@ -314,6 +315,9 @@ class Plugin extends JPlugin
 	{
 	}
 
+	/**
+	 * @return  bool
+	 */
 	protected function passChecks()
 	{
 		if ( ! is_null($this->_pass))
@@ -340,10 +344,12 @@ class Plugin extends JPlugin
 			return false;
 		}
 
+		$params = Parameters::getInstance()->getPluginParams($this->_name);
+
 		// allow in admin?
 		if ( ! $this->_enable_in_admin
 			&& $this->_is_admin
-			&& ( ! isset($this->_params->enable_admin) || ! $this->_params->enable_admin))
+			&& ( ! isset($params->enable_admin) || ! $params->enable_admin))
 		{
 			return false;
 		}
@@ -357,7 +363,7 @@ class Plugin extends JPlugin
 
 		// disabled by component?
 		if ($this->_disable_on_components
-			&& Protect::isRestrictedComponent(isset($this->_params->disabled_components) ? $this->_params->disabled_components : [], 'component'))
+			&& Protect::isRestrictedComponent(isset($params->disabled_components) ? $params->disabled_components : [], 'component'))
 		{
 			return false;
 		}

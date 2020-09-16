@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.7.20564
+ * @version         20.9.11663
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -132,10 +132,10 @@ class DB
 			return 'NOW()';
 		}
 
-		if (is_numeric($value))
-		{
-			return $value;
-		}
+//		if (is_numeric($value))
+//		{
+//			return $value;
+//		}
 
 		return JFactory::getDbo()->quote($value);
 	}

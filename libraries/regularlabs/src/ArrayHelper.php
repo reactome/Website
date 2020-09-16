@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.7.20564
+ * @version         20.9.11663
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -245,5 +245,30 @@ class ArrayHelper
 		});
 
 		return $array;
+	}
+
+	/**
+	 * Flatten an array of nested arrays, keeping the order
+	 *
+	 * @param array $array
+	 *
+	 * @return array
+	 */
+	public static function flatten($array)
+	{
+		$flattened = [];
+
+		foreach ($array as $nested)
+		{
+			if ( ! is_array($nested))
+			{
+				$flattened[] = $nested;
+				continue;
+			}
+
+			$flattened = array_merge($flattened, self::flatten($nested));
+		}
+
+		return $flattened;
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.7.20564
+ * @version         20.9.11663
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -275,12 +275,13 @@ class StringHelper
 	 * Removes html tags from string
 	 *
 	 * @param string $string
+	 * @param bool   $remove_comments
 	 *
 	 * @return string
 	 */
-	public static function removeHtml($string)
+	public static function removeHtml($string, $remove_comments = false)
 	{
-		return Html::removeHtmlTags($string);
+		return Html::removeHtmlTags($string, $remove_comments);
 	}
 
 	/**

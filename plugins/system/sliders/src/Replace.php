@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.9.2
+ * @version         7.9.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -639,9 +639,12 @@ class Replace
 			$html[] = '<div class="accordion-inner panel-body">';
 		}
 
-		$html[] = '<' . $item->title_tag . ' class="rl_sliders-title nn_sliders-title">'
-			. RL_RegEx::replace('<\?h[0-9](\s[^>]* )?>', '', $item->title_full)
-			. '</' . $item->title_tag . '>';
+		if ($params->output_title_tag)
+		{
+			$html[] = '<' . $item->title_tag . ' class="rl_sliders-title nn_sliders-title">'
+				. RL_RegEx::replace('<\?h[0-9](\s[^>]* )?>', '', $item->title_full)
+				. '</' . $item->title_tag . '>';
+		}
 
 		$html = implode("\n", $html);
 

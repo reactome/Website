@@ -1,6 +1,6 @@
 /**
  * @package         Sliders
- * @version         7.9.2
+ * @version         7.9.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com

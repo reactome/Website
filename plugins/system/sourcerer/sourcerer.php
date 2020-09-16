@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.4.1
+ * @version         8.4.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,7 +14,9 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory as JFactory;
 use Joomla\CMS\Language\Text as JText;
 use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\Extension as RL_Extension;
 use RegularLabs\Library\Html as RL_Html;
+use RegularLabs\Library\Language as RL_Language;
 use RegularLabs\Library\Plugin as RL_Plugin;
 use RegularLabs\Library\Protect as RL_Protect;
 use RegularLabs\Plugin\System\Sourcerer\Area;
@@ -53,6 +55,20 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
+if (! RL_Document::isJoomlaVersion(3, 'SOURCERER'))
+{
+	RL_Extension::disable('sourcerer', 'plugin');
+
+	RL_Language::load('plg_system_regularlabs');
+
+	JFactory::getApplication()->enqueueMessage(
+		JText::sprintf('RL_PLUGIN_HAS_BEEN_DISABLED', JText::_('SOURCERER')),
+		'error'
+	);
+
+	return;
+}
+
 if (true)
 {
 	class PlgSystemSourcerer extends RL_Plugin
@@ -61,6 +77,7 @@ if (true)
 		public $_can_disable_by_url    = false;
 		public $_disable_on_components = true;
 		public $_page_types            = ['html', 'feed', 'pdf', 'xml', 'ajax', 'json', 'raw'];
+		public $_jversion        = 3;
 
 		protected function handleOnContentPrepare($area, $context, &$article, &$params, $page = 0)
 		{

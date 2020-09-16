@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.7.20564
+ * @version         20.9.11663
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -484,7 +484,7 @@ class PluginTag
 		$s = RegEx::quote($start_character);
 		$e = RegEx::quote($end_character);
 
-		return '(?:[^' . $s . $e . ']*' . $s . '[^' . $e . ']*' . $s . ')*.*?';
+		return '(?:[^' . $s . $e . ']*' . $s . '[^' . $e . ']*' . $e . ')*.*?';
 	}
 
 	/**

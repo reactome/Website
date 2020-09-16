@@ -2,8 +2,8 @@
 <extension version="3.9" type="plugin" group="system" method="upgrade">
 	<name>plg_system_sliders</name>
 	<description>PLG_SYSTEM_SLIDERS_DESC</description>
-	<version>7.9.2</version>
-	<creationDate>August 2020</creationDate>
+	<version>7.9.3</version>
+	<creationDate>September 2020</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -155,6 +155,12 @@
 			</fieldset>
 
 			<fieldset name="advanced">
+				<field name="output_title_tag" type="radio" class="btn-group" default="1"
+					   label="SLD_OUTPUT_TITLE_TAG"
+					   description="SLD_OUTPUT_TITLE_TAG_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
 				<field name="title_tag" type="text" size="5" class="input-mini" default="h2"
 					   label="SLD_TITLE_TAG"
 					   description="SLD_TITLE_TAG_DESC" />
