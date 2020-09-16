@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.7.2
+ * @version         7.7.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -642,10 +642,14 @@ class Replace
 		if ( ! $item->haslink)
 		{
 			$class = 'anchor';
-			$html[] = '<a id="anchor-' . $item->id . '" class="' . $class . '"></a>'
-				. '<' . $item->title_tag . ' class="rl_tabs-title nn_tabs-title">'
-				. $item->title
-				. '</' . $item->title_tag . '>';
+			$html[] = '<a id="anchor-' . $item->id . '" class="' . $class . '"></a>';
+
+			if ($params->output_title_tag)
+			{
+				$html[] = '<' . $item->title_tag . ' class="rl_tabs-title nn_tabs-title">'
+					. $item->title
+					. '</' . $item->title_tag . '>';
+			}
 		}
 
 		$html = implode("\n", $html);

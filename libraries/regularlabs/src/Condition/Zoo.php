@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.7.20564
+ * @version         20.9.11663
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -54,6 +54,20 @@ abstract class Zoo
 		}
 
 		$request->id = JFactory::getApplication()->input->getInt($request->idname, 0);
+
+		if ($request->id)
+		{
+			return;
+		}
+
+		$menu = JFactory::getApplication()->getMenu()->getItem((int) $request->Itemid);
+
+		if (empty($menu))
+		{
+			return;
+		}
+
+		$request->id = $menu->getParams()->get('item_id', 0);
 	}
 
 	public function getItem($fields = [])

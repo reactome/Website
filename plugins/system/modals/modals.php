@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.6.1
+ * @version         11.6.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,10 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory as JFactory;
 use Joomla\CMS\Language\Text as JText;
+use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\Extension as RL_Extension;
 use RegularLabs\Library\Html as RL_Html;
+use RegularLabs\Library\Language as RL_Language;
 use RegularLabs\Library\Plugin as RL_Plugin;
 use RegularLabs\Plugin\System\Modals\Clean;
 use RegularLabs\Plugin\System\Modals\Document;
@@ -48,6 +51,20 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
+if (! RL_Document::isJoomlaVersion(3, 'MODALS'))
+{
+	RL_Extension::disable('modals', 'plugin');
+
+	RL_Language::load('plg_system_regularlabs');
+
+	JFactory::getApplication()->enqueueMessage(
+		JText::sprintf('RL_PLUGIN_HAS_BEEN_DISABLED', JText::_('MODALS')),
+		'error'
+	);
+
+	return;
+}
+
 if (true)
 {
 	class PlgSystemModals extends RL_Plugin
@@ -55,13 +72,14 @@ if (true)
 		public $_lang_prefix           = 'MDL';
 		public $_has_tags              = true;
 		public $_disable_on_components = true;
+		public $_jversion        = 3;
 
 		public function processArticle(&$string, $area = 'article', $context = '', $article = null, $page = 0)
 		{
 			Replace::replaceTags($string, $area, $context);
 		}
 
-		protected function loadStylesAndScripts($buffer)
+		protected function loadStylesAndScripts(&$buffer)
 		{
 			Document::addHeadStuff();
 		}

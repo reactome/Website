@@ -1,20 +1,25 @@
 <?php
+
 /**
  * @package        Direct Alias
- * @copyright      Copyright (C) 2009-2017 AlterBrains.com. All rights reserved.
+ * @copyright      Copyright (C) 2009-2020 AlterBrains.com. All rights reserved.
  * @license        http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Router\SiteRouter;
+use Joomla\CMS\Uri\Uri;
 
 defined('_JEXEC') or die('Restricted access');
 
 /**
  * Class plgSystemDirectalias
  *
- * @since 1.0
+ * @since        1.0
+ * @noinspection UnknownInspectionInspection
+ * @noinspection PhpUnused
  */
 class plgSystemDirectalias extends CMSPlugin
 {
@@ -25,7 +30,13 @@ class plgSystemDirectalias extends CMSPlugin
 	protected $app;
 
 	/**
-	 * @param   Form $form The form
+	 * @var array
+	 * @since 2.1.0
+	 */
+	public $short_ids = [];
+
+	/**
+	 * @param Form $form The form
 	 *
 	 * @return  boolean
 	 *
@@ -85,7 +96,9 @@ class plgSystemDirectalias extends CMSPlugin
 	}
 
 	/**
-	 * @since 1.0
+	 * @since        1.0
+	 * @noinspection UnknownInspectionInspection
+	 * @noinspection PhpUnused
 	 */
 	public function onAfterInitialise()
 	{
@@ -97,8 +110,6 @@ class plgSystemDirectalias extends CMSPlugin
 		// Falang overloads menu items via own router's parse rule, so we need to update routes after its rule but now now.
 		if (class_exists('plgSystemFalangdriver'))
 		{
-			/** @noinspection NullPointerExceptionInspection */
-			/** @noinspection PhpUndefinedMethodInspection */
 			SiteApplication::getRouter()->attachParseRule([
 				$this,
 				'updateDirectRoutes',
@@ -111,6 +122,7 @@ class plgSystemDirectalias extends CMSPlugin
 	}
 
 	/**
+	 * Joomla4 requires parent_id=1 for top-level shorten URLs.
 	 * @since 1.0
 	 */
 	public function updateDirectRoutes()
@@ -123,40 +135,35 @@ class plgSystemDirectalias extends CMSPlugin
 		}
 		$updated = true;
 
-		/** @var \Joomla\CMS\Menu\SiteMenu $menu */
-		$menu = $this->app->getMenu();
-
-		// Get items.
-		/** @noinspection PhpUnhandledExceptionInspection */
-		/** @var \ReflectionProperty $rProperty */
-		$items = $this->getMenuItems($menu, $rProperty);
-
-		$direct_aliases = [];
-
-		$shorten_all = $this->params->get('shorten_all');
-
-		/** @var stdClass[] $items */
-		foreach ($items as &$item)
+		// Just shorten all URLs.
+		if ($this->params->get('shorten_all'))
 		{
-			// Remember original route.
-			$item->original_route = $item->route;
-
-			// Just shorten all URLs.
-			if ($shorten_all)
+			foreach ($this->app->getMenu()->getMenu() as $item)
 			{
-				$item->route = $item->alias;
+				/** @noinspection PhpUndefinedFieldInspection */
+				$item->_route = $item->route;
+				$item->route  = $item->alias;
 			}
-			// Or custom settings per menu item
-			else
+		}
+		// Or custom settings per menu item
+		else
+		{
+			$direct_aliases = [];
+
+			foreach ($this->app->getMenu()->getMenu() as $item)
 			{
-				$absent_alias = $item->params->get('absent_alias');
-				$direct_alias = $item->params->get('direct_alias');
+				/** @noinspection PhpUndefinedFieldInspection */
+				$item->_route = $item->route;
+
+				$absent_alias = $item->getParams()->get('absent_alias');
+				$direct_alias = $item->getParams()->get('direct_alias');
 
 				if ($absent_alias && $direct_alias)
 				{
 					$direct_aliases[$item->route] = '';
 
-					$item->route = $item->alias;
+					$item->route       = $item->alias;
+					$this->short_ids[] = $item->id;
 				}
 				// Remove alias for all children
 				elseif ($absent_alias)
@@ -173,7 +180,8 @@ class plgSystemDirectalias extends CMSPlugin
 				{
 					$direct_aliases[$item->route] = $item->alias;
 
-					$item->route = $item->alias;
+					$item->route       = $item->alias;
+					$this->short_ids[] = $item->id;
 				}
 				// Remove parent alias of parents with direct aliases
 				elseif ($item->level > 1 && !empty($direct_aliases))
@@ -185,28 +193,97 @@ class plgSystemDirectalias extends CMSPlugin
 						if (isset($direct_aliases[$test_route]))
 						{
 							$item->route = trim($direct_aliases[$test_route] . '/' . substr($item->route, strlen($test_route) + 1), '/');
+
+							if ($direct_aliases[$test_route] === '')
+							{
+								$this->short_ids[] = $item->id;
+							}
 							break;
 						}
 					}
 				}
 			}
 		}
+
+		// Decorate native SiteRouter::parseSefRoute() which uses parent_id=1 for top-level items.
+		if (version_compare(JVERSION, '4.0', 'ge'))
+		{
+			$this->decorateJoomlaParseSefRoute();
+		}
 	}
 
 	/**
-	 * @param \Joomla\CMS\Menu\SiteMenu $menu
-	 * @param \ReflectionProperty       $rProperty
-	 *
-	 * @return array
-	 * @throws \ReflectionException
-	 * @since 2.0
+	 * @since 2.1.0
 	 */
-	protected function getMenuItems($menu, &$rProperty = null)
+	protected function decorateJoomlaParseSefRoute()
 	{
-		/** @noinspection PhpUnhandledExceptionInspection */
-		$rProperty = new ReflectionProperty($menu, version_compare(JVERSION, '4.0', 'l') ? '_items' : 'items');
-		$rProperty->setAccessible(true);
+		$router = SiteApplication::getRouter();
 
-		return $rProperty->getValue($menu);
+		$getDuringRules = (static function &($router) {
+			return $router->rules['parse' . $router::PROCESS_DURING];
+		})->bindTo(null, get_class($router));
+
+		foreach ($getDuringRules($router) as &$callback)
+		{
+			if (is_array($callback)
+				&& $callback[1] === 'parseSefRoute'
+				&& is_object($callback[0])
+				&& get_class($callback[0]) === SiteRouter::class
+			)
+			{
+				/**
+				 * @param SiteRouter $router
+				 * @param Uri        $uri
+				 *
+				 * @since 2.1.0
+				 */
+				$callback = function (&$router, &$uri) {
+					// Update all parent_id to 1 as required in Joomla 4
+					if ($this->params->get('shorten_all'))
+					{
+						foreach ($this->app->getMenu()->getMenu() as $item)
+						{
+							/** @noinspection PhpUndefinedFieldInspection */
+							$item->_parent_id = $item->parent_id;
+							$item->parent_id  = 1;
+						}
+					}
+					else
+					{
+						$items = $this->app->getMenu()->getMenu();
+
+						foreach ($this->short_ids as $id)
+						{
+							$items[$id]->_parent_id = $items[$id]->parent_id;
+							$items[$id]->parent_id  = 1;
+						}
+					}
+
+					// Execute original parse rule.
+					$router->parseSefRoute($router, $uri);
+
+					// Restore parent_id
+					if ($this->params->get('shorten_all'))
+					{
+						foreach ($this->app->getMenu()->getMenu() as $item)
+						{
+							/** @noinspection PhpUndefinedFieldInspection */
+							$item->parent_id = $item->_parent_id;
+						}
+					}
+					else
+					{
+						$items = $this->app->getMenu()->getMenu();
+
+						foreach ($this->short_ids as $id)
+						{
+							$items[$id]->parent_id = $items[$id]->_parent_id;
+						}
+					}
+				};
+
+				break;
+			}
+		}
 	}
 }

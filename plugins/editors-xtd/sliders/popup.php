@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.9.2
+ * @version         7.9.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -44,12 +44,12 @@ class Popup
 		";
 		RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('sliders/popup.min.js', '7.9.2');
+		RL_Document::script('sliders/popup.min.js', '7.9.3');
 	}
 
 	public function loadStyles()
 	{
-		RL_Document::style('sliders/popup.min.css', '7.9.2');
+		RL_Document::style('sliders/popup.min.css', '7.9.3');
 	}
 }
 
