@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.9.11663
+ * @version         20.10.11720
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,6 +14,7 @@ namespace RegularLabs\Library;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Language\Text as JText;
+use Joomla\CMS\Layout\LayoutHelper;
 
 /**
  * Class Language
@@ -44,19 +45,20 @@ class License
 			return '';
 		}
 
-		Document::loadMainDependencies();
+		$displayData = [
+			'msgList' => [
+				'' => [
+					JText::sprintf('RL_IS_FREE_VERSION', $name),
+					JText::_('RL_FOR_MORE_GO_PRO'),
+					'<a href="https://www.regularlabs.com/purchase/cart/add/' . $alias . '" target="_blank" class="btn btn-small btn-primary">'
+					. '<span class="icon-basket"></span> '
+					. StringHelper::html_entity_decoder(JText::_('RL_GO_PRO'))
+					. '</a>',
+				],
+			],
+		];
 
-		return
-			'<div class="alert alert-default rl_license">'
-			. JText::sprintf('RL_IS_FREE_VERSION', $name)
-			. '<br>'
-			. JText::_('RL_FOR_MORE_GO_PRO')
-			. '<br>'
-			. '<a href="https://www.regularlabs.com/purchase/cart/add/' . $alias . '" target="_blank" class="btn btn-small btn-primary">'
-			. ' <span class="icon-basket"></span>'
-			. StringHelper::html_entity_decoder(JText::_('RL_GO_PRO'))
-			. '</a>'
-			. '</div>';
+		return LayoutHelper::render('joomla.system.message', $displayData);
 	}
 
 	/**

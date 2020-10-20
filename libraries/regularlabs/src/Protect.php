@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.9.11663
+ * @version         20.10.11720
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -120,6 +120,7 @@ class Protect
 		}
 
 		$restricted_components = ArrayHelper::toArray(str_replace('|', ',', $restricted_components));
+		$restricted_components = ArrayHelper::clean($restricted_components);
 
 		if ( ! empty($restricted_components) && in_array(JFactory::getApplication()->input->get('option'), $restricted_components))
 		{
@@ -1057,8 +1058,8 @@ class Protect
 	 */
 	public static function removePluginTags(&$string, $tags, $character_start = '{', $character_end = '{', $keep_content = true)
 	{
-		$character_start = RegEx::quote($character_start);
-		$character_end   = RegEx::quote($character_end);
+		$regex_character_start = RegEx::quote($character_start);
+		$regex_character_end   = RegEx::quote($character_end);
 
 		foreach ($tags as $tag)
 		{
@@ -1072,9 +1073,14 @@ class Protect
 				$tag = [$tag[0], $tag[0]];
 			}
 
-			$regex = $character_start . RegEx::quote($tag[0]) . '(?:\s.*?)?' . $character_end
+			if ( ! StringHelper::contains($string, $character_start . '/' . $tag[1] . $character_end))
+			{
+				continue;
+			}
+
+			$regex = $regex_character_start . RegEx::quote($tag[0]) . '(?:\s.*?)?' . $regex_character_end
 				. '(.*?)'
-				. $character_start . '/' . RegEx::quote($tag[1]) . $character_end;
+				. $regex_character_start . '/' . RegEx::quote($tag[1]) . $regex_character_end;
 
 			$replace = $keep_content ? '\1' : '';
 

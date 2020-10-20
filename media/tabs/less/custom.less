@@ -1,6 +1,6 @@
 /**
  * @package         Tabs
- * @version         7.7.3
+ * @version         7.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
