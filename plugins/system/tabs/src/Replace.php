@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.7.3
+ * @version         7.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -127,8 +127,6 @@ class Replace
 
 	private static function handlePrintPage(&$string)
 	{
-		$params = Params::get();
-
 		$sets = self::getSets($string);
 		self::initSets($sets);
 
@@ -145,10 +143,10 @@ class Replace
 				}
 
 				$replace = $prefix . '<div id="' . $item->id . '" class="' . $class . '">'
-					. '<' . $params->title_tag . ' class="rl_tabs-title nn_tabs-title">'
+					. '<' . $item->title_tag . ' class="rl_tabs-title nn_tabs-title">'
 					. '<a id="anchor-' . $item->id . '" class="anchor"></a>'
 					. $item->title_full
-					. '</' . $params->title_tag . '>';
+					. '</' . $item->title_tag . '>';
 
 				$string = RL_String::replaceOnce($item->orig, $replace, $string);
 				$prefix = '</div>';
@@ -408,7 +406,7 @@ class Replace
 
 
 				$set_keys = [
-					'class', 'open', 'title_tag', 'onclick',
+					'class', 'open', 'output_title_tag', 'title_tag', 'onclick',
 				];
 				foreach ($set_keys as $key)
 				{
@@ -644,7 +642,7 @@ class Replace
 			$class = 'anchor';
 			$html[] = '<a id="anchor-' . $item->id . '" class="' . $class . '"></a>';
 
-			if ($params->output_title_tag)
+			if ($item->output_title_tag)
 			{
 				$html[] = '<' . $item->title_tag . ' class="rl_tabs-title nn_tabs-title">'
 					. $item->title
@@ -664,7 +662,8 @@ class Replace
 			return '</div>';
 		}
 
-		$class = self::getMainClasses($item);
+		$params = Params::get();
+		$class  = self::getMainClasses($item);
 
 
 		$html[] = '<div class="' . trim($class) . '" role="presentation">';

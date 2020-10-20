@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.9.11663
+ * @version         20.10.11720
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -226,6 +226,16 @@ class Document
 	}
 
 	/**
+	 * Checks if current page is a JSON format fle
+	 *
+	 * @return bool
+	 */
+	public static function isJSON()
+	{
+		return JFactory::getApplication()->input->get('format') == 'json';
+	}
+
+	/**
 	 * Checks if current page is a https (ssl) page
 	 *
 	 * @return bool
@@ -311,7 +321,7 @@ class Document
 		{
 			JHtml::_('behavior.core');
 			JHtml::_('script', 'jui/cms.js', ['version' => 'auto', 'relative' => true]);
-			$version = '20.9.11663';
+			$version = '20.10.11720';
 		}
 
 		if ( ! empty($version))
@@ -332,7 +342,7 @@ class Document
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '20.9.11663';
+			$version = '20.10.11720';
 		}
 
 		if ( ! $file = File::getMediaFile('css', $file))

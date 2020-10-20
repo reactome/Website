@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.9.11663
+ * @version         20.10.11720
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -28,6 +28,7 @@ class HikashopPagetype
 		}
 
 		$type = $this->request->view;
+
 		if (
 			($type == 'product' && in_array($this->request->layout, ['contact', 'show']))
 			|| ($type == 'user' && in_array($this->request->layout, ['cpanel']))

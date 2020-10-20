@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.9.11663
+ * @version         20.10.11720
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -83,6 +83,8 @@ class Article
 				$db->quoteName('c.title', 'category_title'),
 				$db->quoteName('c.alias', 'category_alias'),
 				$db->quoteName('c.access', 'category_access'),
+				$db->quoteName('c.lft', 'category_lft'),
+				$db->quoteName('c.lft', 'category_ordering'),
 			]);
 		}
 		$query->innerJoin($db->quoteName('#__categories', 'c') . ' ON ' . $db->quoteName('c.id') . ' = ' . $db->quoteName('a.catid'))
@@ -280,6 +282,11 @@ class Article
 
 	public static function getPages($string)
 	{
+		if (empty($string))
+		{
+			return [''];
+		}
+
 		return preg_split('#(<hr class="system-pagebreak" .*?>)#s', $string, null, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 	}
 

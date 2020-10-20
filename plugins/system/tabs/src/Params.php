@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         7.7.3
+ * @version         7.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -140,14 +140,12 @@ class Params
 
 	public static function getTagCharacters()
 	{
-		$params = self::get();
-
-		if ( ! isset($params->tag_character_start))
+		if ( ! isset(self::$params->tag_character_start))
 		{
 			self::setTagCharacters();
 		}
 
-		return [$params->tag_character_start, $params->tag_character_end];
+		return [self::$params->tag_character_start, self::$params->tag_character_end];
 	}
 
 	public static function setTagCharacters()
