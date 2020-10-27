@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.6.2
+ * @version         11.7.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -110,8 +110,9 @@ class PlgSystemModalsInstallerScriptHelper
 			->select($this->db->quoteName('extension_id'))
 			->from('#__extensions')
 			->where($this->db->quoteName('type') . ' = ' . $this->db->quote($this->extension_type))
-			->where($this->db->quoteName('element') . ' = ' . $this->db->quote($this->getElementName()));
-		$this->db->setQuery($query, 0, 1);
+			->where($this->db->quoteName('element') . ' = ' . $this->db->quote($this->getElementName()))
+			->setLimit(1);
+		$this->db->setQuery($query);
 		$result = $this->db->loadResult();
 
 		return empty($result) ? false : true;
@@ -321,8 +322,9 @@ class PlgSystemModalsInstallerScriptHelper
 		$query->clear()
 			->select($this->db->quoteName('moduleid'))
 			->from('#__modules_menu')
-			->where($this->db->quoteName('moduleid') . ' = ' . (int) $id);
-		$this->db->setQuery($query, 0, 1);
+			->where($this->db->quoteName('moduleid') . ' = ' . (int) $id)
+			->setLimit(1);
+		$this->db->setQuery($query);
 		$exists = $this->db->loadResult();
 
 		if ($exists)
@@ -563,8 +565,9 @@ class PlgSystemModalsInstallerScriptHelper
 		$query = $this->db->getQuery(true)
 			->select($this->db->quoteName('rules'))
 			->from('#__assets')
-			->where($this->db->quoteName('title') . ' = ' . $this->db->quote('com_' . $this->extname));
-		$this->db->setQuery($query, 0, 1);
+			->where($this->db->quoteName('title') . ' = ' . $this->db->quote('com_' . $this->extname))
+			->setLimit(1);
+		$this->db->setQuery($query);
 		$rules = $this->db->loadResult();
 
 		$rules = json_decode($rules);
@@ -636,8 +639,9 @@ class PlgSystemModalsInstallerScriptHelper
 			->select($this->db->quoteName('id'))
 			->from('#__assets')
 			->where($this->db->quoteName('name') . ' = ' . $this->db->quote('com_modules.module.' . (int) $module_id))
-			->where($this->db->quoteName('title') . ' LIKE ' . $this->db->quote('NoNumber%'));
-		$this->db->setQuery($query, 0, 1);
+			->where($this->db->quoteName('title') . ' LIKE ' . $this->db->quote('NoNumber%'))
+			->setLimit(1);
+		$this->db->setQuery($query);
 		$asset_id = $this->db->loadResult();
 
 		if (empty($asset_id))
@@ -730,8 +734,9 @@ class PlgSystemModalsInstallerScriptHelper
 			->from('#__update_sites')
 			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%download.regularlabs.com%'))
 			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%e=' . $this->alias . '%'))
-			->where($this->db->quoteName('location') . ' NOT LIKE ' . $this->db->quote('%pro=1%'));
-		$this->db->setQuery($query, 0, 1);
+			->where($this->db->quoteName('location') . ' NOT LIKE ' . $this->db->quote('%pro=1%'))
+			->setLimit(1);
+		$this->db->setQuery($query);
 		$id = $this->db->loadResult();
 
 		// Otherwise just get the first match
