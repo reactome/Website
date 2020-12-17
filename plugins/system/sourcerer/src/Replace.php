@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.4.2
+ * @version         8.4.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,6 @@ namespace RegularLabs\Plugin\System\Sourcerer;
 
 defined('_JEXEC') or die;
 
-use JFile;
 use Joomla\CMS\Factory as JFactory;
 use Joomla\CMS\Language\Text as JText;
 use Joomla\CMS\Uri\Uri as JUri;
@@ -137,7 +136,7 @@ class Replace
 		// Remove html tags if code is placed via the WYSIWYG editor
 		if ($remove_html)
 		{
-			$content = RL_Html::convertWysiwygToPlainText($content);
+			$content = self::convertWysiwygToPlainText($content);
 		}
 
 		self::replacePhpShortCodes($content);
@@ -175,6 +174,16 @@ class Replace
 
 			$match = array_merge($match, $tags);
 		}
+
+		return $content;
+	}
+
+	private static function convertWysiwygToPlainText($content)
+	{
+		$content = RL_Html::convertWysiwygToPlainText($content);
+
+		// Remove trailing spaces from EOT lines
+		$content = RL_RegEx::replace('(=\s*<<<([^\s]+)) ?(\n.*?\2;) ?', '\1\3', $content);
 
 		return $content;
 	}
