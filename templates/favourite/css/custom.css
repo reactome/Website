@@ -753,7 +753,7 @@ video.responsive-vid {
 /* ### Note: Thoroughly test the responsive design once height is changed ### */
 .twitter-timeline {
     background: none;
-    height: 503px !important;
+    height: 509px !important;
 }
 
 /** Sync Tool **/
@@ -814,7 +814,6 @@ video.responsive-vid {
     font-weight: 400 !important;
 }
 
-
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
     .twitter-timeline {
         height: 568px !important;
@@ -823,12 +822,60 @@ video.responsive-vid {
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
     .twitter-timeline {
-        height: 562px !important;
+        height: 588px !important;
     }
     ul.menu.footer-menu {
         padding: 0;
     }
 }
+/* iPad */
+/* Portrait */
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (orientation: portrait) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+       .twitter-timeline {
+        height: 588px !important;
+    }
+}
+
+/* Landscape */
+@media only screen 
+  and (min-device-width: 990px) 
+  and (max-device-width: 1024px) 
+  and (orientation: landscape) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+       .twitter-timeline {
+        height: 565px !important;
+    }
+}
+
+/* iPad Pro */
+/* Landscape*/
+@media only screen 
+   and (min-device-width: 1366px) 
+   and (max-device-height: 1024px) 
+   and (-webkit-min-device-pixel-ratio: 2)  
+   and (orientation: landscape)  {
+     .twitter-timeline {
+        height: 510px !important;
+    }
+}
+
+/* Portrait*/
+@media only screen 
+  and (min-device-width: 1024px) 
+  and (max-device-height: 1366px) 
+  and (-webkit-min-device-pixel-ratio: 2)  
+  and (orientation: portrait)  {
+  .twitter-timeline {
+        height: 565px !important;
+    }
+}
+
+
+
 /* ### END TWITTER WIDGET ### */
 
 /** ### CSS for the citation project ### **/ 

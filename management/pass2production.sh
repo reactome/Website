@@ -70,6 +70,7 @@ usage () {
     echo '          destination_server=<DEV|PROD> *** [MANDATORY] ***'
     echo '          privatekey=<path for certificate pem file>'
     echo '          email_me=<your valid email address>'
+    echo '          notify=<people to notify, csv email list>'
     echo '          static_dir=<Path for static folder> [Default: /usr/local/reactomes/Reactome/development/Website/static/]'
     echo ''
     echo '          move_data_over [Copy download folder, solr and graph to remote server. Recommended to run using `screen`]'
@@ -91,6 +92,7 @@ do
         static_dir)                STATIC_DIR=${VALUE} ;;
         privatekey)                PRIVATE_KEY=${VALUE} ;;
         email_me)                  MAIL_TO=${VALUE} ;;
+        notify)                    NOTIFY_LIST=${VALUE} ;;
         do_release)                DO_RELEASE="do-release" ;;
         move_data_over)            MOVE_DATA="move-data" ;;
         help)                      HELP="help-me" ;;
@@ -157,6 +159,12 @@ JOOMLA_SCRIPT="${STATIC_DIR}/scripts/joomla_migration.sh"
 SOURCE_SERVER_USER=""
 SOURCE_SERVER_PASSWD=""
 
+# IDG
+IDG_SERVER="idg.reactome.org"
+IDG_ENABLE_TRANSFER="FALSE"
+IDG_DOWNLOAD_DIR=${STATIC_DIR}"/download/current"
+
+
 FROM="p2p-noreply@reactome.org"
 DEFAULT_MAIL_TO="nobody@reactome.org"
 
@@ -195,6 +203,9 @@ fi
 if [[ "${DESTINATION_SERVER}" == "PROD" ]]
 then
     SERVER=${PRD1_SERVER}
+
+    # IT WILL TRANSFER THE DOWNLOAD FOLDER TO THE IDG SERVER
+    IDG_ENABLE_TRANSFER="TRUE"
 elif [[ "${DESTINATION_SERVER}" == "DEV" ]]
 then
     SERVER=${DEV_SERVER}
@@ -221,7 +232,15 @@ send_mail () {
     BODY=`cat ${LOGFILE}`
     FROM="Pass2Production<p2p-noreply@reactome.org>"
     echo -e "Subject:${SUBJECT}\n${BODY}" | sendmail -f "${FROM}" -t "${MAIL_TO}"
-    exit
+}
+
+notify_subscribers () {
+    if [[ ! ${NOTIFY_LIST} = "" ]]; then	
+       SUBJECT="Reactome version ${RELEASE_VERSION} is now available!"
+       BODY="A new version is available. Kind Regards. Reactome Team"
+       FROM="Reactome<release-noreply@reactome.org>"
+       echo -e "Subject:${SUBJECT}\n${BODY}" | sendmail -f "${FROM}" -t "${NOTIFY_LIST}"
+    fi
 }
 
 transfer_download_folder (){
@@ -231,25 +250,31 @@ transfer_download_folder (){
     SIZE=$(du -sh ${DOWNLOAD_DIR} | cut -f1)
 
     echo "Transferring download folder [${DOWNLOAD_DIR}]. Folder size is [$SIZE]"
-    read -r -p "Copying the download folder [size=$SIZE] is recommended to use 'screen'. Continue? [y/N] " response
-    case "$response" in
-        [yY][eE][sS]|[yY])
-            sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${DOWNLOAD_DIR}/ ${SHARED_USER}@${SERVER}:${DOWNLOAD_DIR} #2> /dev/null
-            OUT=$?
-            if [[ "$OUT" -ne 0 ]]; then
-                echo "[ERROR] [Download] - Rsync didn't executed properly. Check system output and address it manually. Re-run once the issue is sorted."
-                send_error_mail
-            fi
-            ;;
-        *)
-            exit
-            ;;
-    esac
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${DOWNLOAD_DIR}/ ${SHARED_USER}@${SERVER}:${DOWNLOAD_DIR} #2> /dev/null
+    OUT=$?
+    if [[ "$OUT" -ne 0 ]]; then
+         echo "[ERROR] [Download] - Rsync didn't executed properly. Check system output and address it manually. Re-run once the issue is sorted."
+         send_error_mail
+    fi
 
     difftimelps=$(($(date +"%s")-$begin))
     echo "Download folder has been synchronised. Elapsed time: [$(($difftimelps / 60)) minutes and $(($difftimelps % 60)) seconds]"
 
-    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} ZIP_ARCHIVE release_version=${RELEASE_VERSION}"
+    
+    # SYNC DOWNLOAD TO IDG SERVER - 16/12/2020 gviteri
+    if [[ "${IDG_ENABLE_TRANSFER}" == "TRUE" ]]
+    then
+            echo "Transferring download folder [${IDG_DOWNLOAD_DIR}]. Folder size is [$SIZE]"
+            echo "IDG Transferring has been enabled. Transferring downloads folder"
+            sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${DOWNLOAD_DIR}/ ${SHARED_USER}@${IDG_SERVER}:${IDG_DOWNLOAD_DIR} #2> /dev/null
+            OUT=$?
+            if [[ "$OUT" -ne 0 ]]; then
+                echo "[ERROR NONBLOCKER] [IDG Download folder] - Rsync didn't executed properly while transferring the download folder to the IDG SERVER. Execution will continue as normal."
+            fi
+    fi
+
+    # zip download folder is disabled
+    # sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} ZIP_ARCHIVE release_version=${RELEASE_VERSION}"
 }
 
 # solr, neo4j, icons, figures...
@@ -517,10 +542,10 @@ validate_mysql_credentials () {
 
 ask_db_credentials () {
     echo $""
-    echo "These credentials are required for ${GK_CURRENT_DB} database"
+    echo "These credentials are required for db:${GK_CURRENT_DB}"
 
     while true; do
-        read -r -p "Type DATABASE user for ${GK_CURRENT_DB} > " R_MYSQL_USER
+        read -r -p "Type MySQL DATABASE user for db:${GK_CURRENT_DB} > " R_MYSQL_USER
         read -s -p "Type password for ${R_MYSQL_USER} > " R_MYSQL_PASSWD
         validate_mysql_credentials ${R_MYSQL_USER} ${R_MYSQL_PASSWD}
         if [[ "$?" -eq 0 ]]; then
@@ -537,8 +562,8 @@ ask_extra_credentials () {
 
     while true; do
         # Read credentials for Source Server
-        read -r -p "Type your user @ ${RELEASE_SERVER} > " SOURCE_SERVER_USER
-        read -s -p "Type your password ${SOURCE_SERVER_USER}@${RELEASE_SERVER} > " SOURCE_SERVER_PASSWD
+        read -r -p "Type your SYSTEM USER @ ${RELEASE_SERVER} > " SOURCE_SERVER_USER
+        read -s -p "Type your SYSTEM PASSWORD ${SOURCE_SERVER_USER}@${RELEASE_SERVER} > " SOURCE_SERVER_PASSWD
         validate_source_credentials
         if [[ "$?" -eq 0 ]]; then
             echo "OS Credentials... OK"
@@ -549,20 +574,20 @@ ask_extra_credentials () {
     echo $""
 
     while true; do
-        read -r -p "Type DATABASE user for website > " WEBSITE_MYSQL_USER
+        read -r -p "Type MySQL DATABASE user db:website [website] > " WEBSITE_MYSQL_USER
         read -s -p "Type password for ${WEBSITE_MYSQL_USER} > " WEBSITE_MYSQL_PASSWD
         validate_mysql_credentials ${WEBSITE_MYSQL_USER} ${WEBSITE_MYSQL_PASSWD}
         if [[ "$?" -eq 0 ]]; then
-            echo "MySQL Credentials... OK"
+            echo "[WEBSITE] MySQL Credentials... OK"
             break
         fi
     done
 
     echo $""
-    echo "These credentials are required for ${GK_CURRENT_DB} database"
+    echo "These credentials are required for MySQL databaseName:${GK_CURRENT_DB} database"
 
     while true; do
-        read -r -p "Type DATABASE user for ${GK_CURRENT_DB} > " R_MYSQL_USER
+        read -r -p "Type MySQL DATABASE user for db:${GK_CURRENT_DB} [curator] > " R_MYSQL_USER
         read -s -p "Type password for ${R_MYSQL_USER} > " R_MYSQL_PASSWD
         validate_mysql_credentials ${R_MYSQL_USER} ${R_MYSQL_PASSWD}
         if [[ "$?" -eq 0 ]]; then
@@ -588,7 +613,7 @@ move_data_over () {
     echo "DONE! Data have been moved and you can proceed with the Release."
     echo "Run the script again and choose 'do_release'"
 
-    send_mail
+    #send_mail
 }
 
 # KEY FUNCTION
@@ -648,3 +673,4 @@ echo $""
 echo "Execution has finished, please have close look to the email you've got and address any WARNING manually"
 
 send_mail
+notify_subscribers

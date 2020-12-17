@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.10.18795
+ * @version         20.11.23860
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -43,5 +43,30 @@ class ObjectHelper
 		}
 
 		return $default;
+	}
+
+	/**
+	 * Deep clone an object
+	 *
+	 * @param object $object
+	 *
+	 * @return object
+	 */
+	public static function deepClone($object)
+	{
+		return unserialize(serialize($object));
+	}
+
+	/**
+	 * Merge 2 objects
+	 *
+	 * @param object $object1
+	 * @param object $object2
+	 *
+	 * @return object
+	 */
+	public static function merge($object1, $object2)
+	{
+		return (object) array_merge((array) $object1, (array) $object2);
 	}
 }

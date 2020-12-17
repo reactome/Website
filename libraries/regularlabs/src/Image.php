@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.10.18795
+ * @version         20.11.23860
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -194,6 +194,7 @@ class Image
 		$source_path  = JPATH_SITE . '/' . $clean_source;
 
 		$destination_folder = ltrim($destination_folder ?: File::getDirName($clean_source));
+		$destination_folder = self::cleanPath($destination_folder);
 
 		if ( ! file_exists($source_path))
 		{

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.10.18795
+ * @version         20.11.23860
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -1056,7 +1056,7 @@ class Protect
 	 * @param string $character_end
 	 * @param bool   $keep_content
 	 */
-	public static function removePluginTags(&$string, $tags, $character_start = '{', $character_end = '{', $keep_content = true)
+	public static function removePluginTags(&$string, $tags, $character_start = '{', $character_end = '}', $keep_content = true)
 	{
 		$regex_character_start = RegEx::quote($character_start);
 		$regex_character_end   = RegEx::quote($character_end);
