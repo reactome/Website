@@ -159,7 +159,7 @@ JOOMLA_SCRIPT="${STATIC_DIR}/scripts/joomla_migration.sh"
 SOURCE_SERVER_USER=""
 SOURCE_SERVER_PASSWD=""
 
-# IDG
+# IDG (only transferring to IDG when transferring to Reactom PROD)
 IDG_SERVER="idg.reactome.org"
 IDG_ENABLE_TRANSFER="FALSE"
 IDG_DOWNLOAD_DIR=${STATIC_DIR}"/download/current"
@@ -329,6 +329,18 @@ export_mysql_databases () {
             echo "[WARN] [${GK_CURRENT_TMP_FILE}.gz] - Rsync didn't executed properly. Check system output and address it manually. Re-run once the issue is sorted."
         fi
 
+        # transfer DB to IDG_SERVER
+        if [[ "${IDG_ENABLE_TRANSFER}" == "TRUE" ]]
+        then
+            echo "Transferring ${CURR_DB_FILE_GZ} to ${IDG_SERVER}"
+            sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${CURR_DB_FILE_GZ} ${SHARED_USER}@${IDG_SERVER}:${CURR_DB_FILE_GZ} #2> /dev/null
+            OUT=$?
+            if [[ "$OUT" -ne 0 ]]; then
+                echo "[WARN] [${GK_CURRENT_TMP_FILE}.gz] [IDG_SERVER] - Rsync didn't executed properly. Check system output and address it manually. Re-run once the issue is sorted."
+                echo "[WARN] [IDG_SERVER] - Please report, however that shouldn't affect the normal p2p flow."
+            fi
+        fi
+
         echo "Removing database dump file ${CURR_DB_FILE} from ${RELEASE_SERVER}"
         rm -f ${CURR_DB_FILE_GZ}
         rm -f ${CURR_DB_FILE}
@@ -445,6 +457,16 @@ other_databases () {
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         exit;
+    fi
+
+    # Sync IDG Server
+    if [[ "${IDG_ENABLE_TRANSFER}" == "TRUE" ]]
+    then
+        sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${IDG_SERVER} "${SYNC_TOOL} OTHER_DBS mysql_user=${R_MYSQL_USER} mysql_passwd=${R_MYSQL_PASSWD}"
+        OUT=$?
+        if [[ "$OUT" -ne 0 ]]; then
+            echo "[WARN] Couldn't create the current database in the IDG_SERVER. Please report, however that shouldn't affect the normal p2p flow."
+        fi
     fi
 }
 
