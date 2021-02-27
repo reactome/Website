@@ -162,8 +162,8 @@ SOURCE_SERVER_PASSWD=""
 # IDG (only transferring to IDG when transferring to Reactom PROD)
 IDG_SERVER="idg.reactome.org"
 IDG_ENABLE_TRANSFER="FALSE"
-IDG_DOWNLOAD_DIR=${STATIC_DIR}"/download/current"
-
+IDG_STATIC_DIR="/usr/local/reactomes/Reactome/production/Website/dist"
+IDG_DOWNLOAD_DIR=${IDG_STATIC_DIR}"/download/current"
 
 FROM="p2p-noreply@reactome.org"
 DEFAULT_MAIL_TO="nobody@reactome.org"
