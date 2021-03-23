@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         11.7.1
+ * @version         11.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -38,12 +38,12 @@ class Popup
 		";
 		RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('modals/popup.min.js', '11.7.1');
+		RL_Document::script('modals/popup.min.js', '11.8.0');
 	}
 
 	public function loadStyles()
 	{
-		RL_Document::style('modals/popup.min.css', '11.7.1');
+		RL_Document::style('modals/popup.min.css', '11.8.0');
 	}
 }
 

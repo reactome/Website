@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         20.11.23860
+ * @version         21.2.23991
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -53,6 +53,17 @@ class RegularLabsInstallerScriptHelper
 		{
 			$this->install_type = 'update';
 		}
+
+//		if ($this->extension_type == 'component')
+//		{
+//			// Remove admin menu to prevent error on creating it again
+//			$query = $this->db->getQuery(true)
+//				->delete('#__menu')
+//				->where($this->db->quoteName('path') . ' = ' . $this->db->quote('com-' . $this->extname))
+//				->where($this->db->quoteName('client_id') . ' = 1');
+//			$this->db->setQuery($query);
+//			$this->db->execute();
+//		}
 
 		if ($this->onBeforeInstall($route) === false)
 		{
