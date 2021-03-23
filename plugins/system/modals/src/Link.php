@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         11.7.1
+ * @version         11.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -212,6 +212,9 @@ class Link
 
 		$attributes->class .= ! empty($tag->class) ? ' ' . $tag->class : '';
 		unset($tag->class);
+
+		$attributes->style = ! empty($tag->style) ? $tag->style : '';
+		unset($tag->style);
 
 		if ( ! empty($tag->title))
 		{
