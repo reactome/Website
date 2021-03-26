@@ -3,7 +3,7 @@ defined('_JEXEC') or die;
 $path         = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 $template_cgi = "template-cgi";
 $protocol     = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']!='off') ? 'https://' : 'http://';
-$url          = $protocol . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $path . '/' . $template_cgi;
+$url          = $protocol . $_SERVER['SERVER_NAME'] . '/' . $template_cgi;
 $content      = file_get_contents($url);
 $pieces = explode("<!-- template-placeholder -->", $content);
 echo $pieces[0]; // header
