@@ -3,6 +3,7 @@
 defined('_JEXEC') or die;
 
 $lastexecname = '.last_execution';
+$output = '';
 
 if(isset($_POST["action"])) {
 	if (htmlspecialchars($_POST["action"]) === "sync") {
@@ -41,7 +42,7 @@ if(isset($_POST["action"])) {
 
 		$servername = ($env == "PROD") ? "reactome.org" : "dev.reactome.org";
 
-		$mailer =& JFactory::getMailer();
+		$mailer = JFactory::getMailer();
 
 		//add the sender Information.
 		$sender = array("no-reply@reactome.org", "Reactome Website");
@@ -69,7 +70,7 @@ if(isset($_POST["action"])) {
         //add body
         $mailer->setBody($output);
 
-        $send =& $mailer->Send();
+        $send = $mailer->Send();
         if ($send !== true)	{
             echo '<script>console.log(' . $send->message . ')</script>';
         }
