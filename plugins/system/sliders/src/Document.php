@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.10.0
+ * @version         8.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -49,11 +49,11 @@ class Document
 
 		RL_Document::scriptOptions($options, 'Sliders');
 
-		RL_Document::script('sliders/script.min.js', ($params->media_versioning ? '7.10.0' : ''));
+		RL_Document::script('sliders/script.min.js', ($params->media_versioning ? '8.0.0' : ''));
 
 		if ($params->load_stylesheet)
 		{
-			RL_Document::style('sliders/style.min.css', ($params->media_versioning ? '7.10.0' : ''));
+			RL_Document::style('sliders/style.min.css', ($params->media_versioning ? '8.0.0' : ''));
 		}
 
 	}

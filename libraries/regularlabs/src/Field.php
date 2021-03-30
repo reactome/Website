@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.2.23991
+ * @version         21.3.19623
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -112,9 +112,9 @@ class Field
 		return Form::selectlist($options, $name, $value, $id, $size, $multiple, $simple);
 	}
 
-	public static function selectListSimple(&$options, $name, $value, $id, $size = 0, $multiple = false)
+	public static function selectListSimple(&$options, $name, $value, $id, $size = 0, $multiple = false, $ignore_max_count = false)
 	{
-		return Form::selectListSimple($options, $name, $value, $id, $size, $multiple);
+		return Form::selectListSimple($options, $name, $value, $id, $size, $multiple, false, $ignore_max_count);
 	}
 
 	public static function selectListAjax($field, $name, $value, $id, $attributes = [], $simple = false)

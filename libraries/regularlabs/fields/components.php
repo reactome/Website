@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.2.23991
+ * @version         21.3.19623
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -47,7 +47,7 @@ class JFormFieldRL_Components extends \RegularLabs\Library\Field
 
 		$options = $this->getComponents();
 
-		return $this->selectListSimple($options, $name, $value, $id, $size, true);
+		return $this->selectListSimple($options, $name, $value, $id, $size, true, true);
 	}
 
 	function getComponents()

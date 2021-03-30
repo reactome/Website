@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sliders
- * @version         7.10.0
+ * @version         8.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -44,12 +44,12 @@ class Popup
 		";
 		RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('sliders/popup.min.js', '7.10.0');
+		RL_Document::script('sliders/popup.min.js', '8.0.0');
 	}
 
 	public function loadStyles()
 	{
-		RL_Document::style('sliders/popup.min.css', '7.10.0');
+		RL_Document::style('sliders/popup.min.css', '8.0.0');
 	}
 }
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.2.23991
+ * @version         21.3.19623
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -30,10 +30,11 @@ class Form
 	 * @param bool   $multiple
 	 * @param bool   $simple
 	 * @param bool   $readonly
+	 * @param bool   $ignore_max_count
 	 *
 	 * @return string
 	 */
-	public static function selectList(&$options, $name, $value, $id, $size = 0, $multiple = false, $simple = false, $readonly = false)
+	public static function selectList(&$options, $name, $value, $id, $size = 0, $multiple = false, $simple = false, $readonly = false, $ignore_max_count = false)
 	{
 		if (empty($options))
 		{
@@ -68,14 +69,14 @@ class Form
 				{
 					$count += count($option->links);
 				}
-				if ($count > $params->max_list_count)
+				if ( ! $ignore_max_count && $count > $params->max_list_count)
 				{
 					break;
 				}
 			}
 		}
 
-		if ($options == -1 || $count > $params->max_list_count)
+		if ($options == -1 || ( ! $ignore_max_count && $count > $params->max_list_count))
 		{
 			if (is_array($value))
 			{
@@ -368,12 +369,13 @@ class Form
 	 * @param int    $size
 	 * @param bool   $multiple
 	 * @param bool   $readonly
+	 * @param bool   $ignore_max_count
 	 *
 	 * @return string
 	 */
-	public static function selectListSimple(&$options, $name, $value, $id, $size = 0, $multiple = false, $readonly = false)
+	public static function selectListSimple(&$options, $name, $value, $id, $size = 0, $multiple = false, $readonly = false, $ignore_max_count = false)
 	{
-		return self::selectlist($options, $name, $value, $id, $size, $multiple, true, $readonly);
+		return self::selectlist($options, $name, $value, $id, $size, $multiple, true, $readonly, $ignore_max_count);
 	}
 
 	/**
