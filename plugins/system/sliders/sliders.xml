@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.9" type="plugin" group="system" method="upgrade">
-	<name>plg_system_sliders</name>
+	<name>PLG_SYSTEM_SLIDERS</name>
 	<description>PLG_SYSTEM_SLIDERS_DESC</description>
-	<version>7.10.0</version>
-	<creationDate>October 2020</creationDate>
+	<version>8.0.0</version>
+	<creationDate>March 2021</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -14,7 +14,7 @@
 
 	<updateservers>
 		<server type="extension" priority="1" name="Regular Labs - Sliders">
-			https://download.regularlabs.com/updates.xml?e=sliders&amp;type=.xml
+			https://download.regularlabs.com/updates.xml?e=XXX&amp;type=.xml
 		</server>
 	</updateservers>
 
@@ -137,7 +137,8 @@
 					   description="SLD_CLOSING_TAG_DESC" />
 				<field name="tag_delimiter" type="radio" class="btn-group" size="2" default="space"
 					   label="RL_TAG_SYNTAX"
-					   description="SLD_TAG_SYNTAX_DESC">
+					   description="SLD_TAG_SYNTAX_DESC"
+					   showon="tag_delimiter:=">
 					<option value="space">SLD_SYNTAX_SPACE</option>
 					<option value="=">SLD_SYNTAX_IS</option>
 				</field>
