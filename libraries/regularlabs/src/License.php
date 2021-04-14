@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.3.19623
+ * @version         21.4.10972
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -50,7 +50,7 @@ class License
 				'' => [
 					JText::sprintf('RL_IS_FREE_VERSION', $name),
 					JText::_('RL_FOR_MORE_GO_PRO'),
-					'<a href="https://www.regularlabs.com/purchase/cart/add/' . $alias . '" target="_blank" class="btn btn-small btn-primary">'
+					'<a href="https://regularlabs.com/purchase/cart/add/' . $alias . '" target="_blank" class="btn btn-small btn-primary">'
 					. '<span class="icon-basket"></span> '
 					. StringHelper::html_entity_decoder(JText::_('RL_GO_PRO'))
 					. '</a>',

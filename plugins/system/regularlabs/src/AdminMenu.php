@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.3.19623
+ * @version         21.4.10972
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -138,7 +138,7 @@ class AdminMenu
 
 		$nav = RL_RegEx::replace(
 			$shop_item,
-			'\0<li class="divider"><span></span></li>\1dev\2href="https://www.regularlabs.com"\3Regular Labs Extensions\4',
+			'\0<li class="divider"><span></span></li>\1dev\2href="https://regularlabs.com"\3Regular Labs Extensions\4',
 			$nav
 		);
 

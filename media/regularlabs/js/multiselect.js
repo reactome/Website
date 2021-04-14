@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         21.3.19623
+ * @version         21.4.10972
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,7 +12,7 @@
 
 if (typeof window.RegularLabsMultiSelect === 'undefined'
 	|| typeof RegulaRegularLabsMultiSelectrLabsForm.version === 'undefined'
-	|| RegularLabsMultiSelect.version < '21.3.19623') {
+	|| RegularLabsMultiSelect.version < '21.4.10972') {
 
 	(function($) {
 		$(document).ready(function() {
@@ -22,7 +22,7 @@ if (typeof window.RegularLabsMultiSelect === 'undefined'
 		});
 
 		window.RegularLabsMultiSelect = {
-			version: '21.3.19623',
+			version: '21.4.10972',
 
 			init: function(element) {
 				const self      = this;

@@ -1,6 +1,6 @@
 /**
  * @package         Tabs
- * @version         8.0.0
+ * @version         8.0.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -19,6 +19,9 @@ var RegularLabsTabsPopup = null;
 		],
 		booleans: [
 			'color_inactive_handles', 'outline_handles', 'outline_content',
+		],
+		radio: [
+			'alignment'
 		],
 
 		init: function() {
@@ -125,6 +128,18 @@ var RegularLabsTabsPopup = null;
 					}
 				});
 
+
+				$.each(self.radio, function(s, name) {
+					var field_name = el.id + '[' + name + ']';
+
+					var input_checked = $('input[name="' + field_name + '"]:checked');
+
+					if (!input_checked.attr('value')) {
+						return;
+					}
+
+					parameters[name] = input_checked.attr('value');
+				});
 
 				var content = $('#' + el.id + '_content').html().trim();
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.3.19623
+ * @version         21.4.10972
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -177,7 +177,7 @@ class Version
 
 		if ( ! $is_pro)
 		{
-			$msg .= ' <a href="https://www.regularlabs.com/purchase/cart/add/' . $alias . '" target="_blank" class="btn btn-large btn-primary">'
+			$msg .= ' <a href="https://regularlabs.com/purchase/cart/add/' . $alias . '" target="_blank" class="btn btn-large btn-primary">'
 				. '<span class="icon-basket"></span> '
 				. JText::_('RL_GO_PRO')
 				. '</a>';
@@ -185,7 +185,7 @@ class Version
 
 		$msg .= '<br>'
 			. '<span class="ghosted">'
-			. '[ <a href="https://www.regularlabs.com/' . $alias . '/changelog" target="_blank">'
+			. '[ <a href="https://regularlabs.com/' . $alias . '/changelog" target="_blank">'
 			. JText::_('RL_CHANGELOG')
 			. '</a> ]'
 			. '<br>'
@@ -215,7 +215,7 @@ class Version
 		)
 		{
 			$url = $is_pro
-				? 'https://www.regularlabs.com/' . $alias . '/features'
+				? 'https://regularlabs.com/' . $alias . '/features'
 				: JRoute::_('index.php?option=com_installer&view=update');
 
 			return [$url, ''];
@@ -241,7 +241,7 @@ class Version
 			var RLEM_TOKEN = '" . JSession::getFormToken() . "';
 		"
 		);
-		Document::script('regularlabsmanager/script.min.js', '21.3.19623');
+		Document::script('regularlabsmanager/script.min.js', '21.4.10972');
 
 		$url = 'https://download.regularlabs.com?ext=' . $alias . '&j=3';
 
@@ -316,8 +316,8 @@ class Version
 	{
 		return JText::sprintf(
 			'RL_POWERED_BY',
-			'<a href="https://www.regularlabs.com" target="_blank">'
-			. '<img src="' . JUri::root() . 'media/regularlabs/images/logo.png" width="135" height="24" alt="Regular Labs">'
+			'<a href="https://regularlabs.com" target="_blank">'
+			. '<img src="' . JUri::root() . 'media/regularlabs/images/logo.svg" width="112" height="24" alt="Regular Labs">'
 			. '</a>'
 		);
 	}
