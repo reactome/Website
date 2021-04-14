@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.8.0
+ * @version         11.8.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com

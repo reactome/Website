@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.3.19623
+ * @version         21.4.10972
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -489,7 +489,7 @@ class PlgSystemRegularLabsInstallerScriptHelper
 			html_entity_decode(
 				JText::sprintf(
 					'RLI_ERROR_UNINSTALL_FIRST',
-					'<a href="https://www.regularlabs.com/extensions/' . $this->alias . '" target="_blank">',
+					'<a href="https://regularlabs.com/' . $this->alias . '" target="_blank">',
 					'</a>',
 					JText::_($this->name)
 				)

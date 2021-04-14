@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.8.0
+ * @version         11.8.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -71,7 +71,7 @@ $form->loadFile($xmlfile, 1, '//config');
 			<?php
 			echo JText::sprintf(
 				'MDL_MORE_SETTINGS',
-				'<a href="https://www.regularlabs.com/extensions/modals/tutorial" target="_blank">',
+				'<a href="https://regularlabs.com/modals" target="_blank">',
 				'</a>'
 			);
 			?>

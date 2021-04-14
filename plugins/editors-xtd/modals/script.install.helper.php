@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.8.0
+ * @version         11.8.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -489,7 +489,7 @@ class PlgEditorsXtdModalsInstallerScriptHelper
 			html_entity_decode(
 				JText::sprintf(
 					'RLI_ERROR_UNINSTALL_FIRST',
-					'<a href="https://www.regularlabs.com/extensions/' . $this->alias . '" target="_blank">',
+					'<a href="https://regularlabs.com/' . $this->alias . '" target="_blank">',
 					'</a>',
 					JText::_($this->name)
 				)

@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         21.3.19623
+ * @version         21.4.10972
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,11 +12,11 @@
 
 if (typeof window.RegularLabsForm === 'undefined'
 	|| typeof RegularLabsForm.version === 'undefined'
-	|| RegularLabsForm.version < '21.3.19623') {
+	|| RegularLabsForm.version < '21.4.10972') {
 
 	(function($) {
 		window.RegularLabsForm = {
-			version: '21.3.19623',
+			version: '21.4.10972',
 
 			getValue: function(name, escape) {
 				let $field = $(`[name="${name}"]`);
@@ -215,14 +215,13 @@ if (typeof window.RegularLabsForm === 'undefined'
 
 			function removeEmptyControlGroups() {
 				// remove all empty control groups
-				$('div.control-group > div').each(function(i, el) {
-					if (
-						$(el).html().trim() == ''
-						&& (
-							$(el).attr('class') == 'control-label'
-							|| $(el).attr('class') == 'controls'
-						)
-					) {
+				$('div.control-group > div.control-label label').each(function(i, el) {
+					if ($(el).html().trim() == '') {
+						$(el).remove();
+					}
+				});
+				$('div.control-group > div.control-label,div.control-group > div.controls').each(function(i, el) {
+					if ($(el).html().trim() == '') {
 						$(el).remove();
 					}
 				});

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.3.19623
+ * @version         21.4.10972
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -73,7 +73,7 @@ class JFormFieldRL_OnlyPro extends \RegularLabs\Library\Field
 
 		if ($alias)
 		{
-			$text = '<a href="https://www.regularlabs.com/extensions/' . $extension . '/features" target="_blank">'
+			$text = '<a href="https://regularlabs.com/' . $extension . '/features" target="_blank">'
 				. $text
 				. '</a>';
 		}

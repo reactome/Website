@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         11.8.0
+ * @version         11.8.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -209,6 +209,7 @@ var RLModals          = null;
 			setTimeout(function() {
 				self.resizeContent();
 				self.resizeTitle();
+				self.resizeContent();
 			}, options.auto_correct_size_delay);
 		},
 
@@ -219,14 +220,28 @@ var RLModals          = null;
 				return;
 			}
 
-			// Don't resize videos or images
-			if ($modal.attr('data-modal-video') || $modal.attr('data-modal-image')) {
+			var $content = $('#rl_modals_loaded_content');
+
+			// Simple resize for videos
+			if ($modal.attr('data-modal-video')) {
+				var $iframe = $content.find('iframe');
+				$iframe.css('max-width', this.getMaxWidth($content));
+				$iframe.css('max-height', this.getMaxHeight($content));
+
+				return;
+			}
+
+			// Simple resize for images
+			if ($modal.attr('data-modal-image')) {
+				var $image = $content.find('img');
+				$image.css('max-width', this.getMaxWidth($content));
+				$image.css('max-height', this.getMaxHeight($content));
+
 				return;
 			}
 
 			var modals_settings = $modal.data('modals_settings');
 
-			var $content   = $('#rl_modals_loaded_content');
 			var $container = $('#rl_modals_content');
 
 			var original_container_width = this.getWidth($container);

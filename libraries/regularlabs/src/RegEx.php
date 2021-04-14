@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.3.19623
+ * @version         21.4.10972
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -208,14 +208,8 @@ class RegEx
 
 		if (substr($pattern, 0, 1) != '#')
 		{
-			$pattern = '#' . $pattern . '#';
-		}
-
-		$options = ! is_null($options) ? $options : 'si';
-
-		if (substr($pattern, -1, 1) == '#')
-		{
-			$pattern .= $options;
+			$options = ! is_null($options) ? $options : 'si';
+			$pattern = '#' . $pattern . '#' . $options;
 		}
 
 		if (StringHelper::detectUTF8($string))
@@ -238,9 +232,9 @@ class RegEx
 	 */
 	private static function preparePatternArray($pattern, $options = null, $string = '')
 	{
-		array_walk($pattern, function (&$subpattern, $key, $string) {
-			$subpattern = self::preparePattern($subpattern, $options = null, $string);
-		}, $string);
+		array_walk($pattern, function (&$subpattern, $key, $data) {
+			$subpattern = self::preparePattern($subpattern, $data[0], $data[1]);
+		}, [$options, $string]);
 
 		return $pattern;
 	}

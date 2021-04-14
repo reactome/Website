@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.3.19623
+ * @version         21.4.10972
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -305,15 +305,21 @@ class Document
 	 *
 	 * @param string $file
 	 * @param string $version
+	 * @param array  $options
+	 * @param array  $attribs
+	 * @param bool   $load_jquery
 	 */
-	public static function script($file, $version = '', $options = [], $attribs = [])
+	public static function script($file, $version = '', $options = [], $attribs = [], $load_jquery = true)
 	{
 		if ( ! $url = File::getMediaFile('js', $file))
 		{
 			return;
 		}
 
-		JHtml::_('jquery.framework');
+		if ($load_jquery)
+		{
+			JHtml::_('jquery.framework');
+		}
 
 		if (strpos($file, 'regularlabs/') !== false
 			&& strpos($file, 'regular.') === false
@@ -321,7 +327,7 @@ class Document
 		{
 			JHtml::_('behavior.core');
 			JHtml::_('script', 'jui/cms.js', ['version' => 'auto', 'relative' => true]);
-			$version = '21.3.19623';
+			$version = '21.4.10972';
 		}
 
 		if ( ! empty($version))
@@ -342,7 +348,7 @@ class Document
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '21.3.19623';
+			$version = '21.4.10972';
 		}
 
 		if ( ! $file = File::getMediaFile('css', $file))
