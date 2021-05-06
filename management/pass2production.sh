@@ -163,6 +163,8 @@ SOURCE_SERVER_PASSWD=""
 IDG_SERVER="idg.reactome.org"
 IDG_ENABLE_TRANSFER="FALSE"
 IDG_STATIC_DIR="/usr/local/reactomes/Reactome/production/Website/dist"
+IDG_FIGURE_SOURCE=${STATIC_DIR}"/figures"
+IDG_FIGURE_DIR=${IDG_STATIC_DIR}"/figures"
 IDG_DOWNLOAD_DIR=${IDG_STATIC_DIR}"/download/current"
 
 FROM="p2p-noreply@reactome.org"
@@ -271,6 +273,15 @@ transfer_download_folder (){
             if [[ "$OUT" -ne 0 ]]; then
                 echo "[ERROR NONBLOCKER] [IDG Download folder] - Rsync didn't executed properly while transferring the download folder to the IDG SERVER. Execution will continue as normal."
             fi
+
+	    # IDG FIGURES
+            echo "Transferring FIGURES folder [${IDG_FIGURE_DIR}]."
+            echo "IDG Transferring has been enabled. Transferring FIGURES folder"
+            sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${IDG_FIGURE_SOURCE}/ ${SHARED_USER}@${IDG_SERVER}:${IDG_FIGURE_DIR} #2> /dev/null
+            OUT=$?
+            if [[ "$OUT" -ne 0 ]]; then
+                echo "[ERROR NONBLOCKER] [IDG Figure folder] - Rsync didn't executed properly while transferring the download folder to the IDG SERVER. Execution will continue as normal."
+            fi	    
     fi
 
     # zip download folder is disabled
