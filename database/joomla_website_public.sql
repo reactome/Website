@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.33, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.34, for Linux (x86_64)
 --
 -- Host: localhost    Database: website
 -- ------------------------------------------------------
--- Server version	5.7.33-0ubuntu0.18.04.1
+-- Server version	5.7.34-0ubuntu0.18.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -692,7 +692,7 @@ CREATE TABLE `rlp_extensions` (
   KEY `element_clientid` (`element`,`client_id`),
   KEY `element_folder_clientid` (`element`,`folder`,`client_id`),
   KEY `extension` (`type`,`element`,`folder`,`client_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10406 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10404 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
