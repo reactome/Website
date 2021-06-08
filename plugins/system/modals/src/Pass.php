@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -19,6 +19,24 @@ use RegularLabs\Library\StringHelper as RL_String;
 
 class Pass
 {
+	public static function passClassnames($attributes)
+	{
+		$params = Params::get();
+
+		if (empty($attributes->class) || empty($params->classnames))
+		{
+			return false;
+		}
+
+		$classnames = str_replace($params->class, '', $attributes->class);
+
+		return self::arrayInArray($classnames, $params->classnames);
+	}
+
+	public static function passExternal($attributes)
+	{
+	}
+
 	public static function passLinkChecks($attributes)
 	{
 		// return if the link has no href
@@ -53,6 +71,10 @@ class Pass
 		return false;
 	}
 
+	public static function passTarget($attributes)
+	{
+	}
+
 	public static function urlIgnored($url)
 	{
 		$params = Params::get();
@@ -75,20 +97,6 @@ class Pass
 		return false;
 	}
 
-	public static function passClassnames($attributes)
-	{
-		$params = Params::get();
-
-		if (empty($attributes->class) || empty($params->classnames))
-		{
-			return false;
-		}
-
-		$classnames = str_replace($params->class, '', $attributes->class);
-
-		return self::arrayInArray($classnames, $params->classnames);
-	}
-
 	private static function arrayInArray($needles, $haystack)
 	{
 		if ( ! is_array($needles))
@@ -102,21 +110,6 @@ class Pass
 
 		// Check
 		return (boolean) array_intersect($haystack, $needles);
-	}
-
-	private static function passURLs($url)
-	{
-		$params = Params::get();
-
-		foreach ($params->urls as $param_url)
-		{
-			if (self::passURL($url, $param_url))
-			{
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	private static function passURL($url, $param_url)
@@ -170,4 +163,18 @@ class Pass
 		return true;
 	}
 
+	private static function passURLs($url)
+	{
+		$params = Params::get();
+
+		foreach ($params->urls as $param_url)
+		{
+			if (self::passURL($url, $param_url))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

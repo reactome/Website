@@ -30,104 +30,98 @@ use BadMethodCallException;
 class MobileDetect
 {
 	/**
-	 * Mobile detection type.
-	 *
-	 * @deprecated since version 2.6.9
-	 */
-	const DETECTION_TYPE_MOBILE = 'mobile';
-
-	/**
 	 * Extended detection type.
 	 *
 	 * @deprecated since version 2.6.9
 	 */
 	const DETECTION_TYPE_EXTENDED = 'extended';
-
+	/**
+	 * Mobile detection type.
+	 *
+	 * @deprecated since version 2.6.9
+	 */
+	const DETECTION_TYPE_MOBILE = 'mobile';
+	/**
+	 * Top-level device.
+	 */
+	const MOBILE_GRADE_A = 'A';
+	/**
+	 * Mid-level device.
+	 */
+	const MOBILE_GRADE_B = 'B';
+	/**
+	 * Low-level device.
+	 */
+	const MOBILE_GRADE_C = 'C';
 	/**
 	 * A frequently used regular expression to extract version #s.
 	 *
 	 * @deprecated since version 2.6.9
 	 */
 	const VER = '([\w._\+]+)';
-
-	/**
-	 * Top-level device.
-	 */
-	const MOBILE_GRADE_A = 'A';
-
-	/**
-	 * Mid-level device.
-	 */
-	const MOBILE_GRADE_B = 'B';
-
-	/**
-	 * Low-level device.
-	 */
-	const MOBILE_GRADE_C = 'C';
-
 	/**
 	 * Stores the version number of the current release.
 	 */
 	const VERSION = '2.8.37';
-
-	/**
-	 * A type for the version() method indicating a string return value.
-	 */
-	const VERSION_TYPE_STRING = 'text';
-
 	/**
 	 * A type for the version() method indicating a float return value.
 	 */
 	const VERSION_TYPE_FLOAT = 'float';
-
 	/**
-	 * A cache for resolved matches
+	 * A type for the version() method indicating a string return value.
+	 */
+	const VERSION_TYPE_STRING = 'text';
+	/**
+	 * List of mobile User Agents.
+	 *
+	 * IMPORTANT: This is a list of only mobile browsers.
+	 * Mobile Detect 2.x supports only mobile browsers,
+	 * it was never designed to detect all browsers.
+	 * The change will come in 2017 in the 3.x release for PHP7.
+	 *
 	 * @var array
 	 */
-	protected $cache = [];
-
-	/**
-	 * The User-Agent HTTP header is stored in here.
-	 * @var string
-	 */
-	protected $userAgent = null;
-
-	/**
-	 * HTTP headers in the PHP-flavor. So HTTP_USER_AGENT and SERVER_SOFTWARE.
-	 * @var array
-	 */
-	protected $httpHeaders = [];
-
-	/**
-	 * CloudFront headers. E.g. CloudFront-Is-Desktop-Viewer, CloudFront-Is-Mobile-Viewer & CloudFront-Is-Tablet-Viewer.
-	 * @var array
-	 */
-	protected $cloudfrontHeaders = [];
-
-	/**
-	 * The matching Regex.
-	 * This is good for debug.
-	 * @var string
-	 */
-	protected $matchingRegex = null;
-
-	/**
-	 * The matches extracted from the regex expression.
-	 * This is good for debug.
-	 *
-	 * @var string
-	 */
-	protected $matchesArray = null;
-
-	/**
-	 * The detection type, using self::DETECTION_TYPE_MOBILE or self::DETECTION_TYPE_EXTENDED.
-	 *
-	 * @deprecated since version 2.6.9
-	 *
-	 * @var string
-	 */
-	protected $detectionType = self::DETECTION_TYPE_MOBILE;
-
+	protected static $browsers = [
+		//'Vivaldi'         => 'Vivaldi',
+		// @reference: https://developers.google.com/chrome/mobile/docs/user-agent
+		'Chrome'         => '\bCrMo\b|CriOS|Android.*Chrome/[.0-9]* (Mobile)?',
+		'Dolfin'         => '\bDolfin\b',
+		'Opera'          => 'Opera.*Mini|Opera.*Mobi|Android.*Opera|Mobile.*OPR/[0-9.]+$|Coast/[0-9.]+',
+		'Skyfire'        => 'Skyfire',
+		// Added "Edge on iOS" https://github.com/serbanghita/Mobile-Detect/issues/764
+		'Edge'           => '\bEdgiOS\b|Mobile Safari/[.0-9]* Edge',
+		'IE'             => 'IEMobile|MSIEMobile', // |Trident/[.0-9]+
+		'Firefox'        => 'fennec|firefox.*maemo|(Mobile|Tablet).*Firefox|Firefox.*Mobile|FxiOS',
+		'Bolt'           => 'bolt',
+		'TeaShark'       => 'teashark',
+		'Blazer'         => 'Blazer',
+		// @reference: http://developer.apple.com/library/safari/#documentation/AppleApplications/Reference/SafariWebContent/OptimizingforSafarioniPhone/OptimizingforSafarioniPhone.html#//apple_ref/doc/uid/TP40006517-SW3
+		// Excluded "Edge on iOS" https://github.com/serbanghita/Mobile-Detect/issues/764
+		'Safari'         => 'Version((?!\bEdgiOS\b).)*Mobile.*Safari|Safari.*Mobile|MobileSafari',
+		// http://en.wikipedia.org/wiki/Midori_(web_browser)
+		//'Midori'          => 'midori',
+		//'Tizen'           => 'Tizen',
+		'WeChat'         => '\bMicroMessenger\b',
+		'UCBrowser'      => 'UC.*Browser|UCWEB',
+		'baiduboxapp'    => 'baiduboxapp',
+		'baidubrowser'   => 'baidubrowser',
+		// https://github.com/serbanghita/Mobile-Detect/issues/7
+		'DiigoBrowser'   => 'DiigoBrowser',
+		// http://www.puffinbrowser.com/index.php
+		// https://github.com/serbanghita/Mobile-Detect/issues/752
+		// 'Puffin'            => 'Puffin',
+		// http://mercury-browser.com/index.html
+		'Mercury'        => '\bMercury\b',
+		// http://en.wikipedia.org/wiki/Obigo_Browser
+		'ObigoBrowser'   => 'Obigo',
+		// http://en.wikipedia.org/wiki/NetFront
+		'NetFront'       => 'NF-Browser',
+		// @reference: http://en.wikipedia.org/wiki/Minimo
+		// http://en.wikipedia.org/wiki/Vision_Mobile_Browser
+		'GenericBrowser' => 'NokiaBrowser|OviBrowser|OneBrowser|TwonkyBeamBrowser|SEMC.*Browser|FlyFlow|Minimo|NetFront|Novarra-Vision|MQQBrowser|MicroMessenger',
+		// @reference: https://en.wikipedia.org/wiki/Pale_Moon_(web_browser)
+		'PaleMoon'       => 'Android.*PaleMoon|Mobile.*PaleMoon',
+	];
 	/**
 	 * HTTP headers that trigger the 'isMobile' detection
 	 * to be true.
@@ -165,7 +159,41 @@ class MobileDetect
 		// Seen this on a HTC.
 		'HTTP_UA_CPU'                  => ['matches' => ['ARM']],
 	];
-
+	/**
+	 * List of mobile Operating Systems.
+	 *
+	 * @var array
+	 */
+	protected static $operatingSystems = [
+		'AndroidOS'       => 'Android',
+		'BlackBerryOS'    => 'blackberry|\bBB10\b|rim tablet os',
+		'PalmOS'          => 'PalmOS|avantgo|blazer|elaine|hiptop|palm|plucker|xiino',
+		'SymbianOS'       => 'Symbian|SymbOS|Series60|Series40|SYB-[0-9]+|\bS60\b',
+		// @reference: http://en.wikipedia.org/wiki/Windows_Mobile
+		'WindowsMobileOS' => 'Windows CE.*(PPC|Smartphone|Mobile|[0-9]{3}x[0-9]{3})|Windows Mobile|Windows Phone [0-9.]+|WCE;',
+		// @reference: http://en.wikipedia.org/wiki/Windows_Phone
+		// http://wifeng.cn/?r=blog&a=view&id=106
+		// http://nicksnettravels.builttoroam.com/post/2011/01/10/Bogus-Windows-Phone-7-User-Agent-String.aspx
+		// http://msdn.microsoft.com/library/ms537503.aspx
+		// https://msdn.microsoft.com/en-us/library/hh869301(v=vs.85).aspx
+		'WindowsPhoneOS'  => 'Windows Phone 10.0|Windows Phone 8.1|Windows Phone 8.0|Windows Phone OS|XBLWP7|ZuneWP7|Windows NT 6.[23]; ARM;',
+		'iOS'             => '\biPhone.*Mobile|\biPod|\biPad|AppleCoreMedia',
+		// https://en.wikipedia.org/wiki/IPadOS
+		'iPadOS'          => 'CPU OS 13',
+		// @reference https://en.m.wikipedia.org/wiki/Sailfish_OS
+		// https://sailfishos.org/
+		'SailfishOS'      => 'Sailfish',
+		// http://en.wikipedia.org/wiki/MeeGo
+		// @todo: research MeeGo in UAs
+		'MeeGoOS'         => 'MeeGo',
+		// http://en.wikipedia.org/wiki/Maemo
+		// @todo: research Maemo in UAs
+		'MaemoOS'         => 'Maemo',
+		'JavaOS'          => 'J2ME/|\bMIDP\b|\bCLDC\b', // '|Java/' produces bug #135
+		'webOS'           => 'webOS|hpwOS',
+		'badaOS'          => '\bBada\b',
+		'BREWOS'          => 'BREW',
+	];
 	/**
 	 * List of mobile devices (phones).
 	 *
@@ -216,7 +244,83 @@ class MobileDetect
 		// @Tapatalk is a mobile app; http://support.tapatalk.com/threads/smf-2-0-2-os-and-browser-detection-plugin-and-tapatalk.15565/#post-79039
 		'GenericPhone' => 'Tapatalk|PDA;|SAGEM|\bmmp\b|pocket|\bpsp\b|symbian|Smartphone|smartfon|treo|up.browser|up.link|vodafone|\bwap\b|nokia|Series40|Series60|S60|SonyEricsson|N900|MAUI.*WAP.*Browser',
 	];
+	/**
+	 * The individual segments that could exist in a User-Agent string. VER refers to the regular
+	 * expression defined in the constant self::VER.
+	 *
+	 * @var array
+	 */
+	protected static $properties = [
 
+		// Build
+		'Mobile'           => 'Mobile/[VER]',
+		'Build'            => 'Build/[VER]',
+		'Version'          => 'Version/[VER]',
+		'VendorID'         => 'VendorID/[VER]',
+
+		// Devices
+		'iPad'             => 'iPad.*CPU[a-z ]+[VER]',
+		'iPhone'           => 'iPhone.*CPU[a-z ]+[VER]',
+		'iPod'             => 'iPod.*CPU[a-z ]+[VER]',
+		//'BlackBerry'    => array('BlackBerry[VER]', 'BlackBerry [VER];'),
+		'Kindle'           => 'Kindle/[VER]',
+
+		// Browser
+		'Chrome'           => ['Chrome/[VER]', 'CriOS/[VER]', 'CrMo/[VER]'],
+		'Coast'            => ['Coast/[VER]'],
+		'Dolfin'           => 'Dolfin/[VER]',
+		// @reference: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent/Firefox
+		'Firefox'          => ['Firefox/[VER]', 'FxiOS/[VER]'],
+		'Fennec'           => 'Fennec/[VER]',
+		// http://msdn.microsoft.com/en-us/library/ms537503(v=vs.85).aspx
+		// https://msdn.microsoft.com/en-us/library/ie/hh869301(v=vs.85).aspx
+		'Edge'             => 'Edge/[VER]',
+		'IE'               => ['IEMobile/[VER];', 'IEMobile [VER]', 'MSIE [VER];', 'Trident/[0-9.]+;.*rv:[VER]'],
+		// http://en.wikipedia.org/wiki/NetFront
+		'NetFront'         => 'NetFront/[VER]',
+		'NokiaBrowser'     => 'NokiaBrowser/[VER]',
+		'Opera'            => [' OPR/[VER]', 'Opera Mini/[VER]', 'Version/[VER]'],
+		'Opera Mini'       => 'Opera Mini/[VER]',
+		'Opera Mobi'       => 'Version/[VER]',
+		'UCBrowser'        => ['UCWEB[VER]', 'UC.*Browser/[VER]'],
+		'MQQBrowser'       => 'MQQBrowser/[VER]',
+		'MicroMessenger'   => 'MicroMessenger/[VER]',
+		'baiduboxapp'      => 'baiduboxapp/[VER]',
+		'baidubrowser'     => 'baidubrowser/[VER]',
+		'SamsungBrowser'   => 'SamsungBrowser/[VER]',
+		'Iron'             => 'Iron/[VER]',
+		// @note: Safari 7534.48.3 is actually Version 5.1.
+		// @note: On BlackBerry the Version is overwriten by the OS.
+		'Safari'           => ['Version/[VER]', 'Safari/[VER]'],
+		'Skyfire'          => 'Skyfire/[VER]',
+		'Tizen'            => 'Tizen/[VER]',
+		'Webkit'           => 'webkit[ /][VER]',
+		'PaleMoon'         => 'PaleMoon/[VER]',
+		'SailfishBrowser'  => 'SailfishBrowser/[VER]',
+
+		// Engine
+		'Gecko'            => 'Gecko/[VER]',
+		'Trident'          => 'Trident/[VER]',
+		'Presto'           => 'Presto/[VER]',
+		'Goanna'           => 'Goanna/[VER]',
+
+		// OS
+		'iOS'              => ' \bi?OS\b [VER][ ;]{1}',
+		'Android'          => 'Android [VER]',
+		'Sailfish'         => 'Sailfish [VER]',
+		'BlackBerry'       => ['BlackBerry[\w]+/[VER]', 'BlackBerry.*Version/[VER]', 'Version/[VER]'],
+		'BREW'             => 'BREW [VER]',
+		'Java'             => 'Java/[VER]',
+		// @reference: http://windowsteamblog.com/windows_phone/b/wpdev/archive/2011/08/29/introducing-the-ie9-on-windows-phone-mango-user-agent-string.aspx
+		// @reference: http://en.wikipedia.org/wiki/Windows_NT#Releases
+		'Windows Phone OS' => ['Windows Phone OS [VER]', 'Windows Phone [VER]'],
+		'Windows Phone'    => 'Windows Phone [VER]',
+		'Windows CE'       => 'Windows CE/[VER]',
+		// http://social.msdn.microsoft.com/Forums/en-US/windowsdeveloperpreviewgeneral/thread/6be392da-4d2f-41b4-8354-8dcee20c85cd
+		'Windows NT'       => 'Windows NT [VER]',
+		'Symbian'          => ['SymbianOS/[VER]', 'Symbian/[VER]'],
+		'webOS'            => ['webOS/[VER]', 'hpwOS/[VER];'],
+	];
 	/**
 	 * List of tablet devices.
 	 *
@@ -486,115 +590,6 @@ class MobileDetect
 		'TelstraTablet'     => 'T-Hub2',
 		'GenericTablet'     => 'Android.*\b97D\b|Tablet(?!.*PC)|BNTV250A|MID-WCDMA|LogicPD Zoom2|\bA7EB\b|CatNova8|A1_07|CT704|CT1002|\bM721\b|rk30sdk|\bEVOTAB\b|M758A|ET904|ALUMIUM10|Smartfren Tab|Endeavour 1010|Tablet-PC-4|Tagi Tab|\bM6pro\b|CT1020W|arc 10HD|\bTP750\b|\bQTAQZ3\b|WVT101|TM1088|KT107',
 	];
-
-	/**
-	 * List of mobile Operating Systems.
-	 *
-	 * @var array
-	 */
-	protected static $operatingSystems = [
-		'AndroidOS'       => 'Android',
-		'BlackBerryOS'    => 'blackberry|\bBB10\b|rim tablet os',
-		'PalmOS'          => 'PalmOS|avantgo|blazer|elaine|hiptop|palm|plucker|xiino',
-		'SymbianOS'       => 'Symbian|SymbOS|Series60|Series40|SYB-[0-9]+|\bS60\b',
-		// @reference: http://en.wikipedia.org/wiki/Windows_Mobile
-		'WindowsMobileOS' => 'Windows CE.*(PPC|Smartphone|Mobile|[0-9]{3}x[0-9]{3})|Windows Mobile|Windows Phone [0-9.]+|WCE;',
-		// @reference: http://en.wikipedia.org/wiki/Windows_Phone
-		// http://wifeng.cn/?r=blog&a=view&id=106
-		// http://nicksnettravels.builttoroam.com/post/2011/01/10/Bogus-Windows-Phone-7-User-Agent-String.aspx
-		// http://msdn.microsoft.com/library/ms537503.aspx
-		// https://msdn.microsoft.com/en-us/library/hh869301(v=vs.85).aspx
-		'WindowsPhoneOS'  => 'Windows Phone 10.0|Windows Phone 8.1|Windows Phone 8.0|Windows Phone OS|XBLWP7|ZuneWP7|Windows NT 6.[23]; ARM;',
-		'iOS'             => '\biPhone.*Mobile|\biPod|\biPad|AppleCoreMedia',
-		// https://en.wikipedia.org/wiki/IPadOS
-		'iPadOS'          => 'CPU OS 13',
-		// @reference https://en.m.wikipedia.org/wiki/Sailfish_OS
-		// https://sailfishos.org/
-		'SailfishOS'      => 'Sailfish',
-		// http://en.wikipedia.org/wiki/MeeGo
-		// @todo: research MeeGo in UAs
-		'MeeGoOS'         => 'MeeGo',
-		// http://en.wikipedia.org/wiki/Maemo
-		// @todo: research Maemo in UAs
-		'MaemoOS'         => 'Maemo',
-		'JavaOS'          => 'J2ME/|\bMIDP\b|\bCLDC\b', // '|Java/' produces bug #135
-		'webOS'           => 'webOS|hpwOS',
-		'badaOS'          => '\bBada\b',
-		'BREWOS'          => 'BREW',
-	];
-
-	/**
-	 * List of mobile User Agents.
-	 *
-	 * IMPORTANT: This is a list of only mobile browsers.
-	 * Mobile Detect 2.x supports only mobile browsers,
-	 * it was never designed to detect all browsers.
-	 * The change will come in 2017 in the 3.x release for PHP7.
-	 *
-	 * @var array
-	 */
-	protected static $browsers = [
-		//'Vivaldi'         => 'Vivaldi',
-		// @reference: https://developers.google.com/chrome/mobile/docs/user-agent
-		'Chrome'         => '\bCrMo\b|CriOS|Android.*Chrome/[.0-9]* (Mobile)?',
-		'Dolfin'         => '\bDolfin\b',
-		'Opera'          => 'Opera.*Mini|Opera.*Mobi|Android.*Opera|Mobile.*OPR/[0-9.]+$|Coast/[0-9.]+',
-		'Skyfire'        => 'Skyfire',
-		// Added "Edge on iOS" https://github.com/serbanghita/Mobile-Detect/issues/764
-		'Edge'           => '\bEdgiOS\b|Mobile Safari/[.0-9]* Edge',
-		'IE'             => 'IEMobile|MSIEMobile', // |Trident/[.0-9]+
-		'Firefox'        => 'fennec|firefox.*maemo|(Mobile|Tablet).*Firefox|Firefox.*Mobile|FxiOS',
-		'Bolt'           => 'bolt',
-		'TeaShark'       => 'teashark',
-		'Blazer'         => 'Blazer',
-		// @reference: http://developer.apple.com/library/safari/#documentation/AppleApplications/Reference/SafariWebContent/OptimizingforSafarioniPhone/OptimizingforSafarioniPhone.html#//apple_ref/doc/uid/TP40006517-SW3
-		// Excluded "Edge on iOS" https://github.com/serbanghita/Mobile-Detect/issues/764
-		'Safari'         => 'Version((?!\bEdgiOS\b).)*Mobile.*Safari|Safari.*Mobile|MobileSafari',
-		// http://en.wikipedia.org/wiki/Midori_(web_browser)
-		//'Midori'          => 'midori',
-		//'Tizen'           => 'Tizen',
-		'WeChat'         => '\bMicroMessenger\b',
-		'UCBrowser'      => 'UC.*Browser|UCWEB',
-		'baiduboxapp'    => 'baiduboxapp',
-		'baidubrowser'   => 'baidubrowser',
-		// https://github.com/serbanghita/Mobile-Detect/issues/7
-		'DiigoBrowser'   => 'DiigoBrowser',
-		// http://www.puffinbrowser.com/index.php
-		// https://github.com/serbanghita/Mobile-Detect/issues/752
-		// 'Puffin'            => 'Puffin',
-		// http://mercury-browser.com/index.html
-		'Mercury'        => '\bMercury\b',
-		// http://en.wikipedia.org/wiki/Obigo_Browser
-		'ObigoBrowser'   => 'Obigo',
-		// http://en.wikipedia.org/wiki/NetFront
-		'NetFront'       => 'NF-Browser',
-		// @reference: http://en.wikipedia.org/wiki/Minimo
-		// http://en.wikipedia.org/wiki/Vision_Mobile_Browser
-		'GenericBrowser' => 'NokiaBrowser|OviBrowser|OneBrowser|TwonkyBeamBrowser|SEMC.*Browser|FlyFlow|Minimo|NetFront|Novarra-Vision|MQQBrowser|MicroMessenger',
-		// @reference: https://en.wikipedia.org/wiki/Pale_Moon_(web_browser)
-		'PaleMoon'       => 'Android.*PaleMoon|Mobile.*PaleMoon',
-	];
-
-	/**
-	 * Utilities.
-	 *
-	 * @var array
-	 */
-	protected static $utilities = [
-		// Experimental. When a mobile device wants to switch to 'Desktop Mode'.
-		// http://scottcate.com/technology/windows-phone-8-ie10-desktop-or-mobile/
-		// https://github.com/serbanghita/Mobile-Detect/issues/57#issuecomment-15024011
-		// https://developers.facebook.com/docs/sharing/webmasters/crawler/
-		'Bot'         => 'Googlebot|facebookexternalhit|Google-AMPHTML|s~amp-validator|AdsBot-Google|Google Keyword Suggestion|Facebot|YandexBot|YandexMobileBot|bingbot|ia_archiver|AhrefsBot|Ezooms|GSLFbot|WBSearchBot|Twitterbot|TweetmemeBot|Twikle|PaperLiBot|Wotbox|UnwindFetchor|Exabot|MJ12bot|YandexImages|TurnitinBot|Pingdom|contentkingapp|AspiegelBot',
-		'MobileBot'   => 'Googlebot-Mobile|AdsBot-Google-Mobile|YahooSeeker/M1A1-R2D2',
-		'DesktopMode' => 'WPDesktop',
-		'TV'          => 'SonyDTV|HbbTV', // experimental
-		'WebKit'      => '(webkit)[ /]([\w.]+)',
-		// @todo: Include JXD consoles.
-		'Console'     => '\b(Nintendo|Nintendo WiiU|Nintendo 3DS|Nintendo Switch|PLAYSTATION|Xbox)\b',
-		'Watch'       => 'SM-V700',
-	];
-
 	/**
 	 * All possible HTTP headers that represent the
 	 * User-Agent string.
@@ -614,84 +609,66 @@ class MobileDetect
 		'HTTP_DEVICE_STOCK_UA',
 		'HTTP_X_UCBROWSER_DEVICE_UA',
 	];
-
 	/**
-	 * The individual segments that could exist in a User-Agent string. VER refers to the regular
-	 * expression defined in the constant self::VER.
+	 * Utilities.
 	 *
 	 * @var array
 	 */
-	protected static $properties = [
-
-		// Build
-		'Mobile'           => 'Mobile/[VER]',
-		'Build'            => 'Build/[VER]',
-		'Version'          => 'Version/[VER]',
-		'VendorID'         => 'VendorID/[VER]',
-
-		// Devices
-		'iPad'             => 'iPad.*CPU[a-z ]+[VER]',
-		'iPhone'           => 'iPhone.*CPU[a-z ]+[VER]',
-		'iPod'             => 'iPod.*CPU[a-z ]+[VER]',
-		//'BlackBerry'    => array('BlackBerry[VER]', 'BlackBerry [VER];'),
-		'Kindle'           => 'Kindle/[VER]',
-
-		// Browser
-		'Chrome'           => ['Chrome/[VER]', 'CriOS/[VER]', 'CrMo/[VER]'],
-		'Coast'            => ['Coast/[VER]'],
-		'Dolfin'           => 'Dolfin/[VER]',
-		// @reference: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent/Firefox
-		'Firefox'          => ['Firefox/[VER]', 'FxiOS/[VER]'],
-		'Fennec'           => 'Fennec/[VER]',
-		// http://msdn.microsoft.com/en-us/library/ms537503(v=vs.85).aspx
-		// https://msdn.microsoft.com/en-us/library/ie/hh869301(v=vs.85).aspx
-		'Edge'             => 'Edge/[VER]',
-		'IE'               => ['IEMobile/[VER];', 'IEMobile [VER]', 'MSIE [VER];', 'Trident/[0-9.]+;.*rv:[VER]'],
-		// http://en.wikipedia.org/wiki/NetFront
-		'NetFront'         => 'NetFront/[VER]',
-		'NokiaBrowser'     => 'NokiaBrowser/[VER]',
-		'Opera'            => [' OPR/[VER]', 'Opera Mini/[VER]', 'Version/[VER]'],
-		'Opera Mini'       => 'Opera Mini/[VER]',
-		'Opera Mobi'       => 'Version/[VER]',
-		'UCBrowser'        => ['UCWEB[VER]', 'UC.*Browser/[VER]'],
-		'MQQBrowser'       => 'MQQBrowser/[VER]',
-		'MicroMessenger'   => 'MicroMessenger/[VER]',
-		'baiduboxapp'      => 'baiduboxapp/[VER]',
-		'baidubrowser'     => 'baidubrowser/[VER]',
-		'SamsungBrowser'   => 'SamsungBrowser/[VER]',
-		'Iron'             => 'Iron/[VER]',
-		// @note: Safari 7534.48.3 is actually Version 5.1.
-		// @note: On BlackBerry the Version is overwriten by the OS.
-		'Safari'           => ['Version/[VER]', 'Safari/[VER]'],
-		'Skyfire'          => 'Skyfire/[VER]',
-		'Tizen'            => 'Tizen/[VER]',
-		'Webkit'           => 'webkit[ /][VER]',
-		'PaleMoon'         => 'PaleMoon/[VER]',
-		'SailfishBrowser'  => 'SailfishBrowser/[VER]',
-
-		// Engine
-		'Gecko'            => 'Gecko/[VER]',
-		'Trident'          => 'Trident/[VER]',
-		'Presto'           => 'Presto/[VER]',
-		'Goanna'           => 'Goanna/[VER]',
-
-		// OS
-		'iOS'              => ' \bi?OS\b [VER][ ;]{1}',
-		'Android'          => 'Android [VER]',
-		'Sailfish'         => 'Sailfish [VER]',
-		'BlackBerry'       => ['BlackBerry[\w]+/[VER]', 'BlackBerry.*Version/[VER]', 'Version/[VER]'],
-		'BREW'             => 'BREW [VER]',
-		'Java'             => 'Java/[VER]',
-		// @reference: http://windowsteamblog.com/windows_phone/b/wpdev/archive/2011/08/29/introducing-the-ie9-on-windows-phone-mango-user-agent-string.aspx
-		// @reference: http://en.wikipedia.org/wiki/Windows_NT#Releases
-		'Windows Phone OS' => ['Windows Phone OS [VER]', 'Windows Phone [VER]'],
-		'Windows Phone'    => 'Windows Phone [VER]',
-		'Windows CE'       => 'Windows CE/[VER]',
-		// http://social.msdn.microsoft.com/Forums/en-US/windowsdeveloperpreviewgeneral/thread/6be392da-4d2f-41b4-8354-8dcee20c85cd
-		'Windows NT'       => 'Windows NT [VER]',
-		'Symbian'          => ['SymbianOS/[VER]', 'Symbian/[VER]'],
-		'webOS'            => ['webOS/[VER]', 'hpwOS/[VER];'],
+	protected static $utilities = [
+		// Experimental. When a mobile device wants to switch to 'Desktop Mode'.
+		// http://scottcate.com/technology/windows-phone-8-ie10-desktop-or-mobile/
+		// https://github.com/serbanghita/Mobile-Detect/issues/57#issuecomment-15024011
+		// https://developers.facebook.com/docs/sharing/webmasters/crawler/
+		'Bot'         => 'Googlebot|facebookexternalhit|Google-AMPHTML|s~amp-validator|AdsBot-Google|Google Keyword Suggestion|Facebot|YandexBot|YandexMobileBot|bingbot|ia_archiver|AhrefsBot|Ezooms|GSLFbot|WBSearchBot|Twitterbot|TweetmemeBot|Twikle|PaperLiBot|Wotbox|UnwindFetchor|Exabot|MJ12bot|YandexImages|TurnitinBot|Pingdom|contentkingapp|AspiegelBot',
+		'MobileBot'   => 'Googlebot-Mobile|AdsBot-Google-Mobile|YahooSeeker/M1A1-R2D2',
+		'DesktopMode' => 'WPDesktop',
+		'TV'          => 'SonyDTV|HbbTV', // experimental
+		'WebKit'      => '(webkit)[ /]([\w.]+)',
+		// @todo: Include JXD consoles.
+		'Console'     => '\b(Nintendo|Nintendo WiiU|Nintendo 3DS|Nintendo Switch|PLAYSTATION|Xbox)\b',
+		'Watch'       => 'SM-V700',
 	];
+	/**
+	 * A cache for resolved matches
+	 * @var array
+	 */
+	protected $cache = [];
+	/**
+	 * CloudFront headers. E.g. CloudFront-Is-Desktop-Viewer, CloudFront-Is-Mobile-Viewer & CloudFront-Is-Tablet-Viewer.
+	 * @var array
+	 */
+	protected $cloudfrontHeaders = [];
+	/**
+	 * The detection type, using self::DETECTION_TYPE_MOBILE or self::DETECTION_TYPE_EXTENDED.
+	 *
+	 * @deprecated since version 2.6.9
+	 *
+	 * @var string
+	 */
+	protected $detectionType = self::DETECTION_TYPE_MOBILE;
+	/**
+	 * HTTP headers in the PHP-flavor. So HTTP_USER_AGENT and SERVER_SOFTWARE.
+	 * @var array
+	 */
+	protected $httpHeaders = [];
+	/**
+	 * The matches extracted from the regex expression.
+	 * This is good for debug.
+	 *
+	 * @var string
+	 */
+	protected $matchesArray = null;
+	/**
+	 * The matching Regex.
+	 * This is good for debug.
+	 * @var string
+	 */
+	protected $matchingRegex = null;
+	/**
+	 * The User-Agent HTTP header is stored in here.
+	 * @var string
+	 */
+	protected $userAgent = null;
 
 	/**
 	 * Construct an instance of this class.
@@ -711,6 +688,70 @@ class MobileDetect
 	}
 
 	/**
+	 * Retrieve the list of known browsers. Specifically, the user agents.
+	 *
+	 * @return array List of browsers / user agents.
+	 */
+	public static function getBrowsers()
+	{
+		return self::$browsers;
+	}
+
+	/**
+	 * Method gets the mobile detection rules. This method is used for the magic methods $detect->is*().
+	 *
+	 * @return array All the rules (but not extended).
+	 * @deprecated since version 2.6.9
+	 *
+	 */
+	public static function getMobileDetectionRules()
+	{
+		static $rules;
+
+		if ( ! $rules)
+		{
+			$rules = array_merge(
+				self::$phoneDevices,
+				self::$tabletDevices,
+				self::$operatingSystems,
+				self::$browsers
+			);
+		}
+
+		return $rules;
+	}
+
+	/**
+	 * Retrieve the list of mobile operating systems.
+	 *
+	 * @return array The list of mobile operating systems.
+	 */
+	public static function getOperatingSystems()
+	{
+		return self::$operatingSystems;
+	}
+
+	/**
+	 * Retrieve the list of known phone devices.
+	 *
+	 * @return array List of phone devices.
+	 */
+	public static function getPhoneDevices()
+	{
+		return self::$phoneDevices;
+	}
+
+	/**
+	 * Get the properties array.
+	 *
+	 * @return array
+	 */
+	public static function getProperties()
+	{
+		return self::$properties;
+	}
+
+	/**
 	 * Get the current script version.
 	 * This is useful for the demo.php file,
 	 * so people can check on what version they are testing
@@ -724,44 +765,104 @@ class MobileDetect
 	}
 
 	/**
-	 * Set the HTTP Headers. Must be PHP-flavored. This method will reset existing headers.
+	 * Retrieve the list of known tablet devices.
 	 *
-	 * @param array $httpHeaders The headers to set. If null, then using PHP's _SERVER to extract
-	 *                           the headers. The default null is left for backwards compatibility.
+	 * @return array List of tablet devices.
 	 */
-	public function setHttpHeaders($httpHeaders = null)
+	public static function getTabletDevices()
 	{
-		// use global _SERVER if $httpHeaders aren't defined
-		if ( ! is_array($httpHeaders) || ! count($httpHeaders))
-		{
-			$httpHeaders = $_SERVER;
-		}
-
-		// clear existing headers
-		$this->httpHeaders = [];
-
-		// Only save HTTP headers. In PHP land, that means only _SERVER vars that
-		// start with HTTP_.
-		foreach ($httpHeaders as $key => $value)
-		{
-			if (substr($key, 0, 5) === 'HTTP_')
-			{
-				$this->httpHeaders[$key] = $value;
-			}
-		}
-
-		// In case we're dealing with CloudFront, we need to know.
-		$this->setCfHeaders($httpHeaders);
+		return self::$tabletDevices;
 	}
 
 	/**
-	 * Retrieves the HTTP headers.
+	 * Alias for getBrowsers() method.
+	 *
+	 * @return array List of user agents.
+	 */
+	public static function getUserAgents()
+	{
+		return self::getBrowsers();
+	}
+
+	/**
+	 * Retrieve the list of known utilities.
+	 *
+	 * @return array List of utilities.
+	 */
+	public static function getUtilities()
+	{
+		return self::$utilities;
+	}
+
+	/**
+	 * Magic overloading method.
+	 *
+	 * @method boolean is[...]()
+	 * @param string $name
+	 * @param array  $arguments
+	 *
+	 * @return mixed
+	 * @throws BadMethodCallException when the method doesn't exist and doesn't start with 'is'
+	 */
+	public function __call($name, $arguments)
+	{
+		// make sure the name starts with 'is', otherwise
+		if (substr($name, 0, 2) !== 'is')
+		{
+			throw new BadMethodCallException("No such method exists: $name");
+		}
+
+		$this->setDetectionType(self::DETECTION_TYPE_MOBILE);
+
+		$key = substr($name, 2);
+
+		return $this->matchUAAgainstKey($key);
+	}
+
+	/**
+	 * Check the HTTP headers for signs of mobile.
+	 * This is the fastest mobile check possible; it's used
+	 * inside isMobile() method.
+	 *
+	 * @return bool
+	 */
+	public function checkHttpHeadersForMobile()
+	{
+
+		foreach ($this->getMobileHeaders() as $mobileHeader => $matchType)
+		{
+			if (isset($this->httpHeaders[$mobileHeader]))
+			{
+				if (isset($matchType['matches']) && is_array($matchType['matches']))
+				{
+					foreach ($matchType['matches'] as $_match)
+					{
+						if (strpos($this->httpHeaders[$mobileHeader], $_match) !== false)
+						{
+							return true;
+						}
+					}
+
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Retrieves the cloudfront headers.
 	 *
 	 * @return array
 	 */
-	public function getHttpHeaders()
+	public function getCfHeaders()
 	{
-		return $this->httpHeaders;
+		return $this->cloudfrontHeaders;
 	}
 
 	/**
@@ -799,9 +900,108 @@ class MobileDetect
 		return null;
 	}
 
+	/**
+	 * Retrieves the HTTP headers.
+	 *
+	 * @return array
+	 */
+	public function getHttpHeaders()
+	{
+		return $this->httpHeaders;
+	}
+
+	/**
+	 * Set the HTTP Headers. Must be PHP-flavored. This method will reset existing headers.
+	 *
+	 * @param array $httpHeaders The headers to set. If null, then using PHP's _SERVER to extract
+	 *                           the headers. The default null is left for backwards compatibility.
+	 */
+	public function setHttpHeaders($httpHeaders = null)
+	{
+		// use global _SERVER if $httpHeaders aren't defined
+		if ( ! is_array($httpHeaders) || ! count($httpHeaders))
+		{
+			$httpHeaders = $_SERVER;
+		}
+
+		// clear existing headers
+		$this->httpHeaders = [];
+
+		// Only save HTTP headers. In PHP land, that means only _SERVER vars that
+		// start with HTTP_.
+		foreach ($httpHeaders as $key => $value)
+		{
+			if (substr($key, 0, 5) === 'HTTP_')
+			{
+				$this->httpHeaders[$key] = $value;
+			}
+		}
+
+		// In case we're dealing with CloudFront, we need to know.
+		$this->setCfHeaders($httpHeaders);
+	}
+
+	public function getMatchesArray()
+	{
+		return $this->matchesArray;
+	}
+
+	public function getMatchingRegex()
+	{
+		return $this->matchingRegex;
+	}
+
+	/**
+	 * Method gets the mobile detection rules + utilities.
+	 * The reason this is separate is because utilities rules
+	 * don't necessary imply mobile. This method is used inside
+	 * the new $detect->is('stuff') method.
+	 *
+	 * @return array All the rules + extended.
+	 * @deprecated since version 2.6.9
+	 *
+	 */
+	public function getMobileDetectionRulesExtended()
+	{
+		static $rules;
+
+		if ( ! $rules)
+		{
+			// Merge all rules together.
+			$rules = array_merge(
+				self::$phoneDevices,
+				self::$tabletDevices,
+				self::$operatingSystems,
+				self::$browsers,
+				self::$utilities
+			);
+		}
+
+		return $rules;
+	}
+
 	public function getMobileHeaders()
 	{
 		return self::$mobileHeaders;
+	}
+
+	/**
+	 * Retrieve the current set of rules.
+	 *
+	 * @return array
+	 * @deprecated since version 2.6.9
+	 *
+	 */
+	public function getRules()
+	{
+		if ($this->detectionType == self::DETECTION_TYPE_EXTENDED)
+		{
+			return self::getMobileDetectionRulesExtended();
+		}
+		else
+		{
+			return self::getMobileDetectionRules();
+		}
 	}
 
 	/**
@@ -816,60 +1016,13 @@ class MobileDetect
 	}
 
 	/**
-	 * Set CloudFront headers
-	 * http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html#header-caching-web-device
+	 * Retrieve the User-Agent.
 	 *
-	 * @param array $cfHeaders List of HTTP headers
-	 *
-	 * @return  boolean If there were CloudFront headers to be set
+	 * @return string|null The user agent if it's set.
 	 */
-	public function setCfHeaders($cfHeaders = null)
+	public function getUserAgent()
 	{
-		// use global _SERVER if $cfHeaders aren't defined
-		if ( ! is_array($cfHeaders) || ! count($cfHeaders))
-		{
-			$cfHeaders = $_SERVER;
-		}
-
-		// clear existing headers
-		$this->cloudfrontHeaders = [];
-
-		// Only save CLOUDFRONT headers. In PHP land, that means only _SERVER vars that
-		// start with cloudfront-.
-		$response = false;
-		foreach ($cfHeaders as $key => $value)
-		{
-			if (substr(strtolower($key), 0, 16) === 'http_cloudfront_')
-			{
-				$this->cloudfrontHeaders[strtoupper($key)] = $value;
-				$response                                  = true;
-			}
-		}
-
-		return $response;
-	}
-
-	/**
-	 * Retrieves the cloudfront headers.
-	 *
-	 * @return array
-	 */
-	public function getCfHeaders()
-	{
-		return $this->cloudfrontHeaders;
-	}
-
-	/**
-	 * @param string $userAgent
-	 *
-	 * @return string
-	 */
-	private function prepareUserAgent($userAgent)
-	{
-		$userAgent = trim($userAgent);
-		$userAgent = substr($userAgent, 0, 500);
-
-		return $userAgent;
+		return $this->userAgent;
 	}
 
 	/**
@@ -914,300 +1067,33 @@ class MobileDetect
 	}
 
 	/**
-	 * Retrieve the User-Agent.
-	 *
-	 * @return string|null The user agent if it's set.
-	 */
-	public function getUserAgent()
-	{
-		return $this->userAgent;
-	}
-
-	/**
-	 * Set the detection type. Must be one of self::DETECTION_TYPE_MOBILE or
-	 * self::DETECTION_TYPE_EXTENDED. Otherwise, nothing is set.
-	 *
-	 * @param string $type The type. Must be a self::DETECTION_TYPE_* constant. The default
-	 *                     parameter is null which will default to self::DETECTION_TYPE_MOBILE.
-	 *
-	 * @deprecated since version 2.6.9
-	 *
-	 */
-	public function setDetectionType($type = null)
-	{
-		if ($type === null)
-		{
-			$type = self::DETECTION_TYPE_MOBILE;
-		}
-
-		if ($type !== self::DETECTION_TYPE_MOBILE && $type !== self::DETECTION_TYPE_EXTENDED)
-		{
-			return;
-		}
-
-		$this->detectionType = $type;
-	}
-
-	public function getMatchingRegex()
-	{
-		return $this->matchingRegex;
-	}
-
-	public function getMatchesArray()
-	{
-		return $this->matchesArray;
-	}
-
-	/**
-	 * Retrieve the list of known phone devices.
-	 *
-	 * @return array List of phone devices.
-	 */
-	public static function getPhoneDevices()
-	{
-		return self::$phoneDevices;
-	}
-
-	/**
-	 * Retrieve the list of known tablet devices.
-	 *
-	 * @return array List of tablet devices.
-	 */
-	public static function getTabletDevices()
-	{
-		return self::$tabletDevices;
-	}
-
-	/**
-	 * Alias for getBrowsers() method.
-	 *
-	 * @return array List of user agents.
-	 */
-	public static function getUserAgents()
-	{
-		return self::getBrowsers();
-	}
-
-	/**
-	 * Retrieve the list of known browsers. Specifically, the user agents.
-	 *
-	 * @return array List of browsers / user agents.
-	 */
-	public static function getBrowsers()
-	{
-		return self::$browsers;
-	}
-
-	/**
-	 * Retrieve the list of known utilities.
-	 *
-	 * @return array List of utilities.
-	 */
-	public static function getUtilities()
-	{
-		return self::$utilities;
-	}
-
-	/**
-	 * Method gets the mobile detection rules. This method is used for the magic methods $detect->is*().
-	 *
-	 * @return array All the rules (but not extended).
-	 * @deprecated since version 2.6.9
-	 *
-	 */
-	public static function getMobileDetectionRules()
-	{
-		static $rules;
-
-		if ( ! $rules)
-		{
-			$rules = array_merge(
-				self::$phoneDevices,
-				self::$tabletDevices,
-				self::$operatingSystems,
-				self::$browsers
-			);
-		}
-
-		return $rules;
-	}
-
-	/**
-	 * Method gets the mobile detection rules + utilities.
-	 * The reason this is separate is because utilities rules
-	 * don't necessary imply mobile. This method is used inside
-	 * the new $detect->is('stuff') method.
-	 *
-	 * @return array All the rules + extended.
-	 * @deprecated since version 2.6.9
-	 *
-	 */
-	public function getMobileDetectionRulesExtended()
-	{
-		static $rules;
-
-		if ( ! $rules)
-		{
-			// Merge all rules together.
-			$rules = array_merge(
-				self::$phoneDevices,
-				self::$tabletDevices,
-				self::$operatingSystems,
-				self::$browsers,
-				self::$utilities
-			);
-		}
-
-		return $rules;
-	}
-
-	/**
-	 * Retrieve the current set of rules.
-	 *
-	 * @return array
-	 * @deprecated since version 2.6.9
-	 *
-	 */
-	public function getRules()
-	{
-		if ($this->detectionType == self::DETECTION_TYPE_EXTENDED)
-		{
-			return self::getMobileDetectionRulesExtended();
-		}
-		else
-		{
-			return self::getMobileDetectionRules();
-		}
-	}
-
-	/**
-	 * Retrieve the list of mobile operating systems.
-	 *
-	 * @return array The list of mobile operating systems.
-	 */
-	public static function getOperatingSystems()
-	{
-		return self::$operatingSystems;
-	}
-
-	/**
-	 * Check the HTTP headers for signs of mobile.
-	 * This is the fastest mobile check possible; it's used
-	 * inside isMobile() method.
-	 *
-	 * @return bool
-	 */
-	public function checkHttpHeadersForMobile()
-	{
-
-		foreach ($this->getMobileHeaders() as $mobileHeader => $matchType)
-		{
-			if (isset($this->httpHeaders[$mobileHeader]))
-			{
-				if (isset($matchType['matches']) && is_array($matchType['matches']))
-				{
-					foreach ($matchType['matches'] as $_match)
-					{
-						if (strpos($this->httpHeaders[$mobileHeader], $_match) !== false)
-						{
-							return true;
-						}
-					}
-
-					return false;
-				}
-				else
-				{
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Magic overloading method.
-	 *
-	 * @method boolean is[...]()
-	 * @param string $name
-	 * @param array  $arguments
-	 *
-	 * @return mixed
-	 * @throws BadMethodCallException when the method doesn't exist and doesn't start with 'is'
-	 */
-	public function __call($name, $arguments)
-	{
-		// make sure the name starts with 'is', otherwise
-		if (substr($name, 0, 2) !== 'is')
-		{
-			throw new BadMethodCallException("No such method exists: $name");
-		}
-
-		$this->setDetectionType(self::DETECTION_TYPE_MOBILE);
-
-		$key = substr($name, 2);
-
-		return $this->matchUAAgainstKey($key);
-	}
-
-	/**
-	 * Find a detection rule that matches the current User-agent.
-	 *
-	 * @param null $userAgent deprecated
-	 *
-	 * @return boolean
-	 */
-	protected function matchDetectionRulesAgainstUA($userAgent = null)
-	{
-		// Begin general search.
-		foreach ($this->getRules() as $_regex)
-		{
-			if (empty($_regex))
-			{
-				continue;
-			}
-
-			if ($this->match($_regex, $userAgent))
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Search for a certain key in the rules array.
-	 * If the key is found then try to match the corresponding
-	 * regex against the User-Agent.
+	 * This method checks for a certain property in the
+	 * userAgent.
 	 *
 	 * @param string $key
+	 * @param string $userAgent   deprecated
+	 * @param string $httpHeaders deprecated
 	 *
-	 * @return boolean
+	 * @return bool|int|null
+	 * @todo: The httpHeaders part is not yet used.
+	 *
 	 */
-	protected function matchUAAgainstKey($key)
+	public function is($key, $userAgent = null, $httpHeaders = null)
 	{
-		// Make the keys lowercase so we can match: isIphone(), isiPhone(), isiphone(), etc.
-		$key = strtolower($key);
-		if (false === isset($this->cache[$key]))
+		// Set the UA and HTTP headers only if needed (eg. batch mode).
+		if ($httpHeaders)
 		{
-
-			// change the keys to lower case
-			$_rules = array_change_key_case($this->getRules());
-
-			if (false === empty($_rules[$key]))
-			{
-				$this->cache[$key] = $this->match($_rules[$key]);
-			}
-
-			if (false === isset($this->cache[$key]))
-			{
-				$this->cache[$key] = false;
-			}
+			$this->setHttpHeaders($httpHeaders);
 		}
 
-		return $this->cache[$key];
+		if ($userAgent)
+		{
+			$this->setUserAgent($userAgent);
+		}
+
+		$this->setDetectionType(self::DETECTION_TYPE_EXTENDED);
+
+		return $this->matchUAAgainstKey($key);
 	}
 
 	/**
@@ -1289,36 +1175,6 @@ class MobileDetect
 	}
 
 	/**
-	 * This method checks for a certain property in the
-	 * userAgent.
-	 *
-	 * @param string $key
-	 * @param string $userAgent   deprecated
-	 * @param string $httpHeaders deprecated
-	 *
-	 * @return bool|int|null
-	 * @todo: The httpHeaders part is not yet used.
-	 *
-	 */
-	public function is($key, $userAgent = null, $httpHeaders = null)
-	{
-		// Set the UA and HTTP headers only if needed (eg. batch mode).
-		if ($httpHeaders)
-		{
-			$this->setHttpHeaders($httpHeaders);
-		}
-
-		if ($userAgent)
-		{
-			$this->setUserAgent($userAgent);
-		}
-
-		$this->setDetectionType(self::DETECTION_TYPE_EXTENDED);
-
-		return $this->matchUAAgainstKey($key);
-	}
-
-	/**
 	 * Some detection rules are relative (not standard),
 	 * because of the diversity of devices, vendors and
 	 * their conventions in representing the User-Agent or
@@ -1345,94 +1201,6 @@ class MobileDetect
 		}
 
 		return $match;
-	}
-
-	/**
-	 * Get the properties array.
-	 *
-	 * @return array
-	 */
-	public static function getProperties()
-	{
-		return self::$properties;
-	}
-
-	/**
-	 * Prepare the version number.
-	 *
-	 * @param string $ver The string version, like "2.6.21.2152";
-	 *
-	 * @return float
-	 * @todo Remove the error supression from str_replace() call.
-	 *
-	 */
-	public function prepareVersionNo($ver)
-	{
-		$ver    = str_replace(['_', ' ', '/'], '.', $ver);
-		$arrVer = explode('.', $ver, 2);
-
-		if (isset($arrVer[1]))
-		{
-			$arrVer[1] = @str_replace('.', '', $arrVer[1]); // @todo: treat strings versions.
-		}
-
-		return (float) implode('.', $arrVer);
-	}
-
-	/**
-	 * Check the version of the given property in the User-Agent.
-	 * Will return a float number. (eg. 2_0 will return 2.0, 4.3.1 will return 4.31)
-	 *
-	 * @param string $propertyName The name of the property. See self::getProperties() array
-	 *                             keys for all possible properties.
-	 * @param string $type         Either self::VERSION_TYPE_STRING to get a string value or
-	 *                             self::VERSION_TYPE_FLOAT indicating a float value. This parameter
-	 *                             is optional and defaults to self::VERSION_TYPE_STRING. Passing an
-	 *                             invalid parameter will default to the this type as well.
-	 *
-	 * @return string|float The version of the property we are trying to extract.
-	 */
-	public function version($propertyName, $type = self::VERSION_TYPE_STRING)
-	{
-		if (empty($propertyName))
-		{
-			return false;
-		}
-
-		// set the $type to the default if we don't recognize the type
-		if ($type !== self::VERSION_TYPE_STRING && $type !== self::VERSION_TYPE_FLOAT)
-		{
-			$type = self::VERSION_TYPE_STRING;
-		}
-
-		$properties = self::getProperties();
-
-		// Check if the property exists in the properties array.
-		if (true === isset($properties[$propertyName]))
-		{
-
-			// Prepare the pattern to be matched.
-			// Make sure we always deal with an array (string is converted).
-			$properties[$propertyName] = (array) $properties[$propertyName];
-
-			foreach ($properties[$propertyName] as $propertyMatchString)
-			{
-
-				$propertyPattern = str_replace('[VER]', self::VER, $propertyMatchString);
-
-				// Identify and extract the version.
-				preg_match(sprintf('#%s#is', $propertyPattern), $this->userAgent, $match);
-
-				if (false === empty($match[1]))
-				{
-					$version = ($type == self::VERSION_TYPE_FLOAT ? $this->prepareVersionNo($match[1]) : $match[1]);
-
-					return $version;
-				}
-			}
-		}
-
-		return false;
 	}
 
 	/**
@@ -1566,5 +1334,214 @@ class MobileDetect
 		// All older smartphone platforms and featurephones - Any device that doesn't support media queries
 		// will receive the basic, C grade experience.
 		return self::MOBILE_GRADE_C;
+	}
+
+	/**
+	 * Prepare the version number.
+	 *
+	 * @param string $ver The string version, like "2.6.21.2152";
+	 *
+	 * @return float
+	 * @todo Remove the error supression from str_replace() call.
+	 *
+	 */
+	public function prepareVersionNo($ver)
+	{
+		$ver    = str_replace(['_', ' ', '/'], '.', $ver);
+		$arrVer = explode('.', $ver, 2);
+
+		if (isset($arrVer[1]))
+		{
+			$arrVer[1] = @str_replace('.', '', $arrVer[1]); // @todo: treat strings versions.
+		}
+
+		return (float) implode('.', $arrVer);
+	}
+
+	/**
+	 * Set CloudFront headers
+	 * http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html#header-caching-web-device
+	 *
+	 * @param array $cfHeaders List of HTTP headers
+	 *
+	 * @return  boolean If there were CloudFront headers to be set
+	 */
+	public function setCfHeaders($cfHeaders = null)
+	{
+		// use global _SERVER if $cfHeaders aren't defined
+		if ( ! is_array($cfHeaders) || ! count($cfHeaders))
+		{
+			$cfHeaders = $_SERVER;
+		}
+
+		// clear existing headers
+		$this->cloudfrontHeaders = [];
+
+		// Only save CLOUDFRONT headers. In PHP land, that means only _SERVER vars that
+		// start with cloudfront-.
+		$response = false;
+		foreach ($cfHeaders as $key => $value)
+		{
+			if (substr(strtolower($key), 0, 16) === 'http_cloudfront_')
+			{
+				$this->cloudfrontHeaders[strtoupper($key)] = $value;
+				$response                                  = true;
+			}
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Set the detection type. Must be one of self::DETECTION_TYPE_MOBILE or
+	 * self::DETECTION_TYPE_EXTENDED. Otherwise, nothing is set.
+	 *
+	 * @param string $type The type. Must be a self::DETECTION_TYPE_* constant. The default
+	 *                     parameter is null which will default to self::DETECTION_TYPE_MOBILE.
+	 *
+	 * @deprecated since version 2.6.9
+	 *
+	 */
+	public function setDetectionType($type = null)
+	{
+		if ($type === null)
+		{
+			$type = self::DETECTION_TYPE_MOBILE;
+		}
+
+		if ($type !== self::DETECTION_TYPE_MOBILE && $type !== self::DETECTION_TYPE_EXTENDED)
+		{
+			return;
+		}
+
+		$this->detectionType = $type;
+	}
+
+	/**
+	 * Check the version of the given property in the User-Agent.
+	 * Will return a float number. (eg. 2_0 will return 2.0, 4.3.1 will return 4.31)
+	 *
+	 * @param string $propertyName The name of the property. See self::getProperties() array
+	 *                             keys for all possible properties.
+	 * @param string $type         Either self::VERSION_TYPE_STRING to get a string value or
+	 *                             self::VERSION_TYPE_FLOAT indicating a float value. This parameter
+	 *                             is optional and defaults to self::VERSION_TYPE_STRING. Passing an
+	 *                             invalid parameter will default to the this type as well.
+	 *
+	 * @return string|float The version of the property we are trying to extract.
+	 */
+	public function version($propertyName, $type = self::VERSION_TYPE_STRING)
+	{
+		if (empty($propertyName))
+		{
+			return false;
+		}
+
+		// set the $type to the default if we don't recognize the type
+		if ($type !== self::VERSION_TYPE_STRING && $type !== self::VERSION_TYPE_FLOAT)
+		{
+			$type = self::VERSION_TYPE_STRING;
+		}
+
+		$properties = self::getProperties();
+
+		// Check if the property exists in the properties array.
+		if (true === isset($properties[$propertyName]))
+		{
+
+			// Prepare the pattern to be matched.
+			// Make sure we always deal with an array (string is converted).
+			$properties[$propertyName] = (array) $properties[$propertyName];
+
+			foreach ($properties[$propertyName] as $propertyMatchString)
+			{
+
+				$propertyPattern = str_replace('[VER]', self::VER, $propertyMatchString);
+
+				// Identify and extract the version.
+				preg_match(sprintf('#%s#is', $propertyPattern), $this->userAgent, $match);
+
+				if (false === empty($match[1]))
+				{
+					$version = ($type == self::VERSION_TYPE_FLOAT ? $this->prepareVersionNo($match[1]) : $match[1]);
+
+					return $version;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Find a detection rule that matches the current User-agent.
+	 *
+	 * @param null $userAgent deprecated
+	 *
+	 * @return boolean
+	 */
+	protected function matchDetectionRulesAgainstUA($userAgent = null)
+	{
+		// Begin general search.
+		foreach ($this->getRules() as $_regex)
+		{
+			if (empty($_regex))
+			{
+				continue;
+			}
+
+			if ($this->match($_regex, $userAgent))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Search for a certain key in the rules array.
+	 * If the key is found then try to match the corresponding
+	 * regex against the User-Agent.
+	 *
+	 * @param string $key
+	 *
+	 * @return boolean
+	 */
+	protected function matchUAAgainstKey($key)
+	{
+		// Make the keys lowercase so we can match: isIphone(), isiPhone(), isiphone(), etc.
+		$key = strtolower($key);
+		if (false === isset($this->cache[$key]))
+		{
+
+			// change the keys to lower case
+			$_rules = array_change_key_case($this->getRules());
+
+			if (false === empty($_rules[$key]))
+			{
+				$this->cache[$key] = $this->match($_rules[$key]);
+			}
+
+			if (false === isset($this->cache[$key]))
+			{
+				$this->cache[$key] = false;
+			}
+		}
+
+		return $this->cache[$key];
+	}
+
+	/**
+	 * @param string $userAgent
+	 *
+	 * @return string
+	 */
+	private function prepareUserAgent($userAgent)
+	{
+		$userAgent = trim($userAgent);
+		$userAgent = substr($userAgent, 0, 500);
+
+		return $userAgent;
 	}
 }

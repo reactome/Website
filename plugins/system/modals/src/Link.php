@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -74,8 +74,8 @@ class Link
 
 			if ( ! isset($data['title']))
 			{
-				$auto_titles = isset($data['auto_titles']) ? $data['auto_titles'] : $params->auto_titles;
-				$title_case  = isset($data['title_case']) ? $data['title_case'] : $params->title_case;
+				$auto_titles = $data['auto_titles'] ?? $params->auto_titles;
+				$title_case  = $data['title_case'] ?? $params->title_case;
 				if ($auto_titles)
 				{
 					$data['title'] = File::getTitle($attributes->href, $title_case);
@@ -139,18 +139,40 @@ class Link
 			. $content;
 	}
 
-	private static function cleanTitle($string)
-	{
-		$string = str_replace('<div class="modals_description">', ' - ', $string);
-
-		return RL_String::removeHtml($string);
-	}
-
 	public static function get($string, $link = '', $content = '')
 	{
-		list($attributes, $data, $extra) = self::getData($string, $link);
+		[$attributes, $data, $extra] = self::getData($string, $link);
 
-		return [self::build($attributes, $data, $content), $extra];
+		$link = self::build($attributes, $data, $content);
+		$link .= $link ? '</a>' : '';
+
+		return [$link, $extra];
+	}
+
+	public static function getAttributeList($string)
+	{
+		$attributes = (object) [];
+
+		if ( ! $string)
+		{
+			return $attributes;
+		}
+
+		$params = Params::get();
+
+		RL_RegEx::matchAll('([a-z0-9_-]+)\s*=\s*(?:"(.*?)"|\'(.*?)\')', $string, $params);
+
+		if (empty($params))
+		{
+			return $attributes;
+		}
+
+		foreach ($params as $param)
+		{
+			$attributes->{$param[1]} = $param[3] ?? $param[2];
+		}
+
+		return $attributes;
 	}
 
 	public static function getData($string, $link = '')
@@ -207,13 +229,13 @@ class Link
 		$extra = '';
 
 
-		$attributes->id = ! empty($tag->id) ? $tag->id : '';
+		$attributes->id = $tag->id ?? '';
 		unset($tag->id);
 
 		$attributes->class .= ! empty($tag->class) ? ' ' . $tag->class : '';
 		unset($tag->class);
 
-		$attributes->style = ! empty($tag->style) ? $tag->style : '';
+		$attributes->style = $tag->style ?? '';
 		unset($tag->style);
 
 		if ( ! empty($tag->title))
@@ -254,14 +276,97 @@ class Link
 		return [$attributes, $data, $extra];
 	}
 
-	private static function translateString($string = '')
+	private static function addUrlParameter($url, $key, $value = '')
 	{
-		if (empty($string) || ! RL_RegEx::match('^[A-Z][A-Z0-9_]+$', $string))
+		if (empty($key))
 		{
-			return $string;
+			return $url;
 		}
 
-		return JText::_($string);
+		$key = ltrim($key, '?&');
+
+		if (RL_RegEx::match('[\?&]' . $key . '=', $url))
+		{
+			return $url;
+		}
+
+		$query = $key;
+
+		if ($value)
+		{
+			$query .= '=' . $value;
+		}
+
+		return $url . (strpos($url, '?') === false ? '?' : '&') . $query;
+	}
+
+	private static function cleanTitle($string)
+	{
+		$string = str_replace('<div class="modals_description">', ' - ', $string);
+
+		return RL_String::removeHtml($string);
+	}
+
+	private static function cleanUrl($url)
+	{
+		return RL_RegEx::replace('<a[^>]*>(.*?)</a>', '\1', $url);
+	}
+
+	private static function fixUrlVimeo($url)
+	{
+		$regex = '(?:^vimeo=|vimeo\.com/(?:video/)?)(?<id>[0-9]+)(?<query>.*)$';
+
+		if ( ! RL_RegEx::match($regex, trim($url), $match))
+		{
+			return $url;
+		}
+
+		$url = 'https://player.vimeo.com/video/' . $match['id'];
+
+		$url = self::addUrlParameter($url, $match['query']);
+
+		return $url;
+	}
+
+	private static function fixUrlYoutube($url)
+	{
+		$regex = '(?:^youtube=|youtu\.be/?|youtube\.com/embed/?|youtube\.com\/watch\?v=)(?<id>[^/&\?]+)(?:\?|&amp;|&)?(?<query>.*)$';
+
+		if ( ! RL_RegEx::match($regex, trim($url), $match))
+		{
+			return $url;
+		}
+
+		$url = 'https://www.youtube.com/embed/' . $match['id'];
+
+		$url = self::addUrlParameter($url, $match['query']);
+		$url = self::addUrlParameter($url, 'wmode', 'transparent');
+
+		return $url;
+	}
+
+	private static function fixVideoUrl($url, &$data)
+	{
+		switch (true)
+		{
+			case(
+				strpos($url, 'youtu.be') !== false
+				|| strpos($url, 'youtube.com') !== false
+			) :
+				$data['video'] = 'true';
+
+				return self::fixUrlYoutube($url);
+
+			case(
+				strpos($url, 'vimeo.com') !== false
+			) :
+				$data['video'] = 'true';
+
+				return self::fixUrlVimeo($url);
+
+			default:
+				return $url;
+		}
 	}
 
 	private static function prepareAttributeList($link)
@@ -302,120 +407,19 @@ class Link
 		return $attributes;
 	}
 
-	public static function getAttributeList($string)
-	{
-		$attributes = (object) [];
-
-		if ( ! $string)
-		{
-			return $attributes;
-		}
-
-		$params = Params::get();
-
-		RL_RegEx::matchAll('([a-z0-9_-]+)\s*=\s*(?:"(.*?)"|\'(.*?)\')', $string, $params);
-
-		if (empty($params))
-		{
-			return $attributes;
-		}
-
-		foreach ($params as $param)
-		{
-			$attributes->{$param[1]} = isset($param[3]) ? $param[3] : $param[2];
-		}
-
-		return $attributes;
-	}
-
-	private static function cleanUrl($url)
-	{
-		return RL_RegEx::replace('<a[^>]*>(.*?)</a>', '\1', $url);
-	}
-
 	private static function setVideoUrl(&$attributes, &$data)
 	{
 
 		$attributes->href = self::fixVideoUrl($attributes->href, $data);
 	}
 
-	private static function fixVideoUrl($url, &$data)
+	private static function translateString($string = '')
 	{
-		switch (true)
+		if (empty($string) || ! RL_RegEx::match('^[A-Z][A-Z0-9_]+$', $string))
 		{
-			case(
-				strpos($url, 'youtu.be') !== false
-				|| strpos($url, 'youtube.com') !== false
-			) :
-				$data['video'] = 'true';
-
-				return self::fixUrlYoutube($url);
-
-			case(
-				strpos($url, 'vimeo.com') !== false
-			) :
-				$data['video'] = 'true';
-
-				return self::fixUrlVimeo($url);
+			return $string;
 		}
 
-		return $url;
-	}
-
-	private static function fixUrlYoutube($url)
-	{
-		$regex = '(?:^youtube=|youtu\.be/?|youtube\.com/embed/?|youtube\.com\/watch\?v=)(?<id>[^/&\?]+)(?:\?|&amp;|&)?(?<query>.*)$';
-
-		if ( ! RL_RegEx::match($regex, trim($url), $match))
-		{
-			return $url;
-		}
-
-		$url = 'https://www.youtube.com/embed/' . $match['id'];
-
-		$url = self::addUrlParameter($url, $match['query']);
-		$url = self::addUrlParameter($url, 'wmode', 'transparent');
-
-		return $url;
-	}
-
-	private static function fixUrlVimeo($url)
-	{
-		$regex = '(?:^vimeo=|vimeo\.com/(?:video/)?)(?<id>[0-9]+)(?<query>.*)$';
-
-		if ( ! RL_RegEx::match($regex, trim($url), $match))
-		{
-			return $url;
-		}
-
-		$url = 'https://player.vimeo.com/video/' . $match['id'];
-
-		$url = self::addUrlParameter($url, $match['query']);
-
-		return $url;
-	}
-
-	private static function addUrlParameter($url, $key, $value = '')
-	{
-		if (empty($key))
-		{
-			return $url;
-		}
-
-		$key = ltrim($key, '?&');
-
-		if (RL_RegEx::match('[\?&]' . $key . '=', $url))
-		{
-			return $url;
-		}
-
-		$query = $key;
-
-		if ($value)
-		{
-			$query .= '=' . $value;
-		}
-
-		return $url . (strpos($url, '?') === false ? '?' : '&') . $query;
+		return JText::_($string);
 	}
 }

@@ -2,26 +2,26 @@
 <extension version="3.9" type="plugin" group="system" method="upgrade">
 	<name>PLG_SYSTEM_MODALS</name>
 	<description>PLG_SYSTEM_MODALS_DESC</description>
-	<version>11.8.1</version>
-	<creationDate>April 2021</creationDate>
+	<version>11.9.0</version>
+	<creationDate>June 2021</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://regularlabs.com</authorUrl>
-	<copyright>Copyright © 2018 Regular Labs - All Rights Reserved</copyright>
+	<copyright>Copyright © 2021 Regular Labs - All Rights Reserved</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 
 	<scriptfile>script.install.php</scriptfile>
 
 	<updateservers>
 		<server type="extension" priority="1" name="Regular Labs - Modals">
-			https://download.regularlabs.com/updates.xml?e=XXX&amp;type=.xml
+			https://download.regularlabs.com/updates.xml?e=modals&amp;type=.xml
 		</server>
 	</updateservers>
 
 	<files>
-		<filename plugin="modals">modals.php</filename>
-		<filename>modal.php</filename>
-		<filename>script.install.helper.php</filename>
+		<file plugin="modals">modals.php</file>
+		<file>modal.php</file>
+		<file>script.install.helper.php</file>
 		<folder>language</folder>
 		<folder>src</folder>
 		<folder>vendor</folder>
@@ -37,8 +37,8 @@
 	<config>
 		<fields name="params" addfieldpath="/libraries/regularlabs/fields">
 			<fieldset name="basic">
-				<field name="@loadlanguage_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
-				<field name="@loadlanguage" type="rl_loadlanguage" extension="plg_system_modals" />
+				<field name="@load_language_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
+				<field name="@load_language" type="rl_loadlanguage" extension="plg_system_modals" />
 				<field name="@license" type="rl_license" extension="MODALS" />
 				<field name="@version" type="rl_version" extension="MODALS" />
 				<field name="@header" type="rl_header"

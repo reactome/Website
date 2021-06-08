@@ -1,9 +1,9 @@
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -24,7 +24,7 @@ var RegularLabsModalsPopup = null;
 		initText: function($el) {
 			var selection = this.getSelection();
 
-			if (!selection) {
+			if ( ! selection) {
 				return;
 			}
 
@@ -40,7 +40,7 @@ var RegularLabsModalsPopup = null;
 		},
 
 		setTypeFromTab: function($el) {
-			if (!$el || !$el.attr('href')) {
+			if ( ! $el || ! $el.attr('href')) {
 				return;
 			}
 
@@ -50,7 +50,7 @@ var RegularLabsModalsPopup = null;
 		insertText: function() {
 			var tag = this.getTag();
 
-			if (!tag) {
+			if ( ! tag) {
 				return false;
 			}
 
@@ -62,13 +62,13 @@ var RegularLabsModalsPopup = null;
 		getSelection: function() {
 			var editor_textarea = window.parent.document.getElementById(modals_editorname);
 
-			if (!editor_textarea) {
+			if ( ! editor_textarea) {
 				return false;
 			}
 
 			var iframes = editor_textarea.parentNode.getElementsByTagName('iframe');
 
-			if (!iframes.length) {
+			if ( ! iframes.length) {
 				return false;
 			}
 
@@ -100,7 +100,7 @@ var RegularLabsModalsPopup = null;
 
 			var main_attributes = this.getAttributesByType(type);
 
-			if (!main_attributes) {
+			if ( ! main_attributes) {
 				return false;
 			}
 

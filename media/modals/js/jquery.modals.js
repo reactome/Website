@@ -1,9 +1,9 @@
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -404,7 +404,7 @@
 
 		return function() {
 			if (active) {
-				if (!settings.get('slideshow')) {
+				if ( ! settings.get('slideshow')) {
 					$events.unbind(event_cleanup, reset);
 					reset();
 				}
@@ -427,7 +427,7 @@
 	function launch(element) {
 		var options;
 
-		if (!closing) {
+		if ( ! closing) {
 
 			options = $(element).data(colorbox);
 
@@ -435,7 +435,7 @@
 
 			getRelated(settings.get('rel'));
 
-			if (!open) {
+			if ( ! open) {
 				open = active = true; // Prevents the page-change action from queuing up if the visitor holds down the left or right keys.
 
 				setClass(settings.get('className'));
@@ -505,7 +505,7 @@
 	// Colorbox's markup needs to be added to the DOM prior to being called
 	// so that the browser will go ahead and load the CSS background images.
 	function appendHTML() {
-		if (!$box) {
+		if ( ! $box) {
 			init            = false;
 			$window         = $(window);
 			$box            = $tag(div).attr({
@@ -564,7 +564,7 @@
 
 			$groupControls = $next.add($prev).add($current).add($slideshow);
 		}
-		if (document.body && !$box.parent().length) {
+		if (document.body && ! $box.parent().length) {
 			$(document.body).append($overlay, $box.append($wrap, $loadingBay));
 		}
 	}
@@ -574,14 +574,14 @@
 		function clickHandler(e) {
 			// ignore non-left-mouse-clicks and clicks modified with ctrl / command, shift, or alt.
 			// See: http://jacklmoore.com/notes/click-events/
-			if (!(e.which > 1 || e.shiftKey || e.altKey || e.metaKey || e.ctrlKey)) {
+			if ( ! (e.which > 1 || e.shiftKey || e.altKey || e.metaKey || e.ctrlKey)) {
 				e.preventDefault();
 				launch(this);
 			}
 		}
 
 		if ($box) {
-			if (!init) {
+			if ( ! init) {
 				init = true;
 
 				// Anonymous functions here keep the public method from being cached, thereby allowing them to be redefined on the fly.
@@ -607,7 +607,7 @@
 						e.preventDefault();
 						publicMethod.close();
 					}
-					if (open && settings.get('arrowKey') && $related[1] && !e.altKey) {
+					if (open && settings.get('arrowKey') && $related[1] && ! e.altKey) {
 						if (key === 37) {
 							e.preventDefault();
 							$prev.click();
@@ -675,7 +675,7 @@
 			options.open = true;
 		}
 
-		if (!$obj[0]) { // colorbox being applied to empty collection
+		if ( ! $obj[0]) { // colorbox being applied to empty collection
 			return $obj;
 		}
 
@@ -770,7 +770,6 @@
 			$.each(css, function(i) {
 				if (css[i] !== previousCSS[i]) {
 					tempSpeed = speed;
-					return;
 				}
 			});
 			speed = tempSpeed;
@@ -778,7 +777,7 @@
 
 		previousCSS = css;
 
-		if (!speed) {
+		if ( ! speed) {
 			$box.css(css);
 		}
 
@@ -808,7 +807,7 @@
 	publicMethod.resize = function(options) {
 		var scrolltop;
 
-		if (!open) {
+		if ( ! open) {
 			return;
 		}
 
@@ -832,7 +831,7 @@
 			settings.h = setSize(options.innerHeight, 'y');
 		}
 
-		if (!options.innerHeight && !options.height) {
+		if ( ! options.innerHeight && ! options.height) {
 			scrolltop = $loaded.scrollTop();
 			$loaded.css({height: 'auto'});
 			settings.h = $loaded.height();
@@ -851,7 +850,7 @@
 	};
 
 	publicMethod.prep = function(object) {
-		if (!open) {
+		if ( ! open) {
 			return;
 		}
 
@@ -892,7 +891,7 @@
 				iframe,
 				complete;
 
-			if (!open) {
+			if ( ! open) {
 				return;
 			}
 
@@ -922,7 +921,7 @@
 					.html(settings.get('previous'))
 					.attr('aria-hidden', $showPrev ? 'false' : 'true');
 
-				if (!($prev.is(':focus') || $next.is(':focus') || $close.is(':focus'))) {
+				if ( ! ($prev.is(':focus') || $next.is(':focus') || $close.is(':focus'))) {
 					if ($showPrev) {
 						$prev.focus();
 					} else if ($showNext) {
@@ -957,7 +956,7 @@
 
 				iframe = settings.get('createIframe');
 
-				if (!settings.get('scrolling')) {
+				if ( ! settings.get('scrolling')) {
 					iframe.scrolling = 'no';
 				}
 
@@ -1119,14 +1118,14 @@
 
 	// Navigates to the next page/image in a set.
 	publicMethod.next = function() {
-		if (!active && $related[1] && (settings.get('loop') || $related[index + 1])) {
+		if ( ! active && $related[1] && (settings.get('loop') || $related[index + 1])) {
 			index = getIndex(1);
 			launch($related[index]);
 		}
 	};
 
 	publicMethod.prev = function() {
-		if (!active && $related[1] && (settings.get('loop') || index)) {
+		if ( ! active && $related[1] && (settings.get('loop') || index)) {
 			index = getIndex(-1);
 			launch($related[index]);
 		}
@@ -1134,7 +1133,7 @@
 
 	// Note: to use this within an iframe use the following format: parent.jQuery.colorbox.close();
 	publicMethod.close = function() {
-		if (open && !closing) {
+		if (open && ! closing) {
 
 			closing = true;
 			open    = false;
@@ -1160,7 +1159,7 @@
 
 	// Removes changes Colorbox made to the document, but does not remove the plugin.
 	publicMethod.remove = function() {
-		if (!$box) {
+		if ( ! $box) {
 			return;
 		}
 

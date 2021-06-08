@@ -1,68 +1,26 @@
 <?php
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die;
-
 use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Filesystem\File as JFile;
+
+defined('_JEXEC') or die;
 
 require_once __DIR__ . '/script.install.helper.php';
 
 class PlgSystemModalsInstallerScript extends PlgSystemModalsInstallerScriptHelper
 {
-	public $name           = 'MODALS';
 	public $alias          = 'modals';
 	public $extension_type = 'plugin';
-
-	public function uninstall($adapter)
-	{
-		$this->uninstallPlugin($this->extname, 'editors-xtd');
-	}
-
-	public function onBeforeInstall($route)
-	{
-		if ( ! parent::onBeforeInstall($route))
-		{
-			return false;
-		}
-
-		$this->showDivMessage();
-
-		return true;
-	}
-
-	public function onAfterInstall($route)
-	{
-		// Copy modal.php to system template folder
-		JFile::copy(__DIR__ . '/modal.php', JPATH_SITE . '/templates/system/modal.php');
-
-		$this->fixOldParams();
-
-		return parent::onAfterInstall($route);
-	}
-
-	private function showDivMessage()
-	{
-		$installed_version = $this->getVersion($this->getInstalledXMLFile());
-
-		if ($installed_version && version_compare($installed_version, 11, '<'))
-		{
-			JFactory::getApplication()->enqueueMessage(
-				'Modals no longer uses the external Colorbox script. As a result, the script name and all element ids and have been changed.<br>'
-				. 'This means that any custom styles and scripts you are using for Modals will need updating.<br><br>'
-				. 'References in your custom CSS styling to <code>cboxTitle</code>, <code>cboxLoadedContent</code>, etc. will need to be changed to <code>rl_modals_title</code>, <code>rl_modals_loaded_content</code>, etc.<br>'
-				. 'References in your custom code to <code>jQuery.colorbox</code> will need to be changed to <code>jQuery.rl_modals</code>'
-				, 'warning'
-			);
-		}
-	}
+	public $name           = 'MODALS';
 
 	public function fixOldParams()
 	{
@@ -133,5 +91,48 @@ class PlgSystemModalsInstallerScript extends PlgSystemModalsInstallerScriptHelpe
 		$this->db->execute();
 
 		JFactory::getCache()->clean('_system');
+	}
+
+	public function onAfterInstall($route)
+	{
+		// Copy modal.php to system template folder
+		JFile::copy(__DIR__ . '/modal.php', JPATH_SITE . '/templates/system/modal.php');
+
+		$this->fixOldParams();
+
+		return parent::onAfterInstall($route);
+	}
+
+	public function onBeforeInstall($route)
+	{
+		if ( ! parent::onBeforeInstall($route))
+		{
+			return false;
+		}
+
+		$this->showDivMessage();
+
+		return true;
+	}
+
+	public function uninstall($adapter)
+	{
+		$this->uninstallPlugin($this->extname, 'editors-xtd');
+	}
+
+	private function showDivMessage()
+	{
+		$installed_version = $this->getVersion($this->getInstalledXMLFile());
+
+		if ($installed_version && version_compare($installed_version, 11, '<'))
+		{
+			JFactory::getApplication()->enqueueMessage(
+				'Modals no longer uses the external Colorbox script. As a result, the script name and all element ids and have been changed.<br>'
+				. 'This means that any custom styles and scripts you are using for Modals will need updating.<br><br>'
+				. 'References in your custom CSS styling to <code>cboxTitle</code>, <code>cboxLoadedContent</code>, etc. will need to be changed to <code>rl_modals_title</code>, <code>rl_modals_loaded_content</code>, etc.<br>'
+				. 'References in your custom code to <code>jQuery.colorbox</code> will need to be changed to <code>jQuery.rl_modals</code>'
+				, 'warning'
+			);
+		}
 	}
 }

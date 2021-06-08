@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -12,7 +12,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory as JFactory;
-use RegularLabs\Library\Parameters as RL_Parameters;
+use RegularLabs\Library\ParametersNew as RL_Parameters;
 use RegularLabs\Library\RegEx as RL_RegEx;
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
@@ -36,7 +36,7 @@ require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 	</html>
 <?php else: ?>
 	<?php
-	$config = RL_Parameters::getInstance()->getPluginParams('modals');
+	$config = RL_Parameters::getPlugin('modals');
 	?>
 	<?php if ($config->load_head) : ?>
 		<?php

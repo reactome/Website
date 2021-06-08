@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -19,56 +19,6 @@ use RegularLabs\Library\StringHelper as RL_String;
 
 class File
 {
-	public static function isVideo($url, $data)
-	{
-		if (isset($data['video']) && $data['video'] == 'true')
-		{
-			return true;
-		}
-
-		return RL_File::isExternalVideo($url) || RL_File::isVideo($url);
-	}
-
-	public static function isIframe($url, &$data)
-	{
-		if ( ! empty($data['inline']))
-		{
-			return false;
-		}
-
-		$params = Params::get();
-
-		if (RL_File::isMedia($url, $params->iframefiles))
-		{
-			return true;
-		}
-
-		if (RL_File::isMedia($url, $params->mediafiles))
-		{
-			unset($data['iframe']);
-
-			return false;
-		}
-
-		if (empty($data['iframe']))
-		{
-			return $params->iframe;
-		}
-
-		return ($data['iframe'] !== 0 && $data['iframe'] !== 'false');
-	}
-
-	public static function retinaImageExists($url)
-	{
-		$params = Params::get();
-
-		$suffix = str_replace('.$1', '.\1', $params->retinasuffix);
-
-		$retina_file = RL_RegEx::replace('(\.[a-z0-9]+)$', $suffix, $url);
-
-		return file_exists(JPATH_SITE . '/' . $retina_file);
-	}
-
 	public static function getCleanFileName($url)
 	{
 		$params = Params::get();
@@ -123,5 +73,55 @@ class File
 		}
 
 		return $title;
+	}
+
+	public static function isIframe($url, &$data)
+	{
+		if ( ! empty($data['inline']))
+		{
+			return false;
+		}
+
+		$params = Params::get();
+
+		if (RL_File::isMedia($url, $params->iframefiles))
+		{
+			return true;
+		}
+
+		if (RL_File::isMedia($url, $params->mediafiles))
+		{
+			unset($data['iframe']);
+
+			return false;
+		}
+
+		if (empty($data['iframe']))
+		{
+			return $params->iframe;
+		}
+
+		return ($data['iframe'] !== 0 && $data['iframe'] !== 'false');
+	}
+
+	public static function isVideo($url, $data)
+	{
+		if (isset($data['video']) && $data['video'] == 'true')
+		{
+			return true;
+		}
+
+		return RL_File::isExternalVideo($url) || RL_File::isVideo($url);
+	}
+
+	public static function retinaImageExists($url)
+	{
+		$params = Params::get();
+
+		$suffix = str_replace('.$1', '.\1', $params->retinasuffix);
+
+		$retina_file = RL_RegEx::replace('(\.[a-z0-9]+)$', $suffix, $url);
+
+		return file_exists(JPATH_SITE . '/' . $retina_file);
 	}
 }

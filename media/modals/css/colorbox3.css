@@ -1,18 +1,18 @@
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -23,190 +23,224 @@
 #rl_modals,
 #rl_modals_overlay,
 #rl_modals_wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  overflow: hidden;
+    position: absolute;
+    z-index:  9999;
+    top:      0;
+    left:     0;
+    overflow: hidden;
 }
+
 #rl_modals_wrapper {
-  max-width: none;
+    max-width: none;
 }
+
 #rl_modals_overlay {
-  position: fixed;
-  width: 100%;
-  height: 100%;
+    position: fixed;
+    width:    100%;
+    height:   100%;
 }
+
 #rl_modals_middle_left,
 #rl_modals_bottom_left {
-  clear: left;
+    clear: left;
 }
+
 #rl_modals_content {
-  position: relative;
+    position: relative;
 }
+
 #rl_modals_loaded_content {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
+    overflow:                   auto;
+    -webkit-overflow-scrolling: touch;
 }
+
 #rl_modals_title {
-  margin: 0;
+    margin: 0;
 }
+
 #rl_modals_loading_overlay,
 #rl_modals_loading_graphic {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+    position: absolute;
+    top:      0;
+    left:     0;
+    width:    100%;
+    height:   100%;
 }
+
 #rl_modals_previous,
 #rl_modals_next,
 #rl_modals_close,
 #rl_modals_slideshow {
-  cursor: pointer;
+    cursor: pointer;
 }
+
 #rl_modals.no_navigation #rl_modals_previous,
 #rl_modals.no_navigation #rl_modals_next,
 #rl_modals.no_navigation #rl_modals_close,
 #rl_modals.no_navigation #rl_modals_slideshow,
 #rl_modals.no_navigation #rl_modals_current {
-  display: none !important;
+    display: none !important;
 }
+
 .rl_modals_photo {
-  float: left;
-  margin: auto;
-  border: 0;
-  display: block;
-  max-width: none;
-  -ms-interpolation-mode: bicubic;
+    display:                block;
+    float:                  left;
+    max-width:              none;
+    margin:                 auto;
+    border:                 0;
+    -ms-interpolation-mode: bicubic;
 }
+
 .rl_modals_iframe {
-  width: 100%;
-  height: 100%;
-  display: block;
-  border: 0;
-  padding: 0;
-  margin: 0;
+    display: block;
+    width:   100%;
+    height:  100%;
+    margin:  0;
+    padding: 0;
+    border:  0;
 }
+
 #rl_modals,
 #rl_modals_content,
 #rl_modals_loaded_content {
-  box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
+    -moz-box-sizing:    content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing:         content-box;
 }
+
 #rl_modals_title .modals_description {
-  font-size: 0.7em;
-  font-weight: normal;
+    font-size:   0.7em;
+    font-weight: normal;
 }
+
 .modal_link_hidden {
-  display: none !important;
+    display: none !important;
 }
+
 #rl_modals_overlay {
-  background: #000000;
+    background: #000000;
 }
+
 #rl_modals {
-  outline: 0;
+    outline: 0;
 }
+
 #rl_modals_content {
-  margin-top: 20px;
-  background: #000000;
+    margin-top: 20px;
+    background: #000000;
 }
+
 .rl_modals_iframe {
-  background: #ffffff;
+    background: #ffffff;
 }
+
 #rl_modals_error {
-  padding: 50px;
-  border: 1px solid #cccccc;
+    padding: 50px;
+    border:  1px solid #cccccc;
 }
+
 #rl_modals_loaded_content {
-  border: 5px solid #000000;
-  padding: 6px 12px;
-  background: #ffffff;
+    padding:    6px 12px;
+    border:     5px solid #000000;
+    background: #ffffff;
 }
+
 #rl_modals.is_image #rl_modals_loaded_content,
 #rl_modals.is_video #rl_modals_loaded_content {
-  padding: 0;
+    padding: 0;
 }
+
 #rl_modals_title {
-  position: absolute;
-  top: -20px;
-  left: 0;
-  color: #cccccc;
+    position: absolute;
+    top:      -20px;
+    left:     0;
+    color:    #cccccc;
 }
+
 #rl_modals_current {
-  position: absolute;
-  top: -20px;
-  right: 0px;
-  color: #cccccc;
+    position: absolute;
+    top:      -20px;
+    right:    0px;
+    color:    #cccccc;
 }
+
 #rl_modals_loading_graphic {
-  background: url(../images/colorbox3/loading.gif) no-repeat center center;
+    background: url(../images/colorbox3/loading.gif) no-repeat center center;
 }
+
 /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
 #rl_modals_previous,
 #rl_modals_next,
 #rl_modals_slideshow,
 #rl_modals_close {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  overflow: visible;
-  width: auto;
-  background: none;
+    overflow:   visible;
+    width:      auto;
+    margin:     0;
+    padding:    0;
+    border:     0;
+    background: none;
 }
+
 /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
 #rl_modals_previous:active,
 #rl_modals_next:active,
 #rl_modals_slideshow:active,
 #rl_modals_close:active {
-  outline: 0;
+    outline: 0;
 }
+
 #rl_modals_slideshow {
-  position: absolute;
-  top: -20px;
-  right: 90px;
-  color: #ffffff;
+    position: absolute;
+    top:      -20px;
+    right:    90px;
+    color:    #ffffff;
 }
+
 #rl_modals_previous {
-  position: absolute;
-  top: 50%;
-  left: 5px;
-  margin-top: -32px;
-  background: url(../images/colorbox3/controls.png) no-repeat top left;
-  width: 28px;
-  height: 65px;
-  text-indent: -9999px;
+    position:    absolute;
+    top:         50%;
+    left:        5px;
+    width:       28px;
+    height:      65px;
+    margin-top:  -32px;
+    text-indent: -9999px;
+    background:  url(../images/colorbox3/controls.png) no-repeat top left;
 }
+
 #rl_modals_previous:hover {
-  background-position: bottom left;
+    background-position: bottom left;
 }
+
 #rl_modals_next {
-  position: absolute;
-  top: 50%;
-  right: 5px;
-  margin-top: -32px;
-  background: url(../images/colorbox3/controls.png) no-repeat top right;
-  width: 28px;
-  height: 65px;
-  text-indent: -9999px;
+    position:    absolute;
+    top:         50%;
+    right:       5px;
+    width:       28px;
+    height:      65px;
+    margin-top:  -32px;
+    text-indent: -9999px;
+    background:  url(../images/colorbox3/controls.png) no-repeat top right;
 }
+
 #rl_modals_next:hover {
-  background-position: bottom right;
+    background-position: bottom right;
 }
+
 #rl_modals_close {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  display: block;
-  background: url(../images/colorbox3/controls.png) no-repeat top center;
-  width: 38px;
-  height: 19px;
-  text-indent: -9999px;
+    position:    absolute;
+    top:         5px;
+    right:       5px;
+    display:     block;
+    width:       38px;
+    height:      19px;
+    text-indent: -9999px;
+    background:  url(../images/colorbox3/controls.png) no-repeat top center;
 }
+
 #rl_modals_close:hover {
-  background-position: bottom center;
+    background-position: bottom center;
 }
+
 #rl_modals.has_scrollbar #rl_modals_close {
-  right: 16px;
+    right: 16px;
 }
