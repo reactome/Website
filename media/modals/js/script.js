@@ -1,9 +1,9 @@
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -23,7 +23,7 @@ var RLModals          = null;
 		init: function(options) {
 			options = options ? options : this.getOptions();
 
-			if (!options) {
+			if ( ! options) {
 				return;
 			}
 
@@ -126,7 +126,7 @@ var RLModals          = null;
 					defaults[key] = true;
 				} else if (defaults[key] == 'false') {
 					defaults[key] = false;
-				} else if (!isNaN(defaults[key])) {
+				} else if ( ! isNaN(defaults[key])) {
 					defaults[key] = parseFloat(defaults[key]);
 				}
 			}
@@ -161,7 +161,7 @@ var RLModals          = null;
 
 			$el.data('modals_settings', defaults);
 
-			if (!isNaN(defaults.maxWidth) && defaults.maxWidth > ($(window).width() * .95)) {
+			if ( ! isNaN(defaults.maxWidth) && defaults.maxWidth > ($(window).width() * .95)) {
 				defaults.maxWidth = '95%';
 			}
 
@@ -178,7 +178,7 @@ var RLModals          = null;
 			RegularLabsModals.resize_timer = setTimeout(function() {
 				var $wrapper = $('#rl_modals_wrapper');
 
-				if (!$wrapper.is(':visible')) {
+				if ( ! $wrapper.is(':visible')) {
 					return;
 				}
 
@@ -202,7 +202,7 @@ var RLModals          = null;
 			var self    = this;
 			var options = this.getOptions();
 
-			if (!options.auto_correct_size) {
+			if ( ! options.auto_correct_size) {
 				return;
 			}
 
@@ -216,32 +216,18 @@ var RLModals          = null;
 		resizeContent: function() {
 			var $modal = RegularLabsModals.active_modal;
 
-			if (!$modal) {
+			if ( ! $modal) {
 				return;
 			}
 
-			var $content = $('#rl_modals_loaded_content');
-
-			// Simple resize for videos
-			if ($modal.attr('data-modal-video')) {
-				var $iframe = $content.find('iframe');
-				$iframe.css('max-width', this.getMaxWidth($content));
-				$iframe.css('max-height', this.getMaxHeight($content));
-
-				return;
-			}
-
-			// Simple resize for images
-			if ($modal.attr('data-modal-image')) {
-				var $image = $content.find('img');
-				$image.css('max-width', this.getMaxWidth($content));
-				$image.css('max-height', this.getMaxHeight($content));
-
+			// Don't resize videos or images
+			if ($modal.attr('data-modal-video') || $modal.attr('data-modal-image')) {
 				return;
 			}
 
 			var modals_settings = $modal.data('modals_settings');
 
+			var $content   = $('#rl_modals_loaded_content');
 			var $container = $('#rl_modals_content');
 
 			var original_container_width = this.getWidth($container);
@@ -309,7 +295,7 @@ var RLModals          = null;
 		resizeTitle: function() {
 			var $title = $('#rl_modals_title');
 
-			if (!this.getHeight($title)) {
+			if ( ! this.getHeight($title)) {
 				return;
 			}
 
@@ -347,7 +333,7 @@ var RLModals          = null;
 
 			var height_inner = this.getHeight($title);
 
-			if (!height_inner) {
+			if ( ! height_inner) {
 				return {'height': 0, 'position': 'top'};
 			}
 
@@ -486,7 +472,7 @@ var RLModals          = null;
 		convertWidth: function(width, inner) {
 			var inner = inner ? true : false;
 
-			if (!width) {
+			if ( ! width) {
 				return this.getWidthByPercentage(95);
 			}
 
@@ -519,7 +505,7 @@ var RLModals          = null;
 		convertHeight: function(height, inner) {
 			var inner = inner ? true : false;
 
-			if (!height) {
+			if ( ! height) {
 				return this.getHeigthByPercentage(95);
 			}
 

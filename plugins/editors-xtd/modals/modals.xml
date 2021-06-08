@@ -2,23 +2,23 @@
 <extension version="3.9" type="plugin" group="editors-xtd" method="upgrade">
 	<name>PLG_EDITORS-XTD_MODALS</name>
 	<description>PLG_EDITORS-XTD_MODALS_DESC</description>
-	<version>11.8.1</version>
-	<creationDate>April 2021</creationDate>
+	<version>11.9.0</version>
+	<creationDate>June 2021</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://regularlabs.com</authorUrl>
-	<copyright>Copyright © 2018 Regular Labs - All Rights Reserved</copyright>
+	<copyright>Copyright © 2021 Regular Labs - All Rights Reserved</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 
 	<scriptfile>script.install.php</scriptfile>
 
 	<files>
-		<filename plugin="modals">modals.php</filename>
-		<filename>fields.xml</filename>
-		<filename>helper.php</filename>
-		<filename>popup.php</filename>
-		<filename>popup.tmpl.php</filename>
-		<filename>script.install.helper.php</filename>
+		<file plugin="modals">modals.php</file>
+		<file>fields.xml</file>
+		<file>helper.php</file>
+		<file>popup.php</file>
+		<file>popup.tmpl.php</file>
+		<file>script.install.helper.php</file>
 		<folder>fields</folder>
 		<folder>language</folder>
 		<folder>layouts</folder>
@@ -27,13 +27,13 @@
 	<config>
 		<fields name="params" addfieldpath="/libraries/regularlabs/fields">
 			<fieldset name="basic">
-				<field name="@loadlanguage_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
-				<field name="@loadlanguage" type="rl_loadlanguage" extension="plg_editors-xtd_modals" />
+				<field name="@load_language_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
+				<field name="@load_language" type="rl_loadlanguage" extension="plg_editors-xtd_modals" />
 				<field name="@license" type="rl_license" extension="MODALS" />
 				<field name="@version" type="rl_version" extension="MODALS" />
 				<field name="@dependency" type="rl_dependency"
 					   label="MDL_THE_SYSTEM_PLUGIN"
-					   file="/plugins/system/modals/modals.php" />
+					   file="/plugins/system/modals/modals.xml" />
 				<field name="@header" type="rl_header"
 					   label="MODALS"
 					   description="MODALS_DESC"

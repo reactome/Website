@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -12,12 +12,12 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Object\CMSObject as JObject;
+use RegularLabs\Library\EditorButtonHelper as RL_EditorButtonHelper;
 
 /**
  * Plugin that places the button
  */
-class PlgButtonModalsHelper
-	extends \RegularLabs\Library\EditorButtonHelper
+class PlgButtonModalsHelper extends RL_EditorButtonHelper
 {
 	/**
 	 * Display the button

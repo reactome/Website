@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -14,7 +14,7 @@ namespace RegularLabs\Plugin\System\Modals;
 defined('_JEXEC') or die;
 
 use RegularLabs\Library\ArrayHelper as RL_Array;
-use RegularLabs\Library\Parameters as RL_Parameters;
+use RegularLabs\Library\ParametersNew as RL_Parameters;
 use RegularLabs\Library\PluginTag as RL_PluginTag;
 use RegularLabs\Library\RegEx as RL_RegEx;
 
@@ -30,7 +30,7 @@ class Params
 			return self::$params;
 		}
 
-		$params = RL_Parameters::getInstance()->getPluginParams('modals');
+		$params = RL_Parameters::getPlugin('modals');
 
 		$params->tag = RL_PluginTag::clean($params->tag);
 
@@ -68,6 +68,13 @@ class Params
 		return self::$params;
 	}
 
+	public static function getRegex($type = 'tag')
+	{
+		$regexes = self::getRegexes();
+
+		return $regexes->{$type} ?? $regexes->tag;
+	}
+
 	public static function getSettings()
 	{
 		$params = self::get();
@@ -84,11 +91,32 @@ class Params
 		return (object) $settings;
 	}
 
+	public static function getTagCharacters()
+	{
+		$params = self::get();
+
+		if ( ! isset($params->tag_character_start))
+		{
+			self::setTagCharacters();
+		}
+
+		return [$params->tag_character_start, $params->tag_character_end];
+	}
+
+	public static function getTagWords()
+	{
+		$params = self::get();
+
+		return [
+			$params->tag,
+		];
+	}
+
 	public static function getTags($only_start_tags = false)
 	{
 		$params = self::get();
 
-		list($tag_start, $tag_end) = self::getTagCharacters();
+		[$tag_start, $tag_end] = self::getTagCharacters();
 
 		$tags = [
 			[
@@ -102,20 +130,11 @@ class Params
 		return $only_start_tags ? $tags[0] : $tags;
 	}
 
-	public static function getTagWords()
+	public static function setTagCharacters()
 	{
 		$params = self::get();
 
-		return [
-			$params->tag,
-		];
-	}
-
-	public static function getRegex($type = 'tag')
-	{
-		$regexes = self::getRegexes();
-
-		return isset($regexes->{$type}) ? $regexes->{$type} : $regexes->tag;
+		[self::$params->tag_character_start, self::$params->tag_character_end] = explode('.', $params->tag_characters);
 	}
 
 	private static function getRegexes()
@@ -128,7 +147,7 @@ class Params
 		$params = self::get();
 
 		// Tag character start and end
-		list($tag_start, $tag_end) = Params::getTagCharacters();
+		[$tag_start, $tag_end] = Params::getTagCharacters();
 
 		$pre        = RL_PluginTag::getRegexSurroundingTagsPre();
 		$post       = RL_PluginTag::getRegexSurroundingTagsPost();
@@ -180,24 +199,5 @@ class Params
 
 
 		return self::$regexes;
-	}
-
-	public static function getTagCharacters()
-	{
-		$params = self::get();
-
-		if ( ! isset($params->tag_character_start))
-		{
-			self::setTagCharacters();
-		}
-
-		return [$params->tag_character_start, $params->tag_character_end];
-	}
-
-	public static function setTagCharacters()
-	{
-		$params = self::get();
-
-		list(self::$params->tag_character_start, self::$params->tag_character_end) = explode('.', $params->tag_characters);
 	}
 }

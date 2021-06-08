@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -19,32 +19,6 @@ use RegularLabs\Library\Uri as RL_Uri;
 
 class Data
 {
-
-	public static function setDataWidthHeight(&$data, $isexternal)
-	{
-		self::setDataAxis($data, $isexternal, 'width');
-		self::setDataAxis($data, $isexternal, 'height');
-	}
-
-	public static function setDataAxis(&$data, $isexternal, $axis = 'width')
-	{
-		if ( ! empty($data[$axis]))
-		{
-			return;
-		}
-
-		$params = Params::get();
-
-		if ($isexternal)
-		{
-			$data[$axis] = $params->{'external' . $axis} ?: $params->{$axis} ?: '95%';
-
-			return;
-		}
-
-		$data[$axis] = $params->{$axis} ?: $params->{'external' . $axis} ?: '95%';
-	}
-
 
 	public static function flattenAttributeList($attributes)
 	{
@@ -78,32 +52,6 @@ class Data
 		}
 
 		return $string;
-	}
-
-	public static function flattenDataAttributeList(&$dat)
-	{
-		if (isset($dat['width']))
-		{
-			unset($dat['externalWidth']);
-		}
-
-		if (isset($dat['height']))
-		{
-			unset($dat['externalHeight']);
-		}
-
-		$data = [];
-		foreach ($dat as $key => $val)
-		{
-			if ( ! $str = self::flattenDataAttribute($key, $val))
-			{
-				continue;
-			}
-
-			$data[] = $str;
-		}
-
-		return empty($data) ? '' : ' ' . implode(' ', $data);
 	}
 
 	public static function flattenDataAttribute($key, $val)
@@ -166,4 +114,70 @@ class Data
 		return 'data-modal-' . $key . '="' . $val . '"';
 	}
 
+	public static function flattenDataAttributeList(&$dat)
+	{
+		if (isset($dat['width']))
+		{
+			unset($dat['externalWidth']);
+		}
+
+		if (isset($dat['height']))
+		{
+			unset($dat['externalHeight']);
+		}
+
+		$data = [];
+		foreach ($dat as $key => $val)
+		{
+			if ( ! $str = self::flattenDataAttribute($key, $val))
+			{
+				continue;
+			}
+
+			$data[] = $str;
+		}
+
+		return empty($data) ? '' : ' ' . implode(' ', $data);
+	}
+
+	public static function getIsOpenFromValue($value, $opentype, $cookie_id = '', $cookie_ttl = 0)
+	{
+	}
+
+	public static function isOpen($values, $opentype, $cookie_id = '', $cookie_ttl = 0)
+	{
+	}
+
+	public static function setDataAxis(&$data, $isexternal, $axis = 'width')
+	{
+		if ( ! empty($data[$axis]))
+		{
+			return;
+		}
+
+		$params = Params::get();
+
+		if ($isexternal)
+		{
+			$data[$axis] = $params->{'external' . $axis} ?: $params->{$axis} ?: '95%';
+
+			return;
+		}
+
+		$data[$axis] = $params->{$axis} ?: $params->{'external' . $axis} ?: '95%';
+	}
+
+	public static function setDataOpen(&$data, $attributes = null)
+	{
+	}
+
+	public static function setDataWidthHeight(&$data, $isexternal)
+	{
+		self::setDataAxis($data, $isexternal, 'width');
+		self::setDataAxis($data, $isexternal, 'height');
+	}
+
+	private static function getOpenCount($type = '', $cookie_id = '', $cookie_ttl = 0)
+	{
+	}
 }

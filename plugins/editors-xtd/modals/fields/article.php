@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -43,7 +43,7 @@ class JFormFieldModals_Article extends JFormField
 				}
 				");
 
-		$title = empty($title) ? JText::_('RL_SELECT_AN_ARTICLE') : htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+		$title = ! empty($title) ? htmlspecialchars($title, ENT_QUOTES, 'UTF-8') : JText::_('RL_SELECT_AN_ARTICLE');
 
 		// The current article display field.
 		$html = '<span class="input-append">';

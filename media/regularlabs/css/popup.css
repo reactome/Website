@@ -1,9 +1,9 @@
 /**
  * @package         Regular Labs Library
- * @version         21.4.10972
+ * @version         21.5.22934
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -60,6 +60,7 @@
   width: 28px !important;
   height: auto !important;
 }
+button .icon-reglab,
 .btn-wrapper .icon-reglab,
 .btn-group .icon-reglab,
 .btn .icon-reglab {
@@ -67,152 +68,182 @@
   mask-image: none;
   -webkit-mask-image: none;
 }
+button .icon-reglab:before,
 .btn-wrapper .icon-reglab:before,
 .btn-group .icon-reglab:before,
 .btn .icon-reglab:before {
   font-family: 'RegularLabs' !important;
   vertical-align: bottom;
 }
+button .icon-reglab.icon-reglab:before,
 .btn-wrapper .icon-reglab.icon-reglab:before,
 .btn-group .icon-reglab.icon-reglab:before,
 .btn .icon-reglab.icon-reglab:before {
   content: "\e000";
 }
+button .icon-reglab.icon-addtomenu:before,
 .btn-wrapper .icon-reglab.icon-addtomenu:before,
 .btn-group .icon-reglab.icon-addtomenu:before,
 .btn .icon-reglab.icon-addtomenu:before {
   content: "\e001";
 }
+button .icon-reglab.icon-advancedmodulemanager:before,
 .btn-wrapper .icon-reglab.icon-advancedmodulemanager:before,
 .btn-group .icon-reglab.icon-advancedmodulemanager:before,
 .btn .icon-reglab.icon-advancedmodulemanager:before {
   content: "\e003";
 }
+button .icon-reglab.icon-advancedtemplatemanager:before,
 .btn-wrapper .icon-reglab.icon-advancedtemplatemanager:before,
 .btn-group .icon-reglab.icon-advancedtemplatemanager:before,
 .btn .icon-reglab.icon-advancedtemplatemanager:before {
   content: "\e015";
 }
+button .icon-reglab.icon-articlesanywhere:before,
 .btn-wrapper .icon-reglab.icon-articlesanywhere:before,
 .btn-group .icon-reglab.icon-articlesanywhere:before,
 .btn .icon-reglab.icon-articlesanywhere:before {
   content: "\e004";
 }
+button .icon-reglab.icon-articlesfield:before,
 .btn-wrapper .icon-reglab.icon-articlesfield:before,
 .btn-group .icon-reglab.icon-articlesfield:before,
 .btn .icon-reglab.icon-articlesfield:before {
   content: "\e01d";
 }
+button .icon-reglab.icon-betterpreview:before,
 .btn-wrapper .icon-reglab.icon-betterpreview:before,
 .btn-group .icon-reglab.icon-betterpreview:before,
 .btn .icon-reglab.icon-betterpreview:before {
   content: "\e005";
 }
+button .icon-reglab.icon-bettertrash:before,
 .btn-wrapper .icon-reglab.icon-bettertrash:before,
 .btn-group .icon-reglab.icon-bettertrash:before,
 .btn .icon-reglab.icon-bettertrash:before {
   content: "\e01b";
 }
+button .icon-reglab.icon-cachecleaner:before,
 .btn-wrapper .icon-reglab.icon-cachecleaner:before,
 .btn-group .icon-reglab.icon-cachecleaner:before,
 .btn .icon-reglab.icon-cachecleaner:before {
   content: "\e006";
 }
+button .icon-reglab.icon-cdnforjoomla:before,
 .btn-wrapper .icon-reglab.icon-cdnforjoomla:before,
 .btn-group .icon-reglab.icon-cdnforjoomla:before,
 .btn .icon-reglab.icon-cdnforjoomla:before {
   content: "\e007";
 }
+button .icon-reglab.icon-componentsanywhere:before,
 .btn-wrapper .icon-reglab.icon-componentsanywhere:before,
 .btn-group .icon-reglab.icon-componentsanywhere:before,
 .btn .icon-reglab.icon-componentsanywhere:before {
   content: "\e008";
 }
+button .icon-reglab.icon-conditionalcontent:before,
 .btn-wrapper .icon-reglab.icon-conditionalcontent:before,
 .btn-group .icon-reglab.icon-conditionalcontent:before,
 .btn .icon-reglab.icon-conditionalcontent:before {
   content: "\e019";
 }
+button .icon-reglab.icon-contenttemplater:before,
 .btn-wrapper .icon-reglab.icon-contenttemplater:before,
 .btn-group .icon-reglab.icon-contenttemplater:before,
 .btn .icon-reglab.icon-contenttemplater:before {
   content: "\e009";
 }
+button .icon-reglab.icon-dbreplacer:before,
 .btn-wrapper .icon-reglab.icon-dbreplacer:before,
 .btn-group .icon-reglab.icon-dbreplacer:before,
 .btn .icon-reglab.icon-dbreplacer:before {
   content: "\e00a";
 }
+button .icon-reglab.icon-dummycontent:before,
 .btn-wrapper .icon-reglab.icon-dummycontent:before,
 .btn-group .icon-reglab.icon-dummycontent:before,
 .btn .icon-reglab.icon-dummycontent:before {
   content: "\e017";
 }
+button .icon-reglab.icon-emailprotector:before,
 .btn-wrapper .icon-reglab.icon-emailprotector:before,
 .btn-group .icon-reglab.icon-emailprotector:before,
 .btn .icon-reglab.icon-emailprotector:before {
   content: "\e00b";
 }
+button .icon-reglab.icon-geoip:before,
 .btn-wrapper .icon-reglab.icon-geoip:before,
 .btn-group .icon-reglab.icon-geoip:before,
 .btn .icon-reglab.icon-geoip:before {
   content: "\e018";
 }
+button .icon-reglab.icon-iplogin:before,
 .btn-wrapper .icon-reglab.icon-iplogin:before,
 .btn-group .icon-reglab.icon-iplogin:before,
 .btn .icon-reglab.icon-iplogin:before {
   content: "\e016";
 }
+button .icon-reglab.icon-keyboardshortcuts:before,
 .btn-wrapper .icon-reglab.icon-keyboardshortcuts:before,
 .btn-group .icon-reglab.icon-keyboardshortcuts:before,
 .btn .icon-reglab.icon-keyboardshortcuts:before {
   content: "\e01e";
 }
+button .icon-reglab.icon-modals:before,
 .btn-wrapper .icon-reglab.icon-modals:before,
 .btn-group .icon-reglab.icon-modals:before,
 .btn .icon-reglab.icon-modals:before {
   content: "\e00c";
 }
+button .icon-reglab.icon-modulesanywhere:before,
 .btn-wrapper .icon-reglab.icon-modulesanywhere:before,
 .btn-group .icon-reglab.icon-modulesanywhere:before,
 .btn .icon-reglab.icon-modulesanywhere:before {
   content: "\e00d";
 }
+button .icon-reglab.icon-quickindex:before,
 .btn-wrapper .icon-reglab.icon-quickindex:before,
 .btn-group .icon-reglab.icon-quickindex:before,
 .btn .icon-reglab.icon-quickindex:before {
   content: "\e01c";
 }
+button .icon-reglab.icon-rereplacer:before,
 .btn-wrapper .icon-reglab.icon-rereplacer:before,
 .btn-group .icon-reglab.icon-rereplacer:before,
 .btn .icon-reglab.icon-rereplacer:before {
   content: "\e00e";
 }
+button .icon-reglab.icon-simpleusernotes:before,
 .btn-wrapper .icon-reglab.icon-simpleusernotes:before,
 .btn-group .icon-reglab.icon-simpleusernotes:before,
 .btn .icon-reglab.icon-simpleusernotes:before {
   content: "\e01a";
 }
+button .icon-reglab.icon-sliders:before,
 .btn-wrapper .icon-reglab.icon-sliders:before,
 .btn-group .icon-reglab.icon-sliders:before,
 .btn .icon-reglab.icon-sliders:before {
   content: "\e00f";
 }
+button .icon-reglab.icon-snippets:before,
 .btn-wrapper .icon-reglab.icon-snippets:before,
 .btn-group .icon-reglab.icon-snippets:before,
 .btn .icon-reglab.icon-snippets:before {
   content: "\e010";
 }
+button .icon-reglab.icon-sourcerer:before,
 .btn-wrapper .icon-reglab.icon-sourcerer:before,
 .btn-group .icon-reglab.icon-sourcerer:before,
 .btn .icon-reglab.icon-sourcerer:before {
   content: "\e011";
 }
+button .icon-reglab.icon-tabs:before,
 .btn-wrapper .icon-reglab.icon-tabs:before,
 .btn-group .icon-reglab.icon-tabs:before,
 .btn .icon-reglab.icon-tabs:before {
   content: "\e012";
 }
+button .icon-reglab.icon-tooltips:before,
 .btn-wrapper .icon-reglab.icon-tooltips:before,
 .btn-group .icon-reglab.icon-tooltips:before,
 .btn .icon-reglab.icon-tooltips:before {

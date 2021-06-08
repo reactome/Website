@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Modals
- * @version         11.8.1
+ * @version         11.9.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -53,7 +53,7 @@ class Replace
 		);
 
 		// allow in component?
-		if (RL_Protect::isRestrictedComponent(isset($params->disabled_components) ? $params->disabled_components : [], $area))
+		if (RL_Protect::isRestrictedComponent($params->disabled_components ?? [], $area))
 		{
 
 			Protect::_($string);
@@ -88,9 +88,9 @@ class Replace
 		// tag syntax inside links
 		self::replaceTagSyntaxInsideLinks($string);
 
-		list($start_tags, $end_tags) = Params::getTags();
+		[$start_tags, $end_tags] = Params::getTags();
 
-		list($pre_string, $string, $post_string) = RL_Html::getContentContainingSearches(
+		[$pre_string, $string, $post_string] = RL_Html::getContentContainingSearches(
 			$string,
 			$start_tags,
 			$end_tags
@@ -110,6 +110,23 @@ class Replace
 	}
 
 	// add ml to internal links
+
+	private static function replaceContentTag(&$string, $match)
+	{
+	}
+
+	private static function replaceContentTags(&$string)
+	{
+	}
+
+	private static function replaceImage(&$string, $match)
+	{
+	}
+
+	private static function replaceImages(&$string)
+	{
+	}
+
 	private static function replaceInsideModal(&$string, $area = '')
 	{
 		self::replaceTagSyntax($string, $area);
@@ -148,112 +165,6 @@ class Replace
 			$href = Document::addUrlAttributes($attributes->href, true);
 
 			self::replaceOnce('href="' . $href . '"', 'href="' . $attributes->href . '"', $string);
-		}
-	}
-
-	private static function replaceTagSyntaxInsideLinks(&$string)
-	{
-		$regex = Params::getRegex('inlink');
-
-		RL_RegEx::matchAll($regex, $string, $matches);
-
-		if (empty($matches))
-		{
-			return;
-		}
-
-		$params = Params::get();
-
-		foreach ($matches as $match)
-		{
-			$content = trim($match['image_pre'] . $match['text'] . $match['image_post']);
-
-			list($link, $extra) = Link::get($match['data'], $match['link_start'], $content);
-			$link = $link ? $link . '</a>' : '';
-
-			if ($params->place_comments)
-			{
-				$link = Protect::wrapInCommentTags($link);
-			}
-
-			self::replaceOnce($match[0], $link, $string, $extra);
-		}
-	}
-
-	private static function replaceTagSyntax(&$string, $area = '')
-	{
-		$regex = Params::getRegex();
-
-		RL_RegEx::matchAll($regex, $string, $matches);
-
-		if (empty($matches))
-		{
-			return;
-		}
-
-		$params = Params::get();
-
-		foreach ($matches as $match)
-		{
-			$tags = RL_Html::cleanSurroundingTags(
-				[
-					'end_pre'    => $match['end_pre'],
-					'start_post' => $match['start_post'],
-				]
-			);
-			$tags = RL_Html::cleanSurroundingTags(
-				[
-					'end_pre'    => $tags['end_pre'],
-					'pre'        => $match['pre'],
-					'post'       => $match['post'],
-					'start_post' => $tags['start_post'],
-				],
-				['p']
-			);
-
-			list($link, $extra) = Link::get($match['data'], '', trim($tags['pre'] . $match['text'] . $tags['post']));
-
-			$link = $link ? $link . '</a>' : '';
-
-			if ($params->place_comments)
-			{
-				$link = Protect::wrapInCommentTags($link);
-			}
-
-			$html = $match['start_pre'] . $tags['start_post']
-				. $link
-				. $tags['end_pre'] . $match['end_post'];
-
-			self::replaceOnce($match[0], $html, $string, $extra);
-		}
-	}
-
-	private static function replaceLinks(&$string)
-	{
-		$params = Params::get();
-
-		if (
-			(
-				empty($params->classnames)
-				&& ! RL_RegEx::match('class\s*=\s*(?:"[^"]*|\'[^\']*)(?:' . implode('|', $params->classnames) . ')', $string)
-			)
-		)
-		{
-			return;
-		}
-
-		$regex = Params::getRegex('link');
-
-		RL_RegEx::matchAll($regex, $string, $matches);
-
-		if (empty($matches))
-		{
-			return;
-		}
-
-		foreach ($matches as $match)
-		{
-			self::replaceLink($string, $match);
 		}
 	}
 
@@ -308,6 +219,34 @@ class Replace
 		self::replaceOnce($match[0], $link, $string);
 	}
 
+	private static function replaceLinks(&$string)
+	{
+		$params = Params::get();
+
+		if (
+			(
+				empty($params->classnames)
+				&& ! RL_RegEx::match('class\s*=\s*(?:"[^"]*|\'[^\']*)(?:' . implode('|', $params->classnames) . ')', $string)
+			)
+		)
+		{
+			return;
+		}
+
+		$regex = Params::getRegex('link');
+
+		RL_RegEx::matchAll($regex, $string, $matches);
+
+		if (empty($matches))
+		{
+			return;
+		}
+
+		foreach ($matches as $match)
+		{
+			self::replaceLink($string, $match);
+		}
+	}
 
 	private static function replaceOnce($search, $replace, &$string, $extra = '')
 	{
@@ -326,5 +265,79 @@ class Replace
 			$replace . $match['post'] . $extra,
 			$string
 		);
+	}
+
+	private static function replaceTagSyntax(&$string, $area = '')
+	{
+		$regex = Params::getRegex();
+
+		RL_RegEx::matchAll($regex, $string, $matches);
+
+		if (empty($matches))
+		{
+			return;
+		}
+
+		$params = Params::get();
+
+		foreach ($matches as $match)
+		{
+			$tags = RL_Html::cleanSurroundingTags(
+				[
+					'end_pre'    => $match['end_pre'],
+					'start_post' => $match['start_post'],
+				]
+			);
+			$tags = RL_Html::cleanSurroundingTags(
+				[
+					'end_pre'    => $tags['end_pre'],
+					'pre'        => $match['pre'],
+					'post'       => $match['post'],
+					'start_post' => $tags['start_post'],
+				],
+				['p']
+			);
+
+			[$link, $extra] = Link::get($match['data'], '', trim($tags['pre'] . $match['text'] . $tags['post']));
+
+			if ($params->place_comments)
+			{
+				$link = Protect::wrapInCommentTags($link);
+			}
+
+			$html = $match['start_pre'] . $tags['start_post']
+				. $link
+				. $tags['end_pre'] . $match['end_post'];
+
+			self::replaceOnce($match[0], $html, $string, $extra);
+		}
+	}
+
+	private static function replaceTagSyntaxInsideLinks(&$string)
+	{
+		$regex = Params::getRegex('inlink');
+
+		RL_RegEx::matchAll($regex, $string, $matches);
+
+		if (empty($matches))
+		{
+			return;
+		}
+
+		$params = Params::get();
+
+		foreach ($matches as $match)
+		{
+			$content = trim($match['image_pre'] . $match['text'] . $match['image_post']);
+
+			[$link, $extra] = Link::get($match['data'], $match['link_start'], $content);
+
+			if ($params->place_comments)
+			{
+				$link = Protect::wrapInCommentTags($link);
+			}
+
+			self::replaceOnce($match[0], $link, $string, $extra);
+		}
 	}
 }

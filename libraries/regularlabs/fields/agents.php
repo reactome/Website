@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.4.10972
+ * @version         21.5.22934
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -26,37 +26,7 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 {
 	public $type = 'Agents';
 
-	protected function getInput()
-	{
-		if ( ! is_array($this->value))
-		{
-			$this->value = explode(',', $this->value);
-		}
-
-		$size  = (int) $this->get('size');
-		$group = $this->get('group', 'os');
-
-		return $this->selectListSimpleAjax(
-			$this->type, $this->name, $this->value, $this->id,
-			compact('size', 'group')
-		);
-	}
-
-	function getAjaxRaw(Registry $attributes)
-	{
-		$name  = $attributes->get('name', $this->type);
-		$id    = $attributes->get('id', strtolower($name));
-		$value = $attributes->get('value', []);
-		$size  = $attributes->get('size');
-
-		$options = $this->getAgents(
-			$attributes->get('group')
-		);
-
-		return $this->selectListSimple($options, $name, $value, $id, $size, true);
-	}
-
-	function getAgents($group = 'os')
+	public function getAgents($group = 'os')
 	{
 		$agents = [];
 		switch ($group)
@@ -120,5 +90,35 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 		}
 
 		return $options;
+	}
+
+	public function getAjaxRaw(Registry $attributes)
+	{
+		$name  = $attributes->get('name', $this->type);
+		$id    = $attributes->get('id', strtolower($name));
+		$value = $attributes->get('value', []);
+		$size  = $attributes->get('size');
+
+		$options = $this->getAgents(
+			$attributes->get('group')
+		);
+
+		return $this->selectListSimple($options, $name, $value, $id, $size, true);
+	}
+
+	protected function getInput()
+	{
+		if ( ! is_array($this->value))
+		{
+			$this->value = explode(',', $this->value);
+		}
+
+		$size  = (int) $this->get('size');
+		$group = $this->get('group', 'os');
+
+		return $this->selectListSimpleAjax(
+			$this->type, $this->name, $this->value, $this->id,
+			compact('size', 'group')
+		);
 	}
 }
