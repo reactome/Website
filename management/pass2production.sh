@@ -268,7 +268,7 @@ transfer_download_folder (){
     then
             echo "Transferring download folder [${IDG_DOWNLOAD_DIR}]. Folder size is [$SIZE]"
             echo "IDG Transferring has been enabled. Transferring downloads folder"
-            sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${DOWNLOAD_DIR}/ ${SHARED_USER}@${IDG_SERVER}:${IDG_DOWNLOAD_DIR} #2> /dev/null
+            sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO --omit-link-times -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${DOWNLOAD_DIR}/ ${SHARED_USER}@${IDG_SERVER}:${IDG_DOWNLOAD_DIR} #2> /dev/null
             OUT=$?
             if [[ "$OUT" -ne 0 ]]; then
                 echo "[ERROR NONBLOCKER] [IDG Download folder] - Rsync didn't executed properly while transferring the download folder to the IDG SERVER. Execution will continue as normal."
@@ -277,7 +277,7 @@ transfer_download_folder (){
 	    # IDG FIGURES
             echo "Transferring FIGURES folder [${IDG_FIGURE_DIR}]."
             echo "IDG Transferring has been enabled. Transferring FIGURES folder"
-            sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${IDG_FIGURE_SOURCE}/ ${SHARED_USER}@${IDG_SERVER}:${IDG_FIGURE_DIR} #2> /dev/null
+            sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO --omit-link-times -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${IDG_FIGURE_SOURCE}/ ${SHARED_USER}@${IDG_SERVER}:${IDG_FIGURE_DIR} #2> /dev/null
             OUT=$?
             if [[ "$OUT" -ne 0 ]]; then
                 echo "[ERROR NONBLOCKER] [IDG Figure folder] - Rsync didn't executed properly while transferring the download folder to the IDG SERVER. Execution will continue as normal."
@@ -473,6 +473,7 @@ other_databases () {
     # Sync IDG Server
     if [[ "${IDG_ENABLE_TRANSFER}" == "TRUE" ]]
     then
+	echo "[IDG Server]...."
         sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${IDG_SERVER} "${SYNC_TOOL} OTHER_DBS mysql_user=${R_MYSQL_USER} mysql_passwd=${R_MYSQL_PASSWD}"
         OUT=$?
         if [[ "$OUT" -ne 0 ]]; then
@@ -578,7 +579,7 @@ ask_db_credentials () {
     echo "These credentials are required for db:${GK_CURRENT_DB}"
 
     while true; do
-        read -r -p "Type MySQL DATABASE user for db:${GK_CURRENT_DB} > " R_MYSQL_USER
+        read -r -p "Type MySQL DATABASE user for db:${GK_CURRENT_DB} [curator] > " R_MYSQL_USER
         read -s -p "Type password for ${R_MYSQL_USER} > " R_MYSQL_PASSWD
         validate_mysql_credentials ${R_MYSQL_USER} ${R_MYSQL_PASSWD}
         if [[ "$?" -eq 0 ]]; then
@@ -595,8 +596,8 @@ ask_extra_credentials () {
 
     while true; do
         # Read credentials for Source Server
-        read -r -p "Type your SYSTEM USER @ ${RELEASE_SERVER} > " SOURCE_SERVER_USER
-        read -s -p "Type your SYSTEM PASSWORD ${SOURCE_SERVER_USER}@${RELEASE_SERVER} > " SOURCE_SERVER_PASSWD
+        read -r -p "Type your PERSONAL ACCOUNT @ ${RELEASE_SERVER} > " SOURCE_SERVER_USER
+        read -s -p "Type your PASSWORD ${SOURCE_SERVER_USER}@${RELEASE_SERVER} > " SOURCE_SERVER_PASSWD
         validate_source_credentials
         if [[ "$?" -eq 0 ]]; then
             echo "OS Credentials... OK"
