@@ -4,7 +4,7 @@
  * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.1-FREE - 2020-05-03
+ * @version    3.4.0.0-FREE - 2021-08-02
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -23,8 +23,15 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-use Joomla\CMS\{Plugin\CMSPlugin, Factory, Uri\Uri, MVC\Model\BaseDatabaseModel};
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\{Plugin\CMSPlugin, Factory, Uri\Uri};
 
+/**
+ * Class PlgSystemEasyJoomlaBackupCronjob
+ *
+ * @since   3.0.0-FREE
+ * @version 3.4.0.0-FREE
+ */
 class PlgSystemEasyJoomlaBackupCronjob extends CMSPlugin
 {
     /**
@@ -36,44 +43,32 @@ class PlgSystemEasyJoomlaBackupCronjob extends CMSPlugin
      * @throws Exception
      * @since 3.0.0-FREE
      */
-    public function __construct(object &$subject, array $config)
+    public function __construct(object $subject, array $config)
     {
-        if (Factory::getApplication()->isClient('administrator')) {
-            return;
-        }
-
         parent::__construct($subject, $config);
     }
 
     /**
      * The backup process via a cronjob is executed in the trigger onAfterRender
      *
-     * @since 3.0.0-FREE
+     * @throws Exception
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    public function onAfterRender()
+    public function onAfterRender(): void
     {
+        if (Factory::getApplication()->isClient('administrator')) {
+            return;
+        }
+
         $tokenRequest = Factory::getApplication()->input->get('ejbtoken', null, 'STRING');
 
         if (!empty($tokenRequest)) {
             $token = (string)$this->params->get('token');
 
             if ($tokenRequest === $token) {
-                $type = Factory::getApplication()->input->get('ejbtype', null, 'INTEGER');
-
-                if (empty($type) || (!in_array($type, [1, 2, 3]))) {
-                    $type = (int)$this->params->get('type');
-                }
-
-                if ($type === 1) {
-                    $type = 'fullbackup';
-                } elseif ($type === 2) {
-                    $type = 'databasebackup';
-                } elseif ($type === 3) {
-                    $type = 'filebackup';
-                }
-
-                $this->backupCreate($type);
-                Factory::getApplication()->redirect(Uri::getInstance()->current());
+                $this->backupCreate($this->getBackupType());
+                Factory::getApplication()->redirect(Uri::getInstance()::current());
             }
         }
     }
@@ -85,9 +80,10 @@ class PlgSystemEasyJoomlaBackupCronjob extends CMSPlugin
      * @param string $type
      *
      * @throws Exception
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    private function backupCreate(string $type)
+    private function backupCreate(string $type): void
     {
         @ini_set('memory_limit', -1);
         @ini_set('error_reporting', 0);
@@ -96,9 +92,36 @@ class PlgSystemEasyJoomlaBackupCronjob extends CMSPlugin
         require_once JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/helpers/Autoload.php';
 
         JLoader::import('createbackup', JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/models');
+
         /* @var EasyJoomlaBackupModelCreatebackup $model */
         $model = BaseDatabaseModel::getInstance('createbackup', 'EasyJoomlaBackupModel');
         $model->createBackup($type, 'plugin');
         $model->removeBackupFilesMax();
+    }
+
+    /**
+     * Gets the backup type for the execution
+     *
+     * @return string
+     * @throws Exception
+     * @since 3.4.0.0-FREE
+     */
+    private function getBackupType(): string
+    {
+        $type = Factory::getApplication()->input->get('ejbtype', null, 'INTEGER');
+
+        if (empty($type) || (!in_array($type, [1, 2, 3], true))) {
+            $type = (int)$this->params->get('type');
+        }
+
+        if ($type === 2) {
+            return 'databasebackup';
+        }
+
+        if ($type === 3) {
+            return 'filebackup';
+        }
+
+        return 'fullbackup';
     }
 }

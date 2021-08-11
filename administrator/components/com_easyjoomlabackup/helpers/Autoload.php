@@ -4,7 +4,7 @@
  * @copyright
  * @package    Easybook Reloaded - EBR for Joomla! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.1-FREE - 2020-05-03
+ * @version    3.4.0.0-FREE - 2021-08-02
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -24,10 +24,17 @@
 
 namespace EasyJoomlaBackup;
 
-defined('_JEXEC') || die('Restricted access');
+\defined('_JEXEC') || die('Restricted access');
 
 use JLoader;
 
+/**
+ * Class Autoload
+ *
+ * @package EasyJoomlaBackup
+ * @since   3.3.1-FREE
+ * @version 3.4.0.0-FREE
+ */
 class Autoload
 {
     /**
@@ -37,9 +44,10 @@ class Autoload
     public const PATH_EASYJOOMLABACKUP_ADMINISTRATOR = JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup';
 
     /**
-     * @since 3.3.1-FREE
+     * @since   3.3.1-FREE
+     * @version 3.4.0.0-FREE
      */
-    public static function init()
+    public static function init(): void
     {
         JLoader::registerNamespace('EasyJoomlaBackup', self::PATH_EASYJOOMLABACKUP_ADMINISTRATOR . '/helpers', false, false, 'psr4');
     }

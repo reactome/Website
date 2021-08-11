@@ -4,7 +4,7 @@
  * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.1-FREE - 2020-05-03
+ * @version    3.4.0.0-FREE - 2021-08-02
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -23,7 +23,7 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-use Joomla\CMS\{Router\Route, Language\Text, HTML\HTMLHelper};
+use Joomla\CMS\{HTML\HTMLHelper, Router\Route, Language\Text};
 use EasyJoomlaBackup\Helper;
 
 HTMLHelper::_('behavior.framework');
@@ -32,10 +32,9 @@ HTMLHelper::_('behavior.formvalidation');
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function(task) {
-        if(task === 'cancel' || document.formvalidator.isValid(document.id('easyjoomlabackup-form'))) {
+        if (task === 'cancel' || document.formvalidator.isValid(document.id('easyjoomlabackup-form'))) {
             Joomla.submitform(task, document.getElementById('easyjoomlabackup-form'));
-        }
-        else {
+        } else {
             alert('<?php echo $this->escape(Text::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
         }
     };

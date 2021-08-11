@@ -2,36 +2,36 @@
 <extension version="3.9" type="plugin" group="editors-xtd" method="upgrade">
 	<name>PLG_EDITORS-XTD_SLIDERS</name>
 	<description>PLG_EDITORS-XTD_SLIDERS_DESC</description>
-	<version>8.0.1</version>
-	<creationDate>April 2021</creationDate>
+	<version>8.1.0</version>
+	<creationDate>July 2021</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://regularlabs.com</authorUrl>
-	<copyright>Copyright © 2018 Regular Labs - All Rights Reserved</copyright>
+	<copyright>Copyright © 2021 Regular Labs - All Rights Reserved</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 
 	<scriptfile>script.install.php</scriptfile>
 
 	<files>
-		<filename plugin="sliders">sliders.php</filename>
-		<filename>fields.xml</filename>
-		<filename>helper.php</filename>
-		<filename>popup.php</filename>
-		<filename>popup.tmpl.php</filename>
-		<filename>script.install.helper.php</filename>
+		<file plugin="sliders">sliders.php</file>
+		<file>fields.xml</file>
+		<file>helper.php</file>
+		<file>popup.php</file>
+		<file>popup.tmpl.php</file>
+		<file>script.install.helper.php</file>
 		<folder>language</folder>
 	</files>
 
 	<config>
 		<fields name="params" addfieldpath="/libraries/regularlabs/fields">
 			<fieldset name="basic">
-				<field name="@loadlanguage_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
-				<field name="@loadlanguage" type="rl_loadlanguage" extension="plg_editors-xtd_sliders" />
+				<field name="@load_language_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
+				<field name="@load_language" type="rl_loadlanguage" extension="plg_editors-xtd_sliders" />
 				<field name="@license" type="rl_license" extension="SLIDERS" />
 				<field name="@version" type="rl_version" extension="SLIDERS" />
 				<field name="@dependency" type="rl_dependency"
 					   label="SLD_THE_SYSTEM_PLUGIN"
-					   file="/plugins/system/sliders/sliders.php" />
+					   file="/plugins/system/sliders/sliders.xml" />
 				<field name="@header" type="rl_header"
 					   label="SLIDERS"
 					   description="SLIDERS_DESC"

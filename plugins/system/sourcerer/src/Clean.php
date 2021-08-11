@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.4.3
+ * @version         8.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -62,7 +62,7 @@ class Clean
 
 		$params = Params::get();
 
-		list($tag_start, $tag_end) = Params::getTagCharacters();
+		[$tag_start, $tag_end] = Params::getTagCharacters();
 
 		$inside_tag = RL_PluginTag::getRegexInsideTag($tag_start, $tag_end);
 		$spaces     = RL_PluginTag::getRegexSpaces();

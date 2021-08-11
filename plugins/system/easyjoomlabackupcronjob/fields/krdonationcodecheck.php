@@ -4,7 +4,7 @@
  * @copyright
  * @package     Field - Donation Code Check
  * @author      Viktor Vogel <admin@kubik-rubik.de>
- * @version     Joomla! 3 - 3.3.0 - 2020-01-02
+ * @version     Joomla! 3 - 3.3.1 - 2020-05-22
  * @link        https://kubik-rubik.de/
  *
  * @license     GNU/GPL
@@ -30,9 +30,9 @@ use Joomla\Registry\Registry;
  * Form Field class for Kubik-Rubik Joomla! Extensions.
  * Provides a donation code check.
  */
-class JFormFieldKRDonationCodeCheck extends FormField
+class JFormFieldKrDonationCodeCheck extends FormField
 {
-    protected $type = 'krdonationcodecheck';
+    protected $type = 'krDonationCodeCheck';
     protected $validationDomain = 'https://check.kubik-rubik.de';
     protected $validationDomainFallBack = 'http://check.kubik-rubik.eu';
 
@@ -199,7 +199,7 @@ class JFormFieldKRDonationCodeCheck extends FormField
     {
         $donationCodeCheck = 0;
 
-        if (HttpFactory::getAvailableDriver(new Registry()) == false) {
+        if (HttpFactory::getAvailableDriver(new Registry) == false) {
             return -2;
         }
 
@@ -233,10 +233,10 @@ class JFormFieldKRDonationCodeCheck extends FormField
     }
 
     /**
-     * @return string|void
+     * @return string
      */
     protected function getLabel()
     {
-        return;
+        return '';
     }
 }

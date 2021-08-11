@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.4.3
+ * @version         8.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -18,6 +18,31 @@ use RegularLabs\Library\RegEx as RL_RegEx;
 class Area
 {
 	static $prefix = 'SRC';
+
+	public static function get(&$string, $area = '')
+	{
+		if (empty($string) || empty($area))
+		{
+			return [];
+		}
+
+		$start = '<!-- START: ' . self::$prefix . '_' . strtoupper($area) . ' -->';
+		$end   = '<!-- END: ' . self::$prefix . '_' . strtoupper($area) . ' -->';
+
+		$matches = explode($start, $string);
+		array_shift($matches);
+
+		foreach ($matches as $i => $match)
+		{
+			[$text] = explode($end, $match, 2);
+			$matches[$i] = [
+				$start . $text . $end,
+				$text,
+			];
+		}
+
+		return $matches;
+	}
 
 	public static function tag(&$string, $area = '')
 	{
@@ -40,30 +65,5 @@ class Area
 		);
 
 		return true;
-	}
-
-	public static function get(&$string, $area = '')
-	{
-		if (empty($string) || empty($area))
-		{
-			return [];
-		}
-
-		$start = '<!-- START: ' . self::$prefix . '_' . strtoupper($area) . ' -->';
-		$end   = '<!-- END: ' . self::$prefix . '_' . strtoupper($area) . ' -->';
-
-		$matches = explode($start, $string);
-		array_shift($matches);
-
-		foreach ($matches as $i => $match)
-		{
-			list($text) = explode($end, $match, 2);
-			$matches[$i] = [
-				$start . $text . $end,
-				$text,
-			];
-		}
-
-		return $matches;
 	}
 }

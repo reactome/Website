@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Sliders
- * @version         8.0.1
+ * @version         8.1.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -19,7 +19,7 @@ use RegularLabs\Library\Document as RL_Document;
 
 class Document
 {
-	public static function addHeadStuff()
+	public static function loadStylesAndScripts()
 	{
 		// do not load scripts/styles on feeds or print pages
 		if (RL_Document::isFeed() || JFactory::getApplication()->input->getInt('print', 0))
@@ -49,11 +49,11 @@ class Document
 
 		RL_Document::scriptOptions($options, 'Sliders');
 
-		RL_Document::script('sliders/script.min.js', ($params->media_versioning ? '8.0.1' : ''), [], [], $params->load_jquery);
+		RL_Document::script('sliders/script.min.js', ($params->media_versioning ? '8.1.0' : ''), [], [], $params->load_jquery);
 
 		if ($params->load_stylesheet)
 		{
-			RL_Document::style('sliders/style.min.css', ($params->media_versioning ? '8.0.1' : ''));
+			RL_Document::style('sliders/style.min.css', ($params->media_versioning ? '8.1.0' : ''));
 		}
 
 	}

@@ -4,7 +4,7 @@
  * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.1-FREE - 2020-05-03
+ * @version    3.4.0.0-FREE - 2021-08-02
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -23,8 +23,15 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-use Joomla\CMS\{MVC\Model\BaseDatabaseModel, Factory, Uri\Uri, Pagination\Pagination, Application\WebApplication};
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\{Factory, Uri\Uri, Pagination\Pagination, Application\WebApplication};
 
+/**
+ * Class EasyJoomlaBackupModelEasyJoomlaBackup
+ *
+ * @since   3.0.0-FREE
+ * @version 3.4.0.0-FREE
+ */
 class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
 {
     /**
@@ -57,7 +64,6 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
     public function __construct()
     {
         parent::__construct();
-
         $this->db = Factory::getDbo();
 
         $app = Factory::getApplication();
@@ -118,7 +124,8 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
      * Finds backup files without entry in the database or entries without backup files
      *
      * @return bool
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
     public function discover(): bool
     {
@@ -127,7 +134,7 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
         $dir = @opendir(JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/backups/');
 
         while ($file = readdir($dir)) {
-            if (substr(strtolower($file), -3) == 'zip') {
+            if (strtolower(substr($file, -3)) === 'zip') {
                 $backupFiles[] = $file;
             }
         }
@@ -147,17 +154,15 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
         foreach ($entries as $entry) {
             $entriesArray[] = $entry->name;
 
-            if (!in_array($entry->name, $backupFiles)) {
+            if (!in_array($entry->name, $backupFiles, true)) {
                 $this->removeEntry($entry->id);
-                continue;
             }
         }
 
         // Check whether an entry has to be added - Case: Entry in the database does not exist but backup archive does
         foreach ($backupFiles as $backupFile) {
-            if (!in_array($backupFile, $entriesArray)) {
+            if (!in_array($backupFile, $entriesArray, true)) {
                 $this->addEntry($backupFile);
-                continue;
             }
         }
 
@@ -197,16 +202,17 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
      *
      * @param int $id
      *
-     * @return bool
-     * @since 3.0.0-FREE
+     * @return void
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    private function removeEntry(int $id): bool
+    private function removeEntry(int $id): void
     {
-        $query = "DELETE FROM " . $this->db->quoteName('#__easyjoomlabackup') . " WHERE " . $this->db->quoteName('id') . " = " . $this->db->quote($id);
+        $query = $this->db->getQuery(true);
+        $query->delete($this->db->quoteName('#__easyjoomlabackup'));
+        $query->where($this->db->quoteName('id') . ' = ' . $this->db->quote($id));
         $this->db->setQuery($query);
         $this->db->execute();
-
-        return true;
     }
 
     /**
@@ -214,19 +220,22 @@ class EasyJoomlaBackupModelEasyJoomlaBackup extends BaseDatabaseModel
      *
      * @param string $fileName
      *
-     * @return bool
-     * @since 3.0.0-FREE
+     * @return void
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    private function addEntry(string $fileName): bool
+    private function addEntry(string $fileName): void
     {
-        $date = date("Y-m-d H:i:s.", filemtime(JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/backups/' . $fileName));
-        $size = filesize(JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/backups/' . $fileName);
+        $file = JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/backups/' . $fileName;
+        $date = gmdate('Y-m-d H:i:s.', filemtime($file));
+        $size = filesize($file);
 
-        $query = "INSERT INTO " . $this->db->quoteName('#__easyjoomlabackup') . " (" . $this->db->quoteName('date') . ", " . $this->db->quoteName('comment') . ", " . $this->db->quoteName('type') . ", " . $this->db->quoteName('size') . ", " . $this->db->quoteName('duration') . ", " . $this->db->quoteName('name') . ") VALUES (" . $this->db->quote($date) . ", '', " . $this->db->quote('discovered') . ", " . $this->db->quote($size) . ", '', " . $this->db->quote($fileName) . ")";
+        $query = $this->db->getQuery(true);
+        $query->insert($this->db->quoteName('#__easyjoomlabackup'));
+        $query->columns($this->db->quoteName('date') . ', ' . $this->db->quoteName('comment') . ', ' . $this->db->quoteName('type') . ', ' . $this->db->quoteName('size') . ', ' . $this->db->quoteName('duration') . ', ' . $this->db->quoteName('name'));
+        $query->values($this->db->quote($date) . ", '', " . $this->db->quote('discovered') . ', ' . $this->db->quote($size) . ", '', " . $this->db->quote($fileName));
         $this->db->setQuery($query);
         $this->db->execute();
-
-        return true;
     }
 
     /**

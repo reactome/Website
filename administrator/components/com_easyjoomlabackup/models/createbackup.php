@@ -4,7 +4,7 @@
  * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.1-FREE - 2020-05-03
+ * @version    3.4.0.0-FREE - 2021-08-02
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -23,13 +23,23 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
-use Joomla\CMS\{Application\CMSApplication, Date\Date, Input\Input, Factory, Uri\Uri, Table\Table, Language\Text, User\UserHelper, Component\ComponentHelper, Filesystem\File, Filesystem\Folder};
-use Joomla\Registry\Registry;
 use EasyJoomlaBackup\Helper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\{Input\Input, Application\CMSApplication, Date\Date, Factory, Uri\Uri, Table\Table, Language\Text, User\UserHelper, Component\ComponentHelper, Filesystem\File, Filesystem\Folder};
+use Joomla\Registry\Registry;
 
+/**
+ * Class EasyJoomlaBackupModelCreatebackup
+ *
+ * @since   3.0.0-FREE
+ * @version 3.4.0.0-FREE
+ */
 class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
 {
+    /**
+     * @var string DEFAULT_PREFIX
+     * @since 3.0.0-FREE
+     */
     public const DEFAULT_PREFIX = 'easy-joomla-backup';
 
     /**
@@ -105,6 +115,36 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
     protected $params;
 
     /**
+     * @var int $maximumListLimit
+     * @since 3.4.0.0-FREE
+     */
+    protected $maximumListLimit = 100000;
+
+    /**
+     * @var int $maximumInsertLimit
+     * @since 3.4.0.0-FREE
+     */
+    protected $maximumInsertLimit = 250;
+
+    /**
+     * @var string $fileName
+     * @since 3.4.0.0-FREE
+     */
+    protected $fileName = '';
+
+    /**
+     * @var string $fileNameDatabase
+     * @since 3.4.0.0-FREE
+     */
+    protected $fileNameDatabase = '';
+
+    /**
+     * @var object $iterator
+     * @since 3.4.0.0-FREE
+     */
+    protected $iterator;
+
+    /**
      * EasyJoomlaBackupModelCreatebackup constructor.
      *
      * @throws Exception
@@ -152,113 +192,128 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param string $type
      * @param string $hash
      *
-     * @return bool|array
+     * @return array
      * @throws Exception
-     * @since 3.3.0-FREE
+     * @since   3.3.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    public function createBackupAjax(string $type, string $hash)
+    public function createBackupAjax(string $type, string $hash): array
     {
         // Check whether Zip class exists
-        if (class_exists('ZipArchive')) {
-            $this->externalAttributes = $this->checkExternalAttributes();
+        if (!class_exists('ZipArchive')) {
+            return [];
+        }
 
-            $status = true;
-            $statusDb = true;
+        $this->externalAttributes = $this->checkExternalAttributes();
 
-            $fileName = $this->createFilenameAjax($hash);
-            $this->backupPath = $this->backupFolder . $fileName;
+        $status = true;
+        $statusDb = true;
 
-            // Prepare backup process
-            if (!File::exists($this->backupPath)) {
-                $this->prepareBackupProcess($type, $hash);
+        $this->fileName = $this->createFilenameAjax($hash);
+        $this->backupPath = $this->backupFolder . $this->fileName;
 
-                $message = ($type === 'databasebackup') ? Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_INITIALISE_DB') : Text::sprintf('COM_EASYJOOMLABACKUP_BACKUPMODAL_LASTFOLDER', 'root');
+        // Prepare backup process
+        if (!File::exists($this->backupPath)) {
+            $this->prepareBackupProcess($type, $hash);
+
+            $message = ($type === 'databasebackup') ? Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_INITIALISE_DB') : Text::sprintf('COM_EASYJOOMLABACKUP_BACKUPMODAL_LASTFOLDER', 'root');
+
+            return [
+                'hash'     => $hash,
+                'finished' => false,
+                'percent'  => 0,
+                'message'  => $message,
+            ];
+        }
+
+        // Create file system backup
+        if ($type === 'filebackup' || $type === 'fullbackup') {
+            $fileBackupDone = (bool)$this->app->getUserState('ejb.' . $hash . '.fileBackupDone', false);
+
+            if (!$fileBackupDone) {
+                $status = $this->createBackupZipArchiveFilesAjax($hash);
+
+                $foldersIteration = (array)$this->app->getUserState('ejb.' . $hash . '.foldersIteration', []);
+                $foldersIterationCount = (int)$this->app->getUserState('ejb.' . $hash . '.foldersIterationCount', 1);
+                $message = Text::sprintf('COM_EASYJOOMLABACKUP_BACKUPMODAL_LASTFOLDER', $foldersIteration[0]['relname']);
+                $totalPercentage = ($type === 'fullbackup') ? 90 : 100;
+
+                if ($status) {
+                    $this->app->setUserState('ejb.' . $hash . '.fileBackupDone', true);
+                    $foldersIteration = [];
+                    $foldersIterationCount = 1;
+                    $message = ($type === 'fullbackup') ? Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_FILEBACKUPDONE_DB') : Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_FILEBACKUPDONE');
+                }
 
                 return [
                     'hash'     => $hash,
                     'finished' => false,
-                    'percent'  => 0,
+                    'percent'  => $totalPercentage - round(count($foldersIteration) * $totalPercentage / $foldersIterationCount),
                     'message'  => $message,
-                ];
-            }
-
-            // Create file system backup
-            if ($type == 'filebackup' || $type == 'fullbackup') {
-                $fileBackupDone = (bool)$this->app->getUserState('ejb.' . $hash . '.fileBackupDone', false);
-
-                if (!$fileBackupDone) {
-                    $status = $this->createBackupZipArchiveFilesAjax($hash);
-
-                    $foldersIteration = (array)$this->app->getUserState('ejb.' . $hash . '.foldersIteration', []);
-                    $foldersIterationCount = (int)$this->app->getUserState('ejb.' . $hash . '.foldersIterationCount', 1);
-                    $message = Text::sprintf('COM_EASYJOOMLABACKUP_BACKUPMODAL_LASTFOLDER', $foldersIteration[0]['relname']);
-                    $totalPercentage = ($type === 'fullbackup') ? 90 : 100;
-
-                    if ($status) {
-                        $this->app->setUserState('ejb.' . $hash . '.fileBackupDone', true);
-                        $foldersIteration = [];
-                        $foldersIterationCount = 1;
-                        $message = ($type === 'fullbackup') ? Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_FILEBACKUPDONE_DB') : Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_FILEBACKUPDONE');
-                    }
-
-                    return [
-                        'hash'     => $hash,
-                        'finished' => false,
-                        'percent'  => $totalPercentage - round(count($foldersIteration) * $totalPercentage / $foldersIterationCount),
-                        'message'  => $message,
-                    ];
-                }
-            }
-
-            // Create database backup
-            if ($type == 'databasebackup' || $type == 'fullbackup') {
-                $statusDb = $this->createBackupZipArchiveDatabaseAjax($fileName);
-            }
-
-            // Backup process finished successfully
-            if (!empty($status) && !empty($statusDb)) {
-                // Add path of table - this is important for the cronjob system plugin
-                Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/tables');
-                $table = $this->getTable('createbackup', 'EasyJoomlaBackupTable');
-
-                $data = [];
-                $data['date'] = $this->backupDatetime->toSql();
-                $data['type'] = $type;
-                $data['name'] = $fileName;
-                $data['size'] = filesize($this->backupFolder . $fileName);
-
-                $startProcess = $this->app->getUserState('ejb.' . $hash . '.startProcess', microtime(true));
-
-                $data['duration'] = round(microtime(true) - $startProcess, 2);
-
-                if (empty($source)) {
-                    $data['comment'] = $this->input->get('comment', '', 'STRING');
-                } else {
-                    $language = Factory::getLanguage();
-                    $language->load('com_easyjoomlabackup', JPATH_ADMINISTRATOR);
-
-                    $data['comment'] = Text::_('COM_EASYJOOMLABACKUP_CRONJOBPLUGIN');
-
-                    if ($source == 'cli') {
-                        $data['comment'] = Text::_('COM_EASYJOOMLABACKUP_CLISCRIPT');
-                    }
-                }
-
-                if (!$table->save($data)) {
-                    throw new Exception(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 404);
-                }
-
-                // Backup process executed completely
-                return [
-                    'hash'           => $hash,
-                    'finished'       => true,
-                    'percent'        => 100,
-                    'backupLastFile' => Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_DONE'),
                 ];
             }
         }
 
-        return false;
+        // Create database backup
+        if ($type === 'databasebackup' || $type === 'fullbackup') {
+            $this->setFileNameDatabase();
+            $dbBackupDone = (bool)$this->app->getUserState('ejb.' . $hash . '.dbBackupDone', false);
+
+            if (!$dbBackupDone) {
+                $statusDb = $this->createBackupSqlArchiveDatabaseAjax($hash);
+                $dbTables = (array)$this->app->getUserState('ejb.' . $hash . '.dbTables', []);
+                $dbTablesCount = (int)$this->app->getUserState('ejb.' . $hash . '.dbTablesCount', 1);
+                $message = Text::sprintf('COM_EASYJOOMLABACKUP_BACKUPMODAL_LASTTABLE', $dbTables[0]);
+                $totalPercentage = ($type === 'fullbackup') ? 10 : 100;
+
+                if ($statusDb) {
+                    $this->app->setUserState('ejb.' . $hash . '.dbBackupDone', true);
+                    $dbTables = [];
+                    $dbTablesCount = 1;
+                    $message = ($type === 'fullbackup') ? Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_FILEDATABASEBACKUPDONE_DB') : Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_DATABASEBACKUPDONE');
+                }
+
+                return [
+                    'hash'     => $hash,
+                    'finished' => false,
+                    'percent'  => ($type === 'fullbackup' ? 90 : 0) + $totalPercentage - round(count($dbTables) * $totalPercentage / $dbTablesCount),
+                    'message'  => $message,
+                ];
+            }
+
+            $this->createBackupZipArchiveDatabaseAjax();
+        }
+
+        // Backup process finished successfully
+        if (!empty($status) && !empty($statusDb)) {
+            // Add path of table - this is important for the cronjob system plugin
+            Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/tables');
+            $table = $this->getTable('createbackup', 'EasyJoomlaBackupTable');
+
+            $data = [];
+            $data['date'] = $this->backupDatetime->toSql();
+            $data['type'] = $type;
+            $data['name'] = $this->fileName;
+            $data['size'] = filesize($this->backupFolder . $this->fileName);
+
+            $startProcess = $this->app->getUserState('ejb.' . $hash . '.startProcess', microtime(true));
+            $data['duration'] = round(microtime(true) - $startProcess, 2);
+            $data['comment'] = $this->input->get('comment', '', 'STRING');
+
+            if (!$table->save($data)) {
+                throw new Exception(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 404);
+            }
+
+            // Backup process executed completely
+            return [
+                'hash'           => $hash,
+                'finished'       => true,
+                'percent'        => 100,
+                'backupLastFile' => Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_DONE'),
+            ];
+        }
+
+        return [];
     }
 
     /**
@@ -266,9 +321,10 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * Since PHP 5 >= 5.6.0, PHP 7, PECL zip >= 1.12.4
      *
      * @return bool
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    private function checkExternalAttributes()
+    private function checkExternalAttributes(): bool
     {
         $zipObject = new ZipArchive();
 
@@ -304,7 +360,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
         $addSuffix = $this->params->get('add_suffix_archive', 1);
 
         if (!empty($addSuffix)) {
-            $fileName .= '_' . UserHelper::genRandomPassword(10);
+            $fileName .= '_' . UserHelper::genRandomPassword(16);
         }
 
         $fileName .= '.zip';
@@ -349,9 +405,10 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param string $backupType
      * @param string $hash
      *
-     * @since 3.3.0-FREE
+     * @since   3.3.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    private function prepareBackupProcess(string $backupType, string $hash)
+    private function prepareBackupProcess(string $backupType, string $hash): void
     {
         $this->app->setUserState('ejb.' . $hash . '.startProcess', microtime(true));
 
@@ -365,8 +422,8 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
 
             $tables = array_filter(
                 $tables,
-                function ($table) use ($prefix, $additionalDbTables) {
-                    return strpos($table, $prefix) === 0 || in_array($table, $additionalDbTables);
+                static function ($table) use ($prefix, $additionalDbTables) {
+                    return strpos($table, $prefix) === 0 || in_array($table, $additionalDbTables, true);
                 }
             );
 
@@ -382,10 +439,12 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
 
             // Remove first slash from relname property
             foreach ($foldersIteration as &$folderIteration) {
-                if (strpos($folderIteration['relname'], '/') === 0) {
+                if (strncmp($folderIteration['relname'], '/', 1) === 0) {
                     $folderIteration['relname'] = substr($folderIteration['relname'], 1);
                 }
             }
+
+            unset($folderIteration);
 
             $this->app->setUserState('ejb.' . $hash . '.filesRoot', $filesRoot);
             $this->app->setUserState('ejb.' . $hash . '.foldersIteration', $foldersIteration);
@@ -404,7 +463,8 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      *
      * @return bool
      * @throws Exception
-     * @since 3.3.0-FREE
+     * @since   3.3.0-FREE
+     * @version 3.4.0.0-FREE
      */
     private function createBackupZipArchiveFilesAjax(string $hash): bool
     {
@@ -436,10 +496,8 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
             }
 
             foreach ($filesRoot as $file) {
-                if (!empty($excludeFiles)) {
-                    if (in_array($file, $excludeFiles)) {
-                        continue;
-                    }
+                if (!empty($excludeFiles) && in_array($file, $excludeFiles, true)) {
+                    continue;
                 }
 
                 // Add the files to the zip archive and set a correct local name
@@ -473,7 +531,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
                 $folderIteration = array_shift($foldersIteration);
                 $recursive = false;
 
-                if (count(explode('/', $folderIteration['relname'])) == $this->maximumExecutionLevel) {
+                if (count(explode('/', $folderIteration['relname'])) === $this->maximumExecutionLevel) {
                     $recursive = true;
                 }
 
@@ -506,9 +564,10 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param string $fileName
      * @param int    $filePermission
      *
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    private function setExternalAttributes(object &$zipObject, string $fileName, int $filePermission)
+    private function setExternalAttributes(object $zipObject, string $fileName, int $filePermission): void
     {
         if ($this->externalAttributes) {
             $zipObject->setExternalAttributesName($fileName, ZipArchive::OPSYS_UNIX, $filePermission << 16);
@@ -526,7 +585,8 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param array  $excludeFolders
      *
      * @return bool
-     * @since 3.3.0-FREE
+     * @since   3.3.0-FREE
+     * @version 3.4.0.0-FREE
      */
     private function zipFoldersAndFilesRecursiveAjax(object $zip, string $folder, string $folderRelative, bool $recursive, array $excludeFiles = [], array $excludeFolders = []): bool
     {
@@ -543,7 +603,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
         $excludeFoldersCreateEmpty = ['administrator/components/com_easyjoomlabackup/backups', 'cache', 'tmp', 'administrator/cache'];
 
         // Check whether the loaded folder has to be excluded
-        if (in_array($folderRelative, $excludeFoldersCreateEmpty)) {
+        if (in_array($folderRelative, $excludeFoldersCreateEmpty, true)) {
             // Add empty folder - 0755
             $zip->addEmptyDir($folderRelative . '/');
             $this->setExternalAttributes($zip, $folderRelative . '/', 16877);
@@ -553,7 +613,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
             $this->setExternalAttributes($zip, $folderRelative . '/index.html', 33188);
 
             // Add a .htaccess to the backup folder to protect the archive files
-            if ($folderRelative == 'administrator/components/com_easyjoomlabackup/backups') {
+            if ($folderRelative === 'administrator/components/com_easyjoomlabackup/backups') {
                 // Add .htaccess with Deny from all - 0444
                 $zip->addFromString($folderRelative . '/.htaccess', 'Deny from all');
                 $this->setExternalAttributes($zip, $folderRelative . '/.htaccess', 33060);
@@ -579,8 +639,8 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
 
         // Go through the current folder and add data to the zip object
         while ($file = readdir($dir)) {
-            if (is_dir($folder . '/' . $file) && $file != '.' && $file != '..') {
-                if (in_array($folderRelative . '/' . $file, $excludeFoldersCreateEmpty)) {
+            if ($file !== '.' && $file !== '..' && is_dir($folder . '/' . $file)) {
+                if (in_array($folderRelative . '/' . $file, $excludeFoldersCreateEmpty, true)) {
                     // Add empty folder - 0755
                     $zip->addEmptyDir($folderRelative . '/' . $file . '/');
                     $this->setExternalAttributes($zip, $folderRelative . '/' . $file . '/', 16877);
@@ -590,7 +650,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
                     $this->setExternalAttributes($zip, $folderRelative . '/' . $file . '/index.html', 33188);
 
                     // Add a .htaccess to the backup folder to protect the archive files
-                    if ($folderRelative . '/' . $file == 'administrator/components/com_easyjoomlabackup/backups') {
+                    if ($folderRelative . '/' . $file === 'administrator/components/com_easyjoomlabackup/backups') {
                         // Add .htaccess with Deny from all - 0444
                         $zip->addFromString($folderRelative . '/' . $file . '/.htaccess', 'Deny from all');
                         $this->setExternalAttributes($zip, $folderRelative . '/' . $file . '/.htaccess', 33060);
@@ -599,10 +659,8 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
                     continue;
                 }
 
-                if (!empty($excludeFolders)) {
-                    if (in_array($folderRelative . '/' . $file, $excludeFolders)) {
-                        continue;
-                    }
+                if (!empty($excludeFolders) && in_array($folderRelative . '/' . $file, $excludeFolders, true)) {
+                    continue;
                 }
 
                 $zip->addEmptyDir($folderRelative . '/' . $file . '/');
@@ -612,10 +670,8 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
                     $this->zipFoldersAndFilesRecursiveAjax($zip, $folder . '/' . $file, $folderRelative . '/' . $file, $recursive, $excludeFiles, $excludeFolders);
                 }
             } elseif (is_file($folder . '/' . $file)) {
-                if (!empty($excludeFiles)) {
-                    if (in_array($folderRelative . '/' . $file, $excludeFiles)) {
-                        continue;
-                    }
+                if (!empty($excludeFiles) && in_array($folderRelative . '/' . $file, $excludeFiles, true)) {
+                    continue;
                 }
 
                 // Add the files to the zip archive and set a correct local name
@@ -636,45 +692,59 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param int   $precision
      *
      * @return float|int
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
     private function ceilDecimalDigits(float $value, int $precision = 2)
     {
-        return ceil($value * pow(10, $precision)) / pow(10, $precision);
+        return ceil($value * (10 ** $precision)) / (10 ** $precision);
     }
 
     /**
-     * Creates a complete dump of the Joomla! database
+     * Sets the database filename
      *
-     * @param string $fileName
+     * @since 3.4.0.0-FREE
+     */
+    private function setFileNameDatabase(): void
+    {
+        $this->fileNameDatabase = str_replace('.zip', '', $this->fileName) . '.sql';
+    }
+
+    /**
+     * Creates a complete dump of the Joomla! database as a SQL file
+     *
+     * @param string $hash
      *
      * @return bool
-     * @since 3.3.0-FREE
+     * @since 3.4.0.0-FREE
      */
-    private function createBackupZipArchiveDatabaseAjax(string $fileName): bool
+    private function createBackupSqlArchiveDatabaseAjax(string $hash): bool
     {
-        // SQL Dump - Backup the whole database of the Joomla! website and write it into the
-        // archive file - only if the zip archive could be created
-        $zipDatabase = new ZipArchive();
+        // Create a temporary sql file first. This is required to avoid memory timeouts on large databases!
+        if (!File::exists($this->backupFolder . $this->fileNameDatabase)) {
+            $data = '-- Easy Joomla Backup for Joomla! - SQL Dump' . "\n";
+            $data .= '-- Author: Viktor Vogel' . "\n";
+            $data .= '-- Project page: https://kubik-rubik.de/ejb-easy-joomla-backup' . "\n";
+            $data .= '-- License: GNU/GPL - https://www.gnu.org/licenses/gpl.html' . "\n\n";
 
-        if ($zipDatabase->open($this->backupFolder . $fileName, ZipArchive::CREATE) !== true) {
-            return false;
+            $this->writeDatabaseFile($data);
         }
 
-        // Set a correct extension for the database dump name
-        $fileNameDb = str_replace('.zip', '', $fileName) . '.sql';
-        $this->backupDatabase($fileNameDb);
+        $dbTables = (array)$this->app->getUserState('ejb.' . $hash . '.dbTables', []);
 
-        // Add file which was created from the database export to the zip archive - 0640
-        $zipDatabase->addFile($this->backupFolder . $fileNameDb, $fileNameDb);
-        $this->setExternalAttributes($zipDatabase, $fileNameDb, 33184);
+        while ($this->maximumExecutionTime > 0 && !empty($dbTables)) {
+            $startTime = microtime(true);
+            $dbTable = array_shift($dbTables);
 
-        $zipDatabase->close();
+            $this->backupDatabaseAjax($dbTable);
 
-        // Delete the temporary database dump files
-        unlink($this->backupFolder . $fileNameDb);
+            $endTime = microtime(true);
+            $this->maximumExecutionTime -= $this->ceilDecimalDigits($endTime - $startTime, 2);
+        }
 
-        if ($zipDatabase->status != 0) {
+        if (count($dbTables) >= 1) {
+            $this->app->setUserState('ejb.' . $hash . '.dbTables', $dbTables);
+
             return false;
         }
 
@@ -682,17 +752,29 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
     }
 
     /**
+     * Adds the data to the temporary dump file and cleans the data string
+     *
+     * @param string $data
+     *
+     * @since 3.4.0.0-FREE
+     */
+    private function writeDatabaseFile(string &$data): void
+    {
+        file_put_contents($this->backupFolder . $this->fileNameDatabase, $data, FILE_APPEND);
+        $data = '';
+    }
+
+    /**
      * Creates a SQL Dump of the Joomla! database and add it directly to the archive
      *
-     * @param string $fileNameDump
+     * @param string $dbTable
      *
-     * @return bool
-     * @since 3.0.0-FREE
+     * @return void
+     * @since 3.4.0.0-FREE
      */
-    private function backupDatabase(string $fileNameDump): bool
+    private function backupDatabaseAjax(string $dbTable): void
     {
         $this->db->setUtf();
-        $tables = $this->db->getTableList();
         $dbPrefix = $this->db->getPrefix();
         $addDropStatement = $this->params->get('add_drop_statement');
 
@@ -703,93 +785,161 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
             $addDbTables = array_map('trim', explode("\n", $addDbTables));
         }
 
-        // Create a temporary dump file first. This is required to avoid memory timeouts on large databases!
-        $data = '-- Easy Joomla Backup for Joomal! - SQL Dump' . "\n";
-        $data .= '-- Author: Viktor Vogel' . "\n";
-        $data .= '-- Project page: https://kubik-rubik.de/ejb-easy-joomla-backup' . "\n";
-        $data .= '-- License: GNU/GPL - http://www.gnu.org/licenses/gpl.html' . "\n\n";
+        if (stripos($dbTable, $dbPrefix) !== false || in_array($dbTable, $addDbTables, true)) {
+            if (!empty($addDropStatement)) {
+                $data = 'DROP TABLE IF EXISTS ' . $dbTable . ';' . "\n";
+                $this->writeDatabaseFile($data);
+            }
 
-        file_put_contents($this->backupFolder . $fileNameDump, $data);
+            // Set the query to get the table CREATE statement.
+            $this->db->setQuery('SHOW CREATE TABLE ' . $dbTable);
+            $rowCreate = $this->db->loadRow();
 
-        foreach ($tables as $table) {
-            if (stripos($table, $dbPrefix) !== false || in_array($table, $addDbTables)) {
-                $data = '';
+            $data = $rowCreate[1] . ";\n\n";
+            $this->writeDatabaseFile($data);
 
-                if (!empty($addDropStatement)) {
-                    $data .= 'DROP TABLE IF EXISTS ' . $table . ';' . "\n";
+            $tableInformation = $this->db->getTableColumns($dbTable);
+            $numFields = count($tableInformation);
+            $tableColumnTypes = array_values($tableInformation);
+
+            $this->db->setQuery('SELECT * FROM ' . $dbTable);
+            $this->db->execute();
+            $count = $this->db->getNumRows();
+
+            if ($count > 0) {
+                $passes = (int)ceil($count / $this->maximumListLimit);
+                $this->iterator = $this->db->getIterator();
+
+                for ($round = 0; $round < $passes; $round++) {
+                    $rowList = $this->getRowList($passes);
+                    $this->addRowEntries($rowList, $numFields, $tableColumnTypes, $dbTable);
                 }
+            }
 
-                // Set the query to get the table CREATE statement.
-                $this->db->setQuery('SHOW CREATE TABLE ' . $table);
-                $rowCreate = $this->db->loadRow();
+            $data .= "\n\n";
+            $this->writeDatabaseFile($data);
+        }
+    }
 
-                $data .= $rowCreate[1] . ";\n\n";
+    /**
+     * Gets a list of database entries from the table query - using an iterator if too many entries
+     *
+     * @param int $passes
+     *
+     * @return array|mixed
+     * @since 3.4.0.0-FREE
+     */
+    private function getRowList(int $passes)
+    {
+        if ($passes === 1) {
+            return $this->db->loadRowList();
+        }
 
-                $this->db->setQuery('SELECT * FROM ' . $table);
-                $this->db->execute();
-                $count = $this->db->getNumRows();
+        $rowList = [];
+        $iteratorCount = 0;
 
-                if ($count > 0) {
-                    $data .= 'INSERT INTO `' . $table . '` VALUES' . "\n";
-                    $rowList = $this->db->loadRowList();
+        foreach ($this->iterator as $row) {
+            if ($iteratorCount >= $this->maximumListLimit) {
+                break;
+            }
 
-                    $tableInformation = $this->db->getTableColumns($table);
-                    $numFields = count($tableInformation);
-                    $tableColumns = array_values($tableInformation);
-
-                    $countEntries = 0;
-
-                    foreach ($rowList as $row) {
-                        $countEntries++;
-
-                        $data .= '(';
-
-                        for ($j = 0; $j < $numFields; $j++) {
-                            // First check whether the value is NULL to avoid loss
-                            if (is_null($row[$j])) {
-                                $data .= 'NULL';
-                            } else {
-                                // Prepare data for a correct syntax
-                                $row[$j] = str_replace(['\\', '\'', "\0", "\r\n"], ['\\\\', '\'\'', '\0', '\r\n'], $row[$j]);
-
-                                if (isset($row[$j])) {
-                                    if (is_numeric($row[$j]) && stripos($tableColumns[$j], 'int') !== false) {
-                                        $data .= $row[$j];
-                                    } else {
-                                        $data .= '\'' . $row[$j] . '\'';
-                                    }
-                                } else {
-                                    $data .= '\'\'';
-                                }
-                            }
-
-                            if ($j < ($numFields - 1)) {
-                                $data .= ', ';
-                            }
-                        }
-
-                        if ($countEntries < $count) {
-                            // Add a new INSERT INTO statement after every fiftieth entry to avoid timeouts
-                            if ($countEntries % 50 == 0) {
-                                $data .= ");\n";
-                                $data .= 'INSERT INTO `' . $table . '` VALUES' . "\n";
-                            } else {
-                                $data .= "),\n";
-                            }
-                        }
-                    }
-
-                    $data .= ");\n";
-                }
-
-                $data .= "\n\n";
-
-                // Add the data to the temporary dump file
-                file_put_contents($this->backupFolder . $fileNameDump, $data, FILE_APPEND);
+            if (!empty($row)) {
+                $rowList[] = array_values((array)$row);
+                $iteratorCount++;
             }
         }
 
-        return true;
+        return $rowList;
+    }
+
+    /**
+     * Adds insert values to the dump file
+     *
+     * @param array  $rowList
+     * @param int    $numFields
+     * @param array  $tableColumns
+     * @param string $table
+     *
+     * @since 3.4.0.0-FREE
+     */
+    private function addRowEntries(array $rowList, int $numFields, array $tableColumns, string $table): void
+    {
+        $countEntries = 0;
+        $count = count($rowList);
+        $data = 'INSERT INTO `' . $table . '` VALUES' . "\n";
+
+        foreach ($rowList as $row) {
+            $countEntries++;
+            $data .= '(';
+
+            for ($j = 0; $j < $numFields; $j++) {
+                // First check whether the value is NULL to avoid loss
+                if ($row[$j] === null) {
+                    $data .= 'NULL';
+                } else {
+                    // Prepare data for a correct syntax
+                    $row[$j] = str_replace(['\\', '\'', "\0", "\r\n"], ['\\\\', '\'\'', '\0', '\r\n'], $row[$j]);
+
+                    if (isset($row[$j])) {
+                        if (is_numeric($row[$j]) && stripos($tableColumns[$j], 'int') !== false) {
+                            $data .= $row[$j];
+                        } else {
+                            $data .= '\'' . $row[$j] . '\'';
+                        }
+                    } else {
+                        $data .= '\'\'';
+                    }
+                }
+
+                if ($j < ($numFields - 1)) {
+                    $data .= ', ';
+                }
+            }
+
+            if ($countEntries < $count) {
+                // Add a new INSERT INTO statement to avoid timeouts
+                if ($countEntries % $this->maximumInsertLimit === 0) {
+                    $data .= ");\n";
+                    $data .= 'INSERT INTO `' . $table . '` VALUES' . "\n";
+                } else {
+                    $data .= "),\n";
+                }
+            }
+        }
+
+        $data .= ");\n";
+        $this->writeDatabaseFile($data);
+    }
+
+    /**
+     * Creates a zip archive of the SQL dump file
+     *
+     * @return void
+     * @since   3.3.0-FREE
+     * @version 3.4.0.0-FREE
+     */
+    private function createBackupZipArchiveDatabaseAjax(): void
+    {
+        // SQL Dump - Backup the whole database of the Joomla! website and write it into the
+        // archive file - only if the zip archive could be created
+        $zipDatabase = new ZipArchive();
+
+        if ($zipDatabase->open($this->backupFolder . $this->fileName, ZipArchive::CREATE) !== true) {
+            return;
+        }
+
+        if (!File::exists($this->backupFolder . $this->fileNameDatabase)) {
+            return;
+        }
+
+        // Add file which was created from the database export to the zip archive - 0640
+        $zipDatabase->addFile($this->backupFolder . $this->fileNameDatabase, $this->fileNameDatabase);
+        $this->setExternalAttributes($zipDatabase, $this->fileNameDatabase, 33184);
+
+        $zipDatabase->close();
+
+        // Delete the temporary database dump files
+        File::delete($this->backupFolder . $this->fileNameDatabase);
     }
 
     /**
@@ -805,56 +955,57 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
     public function createBackup(string $type, string $source = ''): bool
     {
         // Check whether Zip class exists
-        if (class_exists('ZipArchive')) {
-            $this->externalAttributes = $this->checkExternalAttributes();
+        if (!class_exists('ZipArchive')) {
+            return false;
+        }
 
-            $start = microtime(true);
-            $status = true;
-            $statusDb = true;
+        $this->externalAttributes = $this->checkExternalAttributes();
 
-            // Create name of the new archive
-            $fileName = $this->createFilename();
+        $start = microtime(true);
+        $status = true;
+        $statusDb = true;
 
-            // Get all files and folders
-            if ($type == 'filebackup' || $type == 'fullbackup') {
-                $status = $this->createBackupZipArchiveFiles($fileName);
-            }
+        // Create name of the new archive
+        $this->fileName = $this->createFilename();
 
-            if ($type == 'databasebackup' || $type == 'fullbackup') {
-                $statusDb = $this->createBackupZipArchiveDatabase($fileName);
-            }
+        // Get all files and folders
+        if ($type === 'filebackup' || $type === 'fullbackup') {
+            $status = $this->createBackupZipArchiveFiles();
+        }
 
-            // Zip archive created successfully
-            if (!empty($status) && !empty($statusDb)) {
-                // Add path of table - this is important for the cronjob system plugin
-                Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/tables');
-                $table = $this->getTable('createbackup', 'EasyJoomlaBackupTable');
+        if ($type === 'databasebackup' || $type === 'fullbackup') {
+            $statusDb = $this->createBackupZipArchiveDatabase();
+        }
 
-                $data = [];
-                $data['date'] = $this->backupDatetime->toSql();
-                $data['type'] = $type;
-                $data['name'] = $fileName;
-                $data['size'] = filesize($this->backupFolder . $fileName);
-                $data['duration'] = round(microtime(true) - $start, 2);
-                $data['comment'] = $this->input->get('comment', '', 'STRING');
+        // Zip archive created successfully
+        if (!empty($status) && !empty($statusDb)) {
+            // Add path of table - this is important for the cronjob system plugin
+            Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_easyjoomlabackup/tables');
+            $table = $this->getTable('createbackup', 'EasyJoomlaBackupTable');
 
-                if (!empty($source)) {
-                    $language = Factory::getLanguage();
-                    $language->load('com_easyjoomlabackup', JPATH_ADMINISTRATOR);
+            $data = [];
+            $data['date'] = $this->backupDatetime->toSql();
+            $data['type'] = $type;
+            $data['name'] = $this->fileName;
+            $data['size'] = filesize($this->backupFolder . $this->fileName);
+            $data['duration'] = round(microtime(true) - $start, 2);
+            $data['comment'] = $this->input->get('comment', '', 'STRING');
 
-                    $data['comment'] = Text::_('COM_EASYJOOMLABACKUP_CRONJOBPLUGIN');
+            if (!empty($source)) {
+                Factory::getLanguage()->load('com_easyjoomlabackup', JPATH_ADMINISTRATOR);
 
-                    if ($source == 'cli') {
-                        $data['comment'] = Text::_('COM_EASYJOOMLABACKUP_CLISCRIPT');
-                    }
+                $data['comment'] = Text::_('COM_EASYJOOMLABACKUP_CRONJOBPLUGIN');
+
+                if ($source === 'cli') {
+                    $data['comment'] = Text::_('COM_EASYJOOMLABACKUP_CLISCRIPT');
                 }
-
-                if (!$table->save($data)) {
-                    throw new Exception(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 404);
-                }
-
-                return true;
             }
+
+            if (!$table->save($data)) {
+                throw new Exception(Text::_('JERROR_AN_ERROR_HAS_OCCURRED'), 404);
+            }
+
+            return true;
         }
 
         return false;
@@ -864,7 +1015,8 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * Creates a filename for the backup archive from the URL, the date and a random string
      *
      * @return string
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
     private function createFilename(): string
     {
@@ -879,7 +1031,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
         $addSuffix = $this->params->get('add_suffix_archive', 1);
 
         if (!empty($addSuffix)) {
-            $fileName .= '_' . UserHelper::genRandomPassword(10);
+            $fileName .= '_' . UserHelper::genRandomPassword(16);
         }
 
         $fileName .= '.zip';
@@ -891,12 +1043,11 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * Creates the archive file of all files from the Joomla! installation with a possible exclusion of files and
      * folders
      *
-     * @param string $fileName
-     *
      * @return bool
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    private function createBackupZipArchiveFiles(string $fileName): bool
+    private function createBackupZipArchiveFiles(): bool
     {
         // Prepare files which should be excluded
         $excludeFiles = $this->params->get('exclude_files', []);
@@ -919,7 +1070,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
         $filesArray = [];
 
         while ($file = readdir($dir)) {
-            if ($file == '.' || $file == '..') {
+            if ($file === '.' || $file === '..') {
                 continue;
             }
 
@@ -927,14 +1078,14 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
                 // Create for all folders an own Zip Archive object to avoid memory overflow
                 $zipFolder = new ZipArchive();
 
-                if ($zipFolder->open($this->backupFolder . $fileName, ZipArchive::CREATE) !== true) {
+                if ($zipFolder->open($this->backupFolder . $this->fileName, ZipArchive::CREATE) !== true) {
                     return false;
                 }
 
                 $this->zipFoldersAndFilesRecursive($zipFolder, JPATH_ROOT . '/' . $file, $file, $excludeFiles, $excludeFolders, $file);
                 $zipFolder->close();
 
-                if ($zipFolder->status != 0) {
+                if ($zipFolder->status !== 0) {
                     return false;
                 }
             } elseif (is_file(JPATH_ROOT . '/' . $file)) {
@@ -947,15 +1098,13 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
         if (!empty($filesArray)) {
             $zipFile = new ZipArchive();
 
-            if ($zipFile->open($this->backupFolder . $fileName, ZipArchive::CREATE) !== true) {
+            if ($zipFile->open($this->backupFolder . $this->fileName, ZipArchive::CREATE) !== true) {
                 return false;
             }
 
             foreach ($filesArray as $file) {
-                if (!empty($excludeFiles)) {
-                    if (in_array($file, $excludeFiles)) {
-                        continue;
-                    }
+                if (!empty($excludeFiles) && in_array($file, $excludeFiles, true)) {
+                    continue;
                 }
 
                 // Add the files to the zip archive and set a correct local name
@@ -965,14 +1114,13 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
 
             $zipFile->close();
 
-            if ($zipFile->status != 0) {
+            if ($zipFile->status !== 0) {
                 return false;
             }
         }
 
         closedir($dir);
-        unset($zipFolder);
-        unset($zipFile);
+        unset($zipFolder, $zipFile);
 
         return true;
     }
@@ -987,17 +1135,17 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param array  $excludeFolders
      * @param string $folderStart
      *
-     * @return bool
+     * @return void
      * @since 3.0.0-FREE
      */
-    private function zipFoldersAndFilesRecursive(object $zip, string $folder, string $folderRelative, array $excludeFiles = [], array $excludeFolders = [], string $folderStart = ''): bool
+    private function zipFoldersAndFilesRecursive(object $zip, string $folder, string $folderRelative, array $excludeFiles = [], array $excludeFolders = [], string $folderStart = ''): void
     {
         // Do not zip the folders of the backup archives, the cache and temp folders - only create empty folders
         $excludeFoldersCreateEmpty = ['administrator/components/com_easyjoomlabackup/backups', 'cache', 'tmp', 'administrator/cache'];
 
         // First check whether a root folder has to be excluded
         if (!empty($folderStart)) {
-            if (in_array($folderStart, $excludeFoldersCreateEmpty)) {
+            if (in_array($folderStart, $excludeFoldersCreateEmpty, true)) {
                 // Add empty folder - 0755
                 $zip->addEmptyDir($folderStart . '/');
                 $this->setExternalAttributes($zip, $folderStart . '/', 16877);
@@ -1006,13 +1154,11 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
                 $zip->addFromString($folderStart . '/index.html', '');
                 $this->setExternalAttributes($zip, $folderStart . '/index.html', 33188);
 
-                return true;
+                return;
             }
 
-            if (!empty($excludeFolders)) {
-                if (in_array($folderStart, $excludeFolders)) {
-                    return true;
-                }
+            if (!empty($excludeFolders) && in_array($folderStart, $excludeFolders, true)) {
+                return;
             }
 
             // Add the called folder to the zip archive
@@ -1022,13 +1168,13 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
 
         // Open the called folder path
         if (!$dir = @opendir($folder)) {
-            return false;
+            return;
         }
 
         // Go through the current folder and add data to the zip object
         while ($file = readdir($dir)) {
-            if (is_dir($folder . '/' . $file) && $file != '.' && $file != '..') {
-                if (in_array($folderRelative . '/' . $file, $excludeFoldersCreateEmpty)) {
+            if ($file !== '.' && $file !== '..' && is_dir($folder . '/' . $file)) {
+                if (in_array($folderRelative . '/' . $file, $excludeFoldersCreateEmpty, true)) {
                     // Add empty folder - 0755
                     $zip->addEmptyDir($folderRelative . '/' . $file . '/');
                     $this->setExternalAttributes($zip, $folderRelative . '/' . $file . '/', 16877);
@@ -1038,7 +1184,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
                     $this->setExternalAttributes($zip, $folderRelative . '/' . $file . '/index.html', 33188);
 
                     // Add a .htaccess to the backup folder to protect the archive files
-                    if ($folderRelative . '/' . $file == 'administrator/components/com_easyjoomlabackup/backups') {
+                    if ($folderRelative . '/' . $file === 'administrator/components/com_easyjoomlabackup/backups') {
                         // Add .htaccess with Deny from all - 0444
                         $zip->addFromString($folderRelative . '/' . $file . '/.htaccess', 'Deny from all');
                         $this->setExternalAttributes($zip, $folderRelative . '/' . $file . '/.htaccess', 33060);
@@ -1047,10 +1193,8 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
                     continue;
                 }
 
-                if (!empty($excludeFolders)) {
-                    if (in_array($folderRelative . '/' . $file, $excludeFolders)) {
-                        continue;
-                    }
+                if (!empty($excludeFolders) && in_array($folderRelative . '/' . $file, $excludeFolders, true)) {
+                    continue;
                 }
 
                 $zip->addEmptyDir($folderRelative . '/' . $file . '/');
@@ -1058,10 +1202,8 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
 
                 $this->zipFoldersAndFilesRecursive($zip, $folder . '/' . $file, $folderRelative . '/' . $file, $excludeFiles, $excludeFolders);
             } elseif (is_file($folder . '/' . $file)) {
-                if (!empty($excludeFiles)) {
-                    if (in_array($folderRelative . '/' . $file, $excludeFiles)) {
-                        continue;
-                    }
+                if (!empty($excludeFiles) && in_array($folderRelative . '/' . $file, $excludeFiles, true)) {
+                    continue;
                 }
 
                 // Add the files to the zip archive and set a correct local name
@@ -1071,54 +1213,113 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
         }
 
         closedir($dir);
-
-        return true;
     }
 
     /**
      * Creates a complete dump of the Joomla! database
      *
-     * @param string $fileName
-     *
      * @return bool
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    private function createBackupZipArchiveDatabase(string $fileName): bool
+    private function createBackupZipArchiveDatabase(): bool
     {
         // SQL Dump - Backup the whole database of the Joomla! website and write it into the
         // archive file - only if the zip archive could be created
         $zipDatabase = new ZipArchive();
 
-        if ($zipDatabase->open($this->backupFolder . $fileName, ZipArchive::CREATE) !== true) {
+        if ($zipDatabase->open($this->backupFolder . $this->fileName, ZipArchive::CREATE) !== true) {
             return false;
         }
 
         // Set a correct extension for the database dump name
-        $fileNameDb = str_replace('.zip', '', $fileName) . '.sql';
-        $this->backupDatabase($fileNameDb);
+        $this->setFileNameDatabase();
+        $this->backupDatabase();
 
         // Add file which was created from the database export to the zip archive - 0640
-        $zipDatabase->addFile($this->backupFolder . $fileNameDb, $fileNameDb);
-        $this->setExternalAttributes($zipDatabase, $fileNameDb, 33184);
+        $zipDatabase->addFile($this->backupFolder . $this->fileNameDatabase, $this->fileNameDatabase);
+        $this->setExternalAttributes($zipDatabase, $this->fileNameDatabase, 33184);
 
         $zipDatabase->close();
 
         // Delete the temporary database dump files
-        unlink($this->backupFolder . $fileNameDb);
+        unlink($this->backupFolder . $this->fileNameDatabase);
 
-        if ($zipDatabase->status != 0) {
-            return false;
+        return !($zipDatabase->status !== 0);
+    }
+
+    /**
+     * Creates a SQL Dump of the Joomla! database and add it directly to the archive
+     *
+     * @return void
+     * @since 3.4.0.0-FREE
+     */
+    private function backupDatabase(): void
+    {
+        $this->db->setUtf();
+        $tables = $this->db->getTableList();
+        $dbPrefix = $this->db->getPrefix();
+        $addDropStatement = $this->params->get('add_drop_statement');
+
+        // Add additional database tables
+        $addDbTables = $this->params->get('add_db_tables', []);
+
+        if (!empty($addDbTables)) {
+            $addDbTables = array_map('trim', explode("\n", $addDbTables));
         }
 
-        return true;
+        // Create a temporary dump file first. This is required to avoid memory timeouts on large databases!
+        $data = '-- Easy Joomla Backup for Joomla! - SQL Dump' . "\n";
+        $data .= '-- Author: Viktor Vogel' . "\n";
+        $data .= '-- Project page: https://kubik-rubik.de/ejb-easy-joomla-backup' . "\n";
+        $data .= '-- License: GNU/GPL - http://www.gnu.org/licenses/gpl.html' . "\n\n";
+
+        $this->writeDatabaseFile($data);
+
+        foreach ($tables as $table) {
+            if (stripos($table, $dbPrefix) !== false || in_array($table, $addDbTables, true)) {
+                if (!empty($addDropStatement)) {
+                    $data = 'DROP TABLE IF EXISTS ' . $table . ';' . "\n";
+                    $this->writeDatabaseFile($data);
+                }
+
+                // Set the query to get the table CREATE statement.
+                $this->db->setQuery('SHOW CREATE TABLE ' . $table);
+                $rowCreate = $this->db->loadRow();
+
+                $data = $rowCreate[1] . ";\n\n";
+                $this->writeDatabaseFile($data);
+
+                $tableInformation = $this->db->getTableColumns($table);
+                $numFields = count($tableInformation);
+                $tableColumnTypes = array_values($tableInformation);
+
+                $this->db->setQuery('SELECT * FROM ' . $table);
+                $this->db->execute();
+                $count = $this->db->getNumRows();
+
+                if ($count > 0) {
+                    $passes = (int)ceil($count / $this->maximumListLimit);
+                    $this->iterator = $this->db->getIterator();
+
+                    for ($round = 0; $round < $passes; $round++) {
+                        $rowList = $this->getRowList($passes);
+                        $this->addRowEntries($rowList, $numFields, $tableColumnTypes, $table);
+                    }
+                }
+
+                $data .= "\n\n";
+                $this->writeDatabaseFile($data);
+            }
+        }
     }
 
     /**
      * Loads the correct backup archive and creates the download process
      *
-     * @return bool
+     * @return bool|void
      * @throws Exception
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
      */
     public function download()
     {
@@ -1247,6 +1448,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
         foreach ($ids as $id) {
             // Delete the backup file from the server
             $table->load($id);
+
             $filePath = $this->backupFolder . $table->get('name');
 
             if (File::exists($filePath)) {

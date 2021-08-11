@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.5.22934
+ * @version         21.7.10061
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -68,7 +68,7 @@ class JFormFieldRL_Text extends JFormFieldText
 		$string = JText::sprintf(JText::_($string), $var1, $var2, $var3, $var4, $var5);
 		$string = trim(RL_String::html_entity_decoder($string));
 		$string = str_replace('&quot;', '"', $string);
-		$string = str_replace('span style="font-family:monospace;"', 'span class="rl_code"', $string);
+		$string = str_replace('span style="font-family:monospace;"', 'span class="rl-code"', $string);
 
 		return $string;
 	}

@@ -2,9 +2,9 @@
 
 /**
  * @copyright
- * @package    EJB PRO - Easy Joomla Backup PRO for Joomal! 3.x
+ * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.1-FREE - 2020-05-03
+ * @version    3.4.0.0-FREE - 2021-08-02
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -23,8 +23,8 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-use Joomla\CMS\{Router\Route, Language\Text, HTML\HTMLHelper};
 use EasyJoomlaBackup\Helper;
+use Joomla\CMS\{HTML\HTMLHelper, Router\Route, Language\Text};
 
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
@@ -107,13 +107,13 @@ HTMLHelper::_('behavior.multiselect');
                     </td>
                     <td class="small">
                         <span class="hasTooltip" title="<?php echo htmlspecialchars($row->type); ?>">
-                            <?php if ($row->type == 'fullbackup') : ?>
+                            <?php if ($row->type === 'fullbackup') : ?>
                                 <?php echo Text::_('COM_EASYJOOMLABACKUP_FULLBACKUP'); ?>
-                            <?php elseif ($row->type == 'databasebackup') : ?>
+                            <?php elseif ($row->type === 'databasebackup') : ?>
                                 <?php echo Text::_('COM_EASYJOOMLABACKUP_DATABASEBACKUP'); ?>
-                            <?php elseif ($row->type == 'filebackup') : ?>
+                            <?php elseif ($row->type === 'filebackup') : ?>
                                 <?php echo Text::_('COM_EASYJOOMLABACKUP_FILEBACKUP'); ?>
-                            <?php elseif ($row->type == 'discovered') : ?>
+                            <?php elseif ($row->type === 'discovered') : ?>
                                 <?php echo Text::_('COM_EASYJOOMLABACKUP_DISCOVERED_ARCHIVE'); ?>
                             <?php endif; ?>
                         </span>
@@ -140,7 +140,7 @@ HTMLHelper::_('behavior.multiselect');
                     </td>
                     <td class="small">
                         <span class="hasTooltip" title="<?php echo htmlspecialchars($row->name); ?>">
-                            <?php if ($this->downloadAllowed == true) : ?>
+                            <?php if ($this->downloadAllowed) : ?>
                                 <a href="<?php echo $download; ?>">
                                     <span class="icon-download"></span>
                                     <?php if (strlen($row->name) > 90) : ?>
@@ -173,7 +173,7 @@ HTMLHelper::_('behavior.multiselect');
                                 <span class="icon-easyjoomlabackup-error"></span>
                             </span>
                         <?php endif; ?>
-                        <?php if ($this->dbType == 'mysqli') : ?>
+                        <?php if ($this->dbType === 'mysqli') : ?>
                             <span class="text-success">
 									<?php echo Text::_('COM_EASYJOOMLABACKUP_DBTYPE_MYSQLI'); ?>
                                 <span class="icon-easyjoomlabackup-success"></span>
@@ -184,21 +184,21 @@ HTMLHelper::_('behavior.multiselect');
                                 <span class="icon-easyjoomlabackup-error"></span>
                             </span>
                         <?php endif; ?>
-                        <?php if ($this->sessionHandler == 'none' || $this->sessionHandler == 'php') : ?>
+                        <?php if ($this->sessionHandler === 'none' || $this->sessionHandler === 'php') : ?>
                             <span class="text-success">
 									<?php echo Text::_('COM_EASYJOOMLABACKUP_SESSIONHANDLER_PHP'); ?>
                                 <span class="icon-easyjoomlabackup-success"></span>
                             </span>
                         <?php else : ?>
                             <span class="text-info">
-									<?php echo Text::_('COM_EASYJOOMLABACKUP_SESSIONHANDLER_NOT_PHP'); ?>
+									<?php echo Text::_('COM_EASYJOOMLABACKUP_SESSIONHANDLER_PHP_NOT'); ?>
                                 <span class="icon-easyjoomlabackup-error"></span>
                             </span>
                         <?php endif; ?>
                     </p>
                     <?php if (isset($this->pluginState['enabled']) && isset($this->pluginState['url_settings'])) : ?>
                         <p class="footer-tip">
-                            <?php if ($this->pluginState['enabled'] == true) : ?>
+                            <?php if ($this->pluginState['enabled'] === true) : ?>
                                 <span class="text-success">
 										<span class="icon-easyjoomlabackup-success"></span>
                                     <?php echo Text::sprintf('COM_EASYJOOMLABACKUP_PLUGIN_ENABLED', $this->pluginState['url_settings']); ?>

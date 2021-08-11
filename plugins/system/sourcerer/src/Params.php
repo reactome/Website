@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.4.3
+ * @version         8.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -14,15 +14,15 @@ namespace RegularLabs\Plugin\System\Sourcerer;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory as JFactory;
-use RegularLabs\Library\Parameters as RL_Parameters;
+use RegularLabs\Library\ParametersNew as RL_Parameters;
 use RegularLabs\Library\PluginTag as RL_PluginTag;
 use RegularLabs\Library\RegEx as RL_RegEx;
 
 class Params
 {
+	protected static $areas   = null;
 	protected static $params  = null;
 	protected static $regexes = null;
-	protected static $areas   = null;
 
 	public static function get($key = '', $default = '')
 	{
@@ -36,7 +36,9 @@ class Params
 			return self::$params;
 		}
 
-		$params = RL_Parameters::getInstance()->getPluginParams('sourcerer');
+		$user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
+
+		$params = RL_Parameters::getPlugin('sourcerer');
 
 		$params->tag = RL_PluginTag::clean($params->syntax_word);
 
@@ -44,7 +46,7 @@ class Params
 		$params->splitter         = '<!-- START: SRC_SPLIT -->';
 
 		$params->include_path  = str_replace('//', '/', ('/' . trim($params->include_path, ' /\\') . '/'));
-		$params->user_is_admin = JFactory::getUser()->authorise('core.admin', 1);
+		$params->user_is_admin = $user->authorise('core.admin', 1);
 
 
 		self::$params = $params;
@@ -52,18 +54,54 @@ class Params
 		return self::$params;
 	}
 
-	private static function getByKey($key, $default = '')
+	public static function getArea($type = 'default')
+	{
+		$areas = self::getAreaSettings();
+
+		return $areas->{$type} ?? $areas->default;
+	}
+
+	public static function getAreaSettings()
+	{
+		if ( ! is_null(self::$areas))
+		{
+			return self::$areas;
+		}
+
+		$areas = (object) [];
+
+		// Initialise the different enables
+		$areas->default = self::getAreaDefault();
+
+		self::$areas = $areas;
+
+		return self::$areas;
+	}
+
+	public static function getRegex($type = 'tag')
+	{
+		$regexes = self::getRegexes();
+
+		return $regexes->{$type} ?? $regexes->tag;
+	}
+
+	public static function getTagCharacters()
 	{
 		$params = self::get();
 
-		return ! empty($params->{$key}) ? $params->{$key} : $default;
+		if ( ! isset($params->tag_character_start))
+		{
+			self::setTagCharacters();
+		}
+
+		return [$params->tag_character_start, $params->tag_character_end];
 	}
 
 	public static function getTags($only_start_tags = false)
 	{
 		$params = self::get();
 
-		list($tag_start, $tag_end) = self::getTagCharacters();
+		[$tag_start, $tag_end] = self::getTagCharacters();
 
 		$tags = [
 			[
@@ -77,11 +115,36 @@ class Params
 		return $only_start_tags ? $tags[0] : $tags;
 	}
 
-	public static function getRegex($type = 'tag')
+	public static function setTagCharacters()
 	{
-		$regexes = self::getRegexes();
+		$params = self::get();
 
-		return isset($regexes->{$type}) ? $regexes->{$type} : $regexes->tag;
+		[self::$params->tag_character_start, self::$params->tag_character_end] = explode('.', $params->tag_characters);
+	}
+
+	private static function getAreaByType($type = 'default')
+	{
+	}
+
+	private static function getAreaDefault()
+	{
+		$params = self::get();
+
+		return (object) [
+			'enable'         => true,
+			'enable_css'     => $params->enable_css,
+			'enable_js'      => $params->enable_js,
+			'enable_php'     => $params->enable_php,
+			'forbidden_php'  => $params->forbidden_php,
+			'forbidden_tags' => $params->forbidden_tags,
+		];
+	}
+
+	private static function getByKey($key, $default = '')
+	{
+		$params = self::get();
+
+		return ($params->{$key} ?? null) ?: $default;
 	}
 
 	private static function getRegexes()
@@ -94,7 +157,7 @@ class Params
 		$params = self::get();
 
 		// Tag character start and end
-		list($tag_start, $tag_end) = Params::getTagCharacters();
+		[$tag_start, $tag_end] = Params::getTagCharacters();
 		$tag_start = RL_RegEx::quote($tag_start);
 		$tag_end   = RL_RegEx::quote($tag_end);
 
@@ -118,63 +181,5 @@ class Params
 			. ')';
 
 		return self::$regexes;
-	}
-
-	public static function getArea($type = 'default')
-	{
-		$areas = self::getAreaSettings();
-
-		return isset($areas->{$type}) ? $areas->{$type} : $areas->default;
-	}
-
-	public static function getAreaSettings()
-	{
-		if ( ! is_null(self::$areas))
-		{
-			return self::$areas;
-		}
-
-		$areas = (object) [];
-
-		// Initialise the different enables
-		$areas->default = self::getAreaDefault();
-
-		self::$areas = $areas;
-
-		return self::$areas;
-	}
-
-	private static function getAreaDefault()
-	{
-		$params = self::get();
-
-		return (object) [
-			'enable'         => true,
-			'enable_css'     => $params->enable_css,
-			'enable_js'      => $params->enable_js,
-			'enable_php'     => $params->enable_php,
-			'forbidden_php'  => $params->forbidden_php,
-			'forbidden_tags' => $params->forbidden_tags,
-		];
-	}
-
-
-	public static function getTagCharacters()
-	{
-		$params = self::get();
-
-		if ( ! isset($params->tag_character_start))
-		{
-			self::setTagCharacters();
-		}
-
-		return [$params->tag_character_start, $params->tag_character_end];
-	}
-
-	public static function setTagCharacters()
-	{
-		$params = self::get();
-
-		list(self::$params->tag_character_start, self::$params->tag_character_end) = explode('.', $params->tag_characters);
 	}
 }

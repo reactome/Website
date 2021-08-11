@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.5.22934
+ * @version         21.7.10061
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -210,11 +210,6 @@ class DB
 	 */
 	public static function tableExists($table)
 	{
-		if (isset(self::$tables[$table]))
-		{
-			return self::$tables[$table];
-		}
-
 		$db = JFactory::getDbo();
 
 		if (strpos($table, '#__') === 0)
@@ -225,6 +220,11 @@ class DB
 		if (strpos($table, $db->getPrefix()) !== 0)
 		{
 			$table = $db->getPrefix() . $table;
+		}
+
+		if (isset(self::$tables[$table]))
+		{
+			return self::$tables[$table];
 		}
 
 		$query = 'SHOW TABLES LIKE ' . $db->quote($table);

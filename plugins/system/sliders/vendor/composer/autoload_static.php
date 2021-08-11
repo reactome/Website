@@ -6,25 +6,31 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitf316b959e40db9aa43c1aaabf8d03e18
 {
-	public static $prefixLengthsPsr4 = [
-		'R' =>
-			[
-				'RegularLabs\\Plugin\\System\\Sliders\\' => 34,
-			],
-	];
+    public static $prefixLengthsPsr4 = array (
+        'R' => 
+        array (
+            'RegularLabs\\Plugin\\System\\Sliders\\' => 34,
+        ),
+    );
 
-	public static $prefixDirsPsr4 = [
-		'RegularLabs\\Plugin\\System\\Sliders\\' =>
-			[
-				0 => __DIR__ . '/../..' . '/src',
-			],
-	];
+    public static $prefixDirsPsr4 = array (
+        'RegularLabs\\Plugin\\System\\Sliders\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
+        ),
+    );
 
-	public static function getInitializer(ClassLoader $loader)
-	{
-		return \Closure::bind(function () use ($loader) {
-			$loader->prefixLengthsPsr4 = ComposerStaticInitf316b959e40db9aa43c1aaabf8d03e18::$prefixLengthsPsr4;
-			$loader->prefixDirsPsr4    = ComposerStaticInitf316b959e40db9aa43c1aaabf8d03e18::$prefixDirsPsr4;
-		}, null, ClassLoader::class);
-	}
+    public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+    );
+
+    public static function getInitializer(ClassLoader $loader)
+    {
+        return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf316b959e40db9aa43c1aaabf8d03e18::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf316b959e40db9aa43c1aaabf8d03e18::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf316b959e40db9aa43c1aaabf8d03e18::$classMap;
+
+        }, null, ClassLoader::class);
+    }
 }

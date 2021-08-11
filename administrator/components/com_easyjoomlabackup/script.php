@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.1-FREE - 2020-05-03
+ * @version    3.4.0.0-FREE - 2021-08-02
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -26,10 +27,16 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Installer\Installer;
 
+/**
+ * Class Com_EasyJoomlaBackupInstallerScript
+ *
+ * @since   3.0.0-FREE
+ * @version 3.4.0.0-FREE
+ */
 class Com_EasyJoomlaBackupInstallerScript
 {
-    const MIN_VERSION_JOOMLA = '3.9.0';
-    const MIN_VERSION_PHP = '7.3.0';
+    public const MIN_VERSION_JOOMLA = '3.9.0';
+    public const MIN_VERSION_PHP = '7.3.0';
 
     /**
      * Name of extension that is used in the error message
@@ -67,7 +74,8 @@ class Com_EasyJoomlaBackupInstallerScript
      *
      * @return bool
      * @throws Exception
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
     private function checkVersionJoomla()
     {
@@ -75,7 +83,7 @@ class Com_EasyJoomlaBackupInstallerScript
         $version = new JVersion();
 
         if (!$version->isCompatible(self::MIN_VERSION_JOOMLA)) {
-            JFactory::getApplication()->enqueueMessage(JText::sprintf('KRJE_FREE_ERROR_JOOMLA_VERSION', $this->extensionName, self::MIN_VERSION_JOOMLA), 'error');
+            JFactory::getApplication()->enqueueMessage(JText::sprintf('KRJE_ERROR_JOOMLA_VERSION', $this->extensionName, self::MIN_VERSION_JOOMLA), 'error');
 
             return false;
         }
@@ -88,12 +96,13 @@ class Com_EasyJoomlaBackupInstallerScript
      *
      * @return bool
      * @throws Exception
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
     private function checkVersionPhp()
     {
         if (!version_compare(phpversion(), self::MIN_VERSION_PHP, 'ge')) {
-            JFactory::getApplication()->enqueueMessage(JText::sprintf('KRJE_FREE_ERROR_PHP_VERSION', $this->extensionName, self::MIN_VERSION_PHP), 'error');
+            JFactory::getApplication()->enqueueMessage(JText::sprintf('KRJE_ERROR_PHP_VERSION', $this->extensionName, self::MIN_VERSION_PHP), 'error');
 
             return false;
         }
@@ -104,9 +113,10 @@ class Com_EasyJoomlaBackupInstallerScript
     /**
      * @param object $parent
      *
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    public function install(object $parent)
+    public function install(object $parent): void
     {
         $manifest = $parent->get('manifest');
         $parent = $parent->getParent();
@@ -124,9 +134,10 @@ class Com_EasyJoomlaBackupInstallerScript
     /**
      * @param object $parent
      *
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    public function update(object $parent)
+    public function update(object $parent): void
     {
         $manifest = $parent->get('manifest');
         $parent = $parent->getParent();
@@ -145,17 +156,16 @@ class Com_EasyJoomlaBackupInstallerScript
      * @param string $type
      * @param object $parent
      *
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    public function postflight(string $type, object $parent)
+    public function postflight(string $type, object $parent): void
     {
         $db = Factory::getDbo();
 
-        // Enable the cronjob plugin
         $db->setQuery("UPDATE " . $db->quoteName('#__extensions') . " SET " . $db->quoteName('enabled') . " = 1 WHERE " . $db->quoteName('element') . " = 'easyjoomlabackupcronjob' AND " . $db->quoteName('type') . " = 'plugin'");
         $db->execute();
 
-        // Move CLI script to the CLI folder
         if (File::exists(JPATH_ROOT . '/cli/ejbCli.php')) {
             File::delete(JPATH_ROOT . '/cli/ejbCli.php');
         }

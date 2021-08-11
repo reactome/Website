@@ -1,9 +1,9 @@
 /**
  * @package         Sliders
- * @version         8.0.1
+ * @version         8.1.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -101,7 +101,7 @@ var RegularLabsSlidersPopup = null;
 					}
 				});
 
-				if (first && open_no.attr('checked') && !has_open_yes) {
+				if (first && open_no.attr('checked') && ! has_open_yes) {
 					parameters.open = 'false';
 				}
 				if (open_yes.attr('checked')) {
@@ -203,7 +203,7 @@ var RegularLabsSlidersPopup = null;
 			var select = $('select[name="' + name + '"]');
 			var option = $('select[name="' + name + '"] option[value="' + value + '"]');
 
-			if (!option.length) {
+			if ( ! option.length) {
 				var options = $('select[name="' + name + '"] option');
 				$.each(options, function() {
 					var text = self.toSimpleValue($(this).text());
@@ -217,7 +217,7 @@ var RegularLabsSlidersPopup = null;
 				});
 			}
 
-			if (!option.length) {
+			if ( ! option.length) {
 				return;
 			}
 

@@ -4,7 +4,7 @@
  * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.1-FREE - 2020-05-03
+ * @version    3.4.0.0-FREE - 2021-08-02
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -23,7 +23,7 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-use Joomla\CMS\{Factory, Session\Session, Language\Text};
+use Joomla\CMS\{Language\Text, Factory, Session\Session};
 
 ?>
     <div class="container-fluid">
@@ -39,70 +39,9 @@ use Joomla\CMS\{Factory, Session\Session, Language\Text};
             </div>
         </div>
     </div>
+
 <?php
 $linkAjax = 'index.php?option=com_easyjoomlabackup&controller=createbackup&task=' . $this->backupTask . '&format=json&' . Session::getFormToken() . '=1';
-$js = "
-	;(function($)
-	{
-		$(function()
-		{
-			let progress = $('#backupProgress');
-			let progressQueue = $('#backupProgressQueue');
-			let backupLastFile = $('#backupLastFile');
-			let windowTitle = document.title;
-			
-			$('#create-backup-modal').on('shown', function()
-			{
-				generateDump();
-			})
-			.on('hidden', function()
-			{
-				progress.width('0%');
-				progressQueue.width('100%');
-				progress.removeClass('bar-danger').addClass('bar-info');
-			});
-			
-			var generateDump = function(hash)
-			{
-			    let comment = $('#comment').val();
-				let link = '" . $linkAjax . "&comment=' + comment;
-				
-				if (typeof hash !== 'undefined')
-				{
-					link += '&hash=' + hash;
-				}
-				
-				$.getJSON(link)
-				.done(function(data)
-				{
-					if (data.success)
-					{
-						progress.width(data.data.percent + '%');
-						progressQueue.width((100 - data.data.percent) + '%');
-						backupLastFile.html(data.data.message);
-						document.title = data.data.percent + '% - ' + windowTitle;
-						
-						if (!data.data.finished)
-						{
-							generateDump(data.data.hash);
-						}
-						else
-						{
-							progress.removeClass('bar-info').addClass('bar-success');
-							backupLastFile.html('" . Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_BACKUPDONE') . "');
-							location.href = 'index.php?option=com_easyjoomlabackup';
-						}
-					}
-				})
-				.fail(function()
-				{
-					console.log(JSON.stringify(data.data));
-					progress.removeClass('bar-info').addClass('bar-danger');
-					$('#create-backup-modal').modal('hide');
-				});
-			};
-		});
-	})(jQuery);
-";
+$js = "!function(a){a(function(){let e=a('#backupProgress'),t=a('#backupProgressQueue'),o=a('#backupLastFile'),n=document.title;a('#create-backup-modal').on('shown',function(){s()}).on('hidden',function(){e.width('0%'),t.width('100%'),e.removeClass('bar-danger').addClass('bar-info')});var s=function(d){let c='" . $linkAjax . "&comment='+a('#comment').val();void 0!==d&&(c+='&hash='+d),a.getJSON(c).done(function(a){a.success&&(e.width(a.data.percent+'%'),t.width(100-a.data.percent+'%'),o.html(a.data.message),document.title=a.data.percent+'% - '+n,a.data.finished?(e.removeClass('bar-info').addClass('bar-success'),o.html('" . Text::_('COM_EASYJOOMLABACKUP_BACKUPMODAL_BACKUPDONE') . "'),location.href='index.php?option=com_easyjoomlabackup'):s(a.data.hash))}).fail(function(){console.log(JSON.stringify(data.data)),e.removeClass('bar-info').addClass('bar-danger'),a('#create-backup-modal').modal('hide')})}})}(jQuery);";
 
 Factory::getDocument()->addScriptDeclaration($js);

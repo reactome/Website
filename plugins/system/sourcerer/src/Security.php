@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.4.3
+ * @version         8.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -56,7 +56,7 @@ class Security
 			? (array) $params->articles_security_level
 			: (array) $params->articles_security_level_php;
 
-		$user  = JFactory::getUser();
+		$user  = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
 		$table = $user->getTable();
 
 		if ($table->load($article->created_by))
