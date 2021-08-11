@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         21.5.22934
+ * @version         21.7.10061
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -8,37 +8,33 @@
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 .rl_codemirror .CodeMirror {
-    height:         100px;
-    min-height:     100px;
-    max-height:     none;
-    padding-bottom: 15px;
+  height: 100px;
+  min-height: 100px;
+  max-height: none;
+  padding-bottom: 15px;
 }
-
 .rl_codemirror .cm-resize-handle {
-    position:      relative;
-    z-index:       2;
-    height:        15px;
-    cursor:        ns-resize;
-    user-select:   none;
-    border-top:    1px solid #cccccc;
-    border-bottom: 1px solid #cccccc;
-    background:    #f7f7f7;
+  position: relative;
+  background: #f7f7f7;
+  height: 15px;
+  user-select: none;
+  cursor: ns-resize;
+  border-top: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
+  z-index: 2;
 }
-
 .rl_codemirror .cm-resize-handle:before {
-    font-size:   15px;
-    line-height: 13px;
-    position:    absolute;
-    /* https://en.wikipedia.org/wiki/Triple_bar */
-    left:        50%;
-    content:     '\2261';
-    color:       #999999;
+  position: absolute;
+  left: 50%;
+  content: '\2261';
+  /* https://en.wikipedia.org/wiki/Triple_bar */
+  color: #999999;
+  line-height: 13px;
+  font-size: 15px;
 }
-
 .rl_codemirror .cm-resize-handle:hover {
-    background: #f0f0f0;
+  background: #f0f0f0;
 }
-
 .rl_codemirror .cm-resize-handle:hover:before {
-    color: black;
+  color: black;
 }

@@ -4,8 +4,8 @@
  * @copyright
  * @package     Field - Kubik-Rubik Title
  * @author      Viktor Vogel <admin@kubik-rubik.de>
- * @version     Joomla! 3 - 3.5.0 - 2020-01-02
- * @link        https://kubik-rubik.de/
+ * @version     Joomla! 3 - 3.5.5 - 2021-06-27
+ * @link        https://kubik-rubik.de
  *
  * @license     GNU/GPL
  * This program is free software: you can redistribute it and/or modify
@@ -28,17 +28,24 @@ use Joomla\CMS\{Form\FormField, Factory, Language\Text};
 /**
  * Form Field class for Kubik-Rubik Joomla! Extensions.
  * Provides a custom title and description field.
+ *
+ * @since 3.0.0-FREE
  */
-class JFormFieldKRTitle extends FormField
+class JFormFieldKrTitle extends FormField
 {
-    protected $type = 'krtitle';
+    /**
+     * @var string $type
+     * @since 3.0.0-FREE
+     */
+    protected $type = 'krTitle';
 
-    protected function getInput()
-    {
-        return '';
-    }
-
-    protected function getLabel()
+    /**
+     * Returns the label with the title and description, and adds required CSS classes and instructions.
+     *
+     * @return string
+     * @since 3.0.0-FREE
+     */
+    protected function getLabel(): string
     {
         // Use static variable to execute the CSS instruction only once
         static $executeOnce = false;
@@ -57,16 +64,11 @@ class JFormFieldKRTitle extends FormField
                 }
 
                 $document->addScriptDeclaration($scriptDeclaration);
-                $document->addStyleDeclaration('div#attrib-' . $fieldset->name . ' .control-label.krtitle, div#' . $fieldset->name . ' .control-label.krtitle {width: 100%;}');
-                $document->addStyleDeclaration('div#attrib-' . $fieldset->name . ' .control-label, div#' . $fieldset->name . ' .control-label {width: 20em;}');
-
-                // Legacy
-                $document->addStyleDeclaration('div#attrib-' . $fieldset->name . ' label, div#' . $fieldset->name . ' label {width: 20em;}');
+                $document->addStyleDeclaration('div#attrib-' . $fieldset->name . ' .control-label.krtitle, div#' . $fieldset->name . ' .control-label.krtitle {width: 100%;} div#attrib-' . $fieldset->name . ' .control-label, div#' . $fieldset->name . ' .control-label {width: 20em;} div#attrib-' . $fieldset->name . ' label, div#' . $fieldset->name . ' label {width: 20em;}');
             }
 
             $document->addScriptDeclaration('jQuery(function($){$(".control-group:has(.krtitle-hidden)").remove();});');
-            $document->addStyleDeclaration('div.krtitle-title {padding: 5px 5px 5px 0; font-size: 16px; font-weight: bold;}');
-            $document->addStyleDeclaration('div.krtitle-description {padding: 5px 5px 5px 0; font-size: 14px;}');
+            $document->addStyleDeclaration('div.krtitle-title {padding: 5px 5px 5px 0; font-size: 16px; font-weight: bold;} div.krtitle-title.sub {font-size: 14px;} div.krtitle-description {padding: 5px 5px 5px 0; font-size: 14px;}');
 
             $executeOnce = true;
         }
@@ -84,7 +86,13 @@ class JFormFieldKRTitle extends FormField
         $label = '<div class="clr"></div>';
 
         if ($this->element['label']) {
-            $label .= '<div class="krtitle-title">' . Text::_((string)$this->element['label']) . '</div>';
+            $classSub = '';
+
+            if (isset($this->element['titleType'])) {
+                $classSub = (string)$this->element['titleType'];
+            }
+
+            $label .= '<div class="krtitle-title ' . $classSub . '">' . Text::_((string)$this->element['label']) . '</div>';
         } else {
             $label .= parent::getLabel();
         }
@@ -94,5 +102,16 @@ class JFormFieldKRTitle extends FormField
         }
 
         return $label;
+    }
+
+    /**
+     * Don't use an input field.
+     *
+     * @return string
+     * @since 3.0.0-FREE
+     */
+    protected function getInput(): string
+    {
+        return '';
     }
 }

@@ -4,7 +4,7 @@
  * @copyright
  * @package     Field - Kubik-Rubik Pro Input
  * @author      Viktor Vogel <admin@kubik-rubik.de>
- * @version     Joomla! 3 - 3.0.1 - 2020-05-03
+ * @version     Joomla! 3 - 3.1.1 - 2020-12-04
  * @link        https://kubik-rubik.de/
  *
  * @license     GNU/GPL
@@ -23,17 +23,23 @@
  */
 defined('JPATH_PLATFORM') || die('Restricted access');
 
-use Joomla\CMS\Form\FormField;
+use Joomla\CMS\{Form\FormField, Language\Text};
 
 /**
  * Form Field class for Kubik-Rubik Joomla! Extensions.
  */
-class JFormFieldKRProInput extends FormField
+class JFormFieldKrProInput extends FormField
 {
-    protected $type = 'krproinput';
+    protected $type = 'krProInput';
 
     protected function getInput()
     {
-        return '<span style="color: #bd4242; padding-top: 5px; display: inline-block;">PRO FEATURE</span>';
+        $placeholder = 'PRO FEATURE';
+
+        if (!empty($this->default)) {
+            $placeholder .= ' (' . Text::_($this->default) . ')';
+        }
+
+        return '<input type="text" name="' . $this->name . '" id="' . $this->id . '" value="" size="40" placeholder="' . $placeholder . '" disabled="disabled" style="color: #A50F0F; background-color: #FFF; display: inline-block;opacity: 0.9 !important;"/>';
     }
 }

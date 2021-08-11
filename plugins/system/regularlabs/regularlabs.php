@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.5.22934
+ * @version         21.7.10061
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,10 +19,10 @@ use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\Extension as RL_Extension;
 use RegularLabs\Library\ParametersNew as RL_Parameters;
 use RegularLabs\Library\Uri as RL_Uri;
-use RegularLabs\Plugin\System\RegularLabs\AdminMenu as RL_AdminMenu;
-use RegularLabs\Plugin\System\RegularLabs\DownloadKey as RL_DownloadKey;
-use RegularLabs\Plugin\System\RegularLabs\QuickPage as RL_QuickPage;
-use RegularLabs\Plugin\System\RegularLabs\SearchHelper as RL_SearchHelper;
+use RegularLabs\Plugin\System\RegularLabs\AdminMenu;
+use RegularLabs\Plugin\System\RegularLabs\DownloadKey;
+use RegularLabs\Plugin\System\RegularLabs\QuickPage;
+use RegularLabs\Plugin\System\RegularLabs\SearchHelper;
 
 if ( ! is_file(__DIR__ . '/vendor/autoload.php'))
 {
@@ -140,9 +140,11 @@ class PlgSystemRegularLabs extends JPlugin
 
 		$this->fixQuotesInTooltips();
 
-		RL_AdminMenu::combine();
+		AdminMenu::combine();
 
-		RL_AdminMenu::addHelpItem();
+		AdminMenu::addHelpItem();
+
+		DownloadKey::cloak();
 	}
 
 	public function onAfterRoute()
@@ -157,11 +159,11 @@ class PlgSystemRegularLabs extends JPlugin
 			return;
 		}
 
-		RL_DownloadKey::update();
+		DownloadKey::update();
 
-		RL_SearchHelper::load();
+		SearchHelper::load();
 
-		RL_QuickPage::render();
+		QuickPage::render();
 	}
 
 	public function onAjaxRegularLabs()
@@ -237,12 +239,17 @@ class PlgSystemRegularLabs extends JPlugin
 			return;
 		}
 
-		if (strpos($html, '&amp;quot;rl_code&amp;quot;') === false)
+		if (strpos($html, '&amp;quot;rl-code&amp;quot;') === false
+			&& strpos($html, '&amp;quot;rl_code&amp;quot;') === false)
 		{
 			return;
 		}
 
-		$html = str_replace('&amp;quot;rl_code&amp;quot;', '&quot;rl_code&quot;', $html);
+		$html = str_replace(
+			['&amp;quot;rl-code&amp;quot;', '&amp;quot;rl_code&amp;quot;'],
+			'&quot;rl-code&quot;',
+			$html
+		);
 
 		JFactory::getApplication()->setBody($html);
 	}

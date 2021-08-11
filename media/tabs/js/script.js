@@ -1,9 +1,9 @@
 /**
  * @package         Tabs
- * @version         8.0.1
+ * @version         8.1.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -87,7 +87,7 @@ var RegularLabsTabs = null;
 			var self = this;
 			var $el  = this.getElement(id);
 
-			if (!$el.length) {
+			if ( ! $el.length) {
 				return;
 			}
 
@@ -110,7 +110,7 @@ var RegularLabsTabs = null;
 			// trigger resize event to make certain scripts (like galleries) work
 			window.dispatchEvent(new Event('resize'));
 
-			if (!slideshow) {
+			if ( ! slideshow) {
 				// For some reason Chrome 67 throws an error when not using a small delay
 				setTimeout(function() {
 					$el[0].focus();
@@ -148,7 +148,7 @@ var RegularLabsTabs = null;
 			clearTimeout(self.timers['scroll']);
 
 			self.timers['scroll'] = setTimeout(function() {
-				if (!self.scroll_to) {
+				if ( ! self.scroll_to) {
 					return;
 				}
 
@@ -224,18 +224,18 @@ var RegularLabsTabs = null;
 			}
 
 			// check if element is not a tab
-			if (!$('a.rl_tabs-toggle[data-id="' + id + '"]').length) {
+			if ( ! $('a.rl_tabs-toggle[data-id="' + id + '"]').length) {
 				this.showByHashAnchor(id);
 
 				return;
 			}
 
 			// hash is a tab
-			if (!this.options.use_hash) {
+			if ( ! this.options.use_hash) {
 				return;
 			}
 
-			if (!this.options.urlscroll) {
+			if ( ! this.options.urlscroll) {
 				// Prevent scrolling to anchor
 				$('html,body').animate({scrollTop: 0});
 			}
@@ -250,14 +250,14 @@ var RegularLabsTabs = null;
 
 			var $anchor = $('[id="' + id + '"],a[name="' + id + '"],a#anchor-' + id);
 
-			if (!$anchor.length) {
+			if ( ! $anchor.length) {
 				return;
 			}
 
 			$anchor = $anchor.first();
 
 			// Check if anchor has a parent tab
-			if (!$anchor.closest('.rl_tabs').length) {
+			if ( ! $anchor.closest('.rl_tabs').length) {
 				return;
 			}
 
@@ -271,7 +271,7 @@ var RegularLabsTabs = null;
 		showByID: function(id, scroll) {
 			var $el = $('a.rl_tabs-toggle[data-id="' + id + '"]');
 
-			if (!$el.length) {
+			if ( ! $el.length) {
 				return;
 			}
 
@@ -281,7 +281,7 @@ var RegularLabsTabs = null;
 
 
 		setScrollToElement: function($el) {
-			if (!$el.length) {
+			if ( ! $el.length) {
 				return;
 			}
 
@@ -291,7 +291,7 @@ var RegularLabsTabs = null;
 		openParents: function(id) {
 			var $el = this.getElement(id);
 
-			if (!$el.length) {
+			if ( ! $el.length) {
 				return;
 			}
 
@@ -304,7 +304,7 @@ var RegularLabsTabs = null;
 				parent = this.getParent(parent.el);
 			}
 
-			if (!parents.length) {
+			if ( ! parents.length) {
 				return false;
 			}
 
@@ -314,7 +314,7 @@ var RegularLabsTabs = null;
 		stepThroughParents: function(parents, parent) {
 			var self = this;
 
-			if (!parents.length && parent) {
+			if ( ! parents.length && parent) {
 				self.show(parent.id);
 				return;
 			}
@@ -351,13 +351,13 @@ var RegularLabsTabs = null;
 		},
 
 		getParent: function($el) {
-			if (!$el) {
+			if ( ! $el) {
 				return false;
 			}
 
 			var $parent = $el.parent().closest('.rl_tabs-pane, .rl_sliders-body');
 
-			if (!$parent.length) {
+			if ( ! $parent.length) {
 				return false;
 			}
 
@@ -403,7 +403,7 @@ var RegularLabsTabs = null;
 						max_height = Math.max(max_height, $(this).find('a').first().height());
 					});
 
-					if (!max_height || min_height == max_height) {
+					if ( ! max_height || min_height == max_height) {
 						return;
 					}
 
@@ -499,11 +499,11 @@ var RegularLabsTabs = null;
 			var is_tab  = true;
 			var $anchor = $('a[data-toggle="tab"][data-id="' + id + '"]');
 
-			if (!$anchor.length) {
+			if ( ! $anchor.length) {
 				$anchor = $('[id="' + id + '"],a[name="' + id + '"]');
 
 				// No accompanying link found
-				if (!$anchor.length) {
+				if ( ! $anchor.length) {
 					return;
 				}
 
@@ -514,7 +514,7 @@ var RegularLabsTabs = null;
 			$anchor = $anchor.first();
 
 			// Check if anchor has a parent tab
-			if (!$anchor.closest('.rl_tabs').length) {
+			if ( ! $anchor.closest('.rl_tabs').length) {
 				return;
 			}
 
@@ -522,7 +522,7 @@ var RegularLabsTabs = null;
 			var $tab = $anchor;
 
 			// anchor is not a tab
-			if (!$anchor.hasClass('rl_tabs-toggle')) {
+			if ( ! $anchor.hasClass('rl_tabs-toggle')) {
 				$tab = $anchor.closest('.tab-pane').first();
 				$tab = this.getElement($tab.attr('id'));
 			}
@@ -548,7 +548,7 @@ var RegularLabsTabs = null;
 		},
 
 		initHashHandling: function() {
-			if (!window.history.replaceState) {
+			if ( ! window.history.replaceState) {
 				return;
 			}
 
@@ -599,7 +599,7 @@ var RegularLabsTabs = null;
 				var $el = $('#' + $(this).attr('data-id'));
 
 				$el.find('iframe').each(function() {
-					if (!this.src || $(this).attr('reloaded') == 'true') {
+					if ( ! this.src || $(this).attr('reloaded') == 'true') {
 						return;
 					}
 
@@ -666,7 +666,7 @@ var RegularLabsTabs = null;
 	$(document).ready(function() {
 		var options = RegularLabsTabs.getOptions();
 
-		if (!options) {
+		if ( ! options) {
 			return;
 		}
 

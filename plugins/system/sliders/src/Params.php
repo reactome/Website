@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Sliders
- * @version         8.0.1
+ * @version         8.1.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -14,7 +14,7 @@ namespace RegularLabs\Plugin\System\Sliders;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory as JFactory;
-use RegularLabs\Library\Parameters as RL_Parameters;
+use RegularLabs\Library\ParametersNew as RL_Parameters;
 use RegularLabs\Library\PluginTag as RL_PluginTag;
 use RegularLabs\Library\RegEx as RL_RegEx;
 use RegularLabs\Library\Uri as RL_Uri;
@@ -31,12 +31,12 @@ class Params
 			return self::$params;
 		}
 
-		$params = RL_Parameters::getInstance()->getPluginParams('sliders');
+		$params = RL_Parameters::getPlugin('sliders');
 
 		$params->tag_open  = RL_PluginTag::clean($params->tag_open);
 		$params->tag_close = RL_PluginTag::clean($params->tag_close);
 
-		$params->tag_link = isset($params->tag_link) ? $params->tag_link : 'sliderlink';
+		$params->tag_link = $params->tag_link ?? 'sliderlink';
 		$params->tag_link = RL_PluginTag::clean($params->tag_link);
 
 		$params->use_responsive_view = false;
@@ -44,26 +44,6 @@ class Params
 		self::$params = $params;
 
 		return self::$params;
-	}
-
-	public static function getTags($only_start_tags = false)
-	{
-		$params = self::get();
-
-		list($tag_start, $tag_end) = self::getTagCharacters();
-
-		$tags = [
-			[
-				$tag_start . $params->tag_open,
-				$tag_start . $params->tag_link,
-			],
-			[
-				$tag_start . '/' . $params->tag_close . $tag_end,
-				$tag_start . '/' . $params->tag_link . $tag_end,
-			],
-		];
-
-		return $only_start_tags ? $tags[0] : $tags;
 	}
 
 	public static function getAlignment()
@@ -90,7 +70,44 @@ class Params
 	{
 		$regexes = self::getRegexes();
 
-		return isset($regexes->{$type}) ? $regexes->{$type} : $regexes->tag;
+		return $regexes->{$type} ?? $regexes->tag;
+	}
+
+	public static function getTagCharacters()
+	{
+		if ( ! isset(self::$params->tag_character_start))
+		{
+			self::setTagCharacters();
+		}
+
+		return [self::$params->tag_character_start, self::$params->tag_character_end];
+	}
+
+	public static function getTags($only_start_tags = false)
+	{
+		$params = self::get();
+
+		[$tag_start, $tag_end] = self::getTagCharacters();
+
+		$tags = [
+			[
+				$tag_start . $params->tag_open,
+				$tag_start . $params->tag_link,
+			],
+			[
+				$tag_start . '/' . $params->tag_close . $tag_end,
+				$tag_start . '/' . $params->tag_link . $tag_end,
+			],
+		];
+
+		return $only_start_tags ? $tags[0] : $tags;
+	}
+
+	public static function setTagCharacters()
+	{
+		$params = self::get();
+
+		[self::$params->tag_character_start, self::$params->tag_character_end] = explode('.', $params->tag_characters);
 	}
 
 	private static function getRegexes()
@@ -103,7 +120,7 @@ class Params
 		$params = self::get();
 
 		// Tag character start and end
-		list($tag_start, $tag_end) = Params::getTagCharacters();
+		[$tag_start, $tag_end] = Params::getTagCharacters();
 
 		$pre        = RL_PluginTag::getRegexSurroundingTagsPre();
 		$post       = RL_PluginTag::getRegexSurroundingTagsPost();
@@ -136,23 +153,5 @@ class Params
 			. $tag_start . '/' . $params->tag_link . $tag_end;
 
 		return self::$regexes;
-	}
-
-	public static function getTagCharacters()
-	{
-		if ( ! isset(self::$params->tag_character_start))
-		{
-			self::setTagCharacters();
-		}
-
-		return [self::$params->tag_character_start, self::$params->tag_character_end];
-	}
-
-
-	public static function setTagCharacters()
-	{
-		$params = self::get();
-
-		list(self::$params->tag_character_start, self::$params->tag_character_end) = explode('.', $params->tag_characters);
 	}
 }

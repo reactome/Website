@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Tabs
- * @version         8.0.1
+ * @version         8.1.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -17,8 +17,8 @@ use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\Extension as RL_Extension;
 use RegularLabs\Library\Html as RL_Html;
 use RegularLabs\Library\Language as RL_Language;
-use RegularLabs\Library\Plugin as RL_Plugin;
 use RegularLabs\Library\Protect as RL_Protect;
+use RegularLabs\Library\SystemPlugin as RL_SystemPlugin;
 use RegularLabs\Plugin\System\Tabs\Document;
 use RegularLabs\Plugin\System\Tabs\Params;
 use RegularLabs\Plugin\System\Tabs\Protect;
@@ -39,7 +39,9 @@ if ( ! is_file(__DIR__ . '/vendor/autoload.php'))
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php')
+	|| ! is_file(JPATH_LIBRARIES . '/regularlabs/src/SystemPlugin.php')
+)
 {
 	JFactory::getLanguage()->load('plg_system_tabs', __DIR__);
 	JFactory::getApplication()->enqueueMessage(
@@ -53,7 +55,7 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
-if (! RL_Document::isJoomlaVersion(3, 'TABS'))
+if ( ! RL_Document::isJoomlaVersion(3, 'TABS'))
 {
 	RL_Extension::disable('tabs', 'plugin');
 
@@ -69,12 +71,12 @@ if (! RL_Document::isJoomlaVersion(3, 'TABS'))
 
 if (true)
 {
-	class PlgSystemTabs extends RL_Plugin
+	class PlgSystemTabs extends RL_SystemPlugin
 	{
 		public $_lang_prefix           = 'TAB';
 		public $_has_tags              = true;
 		public $_disable_on_components = true;
-		public $_jversion        = 3;
+		public $_jversion              = 3;
 
 		public function processArticle(&$string, $area = 'article', $context = '', $article = null, $page = 0)
 		{
@@ -83,7 +85,7 @@ if (true)
 
 		protected function loadStylesAndScripts(&$buffer)
 		{
-			Document::addHeadStuff();
+			Document::loadStylesAndScripts();
 		}
 
 		protected function changeDocumentBuffer(&$buffer)
@@ -94,7 +96,7 @@ if (true)
 		protected function changeFinalHtmlOutput(&$html)
 		{
 			$params = Params::get();
-			list($tag_start, $tag_end) = Params::getTagCharacters();
+			[$tag_start, $tag_end] = Params::getTagCharacters();
 
 			if (
 				strpos($html, $tag_start . $params->tag_open) === false
@@ -107,7 +109,7 @@ if (true)
 			}
 
 			// only do stuff in body
-			list($pre, $body, $post) = RL_Html::getBody($html);
+			[$pre, $body, $post] = RL_Html::getBody($html);
 			Replace::replaceTags($body, 'body');
 			$html = $pre . $body . $post;
 

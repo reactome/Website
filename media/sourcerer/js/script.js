@@ -1,10 +1,10 @@
 /**
  * @package         Sourcerer
- * @version         8.4.3
+ * @version         8.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -33,7 +33,7 @@ var RegularLabsSourcererPopup = null;
 			if (editor_textarea) {
 				var iframes = editor_textarea.parentNode.getElementsByTagName('iframe');
 
-				if (!iframes.length) {
+				if ( ! iframes.length) {
 					$('.reglab-overlay').css('cursor', '').fadeOut();
 					return;
 				}
@@ -60,7 +60,7 @@ var RegularLabsSourcererPopup = null;
 				string = this.cleanRange(selection);
 			}
 
-			if (!string) {
+			if ( ! string) {
 				$('.reglab-overlay').css('cursor', '').fadeOut();
 				return;
 			}
@@ -138,7 +138,7 @@ var RegularLabsSourcererPopup = null;
 			var start_tag = this.preg_quote(t_start + t_word) + '( .*?)' + this.preg_quote(t_end);
 			var regex     = new RegExp(start_tag, 'gim');
 
-			if (!string.match(regex)) {
+			if ( ! string.match(regex)) {
 				return;
 			}
 
@@ -150,8 +150,6 @@ var RegularLabsSourcererPopup = null;
 			if ('trim' in attributes) {
 				this.setRadioOption('trim', attributes.trim.toString().toBoolean());
 			}
-
-			return;
 		},
 
 		setPhpField: function(value, method) {
@@ -175,7 +173,7 @@ var RegularLabsSourcererPopup = null;
 			var start_tag = this.preg_quote(t_start + t_word) + '( .*?)' + this.preg_quote(t_end);
 			var regex     = new RegExp('([a-z_-]+)="([^"]*)"', 'gim');
 
-			if (!string.match(regex)) {
+			if ( ! string.match(regex)) {
 				return attributes;
 			}
 
@@ -256,8 +254,8 @@ var RegularLabsSourcererPopup = null;
 			constMappingQuoteStyle[2] = 'ENT_COMPAT';
 			constMappingQuoteStyle[3] = 'ENT_QUOTES';
 
-			useTable      = !isNaN(table) ? constMappingTable[table] : table ? table.toUpperCase() : 'HTML_SPECIALCHARS';
-			useQuoteStyle = !isNaN(quote_style) ? constMappingQuoteStyle[quote_style] : quote_style ? quote_style.toUpperCase() : 'ENT_COMPAT';
+			useTable      = ! isNaN(table) ? constMappingTable[table] : table ? table.toUpperCase() : 'HTML_SPECIALCHARS';
+			useQuoteStyle = ! isNaN(quote_style) ? constMappingQuoteStyle[quote_style] : quote_style ? quote_style.toUpperCase() : 'ENT_COMPAT';
 
 			if (useTable !== 'HTML_SPECIALCHARS' && useTable !== 'HTML_ENTITIES') {
 				throw Error('Table: ' + useTable + ' not supported');
@@ -406,7 +404,7 @@ var RegularLabsSourcererPopup = null;
 			var select = $('select[name="' + name + '"]');
 			var option = $('select[name="' + name + '"] option[value="' + value + '"]');
 
-			if (!option.length) {
+			if ( ! option.length) {
 				return;
 			}
 

@@ -1,9 +1,9 @@
 /**
  * @package         Sliders
- * @version         8.0.1
+ * @version         8.1.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -90,7 +90,7 @@ var RegularLabsSliders = null;
 			var self = this;
 			var $el  = this.getElement(id);
 
-			if (!$el.length) {
+			if ( ! $el.length) {
 				return;
 			}
 
@@ -104,7 +104,7 @@ var RegularLabsSliders = null;
 				this.setScrollOnLoad($el);
 			}
 
-			var show = (!$el.hasClass('in') && !$el.hasClass('active'));
+			var show = ( ! $el.hasClass('in') && ! $el.hasClass('active'));
 
 			if (show) {
 				$el.collapse({
@@ -161,7 +161,7 @@ var RegularLabsSliders = null;
 			clearTimeout(self.timers['scroll']);
 
 			self.timers['scroll'] = setTimeout(function() {
-				if (!self.scroll_to) {
+				if ( ! self.scroll_to) {
 					return;
 				}
 
@@ -236,17 +236,17 @@ var RegularLabsSliders = null;
 			}
 
 			// check if element is not a slider
-			if (!$('a#rl_sliders-scrollto_' + id).length) {
+			if ( ! $('a#rl_sliders-scrollto_' + id).length) {
 				this.showByHashAnchor(id);
 				return;
 			}
 
 			// hash is a slider
-			if (!this.options.use_hash) {
+			if ( ! this.options.use_hash) {
 				return;
 			}
 
-			if (!this.options.urlscroll) {
+			if ( ! this.options.urlscroll) {
 				// Prevent scrolling to anchor
 				$('html,body').animate({scrollTop: 0});
 			}
@@ -261,14 +261,14 @@ var RegularLabsSliders = null;
 
 			var $anchor = $('[id="' + id + '"],a[name="' + id + '"],a#anchor-' + id);
 
-			if (!$anchor.length) {
+			if ( ! $anchor.length) {
 				return;
 			}
 
 			$anchor = $anchor.first();
 
 			// Check if anchor has a parent slider
-			if (!$anchor.closest('.rl_sliders').length) {
+			if ( ! $anchor.closest('.rl_sliders').length) {
 				return;
 			}
 
@@ -282,7 +282,7 @@ var RegularLabsSliders = null;
 		showByID: function(id, scroll) {
 			var $el = $('a#rl_sliders-scrollto_' + id);
 
-			if (!$el.length) {
+			if ( ! $el.length) {
 				return;
 			}
 
@@ -293,7 +293,7 @@ var RegularLabsSliders = null;
 
 
 		setScrollToElement: function($el) {
-			if (!$el.length) {
+			if ( ! $el.length) {
 				return;
 			}
 
@@ -303,7 +303,7 @@ var RegularLabsSliders = null;
 		openParents: function(id) {
 			var $el = this.getElement(id);
 
-			if (!$el.length) {
+			if ( ! $el.length) {
 				return;
 			}
 
@@ -316,7 +316,7 @@ var RegularLabsSliders = null;
 				parent = this.getParent(parent.el);
 			}
 
-			if (!parents.length) {
+			if ( ! parents.length) {
 				return false;
 			}
 
@@ -326,7 +326,7 @@ var RegularLabsSliders = null;
 		stepThroughParents: function(parents, parent) {
 			var self = this;
 
-			if (!parents.length && parent) {
+			if ( ! parents.length && parent) {
 				self.show(parent.id);
 				return;
 			}
@@ -363,13 +363,13 @@ var RegularLabsSliders = null;
 		},
 
 		getParent: function($el) {
-			if (!$el) {
+			if ( ! $el) {
 				return false;
 			}
 
 			var $parent = $el.parent().closest('.rl_tabs-pane, .rl_sliders-body');
 
-			if (!$parent.length) {
+			if ( ! $parent.length) {
 				return false;
 			}
 
@@ -389,7 +389,7 @@ var RegularLabsSliders = null;
 
 		initActiveClasses: function() {
 			$('.rl_sliders-body').on('show.bs.collapse', function(e) {
-				if (!$(e.target).hasClass('rl_sliders-body')) {
+				if ( ! $(e.target).hasClass('rl_sliders-body')) {
 					return;
 				}
 
@@ -398,7 +398,7 @@ var RegularLabsSliders = null;
 				e.stopPropagation();
 			});
 			$('.rl_sliders-body').on('hidden hidden.bs.collapse', function(e) {
-				if (!$(e.target).hasClass('rl_sliders-body')) {
+				if ( ! $(e.target).hasClass('rl_sliders-body')) {
 					return;
 				}
 
@@ -474,11 +474,11 @@ var RegularLabsSliders = null;
 			var is_slider = true;
 			var $anchor   = $('a[data-toggle="collapse"][data-id="' + id + '"]');
 
-			if (!$anchor.length) {
+			if ( ! $anchor.length) {
 				$anchor = $('[id="' + id + '"],a[name="' + id + '"]');
 
 				// No accompanying link found
-				if (!$anchor.length) {
+				if ( ! $anchor.length) {
 					return;
 				}
 
@@ -489,7 +489,7 @@ var RegularLabsSliders = null;
 			$anchor = $anchor.first();
 
 			// Check if anchor has a parent slider
-			if (!$anchor.closest('.rl_sliders').length) {
+			if ( ! $anchor.closest('.rl_sliders').length) {
 				return;
 			}
 
@@ -514,7 +514,7 @@ var RegularLabsSliders = null;
 		},
 
 		initHashHandling: function() {
-			if (!window.history.replaceState) {
+			if ( ! window.history.replaceState) {
 				return;
 			}
 
@@ -534,7 +534,7 @@ var RegularLabsSliders = null;
 				var id  = $(this).attr('data-id');
 				var $el = self.getElement(id);
 
-				if (!$el.hasClass('in')) {
+				if ( ! $el.hasClass('in')) {
 					self.show(id, $(this).hasClass('rl_sliders-item-scroll'));
 				} else {
 					$el.collapse('hide');
@@ -559,7 +559,7 @@ var RegularLabsSliders = null;
 				var $el = $(this);
 
 				$el.find('iframe').each(function() {
-					if (this.src && !$(this).attr('reloaded')) {
+					if (this.src && ! $(this).attr('reloaded')) {
 						this.src += '';
 						$(this).attr('reloaded', true);
 					}
@@ -623,7 +623,7 @@ var RegularLabsSliders = null;
 	$(document).ready(function() {
 		var options = RegularLabsSliders.getOptions();
 
-		if (!options) {
+		if ( ! options) {
 			return;
 		}
 
@@ -646,7 +646,7 @@ function openSliders(id) {
 	var parent   = findSliderSetBy(id);
 	var elements = parent.find('.rl_sliders-body:not(.in)');
 
-	if (!elements.length) {
+	if ( ! elements.length) {
 		return;
 	}
 
@@ -670,7 +670,7 @@ function closeSliders(id) {
 	var parent   = findSliderSetBy(id);
 	var elements = parent.find('.rl_sliders-body.in');
 
-	if (!elements.length) {
+	if ( ! elements.length) {
 		return;
 	}
 

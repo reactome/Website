@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.4.3
+ * @version         8.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -24,16 +24,6 @@ class Protect
 		RL_Protect::protectForm($string, Params::getTags(true), true, 'no-sourcerer');
 	}
 
-	public static function protectTags(&$string)
-	{
-		RL_Protect::protectTags($string, Params::getTags(true));
-	}
-
-	public static function unprotectTags(&$string)
-	{
-		RL_Protect::unprotectTags($string, Params::getTags(true));
-	}
-
 	/**
 	 * Wrap the comment in comment tags
 	 *
@@ -44,5 +34,15 @@ class Protect
 	public static function getMessageCommentTag($comment)
 	{
 		return RL_Protect::getMessageCommentTag(self::$name, $comment);
+	}
+
+	public static function protectTags(&$string)
+	{
+		RL_Protect::protectTags($string, Params::getTags(true));
+	}
+
+	public static function unprotectTags(&$string)
+	{
+		RL_Protect::unprotectTags($string, Params::getTags(true));
 	}
 }

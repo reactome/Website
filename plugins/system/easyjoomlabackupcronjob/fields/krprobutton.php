@@ -4,7 +4,7 @@
  * @copyright
  * @package     Field - Kubik-Rubik Pro Available
  * @author      Viktor Vogel <admin@kubik-rubik.de>
- * @version     Joomla! 3 - 3.1.0 - 2020-01-02
+ * @version     Joomla! 3 - 3.1.1 - 2020-05-22
  * @link        https://kubik-rubik.de/
  *
  * @license     GNU/GPL
@@ -29,9 +29,9 @@ use Joomla\CMS\{Form\FormField, Factory};
  * Form Field class for Kubik-Rubik Joomla! Extensions.
  * Adds a Pro action button with a link to the Pro landing page.
  */
-class JFormFieldKRProButton extends FormField
+class JFormFieldKrProButton extends FormField
 {
-    protected $type = 'krprobutton';
+    protected $type = 'krProButton';
 
     protected function getLabel()
     {

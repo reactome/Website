@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Tabs
- * @version         8.0.1
+ * @version         8.1.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -24,6 +24,26 @@ class Protect
 		RL_Protect::protectHtmlCommentTags($string);
 		RL_Protect::protectFields($string, Params::getTags(true));
 		RL_Protect::protectSourcerer($string);
+	}
+
+	/**
+	 * Get the html end comment tags
+	 *
+	 * @return string
+	 */
+	public static function getCommentEndTag()
+	{
+		return RL_Protect::getCommentEndTag(self::$name);
+	}
+
+	/**
+	 * Get the html start comment tags
+	 *
+	 * @return string
+	 */
+	public static function getCommentStartTag()
+	{
+		return RL_Protect::getCommentStartTag(self::$name);
 	}
 
 	public static function protectTags(&$string)
@@ -46,25 +66,5 @@ class Protect
 	public static function wrapInCommentTags($comment)
 	{
 		return RL_Protect::wrapInCommentTags(self::$name, $comment);
-	}
-
-	/**
-	 * Get the html start comment tags
-	 *
-	 * @return string
-	 */
-	public static function getCommentStartTag()
-	{
-		return RL_Protect::getCommentStartTag(self::$name);
-	}
-
-	/**
-	 * Get the html end comment tags
-	 *
-	 * @return string
-	 */
-	public static function getCommentEndTag()
-	{
-		return RL_Protect::getCommentEndTag(self::$name);
 	}
 }

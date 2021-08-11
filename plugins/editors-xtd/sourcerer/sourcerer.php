@@ -1,19 +1,23 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.4.3
+ * @version         8.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\EditorButtonPlugin as RL_EditorButtonPlugin;
+use RegularLabs\Library\Extension as RL_Extension;
 
 defined('_JEXEC') or die;
 
-if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php')
+	|| ! is_file(JPATH_LIBRARIES . '/regularlabs/src/EditorButtonPlugin.php')
+)
 {
 	return;
 }
@@ -22,13 +26,14 @@ require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 if ( ! RL_Document::isJoomlaVersion(3))
 {
+	RL_Extension::disable('sourcerer', 'plugin', 'editors-xtd');
+
 	return;
 }
 
 if (true)
 {
-	class PlgButtonSourcerer
-		extends \RegularLabs\Library\EditorButtonPlugin
+	class PlgButtonSourcerer extends RL_EditorButtonPlugin
 	{
 	}
 }

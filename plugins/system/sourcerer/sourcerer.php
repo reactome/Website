@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.4.3
+ * @version         8.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -17,8 +17,8 @@ use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\Extension as RL_Extension;
 use RegularLabs\Library\Html as RL_Html;
 use RegularLabs\Library\Language as RL_Language;
-use RegularLabs\Library\Plugin as RL_Plugin;
 use RegularLabs\Library\Protect as RL_Protect;
+use RegularLabs\Library\SystemPlugin as RL_SystemPlugin;
 use RegularLabs\Plugin\System\Sourcerer\Area;
 use RegularLabs\Plugin\System\Sourcerer\Clean;
 use RegularLabs\Plugin\System\Sourcerer\Params;
@@ -41,7 +41,9 @@ if ( ! is_file(__DIR__ . '/vendor/autoload.php'))
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php')
+	|| ! is_file(JPATH_LIBRARIES . '/regularlabs/src/SystemPlugin.php')
+)
 {
 	JFactory::getLanguage()->load('plg_system_sourcerer', __DIR__);
 	JFactory::getApplication()->enqueueMessage(
@@ -55,7 +57,7 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
-if (! RL_Document::isJoomlaVersion(3, 'SOURCERER'))
+if ( ! RL_Document::isJoomlaVersion(3, 'SOURCERER'))
 {
 	RL_Extension::disable('sourcerer', 'plugin');
 
@@ -71,13 +73,13 @@ if (! RL_Document::isJoomlaVersion(3, 'SOURCERER'))
 
 if (true)
 {
-	class PlgSystemSourcerer extends RL_Plugin
+	class PlgSystemSourcerer extends RL_SystemPlugin
 	{
 		public $_lang_prefix           = 'SRC';
 		public $_can_disable_by_url    = false;
 		public $_disable_on_components = true;
 		public $_page_types            = ['html', 'feed', 'pdf', 'xml', 'ajax', 'json', 'raw'];
-		public $_jversion        = 3;
+		public $_jversion              = 3;
 
 		protected function handleOnContentPrepare($area, $context, &$article, &$params, $page = 0)
 		{
@@ -146,7 +148,7 @@ if (true)
 
 			$params = Params::get();
 
-			list($pre, $body, $post) = RL_Html::getBody($html);
+			[$pre, $body, $post] = RL_Html::getBody($html);
 
 			Protect::_($body);
 			Replace::replaceInTheRest($body);

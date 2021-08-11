@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         8.4.3
+ * @version         8.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2020 Regular Labs All Rights Reserved
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -64,27 +64,6 @@ class Code
 		return $function_name($src_variables);
 	}
 
-	private static function getFunctionName($string)
-	{
-		$function_name = 'regularlabs_php_' . md5($string);
-
-		if (function_exists($function_name))
-		{
-			return $function_name;
-		}
-
-		$contents = self::generateFileContents($function_name, $string);
-		RL_Php::createFunctionInMemory($contents);
-
-		if ( ! function_exists($function_name))
-		{
-			// Something went wrong!
-			return false;
-		}
-
-		return $function_name;
-	}
-
 	private static function generateFileContents($function_name = 'src_function', $string = '')
 	{
 		$init = RL_Php::getVarInits();
@@ -107,5 +86,26 @@ class Code
 		];
 
 		return implode("\n", $contents);
+	}
+
+	private static function getFunctionName($string)
+	{
+		$function_name = 'regularlabs_php_' . md5($string);
+
+		if (function_exists($function_name))
+		{
+			return $function_name;
+		}
+
+		$contents = self::generateFileContents($function_name, $string);
+		RL_Php::createFunctionInMemory($contents);
+
+		if ( ! function_exists($function_name))
+		{
+			// Something went wrong!
+			return false;
+		}
+
+		return $function_name;
 	}
 }

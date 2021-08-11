@@ -1,9 +1,9 @@
 /**
  * @package         Tabs
- * @version         8.0.1
+ * @version         8.1.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -20,7 +20,7 @@ var RegularLabsTabsPopup = null;
 		booleans: [
 			'color_inactive_handles', 'outline_handles', 'outline_content',
 		],
-		radio: [
+		radio   : [
 			'alignment'
 		],
 
@@ -39,7 +39,7 @@ var RegularLabsTabsPopup = null;
 				}
 			});
 
-			if (!has_default) {
+			if ( ! has_default) {
 				this.setRadioOption('tab_1[open]', 1);
 				$('.' + $('input[name="tab_1[open]"][value="1"]').parent().attr('id') + '_icon').show();
 			}
@@ -93,7 +93,7 @@ var RegularLabsTabsPopup = null;
 
 				var open_yes = $('input[name="' + el.id + '[open]"][value="1"]');
 
-				if (!first && open_yes.attr('checked')) {
+				if ( ! first && open_yes.attr('checked')) {
 					parameters.open = true;
 				}
 
@@ -134,7 +134,7 @@ var RegularLabsTabsPopup = null;
 
 					var input_checked = $('input[name="' + field_name + '"]:checked');
 
-					if (!input_checked.attr('value')) {
+					if ( ! input_checked.attr('value')) {
 						return;
 					}
 
@@ -190,7 +190,7 @@ var RegularLabsTabsPopup = null;
 			var select = $('select[name="' + name + '"]');
 			var option = $('select[name="' + name + '"] option[value="' + value + '"]');
 
-			if (!option.length) {
+			if ( ! option.length) {
 				var options = $('select[name="' + name + '"] option');
 				$.each(options, function() {
 					var text = self.toSimpleValue($(this).text());
@@ -204,7 +204,7 @@ var RegularLabsTabsPopup = null;
 				});
 			}
 
-			if (!option.length) {
+			if ( ! option.length) {
 				return;
 			}
 

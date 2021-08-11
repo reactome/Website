@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Sliders
- * @version         8.0.1
+ * @version         8.1.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -28,153 +28,13 @@ use RegularLabs\Library\Uri as RL_Uri;
 
 class Replace
 {
+
+	static $allitems = [];
 	static $context  = '';
-	static $sets     = [];
 	static $ids      = [];
 	static $matches  = [];
-	static $allitems = [];
 	static $setcount = 0;
-
-	public static function replaceTags(&$string, $area = 'article', $context = '')
-	{
-		if ( ! is_string($string) || $string == '')
-		{
-			return false;
-		}
-
-		self::$context = $context;
-
-		// Check if tags are in the text snippet used for the search component
-		if (strpos($context, 'com_search.') === 0)
-		{
-			$limit = explode('.', $context, 2);
-			$limit = (int) array_pop($limit);
-
-			$string_check = substr($string, 0, $limit);
-
-			if ( ! RL_String::contains($string_check, Params::getTags(true)))
-			{
-				return false;
-			}
-		}
-
-		$params = Params::get();
-
-		// allow in component?
-		if (RL_Protect::isRestrictedComponent(isset($params->disabled_components) ? $params->disabled_components : [], $area))
-		{
-
-			Protect::_($string);
-
-			self::handlePrintPage($string);
-
-			RL_Protect::unprotect($string);
-
-			return true;
-		}
-
-		if ( ! RL_String::contains($string, Params::getTags(true)))
-		{
-			// Links with #slider-name or &slider=slider-name
-			self::replaceLinks($string);
-
-			return true;
-		}
-
-		Protect::_($string);
-
-		list($start_tags, $end_tags) = Params::getTags();
-
-		list($pre_string, $string, $post_string) = RL_Html::getContentContainingSearches(
-			$string,
-			$start_tags,
-			$end_tags
-		);
-
-		if (JFactory::getApplication()->input->getInt('print', 0))
-		{
-			// Replace syntax with general html on print pages
-			self::handlePrintPage($string);
-
-			$string = $pre_string . $string . $post_string;
-
-			RL_Protect::unprotect($string);
-
-			return true;
-		}
-
-		$sets = self::getSets($string);
-		self::initSets($sets);
-
-		// Tag syntax: {slider ...}
-		self::replaceSyntax($string, $sets);
-
-		// Closing tag: {/slider}
-		self::replaceClosingTag($string);
-
-		// Links with #slider-name or &slider=slider-name
-		self::replaceLinks($string);
-
-		// Link tag {sliderlink ...}
-		self::replaceLinkTag($string);
-
-		$string = $pre_string . $string . $post_string;
-
-		RL_Protect::unprotect($string);
-
-		return true;
-	}
-
-	private static function handlePrintPage(&$string)
-	{
-		$sets = self::getSets($string);
-		self::initSets($sets);
-
-		$prefix = '';
-		foreach ($sets as $items)
-		{
-			foreach ($items as $item)
-			{
-
-				$class = 'rl_sliders-print';
-
-				if ($item->open)
-				{
-					$class .= ' active';
-				}
-
-				$replace = $prefix . '<div id="' . $item->id . '" class="' . $class . '">'
-					. '<' . $item->title_tag . ' class="rl_sliders-title nn_sliders-title">'
-					. '<a id="anchor-' . $item->id . '" class="anchor"></a>'
-					. $item->title_full
-					. '</' . $item->title_tag . '>';
-
-				$string = RL_String::replaceOnce($item->orig, $replace, $string);
-			}
-		}
-
-		$regex = Params::getRegex('end');
-
-		RL_RegEx::matchAll($regex, $string, $matches);
-
-		$replace = '</div>';
-		foreach ($matches as $match)
-		{
-			$string  = RL_String::replaceOnce($match[0], $replace, $string);
-			$replace = '';
-		}
-
-		$regex = Params::getRegex('link');
-
-		RL_RegEx::matchAll($regex, $string, $matches);
-
-		foreach ($matches as $match)
-		{
-			$href   = RL_Uri::get($match['id']);
-			$link   = '<a href="' . $href . '">' . $match['text'] . '</a>';
-			$string = RL_String::replaceOnce($match[0], $link, $string);
-		}
-	}
+	static $sets     = [];
 
 	public static function getSets(&$string, $only_basic_details = false)
 	{
@@ -242,66 +102,191 @@ class Replace
 		return self::$sets;
 	}
 
-	private static function getSetItem($match, &$set_ids, $only_basic_details = false)
+	public static function replaceTags(&$string, $area = 'article', $context = '')
 	{
-		$item = (object) [];
-
-		// Set the values from the tag
-		$tag = RL_Title::clean($match['data'], false, false);
-		self::setTagAttributes($item, $tag);
-
-		if ($only_basic_details)
+		if ( ! is_string($string) || $string == '')
 		{
-			return $item;
+			return false;
 		}
 
-		$item->orig   = $match[0];
-		$item->set_id = trim(str_replace('-', '_', $match['set_id']));
+		self::$context = $context;
 
-		// New set
-		if (empty($set_ids) || current($set_ids) != $item->set_id)
+		// Check if tags are in the text snippet used for the search component
+		if (strpos($context, 'com_search.') === 0)
 		{
-			self::$setcount++;
-			$set_ids[self::$setcount . '.' . $item->set_id] = $item->set_id;
+			$limit = explode('.', $context, 2);
+			$limit = (int) array_pop($limit);
+
+			$string_check = substr($string, 0, $limit);
+
+			if ( ! RL_String::contains($string_check, Params::getTags(true)))
+			{
+				return false;
+			}
 		}
 
-		$item->set = array_search($item->set_id, array_reverse($set_ids));
+		$params = Params::get();
 
-		$item->level = self::getSetLevel($item->set, $set_ids);
+		// allow in component?
+		if (RL_Protect::isRestrictedComponent($params->disabled_components ?? [], $area))
+		{
 
+			Protect::_($string);
 
-		list($item->pre, $item->post) = RL_Html::cleanSurroundingTags(
-			[$match['pre'], $match['post']],
-			['div', 'p', 'span', 'h[0-6]']
+			self::handlePrintPage($string);
+
+			RL_Protect::unprotect($string);
+
+			return true;
+		}
+
+		if ( ! RL_String::contains($string, Params::getTags(true)))
+		{
+			// Links with #slider-name or &slider=slider-name
+			self::replaceLinks($string);
+
+			return true;
+		}
+
+		Protect::_($string);
+
+		[$start_tags, $end_tags] = Params::getTags();
+
+		[$pre_string, $string, $post_string] = RL_Html::getContentContainingSearches(
+			$string,
+			$start_tags,
+			$end_tags
 		);
 
-		return $item;
+		if (JFactory::getApplication()->input->getInt('print', 0))
+		{
+			// Replace syntax with general html on print pages
+			self::handlePrintPage($string);
+
+			$string = $pre_string . $string . $post_string;
+
+			RL_Protect::unprotect($string);
+
+			return true;
+		}
+
+		$sets = self::getSets($string);
+		self::initSets($sets);
+
+		// Tag syntax: {slider ...}
+		self::replaceSyntax($string, $sets);
+
+		// Closing tag: {/slider}
+		self::replaceClosingTag($string);
+
+		// Links with #slider-name or &slider=slider-name
+		self::replaceLinks($string);
+
+		// Link tag {sliderlink ...}
+		self::replaceLinkTag($string);
+
+		$string = $pre_string . $string . $post_string;
+
+		RL_Protect::unprotect($string);
+
+		return true;
 	}
 
-	private static function getSetLevel($set_id, $set_ids)
+	private static function addChildToParent($item)
 	{
-		// Sets are still empty, so this is the first set
-		if (empty(self::$sets))
+		if (empty($item->parent))
 		{
-			return 1;
+			return;
 		}
 
-		// Grab the level from the previous entry of this set
-		if (isset(self::$sets[$set_id]))
+		[$parent_set, $parent_item] = $item->parent;
+
+		if (empty(self::$sets[$parent_set]) || empty(self::$sets[$parent_set][$parent_item]))
 		{
-			return self::$sets[$set_id][0]->level;
+			return;
 		}
 
-		// Look up the level of the previous set
-		$previous_set_id = array_search(prev($set_ids), array_reverse($set_ids));
+		self::$sets[$parent_set][$parent_item]->children[] = $item->set;
+	}
 
-		// Grab the level from the previous entry of this set
-		if (isset(self::$sets[$previous_set_id]))
+	private static function createId($alias)
+	{
+		$id = $alias;
+
+		$i = 1;
+		while (in_array($id, self::$ids))
 		{
-			return self::$sets[$previous_set_id][0]->level + 1;
+			$id = $alias . '-' . ++$i;
 		}
 
-		return 1;
+		self::$ids[] = $id;
+
+		return $id;
+	}
+
+	private static function findItemByMatch($id)
+	{
+		foreach (self::$allitems as $item)
+		{
+			if ( ! in_array($id, $item->matches))
+			{
+				continue;
+			}
+
+			return $item->id;
+		}
+
+		return false;
+	}
+
+	private static function getAccessLevels()
+	{
+	}
+
+	private static function getItemClass($item)
+	{
+		$class = ['accordion-group panel rl_sliders-group nn_sliders-group'];
+
+		if ($item->open)
+		{
+			$class[] = 'active';
+		}
+
+		if ( ! empty($item->mode))
+		{
+			$class[] = $item->mode == 'hover' ? 'hover' : 'click';
+		}
+
+		$class[] = trim($item->class);
+
+		return trim(implode(' ', $class));
+	}
+
+	private static function getLinkAttributes($id)
+	{
+		return 'href="' . RL_Uri::get($id) . '"'
+			. ' class="rl_sliders-link rl_sliders-link-' . $id . ' nn_sliders-link nn_sliders-link-' . $id . '"'
+			. ' data-id="' . $id . '"';
+	}
+
+	private static function getMainClasses($item)
+	{
+		$params = Params::get();
+
+		$classes = [
+			'rl_sliders nn_sliders accordion panel-group',
+			$params->mainclass,
+		];
+
+		if ( ! empty($item->mainclass))
+		{
+			$classes[] = $item->mainclass;
+		}
+
+
+		$classes = array_diff($classes, ['']);
+
+		return trim(implode(' ', $classes));
 	}
 
 	private static function getParent($set_id, $level)
@@ -343,23 +328,256 @@ class Replace
 		return [$previous_set[$parent_item]->set, $parent_item];
 	}
 
-	private static function addChildToParent($item)
+	private static function getPreHtml($items, $first = 0)
 	{
-		if (empty($item->parent))
+		if ( ! $first)
 		{
-			return;
+			return '</div></div></div>';
 		}
 
-		list($parent_set, $parent_item) = $item->parent;
+		$class = self::getMainClasses($items[0]);
 
-		if (empty(self::$sets[$parent_set]) || empty(self::$sets[$parent_set][$parent_item]))
-		{
-			return;
-		}
-
-		self::$sets[$parent_set][$parent_item]->children[] = $item->set;
+		return '<div class="' . $class . '" id="set-rl_sliders-' . $items[0]->set . '" role="presentation">'
+			. '<a id="rl_sliders-scrollto_' . $items[0]->set . '" class="anchor rl_sliders-scroll nn_sliders-scroll"></a>';
 	}
 
+	private static function getSetItem($match, &$set_ids, $only_basic_details = false)
+	{
+		$item = (object) [];
+
+		// Set the values from the tag
+		$tag = RL_Title::clean($match['data'], false, false);
+		self::setTagAttributes($item, $tag);
+
+		if ($only_basic_details)
+		{
+			return $item;
+		}
+
+		$item->orig   = $match[0];
+		$item->set_id = trim(str_replace('-', '_', $match['set_id']));
+
+		// New set
+		if (empty($set_ids) || current($set_ids) != $item->set_id)
+		{
+			self::$setcount++;
+			$set_ids[self::$setcount . '.' . $item->set_id] = $item->set_id;
+		}
+
+		$item->set = array_search($item->set_id, array_reverse($set_ids));
+
+		$item->level = self::getSetLevel($item->set, $set_ids);
+
+
+		[$item->pre, $item->post] = RL_Html::cleanSurroundingTags(
+			[$match['pre'], $match['post']],
+			['div', 'p', 'span', 'h[0-6]']
+		);
+
+		return $item;
+	}
+
+	private static function getSetLevel($set_id, $set_ids)
+	{
+		// Sets are still empty, so this is the first set
+		if (empty(self::$sets))
+		{
+			return 1;
+		}
+
+		// Grab the level from the previous entry of this set
+		if (isset(self::$sets[$set_id]))
+		{
+			return self::$sets[$set_id][0]->level;
+		}
+
+		// Look up the level of the previous set
+		$previous_set_id = array_search(prev($set_ids), array_reverse($set_ids));
+
+		// Grab the level from the previous entry of this set
+		if (isset(self::$sets[$previous_set_id]))
+		{
+			return self::$sets[$previous_set_id][0]->level + 1;
+		}
+
+		return 1;
+	}
+
+	private static function getSliderTitle($item, $items)
+	{
+		$href            = RL_Uri::get($item->id);
+		$title           = $item->title_full;
+		$link_attributes = ' data-toggle="collapse"'
+			. ' id="slider-' . $item->id . '"'
+			. ' data-id="' . $item->id . '"'
+			. ' data-parent="#set-rl_sliders-' . $items[0]->set . '"'
+			. ' aria-expanded="' . ($item->open ? 'true' : 'false') . '"';
+
+		if ( ! empty($item->link_attributes))
+		{
+			$link_attributes .= ' ' . $item->link_attributes;
+		}
+
+		$class = 'accordion-toggle rl_sliders-toggle nn_sliders-toggle';
+
+		$onclick = '';
+
+		if ( ! $item->open)
+		{
+			$class .= ' collapsed';
+		}
+
+		if ($item->haslink)
+		{
+			if (RL_RegEx::match('<a [^>]*href="(.*?)"', $title, $match))
+			{
+				$href = $match[1];
+			}
+
+			$class = 'accordion-toggle rl_sliders-link';
+
+			if (RL_RegEx::match('<a [^>]*class="(.*?)"', $title, $match))
+			{
+				$class = trim($class . ' ' . $match[1]);
+			}
+
+			$link_attributes = '';
+
+			if (RL_RegEx::match('<a ([^>]*)', $title, $match))
+			{
+				$link_attributes = $match[1];
+				$link_attributes = trim(RL_RegEx::replace('(href|class)=".*?"', '', $link_attributes));
+			}
+
+			$title = RL_RegEx::replace('<a .*?>(.*?)</a>', '\1', $title);
+		}
+
+		return
+			'<a href="' . $href . '" title="' . htmlspecialchars($item->title) . '" class="' . $class . '"' . $onclick . $link_attributes . '>'
+			. '<span class="rl_sliders-toggle-inner nn_sliders-toggle-inner">'
+			. ' ' . $title
+			. '</span>'
+			. '</a>';
+	}
+
+	private static function getTagAttributes($string)
+	{
+		RL_PluginTag::protectSpecialChars($string);
+
+		$is_old_syntax = (strpos($string, '|') !== false);
+
+		if ($is_old_syntax)
+		{
+			// Fix some different old syntaxes
+			$string = str_replace(
+				[
+					'|alias:',
+				],
+				[
+					'|alias=',
+				],
+				$string
+			);
+		}
+
+		RL_PluginTag::unprotectSpecialChars($string, true);
+
+		$known_boolean_keys = [
+			'open', 'active', 'opened', 'default',
+			'close', 'inactive', 'closed',
+			'scroll', 'noscroll',
+			'nooutline', 'outline_handles', 'outline_content', 'color_inactive_handles',
+		];
+
+		// Get the values from the tag
+		$attributes = RL_PluginTag::getAttributesFromString($string, 'title', $known_boolean_keys);
+
+		$key_aliases = [
+			'title'              => ['name'],
+			'title-opened'       => ['title-open', 'title-active'],
+			'title-closed'       => ['title-close', 'title-inactive'],
+			'open'               => ['active', 'opened', 'default'],
+			'close'              => ['inactive', 'closed'],
+			'access'             => ['accesslevels', 'accesslevel'],
+			'usergroup'          => ['usergroups', 'group', 'groups'],
+			'heading_attributes' => ['li_attributes'],
+			'link_attributes'    => ['a_attributes'],
+			'body_attributes'    => ['content_attributes'],
+		];
+
+		RL_PluginTag::replaceKeyAliases($attributes, $key_aliases);
+
+		if ( ! empty($attributes->close))
+		{
+			$attributes->open = false;
+			unset($attributes->close);
+		}
+
+		return $attributes;
+	}
+
+	private static function getUserGroups()
+	{
+	}
+
+	private static function handlePrintPage(&$string)
+	{
+		$sets = self::getSets($string);
+		self::initSets($sets);
+
+		$prefix = '';
+		foreach ($sets as $items)
+		{
+			foreach ($items as $item)
+			{
+
+				$class = 'rl_sliders-print';
+
+				if ($item->open)
+				{
+					$class .= ' active';
+				}
+
+				$replace = $prefix . '<div id="' . $item->id . '" class="' . $class . '">'
+					. '<' . $item->title_tag . ' class="rl_sliders-title nn_sliders-title">'
+					. '<a id="anchor-' . $item->id . '" class="anchor"></a>'
+					. $item->title_full
+					. '</' . $item->title_tag . '>';
+
+				$string = RL_String::replaceOnce($item->orig, $replace, $string);
+			}
+		}
+
+		$regex = Params::getRegex('end');
+
+		RL_RegEx::matchAll($regex, $string, $matches);
+
+		$replace = '</div>';
+		foreach ($matches as $match)
+		{
+			$string  = RL_String::replaceOnce($match[0], $replace, $string);
+			$replace = '';
+		}
+
+		$regex = Params::getRegex('link');
+
+		RL_RegEx::matchAll($regex, $string, $matches);
+
+		foreach ($matches as $match)
+		{
+			$href   = RL_Uri::get($match['id']);
+			$link   = '<a href="' . $href . '">' . $match['text'] . '</a>';
+			$string = RL_String::replaceOnce($match[0], $link, $string);
+		}
+	}
+
+	private static function hasAccess($item)
+	{
+	}
+
+	private static function hasAccessByList($levels, $list)
+	{
+	}
 
 	private static function initSets(&$sets)
 	{
@@ -375,13 +593,13 @@ class Replace
 
 			foreach ($items as $i => $item)
 			{
-				$item->title      = isset($item->title) ? trim($item->title) : 'Slider';
+				$item->title      = trim($item->title ?? 'Slider');
 				$item->title_full = $item->title;
 
 				if (isset($item->{'title-opened'}) || isset($item->{'title-closed'}))
 				{
-					$title_closed = isset($item->{'title-closed'}) ? $item->{'title-closed'} : $item->title;
-					$title_opened = isset($item->{'title-opened'}) ? $item->{'title-opened'} : $item->title;
+					$title_closed = $item->{'title-closed'} ?? $item->title;
+					$title_opened = $item->{'title-opened'} ?? $item->title;
 
 					// Set main title to the title-opened, otherwise to title-closed
 					$item->title = $title_opened ?: ($title_closed ?: $item->title);
@@ -397,7 +615,7 @@ class Replace
 				$item->title = $item->title ?: RL_HtmlTag::getAttributeValue('title', $item->title_full);
 				$item->title = $item->title ?: RL_HtmlTag::getAttributeValue('alt', $item->title_full);
 
-				$item->alias = RL_Alias::get(isset($item->alias) ? $item->alias : $item->title);
+				$item->alias = RL_Alias::get($item->alias ?? $item->title);
 				$item->alias = $item->alias ?: 'slider';
 
 				$item->id    = self::createId($item->alias);
@@ -412,7 +630,7 @@ class Replace
 				{
 					$item->{$key} = isset($item->{$key})
 						? $item->{$key}
-						: (isset($params->{$key}) ? $params->{$key} : '');
+						: ($params->{$key} ?? '');
 				}
 
 				$item->matches   = RL_Title::getUrlMatches([$item->id, $item->title]);
@@ -472,89 +690,178 @@ class Replace
 		return $params->state_first == 'open';
 	}
 
-	private static function setOpenItem(&$items, $opened_by_default = '')
+	private static function removeByAccess(&$string)
 	{
-		if ($opened_by_default === '')
+	}
+
+	private static function replaceAnchorLinks(&$string)
+	{
+		RL_RegEx::matchAll(
+			'(?<link><a\s[^>]*href="(?<url>([^"]*)?)\#(?<id>[^"]*)"[^>]*>)(?<text>.*?)</a>',
+			$string,
+			$matches
+		);
+
+		if (empty($matches))
 		{
 			return;
 		}
 
-		$opened_by_default = (int) $opened_by_default;
+		self::replaceLinksMatches($string, $matches);
+	}
 
-		while ($items[$opened_by_default]->haslink)
-		{
-			$opened_by_default++;
-		}
+	private static function replaceClosingTag(&$string)
+	{
+		$params = Params::get();
+		$regex  = Params::getRegex('end');
 
-		if ( ! isset($items[$opened_by_default]))
+		RL_RegEx::matchAll($regex, $string, $matches);
+
+		if (empty($matches))
 		{
 			return;
 		}
 
-		$items[$opened_by_default]->open = true;
+		foreach ($matches as $match)
+		{
+			$html = '</div></div></div></div>';
+
+			if ($params->place_comments)
+			{
+				$html .= Protect::getCommentEndTag();
+			}
+
+			[$pre, $post] = RL_Html::cleanSurroundingTags([$match['pre'], $match['post']]);
+
+			$html = $pre . $html . $post;
+
+			$string = RL_String::replaceOnce($match[0], $html, $string);
+		}
 	}
 
-	private static function setTagAttributes(&$item, $string)
+	private static function replaceLinkTag(&$string)
 	{
-		$values = self::getTagAttributes($string);
+		$regex = Params::getRegex('link');
 
-		$item = (object) array_merge((array) $item, (array) $values);
+		RL_RegEx::matchAll($regex, $string, $matches);
+
+		if (empty($matches))
+		{
+			return;
+		}
+
+		foreach ($matches as $match)
+		{
+			self::replaceLinkTagMatch($string, $match);
+		}
 	}
 
-	private static function getTagAttributes($string)
+	private static function replaceLinkTagMatch(&$string, $match)
 	{
-		RL_PluginTag::protectSpecialChars($string);
+		$params = Params::get();
 
-		$is_old_syntax = (strpos($string, '|') !== false);
+		$id = RL_Alias::get($match['id']);
 
-		if ($is_old_syntax)
+		if ( ! self::stringHasItem($string, $id))
 		{
-			// Fix some different old syntaxes
-			$string = str_replace(
-				[
-					'|alias:',
-				],
-				[
-					'|alias=',
-				],
-				$string
-			);
+			$id_by_name = self::findItemByMatch($match['id']);
+			$id_by_id   = self::findItemByMatch($id);
+			$id         = $id_by_name ?: ($id_by_id ?: $id);
 		}
 
-		RL_PluginTag::unprotectSpecialChars($string, true);
-
-		$known_boolean_keys = [
-			'open', 'active', 'opened', 'default',
-			'close', 'inactive', 'closed',
-			'scroll', 'noscroll',
-			'nooutline', 'outline_handles', 'outline_content', 'color_inactive_handles',
-		];
-
-		// Get the values from the tag
-		$attributes = RL_PluginTag::getAttributesFromString($string, 'title', $known_boolean_keys);
-
-		$key_aliases = [
-			'title'              => ['name'],
-			'title-opened'       => ['title-open', 'title-active'],
-			'title-closed'       => ['title-close', 'title-inactive'],
-			'open'               => ['active', 'opened', 'default'],
-			'close'              => ['inactive', 'closed'],
-			'access'             => ['accesslevels', 'accesslevel'],
-			'usergroup'          => ['usergroups', 'group', 'groups'],
-			'heading_attributes' => ['li_attributes'],
-			'link_attributes'    => ['a_attributes'],
-			'body_attributes'    => ['content_attributes'],
-		];
-
-		RL_PluginTag::replaceKeyAliases($attributes, $key_aliases);
-
-		if ( ! empty($attributes->close))
+		if ( ! self::stringHasItem($string, $id))
 		{
-			$attributes->open = false;
-			unset($attributes->close);
+			$html = '<a href="' . RL_Uri::get($id) . '">' . $match['text'] . '</a>';
+
+			if ($params->place_comments)
+			{
+				$html = Protect::wrapInCommentTags($html);
+			}
+
+			$string = RL_String::replaceOnce($match[0], $html, $string);
+
+			return;
 		}
 
-		return $attributes;
+		$html = '<a ' . self::getLinkAttributes($id) . '>'
+			. '<span class="rl_sliders-link-inner nn_sliders-link-inner">' . $match['text'] . '</span>'
+			. '</a>';
+
+		if ($params->place_comments)
+		{
+			$html = Protect::wrapInCommentTags($html);
+		}
+
+		$string = RL_String::replaceOnce($match[0], $html, $string);
+	}
+
+	private static function replaceLinks(&$string)
+	{
+		// Links with #slider-name
+		self::replaceAnchorLinks($string);
+		// Links with &slider=slider-name
+		self::replaceUrlLinks($string);
+	}
+
+	private static function replaceLinksMatches(&$string, $matches)
+	{
+		$uri            = JUri::getInstance();
+		$current_urls   = [];
+		$current_urls[] = $uri->toString(['path']);
+		$current_urls[] = $uri->toString(['scheme', 'host', 'path']);
+		$current_urls[] = $uri->toString(['scheme', 'host', 'port', 'path']);
+
+		foreach ($matches as $match)
+		{
+			$link = $match['link'];
+
+			if (
+				strpos($link, 'data-toggle=') !== false
+				|| strpos($link, 'onclick=') !== false
+				|| strpos($link, 'rl_sliders-link') !== false
+				|| strpos($link, 'rl_tabs-toggle-sm') !== false
+				|| strpos($link, 'rl_tabs-link') !== false
+			)
+			{
+				continue;
+			}
+
+			$url = $match['url'];
+			if (strpos($url, 'index.php/') === 0)
+			{
+				$url = '/' . $url;
+			}
+
+			if (strpos($url, 'index.php') === 0)
+			{
+				$url = JRoute::_($url);
+			}
+
+			if ($url != '' && ! in_array($url, $current_urls))
+			{
+				continue;
+			}
+
+			$id = $match['id'];
+
+			if ( ! self::stringHasItem($string, $id))
+			{
+				// This is a link to a normal anchor or other element on the page
+				// Remove the prepending obsolete url and leave the hash
+				// $string = str_replace('href="' . $match['url'] . '#' . $id . '"', 'href="#' . $id . '"', $string);
+
+				continue;
+			}
+
+			$attributes = self::getLinkAttributes($id);
+
+			// Combine attributes with original
+			$attributes = RL_HtmlTag::combineAttributes($link, $attributes);
+
+			$html = '<a ' . $attributes . '><span class="rl_sliders-link-inner nn_sliders-link-inner">' . $match['text'] . '</span></a>';
+
+			$string = str_replace($match[0], $html, $string);
+		}
 	}
 
 	private static function replaceSyntax(&$string, $sets)
@@ -569,17 +876,6 @@ class Replace
 		foreach ($sets as $items)
 		{
 			self::replaceSyntaxItemList($string, $items);
-		}
-	}
-
-	private static function replaceSyntaxItemList(&$string, $items)
-	{
-		$first = key($items);
-		end($items);
-
-		foreach ($items as $i => &$item)
-		{
-			self::replaceSyntaxItem($string, $item, $items, ($i == $first));
 		}
 	}
 
@@ -649,166 +945,15 @@ class Replace
 		$string = RL_String::replaceOnce($item->orig, $html, $string);
 	}
 
-	private static function getItemClass($item)
+	private static function replaceSyntaxItemList(&$string, $items)
 	{
-		$class = ['accordion-group panel rl_sliders-group nn_sliders-group'];
+		$first = key($items);
+		end($items);
 
-		if ($item->open)
+		foreach ($items as $i => &$item)
 		{
-			$class[] = 'active';
+			self::replaceSyntaxItem($string, $item, $items, ($i == $first));
 		}
-
-		if ( ! empty($item->mode))
-		{
-			$class[] = $item->mode == 'hover' ? 'hover' : 'click';
-		}
-
-		$class[] = trim($item->class);
-
-		return trim(implode(' ', $class));
-	}
-
-	private static function getPreHtml($items, $first = 0)
-	{
-		if ( ! $first)
-		{
-			return '</div></div></div>';
-		}
-
-		$class = self::getMainClasses($items[0]);
-
-		return '<div class="' . $class . '" id="set-rl_sliders-' . $items[0]->set . '" role="presentation">'
-			. '<a id="rl_sliders-scrollto_' . $items[0]->set . '" class="anchor rl_sliders-scroll nn_sliders-scroll"></a>';
-	}
-
-	private static function getMainClasses($item)
-	{
-		$params = Params::get();
-
-		$classes = [
-			'rl_sliders nn_sliders accordion panel-group',
-			$params->mainclass,
-		];
-
-		if ( ! empty($item->mainclass))
-		{
-			$classes[] = $item->mainclass;
-		}
-
-
-		$classes = array_diff($classes, ['']);
-
-		return trim(implode(' ', $classes));
-	}
-
-	private static function getSliderTitle($item, $items)
-	{
-		$href            = RL_Uri::get($item->id);
-		$title           = $item->title_full;
-		$link_attributes = ' data-toggle="collapse"'
-			. ' id="slider-' . $item->id . '"'
-			. ' data-id="' . $item->id . '"'
-			. ' data-parent="#set-rl_sliders-' . $items[0]->set . '"'
-			. ' aria-expanded="' . ($item->open ? 'true' : 'false') . '"';
-
-		if ( ! empty($item->link_attributes))
-		{
-			$link_attributes .= ' ' . $item->link_attributes;
-		}
-
-		$class = 'accordion-toggle rl_sliders-toggle nn_sliders-toggle';
-
-		$onclick = '';
-
-		if ( ! $item->open)
-		{
-			$class .= ' collapsed';
-		}
-
-		if ($item->haslink)
-		{
-			if (RL_RegEx::match('<a [^>]*href="(.*?)"', $title, $match))
-			{
-				$href = $match[1];
-			}
-
-			$class = 'accordion-toggle rl_sliders-link';
-
-			if (RL_RegEx::match('<a [^>]*class="(.*?)"', $title, $match))
-			{
-				$class = trim($class . ' ' . $match[1]);
-			}
-
-			$link_attributes = '';
-
-			if (RL_RegEx::match('<a ([^>]*)', $title, $match))
-			{
-				$link_attributes = $match[1];
-				$link_attributes = trim(RL_RegEx::replace('(href|class)=".*?"', '', $link_attributes));
-			}
-
-			$title = RL_RegEx::replace('<a .*?>(.*?)</a>', '\1', $title);
-		}
-
-		return
-			'<a href="' . $href . '" title="' . htmlspecialchars($item->title) . '" class="' . $class . '"' . $onclick . $link_attributes . '>'
-			. '<span class="rl_sliders-toggle-inner nn_sliders-toggle-inner">'
-			. ' ' . $title
-			. '</span>'
-			. '</a>';
-	}
-
-	private static function replaceClosingTag(&$string)
-	{
-		$params = Params::get();
-		$regex  = Params::getRegex('end');
-
-		RL_RegEx::matchAll($regex, $string, $matches);
-
-		if (empty($matches))
-		{
-			return;
-		}
-
-		foreach ($matches as $match)
-		{
-			$html = '</div></div></div></div>';
-
-			if ($params->place_comments)
-			{
-				$html .= Protect::getCommentEndTag();
-			}
-
-			list($pre, $post) = RL_Html::cleanSurroundingTags([$match['pre'], $match['post']]);
-
-			$html = $pre . $html . $post;
-
-			$string = RL_String::replaceOnce($match[0], $html, $string);
-		}
-	}
-
-	private static function replaceLinks(&$string)
-	{
-		// Links with #slider-name
-		self::replaceAnchorLinks($string);
-		// Links with &slider=slider-name
-		self::replaceUrlLinks($string);
-	}
-
-	private static function replaceAnchorLinks(&$string)
-	{
-		RL_RegEx::matchAll(
-			'(?<link><a\s[^>]*href="(?<url>([^"]*)?)\#(?<id>[^"]*)"[^>]*>)(?<text>.*?)</a>',
-			$string,
-			$matches
-		);
-
-		if (empty($matches))
-		{
-			return;
-		}
-
-		self::replaceLinksMatches($string, $matches);
 	}
 
 	private static function replaceUrlLinks(&$string)
@@ -827,162 +972,37 @@ class Replace
 		self::replaceLinksMatches($string, $matches);
 	}
 
-	private static function replaceLinksMatches(&$string, $matches)
+	private static function setOpenItem(&$items, $opened_by_default = '')
 	{
-		$uri            = JUri::getInstance();
-		$current_urls   = [];
-		$current_urls[] = $uri->toString(['path']);
-		$current_urls[] = $uri->toString(['scheme', 'host', 'path']);
-		$current_urls[] = $uri->toString(['scheme', 'host', 'port', 'path']);
-
-		foreach ($matches as $match)
-		{
-			$link = $match['link'];
-
-			if (
-				strpos($link, 'data-toggle=') !== false
-				|| strpos($link, 'onclick=') !== false
-				|| strpos($link, 'rl_sliders-link') !== false
-				|| strpos($link, 'rl_tabs-toggle-sm') !== false
-				|| strpos($link, 'rl_tabs-link') !== false
-			)
-			{
-				continue;
-			}
-
-			$url = $match['url'];
-			if (strpos($url, 'index.php/') === 0)
-			{
-				$url = '/' . $url;
-			}
-
-			if (strpos($url, 'index.php') === 0)
-			{
-				$url = JRoute::_($url);
-			}
-
-			if ($url != '' && ! in_array($url, $current_urls))
-			{
-				continue;
-			}
-
-			$id = $match['id'];
-
-			if ( ! self::stringHasItem($string, $id))
-			{
-				// This is a link to a normal anchor or other element on the page
-				// Remove the prepending obsolete url and leave the hash
-				// $string = str_replace('href="' . $match['url'] . '#' . $id . '"', 'href="#' . $id . '"', $string);
-
-				continue;
-			}
-
-			$attributes = self::getLinkAttributes($id);
-
-			// Combine attributes with original
-			$attributes = RL_HtmlTag::combineAttributes($link, $attributes);
-
-			$html = '<a ' . $attributes . '><span class="rl_sliders-link-inner nn_sliders-link-inner">' . $match['text'] . '</span></a>';
-
-			$string = str_replace($match[0], $html, $string);
-		}
-	}
-
-	private static function replaceLinkTag(&$string)
-	{
-		$regex = Params::getRegex('link');
-
-		RL_RegEx::matchAll($regex, $string, $matches);
-
-		if (empty($matches))
+		if ($opened_by_default === '')
 		{
 			return;
 		}
 
-		foreach ($matches as $match)
+		$opened_by_default = (int) $opened_by_default;
+
+		while ($items[$opened_by_default]->haslink)
 		{
-			self::replaceLinkTagMatch($string, $match);
-		}
-	}
-
-	private static function replaceLinkTagMatch(&$string, $match)
-	{
-		$params = Params::get();
-
-		$id = RL_Alias::get($match['id']);
-
-		if ( ! self::stringHasItem($string, $id))
-		{
-			$id_by_name = self::findItemByMatch($match['id']);
-			$id_by_id   = self::findItemByMatch($id);
-			$id         = $id_by_name ?: ($id_by_id ?: $id);
+			$opened_by_default++;
 		}
 
-		if ( ! self::stringHasItem($string, $id))
+		if ( ! isset($items[$opened_by_default]))
 		{
-			$html = '<a href="' . RL_Uri::get($id) . '">' . $match['text'] . '</a>';
-
-			if ($params->place_comments)
-			{
-				$html = Protect::wrapInCommentTags($html);
-			}
-
-			$string = RL_String::replaceOnce($match[0], $html, $string);
-
 			return;
 		}
 
-		$html = '<a ' . self::getLinkAttributes($id) . '>'
-			. '<span class="rl_sliders-link-inner nn_sliders-link-inner">' . $match['text'] . '</span>'
-			. '</a>';
-
-		if ($params->place_comments)
-		{
-			$html = Protect::wrapInCommentTags($html);
-		}
-
-		$string = RL_String::replaceOnce($match[0], $html, $string);
+		$items[$opened_by_default]->open = true;
 	}
 
-	private static function findItemByMatch($id)
+	private static function setTagAttributes(&$item, $string)
 	{
-		foreach (self::$allitems as $item)
-		{
-			if ( ! in_array($id, $item->matches))
-			{
-				continue;
-			}
+		$values = self::getTagAttributes($string);
 
-			return $item->id;
-		}
-
-		return false;
-	}
-
-	private static function getLinkAttributes($id)
-	{
-		return 'href="' . RL_Uri::get($id) . '"'
-			. ' class="rl_sliders-link rl_sliders-link-' . $id . ' nn_sliders-link nn_sliders-link-' . $id . '"'
-			. ' data-id="' . $id . '"';
+		$item = (object) array_merge((array) $item, (array) $values);
 	}
 
 	private static function stringHasItem(&$string, $id)
 	{
 		return (strpos($string, 'data-toggle="collapse" data-id="' . $id . '"') !== false);
-	}
-
-	private static function createId($alias)
-	{
-		$id = $alias;
-
-		$i = 1;
-		while (in_array($id, self::$ids))
-		{
-			$id = $alias . '-' . ++$i;
-		}
-
-		self::$ids[] = $id;
-
-		return $id;
 	}
 }

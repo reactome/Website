@@ -4,7 +4,7 @@
  * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.1-FREE - 2020-05-03
+ * @version    3.4.0.0-FREE - 2021-08-02
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -24,12 +24,19 @@
 
 namespace EasyJoomlaBackup;
 
-defined('_JEXEC') || die('Restricted access');
+\defined('_JEXEC') || die('Restricted access');
 
+use Exception;
 use Joomla\CMS\{Factory, Component\ComponentHelper, Session\Session, Uri\Uri, Language\Text, User\UserHelper, Http\HttpFactory};
 use Joomla\Registry\Registry;
-use Exception;
 
+/**
+ * Class Helper
+ *
+ * @package EasyJoomlaBackup
+ * @since   3.0.0-FREE
+ * @version 3.4.0.0-FREE
+ */
 class Helper
 {
     /**
@@ -52,9 +59,9 @@ class Helper
 
     /**
      * @var string EASYJOOMLABACKUP_VERSION
-     * @since 3.3.1-FREE
+     * @since 3.4.0.0-FREE
      */
-    public const EASYJOOMLABACKUP_VERSION = '3.3.1-FREE';
+    public const EASYJOOMLABACKUP_VERSION = '3.4.0.0-FREE';
 
     /**
      * @var string MESSAGE_TYPE_ERROR
@@ -98,9 +105,10 @@ class Helper
      * @param string $message
      * @param string $type
      *
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    public static function addMessage(string $message, string $type = self::MESSAGE_TYPE_MESSAGE)
+    public static function addMessage(string $message, string $type = self::MESSAGE_TYPE_MESSAGE): void
     {
         $messageQueue = Factory::getSession()->get(self::$sessionName, [], self::$sessionNamespace);
         $messageQueue[] = ['message' => $message, 'type' => $type];
@@ -111,9 +119,10 @@ class Helper
      * Adds message from the message queue to the system message queue
      *
      * @throws Exception
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
-    public static function showMessages()
+    public static function showMessages(): void
     {
         $messageQueue = self::getMessages();
 
@@ -157,7 +166,7 @@ class Helper
 
         if ($fieldValueSession === 1 && ($donationCode === $donationCodeSession)) {
             return '';
-        } elseif (!empty($fieldValueSession) && !empty($fieldValueHeadSession) && ($donationCode == $donationCodeSession)) {
+        } elseif (!empty($fieldValueSession) && !empty($fieldValueHeadSession) && ($donationCode === $donationCodeSession)) {
             self::addHeadData($fieldValueHeadSession);
 
             return $fieldValueSession;
@@ -167,7 +176,7 @@ class Helper
         $donationCodeCheck = false;
         $host = Uri::getInstance()->getHost();
 
-        if ($host == 'localhost') {
+        if ($host === 'localhost') {
             $fieldValue = '<div class="' . self::randomClassName($session) . '">' . Text::_('KR_DONATION_CODE_CHECK_DEFAULT_LOCALHOST') . '</div>';
 
             if (!empty($donationCode)) {
@@ -208,8 +217,9 @@ class Helper
      * @param string $data
      *
      * @since     3.0.0-FREE
+     * @version   3.4.0.0-FREE
      */
-    private static function addHeadData(string $data)
+    private static function addHeadData(string $data): void
     {
         static $dataLoaded = false;
 
@@ -227,13 +237,15 @@ class Helper
      * @param Session $session
      *
      * @return string
-     * @since 3.0.0-FREE
+     * @throws Exception
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
     private static function randomClassName(Session $session): string
     {
         $characters = range('a', 'z');
-        $className = $characters[mt_rand(0, count($characters) - 1)];
-        $classNameLength = mt_rand(6, 12);
+        $className = $characters[random_int(0, \count($characters) - 1)];
+        $classNameLength = random_int(6, 12);
         $className .= UserHelper::genRandomPassword($classNameLength);
 
         $headData = '<style type="text/css">div.' . $className . '{text-align: center; border: 1px solid #DD87A2; border-radius: 2px; padding: 5px; background-color: #F9CAD9; font-size: 120%; margin: 10px 0;}</style>';
@@ -251,13 +263,14 @@ class Helper
      * @param string $donationCode
      *
      * @return int
-     * @since 3.0.0-FREE
+     * @since   3.0.0-FREE
+     * @version 3.4.0.0-FREE
      */
     private static function getDonationCodeStatus(string $host, string $donationCode): int
     {
         $donationCodeCheck = 0;
 
-        if (HttpFactory::getAvailableDriver(new Registry()) == false) {
+        if (HttpFactory::getAvailableDriver(new Registry()) === false) {
             return -2;
         }
 
@@ -288,5 +301,16 @@ class Helper
         }
 
         return $donationCodeCheck;
+    }
+
+    /**
+     * Gets the footer link with the version number
+     *
+     * @return string
+     * @since 3.4.0.0-FREE
+     */
+    public static function getFooter(): string
+    {
+        return '<div style="text-align: center; margin-top: 10px;"><p>' . Text::sprintf('COM_EASYJOOMLABACKUP_VERSION', self::EASYJOOMLABACKUP_VERSION) . '</p></div>';
     }
 }

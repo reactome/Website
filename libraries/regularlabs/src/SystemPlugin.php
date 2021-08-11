@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.5.22934
+ * @version         21.7.10061
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -201,9 +201,11 @@ class SystemPlugin extends JCMSPlugin
 
 		$this->handleOnBeforeCompileHead();
 
-		// For backwards compatibility
-		$html = 'x';
-		$this->loadStylesAndScripts($html);
+		$buffer = Document::getComponentBuffer();
+
+		$this->loadStylesAndScripts($buffer);
+
+		Document::setComponentBuffer($buffer);
 	}
 
 	/**
@@ -274,16 +276,6 @@ class SystemPlugin extends JCMSPlugin
 	}
 
 	/**
-	 * @param string $buffer
-	 * @param string $params
-	 *
-	 * @return  void
-	 */
-	protected function changeModulePositionOutput(&$buffer, &$params)
-	{
-	}
-
-	/**
 	 * @param string $html
 	 *
 	 * @return  bool
@@ -291,6 +283,16 @@ class SystemPlugin extends JCMSPlugin
 	protected function changeFinalHtmlOutput(&$html)
 	{
 		return false;
+	}
+
+	/**
+	 * @param string $buffer
+	 * @param string $params
+	 *
+	 * @return  void
+	 */
+	protected function changeModulePositionOutput(&$buffer, &$params)
+	{
 	}
 
 	/**
@@ -392,14 +394,14 @@ class SystemPlugin extends JCMSPlugin
 	/**
 	 * @return  void
 	 */
-	protected function handleOnBeforeCompileHead()
+	protected function handleOnAfterRoute()
 	{
 	}
 
 	/**
 	 * @return  void
 	 */
-	protected function handleOnAfterRoute()
+	protected function handleOnBeforeCompileHead()
 	{
 	}
 

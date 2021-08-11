@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.3.1-FREE - 2020-05-03
+ * @version    3.4.0.0-FREE - 2021-08-02
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -22,7 +23,7 @@
  */
 defined('_JEXEC') || die('Restricted access');
 
-use Joomla\CMS\{Factory, Language\Text};
+use Joomla\CMS\{Factory, Language\Text, Filesystem\File};
 
 if (!Factory::getUser()->authorise('core.manage', 'com_easyjoomlabackup')) {
     throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 404);
@@ -31,10 +32,12 @@ if (!Factory::getUser()->authorise('core.manage', 'com_easyjoomlabackup')) {
 require_once JPATH_COMPONENT . '/controller.php';
 require_once JPATH_COMPONENT . '/helpers/Autoload.php';
 
-if ($controller = Factory::getApplication()->input->getWord('controller', '')) {
+$controller = Factory::getApplication()->input->getWord('controller', '');
+
+if ($controller !== '') {
     $pathController = JPATH_COMPONENT . '/controllers/' . $controller . '.php';
 
-    if (file_exists($pathController)) {
+    if (File::exists($pathController)) {
         require_once $pathController;
     }
 }

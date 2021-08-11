@@ -1,10 +1,10 @@
 <?php
 /**
  * @package         Tabs
- * @version         8.0.1
+ * @version         8.1.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://www.regularlabs.com
+ * @link            http://regularlabs.com
  * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
@@ -14,13 +14,13 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Language\Text as JText;
 use Joomla\CMS\Object\CMSObject as JObject;
 use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\EditorButtonHelper as RL_EditorButtonHelper;
 use RegularLabs\Library\RegEx as RL_RegEx;
 
 /**
  ** Plugin that places the button
  */
-class PlgButtonTabsHelper
-	extends \RegularLabs\Library\EditorButtonHelper
+class PlgButtonTabsHelper extends RL_EditorButtonHelper
 {
 	/**
 	 * Display the button
@@ -39,6 +39,41 @@ class PlgButtonTabsHelper
 		}
 
 		return $this->renderPopupButton($editor_name);
+	}
+
+	private function getCustomText()
+	{
+		$text = trim($this->params->button_custom_code);
+		$text = str_replace(["\r", "\n"], ['', '</p>\n<p>'], trim($text)) . '</p>';
+		$text = RL_RegEx::replace('^(.*?)</p>', '\1', $text);
+		$text = str_replace(
+			['{tab ', '{/tabs}'],
+			['{' . $this->params->tag_open . $this->params->tag_delimiter, '{/' . $this->params->tag_close . '}'],
+			trim($text)
+		);
+
+		return $text;
+	}
+
+	private function getDefaultText()
+	{
+		return
+			'{' . $this->params->tag_open . $this->params->tag_delimiter . JText::_('TAB_TITLE') . ' 1}\n' .
+			'<p>[:SELECTION:]</p>\n' .
+			'<p>{' . $this->params->tag_open . $this->params->tag_delimiter . JText::_('TAB_TITLE') . ' 2}</p>\n' .
+			'<p>' . JText::_('TAB_TEXT') . '</p>\n' .
+			'<p>{/' . $this->params->tag_close . '}</p>';
+	}
+
+	private function getExampleText()
+	{
+		switch (true)
+		{
+			case ($this->params->button_use_custom_code && $this->params->button_custom_code):
+				return $this->getCustomText();
+			default:
+				return $this->getDefaultText();
+		}
 	}
 
 	private function renderSimpleButton($editor_name)
@@ -74,40 +109,5 @@ class PlgButtonTabsHelper
 		$button->name    = $this->getIcon();
 
 		return $button;
-	}
-
-	private function getExampleText()
-	{
-		switch (true)
-		{
-			case ($this->params->button_use_custom_code && $this->params->button_custom_code):
-				return $this->getCustomText();
-			default:
-				return $this->getDefaultText();
-		}
-	}
-
-	private function getDefaultText()
-	{
-		return
-			'{' . $this->params->tag_open . $this->params->tag_delimiter . JText::_('TAB_TITLE') . ' 1}\n' .
-			'<p>[:SELECTION:]</p>\n' .
-			'<p>{' . $this->params->tag_open . $this->params->tag_delimiter . JText::_('TAB_TITLE') . ' 2}</p>\n' .
-			'<p>' . JText::_('TAB_TEXT') . '</p>\n' .
-			'<p>{/' . $this->params->tag_close . '}</p>';
-	}
-
-	private function getCustomText()
-	{
-		$text = trim($this->params->button_custom_code);
-		$text = str_replace(["\r", "\n"], ['', '</p>\n<p>'], trim($text)) . '</p>';
-		$text = RL_RegEx::replace('^(.*?)</p>', '\1', $text);
-		$text = str_replace(
-			['{tab ', '{/tabs}'],
-			['{' . $this->params->tag_open . $this->params->tag_delimiter, '{/' . $this->params->tag_close . '}'],
-			trim($text)
-		);
-
-		return $text;
 	}
 }
