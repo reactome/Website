@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         8.1.0
+ * @version         8.1.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -49,11 +49,11 @@ class Document
 
 		RL_Document::scriptOptions($options, 'Sliders');
 
-		RL_Document::script('sliders/script.min.js', ($params->media_versioning ? '8.1.0' : ''), [], [], $params->load_jquery);
+		RL_Document::script('sliders/script.min.js', ($params->media_versioning ? '8.1.1' : ''), [], [], $params->load_jquery);
 
 		if ($params->load_stylesheet)
 		{
-			RL_Document::style('sliders/style.min.css', ($params->media_versioning ? '8.1.0' : ''));
+			RL_Document::style('sliders/style.min.css', ($params->media_versioning ? '8.1.1' : ''));
 		}
 
 	}

@@ -2,8 +2,8 @@
 <extension version="3.9" type="library" method="upgrade">
 	<name>Regular Labs Library</name>
 	<description>Regular Labs Library - used by Regular Labs extensions</description>
-	<version>21.7.10061</version>
-	<creationDate>July 2021</creationDate>
+	<version>21.8.10988</version>
+	<creationDate>August 2021</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://regularlabs.com</authorUrl>
@@ -13,15 +13,21 @@
 	<libraryname>regularlabs</libraryname>
 	<scriptfile>script.install.php</scriptfile>
 
+	<updateservers>
+		<server type="extension" priority="1" name="Regular Labs Library">
+			https://download.regularlabs.com/updates.xml?e=library&amp;type=.xml
+		</server>
+	</updateservers>
+
 	<files>
-		<folder>vendor</folder>
-		<folder>src</folder>
 		<file>autoload.php</file>
 		<file>regularlabs.xml</file>
+		<file>script.install.helper.php</file>
 		<folder>fields</folder>
 		<folder>helpers</folder>
 		<folder>layouts</folder>
-		<file>script.install.helper.php</file>
+		<folder>src</folder>
+		<folder>vendor</folder>
 	</files>
 
 	<media folder="media" destination="regularlabs">

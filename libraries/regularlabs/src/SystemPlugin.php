@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.7.10061
+ * @version         21.8.10988
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -41,6 +41,7 @@ class SystemPlugin extends JCMSPlugin
 	public    $_page_types            = [];
 	public    $_protected_formats     = [];
 	public    $_title                 = '';
+	protected $_doc_ready             = false;
 	protected $_pass                  = null;
 	/**
 	 * @var    JCMSApplication
@@ -181,12 +182,20 @@ class SystemPlugin extends JCMSPlugin
 	 */
 	public function onAfterRoute()
 	{
+		$this->_doc_ready = true;
+
 		if ( ! $this->passChecks())
 		{
 			return;
 		}
 
 		$this->handleOnAfterRoute();
+
+		$buffer = Document::getComponentBuffer();
+
+		$this->loadStylesAndScripts($buffer);
+
+		Document::setComponentBuffer($buffer);
 	}
 
 	/**
@@ -200,12 +209,6 @@ class SystemPlugin extends JCMSPlugin
 		}
 
 		$this->handleOnBeforeCompileHead();
-
-		$buffer = Document::getComponentBuffer();
-
-		$this->loadStylesAndScripts($buffer);
-
-		Document::setComponentBuffer($buffer);
 	}
 
 	/**
@@ -454,14 +457,14 @@ class SystemPlugin extends JCMSPlugin
 			return $this->_pass;
 		}
 
-		$this->_pass = false;
+		$this->setPass(false);
 
 		if ( ! $this->isFrameworkEnabled())
 		{
 			return false;
 		}
 
-		if ( ! $this->passPageTypes())
+		if ($this->_doc_ready && ! $this->passPageTypes())
 		{
 			return false;
 		}
@@ -508,7 +511,7 @@ class SystemPlugin extends JCMSPlugin
 			return false;
 		}
 
-		$this->_pass = true;
+		$this->setPass(true);
 
 		return true;
 	}
@@ -620,6 +623,21 @@ class SystemPlugin extends JCMSPlugin
 		}
 
 		define('REGULAR_LABS_LIBRARY_ENABLED', true);
+	}
+
+	/**
+	 * @param bool $pass
+	 *
+	 * @return  void
+	 */
+	private function setPass($pass)
+	{
+		if ( ! $this->_doc_ready)
+		{
+			return;
+		}
+
+		$this->_pass = (bool) $pass;
 	}
 }
 

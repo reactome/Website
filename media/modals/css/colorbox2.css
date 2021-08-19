@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         11.9.0
+ * @version         11.9.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -9,7 +9,7 @@
  */
 /**
  * @package         Modals
- * @version         11.9.0
+ * @version         11.9.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -23,228 +23,190 @@
 #rl_modals,
 #rl_modals_overlay,
 #rl_modals_wrapper {
-    position: absolute;
-    z-index:  9999;
-    top:      0;
-    left:     0;
-    overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  overflow: hidden;
 }
-
 #rl_modals_wrapper {
-    max-width: none;
+  max-width: none;
 }
-
 #rl_modals_overlay {
-    position: fixed;
-    width:    100%;
-    height:   100%;
+  position: fixed;
+  width: 100%;
+  height: 100%;
 }
-
 #rl_modals_middle_left,
 #rl_modals_bottom_left {
-    clear: left;
+  clear: left;
 }
-
 #rl_modals_content {
-    position: relative;
+  position: relative;
 }
-
 #rl_modals_loaded_content {
-    overflow:                   auto;
-    -webkit-overflow-scrolling: touch;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
-
 #rl_modals_title {
-    margin: 0;
+  margin: 0;
 }
-
 #rl_modals_loading_overlay,
 #rl_modals_loading_graphic {
-    position: absolute;
-    top:      0;
-    left:     0;
-    width:    100%;
-    height:   100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
-
 #rl_modals_previous,
 #rl_modals_next,
 #rl_modals_close,
 #rl_modals_slideshow {
-    cursor: pointer;
+  cursor: pointer;
 }
-
 #rl_modals.no_navigation #rl_modals_previous,
 #rl_modals.no_navigation #rl_modals_next,
 #rl_modals.no_navigation #rl_modals_close,
 #rl_modals.no_navigation #rl_modals_slideshow,
 #rl_modals.no_navigation #rl_modals_current {
-    display: none !important;
+  display: none !important;
 }
-
 .rl_modals_photo {
-    display:                block;
-    float:                  left;
-    max-width:              none;
-    margin:                 auto;
-    border:                 0;
-    -ms-interpolation-mode: bicubic;
+  float: left;
+  margin: auto;
+  border: 0;
+  display: block;
+  max-width: none;
+  -ms-interpolation-mode: bicubic;
 }
-
 .rl_modals_iframe {
-    display: block;
-    width:   100%;
-    height:  100%;
-    margin:  0;
-    padding: 0;
-    border:  0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+  padding: 0;
+  margin: 0;
 }
-
 #rl_modals,
 #rl_modals_content,
 #rl_modals_loaded_content {
-    -moz-box-sizing:    content-box;
-    -webkit-box-sizing: content-box;
-    box-sizing:         content-box;
+  box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
 }
-
 #rl_modals_title .modals_description {
-    font-size:   0.7em;
-    font-weight: normal;
+  font-size: 0.7em;
+  font-weight: normal;
 }
-
 .modal_link_hidden {
-    display: none !important;
+  display: none !important;
 }
-
 #rl_modals_overlay {
-    background: #ffffff;
+  background: #ffffff;
 }
-
 #rl_modals {
-    outline: 0;
+  outline: 0;
 }
-
 #rl_modals_content {
-    overflow:   visible;
-    margin-top: 32px;
-    background: #000000;
+  margin-top: 32px;
+  overflow: visible;
+  background: #000000;
 }
-
 .rl_modals_iframe {
-    background: #ffffff;
+  background: #ffffff;
 }
-
 #rl_modals_error {
-    padding: 50px;
-    border:  1px solid #cccccc;
+  padding: 50px;
+  border: 1px solid #cccccc;
 }
-
 #rl_modals_loaded_content {
-    padding:    6px 12px;
-    color:      #ffffff;
-    background: #000000;
+  background: #000000;
+  padding: 6px 12px;
+  color: #ffffff;
 }
-
 #rl_modals.is_image #rl_modals_loaded_content,
 #rl_modals.is_video #rl_modals_loaded_content {
-    padding: 0;
+  padding: 0;
 }
-
 #rl_modals_loading_graphic {
-    background: url(../images/colorbox2/loading.gif) no-repeat center center;
+  background: url(../images/colorbox2/loading.gif) no-repeat center center;
 }
-
 #rl_modals_loading_overlay {
-    background: #000000;
+  background: #000000;
 }
-
 #rl_modals_title {
-    position:   absolute;
-    top:        -22px;
-    left:       0;
-    color:      #000000;
-    background: #ffffff;
+  position: absolute;
+  top: -22px;
+  left: 0;
+  color: #000000;
+  background: #ffffff;
 }
-
 #rl_modals_current {
-    position:    absolute;
-    top:         -22px;
-    right:       205px;
-    text-indent: -9999px;
+  position: absolute;
+  top: -22px;
+  right: 205px;
+  text-indent: -9999px;
 }
-
 /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
 #rl_modals_previous,
 #rl_modals_next,
 #rl_modals_slideshow,
 #rl_modals_close {
-    position:    absolute;
-    top:         -20px;
-    overflow:    visible;
-    width:       20px;
-    height:      20px;
-    margin:      0;
-    padding:     0;
-    text-indent: -9999px;
-    border:      0;
-    background:  url(../images/colorbox2/controls.png) no-repeat 0 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  text-indent: -9999px;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: -20px;
+  background: url(../images/colorbox2/controls.png) no-repeat 0 0;
 }
-
 /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
 #rl_modals_previous:active,
 #rl_modals_next:active,
 #rl_modals_slideshow:active,
 #rl_modals_close:active {
-    outline: 0;
+  outline: 0;
 }
-
 #rl_modals_previous {
-    right:               44px;
-    background-position: 0px 0px;
+  background-position: 0px 0px;
+  right: 44px;
 }
-
 #rl_modals_previous:hover {
-    background-position: 0px -25px;
+  background-position: 0px -25px;
 }
-
 #rl_modals_next {
-    right:               22px;
-    background-position: -25px 0px;
+  background-position: -25px 0px;
+  right: 22px;
 }
-
 #rl_modals_next:hover {
-    background-position: -25px -25px;
+  background-position: -25px -25px;
 }
-
 #rl_modals_close {
-    right:               0;
-    background-position: -50px 0px;
+  background-position: -50px 0px;
+  right: 0;
 }
-
 #rl_modals_close:hover {
-    background-position: -50px -25px;
+  background-position: -50px -25px;
 }
-
 .rl_modals_slideshow_on #rl_modals_previous,
 .rl_modals_slideshow_off #rl_modals_previous {
-    right: 66px;
+  right: 66px;
 }
-
 .rl_modals_slideshow_on #rl_modals_slideshow {
-    right:               44px;
-    background-position: -75px -25px;
+  background-position: -75px -25px;
+  right: 44px;
 }
-
 .rl_modals_slideshow_on #rl_modals_slideshow:hover {
-    background-position: -100px -25px;
+  background-position: -100px -25px;
 }
-
 .rl_modals_slideshow_off #rl_modals_slideshow {
-    right:               44px;
-    background-position: -100px 0px;
+  background-position: -100px 0px;
+  right: 44px;
 }
-
 .rl_modals_slideshow_off #rl_modals_slideshow:hover {
-    background-position: -75px -25px;
+  background-position: -75px -25px;
 }

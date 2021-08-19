@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.7.10061
+ * @version         21.8.10988
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -25,31 +25,21 @@ use RegularLabs\Library\CacheNew as Cache;
  */
 class Document
 {
-	/* @var JDocument */
-	static $document;
-
 	/**
 	 * @return  JDocument  The document object
 	 */
 	public static function get()
 	{
-		if ( ! is_null(self::$document))
-		{
-			return self::$document;
-		}
+		$document = JFactory::getApplication()->getDocument();
 
-		self::$document = JFactory::getApplication()->getDocument();
-
-		if ( ! is_null(self::$document))
+		if ( ! is_null($document))
 		{
-			return self::$document;
+			return $document;
 		}
 
 		JFactory::getApplication()->loadDocument();
 
-		self::$document = JFactory::getApplication()->getDocument();
-
-		return self::$document;
+		return JFactory::getApplication()->getDocument();
 	}
 
 	/**
@@ -531,7 +521,7 @@ class Document
 		{
 			JHtml::_('behavior.core');
 			JHtml::_('script', 'jui/cms.js', ['version' => 'auto', 'relative' => true]);
-			$version = '21.7.10061';
+			$version = '21.8.10988';
 		}
 
 		if ( ! empty($version))
@@ -609,7 +599,7 @@ class Document
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '21.7.10061';
+			$version = '21.8.10988';
 		}
 
 		if ( ! $file = File::getMediaFile('css', $file))

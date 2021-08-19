@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.7.10061
+ * @version         21.8.10988
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -41,12 +41,12 @@ class EditorButtonHelper
 
 	public function getButtonText()
 	{
-		$text_ini = strtoupper(str_replace(' ', '_', $this->params->button_text));
+		$text_ini = strtoupper(str_replace(' ', '_', $this->params->button_text ?? $this->_name));
 		$text     = JText::_($text_ini);
 
 		if ($text == $text_ini)
 		{
-			$text = JText::_($this->params->button_text);
+			$text = JText::_($this->params->button_text ?? $this->_name);
 		}
 
 		return trim($text);
