@@ -4,7 +4,7 @@
  * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
- * @version    3.4.0.0-FREE - 2021-08-02
+ * @version    3.4.1.0-FREE - 2021-09-09
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -35,7 +35,7 @@ use Joomla\Registry\Registry;
  *
  * @package EasyJoomlaBackup
  * @since   3.0.0-FREE
- * @version 3.4.0.0-FREE
+ * @version 3.4.1.0-FREE
  */
 class Helper
 {
@@ -59,9 +59,9 @@ class Helper
 
     /**
      * @var string EASYJOOMLABACKUP_VERSION
-     * @since 3.4.0.0-FREE
+     * @since 3.4.1.0-FREE
      */
-    public const EASYJOOMLABACKUP_VERSION = '3.4.0.0-FREE';
+    public const EASYJOOMLABACKUP_VERSION = '3.4.1.0-FREE';
 
     /**
      * @var string MESSAGE_TYPE_ERROR
@@ -312,5 +312,39 @@ class Helper
     public static function getFooter(): string
     {
         return '<div style="text-align: center; margin-top: 10px;"><p>' . Text::sprintf('COM_EASYJOOMLABACKUP_VERSION', self::EASYJOOMLABACKUP_VERSION) . '</p></div>';
+    }
+
+    /**
+     * Removes a trailing comma from a string
+     *
+     * @param string $string
+     *
+     * @return string
+     * @since 3.4.1.0-FREE
+     */
+    public static function removeTrailingComma(string $string): string
+    {
+        if (substr($string, -1) === ',') {
+            $string = substr($string, 0, -1);
+        }
+
+        return $string;
+    }
+
+    /**
+     * Gets the database dump header information
+     *
+     * @return string
+     * @since 3.4.1.0-FREE
+     */
+    public static function getDatabaseDumpHeader(): string
+    {
+        $data = '-- Easy Joomla Backup for Joomla! - SQL Dump' . "\n";
+        $data .= '-- Author: Viktor Vogel' . "\n";
+        $data .= '-- Project: Kubik-Rubik Joomla! Extensions' . "\n";
+        $data .= '-- Project page: https://kubik-rubik.de/ejb-easy-joomla-backup' . "\n";
+        $data .= '-- License: GNU/GPL - https://www.gnu.org/licenses/gpl.html' . "\n\n";
+
+        return $data;
     }
 }

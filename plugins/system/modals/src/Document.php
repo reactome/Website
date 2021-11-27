@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.9.1
+ * @version         11.9.5
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -67,7 +67,7 @@ class Document
 		return $url;
 	}
 
-	public static function loadStylesAndScripts()
+	public static function loadStylesAndScripts(&$buffer)
 	{
 		// do not load scripts/styles on feeds or print pages
 		if (RL_Document::isFeed() || JFactory::getApplication()->input->getInt('print', 0))
@@ -79,7 +79,7 @@ class Document
 
 		if (JFactory::getApplication()->input->getInt('ml', 0) && $params->add_redirect)
 		{
-			self::addRedirectScript();
+			self::addRedirectScript($buffer);
 
 			return;
 		}
@@ -107,12 +107,12 @@ class Document
 		RL_Document::scriptOptions($options, 'Modals');
 
 		JHtml::script('modals/jquery.touchSwipe.min.js', false, true);
-		RL_Document::script('modals/jquery.modals.min.js', ($params->media_versioning ? '11.9.1' : ''), [], [], $params->load_jquery);
-		RL_Document::script('modals/script.min.js', ($params->media_versioning ? '11.9.1' : ''), [], [], $params->load_jquery);
+		RL_Document::script('modals/jquery.modals.min.js', ($params->media_versioning ? '11.9.5' : ''), [], [], $params->load_jquery);
+		RL_Document::script('modals/script.min.js', ($params->media_versioning ? '11.9.5' : ''), [], [], $params->load_jquery);
 
 		if ($params->load_stylesheet)
 		{
-			RL_Document::style('modals/' . $params->style . '.min.css', ($params->media_versioning ? '11.9.1' : ''));
+			RL_Document::style('modals/' . $params->style . '.min.css', ($params->media_versioning ? '11.9.5' : ''));
 		}
 	}
 
@@ -148,7 +148,7 @@ class Document
 			. $key . '=1';
 	}
 
-	private static function addRedirectScript()
+	private static function addRedirectScript(&$buffer)
 	{
 		// Add redirect script
 		$script =
@@ -167,16 +167,8 @@ class Document
 			return;
 		}
 
-		if ( ! $buffer = RL_Document::getComponentBuffer())
-		{
-			return;
-		}
-
-		$buffer =
-			'<script type="text/javascript">' . $script . '</script>'
+		$buffer = '<script type="text/javascript">' . $script . '</script>'
 			. $buffer;
-
-		RL_Document::setComponentBuffer($buffer);
 	}
 
 	private static function getDefaults()

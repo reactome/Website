@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.8.10988
+ * @version         21.11.13345
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -131,6 +131,11 @@ class JFormFieldRL_ConditionSelection extends \RegularLabs\Library\Field
 
 		$formControl = $this->get('form', $this->formControl);
 		$formControl = $formControl == 'root' ? '' : $formControl;
+
+		if ($this->group)
+		{
+			$formControl .= '[' . $this->group . ']';
+		}
 
 		return RL_ShowOn::open($condition, $formControl);
 	}

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         9.0.0
+ * @version         9.0.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -61,11 +61,8 @@ if ( ! RL_Document::isJoomlaVersion(3, 'SOURCERER'))
 {
 	RL_Extension::disable('sourcerer', 'plugin');
 
-	RL_Language::load('plg_system_regularlabs');
-
-	JFactory::getApplication()->enqueueMessage(
-		JText::sprintf('RL_PLUGIN_HAS_BEEN_DISABLED', JText::_('SOURCERER')),
-		'error'
+	RL_Document::adminError(
+		JText::sprintf('RL_PLUGIN_HAS_BEEN_DISABLED', JText::_('SOURCERER'))
 	);
 
 	return;

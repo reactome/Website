@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.8.10988
+ * @version         21.11.13345
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -57,172 +57,6 @@ trait ConditionContent
 		Protect::removeCommentTags($string, 'Articles Anywhere');
 
 		return $string;
-	}
-
-	private static function passComparison($needle, $haystack, $comparison = 'equals')
-	{
-		$haystack = ArrayHelper::toArray($haystack);
-
-		if (empty($haystack))
-		{
-			return false;
-		}
-
-		// For list values
-		if (count($haystack) > 1)
-		{
-			switch ($comparison)
-			{
-				case 'not_equals':
-					$needle = ArrayHelper::toArray($needle);
-					sort($needle);
-					sort($haystack);
-
-					return $needle != $haystack;
-
-				case 'contains':
-					$needle = ArrayHelper::toArray($needle);
-					sort($needle);
-
-					$intersect = array_intersect($needle, $haystack);
-
-					return $needle == $intersect;
-
-				case 'contains_one':
-					return ArrayHelper::find($needle, $haystack);
-
-				case 'not_contains':
-					return ! ArrayHelper::find($needle, $haystack);
-
-				case 'equals':
-				default:
-					$needle = ArrayHelper::toArray($needle);
-					sort($needle);
-					sort($haystack);
-
-					return $needle == $haystack;
-			}
-		}
-
-		$haystack = $haystack[0];
-
-		if ($comparison == 'regex')
-		{
-			return RegEx::match($needle, $haystack);
-		}
-
-		// What's the use case? Not sure yet :)
-		$needle = self::runThroughArticlesAnywhere($needle);
-
-		// Convert dynamic date values i, like date('yesterday')
-		$haystack = self::valueToDateString($haystack, true);
-		$has_time = self::hasTime($haystack);
-		$needle   = self::valueToDateString($needle, false, $has_time);
-
-		// make the needle and haystack lowercase, so comparisons are case insensitive
-		$needle   = StringHelper::strtolower($needle);
-		$haystack = StringHelper::strtolower($haystack);
-
-		switch ($comparison)
-		{
-			case 'not_equals':
-				return $needle != $haystack;
-
-			case 'contains':
-			case 'contains_one':
-				return strpos($haystack, $needle) !== false;
-
-			case 'not_contains':
-				return strpos($haystack, $needle) === false;
-
-			case 'begins_with':
-				$length = strlen($needle);
-
-				return substr($haystack, 0, $length) === $needle;
-
-			case 'ends_with':
-				$length = strlen($needle);
-
-				if ($length == 0)
-				{
-					return true;
-				}
-
-				return substr($haystack, -$length) === $needle;
-
-			case 'less_than':
-				return $haystack < $needle;
-
-			case 'greater_than':
-				return $haystack > $needle;
-
-			case 'equals':
-			default:
-				return $needle == $haystack;
-		}
-	}
-
-	private static function valueToDateString($value, $apply_offset = true, $add_time = false)
-	{
-		$value = trim($value);
-
-		if (in_array($value, [
-			'now()',
-			'JFactory::getDate()',
-		]))
-		{
-			if ( ! $apply_offset)
-			{
-				return date('Y-m-d H:i:s', strtotime('now'));
-			}
-
-			$date = new JDate('now', JFactory::getConfig()->get('offset', 'UTC'));
-
-			return $date->format('Y-m-d H:i:s');
-		}
-
-		if (self::isDateTimeString($value))
-		{
-			$format = 'Y-m-d H:i:s';
-			$date   = new JDate($value, JFactory::getConfig()->get('offset', 'UTC'));
-
-			if ($apply_offset)
-			{
-				$date = JFactory::getDate($value, 'UTC');
-				$date->setTimezone(new DateTimeZone(JFactory::getConfig()->get('offset')));
-			}
-
-			return $date->format($format, true, false);
-		}
-
-		$regex = '^date\(\s*'
-			. '(?:\'(?<datetime>.*?)\')?'
-			. '(?:\\\\?,\s*\'(?<format>.*?)\')?'
-			. '\s*\)$';
-
-		if ( ! RegEx::match($regex, $value, $match))
-		{
-			return $value;
-		}
-
-		$datetime = ($match['datetime'] ?? null) ?: 'now';
-		$format   = $match['format'] ?? '';
-
-		if (empty($format))
-		{
-			$time   = date('His', strtotime($datetime));
-			$format = (int) $time || $add_time ? 'Y-m-d H:i:s' : 'Y-m-d';
-		}
-
-		$date = new JDate($datetime, JFactory::getConfig()->get('offset', 'UTC'));
-
-		if ($apply_offset)
-		{
-			$date = JFactory::getDate($datetime, 'UTC');
-			$date->setTimezone(new DateTimeZone(JFactory::getConfig()->get('offset')));
-		}
-
-		return $date->format($format, true, false);
 	}
 
 	abstract public function getItem($fields = []);
@@ -479,5 +313,171 @@ trait ConditionContent
 		}
 
 		return false;
+	}
+
+	private static function passComparison($needle, $haystack, $comparison = 'equals')
+	{
+		$haystack = ArrayHelper::toArray($haystack);
+
+		if (empty($haystack))
+		{
+			return false;
+		}
+
+		// For list values
+		if (count($haystack) > 1)
+		{
+			switch ($comparison)
+			{
+				case 'not_equals':
+					$needle = ArrayHelper::toArray($needle);
+					sort($needle);
+					sort($haystack);
+
+					return $needle != $haystack;
+
+				case 'contains':
+					$needle = ArrayHelper::toArray($needle);
+					sort($needle);
+
+					$intersect = array_intersect($needle, $haystack);
+
+					return $needle == $intersect;
+
+				case 'contains_one':
+					return ArrayHelper::find($needle, $haystack);
+
+				case 'not_contains':
+					return ! ArrayHelper::find($needle, $haystack);
+
+				case 'equals':
+				default:
+					$needle = ArrayHelper::toArray($needle);
+					sort($needle);
+					sort($haystack);
+
+					return $needle == $haystack;
+			}
+		}
+
+		$haystack = $haystack[0];
+
+		if ($comparison == 'regex')
+		{
+			return RegEx::match($needle, $haystack);
+		}
+
+		// What's the use case? Not sure yet :)
+		$needle = self::runThroughArticlesAnywhere($needle);
+
+		// Convert dynamic date values i, like date('yesterday')
+		$haystack = self::valueToDateString($haystack, true);
+		$has_time = self::hasTime($haystack);
+		$needle   = self::valueToDateString($needle, false, $has_time);
+
+		// make the needle and haystack lowercase, so comparisons are case insensitive
+		$needle   = StringHelper::strtolower($needle);
+		$haystack = StringHelper::strtolower($haystack);
+
+		switch ($comparison)
+		{
+			case 'not_equals':
+				return $needle != $haystack;
+
+			case 'contains':
+			case 'contains_one':
+				return strpos($haystack, $needle) !== false;
+
+			case 'not_contains':
+				return strpos($haystack, $needle) === false;
+
+			case 'begins_with':
+				$length = strlen($needle);
+
+				return substr($haystack, 0, $length) === $needle;
+
+			case 'ends_with':
+				$length = strlen($needle);
+
+				if ($length == 0)
+				{
+					return true;
+				}
+
+				return substr($haystack, -$length) === $needle;
+
+			case 'less_than':
+				return $haystack < $needle;
+
+			case 'greater_than':
+				return $haystack > $needle;
+
+			case 'equals':
+			default:
+				return $needle == $haystack;
+		}
+	}
+
+	private static function valueToDateString($value, $apply_offset = true, $add_time = false)
+	{
+		$value = trim($value);
+
+		if (in_array($value, [
+			'now()',
+			'JFactory::getDate()',
+		]))
+		{
+			if ( ! $apply_offset)
+			{
+				return date('Y-m-d H:i:s', strtotime('now'));
+			}
+
+			$date = new JDate('now', JFactory::getConfig()->get('offset', 'UTC'));
+
+			return $date->format('Y-m-d H:i:s');
+		}
+
+		if (self::isDateTimeString($value))
+		{
+			$format = 'Y-m-d H:i:s';
+			$date   = new JDate($value, JFactory::getConfig()->get('offset', 'UTC'));
+
+			if ($apply_offset)
+			{
+				$date = JFactory::getDate($value, 'UTC');
+				$date->setTimezone(new DateTimeZone(JFactory::getConfig()->get('offset')));
+			}
+
+			return $date->format($format, true, false);
+		}
+
+		$regex = '^date\(\s*'
+			. '(?:\'(?<datetime>.*?)\')?'
+			. '(?:\\\\?,\s*\'(?<format>.*?)\')?'
+			. '\s*\)$';
+
+		if ( ! RegEx::match($regex, $value, $match))
+		{
+			return $value;
+		}
+
+		$datetime = ($match['datetime'] ?? null) ?: 'now';
+		$format   = $match['format'] ?? '';
+
+		if (empty($format))
+		{
+			$time   = date('His', strtotime($datetime));
+			$format = (int) $time || $add_time ? 'Y-m-d H:i:s' : 'Y-m-d';
+		}
+
+		$date = new JDate($datetime, JFactory::getConfig()->get('offset', 'UTC'));
+
+		if ($apply_offset)
+		{
+			$date = JFactory::getDate($datetime, 'UTC');
+			$date->setTimezone(new DateTimeZone(JFactory::getConfig()->get('offset')));
+		}
+
+		return $date->format($format, true, false);
 	}
 }

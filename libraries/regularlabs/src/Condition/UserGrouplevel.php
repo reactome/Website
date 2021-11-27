@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.8.10988
+ * @version         21.11.13345
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -22,6 +22,8 @@ use RegularLabs\Library\DB as RL_DB;
  */
 class UserGrouplevel extends User
 {
+	static $user_group_children;
+
 	public function pass()
 	{
 		$user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
@@ -89,17 +91,9 @@ class UserGrouplevel extends User
 	{
 		$children = [];
 
-		$db = JFactory::getDbo();
-
 		foreach ($groups as $group)
 		{
-			$query = $db->getQuery(true)
-				->select($db->quoteName('id'))
-				->from($db->quoteName('#__usergroups'))
-				->where($db->quoteName('parent_id') . ' = ' . (int) $group);
-			$db->setQuery($query);
-
-			$group_children = $db->loadColumn();
+			$group_children = $this->getUserGroupChildrenIdsByGroup($group);
 
 			if (empty($group_children))
 			{
@@ -121,6 +115,37 @@ class UserGrouplevel extends User
 		$children = array_unique($children);
 
 		return $children;
+	}
+
+	private function getUserGroupChildrenIdsByGroup($group)
+	{
+		$group = (int) $group;
+
+		if ( ! is_null(self::$user_group_children))
+		{
+			return self::$user_group_children[$group] ?? [];
+		}
+
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true)
+			->select(['id', 'parent_id'])
+			->from($db->quoteName('#__usergroups'));
+		$db->setQuery($query);
+
+		$groups = $db->loadAssocList('id', 'parent_id');
+
+		foreach ($groups as $id => $parent)
+		{
+			if ( ! isset(self::$user_group_children[$parent]))
+			{
+				self::$user_group_children[$parent] = [];
+			}
+
+			self::$user_group_children[$parent][] = $id;
+		}
+
+		return self::$user_group_children[$group] ?? [];
 	}
 
 	private function passMatchAll($groups)

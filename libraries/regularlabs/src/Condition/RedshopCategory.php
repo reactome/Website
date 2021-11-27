@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.8.10988
+ * @version         21.11.13345
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -55,7 +55,7 @@ class RedshopCategory extends Redshop
 
 		$cats = $this->makeArray($cats);
 
-		$pass = $this->passSimple($cats, 'include');
+		$pass = $this->passSimple($cats, false, 'include');
 
 		if ($pass && $this->params->inc_children == 2)
 		{

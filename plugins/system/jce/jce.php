@@ -41,25 +41,34 @@ class PlgSystemJce extends JPlugin
 
     private function isEditorEnabled()
     {
-        $config = JFactory::getConfig();
-        $user = JFactory::getUser();
+        return JPluginHelper::isEnabled('editors', 'jce');
+    }
 
-        if (!JPluginHelper::getPlugin('editors', 'jce')) {
+    private function canRedirectMedia()
+    {
+        $app = JFactory::getApplication();
+
+        // must have fieldid
+        if (!$app->input->get('fieldid')) {
             return false;
         }
-
-        if ($user->getParam('editor', $config->get('editor')) !== 'jce') {
-            return false;
+        
+        // jce converted mediafield
+        if ($app->input->getCmd('option') == 'com_jce' && $app->input->getCmd('task') == 'mediafield.display') {
+            return true;
         }
 
-        return true;
+        // flexi-content mediafield
+        if ($app->input->getCmd('option') == 'com_media' && $app->input->getCmd('asset') == 'com_flexicontent') {
+            return true;
+        }
+
+        return false;
     }
 
     public function onAfterRoute()
     {
-        $app = JFactory::getApplication();
-
-        if ($app->input->getCmd('option') == 'com_jce' && $app->input->getCmd('task') == 'mediafield.display' && $app->input->get('fieldid')) {
+        if ($this->canRedirectMedia()) {
             
             if ($this->isEditorEnabled()) {
                 $params = JComponentHelper::getParams('com_jce');
@@ -111,45 +120,20 @@ class PlgSystemJce extends JPlugin
 
         $version = new JVersion();
 
-        if (!$version->isCompatible('3.4')) {
+        // Joomla 3.9 or later...
+        if (!$version->isCompatible('3.9')) {
             return true;
         }
 
         if (!($form instanceof JForm)) {
             $this->_subject->setError('JERROR_NOT_A_FORM');
-
             return false;
         }
 
         $params = JComponentHelper::getParams('com_jce');
 
-        // get form name.
-        $name = $form->getName();
-
-        if (!$version->isCompatible('3.6')) {
-            $valid = array(
-                'com_content.article',
-                'com_categories.categorycom_content',
-                'com_templates.style',
-                'com_tags.tag',
-                'com_banners.banner',
-                'com_contact.contact',
-                'com_newsfeeds.newsfeed',
-            );
-
-            // only allow some forms, see - https://github.com/joomla/joomla-cms/pull/8657
-            if (!in_array($name, $valid)) {
-                return true;
-            }
-        }
-
         // editor not enabled
         if (!$this->isEditorEnabled()) {
-            return true;
-        }
-
-        // media replacement disabled
-        if ((bool) $params->get('replace_media_manager', 1) === false) {
             return true;
         }
 
@@ -170,7 +154,13 @@ class PlgSystemJce extends JPlugin
 
             $type = $field->getAttribute('type');
 
-            if (strtolower($type) === 'media') {
+            // joomla media field and flexi-content converted media field
+            if (strtolower($type) === 'media' || strtolower($type) === 'fcmedia') {
+
+                // media replacement disabled, skip...
+                if ((bool) $params->get('replace_media_manager', 1) === false) {
+                    continue;
+                }
 
                 $group = (string) $field->group;
                 $form->setFieldAttribute($name, 'type', 'mediajce', $group);
@@ -178,6 +168,7 @@ class PlgSystemJce extends JPlugin
                 $hasMedia = true;
             }
 
+            // jce media field
             if (strtolower($type) === 'mediajce') {
                 $hasMedia = true;
             }

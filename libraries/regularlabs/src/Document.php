@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.8.10988
+ * @version         21.11.13345
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -25,6 +25,42 @@ use RegularLabs\Library\CacheNew as Cache;
  */
 class Document
 {
+	/**
+	 * Enqueues an admin error
+	 *
+	 * @param string $message
+	 */
+	public static function adminError($message)
+	{
+		self::adminMessage($message, 'error');
+	}
+
+	/**
+	 * Enqueues an admin message
+	 *
+	 * @param string $message
+	 * @param string $type
+	 */
+	public static function adminMessage($message, $type = 'message')
+	{
+		if ( ! self::isAdmin())
+		{
+			return;
+		}
+
+		self::message($message, $type);
+	}
+
+	/**
+	 * Enqueues an error
+	 *
+	 * @param string $message
+	 */
+	public static function error($message)
+	{
+		self::message($message, 'error');
+	}
+
 	/**
 	 * @return  JDocument  The document object
 	 */
@@ -321,7 +357,7 @@ class Document
 			return true;
 		}
 
-		if ($title)
+		if ($title && self::isAdmin())
 		{
 			Language::load('plg_system_regularlabs');
 
@@ -412,6 +448,19 @@ class Document
 		self::loadFormDependencies();
 
 		self::style('regularlabs/popup.min.css');
+	}
+
+	/**
+	 * Enqueues a message
+	 *
+	 * @param string $message
+	 * @param string $type
+	 */
+	public static function message($message, $type = 'message')
+	{
+		Language::load('plg_system_regularlabs');
+
+		JFactory::getApplication()->enqueueMessage($message, $type);
 	}
 
 	/**
@@ -521,7 +570,7 @@ class Document
 		{
 			JHtml::_('behavior.core');
 			JHtml::_('script', 'jui/cms.js', ['version' => 'auto', 'relative' => true]);
-			$version = '21.8.10988';
+			$version = '21.11.13345';
 		}
 
 		if ( ! empty($version))
@@ -599,10 +648,11 @@ class Document
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '21.8.10988';
+			$version = '21.11.13345';
 		}
 
-		if ( ! $file = File::getMediaFile('css', $file))
+		$file = File::getMediaFile('css', $file);
+		if ( ! $file)
 		{
 			return;
 		}

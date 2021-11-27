@@ -2,7 +2,7 @@
 <extension version="3.9" type="plugin" group="editors-xtd" method="upgrade">
 	<name>PLG_EDITORS-XTD_SLIDERS</name>
 	<description>PLG_EDITORS-XTD_SLIDERS_DESC</description>
-	<version>8.1.1</version>
+	<version>8.1.3</version>
 	<creationDate>August 2021</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
@@ -11,6 +11,12 @@
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 
 	<scriptfile>script.install.php</scriptfile>
+
+	<updateservers>
+		<server type="extension" priority="1" name="Regular Labs - Sliders">
+			https://download.regularlabs.com/updates.xml?e=sliders&amp;type=.xml
+		</server>
+	</updateservers>
 
 	<files>
 		<file plugin="sliders">sliders.php</file>

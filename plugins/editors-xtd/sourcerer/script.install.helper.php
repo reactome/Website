@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         9.0.0
+ * @version         9.0.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -473,6 +473,12 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 
 	public function publishExtension($route)
 	{
+		if ($this->extension_type == 'module')
+		{
+			// Force enable administrator module extension to solve disabled J3 modules on J4 setups
+			$this->enableAdministratorModuleExtension();
+		}
+
 		if ($route == 'update'
 			&& $this->installed_joomla_version >= $this->current_joomla_version
 		)
@@ -490,6 +496,18 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 				$this->publishModule();
 				break;
 		}
+	}
+
+	public function enableAdministratorModuleExtension()
+	{
+		$query = $this->db->getQuery(true)
+			->update('#__extensions')
+			->set($this->db->quoteName('enabled') . ' = 1')
+			->where($this->db->quoteName('type') . ' = ' . $this->db->quote('module'))
+			->where($this->db->quoteName('element') . ' = ' . $this->db->quote('mod_' . $this->extname))
+			->where($this->db->quoteName('client_id') . ' = 1');
+		$this->db->setQuery($query);
+		$this->db->execute();
 	}
 
 	public function publishModule()

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.8.10988
+ * @version         21.11.13345
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -81,7 +81,8 @@ class JFormFieldRL_VirtueMart extends \RegularLabs\Library\FieldGroup
 
 	protected function getInput()
 	{
-		if ($error = $this->missingFilesOrTables(['categories', 'products']))
+		$error = $this->missingFilesOrTables(['categories', 'products']);
+		if ($error)
 		{
 			return $error;
 		}

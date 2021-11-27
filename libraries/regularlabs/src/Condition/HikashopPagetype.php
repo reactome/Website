@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.8.10988
+ * @version         21.11.13345
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -29,7 +29,7 @@ class HikashopPagetype extends Hikashop
 		$type = $this->request->view;
 
 		if (
-		($type == 'product' && in_array($this->request->task, ['contact', 'show']))
+			($type == 'product' && in_array($this->request->task, ['contact', 'show']))
 		)
 		{
 			$type .= '_' . $this->request->task;

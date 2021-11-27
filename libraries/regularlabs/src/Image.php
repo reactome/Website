@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.8.10988
+ * @version         21.11.13345
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -13,31 +13,13 @@ namespace RegularLabs\Library;
 
 defined('_JEXEC') or die;
 
-use InvalidArgumentException;
+use Exception;
 use Joomla\CMS\Filesystem\Folder as JFolder;
 use Joomla\CMS\Uri\Uri as JUri;
 use Joomla\Image\Image as JImage;
 
 class Image
 {
-//	public static function getSet($source, $width, $height, $folder = 'resized', $resize = true, $quality = 'medium', $possible_suffix = '')
-//	{
-//		$paths = self::getPaths($source, $width, $height, $folder, $resize, $quality, $possible_suffix);
-//
-//		return (object) [
-//			'original'     => (object) [
-//				'url'    => $paths->image,
-//				'width'  => self::getWidth($paths->original),
-//				'height' => self::getHeight($paths->original),
-//			],
-//			'resized' => (object) [
-//				'url'    => $paths->resized,
-//				'width'  => self::getWidth($paths->resized),
-//				'height' => self::getHeight($paths->resized),
-//			],
-//		];
-//	}
-
 	public static function cleanPath($source)
 	{
 		$source = ltrim(str_replace(JUri::root(), '', $source), '/');
@@ -53,21 +35,9 @@ class Image
 			'height' => 0,
 		];
 
-		if (File::isExternal($source))
-		{
-			return $empty;
-		}
+		$image = self::getImageObject(JPATH_SITE . '/' . $source);
 
-		if ( ! getimagesize($source))
-		{
-			return $empty;
-		}
-
-		try
-		{
-			$image = new JImage(JPATH_SITE . '/' . $source);
-		}
-		catch (InvalidArgumentException $e)
+		if (is_null($image))
 		{
 			return $empty;
 		}
@@ -83,6 +53,45 @@ class Image
 		$dimensions = self::getDimensions($source);
 
 		return $dimensions->height;
+	}
+
+	public static function getImageObject($source)
+	{
+		if (File::isExternal($source))
+		{
+			return null;
+		}
+
+		if ( ! file_exists($source))
+		{
+			return null;
+		}
+
+		if ( ! getimagesize($source))
+		{
+			return null;
+		}
+
+		try
+		{
+			$image = new JImage($source);
+		}
+		catch (Exception $e)
+		{
+			return null;
+		}
+
+		if ( ! ($image instanceof JImage))
+		{
+			return null;
+		}
+
+		if ( ! $image->isLoaded())
+		{
+			return null;
+		}
+
+		return $image;
 	}
 
 	public static function getJpgQuality($quality = 'medium')
@@ -264,31 +273,19 @@ class Image
 		$destination_folder = ltrim($destination_folder ?: File::getDirName($clean_source));
 		$destination_folder = self::cleanPath($destination_folder);
 
-		if ( ! file_exists($source_path))
+		$image = self::getImageObject($source_path);
+
+		if (is_null($image))
 		{
-			return false;
+			return $source;
 		}
 
-		if ( ! self::setNewDimensions($source, $width, $height))
+		if ( ! self::setNewDimensionsByImageObject($image, $width, $height))
 		{
 			return $source;
 		}
 
 		if ( ! $width && ! $height)
-		{
-			return $source;
-		}
-
-		if ( ! getimagesize($source_path))
-		{
-			return $source;
-		}
-
-		try
-		{
-			$image = new JImage($source_path);
-		}
-		catch (InvalidArgumentException $e)
 		{
 			return $source;
 		}
@@ -303,16 +300,21 @@ class Image
 
 		JFolder::create(JPATH_SITE . '/' . $destination_folder);
 
-		$info = JImage::getImageFileProperties($source_path);
+		try
+		{
+			$info = JImage::getImageFileProperties($source_path);
 
-		$options = ['quality' => self::getQuality($info->type, $quality)];
+			$options = ['quality' => self::getQuality($info->type, $quality)];
 
-		$image->cropResize($width, $height, false)
-			->toFile($destination_path, $info->type, $options);
+			$image->cropResize($width, $height, false)
+				->toFile($destination_path, $info->type, $options);
 
-		$image->destroy();
-
-		return $destination;
+			return $destination;
+		}
+		catch (Exception $e)
+		{
+			return $source;
+		}
 	}
 
 	public static function setNewDimensions($source, &$width, &$height)
@@ -330,32 +332,40 @@ class Image
 		$clean_source = self::cleanPath($source);
 		$source_path  = JPATH_SITE . '/' . $clean_source;
 
-		if ( ! file_exists($source_path))
+		$image = self::getImageObject($source_path);
+
+		if (is_null($image))
 		{
 			return false;
 		}
 
-		if ( ! getimagesize($source_path))
+		return self::setNewDimensionsByImageObject($image, $width, $height);
+	}
+
+	public static function setNewDimensionsByImageObject($image, &$width, &$height)
+	{
+		if ( ! ($image instanceof JImage) || ! $image->isLoaded())
+		{
+			return false;
+		}
+
+		if ( ! $width && ! $height)
 		{
 			return false;
 		}
 
 		try
 		{
-			$image = new JImage($source_path);
+			$original_width  = $image->getWidth();
+			$original_height = $image->getHeight();
+
+			$width  = $width ?: round($original_width / $original_height * $height);
+			$height = $height ?: round($original_height / $original_width * $width);
 		}
-		catch (InvalidArgumentException $e)
+		catch (Exception $e)
 		{
 			return false;
 		}
-
-		$original_width  = $image->getWidth();
-		$original_height = $image->getHeight();
-
-		$width  = $width ?: round($original_width / $original_height * $height);
-		$height = $height ?: round($original_height / $original_width * $width);
-
-		$image->destroy();
 
 		if ($width == $original_width && $height == $original_height)
 		{
@@ -400,5 +410,4 @@ class Image
 
 		return false;
 	}
-
 }

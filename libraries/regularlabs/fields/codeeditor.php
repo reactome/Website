@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.8.10988
+ * @version         21.11.13345
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -32,8 +32,6 @@ class JFormFieldRL_CodeEditor extends \RegularLabs\Library\Field
 		$width  = $this->get('width', '100%');
 		$height = $this->get('height', 400);
 		$syntax = $this->get('syntax', 'html');
-
-		$this->value = htmlspecialchars(str_replace('\n', "\n", $this->value), ENT_COMPAT, 'UTF-8');
 
 		$editor_plugin = JPluginHelper::getPlugin('editors', 'codemirror');
 

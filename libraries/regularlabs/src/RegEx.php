@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.8.10988
+ * @version         21.11.13345
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -32,7 +32,12 @@ class RegEx
 	 */
 	public static function match($pattern, $string, &$match = null, $options = null, $flags = 0)
 	{
-		if ( ! is_string($pattern) || $pattern == '' || ! is_string($string) || $string == '')
+		if (
+			( ! is_string($pattern) && ! is_numeric($pattern))
+			|| $pattern === ''
+			|| ( ! is_string($string) && ! is_numeric($string))
+			|| $string === ''
+		)
 		{
 			return false;
 		}
@@ -55,7 +60,12 @@ class RegEx
 	 */
 	public static function matchAll($pattern, $string, &$matches = null, $options = null, $flags = PREG_SET_ORDER)
 	{
-		if ( ! is_string($pattern) || $pattern == '' || ! is_string($string) || $string == '')
+		if (
+			( ! is_string($pattern) && ! is_numeric($pattern))
+			|| $pattern === ''
+			|| ( ! is_string($string) && ! is_numeric($string))
+			|| $string === ''
+		)
 		{
 			$matches = [];
 

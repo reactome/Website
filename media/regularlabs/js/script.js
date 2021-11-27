@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         21.8.10988
+ * @version         21.11.13345
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -12,11 +12,11 @@
 
 if (typeof window.RegularLabsScripts === 'undefined'
 	|| typeof RegularLabsScripts.version === 'undefined'
-	|| RegularLabsScripts.version < '21.8.10988') {
+	|| RegularLabsScripts.version < '21.11.13345') {
 
 	(function($) {
 		window.RegularLabsScripts = {
-			version: '21.8.10988',
+			version: '21.11.13345',
 
 			ajax_list        : [],
 			started_ajax_list: false,

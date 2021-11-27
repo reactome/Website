@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.8.10988
+ * @version         21.11.13345
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -168,14 +168,12 @@ class Form
 
 		$params = Parameters::getPlugin('regularlabs');
 
-		if ( ! is_array($value))
-		{
-			$value = explode(',', $value);
-		}
+		$value = ArrayHelper::toArray($value);
+		$value = ArrayHelper::clean($value);
 
 		if (count($value) === 1 && strpos($value[0], ',') !== false)
 		{
-			$value = explode(',', $value[0]);
+			$value = ArrayHelper::toArray($value[0]);
 		}
 
 		$count = 0;

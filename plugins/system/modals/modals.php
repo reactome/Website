@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.9.1
+ * @version         11.9.5
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -57,11 +57,8 @@ if ( ! RL_Document::isJoomlaVersion(3, 'MODALS'))
 {
 	RL_Extension::disable('modals', 'plugin');
 
-	RL_Language::load('plg_system_regularlabs');
-
-	JFactory::getApplication()->enqueueMessage(
-		JText::sprintf('RL_PLUGIN_HAS_BEEN_DISABLED', JText::_('MODALS')),
-		'error'
+	RL_Document::adminError(
+		JText::sprintf('RL_PLUGIN_HAS_BEEN_DISABLED', JText::_('MODALS'))
 	);
 
 	return;
@@ -83,7 +80,7 @@ if (true)
 
 		protected function loadStylesAndScripts(&$buffer)
 		{
-			Document::loadStylesAndScripts();
+			Document::loadStylesAndScripts($buffer);
 		}
 
 		protected function changeDocumentBuffer(&$buffer)

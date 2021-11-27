@@ -62,7 +62,7 @@ class WFEditor
      *
      * @var array
      */
-    private static $plugins = array('core', 'help', 'autolink', 'effects', 'cleanup', 'code', 'format', 'importcss', 'colorpicker', 'upload', 'figure', 'ui', 'noneditable', 'branding');
+    private static $plugins = array('core', 'help', 'autolink', 'effects', 'cleanup', 'code', 'format', 'importcss', 'colorpicker', 'blobupload', 'upload', 'figure', 'ui', 'noneditable', 'branding');
 
     private function addScript($url)
     {
@@ -259,6 +259,11 @@ class WFEditor
             } else {
                 $userParams = json_decode($userParams, true);
             }
+
+            // Remove values with invalid key
+        	$userParams = array_filter($userParams, function ($key) {
+            	return !is_numeric($key);
+        	}, ARRAY_FILTER_USE_KEY);
 
             foreach ($userParams as $userParam) {
                 $name = '';
@@ -514,8 +519,8 @@ class WFEditor
         // encode as json string
         $tinymce = json_encode($settings, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES);
 
-        $this->addScriptDeclaration('try{WFEditor.init(' . $tinymce . ');}catch(e){console.debug(e);}');
-
+        $this->addScriptDeclaration("try{WfEditor.init(" . $tinymce . ");}catch(e){console.debug(e);}");
+        
         if (is_object($this->profile)) {
             if ($wf->getParam('editor.callback_file')) {
                 $this->addScript(JURI::root(true) . '/' . $wf->getParam('editor.callback_file'));
@@ -571,7 +576,7 @@ class WFEditor
                     $script .= '&' . $version;
                 }
             }
-            $output .= $tab . '<script data-cfasync="false" type="text/javascript" src="' . $script . '"></script>' . $end;
+            $output .= $tab . '<script data-cfasync="false" type="text/javascript" src="' . $script . '" defer></script>' . $end;
         }
 
         foreach ($this->javascript as $script) {

@@ -8,11 +8,11 @@
  * @license         https://github.com/regularlabs/regularjs/blob/master/LICENCE MIT
  */
 
+"use strict";
+
 if (typeof window.Regular === 'undefined'
 	|| typeof Regular.version === 'undefined'
-	|| Regular.version < 1.3) {
-
-	"use strict";
+	|| Regular.version < 1.5) {
 
 	window.Regular = new function() {
 		/**
@@ -21,7 +21,7 @@ if (typeof window.Regular === 'undefined'
 		 *
 		 */
 
-		this.version = 1.3;
+		this.version = 1.5;
 
 		/**
 		 *
@@ -38,7 +38,7 @@ if (typeof window.Regular === 'undefined'
 		 */
 		this.alias = function(word) {
 			if (typeof window[word] !== 'undefined') {
-				console.error(`Cannot set '${word}' as am alias of Regular, as it already exists.`);
+				console.error(`Cannot set '${word}' as an alias of Regular, as it already exists.`);
 
 				return false;
 			}
@@ -63,8 +63,12 @@ if (typeof window.Regular === 'undefined'
 			}
 
 			const element = typeof selector === 'string'
-				? document.querySelectorAll(selector)
+				? document.querySelector(selector)
 				: selector;
+
+			if ( ! element) {
+				return false;
+			}
 
 			if (typeof classes === 'string') {
 				classes = classes.split(' ');
@@ -112,17 +116,30 @@ if (typeof window.Regular === 'undefined'
 		 *
 		 * @param selector  A CSS selector string, a HTMLElement object or a collection of HTMLElement objects.
 		 * @param classes   A string or array of class names.
+		 * @param force     An optional boolean value that forces the class to be added or removed.
 		 */
-		this.toggleClasses = function(selector, classes) {
-			doClasses('toggle', selector, classes);
+		this.toggleClasses = function(selector, classes, force) {
+			switch (force) {
+				case true:
+					doClasses('add', selector, classes);
+					break;
+
+				case false:
+					doClasses('remove', selector, classes);
+					break;
+
+				default:
+					doClasses('toggle', selector, classes);
+					break;
+			}
 		};
 
 		/**
-		 * Shows the given element(s) (changes opacity and display attributes).
+		 * Makes the given element(s) visible (changes visibility and display attributes).
 		 *
 		 * @param selector  A CSS selector string, a HTMLElement object or a collection of HTMLElement objects.
 		 */
-		this.show = function(selector) {
+		this.makeVisible = function(selector) {
 			if ( ! selector) {
 				return;
 			}
@@ -132,7 +149,7 @@ if (typeof window.Regular === 'undefined'
 				: selector;
 
 			if ('forEach' in element) {
-				element.forEach(subElement => $.show(subElement));
+				element.forEach(subElement => $.makeVisible(subElement));
 				return;
 			}
 
@@ -154,7 +171,30 @@ if (typeof window.Regular === 'undefined'
 			}
 
 			element.style.visibility = 'visible';
-			element.style.opacity    = 1;
+		};
+
+		/**
+		 * Shows the given element(s) (makes visible and changes opacity attribute).
+		 *
+		 * @param selector  A CSS selector string, a HTMLElement object or a collection of HTMLElement objects.
+		 */
+		this.show = function(selector) {
+			if ( ! selector) {
+				return;
+			}
+
+			const element = typeof selector === 'string'
+				? document.querySelectorAll(selector)
+				: selector;
+
+			if ('forEach' in element) {
+				element.forEach(subElement => $.show(subElement));
+				return;
+			}
+
+			this.makeVisible(element);
+
+			element.style.opacity = 1;
 		};
 
 		/**
@@ -188,7 +228,42 @@ if (typeof window.Regular === 'undefined'
 		};
 
 		/**
-		 * Fades in the the given element(s).
+		 * Shows or hides the given element(s).
+		 *
+		 * @param selector  A CSS selector string, a HTMLElement object or a collection of HTMLElement objects.
+		 * @param force     An optional boolean value that forces the class to be added or removed.
+		 */
+		this.toggle = function(selector, force) {
+			if ( ! selector) {
+				return;
+			}
+
+			switch (force) {
+				case true:
+					$.show(selector);
+					break;
+
+				case false:
+					$.hide(selector);
+					break;
+
+				default:
+					const element = typeof selector === 'string'
+						? document.querySelectorAll(selector)
+						: selector;
+
+					if ('forEach' in element) {
+						element.forEach(subElement => $.toggle(subElement));
+						return;
+					}
+
+					element.style.display === 'none' ? $.show(selector) : $.hide(selector);
+					break;
+			}
+		};
+
+		/**
+		 * Fades in the given element(s).
 		 *
 		 * @param selector    A CSS selector string, a HTMLElement object or a collection of HTMLElement objects.
 		 * @param duration    Optional duration of the effect in milliseconds.
@@ -203,55 +278,23 @@ if (typeof window.Regular === 'undefined'
 				? document.querySelectorAll(selector)
 				: selector;
 
-			if ('forEach' in element) {
-				element.forEach(subElement => $.fadeIn(subElement, duration, oncomplete));
-				return;
-			}
+			this.makeVisible(element);
 
-			element.setAttribute('data-fading', 'in');
-
-			const wait        = 50; // amount of time between steps
-			const nr_of_steps = duration / wait;
-			const change      = 1 / nr_of_steps; // time to wait before next step
-
-			element.style.opacity = getComputedStyle(element, 'opacity');
-
-			if ( ! element.style.opacity) {
-				element.style.opacity = 0;
-			}
-
-			if (element.style.display === 'none') {
-				element.style.display = 'block';
-			}
-
-			element.style.visibility = 'visible';
-
-			(function fade() {
-				if (element.getAttribute('data-fading') === 'out') {
-					return;
-				}
-
-				const new_opacity = parseFloat(element.style.opacity) + change;
-
-				if (new_opacity >= 1) {
+			$.fadeTo(
+				element,
+				1,
+				duration,
+				() => {
 					$.show(element);
-					element.setAttribute('data-fading', '');
 					if (oncomplete) {
 						oncomplete.call(element);
 					}
-					return;
 				}
-
-				element.style.opacity = new_opacity;
-
-				setTimeout(function() {
-					fade.call();
-				}, wait);
-			})();
+			);
 		};
 
 		/**
-		 * Fades out the the given element(s).
+		 * Fades out the given element(s).
 		 *
 		 * @param selector    A CSS selector string, a HTMLElement object or a collection of HTMLElement objects.
 		 * @param duration    Optional duration of the effect in milliseconds.
@@ -266,12 +309,40 @@ if (typeof window.Regular === 'undefined'
 				? document.querySelectorAll(selector)
 				: selector;
 
-			if ('forEach' in element) {
-				element.forEach(subElement => $.fadeOut(subElement, duration, oncomplete));
+			$.fadeTo(
+				element,
+				0,
+				duration,
+				() => {
+					$.hide(element);
+					if (oncomplete) {
+						oncomplete.call(element);
+					}
+				}
+			);
+		};
+
+		/**
+		 * Fades out the given element(s).
+		 *
+		 * @param selector    A CSS selector string, a HTMLElement object or a collection of HTMLElement objects.
+		 * @param opacity     Opacity Value to fade to
+		 * @param duration    Optional duration of the effect in milliseconds.
+		 * @param oncomplete  Optional callback function to execute when effect is completed.
+		 */
+		this.fadeTo = function(selector, opacity, duration = 250, oncomplete) {
+			if ( ! selector) {
 				return;
 			}
 
-			element.setAttribute('data-fading', 'out');
+			const element = typeof selector === 'string'
+				? document.querySelectorAll(selector)
+				: selector;
+
+			if ('forEach' in element) {
+				element.forEach(subElement => $.fadeTo(subElement, opacity, duration));
+				return;
+			}
 
 			const wait        = 50; // amount of time between steps
 			const nr_of_steps = duration / wait;
@@ -279,25 +350,50 @@ if (typeof window.Regular === 'undefined'
 
 			element.style.opacity = getComputedStyle(element, 'opacity');
 
+			if (opacity === element.style.opacity) {
+				element.setAttribute('data-fading', '');
+
+				if (oncomplete) {
+					oncomplete.call(element);
+				}
+
+				return;
+			}
+
+			this.makeVisible(element);
+
+			const direction = opacity > element.style.opacity ? 'in' : 'out';
+
+			element.setAttribute('data-fading', direction);
+
 			(function fade() {
-				if (element.getAttribute('data-fading') === 'in') {
+				if (element.getAttribute('data-fading')
+					&& element.getAttribute('data-fading') !== direction
+				) {
 					return;
 				}
 
-				const new_opacity = parseFloat(element.style.opacity) - change;
+				const new_opacity = direction === 'out'
+					? parseFloat(element.style.opacity) - change
+					: parseFloat(element.style.opacity) + change;
 
-				if (element.style.opacity <= 0) {
-					$.hide(element);
+				if ((direction === 'in' && new_opacity >= opacity)
+					|| (direction === 'out' && new_opacity <= opacity)
+				) {
+					element.style.opacity = opacity;
+
 					element.setAttribute('data-fading', '');
+
 					if (oncomplete) {
 						oncomplete.call(element);
 					}
+
 					return;
 				}
 
 				element.style.opacity = new_opacity;
 
-				setTimeout(function() {
+				setTimeout(() => {
 					fade.call();
 				}, wait);
 			})();

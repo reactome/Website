@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.9.1
+ * @version         11.9.5
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -38,12 +38,12 @@ class Popup extends RL_EditorButtonPopup
 		";
 		RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('modals/popup.min.js', '11.9.1');
+		RL_Document::script('modals/popup.min.js', '11.9.5');
 	}
 
 	public function loadStyles()
 	{
-		RL_Document::style('modals/popup.min.css', '11.9.1');
+		RL_Document::style('modals/popup.min.css', '11.9.5');
 	}
 }
 

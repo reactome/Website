@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.8.10988
+ * @version         21.11.13345
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -99,15 +99,14 @@ class SystemPlugin extends JCMSPlugin
 
 		$buffer = Document::getComponentBuffer();
 
+		$this->loadStylesAndScripts($buffer);
+
 		if ( ! $buffer)
 		{
 			return;
 		}
 
-		if ( ! $this->changeDocumentBuffer($buffer))
-		{
-			return;
-		}
+		$this->changeDocumentBuffer($buffer);
 
 		Document::setComponentBuffer($buffer);
 	}
@@ -190,12 +189,6 @@ class SystemPlugin extends JCMSPlugin
 		}
 
 		$this->handleOnAfterRoute();
-
-		$buffer = Document::getComponentBuffer();
-
-		$this->loadStylesAndScripts($buffer);
-
-		Document::setComponentBuffer($buffer);
 	}
 
 	/**
