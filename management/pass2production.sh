@@ -120,7 +120,7 @@ ICON_DIR="/usr/local/reactomes/Reactome/production/Icons"
 FIGURES_DIR="${STATIC_DIR}/figures"
 
 # services
-TOMCAT_PROCESS="tomcat7"
+TOMCAT_PROCESS="tomcat9"
 SOLR_PROCESS="solr"
 NEO4J_PROCESS="neo4j"
 

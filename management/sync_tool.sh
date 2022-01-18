@@ -43,7 +43,7 @@ DESTINATION_SERVER_USER=""
 DESTINATION_SERVER_PASSWD=""
 
 # services
-TOMCAT_PROCESS="tomcat7"
+TOMCAT_PROCESS="tomcat9"
 SOLR_PROCESS="solr"
 NEO4J_PROCESS="neo4j"
 
@@ -66,6 +66,9 @@ GK_CURRENT_DB="current"
 # No trailing slash, they're added when needed.
 SOLR_DATA_DIR="/var/solr/data"  # solr:solr
 NEO4J_GRAPH_DIR="/var/lib/neo4j/data/databases/graph.db" # neo4j:adm
+NEO4J_GRAPH_SCHEMA_DIR="/var/lib/neo4j/data/databases/graph.db/schema" # neo4j:adm
+#NEO4J_GRAPH_TRANS_DIR="/var/lib/neo4j/data/transactions/graph.db" # neo4j:adm
+
 EHLD_ICONS_DIR="/usr/local/reactomes/Reactome/production/Icons"
 FIGURES_DIR="${STATIC_DIR}/figures"
 
@@ -125,15 +128,15 @@ start_services () {
     echo "Starting services..."
 
     echo "Starting solR"
-    sudo service solr start &> /dev/null
+    sudo service ${SOLR_PROCESS} start &> /dev/null
     check_started ${SOLR_PROCESS}
 
     echo "Starting Neo4j"
-    sudo service neo4j start &> /dev/null
+    sudo service ${NEO4J_PROCESS} start &> /dev/null
     check_started ${NEO4J_PROCESS}
 
     echo "Starting Tomcat"
-    sudo service tomcat7 start &> /dev/null
+    sudo service ${TOMCAT_PROCESS} start &> /dev/null
     check_started ${TOMCAT_PROCESS}
 
     echo "Services have been started"
@@ -226,6 +229,21 @@ folders_to_clean_up () {
             echo "[WARN] Could not delete [${DIR}] folder. It can be deleted manually and we won't exit the script."
         fi
     done
+
+    # neo4j
+    declare -A folders_to_clean=( ["neo4j-schema"]=${NEO4J_GRAPH_SCHEMA_DIR} )
+    for key in "${!folders_to_clean[@]}"
+    do
+        DIR=${folders_to_clean[${key}]}
+        echo "Cleaning ${DIR} folder";
+        sudo -S rm -rf ${DIR} &> /dev/null
+        OUT=$?
+        if [[ "$OUT" -ne 0 ]]; then
+            echo "[WARN] Could not delete [${DIR}] folder. It can be deleted manually and we won't exit the script."
+        fi
+    done
+
+
 
     # can't delete analysis using rm. It throws an error of argument is too long.
     declare -A folders_to_clean_using_find=( ["analysis-temp"]=${ANALYSIS_TEMP_FOLDER} ["cgi-tmp"]=${CGI_TMP_FOLDER} )
@@ -390,7 +408,7 @@ analysis () {
     fi
 
     ALL_ANALYSIS="${ANALYSIS_FOLDER}/*"
-    PERM="tomcat7:reactome"
+    PERM="tomcat9:reactome"
     echo "Updating analysis files owner:group to [${PERM}]"
     sudo  -S chown -R ${PERM} ${ALL_ANALYSIS} &> /dev/null
     OUT=$?
