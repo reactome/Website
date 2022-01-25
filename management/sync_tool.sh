@@ -408,7 +408,7 @@ analysis () {
     fi
 
     ALL_ANALYSIS="${ANALYSIS_FOLDER}/*"
-    PERM="tomcat9:reactome"
+    PERM="tomcat:reactome"
     echo "Updating analysis files owner:group to [${PERM}]"
     sudo  -S chown -R ${PERM} ${ALL_ANALYSIS} &> /dev/null
     OUT=$?
