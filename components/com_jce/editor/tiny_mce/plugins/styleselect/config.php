@@ -95,8 +95,6 @@ class WFStyleselectPluginConfig
                 foreach ((array) $custom_styles as $style) {
                     $style = (object) $style;
 
-                    $style->ceFalseOverride = true;
-
                     // clean up title
                     if (isset($style->title)) {
                         $style->title = self::cleanString($style->title);
@@ -142,21 +140,15 @@ class WFStyleselectPluginConfig
                         $style->remove = 'all';
                     }
 
-                    // edge case for forced_root_block=false
-                    if ($settings['forced_root_block'] === false) {
-                        if (!isset($style->element)) {
-                            $style->inline = 'span';
-                            $style->selector = '*';
-                        }
-                    } else {
-                        // match all if not set
-                        if (!isset($style->selector)) {
-                            $style->selector = '*';
+                    // match all if not set
+                    if (!isset($style->selector)) {
+                        $style->selector = '*';
 
-                            // set to element
-                            if (isset($style->element)) {
-                                $style->selector = $style->element;
-                            }
+                        // set to element
+                        if (isset($style->element)) {
+                            $style->selector = $style->element;
+                        } else {
+                            $style->inline = 'span';
                         }
                     }
 

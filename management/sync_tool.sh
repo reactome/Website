@@ -67,7 +67,7 @@ GK_CURRENT_DB="current"
 SOLR_DATA_DIR="/var/solr/data"  # solr:solr
 NEO4J_GRAPH_DIR="/var/lib/neo4j/data/databases/graph.db" # neo4j:adm
 NEO4J_GRAPH_SCHEMA_DIR="/var/lib/neo4j/data/databases/graph.db/schema" # neo4j:adm
-#NEO4J_GRAPH_TRANS_DIR="/var/lib/neo4j/data/transactions/graph.db" # neo4j:adm
+NEO4J_GRAPH_TRANS_DIR="/var/lib/neo4j/data/transactions/graph.db" # neo4j:adm
 
 EHLD_ICONS_DIR="/usr/local/reactomes/Reactome/production/Icons"
 FIGURES_DIR="${STATIC_DIR}/figures"
@@ -231,7 +231,7 @@ folders_to_clean_up () {
     done
 
     # neo4j
-    declare -A folders_to_clean=( ["neo4j-schema"]=${NEO4J_GRAPH_SCHEMA_DIR} )
+    declare -A folders_to_clean=( ["neo4j-schema"]=${NEO4J_GRAPH_SCHEMA_DIR} ["neo4j-transactions"]=${NEO4J_GRAPH_TRANS_DIR} )
     for key in "${!folders_to_clean[@]}"
     do
         DIR=${folders_to_clean[${key}]}
