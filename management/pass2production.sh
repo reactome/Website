@@ -25,10 +25,13 @@
 #
 #----------------------------------------------------------------------------------------------------------------------
 
-if [[ $(id -u) -ne 0 ]] ; then echo "Please run as sudo." ; exit 1 ; fi
+if [[ $(id -u) -ne 0 ]]; then
+    echo "Please run as sudo."
+    exit 1
+fi
 
 DIR="/usr/local/reactomes/Reactome/production/Website/scripts"
-cd ${DIR};
+cd ${DIR}
 
 NOW=$(date +"%Y%m%d%H%M%S")
 P2P_DIR="./pass2prod"
@@ -44,10 +47,10 @@ exec 2>&1
 # Delete old logs. Only 5 are kept
 LRU=$(ls -t ${LOG}* 2>/dev/null | sed -e '1,5d')
 for LOG_TO_DEL in ${LRU}; do
-    rm -f ${LOG_TO_DEL};
-done;
+    rm -f ${LOG_TO_DEL}
+done
 
-print_help () {
+print_help() {
     echo $""
     echo "###########################################################################"
     echo "########################## Pass to Production #############################"
@@ -63,7 +66,7 @@ print_help () {
     exit
 }
 
-usage () {
+usage() {
     _SCRIPT=$(basename "$0")
     echo "Usage: sudo ./$_SCRIPT <parameters> [OPTION: move_data_over or do_release]"
     echo '          release_version=<XX> *** [MANDATORY] ***'
@@ -81,8 +84,7 @@ usage () {
 }
 
 # Check arguments
-for ARGUMENT in "$@"
-do
+for ARGUMENT in "$@"; do
     KEY=$(echo ${ARGUMENT} | cut -f1 -d=)
     VALUE=$(echo ${ARGUMENT} | cut -f2 -d=)
 
@@ -114,13 +116,14 @@ PRD1_SERVER="reactome.org"
 LIVE_SERVER="reactome.org"
 
 # No trailing slash, they're added when needed.
-SOLR_DATA_DIR="/var/solr/data"  # solr:solr
-NEO4J_GRAPH_DIR="/var/lib/neo4j/data/databases/graph.db" # neo4j:adm
+SOLR_DATA_DIR="/var/solr/data" # solr:solr
+NEO4J_DB_NAME="graph.db"
+NEO4J_GRAPH_DIR="/var/lib/neo4j/data/databases/${NEO4J_DB_NAME}" # neo4j:adm
 ICON_DIR="/usr/local/reactomes/Reactome/production/Icons"
 FIGURES_DIR="${STATIC_DIR}/figures"
 
 # services
-TOMCAT_PROCESS="tomcat7"
+TOMCAT_PROCESS="tomcat9"
 SOLR_PROCESS="solr"
 NEO4J_PROCESS="neo4j"
 
@@ -148,8 +151,8 @@ MYSQL_HOME="/usr/bin"
 MYSQL_PORT=3306
 WEBSITE_MYSQL_USER=""
 WEBSITE_MYSQL_PASSWD=""
-GK_CURRENT_DB="current";
-STABLE_ID_DB="stable_identifiers";
+GK_CURRENT_DB="current"
+STABLE_ID_DB="stable_identifiers"
 R_MYSQL_USER=""
 R_MYSQL_PASSWD=""
 GK_CURRENT_TMP_FILE="/tmp/${GK_CURRENT_DB}_release.sql"
@@ -174,11 +177,11 @@ PRIVATE_KEY="/home/shared/.ssh/shared.pem"
 SHARED_USER="shared"
 PASSPHRASE="" # do not push this script if the passphrase is written down here
 
-SYNC_TOOL="sudo ${DIR}/sync_tool.sh";
+SYNC_TOOL="sudo ${DIR}/sync_tool.sh"
 
 # IMPORTANT: SAME DIRECTORY IS USED FOR CLEAN UP - NEVER PUT A
 # to add more directories to be transferred ["name"]=dir
-declare -A dict=( ["solr"]=${SOLR_DATA_DIR} ["neo4j"]=${NEO4J_GRAPH_DIR} ["icons"]=${ICON_DIR} ["figures"]=${FIGURES_DIR} )
+declare -A dict=(["solr"]=${SOLR_DATA_DIR} ["icons"]=${ICON_DIR} ["figures"]=${FIGURES_DIR})
 
 if [[ "${HELP}" == "help-me" ]]; then
     print_help
@@ -192,60 +195,58 @@ fi
 
 re='^[0-9]+$'
 if ! [[ "${RELEASE_VERSION}" =~ $re ]] && [[ ! "${REMOVE_PP}" ]]; then
-   echo "Release Version is not a number"
-   exit;
+    echo "Release Version is not a number"
+    exit
 fi
-PREVIOUS_RELEASE_VERSION=$(( ${RELEASE_VERSION}-1 ))
+PREVIOUS_RELEASE_VERSION=$((${RELEASE_VERSION} - 1))
 
 if [[ "${DESTINATION_SERVER}" = "" ]]; then
     echo "Missing destination server [DEV|PROD]"
     usage
 fi
 
-if [[ "${DESTINATION_SERVER}" == "PROD" ]]
-then
+if [[ "${DESTINATION_SERVER}" == "PROD" ]]; then
     SERVER=${PRD1_SERVER}
 
     # IT WILL TRANSFER THE DOWNLOAD FOLDER TO THE IDG SERVER
     IDG_ENABLE_TRANSFER="TRUE"
-elif [[ "${DESTINATION_SERVER}" == "DEV" ]]
-then
+elif [[ "${DESTINATION_SERVER}" == "DEV" ]]; then
     SERVER=${DEV_SERVER}
 else
     echo $"Invalid destination server. Please provide DEV or PROD"
-    exit;
+    exit
 fi
 
-if  [[ "${MAIL_TO}" = "" ]]; then
+if [[ "${MAIL_TO}" = "" ]]; then
     MAIL_TO="${DEFAULT_MAIL_TO}"
 fi
 
-send_error_mail () {
+send_error_mail() {
     sleep 15s
     SUBJECT="[Pass2Production] Something went wrong..."
-    BODY=`cat ${LOGFILE}`
+    BODY=$(cat ${LOGFILE})
     FROM="Pass2Production<p2p-noreply@reactome.org>"
     echo -e "Subject:${SUBJECT}\n${BODY}" | sendmail -f "${FROM}" -t "${MAIL_TO}"
     exit
 }
 
-send_mail () {
+send_mail() {
     SUBJECT="[Pass2Production] Execution completed"
-    BODY=`cat ${LOGFILE}`
+    BODY=$(cat ${LOGFILE})
     FROM="Pass2Production<p2p-noreply@reactome.org>"
     echo -e "Subject:${SUBJECT}\n${BODY}" | sendmail -f "${FROM}" -t "${MAIL_TO}"
 }
 
-notify_subscribers () {
-    if [[ ! ${NOTIFY_LIST} = "" ]]; then	
-       SUBJECT="Reactome version ${RELEASE_VERSION} is now available!"
-       BODY="A new version is available. Kind Regards. Reactome Team"
-       FROM="Reactome<release-noreply@reactome.org>"
-       echo -e "Subject:${SUBJECT}\n${BODY}" | sendmail -f "${FROM}" -t "${NOTIFY_LIST}"
+notify_subscribers() {
+    if [[ ! ${NOTIFY_LIST} = "" ]]; then
+        SUBJECT="Reactome version ${RELEASE_VERSION} is now available!"
+        BODY="A new version is available. Kind Regards. Reactome Team"
+        FROM="Reactome<release-noreply@reactome.org>"
+        echo -e "Subject:${SUBJECT}\n${BODY}" | sendmail -f "${FROM}" -t "${NOTIFY_LIST}"
     fi
 }
 
-transfer_download_folder (){
+transfer_download_folder() {
     begin=$(date +"%s")
     echo $""
 
@@ -255,43 +256,40 @@ transfer_download_folder (){
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${DOWNLOAD_DIR}/ ${SHARED_USER}@${SERVER}:${DOWNLOAD_DIR} #2> /dev/null
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-         echo "[ERROR] [Download] - Rsync didn't executed properly. Check system output and address it manually. Re-run once the issue is sorted."
-         send_error_mail
+        echo "[ERROR] [Download] - Rsync didn't executed properly. Check system output and address it manually. Re-run once the issue is sorted."
+        send_error_mail
     fi
 
-    difftimelps=$(($(date +"%s")-$begin))
+    difftimelps=$(($(date +"%s") - $begin))
     echo "Download folder has been synchronised. Elapsed time: [$(($difftimelps / 60)) minutes and $(($difftimelps % 60)) seconds]"
 
-    
     # SYNC DOWNLOAD TO IDG SERVER - 16/12/2020 gviteri
-    if [[ "${IDG_ENABLE_TRANSFER}" == "TRUE" ]]
-    then
-            echo "Transferring download folder [${IDG_DOWNLOAD_DIR}]. Folder size is [$SIZE]"
-            echo "IDG Transferring has been enabled. Transferring downloads folder"
-            sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO --omit-link-times -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${DOWNLOAD_DIR}/ ${SHARED_USER}@${IDG_SERVER}:${IDG_DOWNLOAD_DIR} #2> /dev/null
-            OUT=$?
-            if [[ "$OUT" -ne 0 ]]; then
-                echo "[ERROR NONBLOCKER] [IDG Download folder] - Rsync didn't executed properly while transferring the download folder to the IDG SERVER. Execution will continue as normal."
-            fi
+    if [[ "${IDG_ENABLE_TRANSFER}" == "TRUE" ]]; then
+        echo "Transferring download folder [${IDG_DOWNLOAD_DIR}]. Folder size is [$SIZE]"
+        echo "IDG Transferring has been enabled. Transferring downloads folder"
+        sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO --omit-link-times -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${DOWNLOAD_DIR}/ ${SHARED_USER}@${IDG_SERVER}:${IDG_DOWNLOAD_DIR} #2> /dev/null
+        OUT=$?
+        if [[ "$OUT" -ne 0 ]]; then
+            echo "[ERROR NONBLOCKER] [IDG Download folder] - Rsync didn't executed properly while transferring the download folder to the IDG SERVER. Execution will continue as normal."
+        fi
 
-	    # IDG FIGURES
-            echo "Transferring FIGURES folder [${IDG_FIGURE_DIR}]."
-            echo "IDG Transferring has been enabled. Transferring FIGURES folder"
-            sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO --omit-link-times -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${IDG_FIGURE_SOURCE}/ ${SHARED_USER}@${IDG_SERVER}:${IDG_FIGURE_DIR} #2> /dev/null
-            OUT=$?
-            if [[ "$OUT" -ne 0 ]]; then
-                echo "[ERROR NONBLOCKER] [IDG Figure folder] - Rsync didn't executed properly while transferring the download folder to the IDG SERVER. Execution will continue as normal."
-            fi	    
+        # IDG FIGURES
+        echo "Transferring FIGURES folder [${IDG_FIGURE_DIR}]."
+        echo "IDG Transferring has been enabled. Transferring FIGURES folder"
+        sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO --omit-link-times -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${IDG_FIGURE_SOURCE}/ ${SHARED_USER}@${IDG_SERVER}:${IDG_FIGURE_DIR} #2> /dev/null
+        OUT=$?
+        if [[ "$OUT" -ne 0 ]]; then
+            echo "[ERROR NONBLOCKER] [IDG Figure folder] - Rsync didn't executed properly while transferring the download folder to the IDG SERVER. Execution will continue as normal."
+        fi
     fi
 
     # zip download folder is disabled
     # sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} ZIP_ARCHIVE release_version=${RELEASE_VERSION}"
 }
 
-# solr, neo4j, icons, figures...
-transfer_others_to_tmp () {
-    for name in "${!dict[@]}"
-    do
+# solr, icons, figures...
+transfer_others_to_tmp() {
+    for name in "${!dict[@]}"; do
         begin=$(date +"%s")
         echo $""
 
@@ -308,23 +306,42 @@ transfer_others_to_tmp () {
             exit
         fi
 
-        difftimelps=$(($(date +"%s")-$begin))
+        difftimelps=$(($(date +"%s") - $begin))
         echo "${name} folder has been synchronised. Elapsed time: [$(($difftimelps / 60)) minutes and $(($difftimelps % 60)) seconds]"
     done
 }
 
-export_mysql_databases () {
-    # Note: If you are adding another DB, please remember to add it in the sync_tool.sh > other_database > dbs.
-    other_dbs_dict=( ${GK_CURRENT_DB} )
+export_neo4j_database() {
+    echo $""
+    echo "Dumping ${NEO4J_DB_NAME}..."
+    CURR_DB_FILE="/tmp/${NEO4J_DB_NAME}.dump"
 
-    for DBNAME in "${other_dbs_dict[@]}"
-    do
+    sudo service ${NEO4J_PROCESS} stop
+    sudo neo4j-admin dump --database ${NEO4J_DB_NAME} --to "${CURR_DB_FILE}"
+    sudo service ${NEO4J_PROCESS} start
+
+    echo "Transferring ${CURR_DB_FILE}"
+    sshpass -P passphrase -f <(printf '%s\n' "${PASSPHRASE}") rsync -rogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors "${CURR_DB_FILE}" ${SHARED_USER}@${SERVER}:"${CURR_DB_FILE}" #2> /dev/null
+    OUT=$?
+    if [[ "$OUT" -ne 0 ]]; then
+        echo "[WARN] [${NEO4J_DB_NAME}.dump] - Rsync didn't execute properly. Check system output and address it manually. Re-run once the issue is sorted."
+    fi
+
+    echo "Removing database dump file ${CURR_DB_FILE} from ${RELEASE_SERVER}"
+    rm -f "${CURR_DB_FILE}"
+}
+
+export_mysql_databases() {
+    # Note: If you are adding another DB, please remember to add it in the sync_tool.sh > other_database > dbs.
+    other_dbs_dict=(${GK_CURRENT_DB})
+
+    for DBNAME in "${other_dbs_dict[@]}"; do
         echo $""
         echo "Dumping ${DBNAME}..."
         CURR_DB_FILE="/tmp/${DBNAME}_from_release.sql"
 
         export MYSQL_PWD=${R_MYSQL_PASSWD}
-        ${MYSQL_HOME}/mysqldump -P ${MYSQL_PORT} -u ${R_MYSQL_USER} ${DBNAME} > ${CURR_DB_FILE}
+        ${MYSQL_HOME}/mysqldump -P ${MYSQL_PORT} -u ${R_MYSQL_USER} ${DBNAME} >${CURR_DB_FILE}
 
         CURR_DB_FILE_GZ=${CURR_DB_FILE}".gz"
         if [[ -f ${CURR_DB_FILE_GZ} ]]; then
@@ -341,8 +358,7 @@ export_mysql_databases () {
         fi
 
         # transfer DB to IDG_SERVER
-        if [[ "${IDG_ENABLE_TRANSFER}" == "TRUE" ]]
-        then
+        if [[ "${IDG_ENABLE_TRANSFER}" == "TRUE" ]]; then
             echo "Transferring ${CURR_DB_FILE_GZ} to ${IDG_SERVER}"
             sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) rsync -rogtO -e 'ssh -i '${PRIVATE_KEY}' -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null' -i --links --delete --ignore-errors ${CURR_DB_FILE_GZ} ${SHARED_USER}@${IDG_SERVER}:${CURR_DB_FILE_GZ} #2> /dev/null
             OUT=$?
@@ -359,64 +375,64 @@ export_mysql_databases () {
 }
 
 # Sync website. Executing joomla_migration in the CLI
-website () {
+website() {
     echo "Updating Website in [${DESTINATION_SERVER}]"
     echo "Calling ${JOOMLA_SCRIPT}"
     /bin/bash ${JOOMLA_SCRIPT} 'env='${DESTINATION_SERVER} 'privatekey='${PRIVATE_KEY} 'passphrase='${PASSPHRASE} 'osuser='${SOURCE_SERVER_USER} 'ospasswd='${SOURCE_SERVER_PASSWD} 'dbuser='${WEBSITE_MYSQL_USER} 'dbpasswd='${WEBSITE_MYSQL_PASSWD}
     echo "Joomla Website has been synchronised"
 }
 
-proxy_pass_to_release () {
+proxy_pass_to_release() {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} ENABLEPP"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        exit;
+        exit
     fi
 }
 
-remove_proxy_pass () {
+remove_proxy_pass() {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} REMOVEPP"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        exit;
+        exit
     fi
 }
 
-start_services () {
+start_services() {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} STARTSERVS"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        exit;
+        exit
     fi
 }
 
-stop_services () {
+stop_services() {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} STOPSERVS"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        exit;
+        exit
     fi
 }
 
-rsync_from_tmp_to_src_dir () {
+rsync_from_tmp_to_src_dir() {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} FROMTMPTOSRC"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        exit;
+        exit
     fi
 }
 
-reload_apache () {
+reload_apache() {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} RELOAD_APACHE"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        exit;
+        exit
     fi
 }
 
 # At this point download folder is already in th Destination Server
 # We only need to update the 'current' symlink
-update_download_folder () {
+update_download_folder() {
     echo "Creating 'current' symlink in the Download folder"
     LINK="unlink ${DOWNLOAD_HOME}/current ; ln -s ${DOWNLOAD_DIR} ${DOWNLOAD_HOME}/current"
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "echo ${DESTINATION_SERVER_PASSWD} | ${LINK} "
@@ -427,7 +443,7 @@ update_download_folder () {
     echo "Download folder is done"
 }
 
-analysis_files () {
+analysis_files() {
     ANALYSIS_BIN="analysis_v${RELEASE_VERSION}.bin"
     ANALYSIS_FULLNAME=${ANALYSIS_BIN_FOLDER}"/"${ANALYSIS_BIN}
     ANALYSIS_SYMLINK=${ANALYSIS_BIN_FOLDER}"/analysis.bin"
@@ -451,29 +467,28 @@ analysis_files () {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} ANALYSIS release_version=${RELEASE_VERSION}"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        exit;
+        exit
     fi
 }
 
-adjust_folders_owners_and_permissions () {
+adjust_folders_owners_and_permissions() {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} OWNERANDPERM"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        exit;
+        exit
     fi
 }
 
-other_databases () {
+other_databases() {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} OTHER_DBS mysql_user=${R_MYSQL_USER} mysql_passwd=${R_MYSQL_PASSWD}"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        exit;
+        exit
     fi
 
     # Sync IDG Server
-    if [[ "${IDG_ENABLE_TRANSFER}" == "TRUE" ]]
-    then
-	echo "[IDG Server]...."
+    if [[ "${IDG_ENABLE_TRANSFER}" == "TRUE" ]]; then
+        echo "[IDG Server]...."
         sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${IDG_SERVER} "${SYNC_TOOL} OTHER_DBS mysql_user=${R_MYSQL_USER} mysql_passwd=${R_MYSQL_PASSWD}"
         OUT=$?
         if [[ "$OUT" -ne 0 ]]; then
@@ -482,29 +497,29 @@ other_databases () {
     fi
 }
 
-folders_to_clean_up () {
+folders_to_clean_up() {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} CLEANUP release_version=${RELEASE_VERSION}"
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        exit;
+        exit
     fi
 }
 
 # At this point proxy pass is enabled, so we need to check services directly in Tomcat.
 # Secure HTTP is done at the Apache Level, so https://<server>:<8080> won't work.
 # That's the reason why we are using http
-check_services () {
+check_services() {
     sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh -i ${PRIVATE_KEY} -qn -o StrictHostKeyChecking=no -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -t ${SHARED_USER}@${SERVER} "${SYNC_TOOL} CHECKSERV release_version=${RELEASE_VERSION}"
 }
 
-remove_notice_banner () {
+remove_notice_banner() {
     if [[ "${DESTINATION_SERVER}" == "PROD" ]]; then
         sed -i -e '/show_notice_mod =/ s/= .*/= \'"'"'0\'"';"'/' ${STATIC_DIR}/configuration.php
         sed -i -e 's/\r$//g' ${STATIC_DIR}/configuration.php
     fi
 }
 
-add_notice_banner () {
+add_notice_banner() {
     if [[ "${DESTINATION_SERVER}" == "PROD" ]]; then
         sed -i -e '/show_notice_mod =/ s/= .*/= \'"'"'1\'"';"'/' ${STATIC_DIR}/configuration.php
         sed -i -e 's/\r$//g' ${STATIC_DIR}/configuration.php
@@ -512,25 +527,32 @@ add_notice_banner () {
 }
 
 # Confirm the Release_Version. This can't be wrong.
-check_release_version () {
+check_release_version() {
     echo $""
     while true; do
         read -r -p "*** Do you confirm 'release_version' ${RELEASE_VERSION} ? [y/n] ***  " yn
         case ${yn} in
-            [Yy]* ) echo "OK. Ready to move data over :)"; echo $""; break;;
-            [Nn]* ) echo "OK, correct 'release_version' parameter in the command line and run again."; exit;;
-            * ) echo "Please answer (y/Y) or (n/N).";;
+        [Yy]*)
+            echo "OK. Ready to move data over :)"
+            echo $""
+            break
+            ;;
+        [Nn]*)
+            echo "OK, correct 'release_version' parameter in the command line and run again."
+            exit
+            ;;
+        *) echo "Please answer (y/Y) or (n/N)." ;;
         esac
     done
 }
 
-validate_cert_passphrase () {
+validate_cert_passphrase() {
     echo "Validating certificate passphrase"
     if [[ ! -e ${PRIVATE_KEY} ]]; then
         echo "[ERROR] Couldn't find the private key [${PRIVATE_KEY}]"
         exit
     fi
-    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh-keygen -y -f ${PRIVATE_KEY} &> /dev/null
+    sshpass -P passphrase -f <(printf '%s\n' ${PASSPHRASE}) ssh-keygen -y -f ${PRIVATE_KEY} &>/dev/null
     local OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Invalid certificate passphrase. Please check and try again"
@@ -538,7 +560,7 @@ validate_cert_passphrase () {
     return ${OUT}
 }
 
-ask_passphrase () {
+ask_passphrase() {
     while true; do
         read -s -p "Passphrase for ${PRIVATE_KEY} > " PASSPHRASE
         validate_cert_passphrase
@@ -550,10 +572,10 @@ ask_passphrase () {
 }
 
 # Credentials in for the source (mainly reactomerelease) is needed in the website update phase.
-validate_source_credentials () {
+validate_source_credentials() {
     echo $""
     echo "Validating [${RELEASE_SERVER}] credentials..."
-    sshpass -p ${SOURCE_SERVER_PASSWD} sudo -S -u ${SOURCE_SERVER_USER} sudo ls &> /dev/null
+    sshpass -p ${SOURCE_SERVER_PASSWD} sudo -S -u ${SOURCE_SERVER_USER} sudo ls &>/dev/null
     local OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Can't connect to [${RELEASE_SERVER}]. Please user and password and try again."
@@ -561,12 +583,12 @@ validate_source_credentials () {
     return ${OUT}
 }
 
-validate_mysql_credentials () {
+validate_mysql_credentials() {
     echo $""
     echo "Validating MySQL credentials..."
     # Exporting MySQL password so we don't print it in the command line.
     export MYSQL_PWD=$2
-    ${MYSQL_HOME}/mysql -P ${MYSQL_PORT} -u $1 -e exit 2> /dev/null
+    ${MYSQL_HOME}/mysql -P ${MYSQL_PORT} -u $1 -e exit 2>/dev/null
     local OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
         echo "[ERROR] Can't connect to MySQL. Please check DB user and password and try again."
@@ -574,7 +596,7 @@ validate_mysql_credentials () {
     return ${OUT}
 }
 
-ask_db_credentials () {
+ask_db_credentials() {
     echo $""
     echo "These credentials are required for db:${GK_CURRENT_DB}"
 
@@ -590,7 +612,7 @@ ask_db_credentials () {
 }
 
 # extra credentials: release server and database
-ask_extra_credentials () {
+ask_extra_credentials() {
     echo $""
     echo "These credentials are required for updating the website (Joomla)"
 
@@ -632,15 +654,16 @@ ask_extra_credentials () {
 }
 
 # KEY FUNCTION
-move_data_over () {
+move_data_over() {
     begin_all=$(date +"%s")
     echo "Starting moving data over..."
 
     transfer_download_folder
     transfer_others_to_tmp
+    export_neo4j_database
     export_mysql_databases
 
-    difftimelps=$(($(date +"%s")-$begin_all))
+    difftimelps=$(($(date +"%s") - $begin_all))
     ELAPSED_MSG="Elapsed time: [$(($difftimelps / 60)) minutes and $(($difftimelps % 60)) seconds]"
     MAIL_MSG="Data transferring is completed. \n If you haven't got any error... Please run the script again without 'move_data_over' flag \n ${ELAPSED_MSG}"
     echo ${ELAPSED_MSG}
@@ -651,7 +674,7 @@ move_data_over () {
 }
 
 # KEY FUNCTION
-do_release () {
+do_release() {
     proxy_pass_to_release
     remove_notice_banner
     reload_apache
