@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.11.13345
+ * @version         22.2.6887
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -20,12 +20,11 @@ use Joomla\Image\Image as JImage;
 
 class Image
 {
-	public static function cleanPath($source)
+	public static function getHeight($source)
 	{
-		$source = ltrim(str_replace(JUri::root(), '', $source), '/');
-		$source = strtok($source, '?');
+		$dimensions = self::getDimensions($source);
 
-		return $source;
+		return $dimensions->height;
 	}
 
 	public static function getDimensions($source)
@@ -46,13 +45,6 @@ class Image
 			'width'  => $image->getWidth(),
 			'height' => $image->getHeight(),
 		];
-	}
-
-	public static function getHeight($source)
-	{
-		$dimensions = self::getDimensions($source);
-
-		return $dimensions->height;
 	}
 
 	public static function getImageObject($source)
@@ -94,49 +86,46 @@ class Image
 		return $image;
 	}
 
-	public static function getJpgQuality($quality = 'medium')
+	public static function getUrls($source, $width, $height, $folder = 'resized', $resize = true, $quality = 'medium', $possible_suffix = '')
 	{
-		switch ($quality)
+		$image = self::isResized($source, $folder, $possible_suffix);
+
+		if ($image)
 		{
-			case 'low':
-				return 50;
-
-			case 'high':
-				return 90;
-
-			case 'medium':
-			default:
-				return 70;
+			$source = $image;
 		}
+
+		$original = $source;
+		$resized  = self::getResize($source, $width, $height, $folder, $resize, $quality);
+
+		return (object) compact('original', 'resized');
 	}
 
-	public static function getNewPath($source, $width, $height, $destination_folder = '')
+	public static function isResized($file, $folder = 'resized', $possible_suffix = '')
 	{
-		$clean_source = self::cleanPath($source);
-
-		$source_parts = pathinfo($clean_source);
-
-		$destination_folder = ltrim($destination_folder ?: File::getDirName($clean_source));
-		$destination_file   = File::getFileName($clean_source) . '_' . $width . 'x' . $height . '.' . $source_parts['extension'];
-
-		JFolder::create(JPATH_SITE . '/' . $destination_folder);
-
-		return ltrim($destination_folder . '/' . $destination_file);
-	}
-
-	public static function getQuality($type, $quality = 'medium')
-	{
-		switch ($type)
+		if (File::isExternal($file))
 		{
-			case IMAGETYPE_JPEG:
-				return min(max(self::getJpgQuality($quality), 0), 100);
-
-			case IMAGETYPE_PNG:
-				return 9;
-
-			default:
-				return '';
+			return false;
 		}
+
+		if ( ! file_exists($file))
+		{
+			return false;
+		}
+
+		$main_image = self::isResizedWithFolder($file, $folder);
+
+		if ($main_image)
+		{
+			return $main_image;
+		}
+
+		if ( ! $possible_suffix)
+		{
+			return false;
+		}
+
+		return (bool) self::isResizedWithSuffix($file, $possible_suffix);
 	}
 
 	public static function getResize($source, $width, $height, $folder = 'resized', $resize = true, $quality = 'medium')
@@ -187,53 +176,40 @@ class Image
 		return $destination;
 	}
 
-	public static function getUrls($source, $width, $height, $folder = 'resized', $resize = true, $quality = 'medium', $possible_suffix = '')
+	private static function isResizedWithFolder($file, $resize_folder = 'resized')
 	{
-		$image = self::isResized($source, $folder, $possible_suffix);
+		$folder             = File::getDirName($file);
+		$file               = File::getBaseName($file);
+		$parent_folder_name = File::getBaseName($folder);
+		$parent_folder      = File::getDirName($folder);
 
-		if ($image)
-		{
-			$source = $image;
-		}
-
-		$original = $source;
-		$resized  = self::getResize($source, $width, $height, $folder, $resize, $quality);
-
-		return (object) compact('original', 'resized');
-	}
-
-	public static function getWidth($source)
-	{
-		$dimensions = self::getDimensions($source);
-
-		return $dimensions->width;
-	}
-
-	public static function isResized($file, $folder = 'resized', $possible_suffix = '')
-	{
-		if (File::isExternal($file))
+		// Image is not inside the resize folder
+		if ($parent_folder_name != $resize_folder)
 		{
 			return false;
 		}
 
-		if ( ! file_exists($file))
+		// Check if image with same name exists in parent folder
+		if (file_exists(JPATH_SITE . '/' . $parent_folder . '/' . utf8_decode($file)))
 		{
-			return false;
+			return $parent_folder . '/' . $file;
 		}
 
-		$main_image = self::isResizedWithFolder($file, $folder);
+		// Remove any dimensions from the file
+		// image_300x200.jpg => image.jpg
+		$file = RegEx::replace(
+			'_[0-9]+x[0-9]*(\.[^.]+)$',
+			'\1',
+			$file
+		);
 
-		if ($main_image)
+		// Check again if image with same name (but without dimensions) exists in parent folder
+		if (file_exists(JPATH_SITE . '/' . $parent_folder . '/' . utf8_decode($file)))
 		{
-			return $main_image;
+			return $parent_folder . '/' . $file;
 		}
 
-		if ( ! $possible_suffix)
-		{
-			return false;
-		}
-
-		return (bool) self::isResizedWithSuffix($file, $possible_suffix);
+		return false;
 	}
 
 	public static function isResizedWithSuffix($file, $suffix = '_t')
@@ -258,6 +234,45 @@ class Image
 		}
 
 		return $main_file;
+	}
+
+	public static function setNewDimensions($source, &$width, &$height)
+	{
+		if ( ! $width && ! $height)
+		{
+			return false;
+		}
+
+		if (File::isExternal($source))
+		{
+			return false;
+		}
+
+		$clean_source = self::cleanPath($source);
+		$source_path  = JPATH_SITE . '/' . $clean_source;
+
+		$image = self::getImageObject($source_path);
+
+		if (is_null($image))
+		{
+			return false;
+		}
+
+		return self::setNewDimensionsByImageObject($image, $width, $height);
+	}
+
+	public static function getNewPath($source, $width, $height, $destination_folder = '')
+	{
+		$clean_source = self::cleanPath($source);
+
+		$source_parts = pathinfo($clean_source);
+
+		$destination_folder = ltrim($destination_folder ?: File::getDirName($clean_source));
+		$destination_file   = File::getFileName($clean_source) . '_' . $width . 'x' . $height . '.' . $source_parts['extension'];
+
+		JFolder::create(JPATH_SITE . '/' . $destination_folder);
+
+		return ltrim($destination_folder . '/' . $destination_file);
 	}
 
 	public static function resize($source, &$width, &$height, $destination_folder = '', $quality = 'medium', $overwrite = false)
@@ -317,29 +332,12 @@ class Image
 		}
 	}
 
-	public static function setNewDimensions($source, &$width, &$height)
+	public static function cleanPath($source)
 	{
-		if ( ! $width && ! $height)
-		{
-			return false;
-		}
+		$source = ltrim(str_replace(JUri::root(), '', $source), '/');
+		$source = strtok($source, '?');
 
-		if (File::isExternal($source))
-		{
-			return false;
-		}
-
-		$clean_source = self::cleanPath($source);
-		$source_path  = JPATH_SITE . '/' . $clean_source;
-
-		$image = self::getImageObject($source_path);
-
-		if (is_null($image))
-		{
-			return false;
-		}
-
-		return self::setNewDimensionsByImageObject($image, $width, $height);
+		return $source;
 	}
 
 	public static function setNewDimensionsByImageObject($image, &$width, &$height)
@@ -375,39 +373,41 @@ class Image
 		return true;
 	}
 
-	private static function isResizedWithFolder($file, $resize_folder = 'resized')
+	public static function getQuality($type, $quality = 'medium')
 	{
-		$folder             = File::getDirName($file);
-		$file               = File::getBaseName($file);
-		$parent_folder_name = File::getBaseName($folder);
-		$parent_folder      = File::getDirName($folder);
-
-		// Image is not inside the resize folder
-		if ($parent_folder_name != $resize_folder)
+		switch ($type)
 		{
-			return false;
-		}
+			case IMAGETYPE_JPEG:
+				return min(max(self::getJpgQuality($quality), 0), 100);
 
-		// Check if image with same name exists in parent folder
-		if (file_exists(JPATH_SITE . '/' . $parent_folder . '/' . utf8_decode($file)))
+			case IMAGETYPE_PNG:
+				return 9;
+
+			default:
+				return '';
+		}
+	}
+
+	public static function getJpgQuality($quality = 'medium')
+	{
+		switch ($quality)
 		{
-			return $parent_folder . '/' . $file;
+			case 'low':
+				return 50;
+
+			case 'high':
+				return 90;
+
+			case 'medium':
+			default:
+				return 70;
 		}
+	}
 
-		// Remove any dimensions from the file
-		// image_300x200.jpg => image.jpg
-		$file = RegEx::replace(
-			'_[0-9]+x[0-9]*(\.[^.]+)$',
-			'\1',
-			$file
-		);
+	public static function getWidth($source)
+	{
+		$dimensions = self::getDimensions($source);
 
-		// Check again if image with same name (but without dimensions) exists in parent folder
-		if (file_exists(JPATH_SITE . '/' . $parent_folder . '/' . utf8_decode($file)))
-		{
-			return $parent_folder . '/' . $file;
-		}
-
-		return false;
+		return $dimensions->width;
 	}
 }

@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.11.13345
+ * @version         22.2.6887
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -45,6 +45,39 @@ class RegEx
 		$pattern = self::preparePattern($pattern, $options, $string);
 
 		return preg_match($pattern, $string, $match, $flags);
+	}
+
+	/**
+	 * Make a string a valid regular expression pattern
+	 *
+	 * @param string $pattern
+	 * @param string $options
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	public static function preparePattern($pattern, $options = null, $string = '')
+	{
+		$array = ArrayHelper::applyMethodToValues([$pattern, $options, $string]);
+
+		if ( ! is_null($array))
+		{
+			return $array;
+		}
+
+		if (substr($pattern, 0, 1) != '#')
+		{
+			$options = ! is_null($options) ? $options : 'si';
+			$pattern = '#' . $pattern . '#' . $options;
+		}
+
+		if (StringHelper::detectUTF8($string))
+		{
+			// use utf-8
+			return $pattern . 'u';
+		}
+
+		return $pattern;
 	}
 
 	/**
@@ -89,39 +122,6 @@ class RegEx
 	public static function nameGroup($data, $name = '')
 	{
 		return '(?<' . $name . '>' . $data . ')';
-	}
-
-	/**
-	 * Make a string a valid regular expression pattern
-	 *
-	 * @param string $pattern
-	 * @param string $options
-	 * @param string $string
-	 *
-	 * @return string
-	 */
-	public static function preparePattern($pattern, $options = null, $string = '')
-	{
-		$array = ArrayHelper::applyMethodToValues([$pattern, $options, $string]);
-
-		if ( ! is_null($array))
-		{
-			return $array;
-		}
-
-		if (substr($pattern, 0, 1) != '#')
-		{
-			$options = ! is_null($options) ? $options : 'si';
-			$pattern = '#' . $pattern . '#' . $options;
-		}
-
-		if (StringHelper::detectUTF8($string))
-		{
-			// use utf-8
-			return $pattern . 'u';
-		}
-
-		return $pattern;
 	}
 
 	/**
@@ -175,6 +175,21 @@ class RegEx
 	}
 
 	/**
+	 * Perform a regular expression search and replace once
+	 *
+	 * @param string $pattern
+	 * @param string $replacement
+	 * @param string $string
+	 * @param string $options
+	 *
+	 * @return string
+	 */
+	public static function replaceOnce($pattern, $replacement, $string, $options = null)
+	{
+		return self::replace($pattern, $replacement, $string, $options, 1);
+	}
+
+	/**
 	 * Perform a regular expression search and replace
 	 *
 	 * @param string $pattern
@@ -196,21 +211,6 @@ class RegEx
 		$pattern = self::preparePattern($pattern, $options, $string);
 
 		return preg_replace($pattern, $replacement, $string, $limit, $count);
-	}
-
-	/**
-	 * Perform a regular expression search and replace once
-	 *
-	 * @param string $pattern
-	 * @param string $replacement
-	 * @param string $string
-	 * @param string $options
-	 *
-	 * @return string
-	 */
-	public static function replaceOnce($pattern, $replacement, $string, $options = null)
-	{
-		return self::replace($pattern, $replacement, $string, $options, 1);
 	}
 
 	/**

@@ -4,7 +4,7 @@
  *
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://github.com/regularlabs/regularjs
- * @copyright       Copyright © 2021 Regular Labs - All Rights Reserved
+ * @copyright       Copyright © 2022 Regular Labs - All Rights Reserved
  * @license         https://github.com/regularlabs/regularjs/blob/master/LICENCE MIT
  */
 
@@ -430,7 +430,7 @@ if (typeof window.Regular === 'undefined'
 		this.loadUrl = function(url, data, success, fail) {
 			const request = new XMLHttpRequest();
 
-			request.open("POST", url, true);
+			request.open('POST', url, true);
 
 			request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
@@ -447,7 +447,53 @@ if (typeof window.Regular === 'undefined'
 				fail && fail.call(null, this.responseText, this.status, this);
 			};
 
-			request.send(data);
+			request.send(this.toUrlQueryString(data));
+		};
+
+		/**
+		 * Converts a data object (key, value) to a serialized query string.
+		 *
+		 * @param data    The object with the data to serialize.
+		 * @param prefix  An Optional prefix.
+		 */
+		this.toUrlQueryString = function(data, prefix) {
+			if (typeof data !== 'object') {
+				return data;
+			}
+
+			const parts = [];
+
+			if ( ! (Symbol.iterator in Object(data))) {
+				data = Object.entries(data);
+			}
+
+			for (let i in data) {
+				let value = data[i];
+				let name  = '';
+
+				if (value instanceof Array) {
+					[name, value] = value;
+				}
+
+				let key = name ? (prefix ? `${prefix}[${name}]` : name) : prefix;
+
+				if ( ! key) {
+					continue;
+				}
+
+				if (value !== null && typeof value === 'object') {
+					if (value instanceof Array) {
+						key += '[]';
+					}
+
+					parts.push(this.toUrlQueryString(value, key));
+					continue;
+				}
+
+				parts.push(`${key}=${value}`);
+			}
+
+			return parts.join('&');
 		};
 
 		/**

@@ -1,10 +1,10 @@
 /**
  * @package         Regular Labs Library
- * @version         21.11.13345
+ * @version         22.2.6887
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -12,11 +12,11 @@
 
 if (typeof window.RegularLabsForm === 'undefined'
 	|| typeof RegularLabsForm.version === 'undefined'
-	|| RegularLabsForm.version < '21.11.13345') {
+	|| RegularLabsForm.version < '22.2.6887') {
 
 	(function($) {
 		window.RegularLabsForm = {
-			version: '21.11.13345',
+			version: '22.2.6887',
 
 			getValue: function(name, escape) {
 				let $field = $(`[name="${name}"]`);

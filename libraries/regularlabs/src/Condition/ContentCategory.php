@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.11.13345
+ * @version         22.2.6887
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -125,11 +125,6 @@ class ContentCategory extends Content
 		return $this->_($pass);
 	}
 
-	private function getCatParentIds($id = 0)
-	{
-		return $this->getParentIds($id, 'categories');
-	}
-
 	private function getCategoryIds($is_category = false)
 	{
 		if ($is_category)
@@ -175,5 +170,10 @@ class ContentCategory extends Content
 		}
 
 		return (array) ($menuparams->catid ?? $catid);
+	}
+
+	private function getCatParentIds($id = 0)
+	{
+		return $this->getParentIds($id, 'categories');
 	}
 }

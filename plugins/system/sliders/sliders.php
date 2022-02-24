@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sliders
- * @version         8.1.3
+ * @version         8.2.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -59,11 +59,8 @@ if ( ! RL_Document::isJoomlaVersion(3, 'SLIDERS'))
 {
 	RL_Extension::disable('sliders', 'plugin');
 
-	RL_Language::load('plg_system_regularlabs');
-
-	JFactory::getApplication()->enqueueMessage(
-		JText::sprintf('RL_PLUGIN_HAS_BEEN_DISABLED', JText::_('SLIDERS')),
-		'error'
+	RL_Document::adminError(
+		JText::sprintf('RL_PLUGIN_HAS_BEEN_DISABLED', JText::_('SLIDERS'))
 	);
 
 	return;

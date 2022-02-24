@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.11.13345
+ * @version         22.2.6887
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -52,6 +52,20 @@ class UserGrouplevel extends User
 		return $this->passSimple($groups);
 	}
 
+	private function setUserGroupChildrenIds()
+	{
+		$children = $this->getUserGroupChildrenIds($this->selection);
+
+		if ($this->params->inc_children == 2)
+		{
+			$this->selection = $children;
+
+			return;
+		}
+
+		$this->selection = array_merge($this->selection, $children);
+	}
+
 	private function convertUsergroupNamesToIds($selection)
 	{
 		$names = [];
@@ -85,6 +99,13 @@ class UserGrouplevel extends User
 		$group_ids = $db->loadColumn();
 
 		return array_unique(array_merge($selection, $group_ids));
+	}
+
+	private function passMatchAll($groups)
+	{
+		$pass = ! array_diff($this->selection, $groups) && ! array_diff($groups, $this->selection);
+
+		return $this->_($pass);
 	}
 
 	private function getUserGroupChildrenIds($groups)
@@ -146,26 +167,5 @@ class UserGrouplevel extends User
 		}
 
 		return self::$user_group_children[$group] ?? [];
-	}
-
-	private function passMatchAll($groups)
-	{
-		$pass = ! array_diff($this->selection, $groups) && ! array_diff($groups, $this->selection);
-
-		return $this->_($pass);
-	}
-
-	private function setUserGroupChildrenIds()
-	{
-		$children = $this->getUserGroupChildrenIds($this->selection);
-
-		if ($this->params->inc_children == 2)
-		{
-			$this->selection = $children;
-
-			return;
-		}
-
-		$this->selection = array_merge($this->selection, $children);
 	}
 }

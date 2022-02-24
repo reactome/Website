@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         21.11.13345
+ * @version         22.2.6887
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -15,6 +15,7 @@ use Joomla\CMS\Editor\Editor as JEditor;
 use Joomla\CMS\Factory as JFactory;
 use Joomla\CMS\Plugin\PluginHelper as JPluginHelper;
 use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\Field;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
@@ -23,7 +24,7 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
-class JFormFieldRL_CodeEditor extends \RegularLabs\Library\Field
+class JFormFieldRL_CodeEditor extends Field
 {
 	public $type = 'CodeEditor';
 

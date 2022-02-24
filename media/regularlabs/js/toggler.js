@@ -1,10 +1,10 @@
 /**
  * @package         Regular Labs Library
- * @version         21.11.13345
+ * @version         22.2.6887
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -16,7 +16,7 @@
 
 if (typeof window.RegularLabsToggler === 'undefined'
 	|| typeof RegularLabsToggler.version === 'undefined'
-	|| RegularLabsToggler.version < '21.11.13345') {
+	|| RegularLabsToggler.version < '22.2.6887') {
 
 	(function($) {
 		$(document).ready(function() {
@@ -35,7 +35,7 @@ if (typeof window.RegularLabsToggler === 'undefined'
 		});
 
 		window.RegularLabsToggler = {
-			version: '21.11.13345',
+			version: '22.2.6887',
 
 			togglers: {}, // holds all the toggle areas
 			elements: {}, // holds all the elements and their values that affect toggle areas

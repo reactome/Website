@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sliders
- * @version         8.1.3
+ * @version         8.2.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -386,6 +386,11 @@ class PlgSystemSlidersInstallerScriptHelper
 
 	public function onAfterInstall($route)
 	{
+		if ($this->extension_type == 'component')
+		{
+			$this->fixAssetsRules();
+		}
+
 		return true;
 	}
 
@@ -473,6 +478,12 @@ class PlgSystemSlidersInstallerScriptHelper
 
 	public function publishExtension($route)
 	{
+		if ($this->extension_type == 'module')
+		{
+			// Force enable administrator module extension to solve disabled J3 modules on J4 setups
+			$this->enableAdministratorModuleExtension();
+		}
+
 		if ($route == 'update'
 			&& $this->installed_joomla_version >= $this->current_joomla_version
 		)
@@ -490,6 +501,18 @@ class PlgSystemSlidersInstallerScriptHelper
 				$this->publishModule();
 				break;
 		}
+	}
+
+	public function enableAdministratorModuleExtension()
+	{
+		$query = $this->db->getQuery(true)
+			->update('#__extensions')
+			->set($this->db->quoteName('enabled') . ' = 1')
+			->where($this->db->quoteName('type') . ' = ' . $this->db->quote('module'))
+			->where($this->db->quoteName('element') . ' = ' . $this->db->quote('mod_' . $this->extname))
+			->where($this->db->quoteName('client_id') . ' = 1');
+		$this->db->setQuery($query);
+		$this->db->execute();
 	}
 
 	public function publishModule()
