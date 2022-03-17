@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.2.6887
+ * @version         22.3.8203
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -48,12 +48,15 @@ class RegularLabsInstallerScriptHelper
 			return;
 		}
 
+		$language_string = $this->install_type == 'update'
+			? 'RLI_THE_EXTENSION_HAS_BEEN_UPDATED_SUCCESSFULLY'
+			: 'RLI_THE_EXTENSION_HAS_BEEN_INSTALLED_SUCCESSFULLY';
+
 		JFactory::getApplication()->enqueueMessage(
 			JText::sprintf(
-				$this->install_type == 'update' ? 'RLI_THE_EXTENSION_HAS_BEEN_UPDATED_SUCCESSFULLY' : 'RLI_THE_EXTENSION_HAS_BEEN_INSTALLED_SUCCESSFULLY',
+				$language_string,
 				'<strong>' . JText::_($this->name) . '</strong>',
-				'<strong>' . $this->getVersion() . '</strong>',
-				$this->getFullType()
+				'<strong>' . $this->getVersion() . '</strong>'
 			), 'success'
 		);
 	}

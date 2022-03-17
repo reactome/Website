@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.2.6887
+ * @version         22.3.8203
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -63,12 +63,12 @@ class JFormFieldRL_CodeEditor extends Field
 
 		return '<div class="rl_codemirror" id="rl_codemirror_' . $this->id . '">'
 			. JEditor::getInstance('codemirror')->display(
-				$this->name, $this->value,
+				$this->name, htmlentities($this->value),
 				$width, $height,
 				80, 10,
 				false,
 				$this->id, null, null,
-				['markerGutter' => false, 'activeLine' => true, 'syntax' => $syntax, 'class' => 'xxx']
+				['markerGutter' => false, 'activeLine' => true, 'syntax' => $syntax]
 			)
 			. '</div>';
 	}

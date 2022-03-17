@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.2.6887
+ * @version         22.3.8203
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -36,31 +36,6 @@ class JFormFieldRL_OnlyPro extends Field
 		}
 
 		return $this->getText();
-	}
-
-	protected function getLabel()
-	{
-		$label   = $this->prepareText($this->get('label'));
-		$tooltip = $this->prepareText($this->get('description'));
-
-		if ( ! $label && ! $tooltip)
-		{
-			return '</div><div>' . $this->getText();
-		}
-
-		if ( ! $label)
-		{
-			return $tooltip;
-		}
-
-		if ( ! $tooltip)
-		{
-			return ($label == '---' ? '' : $label);
-		}
-
-		return '<label class="hasPopover" title="' . $label . '" data-content="' . htmlentities($tooltip) . '">'
-			. $label
-			. '</label>';
 	}
 
 	protected function getText()
@@ -108,5 +83,30 @@ class JFormFieldRL_OnlyPro extends Field
 		}
 
 		return false;
+	}
+
+	protected function getLabel()
+	{
+		$label   = $this->prepareText($this->get('label'));
+		$tooltip = $this->prepareText($this->get('description'));
+
+		if ( ! $label && ! $tooltip)
+		{
+			return '</div><div>' . $this->getText();
+		}
+
+		if ( ! $label)
+		{
+			return $tooltip;
+		}
+
+		if ( ! $tooltip)
+		{
+			return ($label == '---' ? '' : $label);
+		}
+
+		return '<label class="hasPopover" title="' . $label . '" data-content="' . htmlentities($tooltip) . '">'
+			. $label
+			. '</label>';
 	}
 }

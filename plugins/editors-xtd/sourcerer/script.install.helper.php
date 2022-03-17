@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         9.1.1
+ * @version         9.2.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -48,12 +48,15 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 			return;
 		}
 
+		$language_string = $this->install_type == 'update'
+			? 'RLI_THE_EXTENSION_HAS_BEEN_UPDATED_SUCCESSFULLY'
+			: 'RLI_THE_EXTENSION_HAS_BEEN_INSTALLED_SUCCESSFULLY';
+
 		JFactory::getApplication()->enqueueMessage(
 			JText::sprintf(
-				$this->install_type == 'update' ? 'RLI_THE_EXTENSION_HAS_BEEN_UPDATED_SUCCESSFULLY' : 'RLI_THE_EXTENSION_HAS_BEEN_INSTALLED_SUCCESSFULLY',
+				$language_string,
 				'<strong>' . JText::_($this->name) . '</strong>',
-				'<strong>' . $this->getVersion() . '</strong>',
-				$this->getFullType()
+				'<strong>' . $this->getVersion() . '</strong>'
 			), 'success'
 		);
 	}
