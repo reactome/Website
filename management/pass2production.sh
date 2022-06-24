@@ -34,7 +34,7 @@ DIR="/usr/local/reactomes/Reactome/production/Website/scripts"
 cd ${DIR}
 
 NOW=$(date +"%Y%m%d%H%M%S")
-P2P_DIR="./pass2prod"
+P2P_DIR="./logs"
 mkdir -p -m 0775 ${P2P_DIR}
 sudo chown -R $(logname)":reactome" ${P2P_DIR}
 LOG="${P2P_DIR}/pass2production"
