@@ -102,6 +102,7 @@ $favcolumns = 6;
       function gtag(){dataLayer.push(arguments)};
       gtag('js', new Date());
       gtag('config', '<?php echo $app->get('ga_tracking_code') ?>');
+      gtag('config', '<?php echo $app->get('ga4_tracking_code') ?>');
   </script>
 
   <!-- FAVTH SCRIPTS -->

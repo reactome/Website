@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.3.8203
+ * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -179,50 +179,6 @@ class ActionLogPlugin extends JCMSPlugin
 		];
 
 		Log::delete($message, $context);
-	}
-
-	public function onExtensionAfterInstall($installer, $eid)
-	{
-		// Prevent duplicate logs
-		if (in_array('install_' . $eid, self::$ids))
-		{
-			return;
-		}
-
-		$context = JFactory::getApplication()->input->get('option');
-
-		if (strpos($context, $this->option) === false)
-		{
-			return;
-		}
-
-		if ( ! ArrayHelper::find(['*', 'install'], $this->events))
-		{
-			return;
-		}
-
-		$extension = Extension::getById($eid);
-
-		if (empty($extension->manifest_cache))
-		{
-			return;
-		}
-
-		$manifest = json_decode($extension->manifest_cache);
-
-		if (empty($manifest->name))
-		{
-			return;
-		}
-
-		self::$ids[] = 'install_' . $eid;
-
-		$message = [
-			'id'             => $eid,
-			'extension_name' => JText::_($manifest->name),
-		];
-
-		Log::install($message, 'com_regularlabsmanager', $manifest->type);
 	}
 
 	public function onExtensionAfterSave($context, $table, $isNew)

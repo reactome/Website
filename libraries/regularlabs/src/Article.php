@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.3.8203
+ * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -223,7 +223,7 @@ class Article
 			return [''];
 		}
 
-		return preg_split('#(<hr class="system-pagebreak" .*?>)#s', $string, null, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+		return preg_split('#(<hr class="system-pagebreak" .*?>)#s', $string, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 	}
 
 	/**

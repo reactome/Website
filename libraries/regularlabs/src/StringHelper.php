@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.3.8203
+ * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -452,7 +452,7 @@ class StringHelper extends \Joomla\String\StringHelper
 		}
 
 		// preg_quote all delimiters
-		$array = preg_split('#(' . RegEx::quote($delimiters) . ')#s', $string, null, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+		$array = preg_split('#(' . RegEx::quote($delimiters) . ')#s', $string, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 
 		if ( ! $maximize_parts)
 		{

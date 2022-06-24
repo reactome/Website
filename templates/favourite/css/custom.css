@@ -191,6 +191,15 @@ ul.menufavth-horizontal li .nav-header {
     border-radius: 4px;
 }
 
+/* Fix blank issues */
+#fav-headerwrap .favnav li .nav-header.overlays{
+  color: #111 !important;
+}
+
+#fav-headerwrap .favnav li .nav-header.disgenet{
+  color: #111 !important;
+}
+
 .fav-overlay {
     background-color: rgba(17, 17, 17, 0.2);
 }
@@ -753,7 +762,7 @@ video.responsive-vid {
 /* ### Note: Thoroughly test the responsive design once height is changed ### */
 .twitter-timeline {
     background: none;
-    height: 509px !important;
+   /* height: 509px !important; */
 }
 
 /** Sync Tool **/
@@ -816,13 +825,13 @@ video.responsive-vid {
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
     .twitter-timeline {
-        height: 568px !important;
+        height: 515px !important;
     }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
     .twitter-timeline {
-        height: 588px !important;
+        height: 500px !important;
     }
     ul.menu.footer-menu {
         padding: 0;
@@ -836,7 +845,7 @@ video.responsive-vid {
   and (orientation: portrait) 
   and (-webkit-min-device-pixel-ratio: 2) {
        .twitter-timeline {
-        height: 588px !important;
+        height: 500px !important;
     }
 }
 
@@ -847,7 +856,7 @@ video.responsive-vid {
   and (orientation: landscape) 
   and (-webkit-min-device-pixel-ratio: 2) {
        .twitter-timeline {
-        height: 565px !important;
+        height: 510px !important;
     }
 }
 
@@ -859,7 +868,7 @@ video.responsive-vid {
    and (-webkit-min-device-pixel-ratio: 2)  
    and (orientation: landscape)  {
      .twitter-timeline {
-        height: 510px !important;
+        height: 455px !important;
     }
 }
 
@@ -870,7 +879,7 @@ video.responsive-vid {
   and (-webkit-min-device-pixel-ratio: 2)  
   and (orientation: portrait)  {
   .twitter-timeline {
-        height: 565px !important;
+        height: 510px !important;
     }
 }
 

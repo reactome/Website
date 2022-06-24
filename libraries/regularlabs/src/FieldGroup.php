@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.3.8203
+ * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -52,18 +52,18 @@ class FieldGroup extends Field
 		return $data[$id];
 	}
 
-	public function getGroup()
-	{
-		$this->params = $this->element->attributes();
-
-		return $this->get('group', $this->default_group ?: $this->type);
-	}
-
 	protected function getInput()
 	{
 		$this->params = $this->element->attributes();
 
 		return $this->getSelectList();
+	}
+
+	public function getGroup()
+	{
+		$this->params = $this->element->attributes();
+
+		return $this->get('group', $this->default_group ?: $this->type);
 	}
 
 	public function getSelectList($group = '')

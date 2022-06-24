@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.3.8203
+ * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -37,6 +37,7 @@ class JFormFieldRL_Header_Library extends JFormFieldRL_Header
 			'Email Protector',
 			'GeoIP',
 			'IP Login',
+			'Keyboard Shortcuts',
 			'Modals',
 			'Modules Anywhere',
 			'Quick Index',

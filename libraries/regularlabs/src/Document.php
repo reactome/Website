@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.3.8203
+ * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -456,7 +456,7 @@ class Document
 		{
 			JHtml::_('behavior.core');
 			JHtml::_('script', 'jui/cms.js', ['version' => 'auto', 'relative' => true]);
-			$version = '22.3.8203';
+			$version = '22.6.8549';
 		}
 
 		if ( ! empty($version))
@@ -479,7 +479,7 @@ class Document
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '22.3.8203';
+			$version = '22.6.8549';
 		}
 
 		$file = File::getMediaFile('css', $file);

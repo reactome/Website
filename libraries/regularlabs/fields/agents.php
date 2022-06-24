@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.3.8203
+ * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -46,18 +46,6 @@ class JFormFieldRL_Agents extends Field
 		$agents = [];
 		switch ($group)
 		{
-			/* OS */
-			case 'os':
-				$agents[] = ['Windows', 'Windows'];
-				$agents[] = ['Mac OS', '#(Mac OS|Mac_PowerPC|Macintosh)#'];
-				$agents[] = ['Linux', '#(Linux|X11)#'];
-				$agents[] = ['Open BSD', 'OpenBSD'];
-				$agents[] = ['Sun OS', 'SunOS'];
-				$agents[] = ['QNX', 'QNX'];
-				$agents[] = ['BeOS', 'BeOS'];
-				$agents[] = ['OS/2', 'OS/2'];
-				break;
-
 			/* Browsers */
 			case 'browsers':
 				if ($this->get('simple') && $this->get('simple') !== 'false')
@@ -94,6 +82,19 @@ class JFormFieldRL_Agents extends Field
 				$agents[] = ['Opera Mini', 'Opera Mini'];
 				$agents[] = ['Opera Mobile', 'Opera Mobi'];
 				$agents[] = ['UC Browser', 'UC Browser'];
+				break;
+
+			/* OS */
+			case 'os':
+			default:
+				$agents[] = ['Windows', 'Windows'];
+				$agents[] = ['Mac OS', '#(Mac OS|Mac_PowerPC|Macintosh)#'];
+				$agents[] = ['Linux', '#(Linux|X11)#'];
+				$agents[] = ['Open BSD', 'OpenBSD'];
+				$agents[] = ['Sun OS', 'SunOS'];
+				$agents[] = ['QNX', 'QNX'];
+				$agents[] = ['BeOS', 'BeOS'];
+				$agents[] = ['OS/2', 'OS/2'];
 				break;
 		}
 
