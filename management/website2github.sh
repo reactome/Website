@@ -68,7 +68,7 @@ done;
 
 LOCAL_REPO="/usr/local/reactomes/Reactome/production/Website/static"
 
-GITHUB_USER="reactomebot"
+#GITHUB_USER="reactomebot"
 GITHUB_USER="adamjohnwright"
 GITHUB_EMAIL=$1
 
