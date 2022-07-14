@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         22.6.8549
+ * @version         22.6.16896
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -12,11 +12,11 @@
 
 if (typeof window.RegularLabsForm === 'undefined'
 	|| typeof RegularLabsForm.version === 'undefined'
-	|| RegularLabsForm.version < '22.6.8549') {
+	|| RegularLabsForm.version < '22.6.16896') {
 
 	(function($) {
 		window.RegularLabsForm = {
-			version: '22.6.8549',
+			version: '22.6.16896',
 
 			getValue: function(name, escape) {
 				let $field = $(`[name="${name}"]`);

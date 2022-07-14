@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.8549
+ * @version         22.6.16896
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -213,6 +213,7 @@ class PlgSystemRegularLabsInstallerScriptHelper
 		$this->addInstalledMessage();
 
 		JFactory::getCache()->clean('com_plugins');
+		JFactory::getCache()->clean('com_modules');
 		JFactory::getCache()->clean('_system');
 
 		return true;
@@ -771,13 +772,21 @@ class PlgSystemRegularLabsInstallerScriptHelper
 		$ordering = $this->db->loadResult();
 		$ordering++;
 
-		// publish module and set ordering number
+		// publish module
 		$query->clear()
 			->update('#__modules')
 			->set($this->db->quoteName('published') . ' = 1')
-			->set($this->db->quoteName('ordering') . ' = ' . (int) $ordering)
 			->set($this->db->quoteName('position') . ' = ' . $this->db->quote($this->module_position))
 			->where($this->db->quoteName('id') . ' = ' . (int) $id);
+		$this->db->setQuery($query);
+		$this->db->execute();
+
+		// set ordering number
+		$query->clear()
+			->update('#__modules')
+			->set($this->db->quoteName('ordering') . ' = ' . (int) $ordering)
+			->where($this->db->quoteName('id') . ' = ' . (int) $id)
+			->where($this->db->quoteName('ordering') . ' = 0');
 		$this->db->setQuery($query);
 		$this->db->execute();
 

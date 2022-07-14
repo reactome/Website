@@ -19,12 +19,16 @@ if ($app->input->get('task') === 'plugin') {
     throw new Exception('Restricted', 403);
 }
 
+$vName = $app->input->get('view');
+
 // fix legacy plugin url
-if ($app->input->get('view') === 'editor' && $app->input->get('layout') === 'plugin') {
+if ($vName == 'editor' && $app->input->get('layout') == 'plugin') {
 
     if ($app->input->get('plugin')) {
         $app->input->set('task', 'plugin.display');
-    }    
+    }
+    
+    $app->input->set('view', '');
 }
 
 // constants and autoload 

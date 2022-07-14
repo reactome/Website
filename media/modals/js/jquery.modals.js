@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         11.10.0
+ * @version         11.10.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -469,7 +469,10 @@
 
 				$groupControls.add($title).hide();
 
-				$box.attr('aria-hidden', 'false');
+				$box.attr('aria-hidden', 'false')
+					.attr('role', 'dialog')
+					.attr('aria-labelledby', $prefix('title'))
+					.attr('aria-describedby', $prefix('loaded_content'));
 
 				// Return focus on closing
 				if (settings.get('returnFocus')) {
@@ -509,11 +512,10 @@
 			init            = false;
 			$window         = $(window);
 			$box            = $tag(div).attr({
-				id                : colorbox,
-				role              : 'dialog',
-				'aria-hidden'     : 'true',
-				'aria-labelledby' : $prefix('title'),
-				'aria-describedby': $prefix('current'),
+				'id'         : colorbox,
+				'role'       : 'dialog',
+				'tabindex'   : -1,
+				'aria-hidden': 'true'
 			}).hide();
 			$overlay        = $tag(div, 'overlay').hide();
 			$loadingOverlay = $([$tag(div, 'loading_overlay')[0], $tag(div, 'loading_graphic')[0]]);
@@ -1143,7 +1145,10 @@
 			$overlay.fadeTo(settings.get('fadeOut') || 0, 0);
 
 			$box.stop().fadeTo(settings.get('fadeOut') || 0, 0, function() {
-				$box.hide().attr('aria-hidden', 'true');
+				$box.hide().attr('aria-hidden', 'true')
+					.attr('role', '')
+					.attr('aria-labelledby', '')
+					.attr('aria-describedby', '');
 				$overlay.hide();
 				trigger(event_purge);
 				$loaded.remove();

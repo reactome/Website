@@ -2,8 +2,8 @@
 <extension version="3.9" type="plugin" group="system" method="upgrade">
 	<name>PLG_SYSTEM_MODALS</name>
 	<description>PLG_SYSTEM_MODALS_DESC</description>
-	<version>11.10.0</version>
-	<creationDate>February 2022</creationDate>
+	<version>11.10.1</version>
+	<creationDate>June 2022</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://regularlabs.com</authorUrl>
@@ -72,7 +72,7 @@
 					   description="MDL_OPACITY_DESC"
 					   showon="overlay:1" />
 
-				<field name="@block_dimensions_a" type="rl_block" start="1" label="MDL_DIMENSIONS" />
+				<field name="@block__dimensions__a" type="rl_block" start="1" label="MDL_DIMENSIONS" />
 				<field name="width" type="text" size="10" class="input-mini" default=""
 					   label="RL_WIDTH"
 					   description="MDL_DIMENSION_DESC" />
@@ -108,16 +108,16 @@
 					   label="MDL_AUTO_CORRECT_SIZE_DELAY"
 					   description="MDL_AUTO_CORRECT_SIZE_DELAY_DESC"
 					   showon="auto_correct_size:1" />
-				<field name="@block_dimensions_b" type="rl_block" end="1" />
+				<field name="@block__dimensions__b" type="rl_block" end="1" />
 
-				<field name="@block_positioning_a" type="rl_block" start="1" label="MDL_POSITIONING" />
+				<field name="@block__positioning__a" type="rl_block" start="1" label="MDL_POSITIONING" />
 				<field name="@positioning" type="rl_onlypro" />
-				<field name="@block_positioning_b" type="rl_block" end="1" />
+				<field name="@block__positioning__b" type="rl_block" end="1" />
 			</fieldset>
 
 
 			<fieldset name="RL_MEDIA">
-				<field name="@block_images_a" type="rl_block" start="1" label="MDL_IMAGES" />
+				<field name="@block__images__a" type="rl_block" start="1" label="MDL_IMAGES" />
 				<field name="auto_titles" type="radio" class="btn-group" default="1"
 					   label="MDL_AUTO_TITLES"
 					   description="MDL_AUTO_TITLES_DESC">
@@ -162,26 +162,26 @@
 					   description="MDL_RETINA_SUFFIX_DESC"
 					   showon="retinaurl:1" />
 				<!-- <<< [PRO] <<< -->
-				<field name="@block_images_b" type="rl_block" end="1" />
+				<field name="@block__images__b" type="rl_block" end="1" />
 
-				<field name="@block_thumbnails_a" type="rl_block" start="1" label="MDL_THUMBNAILS" />
+				<field name="@block__thumbnails__a" type="rl_block" start="1" label="MDL_THUMBNAILS" />
 				<field name="@thumbnails" type="rl_onlypro" />
-				<field name="@block_thumbnails_b" type="rl_block" end="1" />
+				<field name="@block__thumbnails__b" type="rl_block" end="1" />
 
-				<field name="@block_galleries_a" type="rl_block" start="1" label="MDL_GALLERIES" />
+				<field name="@block__galleries__a" type="rl_block" start="1" label="MDL_GALLERIES" />
 				<field name="@galleries" type="rl_onlypro" />
-				<field name="@block_galleries_b" type="rl_block" end="1" />
+				<field name="@block__galleries__b" type="rl_block" end="1" />
 
-				<field name="@block_groups_a" type="rl_block" start="1" label="MDL_GROUPS" />
+				<field name="@block__groups__a" type="rl_block" start="1" label="MDL_GROUPS" />
 				<field name="@groups" type="rl_onlypro" />
-				<field name="@block_groups_b" type="rl_block" end="1" />
+				<field name="@block__groups__b" type="rl_block" end="1" />
 			</fieldset>
 
 
 			<fieldset name="MDL_AUTOCONVERT">
-				<field name="@block_autoconvert_a" type="rl_block" start="1" label="MDL_LINKS" />
+				<field name="@block__autoconvert__a" type="rl_block" start="1" label="MDL_LINKS" />
 
-				<field name="@block_classnames_a" type="rl_block" start="1" label="MDL_CLASSNAMES" />
+				<field name="@block__classnames__a" type="rl_block" start="1" label="MDL_CLASSNAMES" />
 				<field name="autoconvert_classnames" type="radio" class="btn-group" default="1"
 					   label="MDL_AUTOCONVERT"
 					   description="MDL_AUTOCONVERT_CLASSNAMES_DESC">
@@ -192,44 +192,44 @@
 					   label="MDL_CLASSNAMES"
 					   description="MDL_CLASSNAMES_DESC"
 					   showon="autoconvert_classnames:1" />
-				<field name="@block_classnames_b" type="rl_block" end="1" />
+				<field name="@block__classnames__b" type="rl_block" end="1" />
 
-				<field name="@block_external_a" type="rl_block" start="1" label="MDL_EXTERNAL_LINKS" />
+				<field name="@block__external__a" type="rl_block" start="1" label="MDL_EXTERNAL_LINKS" />
 				<field name="@external" type="rl_onlypro"
 					   label="MDL_AUTOCONVERT"
 					   description="MDL_EXTERNAL_LINKS_DESC" />
-				<field name="@block_external_b" type="rl_block" end="1" label="MDL_TARGET" />
+				<field name="@block__external__b" type="rl_block" end="1" label="MDL_TARGET" />
 
-				<field name="@block_target_a" type="rl_block" start="1" label="MDL_TARGET" />
+				<field name="@block__target__a" type="rl_block" start="1" label="MDL_TARGET" />
 				<field name="@target" type="rl_onlypro"
 					   label="MDL_AUTOCONVERT"
 					   description="MDL_TARGET_DESC" />
-				<field name="@block_target_b" type="rl_block" end="1" />
+				<field name="@block__target__b" type="rl_block" end="1" />
 
-				<field name="@block_filetypes_a" type="rl_block" start="1" label="MDL_FILETYPES" />
+				<field name="@block__filetypes__a" type="rl_block" start="1" label="MDL_FILETYPES" />
 				<field name="@filetypes" type="rl_onlypro"
 					   label="MDL_AUTOCONVERT"
 					   description="MDL_AUTOCONVERT_FILETYPES_DESC" />
-				<field name="@block_filetypes_b" type="rl_block" end="1" />
+				<field name="@block__filetypes__b" type="rl_block" end="1" />
 
-				<field name="@block_urls_a" type="rl_block" start="1" label="RL_URL_PARTS" />
+				<field name="@block__urls__a" type="rl_block" start="1" label="RL_URL_PARTS" />
 				<field name="@urls" type="rl_onlypro"
 					   label="MDL_AUTOCONVERT"
 					   description="MDL_AUTOCONVERT_URLS_DESC" />
-				<field name="@block_urls_b" type="rl_block" end="1" />
+				<field name="@block__urls__b" type="rl_block" end="1" />
 
 				<field name="exclude_urls" type="textarea" cols="40" rows="5" default=""
 					   label="MDL_EXCLUDE_URLS"
 					   description="MDL_EXCLUDE_URLS_DESC"
 					   showon="autoconvert_classnames:1[OR]external:1[OR]target:1[OR]filetypes:1[OR]autoconvert_urls:1" />
 
-				<field name="@block_autoconvert_b" type="rl_block" end="1" />
+				<field name="@block__autoconvert__b" type="rl_block" end="1" />
 
-				<field name="@block_autoconvert_images_a" type="rl_block" start="1" label="MDL_IMAGES" />
+				<field name="@block__autoconvert_images__a" type="rl_block" start="1" label="MDL_IMAGES" />
 				<field name="@image_autoconvert_images" type="rl_onlypro"
 					   label="MDL_AUTOCONVERT"
 					   description="MDL_AUTOCONVERT_CLASSNAMES_IMAGES_DESC" />
-				<field name="@block_autoconvert_images_b" type="rl_block" end="1" />
+				<field name="@block__autoconvert_images__b" type="rl_block" end="1" />
 			</fieldset>
 
 
@@ -287,19 +287,19 @@
 				<field name="iframefiles" type="text" default="pdf"
 					   label="MDL_IFRAME_FILES"
 					   description="MDL_IFRAME_FILES_DESC" />
-				<field name="@notice_open_count_based_on" type="rl_onlypro"
+				<field name="@note__open_count_based_on" type="rl_onlypro"
 					   label="MDL_OPEN_COUNT_BASED_ON"
 					   description="MDL_OPEN_COUNT_BASED_ON_DESC" />
 				
-				<field name="@notice_disable_background_scrolling" type="rl_onlypro"
+				<field name="@note__disable_background_scrolling" type="rl_onlypro"
 					   label="MDL_DISABLE_BACKGROUND_SCROLLING"
 					   description="MDL_DISABLE_BACKGROUND_SCROLLING_DESC" />
 				
-				<field name="@notice_disable_on_mobile" type="rl_onlypro"
+				<field name="@note__disable_on_mobile" type="rl_onlypro"
 					   label="MDL_DISABLE_ON_MOBILE"
 					   description="MDL_DISABLE_ON_MOBILE_DESC" />
 				
-				<field name="@notice_disabled_components" type="rl_onlypro"
+				<field name="@note__disabled_components" type="rl_onlypro"
 					   label="RL_DISABLE_ON_COMPONENTS"
 					   description="RL_DISABLE_ON_COMPONENTS_DESC" />
 				<field name="enable_admin" type="radio" class="btn-group" default="0"
@@ -332,7 +332,7 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="@notice_load_jquery" type="note" class="alert alert-danger"
+				<field name="@note__load_jquery" type="note" class="alert alert-danger"
 					   description="RL_JQUERY_DISABLED,MODALS"
 					   showon="load_jquery:0" />
 			</fieldset>

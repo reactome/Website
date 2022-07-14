@@ -2,8 +2,8 @@
 <extension version="3.9" type="plugin" group="editors-xtd" method="upgrade">
 	<name>PLG_EDITORS-XTD_MODALS</name>
 	<description>PLG_EDITORS-XTD_MODALS_DESC</description>
-	<version>11.10.0</version>
-	<creationDate>February 2022</creationDate>
+	<version>11.10.1</version>
+	<creationDate>June 2022</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://regularlabs.com</authorUrl>
@@ -45,7 +45,7 @@
 					   description="MODALS_DESC"
 					   url="https://regularlabs.com/modals" />
 
-				<field name="@notice_settings" type="note" class="alert alert-info"
+				<field name="@note__settings" type="note" class="alert alert-info"
 					   description="MDL_SETTINGS,&lt;a href=&quot;index.php?option=com_plugins&amp;filter_folder=system&amp;filter_search=modals&quot; target=&quot;_blank&quot;&gt;,&lt;/a&gt;" />
 			</fieldset>
 		</fields>
