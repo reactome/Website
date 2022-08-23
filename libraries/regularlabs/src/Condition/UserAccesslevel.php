@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -22,49 +22,49 @@ use RegularLabs\Library\DB as RL_DB;
  */
 class UserAccesslevel extends User
 {
-	public function pass()
-	{
-		$user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
+    public function pass()
+    {
+        $user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
 
-		$levels = $user->getAuthorisedViewLevels();
+        $levels = $user->getAuthorisedViewLevels();
 
-		$this->selection = $this->convertAccessLevelNamesToIds($this->selection);
+        $this->selection = $this->convertAccessLevelNamesToIds($this->selection);
 
-		return $this->passSimple($levels);
-	}
+        return $this->passSimple($levels);
+    }
 
-	private function convertAccessLevelNamesToIds($selection)
-	{
-		$names = [];
+    private function convertAccessLevelNamesToIds($selection)
+    {
+        $names = [];
 
-		foreach ($selection as $i => $level)
-		{
-			if (is_numeric($level))
-			{
-				continue;
-			}
+        foreach ($selection as $i => $level)
+        {
+            if (is_numeric($level))
+            {
+                continue;
+            }
 
-			unset($selection[$i]);
+            unset($selection[$i]);
 
-			$names[] = strtolower(str_replace(' ', '', $level));
-		}
+            $names[] = strtolower(str_replace(' ', '', $level));
+        }
 
-		if (empty($names))
-		{
-			return $selection;
-		}
+        if (empty($names))
+        {
+            return $selection;
+        }
 
-		$db = JFactory::getDbo();
+        $db = JFactory::getDbo();
 
-		$query = $db->getQuery(true)
-			->select($db->quoteName('id'))
-			->from('#__viewlevels')
-			->where('LOWER(REPLACE(' . $db->quoteName('title') . ', " ", ""))'
-				. RL_DB::in($names));
-		$db->setQuery($query);
+        $query = $db->getQuery(true)
+            ->select($db->quoteName('id'))
+            ->from('#__viewlevels')
+            ->where('LOWER(REPLACE(' . $db->quoteName('title') . ', " ", ""))'
+                . RL_DB::in($names));
+        $db->setQuery($query);
 
-		$level_ids = $db->loadColumn();
+        $level_ids = $db->loadColumn();
 
-		return array_unique(array_merge($selection, $level_ids));
-	}
+        return array_unique(array_merge($selection, $level_ids));
+    }
 }

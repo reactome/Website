@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -20,91 +20,91 @@ jimport('joomla.form.formfield');
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_Dependency extends Field
 {
-	public $type = 'Dependency';
+    public $type = 'Dependency';
 
-	protected function getInput()
-	{
-		$file = $this->get('file');
+    protected function getInput()
+    {
+        $file = $this->get('file');
 
-		if ($file)
-		{
-			$label = $this->get('label', 'the main extension');
+        if ($file)
+        {
+            $label = $this->get('label', 'the main extension');
 
-			RLFieldDependency::setMessage($file, $label);
+            RLFieldDependency::setMessage($file, $label);
 
-			return '';
-		}
+            return '';
+        }
 
-		$path      = ($this->get('path') == 'site') ? '' : '/administrator';
-		$label     = $this->get('label');
-		$file      = $this->get('alias', $label);
-		$file      = RL_RegEx::replace('[^a-z-]', '', strtolower($file));
-		$extension = $this->get('extension');
+        $path      = ($this->get('path') == 'site') ? '' : '/administrator';
+        $label     = $this->get('label');
+        $file      = $this->get('alias', $label);
+        $file      = RL_RegEx::replace('[^a-z-]', '', strtolower($file));
+        $extension = $this->get('extension');
 
-		switch ($extension)
-		{
-			case 'com':
-				$file = $path . '/components/com_' . $file . '/com_' . $file . '.xml';
-				break;
-			case 'mod':
-				$file = $path . '/modules/mod_' . $file . '/mod_' . $file . '.xml';
-				break;
-			default:
-				$file = '/plugins/' . str_replace('plg_', '', $extension) . '/' . $file . '.xml';
-				break;
-		}
+        switch ($extension)
+        {
+            case 'com':
+                $file = $path . '/components/com_' . $file . '/com_' . $file . '.xml';
+                break;
+            case 'mod':
+                $file = $path . '/modules/mod_' . $file . '/mod_' . $file . '.xml';
+                break;
+            default:
+                $file = '/plugins/' . str_replace('plg_', '', $extension) . '/' . $file . '.xml';
+                break;
+        }
 
-		$label = JText::_($label) . ' (' . JText::_('RL_' . strtoupper($extension)) . ')';
+        $label = JText::_($label) . ' (' . JText::_('RL_' . strtoupper($extension)) . ')';
 
-		RLFieldDependency::setMessage($file, $label);
+        RLFieldDependency::setMessage($file, $label);
 
-		return '';
-	}
+        return '';
+    }
 
-	protected function getLabel()
-	{
-		return '';
-	}
+    protected function getLabel()
+    {
+        return '';
+    }
 }
 
 class RLFieldDependency
 {
-	static function setMessage($file, $name)
-	{
-		jimport('joomla.filesystem.file');
+    static function setMessage($file, $name)
+    {
+        jimport('joomla.filesystem.file');
 
-		$file = str_replace('\\', '/', $file);
-		$file = (strpos($file, '/administrator') === 0)
-			? str_replace('/administrator', JPATH_ADMINISTRATOR, $file)
-			: JPATH_SITE . '/' . $file;
+        $file = str_replace('\\', '/', $file);
+        $file = (strpos($file, '/administrator') === 0)
+            ? str_replace('/administrator', JPATH_ADMINISTRATOR, $file)
+            : JPATH_SITE . '/' . $file;
 
-		$file = str_replace('//', '/', $file);
+        $file = str_replace('//', '/', $file);
 
-		$file_alt = RL_RegEx::replace('(com|mod)_([a-z-_]+\.)', '\2', $file);
+        $file_alt = RL_RegEx::replace('(com|mod)_([a-z-_]+\.)', '\2', $file);
 
-		if (file_exists($file) || file_exists($file_alt))
-		{
-			return;
-		}
+        if (file_exists($file) || file_exists($file_alt))
+        {
+            return;
+        }
 
-		$msg          = JText::sprintf('RL_THIS_EXTENSION_NEEDS_THE_MAIN_EXTENSION_TO_FUNCTION', JText::_($name));
-		$messageQueue = JFactory::getApplication()->getMessageQueue();
+        $msg          = JText::sprintf('RL_THIS_EXTENSION_NEEDS_THE_MAIN_EXTENSION_TO_FUNCTION', JText::_($name));
+        $messageQueue = JFactory::getApplication()->getMessageQueue();
 
-		foreach ($messageQueue as $queue_message)
-		{
-			if ($queue_message['type'] == 'error' && $queue_message['message'] == $msg)
-			{
-				return;
-			}
-		}
+        foreach ($messageQueue as $queue_message)
+        {
+            if ($queue_message['type'] == 'error' && $queue_message['message'] == $msg)
+            {
+                return;
+            }
+        }
 
-		JFactory::getApplication()->enqueueMessage($msg, 'error');
-	}
+        JFactory::getApplication()->enqueueMessage($msg, 'error');
+    }
 }

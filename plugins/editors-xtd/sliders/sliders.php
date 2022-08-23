@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         8.2.0
+ * @version         8.2.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -16,25 +16,25 @@ use RegularLabs\Library\Extension as RL_Extension;
 defined('_JEXEC') or die;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php')
-	|| ! is_file(JPATH_LIBRARIES . '/regularlabs/src/EditorButtonPlugin.php')
+    || ! is_file(JPATH_LIBRARIES . '/regularlabs/src/EditorButtonPlugin.php')
 )
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 if ( ! RL_Document::isJoomlaVersion(3))
 {
-	RL_Extension::disable('sliders', 'plugin', 'editors-xtd');
+    RL_Extension::disable('sliders', 'plugin', 'editors-xtd');
 
-	return;
+    return;
 }
 
 if (true)
 {
-	class PlgButtonSliders extends RL_EditorButtonPlugin
-	{
-		var $require_core_auth = false;
-	}
+    class PlgButtonSliders extends RL_EditorButtonPlugin
+    {
+        var $require_core_auth = false;
+    }
 }

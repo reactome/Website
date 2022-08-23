@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -16,37 +16,37 @@ use RegularLabs\Library\Language as RL_Language;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_LoadLanguage extends Field
 {
-	public $type = 'LoadLanguage';
+    public $type = 'LoadLanguage';
 
-	protected function getInput()
-	{
-		$extension = $this->get('extension');
-		$admin     = $this->get('admin', 1);
+    protected function getInput()
+    {
+        $extension = $this->get('extension');
+        $admin     = $this->get('admin', 1);
 
-		self::loadLanguage($extension, $admin);
+        self::loadLanguage($extension, $admin);
 
-		return '';
-	}
+        return '';
+    }
 
-	public function loadLanguage($extension, $admin = 1)
-	{
-		if ( ! $extension)
-		{
-			return;
-		}
+    public function loadLanguage($extension, $admin = 1)
+    {
+        if ( ! $extension)
+        {
+            return;
+        }
 
-		RL_Language::load($extension, $admin ? JPATH_ADMINISTRATOR : JPATH_SITE);
-	}
+        RL_Language::load($extension, $admin ? JPATH_ADMINISTRATOR : JPATH_SITE);
+    }
 
-	protected function getLabel()
-	{
-		return '';
-	}
+    protected function getLabel()
+    {
+        return '';
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -18,114 +18,114 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel as JModel;
 
 if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+    require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 }
 
 require_once dirname(__FILE__, 2) . '/assignment.php';
 
 class RLAssignmentsPHP extends RLAssignment
 {
-	public function passPHP()
-	{
-		$article = $this->article;
+    public function passPHP()
+    {
+        $article = $this->article;
 
-		if ( ! is_array($this->selection))
-		{
-			$this->selection = [$this->selection];
-		}
+        if ( ! is_array($this->selection))
+        {
+            $this->selection = [$this->selection];
+        }
 
-		$pass = false;
-		foreach ($this->selection as $php)
-		{
-			// replace \n with newline and other fix stuff
-			$php = str_replace('\|', '|', $php);
-			$php = preg_replace('#(?<!\\\)\\\n#', "\n", $php);
-			$php = trim(str_replace('[:REGEX_ENTER:]', '\n', $php));
+        $pass = false;
+        foreach ($this->selection as $php)
+        {
+            // replace \n with newline and other fix stuff
+            $php = str_replace('\|', '|', $php);
+            $php = preg_replace('#(?<!\\\)\\\n#', "\n", $php);
+            $php = trim(str_replace('[:REGEX_ENTER:]', '\n', $php));
 
-			if ($php == '')
-			{
-				$pass = true;
-				break;
-			}
+            if ($php == '')
+            {
+                $pass = true;
+                break;
+            }
 
-			if ( ! $article && strpos($php, '$article') !== false)
-			{
-				$article = null;
-				if ($this->request->option == 'com_content' && $this->request->view == 'article')
-				{
-					$article = $this->getArticleById($this->request->id);
-				}
-			}
-			if ( ! isset($Itemid))
-			{
-				$Itemid = JFactory::getApplication()->input->getInt('Itemid', 0);
-			}
-			if ( ! isset($mainframe))
-			{
-				$mainframe = JFactory::getApplication();
-			}
-			if ( ! isset($app))
-			{
-				$app = JFactory::getApplication();
-			}
-			if ( ! isset($document))
-			{
-				$document = JFactory::getDocument();
-			}
-			if ( ! isset($doc))
-			{
-				$doc = JFactory::getDocument();
-			}
-			if ( ! isset($database))
-			{
-				$database = JFactory::getDbo();
-			}
-			if ( ! isset($db))
-			{
-				$db = JFactory::getDbo();
-			}
-			if ( ! isset($user))
-			{
-				$user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
-			}
-			$php .= ';return true;';
+            if ( ! $article && strpos($php, '$article') !== false)
+            {
+                $article = null;
+                if ($this->request->option == 'com_content' && $this->request->view == 'article')
+                {
+                    $article = $this->getArticleById($this->request->id);
+                }
+            }
+            if ( ! isset($Itemid))
+            {
+                $Itemid = JFactory::getApplication()->input->getInt('Itemid', 0);
+            }
+            if ( ! isset($mainframe))
+            {
+                $mainframe = JFactory::getApplication();
+            }
+            if ( ! isset($app))
+            {
+                $app = JFactory::getApplication();
+            }
+            if ( ! isset($document))
+            {
+                $document = JFactory::getDocument();
+            }
+            if ( ! isset($doc))
+            {
+                $doc = JFactory::getDocument();
+            }
+            if ( ! isset($database))
+            {
+                $database = JFactory::getDbo();
+            }
+            if ( ! isset($db))
+            {
+                $db = JFactory::getDbo();
+            }
+            if ( ! isset($user))
+            {
+                $user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
+            }
+            $php .= ';return true;';
 
-			$temp_PHP_func = create_function('&$article, &$Itemid, &$mainframe, &$app, &$document, &$doc, &$database, &$db, &$user', $php);
+            $temp_PHP_func = create_function('&$article, &$Itemid, &$mainframe, &$app, &$document, &$doc, &$database, &$db, &$user', $php);
 
-			// evaluate the script
-			ob_start();
-			$pass = (bool) $temp_PHP_func($article, $Itemid, $mainframe, $app, $document, $doc, $database, $db, $user);
-			unset($temp_PHP_func);
-			ob_end_clean();
+            // evaluate the script
+            ob_start();
+            $pass = (bool) $temp_PHP_func($article, $Itemid, $mainframe, $app, $document, $doc, $database, $db, $user);
+            unset($temp_PHP_func);
+            ob_end_clean();
 
-			if ($pass)
-			{
-				break;
-			}
-		}
+            if ($pass)
+            {
+                break;
+            }
+        }
 
-		return $this->pass($pass);
-	}
+        return $this->pass($pass);
+    }
 
-	private function getArticleById($id = 0)
-	{
-		if ( ! $id)
-		{
-			return null;
-		}
+    private function getArticleById($id = 0)
+    {
+        if ( ! $id)
+        {
+            return null;
+        }
 
-		if ( ! class_exists('ContentModelArticle'))
-		{
-			require_once JPATH_SITE . '/components/com_content/models/article.php';
-		}
+        if ( ! class_exists('ContentModelArticle'))
+        {
+            require_once JPATH_SITE . '/components/com_content/models/article.php';
+        }
 
-		$model = JModel::getInstance('article', 'contentModel');
+        $model = JModel::getInstance('article', 'contentModel');
 
-		if ( ! method_exists($model, 'getItem'))
-		{
-			return null;
-		}
+        if ( ! method_exists($model, 'getItem'))
+        {
+            return null;
+        }
 
-		return $model->getItem($this->request->id);
-	}
+        return $model->getItem($this->request->id);
+    }
 }

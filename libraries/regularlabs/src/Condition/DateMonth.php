@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,10 +19,10 @@ defined('_JEXEC') or die;
  */
 class DateMonth extends Date
 {
-	public function pass()
-	{
-		$month = $this->date->format('m', true); // 01 (for January) through 12 (for December)
+    public function pass()
+    {
+        $month = $this->date->format('m', true); // 01 (for January) through 12 (for December)
 
-		return $this->passSimple((int) $month);
-	}
+        return $this->passSimple((int) $month);
+    }
 }

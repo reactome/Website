@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -22,8 +22,8 @@ use RegularLabs\Library\Condition;
  */
 class Language extends Condition
 {
-	public function pass()
-	{
-		return $this->passSimple(JFactory::getLanguage()->getTag(), true);
-	}
+    public function pass()
+    {
+        return $this->passSimple(JFactory::getLanguage()->getTag(), true);
+    }
 }

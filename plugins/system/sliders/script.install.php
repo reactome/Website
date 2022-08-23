@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         8.2.0
+ * @version         8.2.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -15,12 +15,12 @@ require_once __DIR__ . '/script.install.helper.php';
 
 class PlgSystemSlidersInstallerScript extends PlgSystemSlidersInstallerScriptHelper
 {
-	public $alias          = 'sliders';
-	public $extension_type = 'plugin';
-	public $name           = 'SLIDERS';
+    public $alias          = 'sliders';
+    public $extension_type = 'plugin';
+    public $name           = 'SLIDERS';
 
-	public function uninstall($adapter)
-	{
-		$this->uninstallPlugin($this->extname, 'editors-xtd');
-	}
+    public function uninstall($adapter)
+    {
+        $this->uninstallPlugin($this->extname, 'editors-xtd');
+    }
 }

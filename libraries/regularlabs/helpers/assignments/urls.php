@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -17,7 +17,7 @@ use Joomla\CMS\Uri\Uri as JUri;
 
 if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+    require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 }
 
 require_once dirname(__FILE__, 2) . '/assignment.php';
@@ -25,68 +25,68 @@ require_once dirname(__FILE__, 2) . '/text.php';
 
 class RLAssignmentsURLs extends RLAssignment
 {
-	public function passURLs()
-	{
-		$regex = $this->params->regex ?? 0;
+    public function passURLs()
+    {
+        $regex = $this->params->regex ?? 0;
 
-		if ( ! is_array($this->selection))
-		{
-			$this->selection = explode("\n", $this->selection);
-		}
+        if ( ! is_array($this->selection))
+        {
+            $this->selection = explode("\n", $this->selection);
+        }
 
-		if (count($this->selection) == 1)
-		{
-			$this->selection = explode("\n", $this->selection[0]);
-		}
+        if (count($this->selection) == 1)
+        {
+            $this->selection = explode("\n", $this->selection[0]);
+        }
 
-		$url = JUri::getInstance();
-		$url = $url->toString();
+        $url = JUri::getInstance();
+        $url = $url->toString();
 
-		$urls = [
-			RLText::html_entity_decoder(urldecode($url)),
-			urldecode($url),
-			RLText::html_entity_decoder($url),
-			$url,
-		];
-		$urls = array_unique($urls);
+        $urls = [
+            RLText::html_entity_decoder(urldecode($url)),
+            urldecode($url),
+            RLText::html_entity_decoder($url),
+            $url,
+        ];
+        $urls = array_unique($urls);
 
-		$pass = false;
-		foreach ($urls as $url)
-		{
-			foreach ($this->selection as $s)
-			{
-				$s = trim($s);
-				if ($s == '')
-				{
-					continue;
-				}
+        $pass = false;
+        foreach ($urls as $url)
+        {
+            foreach ($this->selection as $s)
+            {
+                $s = trim($s);
+                if ($s == '')
+                {
+                    continue;
+                }
 
-				if ($regex)
-				{
-					$url_part = str_replace(['#', '&amp;'], ['\#', '(&amp;|&)'], $s);
-					$s        = '#' . $url_part . '#si';
-					if (@preg_match($s . 'u', $url) || @preg_match($s, $url))
-					{
-						$pass = true;
-						break;
-					}
+                if ($regex)
+                {
+                    $url_part = str_replace(['#', '&amp;'], ['\#', '(&amp;|&)'], $s);
+                    $s        = '#' . $url_part . '#si';
+                    if (@preg_match($s . 'u', $url) || @preg_match($s, $url))
+                    {
+                        $pass = true;
+                        break;
+                    }
 
-					continue;
-				}
+                    continue;
+                }
 
-				if (strpos($url, $s) !== false)
-				{
-					$pass = true;
-					break;
-				}
-			}
+                if (strpos($url, $s) !== false)
+                {
+                    $pass = true;
+                    break;
+                }
+            }
 
-			if ($pass)
-			{
-				break;
-			}
-		}
+            if ($pass)
+            {
+                break;
+            }
+        }
 
-		return $this->pass($pass);
-	}
+        return $this->pass($pass);
+    }
 }

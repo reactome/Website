@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -16,31 +16,31 @@ use RegularLabs\Library\Field;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_Editor extends Field
 {
-	public $type = 'Editor';
+    public $type = 'Editor';
 
-	protected function getInput()
-	{
-		$width  = $this->get('width', '100%');
-		$height = $this->get('height', 400);
+    protected function getInput()
+    {
+        $width  = $this->get('width', '100%');
+        $height = $this->get('height', 400);
 
-		$this->value = htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8');
+        $this->value = htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8');
 
-		// Get an editor object.
-		$editor = JFactory::getEditor();
-		$html   = $editor->display($this->name, $this->value, $width, $height, true, $this->id);
+        // Get an editor object.
+        $editor = JFactory::getEditor();
+        $html   = $editor->display($this->name, $this->value, $width, $height, true, $this->id);
 
-		return '</div><div>' . $html;
-	}
+        return '</div><div>' . $html;
+    }
 
-	protected function getLabel()
-	{
-		return '';
-	}
+    protected function getLabel()
+    {
+        return '';
+    }
 }

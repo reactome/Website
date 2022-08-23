@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -21,11 +21,11 @@ use Joomla\CMS\Factory as JFactory;
  */
 class K2Pagetype extends K2
 {
-	public function pass()
-	{
-		// K2 messes with the task in the request, so we have to reset the task
-		$this->request->task = JFactory::getApplication()->input->get('task');
+    public function pass()
+    {
+        // K2 messes with the task in the request, so we have to reset the task
+        $this->request->task = JFactory::getApplication()->input->get('task');
 
-		return $this->passByPageType('com_k2', $this->selection, $this->include_type, false, true);
-	}
+        return $this->passByPageType('com_k2', $this->selection, $this->include_type, false, true);
+    }
 }

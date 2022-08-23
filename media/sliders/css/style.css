@@ -1,6 +1,6 @@
 /**
  * @package         Sliders
- * @version         8.2.0
+ * @version         8.2.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -161,8 +161,14 @@
 .rl_sliders.accordion > .accordion-group > .accordion-body > .accordion-inner > :last-child {
   margin-bottom: 0;
 }
+.rl_sliders.accordion > .accordion-group > .accordion-body > .accordion-inner[hidden] {
+  display: block;
+}
 .rl_sliders.accordion > .accordion-group > .accordion-body > .accordion-inner .rl_sliders-title {
   display: none;
+}
+.rl_sliders.accordion > .accordion-group.active > .accordion-body > .accordion-inner {
+  visibility: visible;
 }
 .rl_sliders.accordion > .accordion-group.icon > .accordion-heading > a.accordion-toggle span.rl_sliders-toggle-inner:before {
   display: inline-block;

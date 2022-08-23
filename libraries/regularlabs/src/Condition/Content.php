@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -23,29 +23,29 @@ use RegularLabs\Library\ConditionContent;
  */
 abstract class Content extends Condition
 {
-	use ConditionContent;
+    use ConditionContent;
 
-	public function getItem($fields = [])
-	{
-		if ($this->article)
-		{
-			return $this->article;
-		}
+    public function getItem($fields = [])
+    {
+        if ($this->article)
+        {
+            return $this->article;
+        }
 
-		if ( ! class_exists('ContentModelArticle'))
-		{
-			require_once JPATH_SITE . '/components/com_content/models/article.php';
-		}
+        if ( ! class_exists('ContentModelArticle'))
+        {
+            require_once JPATH_SITE . '/components/com_content/models/article.php';
+        }
 
-		$model = JModel::getInstance('article', 'contentModel');
+        $model = JModel::getInstance('article', 'contentModel');
 
-		if ( ! method_exists($model, 'getItem'))
-		{
-			return null;
-		}
+        if ( ! method_exists($model, 'getItem'))
+        {
+            return null;
+        }
 
-		$this->article = $model->getItem($this->request->id);
+        $this->article = $model->getItem($this->request->id);
 
-		return $this->article;
-	}
+        return $this->article;
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -18,21 +18,21 @@ use RegularLabs\Library\Document as RL_Document;
 
 class SearchHelper
 {
-	public static function load()
-	{
-		// Only in frontend search component view
-		if ( ! RL_Document::isClient('site') || JFactory::getApplication()->input->get('option') != 'com_search')
-		{
-			return;
-		}
+    public static function load()
+    {
+        // Only in frontend search component view
+        if ( ! RL_Document::isClient('site') || JFactory::getApplication()->input->get('option') != 'com_search')
+        {
+            return;
+        }
 
-		$classes = get_declared_classes();
+        $classes = get_declared_classes();
 
-		if (in_array('SearchModelSearch', $classes) || in_array('searchmodelsearch', $classes))
-		{
-			return;
-		}
+        if (in_array('SearchModelSearch', $classes) || in_array('searchmodelsearch', $classes))
+        {
+            return;
+        }
 
-		require_once JPATH_LIBRARIES . '/regularlabs/helpers/search.php';
-	}
+        require_once JPATH_LIBRARIES . '/regularlabs/helpers/search.php';
+    }
 }

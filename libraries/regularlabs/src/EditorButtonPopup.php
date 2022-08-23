@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -24,80 +24,80 @@ use RegularLabs\Library\ParametersNew as Parameters;
  */
 class EditorButtonPopup
 {
-	var $extension         = '';
-	var $params            = null;
-	var $require_core_auth = true;
+    var $extension         = '';
+    var $params            = null;
+    var $require_core_auth = true;
 
-	public function __construct($extension)
-	{
-		$this->extension = $extension;
-		$this->params    = Parameters::getPlugin($extension);
-	}
+    public function __construct($extension)
+    {
+        $this->extension = $extension;
+        $this->params    = Parameters::getPlugin($extension);
+    }
 
-	public function render()
-	{
-		if ( ! Extension::isAuthorised($this->require_core_auth))
-		{
-			throw new Exception(JText::_("ALERTNOTAUTH"));
-		}
+    public function render()
+    {
+        if ( ! Extension::isAuthorised($this->require_core_auth))
+        {
+            throw new Exception(JText::_("ALERTNOTAUTH"));
+        }
 
-		if ( ! Extension::isEnabledInArea($this->params))
-		{
-			throw new Exception(JText::_("ALERTNOTAUTH"));
-		}
+        if ( ! Extension::isEnabledInArea($this->params))
+        {
+            throw new Exception(JText::_("ALERTNOTAUTH"));
+        }
 
-		$this->loadLibraryLanguages();
-		$this->loadLibraryScriptsStyles();
+        $this->loadLibraryLanguages();
+        $this->loadLibraryScriptsStyles();
 
-		$this->loadLanguages();
+        $this->loadLanguages();
 
-		Document::style('regularlabs/popup.min.css');
+        Document::style('regularlabs/popup.min.css');
 
-		$this->loadScripts();
-		$this->loadStyles();
+        $this->loadScripts();
+        $this->loadStyles();
 
-		echo $this->renderTemplate();
-	}
+        echo $this->renderTemplate();
+    }
 
-	private function loadLibraryLanguages()
-	{
-		Language::load('plg_system_regularlabs');
-	}
+    private function loadLibraryLanguages()
+    {
+        Language::load('plg_system_regularlabs');
+    }
 
-	private function loadLibraryScriptsStyles()
-	{
-		Document::loadPopupDependencies();
-	}
+    private function loadLibraryScriptsStyles()
+    {
+        Document::loadPopupDependencies();
+    }
 
-	public function loadLanguages()
-	{
-		Language::load('plg_editors-xtd_' . $this->extension);
-		Language::load('plg_system_' . $this->extension);
-	}
+    public function loadLanguages()
+    {
+        Language::load('plg_editors-xtd_' . $this->extension);
+        Language::load('plg_system_' . $this->extension);
+    }
 
-	public function loadScripts()
-	{
-	}
+    public function loadScripts()
+    {
+    }
 
-	public function loadStyles()
-	{
-	}
+    public function loadStyles()
+    {
+    }
 
-	private function renderTemplate()
-	{
-		ob_start();
-		include $this->getDir() . '/popup.tmpl.php';
-		$html = ob_get_contents();
-		ob_end_clean();
+    private function renderTemplate()
+    {
+        ob_start();
+        include $this->getDir() . '/popup.tmpl.php';
+        $html = ob_get_contents();
+        ob_end_clean();
 
-		return $html;
-	}
+        return $html;
+    }
 
-	private function getDir()
-	{
-		// use static::class instead of get_class($this) after php 5.4 support is dropped
-		$rc = new ReflectionClass(get_class($this));
+    private function getDir()
+    {
+        // use static::class instead of get_class($this) after php 5.4 support is dropped
+        $rc = new ReflectionClass(get_class($this));
 
-		return dirname($rc->getFileName());
-	}
+        return dirname($rc->getFileName());
+    }
 }

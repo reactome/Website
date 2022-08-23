@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -22,13 +22,13 @@ use RegularLabs\Library\Condition;
  */
 abstract class Virtuemart extends Condition
 {
-	public function initRequest(&$request)
-	{
-		$virtuemart_product_id  = JFactory::getApplication()->input->get('virtuemart_product_id', [], 'array');
-		$virtuemart_category_id = JFactory::getApplication()->input->get('virtuemart_category_id', [], 'array');
+    public function initRequest(&$request)
+    {
+        $virtuemart_product_id  = JFactory::getApplication()->input->get('virtuemart_product_id', [], 'array');
+        $virtuemart_category_id = JFactory::getApplication()->input->get('virtuemart_category_id', [], 'array');
 
-		$request->item_id     = $virtuemart_product_id[0] ?? null;
-		$request->category_id = $virtuemart_category_id[0] ?? null;
-		$request->id          = $request->item_id ?: $request->category_id;
-	}
+        $request->item_id     = $virtuemart_product_id[0] ?? null;
+        $request->category_id = $virtuemart_category_id[0] ?? null;
+        $request->id          = $request->item_id ?: $request->category_id;
+    }
 }

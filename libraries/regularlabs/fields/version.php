@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -17,53 +17,53 @@ use RegularLabs\Library\Version as RL_Version;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_Version extends Field
 {
-	public $type = 'Version';
+    public $type = 'Version';
 
-	protected function getInput()
-	{
-		$extension = $this->get('extension');
-		$xml       = $this->get('xml');
+    protected function getInput()
+    {
+        $extension = $this->get('extension');
+        $xml       = $this->get('xml');
 
-		if ( ! $xml && $this->form->getValue('element'))
-		{
-			if ($this->form->getValue('folder'))
-			{
-				$xml = 'plugins/' . $this->form->getValue('folder') . '/' . $this->form->getValue('element') . '/' . $this->form->getValue('element') . '.xml';
-			}
-			else
-			{
-				$xml = 'administrator/modules/' . $this->form->getValue('element') . '/' . $this->form->getValue('element') . '.xml';
-			}
-			if ( ! file_exists(JPATH_SITE . '/' . $xml))
-			{
-				return '';
-			}
-		}
+        if ( ! $xml && $this->form->getValue('element'))
+        {
+            if ($this->form->getValue('folder'))
+            {
+                $xml = 'plugins/' . $this->form->getValue('folder') . '/' . $this->form->getValue('element') . '/' . $this->form->getValue('element') . '.xml';
+            }
+            else
+            {
+                $xml = 'administrator/modules/' . $this->form->getValue('element') . '/' . $this->form->getValue('element') . '.xml';
+            }
+            if ( ! file_exists(JPATH_SITE . '/' . $xml))
+            {
+                return '';
+            }
+        }
 
-		if (empty($extension) || empty($xml))
-		{
-			return '';
-		}
+        if (empty($extension) || empty($xml))
+        {
+            return '';
+        }
 
-		$user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
+        $user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
 
-		if ( ! $user->authorise('core.manage', 'com_installer'))
-		{
-			return '';
-		}
+        if ( ! $user->authorise('core.manage', 'com_installer'))
+        {
+            return '';
+        }
 
-		return '</div><div class="hide">' . RL_Version::getMessage($extension);
-	}
+        return '</div><div class="hide">' . RL_Version::getMessage($extension);
+    }
 
-	protected function getLabel()
-	{
-		return '';
-	}
+    protected function getLabel()
+    {
+        return '';
+    }
 }

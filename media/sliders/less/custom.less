@@ -1,6 +1,6 @@
 /**
  * @package         Sliders
- * @version         8.2.0
+ * @version         8.2.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -17,80 +17,80 @@
 
 /* Custom Style: mystyle1 */
 .rl_sliders {
-	&.accordion {
-		> .accordion-group.mystyle1 {
-			> .accordion-heading {
-				> a.accordion-toggle {
-					.transition-duration(0s);
-					font-size: 22px;
-					#gradient > .vertical(#ff9999, #ffffff);
+    &.accordion {
+        > .accordion-group.mystyle1 {
+            > .accordion-heading {
+                > a.accordion-toggle {
+                    .transition-duration(0s);
+                    font-size: 22px;
+                    #gradient > .vertical(#ff9999, #ffffff);
 
-					&:hover {
-						#gradient > .vertical(#9999ff, #ffffff);
-					}
-				}
-			}
+                    &:hover {
+                        #gradient > .vertical(#9999ff, #ffffff);
+                    }
+                }
+            }
 
-			&.active {
-				> .accordion-heading {
-					> a.accordion-toggle {
-						#gradient > .vertical(#99ff99, #ffffff);
-					}
-				}
-			}
+            &.active {
+                > .accordion-heading {
+                    > a.accordion-toggle {
+                        #gradient > .vertical(#99ff99, #ffffff);
+                    }
+                }
+            }
 
-			> .accordion-body > .accordion-inner {
-				border-top: none;
-				#gradient > .vertical-three-colors(#ffffff, #ffffff, 25%, #ccffcc);
-			}
-		}
-	}
+            > .accordion-body > .accordion-inner {
+                border-top: none;
+                #gradient > .vertical-three-colors(#ffffff, #ffffff, 25%, #ccffcc);
+            }
+        }
+    }
 }
 
 /* Custom Style: mystyle2 */
 .rl_sliders {
-	&.accordion {
-		> .accordion-group.mystyle2 {
-			.border-radius(0 0 0 0);
-			border-color: #666666;
+    &.accordion {
+        > .accordion-group.mystyle2 {
+            .border-radius(0 0 0 0);
+            border-color: #666666;
 
-			> .accordion-heading {
-				> a.accordion-toggle {
-					.transition-duration(1s);
-					font-family:      @monoFontFamily;
-					padding:          8px 20px;
-					background-color: #aaaaaa;
-					color:            #ffffff !important;
+            > .accordion-heading {
+                > a.accordion-toggle {
+                    .transition-duration(1s);
+                    font-family:      @monoFontFamily;
+                    padding:          8px 20px;
+                    background-color: #aaaaaa;
+                    color:            #ffffff !important;
 
-					&:hover {
-						background-color: #999999;
-						color:            #ffffff;
-					}
-				}
-			}
+                    &:hover {
+                        background-color: #999999;
+                        color:            #ffffff;
+                    }
+                }
+            }
 
-			&.active {
-				> .accordion-heading {
-					> a.accordion-toggle {
-						background-color: #666666 !important;
-						color:            #ffffff !important;
-					}
-				}
-			}
+            &.active {
+                > .accordion-heading {
+                    > a.accordion-toggle {
+                        background-color: #666666 !important;
+                        color:            #ffffff !important;
+                    }
+                }
+            }
 
-			> .accordion-body > .accordion-inner {
-				.transition-duration(1s);
-				font-family:      @monoFontFamily;
-				border-top:       none;
-				background-color: #999999;
-				color:            #ffffff;
-			}
+            > .accordion-body > .accordion-inner {
+                .transition-duration(1s);
+                font-family:      @monoFontFamily;
+                border-top:       none;
+                background-color: #999999;
+                color:            #ffffff;
+            }
 
-			&.active {
-				> .accordion-body > .accordion-inner {
-					background-color: #666666;
-				}
-			}
-		}
-	}
+            &.active {
+                > .accordion-body > .accordion-inner {
+                    background-color: #666666;
+                }
+            }
+        }
+    }
 }

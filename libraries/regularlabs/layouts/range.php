@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -56,29 +56,29 @@ JHtml::_('script', 'system/html5fallback.js', ['version' => 'auto', 'relative' =
 
 // Initialize some field attributes.
 $attributes_range = [
-	$class ? 'class="' . $class . '"' : '',
-	$disabled ? 'disabled' : '',
-	$readonly ? 'readonly' : '',
-	! empty($onchange) ? 'onchange="' . $onchange . '"' : '',
-	! empty($max) ? 'max="' . $max . '"' : '',
-	! empty($step) ? 'step="' . $step . '"' : '',
-	! empty($min) ? 'min="' . $min . '"' : '',
-	$autofocus ? 'autofocus' : '',
+    $class ? 'class="' . $class . '"' : '',
+    $disabled ? 'disabled' : '',
+    $readonly ? 'readonly' : '',
+    ! empty($onchange) ? 'onchange="' . $onchange . '"' : '',
+    ! empty($max) ? 'max="' . $max . '"' : '',
+    ! empty($step) ? 'step="' . $step . '"' : '',
+    ! empty($min) ? 'min="' . $min . '"' : '',
+    $autofocus ? 'autofocus' : '',
 ];
 
 $attributes_number = [
-	'class="input-mini text-right"',
-	! empty($size) ? 'size="' . $size . '"' : '',
-	$disabled ? 'disabled' : '',
-	$readonly ? 'readonly' : '',
-	strlen($hint) ? 'placeholder="' . htmlspecialchars($hint, ENT_COMPAT, 'UTF-8') . '"' : '',
-	! empty($onchange) ? 'onchange="' . $onchange . '"' : '',
-	isset($max) ? 'max="' . $max . '"' : '',
-	! empty($step) ? 'step="' . $step . '"' : '',
-	isset($min) ? 'min="' . $min . '"' : '',
-	$required ? 'required aria-required="true"' : '',
-	$autocomplete,
-	$autofocus ? 'autofocus' : '',
+    'class="input-mini text-right"',
+    ! empty($size) ? 'size="' . $size . '"' : '',
+    $disabled ? 'disabled' : '',
+    $readonly ? 'readonly' : '',
+    strlen($hint) ? 'placeholder="' . htmlspecialchars($hint, ENT_COMPAT, 'UTF-8') . '"' : '',
+    ! empty($onchange) ? 'onchange="' . $onchange . '"' : '',
+    isset($max) ? 'max="' . $max . '"' : '',
+    ! empty($step) ? 'step="' . $step . '"' : '',
+    isset($min) ? 'min="' . $min . '"' : '',
+    $required ? 'required aria-required="true"' : '',
+    $autocomplete,
+    $autofocus ? 'autofocus' : '',
 ];
 
 $chars = strlen($max) ?: $size ?: 4;
@@ -87,51 +87,50 @@ $width = $chars * 8;
 $classes = [];
 if ($prepend)
 {
-	$classes[] = 'input-prepend';
+    $classes[] = 'input-prepend';
 }
 if ($append)
 {
-	$classes[] = 'input-append';
+    $classes[] = 'input-append';
 }
 
 if (strpos($prepend, 'icon-') === 0)
 {
-	$prepend = '<span class="' . $prepend . '"></span>';
+    $prepend = '<span class="' . $prepend . '"></span>';
 }
 
 if (strpos($append, 'icon-') === 0)
 {
-	$append = '<span class="' . $append . '"></span>';
+    $append = '<span class="' . $append . '"></span>';
 }
 
 if ($prepend && preg_match('#^[A-Z][A-Z0-9_]+$#', $prepend))
 {
-	$prepend = JText::_($prepend);
+    $prepend = JText::_($prepend);
 }
 
 if ($append && preg_match('#^[A-Z][A-Z0-9_]+$#', $append))
 {
-	$append = JText::_($append);
+    $append = JText::_($append);
 }
 
 $input = '<input type="number" name="' . $name . '" id="' . $id . '" value="' . $value . '"
        oninput="document.querySelector(\'input[data-for=\\\'' . $name . '\\\']\').value=this.value;"'
-	. ' ' . implode(' ', $attributes_number) . ' />';
+    . ' ' . implode(' ', $attributes_number) . ' />';
 ?>
 
 <span class="<?php echo implode(' ', $classes); ?>">
-	<?php if ($prepend): ?>
-		<span class="add-on"><?php echo $prepend; ?></span>
-	<?php endif; ?>
+    <?php if ($prepend): ?>
+        <span class="add-on"><?php echo $prepend; ?></span>
+    <?php endif; ?>
 
-	<?php echo $input; ?>
+    <?php echo $input; ?>
 
-	<?php if ($append): ?>
-		<span class="add-on"><?php echo $append; ?></span>
-	<?php endif; ?>
+    <?php if ($append): ?>
+        <span class="add-on"><?php echo $append; ?></span>
+    <?php endif; ?>
 </span>
 
 <input type="range" data-for="<?php echo $name; ?>" value="<?php echo $value; ?>"
        oninput="document.querySelector('input[name=\'<?php echo $name; ?>\']').value=this.value;"
-	<?php echo implode(' ', $attributes_range); ?> />
-
+    <?php echo implode(' ', $attributes_range); ?> />

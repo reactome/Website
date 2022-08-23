@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -17,84 +17,84 @@ use RegularLabs\Library\Field;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_Checkbox extends Field
 {
-	public $type = 'Checkbox';
+    public $type = 'Checkbox';
 
-	protected function getInput()
-	{
-		$showcheckall = $this->get('showcheckall', 0);
+    protected function getInput()
+    {
+        $showcheckall = $this->get('showcheckall', 0);
 
-		$checkall = ($this->value == '*');
+        $checkall = ($this->value == '*');
 
-		if ( ! $checkall)
-		{
-			if ( ! is_array($this->value))
-			{
-				$this->value = explode(',', $this->value);
-			}
-		}
+        if ( ! $checkall)
+        {
+            if ( ! is_array($this->value))
+            {
+                $this->value = explode(',', $this->value);
+            }
+        }
 
-		$options = [];
-		foreach ($this->element->children() as $option)
-		{
-			if ($option->getName() != 'option')
-			{
-				continue;
-			}
+        $options = [];
+        foreach ($this->element->children() as $option)
+        {
+            if ($option->getName() != 'option')
+            {
+                continue;
+            }
 
-			$text = trim((string) $option);
+            $text = trim((string) $option);
 
-			if ( ! isset($option['value']))
-			{
-				$options[] = '<label style="clear:both;"><strong>' . JText::_($text) . '</strong></label>';
-				continue;
-			}
+            if ( ! isset($option['value']))
+            {
+                $options[] = '<label style="clear:both;"><strong>' . JText::_($text) . '</strong></label>';
+                continue;
+            }
 
-			$val      = (string) $option['value'];
-			$disabled = (int) $option['disabled'];
+            $val      = (string) $option['value'];
+            $disabled = (int) $option['disabled'];
 
-			$option = '<input type="checkbox" class="rl_' . $this->id . '" id="' . $this->id . $val . '" name="' . $this->name . '[]" value="' . $val . '"';
-			if ($checkall || in_array($val, $this->value))
-			{
-				$option .= ' checked="checked"';
-			}
-			if ($disabled)
-			{
-				$option .= ' disabled="disabled"';
-			}
-			$option .= '> <label for="' . $this->id . $val . '" class="checkboxes">' . JText::_($text) . '</label>';
+            $option = '<input type="checkbox" class="rl_' . $this->id . '" id="' . $this->id . $val . '" name="' . $this->name . '[]" value="' . $val . '"';
+            if ($checkall || in_array($val, $this->value))
+            {
+                $option .= ' checked="checked"';
+            }
+            if ($disabled)
+            {
+                $option .= ' disabled="disabled"';
+            }
+            $option .= '> <label for="' . $this->id . $val . '" class="checkboxes">' . JText::_($text) . '</label>';
 
-			$options[] = $option;
-		}
+            $options[] = $option;
+        }
 
-		$options = implode('', $options);
+        $options = implode('', $options);
 
-		if ($showcheckall)
-		{
-			$js = "
-				jQuery(document).ready(function() {
-					RegularLabsForm.initCheckAlls('rl_checkall_" . $this->id . "', 'rl_" . $this->id . "');
-				});
-			";
-			JFactory::getDocument()->addScriptDeclaration($js);
+        if ($showcheckall)
+        {
+            $js = "
+                jQuery(document).ready(function() {
+                    RegularLabsForm.initCheckAlls('rl_checkall_" . $this->id . "', 'rl_" . $this->id . "');
+                });
+            ";
+            JFactory::getDocument()->addScriptDeclaration($js);
 
-			$checker = '<input id="rl_checkall_' . $this->id . '" type="checkbox" onclick=" RegularLabsForm.checkAll( this, \'rl_' . $this->id . '\' );"> ' . JText::_('JALL');
+            $checker = '<input id="rl_checkall_' . $this->id . '" type="checkbox" onclick=" RegularLabsForm.checkAll( this, \'rl_' . $this->id . '\' );"> ' . JText::_('JALL');
 
-			$options = $checker . '<br>' . $options;
-		}
-		$options .= '<input type="hidden" id="' . $this->id . 'x" name="' . $this->name . '' . '[]" value="x" checked="checked">';
+            $options = $checker . '<br>' . $options;
+        }
+        $options .= '<input type="hidden" id="' . $this->id . 'x" name="' . $this->name . '' . '[]" value="x" checked="checked">';
 
-		$html   = [];
-		$html[] = '<fieldset id="' . $this->id . '" class="checkbox">';
-		$html[] = $options;
-		$html[] = '</fieldset>';
+        $html   = [];
+        $html[] = '<fieldset id="' . $this->id . '" class="checkbox">';
+        $html[] = $options;
+        $html[] = '</fieldset>';
 
-		return implode('', $html);
-	}
+        return implode('', $html);
+    }
 }

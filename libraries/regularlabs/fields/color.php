@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,50 +19,50 @@ jimport('joomla.form.formfield');
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_Color extends JFormField
 {
-	public $type = 'Color';
+    public $type = 'Color';
 
-	protected function getInput()
-	{
-		if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
-		{
-			return null;
-		}
+    protected function getInput()
+    {
+        if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+        {
+            return null;
+        }
 
-		$field = new RLFieldColor;
+        $field = new RLFieldColor;
 
-		return $field->getInput($this->name, $this->id, $this->value, $this->element->attributes());
-	}
+        return $field->getInput($this->name, $this->id, $this->value, $this->element->attributes());
+    }
 }
 
 class RLFieldColor
 {
-	public function getInput($name, $id, $value, $params)
-	{
-		$this->name   = $name;
-		$this->id     = $id;
-		$this->value  = $value;
-		$this->params = $params;
+    public function getInput($name, $id, $value, $params)
+    {
+        $this->name   = $name;
+        $this->id     = $id;
+        $this->value  = $value;
+        $this->params = $params;
 
-		$class    = trim('rl_color minicolors ' . $this->get('class'));
-		$disabled = $this->get('disabled') ? ' disabled="disabled"' : '';
+        $class    = trim('rl_color minicolors ' . $this->get('class'));
+        $disabled = $this->get('disabled') ? ' disabled="disabled"' : '';
 
-		RL_Document::script('regularlabs/color.min.js');
-		RL_Document::stylesheet('regularlabs/color.min.css');
+        RL_Document::script('regularlabs/color.min.js');
+        RL_Document::stylesheet('regularlabs/color.min.css');
 
-		$this->value = strtolower(RL_RegEx::replace('[^a-z0-9]', '', $this->value));
+        $this->value = strtolower(RL_RegEx::replace('[^a-z0-9]', '', $this->value));
 
-		return '<input type="text" name="' . $this->name . '" id="' . $this->id . '" class="' . $class . '" value="' . $this->value . '"' . $disabled . '>';
-	}
+        return '<input type="text" name="' . $this->name . '" id="' . $this->id . '" class="' . $class . '" value="' . $this->value . '"' . $disabled . '>';
+    }
 
-	private function get($val, $default = '')
-	{
-		return (isset($this->params[$val]) && (string) $this->params[$val] != '') ? (string) $this->params[$val] : $default;
-	}
+    private function get($val, $default = '')
+    {
+        return (isset($this->params[$val]) && (string) $this->params[$val] != '') ? (string) $this->params[$val] : $default;
+    }
 }

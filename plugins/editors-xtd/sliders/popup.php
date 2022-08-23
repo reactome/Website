@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sliders
- * @version         8.2.0
+ * @version         8.2.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -21,36 +21,36 @@ use RegularLabs\Library\RegEx as RL_RegEx;
 
 class Popup extends RL_EditorButtonPopup
 {
-	var $require_core_auth = false;
+    var $require_core_auth = false;
 
-	public function loadScripts()
-	{
-		// Tag character start and end
-		[$tag_start, $tag_end] = explode('.', $this->params->tag_characters);
+    public function loadScripts()
+    {
+        // Tag character start and end
+        [$tag_start, $tag_end] = explode('.', $this->params->tag_characters);
 
-		$editor = JFactory::getApplication()->input->getString('name', 'text');
-		// Remove any dangerous character to prevent cross site scripting
-		$editor = RL_RegEx::replace('[\'\";\s]', '', $editor);
+        $editor = JFactory::getApplication()->input->getString('name', 'text');
+        // Remove any dangerous character to prevent cross site scripting
+        $editor = RL_RegEx::replace('[\'\";\s]', '', $editor);
 
-		$script = "
-			var sliders_tag_open = '" . RL_RegEx::replace('[^a-z0-9-_]', '', $this->params->tag_open) . "';
-			var sliders_tag_close = '" . RL_RegEx::replace('[^a-z0-9-_]', '', $this->params->tag_close) . "';
-			var sliders_tag_delimiter = '" . (($this->params->tag_delimiter == '=') ? '=' : ' ') . "';
-			var sliders_tag_characters = ['" . $tag_start . "', '" . $tag_end . "'];
-			var sliders_editorname = '" . $editor . "';
-			var sliders_content_placeholder = '" . JText::_('SLD_TEXT', true) . "';
-			var sliders_error_empty_title = '" . JText::_('SLD_ERROR_EMPTY_TITLE', true) . "';
-			var sliders_max_count = " . (int) $this->params->button_max_count . ";
-		";
-		RL_Document::scriptDeclaration($script);
+        $script = "
+            var sliders_tag_open = '" . RL_RegEx::replace('[^a-z0-9-_]', '', $this->params->tag_open) . "';
+            var sliders_tag_close = '" . RL_RegEx::replace('[^a-z0-9-_]', '', $this->params->tag_close) . "';
+            var sliders_tag_delimiter = '" . (($this->params->tag_delimiter == '=') ? '=' : ' ') . "';
+            var sliders_tag_characters = ['" . $tag_start . "', '" . $tag_end . "'];
+            var sliders_editorname = '" . $editor . "';
+            var sliders_content_placeholder = '" . JText::_('SLD_TEXT', true) . "';
+            var sliders_error_empty_title = '" . JText::_('SLD_ERROR_EMPTY_TITLE', true) . "';
+            var sliders_max_count = " . (int) $this->params->button_max_count . ";
+        ";
+        RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('sliders/popup.min.js', '8.2.0');
-	}
+        RL_Document::script('sliders/popup.min.js', '8.2.4');
+    }
 
-	public function loadStyles()
-	{
-		RL_Document::style('sliders/popup.min.css', '8.2.0');
-	}
+    public function loadStyles()
+    {
+        RL_Document::style('sliders/popup.min.css', '8.2.4');
+    }
 }
 
 (new Popup('sliders'))->render();

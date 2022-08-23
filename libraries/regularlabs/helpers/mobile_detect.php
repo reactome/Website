@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -17,13 +17,13 @@ defined('_JEXEC') or die;
 
 if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+    require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 }
 
 class RLMobile_Detect extends MobileDetect
 {
-	public function isMac()
-	{
-		return $this->match('(Mac OS|Mac_PowerPC|Macintosh)');
-	}
+    public function isMac()
+    {
+        return $this->match('(Mac OS|Mac_PowerPC|Macintosh)');
+    }
 }

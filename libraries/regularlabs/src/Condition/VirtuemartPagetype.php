@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -21,11 +21,11 @@ use Joomla\CMS\Factory as JFactory;
  */
 class VirtuemartPagetype extends Virtuemart
 {
-	public function pass()
-	{
-		// Because VM sucks, we have to get the view again
-		$this->request->view = JFactory::getApplication()->input->getString('view');
+    public function pass()
+    {
+        // Because VM sucks, we have to get the view again
+        $this->request->view = JFactory::getApplication()->input->getString('view');
 
-		return $this->passByPageType('com_virtuemart', $this->selection, $this->include_type, true);
-	}
+        return $this->passByPageType('com_virtuemart', $this->selection, $this->include_type, true);
+    }
 }

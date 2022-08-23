@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -24,86 +24,86 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel as JModel;
  */
 class Log
 {
-	public static function changeState($message, $context, $value)
-	{
-		switch ($value)
-		{
-			case 0:
-				$languageKey       = 'PLG_SYSTEM_ACTIONLOGS_CONTENT_UNPUBLISHED';
-				$message['action'] = 'unpublish';
-				break;
-			case 1:
-				$languageKey       = 'PLG_SYSTEM_ACTIONLOGS_CONTENT_PUBLISHED';
-				$message['action'] = 'publish';
-				break;
-			case 2:
-				$languageKey       = 'PLG_SYSTEM_ACTIONLOGS_CONTENT_ARCHIVED';
-				$message['action'] = 'archive';
-				break;
-			case -2:
-				$languageKey       = 'PLG_SYSTEM_ACTIONLOGS_CONTENT_TRASHED';
-				$message['action'] = 'trash';
-				break;
-			default:
-				return;
-		}
+    public static function changeState($message, $context, $value)
+    {
+        switch ($value)
+        {
+            case 0:
+                $languageKey       = 'PLG_SYSTEM_ACTIONLOGS_CONTENT_UNPUBLISHED';
+                $message['action'] = 'unpublish';
+                break;
+            case 1:
+                $languageKey       = 'PLG_SYSTEM_ACTIONLOGS_CONTENT_PUBLISHED';
+                $message['action'] = 'publish';
+                break;
+            case 2:
+                $languageKey       = 'PLG_SYSTEM_ACTIONLOGS_CONTENT_ARCHIVED';
+                $message['action'] = 'archive';
+                break;
+            case -2:
+                $languageKey       = 'PLG_SYSTEM_ACTIONLOGS_CONTENT_TRASHED';
+                $message['action'] = 'trash';
+                break;
+            default:
+                return;
+        }
 
-		self::add($message, $languageKey, $context);
-	}
+        self::add($message, $languageKey, $context);
+    }
 
-	public static function add($message, $languageKey, $context)
-	{
-		$user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
+    public static function add($message, $languageKey, $context)
+    {
+        $user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
 
-		$message['userid']      = $user->id;
-		$message['username']    = $user->username;
-		$message['accountlink'] = 'index.php?option=com_users&task=user.edit&id=' . $user->id;
+        $message['userid']      = $user->id;
+        $message['username']    = $user->username;
+        $message['accountlink'] = 'index.php?option=com_users&task=user.edit&id=' . $user->id;
 
-		JLoader::register('ActionlogsHelper', JPATH_ADMINISTRATOR . '/components/com_actionlogs/helpers/actionlogs.php');
-		JLoader::register('ActionlogsModelActionlog', JPATH_ADMINISTRATOR . '/components/com_actionlogs/models/actionlog.php');
+        JLoader::register('ActionlogsHelper', JPATH_ADMINISTRATOR . '/components/com_actionlogs/helpers/actionlogs.php');
+        JLoader::register('ActionlogsModelActionlog', JPATH_ADMINISTRATOR . '/components/com_actionlogs/models/actionlog.php');
 
-		/* @var ActionlogsModelActionlog $model */
-		$model = JModel::getInstance('Actionlog', 'ActionlogsModel');
-		$model->addLog([$message], $languageKey, $context, $user->id);
-	}
+        /* @var ActionlogsModelActionlog $model */
+        $model = JModel::getInstance('Actionlog', 'ActionlogsModel');
+        $model->addLog([$message], $languageKey, $context, $user->id);
+    }
 
-	public static function delete($message, $context)
-	{
-		$languageKey       = 'PLG_SYSTEM_ACTIONLOGS_CONTENT_DELETED';
-		$message['action'] = 'deleted';
+    public static function delete($message, $context)
+    {
+        $languageKey       = 'PLG_SYSTEM_ACTIONLOGS_CONTENT_DELETED';
+        $message['action'] = 'deleted';
 
-		self::add($message, $languageKey, $context);
-	}
+        self::add($message, $languageKey, $context);
+    }
 
-	public static function install($message, $context, $type = 'component')
-	{
-		$languageKey = 'PLG_ACTIONLOG_JOOMLA_' . strtoupper($type) . '_INSTALLED';
-		if ( ! JFactory::getApplication()->getLanguage()->hasKey($languageKey))
-		{
-			$languageKey = 'PLG_ACTIONLOG_JOOMLA_EXTENSION_INSTALLED';
-		}
+    public static function install($message, $context, $type = 'component')
+    {
+        $languageKey = 'PLG_ACTIONLOG_JOOMLA_' . strtoupper($type) . '_INSTALLED';
+        if ( ! JFactory::getApplication()->getLanguage()->hasKey($languageKey))
+        {
+            $languageKey = 'PLG_ACTIONLOG_JOOMLA_EXTENSION_INSTALLED';
+        }
 
-		$message['action'] = 'install';
-		$message['type']   = 'PLG_ACTIONLOG_JOOMLA_TYPE_' . strtoupper($type);
+        $message['action'] = 'install';
+        $message['type']   = 'PLG_ACTIONLOG_JOOMLA_TYPE_' . strtoupper($type);
 
-		self::add($message, $languageKey, $context);
-	}
+        self::add($message, $languageKey, $context);
+    }
 
-	public static function save($message, $context, $isNew)
-	{
-		$languageKey       = $isNew ? 'PLG_SYSTEM_ACTIONLOGS_CONTENT_ADDED' : 'PLG_SYSTEM_ACTIONLOGS_CONTENT_UPDATED';
-		$message['action'] = $isNew ? 'add' : 'update';
+    public static function save($message, $context, $isNew)
+    {
+        $languageKey       = $isNew ? 'PLG_SYSTEM_ACTIONLOGS_CONTENT_ADDED' : 'PLG_SYSTEM_ACTIONLOGS_CONTENT_UPDATED';
+        $message['action'] = $isNew ? 'add' : 'update';
 
-		self::add($message, $languageKey, $context);
-	}
+        self::add($message, $languageKey, $context);
+    }
 
-	public static function uninstall($message, $context, $type = 'component')
-	{
-		$languageKey = 'PLG_ACTIONLOG_JOOMLA_EXTENSION_UNINSTALLED';
+    public static function uninstall($message, $context, $type = 'component')
+    {
+        $languageKey = 'PLG_ACTIONLOG_JOOMLA_EXTENSION_UNINSTALLED';
 
-		$message['action'] = 'uninstall';
-		$message['type']   = 'PLG_ACTIONLOG_JOOMLA_TYPE_' . strtoupper($type);
+        $message['action'] = 'uninstall';
+        $message['type']   = 'PLG_ACTIONLOG_JOOMLA_TYPE_' . strtoupper($type);
 
-		self::add($message, $languageKey, $context);
-	}
+        self::add($message, $languageKey, $context);
+    }
 }

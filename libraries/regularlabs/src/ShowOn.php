@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -21,36 +21,36 @@ use Joomla\CMS\Form\FormHelper as JFormHelper;
  */
 class ShowOn
 {
-	public static function show($string = '', $condition = '', $formControl = '', $group = '', $animate = true, $class = '')
-	{
-		if ( ! $condition || ! $string)
-		{
-			return $string;
-		}
+    public static function show($string = '', $condition = '', $formControl = '', $group = '', $animate = true, $class = '')
+    {
+        if ( ! $condition || ! $string)
+        {
+            return $string;
+        }
 
-		return self::open($condition, $formControl, $group, $animate, $class)
-			. $string
-			. self::close();
-	}
+        return self::open($condition, $formControl, $group, $animate, $class)
+            . $string
+            . self::close();
+    }
 
-	public static function open($condition = '', $formControl = '', $group = '', $class = '')
-	{
-		if ( ! $condition)
-		{
-			return self::close();
-		}
+    public static function open($condition = '', $formControl = '', $group = '', $class = '')
+    {
+        if ( ! $condition)
+        {
+            return self::close();
+        }
 
-		Document::loadFormDependencies();
+        Document::loadFormDependencies();
 
-		$json = json_encode(JFormHelper::parseShowOnConditions($condition, $formControl, $group));
+        $json = json_encode(JFormHelper::parseShowOnConditions($condition, $formControl, $group));
 
-		$class = $class ? ' class="' . $class . '"' : '';
+        $class = $class ? ' class="' . $class . '"' : '';
 
-		return '<div data-showon=\'' . $json . '\' style="display: none;"' . $class . '>';
-	}
+        return '<div data-showon=\'' . $json . '\' style="display: none;"' . $class . '>';
+    }
 
-	public static function close()
-	{
-		return '</div>';
-	}
+    public static function close()
+    {
+        return '</div>';
+    }
 }

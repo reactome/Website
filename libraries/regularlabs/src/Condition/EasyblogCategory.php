@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,72 +19,72 @@ defined('_JEXEC') or die;
  */
 class EasyblogCategory extends Easyblog
 {
-	public function pass()
-	{
-		if ($this->request->option != 'com_easyblog')
-		{
-			return $this->_(false);
-		}
+    public function pass()
+    {
+        if ($this->request->option != 'com_easyblog')
+        {
+            return $this->_(false);
+        }
 
-		$pass = (
-			($this->params->inc_categories && $this->request->view == 'categories')
-			|| ($this->params->inc_items && $this->request->view == 'entry')
-		);
+        $pass = (
+            ($this->params->inc_categories && $this->request->view == 'categories')
+            || ($this->params->inc_items && $this->request->view == 'entry')
+        );
 
-		if ( ! $pass)
-		{
-			return $this->_(false);
-		}
+        if ( ! $pass)
+        {
+            return $this->_(false);
+        }
 
-		$cats = $this->makeArray($this->getCategories());
+        $cats = $this->makeArray($this->getCategories());
 
-		$pass = $this->passSimple($cats, false, 'include');
+        $pass = $this->passSimple($cats, false, 'include');
 
-		if ($pass && $this->params->inc_children == 2)
-		{
-			return $this->_(false);
-		}
-		else if ( ! $pass && $this->params->inc_children)
-		{
-			foreach ($cats as $cat)
-			{
-				$cats = array_merge($cats, $this->getCatParentIds($cat));
-			}
-		}
+        if ($pass && $this->params->inc_children == 2)
+        {
+            return $this->_(false);
+        }
+        else if ( ! $pass && $this->params->inc_children)
+        {
+            foreach ($cats as $cat)
+            {
+                $cats = array_merge($cats, $this->getCatParentIds($cat));
+            }
+        }
 
-		return $this->passSimple($cats);
-	}
+        return $this->passSimple($cats);
+    }
 
-	private function getCategories()
-	{
-		switch ($this->request->view)
-		{
-			case 'entry' :
-				return $this->getCategoryIDFromItem();
-				break;
+    private function getCategories()
+    {
+        switch ($this->request->view)
+        {
+            case 'entry' :
+                return $this->getCategoryIDFromItem();
+                break;
 
-			case 'categories' :
-				return $this->request->id;
-				break;
+            case 'categories' :
+                return $this->request->id;
+                break;
 
-			default:
-				return '';
-		}
-	}
+            default:
+                return '';
+        }
+    }
 
-	private function getCatParentIds($id = 0)
-	{
-		return $this->getParentIds($id, 'easyblog_category', 'parent_id');
-	}
+    private function getCatParentIds($id = 0)
+    {
+        return $this->getParentIds($id, 'easyblog_category', 'parent_id');
+    }
 
-	private function getCategoryIDFromItem()
-	{
-		$query = $this->db->getQuery(true)
-			->select('i.category_id')
-			->from('#__easyblog_post AS i')
-			->where('i.id = ' . (int) $this->request->id);
-		$this->db->setQuery($query);
+    private function getCategoryIDFromItem()
+    {
+        $query = $this->db->getQuery(true)
+            ->select('i.category_id')
+            ->from('#__easyblog_post AS i')
+            ->where('i.id = ' . (int) $this->request->id);
+        $this->db->setQuery($query);
 
-		return $this->db->loadResult();
-	}
+        return $this->db->loadResult();
+    }
 }

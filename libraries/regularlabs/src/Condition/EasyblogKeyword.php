@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,8 +19,8 @@ defined('_JEXEC') or die;
  */
 class EasyblogKeyword extends Easyblog
 {
-	public function pass()
-	{
-		parent::passContentKeyword();
-	}
+    public function pass()
+    {
+        parent::passContentKeyword();
+    }
 }

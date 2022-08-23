@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -17,73 +17,73 @@ use RegularLabs\Library\Field;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_GroupLevel extends Field
 {
-	public $type = 'GroupLevel';
+    public $type = 'GroupLevel';
 
-	public function getAjaxRaw(Registry $attributes)
-	{
-		$name     = $attributes->get('name', $this->type);
-		$id       = $attributes->get('id', strtolower($name));
-		$value    = $attributes->get('value', []);
-		$size     = $attributes->get('size');
-		$multiple = $attributes->get('multiple');
+    public function getAjaxRaw(Registry $attributes)
+    {
+        $name     = $attributes->get('name', $this->type);
+        $id       = $attributes->get('id', strtolower($name));
+        $value    = $attributes->get('value', []);
+        $size     = $attributes->get('size');
+        $multiple = $attributes->get('multiple');
 
-		$options = $this->getOptions(
-			(bool) $attributes->get('show_all'),
-			(bool) $attributes->get('use_names')
-		);
+        $options = $this->getOptions(
+            (bool) $attributes->get('show_all'),
+            (bool) $attributes->get('use_names')
+        );
 
-		return $this->selectList($options, $name, $value, $id, $size, $multiple);
-	}
+        return $this->selectList($options, $name, $value, $id, $size, $multiple);
+    }
 
-	protected function getOptions($show_all = false, $use_names = false)
-	{
-		$options = $this->getUserGroups($use_names);
+    protected function getOptions($show_all = false, $use_names = false)
+    {
+        $options = $this->getUserGroups($use_names);
 
-		if ($show_all)
-		{
-			$option          = (object) [];
-			$option->value   = -1;
-			$option->text    = '- ' . JText::_('JALL') . ' -';
-			$option->disable = '';
-			array_unshift($options, $option);
-		}
+        if ($show_all)
+        {
+            $option          = (object) [];
+            $option->value   = -1;
+            $option->text    = '- ' . JText::_('JALL') . ' -';
+            $option->disable = '';
+            array_unshift($options, $option);
+        }
 
-		return $options;
-	}
+        return $options;
+    }
 
-	protected function getUserGroups($use_names = false)
-	{
-		$value = $use_names ? 'a.title' : 'a.id';
+    protected function getUserGroups($use_names = false)
+    {
+        $value = $use_names ? 'a.title' : 'a.id';
 
-		$query = $this->db->getQuery(true)
-			->select($value . ' as value, a.title as text, a.parent_id AS parent')
-			->from('#__usergroups AS a')
-			->select('COUNT(DISTINCT b.id) AS level')
-			->join('LEFT', '#__usergroups AS b ON a.lft > b.lft AND a.rgt < b.rgt')
-			->group('a.id')
-			->order('a.lft ASC');
-		$this->db->setQuery($query);
+        $query = $this->db->getQuery(true)
+            ->select($value . ' as value, a.title as text, a.parent_id AS parent')
+            ->from('#__usergroups AS a')
+            ->select('COUNT(DISTINCT b.id) AS level')
+            ->join('LEFT', '#__usergroups AS b ON a.lft > b.lft AND a.rgt < b.rgt')
+            ->group('a.id')
+            ->order('a.lft ASC');
+        $this->db->setQuery($query);
 
-		return $this->db->loadObjectList();
-	}
+        return $this->db->loadObjectList();
+    }
 
-	protected function getInput()
-	{
-		$size      = (int) $this->get('size');
-		$multiple  = $this->get('multiple');
-		$show_all  = $this->get('show_all');
-		$use_names = $this->get('use_names');
+    protected function getInput()
+    {
+        $size      = (int) $this->get('size');
+        $multiple  = $this->get('multiple');
+        $show_all  = $this->get('show_all');
+        $use_names = $this->get('use_names');
 
-		return $this->selectListAjax(
-			$this->type, $this->name, $this->value, $this->id,
-			compact('size', 'multiple', 'show_all', 'use_names')
-		);
-	}
+        return $this->selectListAjax(
+            $this->type, $this->name, $this->value, $this->id,
+            compact('size', 'multiple', 'show_all', 'use_names')
+        );
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -24,86 +24,86 @@ jimport('joomla.filesystem.file');
  */
 class Parameters
 {
-	public static $instance = null;
+    public static $instance = null;
 
-	/**
-	 * @return static instance
-	 * @deprecated Use ParametersNew
-	 */
-	public static function getInstance()
-	{
-		if (is_null(self::$instance))
-		{
-			self::$instance = new static;
-		}
+    /**
+     * @return static instance
+     * @deprecated Use ParametersNew
+     */
+    public static function getInstance()
+    {
+        if (is_null(self::$instance))
+        {
+            self::$instance = new static;
+        }
 
-		return self::$instance;
-	}
+        return self::$instance;
+    }
 
-	/**
-	 * @param string    $name
-	 * @param JRegistry $params
-	 * @param bool      $use_cache
-	 *
-	 * @return object
-	 * @deprecated Use ParametersNew::getComponent()
-	 */
-	public function getComponentParams($name, $params = null, $use_cache = true)
-	{
-		return ParametersNew::getComponent($name, $params, $use_cache);
-	}
+    /**
+     * @param string    $name
+     * @param JRegistry $params
+     * @param bool      $use_cache
+     *
+     * @return object
+     * @deprecated Use ParametersNew::getComponent()
+     */
+    public function getComponentParams($name, $params = null, $use_cache = true)
+    {
+        return ParametersNew::getComponent($name, $params, $use_cache);
+    }
 
-	/**
-	 * @param string    $name
-	 * @param int       $admin
-	 * @param JRegistry $params
-	 * @param bool      $use_cache
-	 *
-	 * @return object
-	 * @deprecated Use ParametersNew::getModule()
-	 */
-	public function getModuleParams($name, $admin = true, $params = '', $use_cache = true)
-	{
-		return ParametersNew::getModule($name, $admin, $params, $use_cache);
-	}
+    /**
+     * @param string    $name
+     * @param int       $admin
+     * @param JRegistry $params
+     * @param bool      $use_cache
+     *
+     * @return object
+     * @deprecated Use ParametersNew::getModule()
+     */
+    public function getModuleParams($name, $admin = true, $params = '', $use_cache = true)
+    {
+        return ParametersNew::getModule($name, $admin, $params, $use_cache);
+    }
 
-	/**
-	 * @param      $xml
-	 * @param bool $use_cache
-	 *
-	 * @return bool|mixed
-	 * @deprecated Use ParametersNew::getObjectFromXml()
-	 */
-	public function getObjectFromXml(&$xml, $use_cache = true)
-	{
-		return ParametersNew::getObjectFromXml($xml, $use_cache);
-	}
+    /**
+     * @param      $xml
+     * @param bool $use_cache
+     *
+     * @return bool|mixed
+     * @deprecated Use ParametersNew::getObjectFromXml()
+     */
+    public function getObjectFromXml(&$xml, $use_cache = true)
+    {
+        return ParametersNew::getObjectFromXml($xml, $use_cache);
+    }
 
-	/**
-	 * @param JRegistry $params
-	 * @param string    $path
-	 * @param string    $default
-	 * @param bool      $use_cache
-	 *
-	 * @return object
-	 * @deprecated Use ParametersNew::getObjectFromRegistry()
-	 */
-	public function getParams($params, $path = '', $default = '', $use_cache = true)
-	{
-		return ParametersNew::getObjectFromRegistry($params, $path, $default, $use_cache);
-	}
+    /**
+     * @param JRegistry $params
+     * @param string    $path
+     * @param string    $default
+     * @param bool      $use_cache
+     *
+     * @return object
+     * @deprecated Use ParametersNew::getObjectFromRegistry()
+     */
+    public function getParams($params, $path = '', $default = '', $use_cache = true)
+    {
+        return ParametersNew::getObjectFromRegistry($params, $path, $default, $use_cache);
+    }
 
-	/**
-	 * @param string    $name
-	 * @param string    $type
-	 * @param JRegistry $params
-	 * @param bool      $use_cache
-	 *
-	 * @return object
-	 * @deprecated Use ParametersNew::getPlugin()
-	 */
-	public function getPluginParams($name, $type = 'system', $params = '', $use_cache = true)
-	{
-		return ParametersNew::getPlugin($name, $type, $params, $use_cache);
-	}
+    /**
+     * @param string    $name
+     * @param string    $type
+     * @param JRegistry $params
+     * @param bool      $use_cache
+     *
+     * @return object
+     * @deprecated Use ParametersNew::getPlugin()
+     */
+    public function getPluginParams($name, $type = 'system', $params = '', $use_cache = true)
+    {
+        return ParametersNew::getPlugin($name, $type, $params, $use_cache);
+    }
 }

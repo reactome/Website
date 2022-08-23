@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -22,10 +22,10 @@ use RegularLabs\Library\Condition;
  */
 abstract class Redshop extends Condition
 {
-	public function initRequest(&$request)
-	{
-		$request->item_id     = JFactory::getApplication()->input->getInt('pid', 0);
-		$request->category_id = JFactory::getApplication()->input->getInt('cid', 0);
-		$request->id          = $request->item_id ?: $request->category_id;
-	}
+    public function initRequest(&$request)
+    {
+        $request->item_id     = JFactory::getApplication()->input->getInt('pid', 0);
+        $request->category_id = JFactory::getApplication()->input->getInt('cid', 0);
+        $request->id          = $request->item_id ?: $request->category_id;
+    }
 }

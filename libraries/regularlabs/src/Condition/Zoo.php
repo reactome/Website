@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -23,63 +23,63 @@ use RegularLabs\Library\ConditionContent;
  */
 abstract class Zoo extends Condition
 {
-	use ConditionContent;
+    use ConditionContent;
 
-	public function getItem($fields = [])
-	{
-		$query = $this->db->getQuery(true)
-			->select($fields)
-			->from('#__zoo_item')
-			->where('id = ' . (int) $this->request->id);
-		$this->db->setQuery($query);
+    public function getItem($fields = [])
+    {
+        $query = $this->db->getQuery(true)
+            ->select($fields)
+            ->from('#__zoo_item')
+            ->where('id = ' . (int) $this->request->id);
+        $this->db->setQuery($query);
 
-		return $this->db->loadObject();
-	}
+        return $this->db->loadObject();
+    }
 
-	public function initRequest(&$request)
-	{
-		$request->view = $request->task ?: $request->view;
+    public function initRequest(&$request)
+    {
+        $request->view = $request->task ?: $request->view;
 
-		switch ($request->view)
-		{
-			case 'item':
-				$request->idname = 'item_id';
-				break;
-			case 'category':
-				$request->idname = 'category_id';
-				break;
-		}
+        switch ($request->view)
+        {
+            case 'item':
+                $request->idname = 'item_id';
+                break;
+            case 'category':
+                $request->idname = 'category_id';
+                break;
+        }
 
-		if ( ! isset($request->idname))
-		{
-			$request->idname = '';
-		}
+        if ( ! isset($request->idname))
+        {
+            $request->idname = '';
+        }
 
-		switch ($request->idname)
-		{
-			case 'item_id':
-				$request->view = 'item';
-				break;
-			case 'category_id':
-				$request->view = 'category';
-				break;
-		}
+        switch ($request->idname)
+        {
+            case 'item_id':
+                $request->view = 'item';
+                break;
+            case 'category_id':
+                $request->view = 'category';
+                break;
+        }
 
-		$request->id = JFactory::getApplication()->input->getInt($request->idname, 0);
+        $request->id = JFactory::getApplication()->input->getInt($request->idname, 0);
 
-		if ($request->id)
-		{
-			return;
-		}
+        if ($request->id)
+        {
+            return;
+        }
 
-		$menu = JFactory::getApplication()->getMenu()->getItem((int) $request->Itemid);
+        $menu = JFactory::getApplication()->getMenu()->getItem((int) $request->Itemid);
 
-		if (empty($menu))
-		{
-			return;
-		}
+        if (empty($menu))
+        {
+            return;
+        }
 
-		$request->id = $menu->getParams()->get('item_id', 0);
-	}
+        $request->id = $menu->getParams()->get('item_id', 0);
+    }
 
 }

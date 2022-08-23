@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -15,18 +15,18 @@ defined('_JEXEC') or die;
 
 if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+    require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 }
 
 require_once dirname(__FILE__, 2) . '/assignment.php';
 
 class RLAssignmentsCookieConfirm extends RLAssignment
 {
-	public function passCookieConfirm()
-	{
-		require_once JPATH_PLUGINS . '/system/cookieconfirm/core.php';
-		$pass = PlgSystemCookieconfirmCore::getInstance()->isCookiesAllowed();
+    public function passCookieConfirm()
+    {
+        require_once JPATH_PLUGINS . '/system/cookieconfirm/core.php';
+        $pass = PlgSystemCookieconfirmCore::getInstance()->isCookiesAllowed();
 
-		return $this->pass($pass);
-	}
+        return $this->pass($pass);
+    }
 }

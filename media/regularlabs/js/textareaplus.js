@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -11,19 +11,19 @@
 "use strict";
 
 (function($) {
-	$(document).ready(function() {
-		$('.rl_resize_textarea').click(function() {
-			var $el    = $(this);
-			var $field = $(`#${$el.attr('data-id')}`);
+    $(document).ready(function() {
+        $('.rl_resize_textarea').click(function() {
+            var $el    = $(this);
+            var $field = $(`#${$el.attr('data-id')}`);
 
-			if ($el.hasClass('rl_minimize')) {
-				$el.removeClass('rl_minimize').addClass('rl_maximize');
-				$field.css({'height': $el.attr('data-min')});
-				return;
-			}
+            if ($el.hasClass('rl_minimize')) {
+                $el.removeClass('rl_minimize').addClass('rl_maximize');
+                $field.css({'height': $el.attr('data-min')});
+                return;
+            }
 
-			$el.removeClass('rl_maximize').addClass('rl_minimize');
-			$field.css({'height': $el.attr('data-max')});
-		});
-	});
+            $el.removeClass('rl_maximize').addClass('rl_minimize');
+            $field.css({'height': $el.attr('data-max')});
+        });
+    });
 })(jQuery);

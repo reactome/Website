@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -24,78 +24,78 @@ use RegularLabs\Library\StringHelper;
  */
 class Url extends Condition
 {
-	public function pass()
-	{
-		$regex         = $this->params->regex ?? false;
-		$casesensitive = $this->params->casesensitive ?? false;
+    public function pass()
+    {
+        $regex         = $this->params->regex ?? false;
+        $casesensitive = $this->params->casesensitive ?? false;
 
-		if ( ! is_array($this->selection))
-		{
-			$this->selection = explode("\n", $this->selection);
-		}
+        if ( ! is_array($this->selection))
+        {
+            $this->selection = explode("\n", $this->selection);
+        }
 
-		if (count($this->selection) == 1)
-		{
-			$this->selection = explode("\n", $this->selection[0]);
-		}
+        if (count($this->selection) == 1)
+        {
+            $this->selection = explode("\n", $this->selection[0]);
+        }
 
-		$url = JUri::getInstance();
-		$url = $url->toString();
+        $url = JUri::getInstance();
+        $url = $url->toString();
 
-		$urls = [
-			StringHelper::html_entity_decoder(urldecode($url)),
-			urldecode($url),
-			StringHelper::html_entity_decoder($url),
-			$url,
-		];
-		$urls = array_unique($urls);
+        $urls = [
+            StringHelper::html_entity_decoder(urldecode($url)),
+            urldecode($url),
+            StringHelper::html_entity_decoder($url),
+            $url,
+        ];
+        $urls = array_unique($urls);
 
-		$pass = false;
-		foreach ($urls as $url)
-		{
-			if ( ! $casesensitive)
-			{
-				$url = StringHelper::strtolower($url);
-			}
+        $pass = false;
+        foreach ($urls as $url)
+        {
+            if ( ! $casesensitive)
+            {
+                $url = StringHelper::strtolower($url);
+            }
 
-			foreach ($this->selection as $selection)
-			{
-				$selection = trim($selection);
-				if ($selection == '')
-				{
-					continue;
-				}
+            foreach ($this->selection as $selection)
+            {
+                $selection = trim($selection);
+                if ($selection == '')
+                {
+                    continue;
+                }
 
-				if ($regex)
-				{
-					$url_part = str_replace(['#', '&amp;'], ['\#', '(&amp;|&)'], $selection);
-					if (@RegEx::match($url_part, $url, $match, $casesensitive ? 's' : 'si'))
-					{
-						$pass = true;
-						break;
-					}
+                if ($regex)
+                {
+                    $url_part = str_replace(['#', '&amp;'], ['\#', '(&amp;|&)'], $selection);
+                    if (@RegEx::match($url_part, $url, $match, $casesensitive ? 's' : 'si'))
+                    {
+                        $pass = true;
+                        break;
+                    }
 
-					continue;
-				}
+                    continue;
+                }
 
-				if ( ! $casesensitive)
-				{
-					$selection = StringHelper::strtolower($selection);
-				}
+                if ( ! $casesensitive)
+                {
+                    $selection = StringHelper::strtolower($selection);
+                }
 
-				if (strpos($url, $selection) !== false)
-				{
-					$pass = true;
-					break;
-				}
-			}
+                if (strpos($url, $selection) !== false)
+                {
+                    $pass = true;
+                    break;
+                }
+            }
 
-			if ($pass)
-			{
-				break;
-			}
-		}
+            if ($pass)
+            {
+                break;
+            }
+        }
 
-		return $this->_($pass);
-	}
+        return $this->_($pass);
+    }
 }

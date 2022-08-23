@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -18,24 +18,24 @@ jimport('joomla.form.formfield');
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_IsInstalled extends Field
 {
-	public $type = 'IsInstalled';
+    public $type = 'IsInstalled';
 
-	protected function getInput()
-	{
-		$is_installed = RL_Extension::isInstalled($this->get('extension'), $this->get('extension_type'), $this->get('folder'));
+    protected function getInput()
+    {
+        $is_installed = RL_Extension::isInstalled($this->get('extension'), $this->get('extension_type'), $this->get('folder'));
 
-		return '<input type="hidden" name="' . $this->name . '" id="' . $this->id . '" value="' . (int) $is_installed . '">';
-	}
+        return '<input type="hidden" name="' . $this->name . '" id="' . $this->id . '" value="' . (int) $is_installed . '">';
+    }
 
-	protected function getLabel()
-	{
-		return '';
-	}
+    protected function getLabel()
+    {
+        return '';
+    }
 }

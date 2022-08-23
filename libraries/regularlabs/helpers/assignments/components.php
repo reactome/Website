@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -15,15 +15,15 @@ defined('_JEXEC') or die;
 
 if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+    require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 }
 
 require_once dirname(__FILE__, 2) . '/assignment.php';
 
 class RLAssignmentsComponents extends RLAssignment
 {
-	public function passComponents()
-	{
-		return $this->passSimple(strtolower($this->request->option));
-	}
+    public function passComponents()
+    {
+        return $this->passSimple(strtolower($this->request->option));
+    }
 }

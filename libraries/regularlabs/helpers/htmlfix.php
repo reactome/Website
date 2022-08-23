@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -17,13 +17,13 @@ use RegularLabs\Library\Html as RL_Html;
 
 if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+    require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 }
 
 class RLHtmlFix
 {
-	public static function _($string)
-	{
-		return RL_Html::fix($string);
-	}
+    public static function _($string)
+    {
+        return RL_Html::fix($string);
+    }
 }

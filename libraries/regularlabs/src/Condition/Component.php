@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -22,12 +22,12 @@ defined('_JEXEC') or die;
  */
 class Component extends Condition
 {
-	public function pass()
-	{
-		$option = JFactory::getApplication()->input->get('option') == 'com_categories'
-			? 'com_categories'
-			: $this->request->option;
+    public function pass()
+    {
+        $option = JFactory::getApplication()->input->get('option') == 'com_categories'
+            ? 'com_categories'
+            : $this->request->option;
 
-		return $this->passSimple(strtolower($option));
-	}
+        return $this->passSimple(strtolower($option));
+    }
 }

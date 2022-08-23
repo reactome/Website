@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,10 +19,10 @@ defined('_JEXEC') or die;
  */
 class DateDay extends Date
 {
-	public function pass()
-	{
-		$day = $this->date->format('N', true); // 1 (for Monday) though 7 (for Sunday )
+    public function pass()
+    {
+        $day = $this->date->format('N', true); // 1 (for Monday) though 7 (for Sunday )
 
-		return $this->passSimple($day);
-	}
+        return $this->passSimple($day);
+    }
 }

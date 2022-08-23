@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -18,7 +18,7 @@ use RegularLabs\Library\RegEx as RL_RegEx;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
@@ -38,107 +38,107 @@ require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
  */
 class JFormFieldRL_Toggler extends JFormField
 {
-	public $type = 'Toggler';
+    public $type = 'Toggler';
 
-	protected function getLabel()
-	{
-		return '';
-	}
+    protected function getLabel()
+    {
+        return '';
+    }
 
-	protected function getInput()
-	{
-		if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
-		{
-			return null;
-		}
+    protected function getInput()
+    {
+        if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+        {
+            return null;
+        }
 
-		$field = new RLFieldToggler;
+        $field = new RLFieldToggler;
 
-		return $field->getInput($this->element->attributes());
-	}
+        return $field->getInput($this->element->attributes());
+    }
 }
 
 class RLFieldToggler
 {
-	public function getInput($params)
-	{
-		$this->params = $params;
+    public function getInput($params)
+    {
+        $this->params = $params;
 
-		$option = JFactory::getApplication()->input->get('option');
+        $option = JFactory::getApplication()->input->get('option');
 
-		// do not place toggler stuff on JoomFish pages
-		if ($option == 'com_joomfish')
-		{
-			return '';
-		}
+        // do not place toggler stuff on JoomFish pages
+        if ($option == 'com_joomfish')
+        {
+            return '';
+        }
 
-		$param  = $this->get('param');
-		$value  = $this->get('value');
-		$nofx   = $this->get('nofx');
-		$method = $this->get('method');
-		$div    = $this->get('div', 0);
+        $param  = $this->get('param');
+        $value  = $this->get('value');
+        $nofx   = $this->get('nofx');
+        $method = $this->get('method');
+        $div    = $this->get('div', 0);
 
-		RL_Document::script('regularlabs/toggler.min.js');
+        RL_Document::script('regularlabs/toggler.min.js');
 
-		$param = RL_RegEx::replace('^\s*(.*?)\s*$', '\1', $param);
-		$param = RL_RegEx::replace('\s*\|\s*', '|', $param);
+        $param = RL_RegEx::replace('^\s*(.*?)\s*$', '\1', $param);
+        $param = RL_RegEx::replace('\s*\|\s*', '|', $param);
 
-		$html = [];
-		if ( ! $param)
-		{
-			return '</div>';
-		}
+        $html = [];
+        if ( ! $param)
+        {
+            return '</div>';
+        }
 
-		$param      = RL_RegEx::replace('[^a-z0-9-\.\|\@]', '_', $param);
-		$param      = str_replace('@', '_', $param);
-		$set_groups = explode('|', $param);
-		$set_values = explode('|', $value);
-		$ids        = [];
-		foreach ($set_groups as $i => $group)
-		{
-			$count = $i;
-			if ($count >= count($set_values))
-			{
-				$count = 0;
-			}
-			$value = explode(',', $set_values[$count]);
-			foreach ($value as $val)
-			{
-				$ids[] = $group . '.' . $val;
-			}
-		}
+        $param      = RL_RegEx::replace('[^a-z0-9-\.\|\@]', '_', $param);
+        $param      = str_replace('@', '_', $param);
+        $set_groups = explode('|', $param);
+        $set_values = explode('|', $value);
+        $ids        = [];
+        foreach ($set_groups as $i => $group)
+        {
+            $count = $i;
+            if ($count >= count($set_values))
+            {
+                $count = 0;
+            }
+            $value = explode(',', $set_values[$count]);
+            foreach ($value as $val)
+            {
+                $ids[] = $group . '.' . $val;
+            }
+        }
 
-		if ( ! $div)
-		{
-			$html[] = '</div></div>';
-		}
+        if ( ! $div)
+        {
+            $html[] = '</div></div>';
+        }
 
-		$html[] = '<div id="' . rand(1000000, 9999999) . '___' . implode('___', $ids) . '" class="rl_toggler';
-		if ($nofx)
-		{
-			$html[] = ' rl_toggler_nofx';
-		}
-		if ($method == 'and')
-		{
-			$html[] = ' rl_toggler_and';
-		}
-		$html[] = '">';
+        $html[] = '<div id="' . rand(1000000, 9999999) . '___' . implode('___', $ids) . '" class="rl_toggler';
+        if ($nofx)
+        {
+            $html[] = ' rl_toggler_nofx';
+        }
+        if ($method == 'and')
+        {
+            $html[] = ' rl_toggler_and';
+        }
+        $html[] = '">';
 
-		if ( ! $div)
-		{
-			$html[] = '<div><div>';
-		}
+        if ( ! $div)
+        {
+            $html[] = '<div><div>';
+        }
 
-		return implode('', $html);
-	}
+        return implode('', $html);
+    }
 
-	private function get($val, $default = '')
-	{
-		if ( ! isset($this->params[$val]) || (string) $this->params[$val] == '')
-		{
-			return $default;
-		}
+    private function get($val, $default = '')
+    {
+        if ( ! isset($this->params[$val]) || (string) $this->params[$val] == '')
+        {
+            return $default;
+        }
 
-		return (string) $this->params[$val];
-	}
+        return (string) $this->params[$val];
+    }
 }

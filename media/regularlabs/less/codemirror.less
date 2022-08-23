@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -10,38 +10,38 @@
 @import "init.less";
 
 .rl_codemirror {
-	.CodeMirror {
-		height:         100px;
-		min-height:     100px;
-		max-height:     none;
-		padding-bottom: 15px;
-	}
+    .CodeMirror {
+        height:         100px;
+        min-height:     100px;
+        max-height:     none;
+        padding-bottom: 15px;
+    }
 
-	.cm-resize-handle {
-		position:      relative;
-		background:    #f7f7f7;
-		height:        15px;
-		user-select:   none;
-		cursor:        ns-resize;
-		border-top:    1px solid #cccccc;
-		border-bottom: 1px solid #cccccc;
-		z-index:       2;
+    .cm-resize-handle {
+        position:      relative;
+        background:    #f7f7f7;
+        height:        15px;
+        user-select:   none;
+        cursor:        ns-resize;
+        border-top:    1px solid #cccccc;
+        border-bottom: 1px solid #cccccc;
+        z-index:       2;
 
-		&:before {
-			position:    absolute;
-			left:        50%;
-			content:     '\2261'; /* https://en.wikipedia.org/wiki/Triple_bar */
-			color:       #999999;
-			line-height: 13px;
-			font-size:   15px;
-		}
+        &:before {
+            position:    absolute;
+            left:        50%;
+            content:     '\2261'; /* https://en.wikipedia.org/wiki/Triple_bar */
+            color:       #999999;
+            line-height: 13px;
+            font-size:   15px;
+        }
 
-		&:hover {
-			background: #f0f0f0;
-		}
+        &:hover {
+            background: #f0f0f0;
+        }
 
-		&:hover:before {
-			color: black;
-		}
-	}
+        &:hover:before {
+            color: black;
+        }
+    }
 }

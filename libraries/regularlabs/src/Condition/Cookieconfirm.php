@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -22,11 +22,11 @@ use RegularLabs\Library\Condition;
  */
 class Cookieconfirm extends Condition
 {
-	public function pass()
-	{
-		require_once JPATH_PLUGINS . '/system/cookieconfirm/core.php';
-		$pass = PlgSystemCookieconfirmCore::getInstance()->isCookiesAllowed();
+    public function pass()
+    {
+        require_once JPATH_PLUGINS . '/system/cookieconfirm/core.php';
+        $pass = PlgSystemCookieconfirmCore::getInstance()->isCookiesAllowed();
 
-		return $this->_($pass);
-	}
+        return $this->_($pass);
+    }
 }

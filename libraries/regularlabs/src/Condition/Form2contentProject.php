@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,22 +19,22 @@ defined('_JEXEC') or die;
  */
 class Form2contentProject extends Form2content
 {
-	public function pass()
-	{
-		if ($this->request->option != 'com_content' && $this->request->view == 'article')
-		{
-			return $this->_(false);
-		}
+    public function pass()
+    {
+        if ($this->request->option != 'com_content' && $this->request->view == 'article')
+        {
+            return $this->_(false);
+        }
 
-		$query = $this->db->getQuery(true)
-			->select('c.projectid')
-			->from('#__f2c_form AS c')
-			->where('c.reference_id = ' . (int) $this->request->id);
-		$this->db->setQuery($query);
-		$type = $this->db->loadResult();
+        $query = $this->db->getQuery(true)
+            ->select('c.projectid')
+            ->from('#__f2c_form AS c')
+            ->where('c.reference_id = ' . (int) $this->request->id);
+        $this->db->setQuery($query);
+        $type = $this->db->loadResult();
 
-		$types = $this->makeArray($type);
+        $types = $this->makeArray($type);
 
-		return $this->passSimple($types);
-	}
+        return $this->passSimple($types);
+    }
 }

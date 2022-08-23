@@ -1,6 +1,6 @@
 /**
  * @package         Tabs
- * @version         8.2.0
+ * @version         8.2.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -17,75 +17,75 @@
 
 /* Custom Style: mystyle1 */
 .rl_tabs.top {
-	> ul.nav {
-		> li.mystyle1 {
-			> a {
-				.transition-duration(0s);
-				font-size:        22px;
-				#gradient > .vertical(#ff9999, #ffffff);
-				background-color: #ffffff;
+    > ul.nav {
+        > li.mystyle1 {
+            > a {
+                .transition-duration(0s);
+                font-size:        22px;
+                #gradient > .vertical(#ff9999, #ffffff);
+                background-color: #ffffff;
 
-				&:hover {
-					#gradient > .vertical(#9999ff, #ffffff);
-					background-color: #ffffff;
-				}
-			}
+                &:hover {
+                    #gradient > .vertical(#9999ff, #ffffff);
+                    background-color: #ffffff;
+                }
+            }
 
-			&.active {
-				> a,
-				> a:hover {
-					#gradient > .vertical(#99ff99, #ffffff);
-					background-color: #ffffff;
-				}
-			}
-		}
-	}
+            &.active {
+                > a,
+                > a:hover {
+                    #gradient > .vertical(#99ff99, #ffffff);
+                    background-color: #ffffff;
+                }
+            }
+        }
+    }
 
-	> .tab-content {
-		> .tab-pane.mystyle1 {
-			#gradient > .vertical-three-colors(#ffffff, #ffffff, 25%, #ccffcc);
-		}
-	}
+    > .tab-content {
+        > .tab-pane.mystyle1 {
+            #gradient > .vertical-three-colors(#ffffff, #ffffff, 25%, #ccffcc);
+        }
+    }
 }
 
 /* Custom Style: mystyle2 */
 .rl_tabs.top {
-	> ul.nav {
-		> li.mystyle2 {
-			> a {
-				.transition-duration(1s);
-				font-family:         @monoFontFamily;
-				.border-radius(0 0 0 0);
-				margin-left:         10px;
-				margin-right:        10px;
-				padding:             8px 20px;
-				background-color:    #aaaaaa;
-				color:               #ffffff;
-				border-color:        #666666;
-				border-bottom-color: #dddddd;
+    > ul.nav {
+        > li.mystyle2 {
+            > a {
+                .transition-duration(1s);
+                font-family:         @monoFontFamily;
+                .border-radius(0 0 0 0);
+                margin-left:         10px;
+                margin-right:        10px;
+                padding:             8px 20px;
+                background-color:    #aaaaaa;
+                color:               #ffffff;
+                border-color:        #666666;
+                border-bottom-color: #dddddd;
 
-				&:hover {
-					background-color: #999999;
-					border-color:     #666666;
-				}
-			}
+                &:hover {
+                    background-color: #999999;
+                    border-color:     #666666;
+                }
+            }
 
-			&.active {
-				> a,
-				> a:hover {
-					.border-radius(0 30px 0 0);
-					background-color: #666666;
-					border-color:     #666666;
-				}
-			}
-		}
-	}
+            &.active {
+                > a,
+                > a:hover {
+                    .border-radius(0 30px 0 0);
+                    background-color: #666666;
+                    border-color:     #666666;
+                }
+            }
+        }
+    }
 
-	> .tab-content {
-		> .tab-pane.mystyle2 {
-			font-family:      @monoFontFamily;
-			background-color: #666666;
-			color:            #ffffff;
-		}
-	}
+    > .tab-content {
+        > .tab-pane.mystyle2 {
+            font-family:      @monoFontFamily;
+            background-color: #666666;
+            color:            #ffffff;
+        }
+    }
 }

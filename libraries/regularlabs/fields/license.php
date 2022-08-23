@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -16,36 +16,36 @@ use RegularLabs\Library\License as RL_License;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_License extends Field
 {
-	public $type = 'License';
+    public $type = 'License';
 
-	protected function getInput()
-	{
-		$extension = $this->get('extension');
+    protected function getInput()
+    {
+        $extension = $this->get('extension');
 
-		if (empty($extension))
-		{
-			return '';
-		}
+        if (empty($extension))
+        {
+            return '';
+        }
 
-		$message = RL_License::getMessage($extension, true);
+        $message = RL_License::getMessage($extension, true);
 
-		if (empty($message))
-		{
-			return '';
-		}
+        if (empty($message))
+        {
+            return '';
+        }
 
-		return '</div><div>' . $message;
-	}
+        return '</div><div>' . $message;
+    }
 
-	protected function getLabel()
-	{
-		return '';
-	}
+    protected function getLabel()
+    {
+        return '';
+    }
 }

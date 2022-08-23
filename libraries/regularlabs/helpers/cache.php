@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -17,35 +17,35 @@ use RegularLabs\Library\Cache as RL_Cache;
 
 if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+    require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 }
 
 class RLCache
 {
-	static $cache = [];
+    static $cache = [];
 
-	public static function get($id)
-	{
-		return RL_Cache::get($id);
-	}
+    public static function get($id)
+    {
+        return RL_Cache::get($id);
+    }
 
-	public static function has($id)
-	{
-		return RL_Cache::has($id);
-	}
+    public static function has($id)
+    {
+        return RL_Cache::has($id);
+    }
 
-	public static function read($id)
-	{
-		return RL_Cache::read($id);
-	}
+    public static function read($id)
+    {
+        return RL_Cache::read($id);
+    }
 
-	public static function set($id, $data)
-	{
-		return RL_Cache::set($id, $data);
-	}
+    public static function set($id, $data)
+    {
+        return RL_Cache::set($id, $data);
+    }
 
-	public static function write($id, $data, $ttl = 0)
-	{
-		return RL_Cache::write($id, $data, $ttl);
-	}
+    public static function write($id, $data, $ttl = 0)
+    {
+        return RL_Cache::write($id, $data, $ttl);
+    }
 }

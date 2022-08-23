@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -25,48 +25,48 @@ use RegularLabs_GeoIp;
  */
 abstract class Geo extends Condition
 {
-	var $geo = null;
+    var $geo = null;
 
-	public function getGeo($ip = '')
-	{
-		if ($this->geo !== null)
-		{
-			return $this->geo;
-		}
+    public function getGeo($ip = '')
+    {
+        if ($this->geo !== null)
+        {
+            return $this->geo;
+        }
 
 
-		$geo = $this->getGeoObject($ip);
+        $geo = $this->getGeoObject($ip);
 
-		if (empty($geo))
-		{
-			return false;
-		}
+        if (empty($geo))
+        {
+            return false;
+        }
 
-		$this->geo = $geo->get();
+        $this->geo = $geo->get();
 
-		if (JFactory::getApplication()->get('debug'))
-		{
-			JLog::addLogger(['text_file' => 'regularlabs_geoip.log.php'], JLog::ALL, ['regularlabs_geoip']);
-			JLog::add(json_encode($this->geo), JLog::DEBUG, 'regularlabs_geoip');
-		}
+        if (JFactory::getApplication()->get('debug'))
+        {
+            JLog::addLogger(['text_file' => 'regularlabs_geoip.log.php'], JLog::ALL, ['regularlabs_geoip']);
+            JLog::add(json_encode($this->geo), JLog::DEBUG, 'regularlabs_geoip');
+        }
 
-		return $this->geo;
-	}
+        return $this->geo;
+    }
 
-	private function getGeoObject($ip)
-	{
-		if ( ! file_exists(JPATH_LIBRARIES . '/geoip/geoip.php'))
-		{
-			return false;
-		}
+    private function getGeoObject($ip)
+    {
+        if ( ! file_exists(JPATH_LIBRARIES . '/geoip/geoip.php'))
+        {
+            return false;
+        }
 
-		require_once JPATH_LIBRARIES . '/geoip/geoip.php';
+        require_once JPATH_LIBRARIES . '/geoip/geoip.php';
 
-		if ( ! class_exists('RegularLabs_GeoIp'))
-		{
-			return new GeoIp($ip);
-		}
+        if ( ! class_exists('RegularLabs_GeoIp'))
+        {
+            return new GeoIp($ip);
+        }
 
-		return new RegularLabs_GeoIp($ip);
-	}
+        return new RegularLabs_GeoIp($ip);
+    }
 }

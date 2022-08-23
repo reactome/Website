@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,16 +19,16 @@ defined('_JEXEC') or die;
  */
 class GeoPostalcode extends Geo
 {
-	public function pass()
-	{
-		if ( ! $this->getGeo() || empty($this->geo->postalCode))
-		{
-			return $this->_(false);
-		}
+    public function pass()
+    {
+        if ( ! $this->getGeo() || empty($this->geo->postalCode))
+        {
+            return $this->_(false);
+        }
 
-		// replace dashes with dots: 730-0011 => 730.0011
-		$postalcode = str_replace('-', '.', $this->geo->postalCode);
+        // replace dashes with dots: 730-0011 => 730.0011
+        $postalcode = str_replace('-', '.', $this->geo->postalCode);
 
-		return $this->passInRange($postalcode);
-	}
+        return $this->passInRange($postalcode);
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,65 +19,65 @@ use RegularLabs\Library\RegEx as RL_RegEx;
 
 class DownloadKey
 {
-	public static function cloak()
-	{
-		// Save the download key from the Regular Labs Extension Manager config to the update sites
-		if (
-			RL_Document::isClient('site')
-			|| JFactory::getApplication()->input->get('option') != 'com_installer'
-			|| JFactory::getApplication()->input->get('view') != 'updatesites'
-		)
-		{
-			return;
-		}
+    public static function cloak()
+    {
+        // Save the download key from the Regular Labs Extension Manager config to the update sites
+        if (
+            RL_Document::isClient('site')
+            || JFactory::getApplication()->input->get('option') != 'com_installer'
+            || JFactory::getApplication()->input->get('view') != 'updatesites'
+        )
+        {
+            return;
+        }
 
-		$html = JFactory::getApplication()->getBody();
+        $html = JFactory::getApplication()->getBody();
 
-		RL_RegEx::matchAll('(regularlabs\.com[^<]*</a>\s*<br/?>\s*<pre>k=)(.*?)([A-Z0-9]{4}</pre>)', $html, $matches);
+        RL_RegEx::matchAll('(regularlabs\.com[^<]*</a>\s*<br/?>\s*<pre>k=)(.*?)([A-Z0-9]{4}</pre>)', $html, $matches);
 
-		foreach ($matches as $match)
-		{
-			$cloaked_key = str_repeat('*', strlen($match[2]));
+        foreach ($matches as $match)
+        {
+            $cloaked_key = str_repeat('*', strlen($match[2]));
 
-			$html = str_replace(
-				$match[0],
-				$match[1] . $cloaked_key . $match[3],
-				$html
-			);
-		}
+            $html = str_replace(
+                $match[0],
+                $match[1] . $cloaked_key . $match[3],
+                $html
+            );
+        }
 
-		JFactory::getApplication()->setBody($html);
-	}
+        JFactory::getApplication()->setBody($html);
+    }
 
-	public static function update()
-	{
-		// Save the download key from the Regular Labs Extension Manager config to the update sites
-		if (
-			RL_Document::isClient('site')
-			|| JFactory::getApplication()->input->get('option') != 'com_config'
-			|| JFactory::getApplication()->input->get('task') != 'config.save.component.apply'
-			|| JFactory::getApplication()->input->get('component') != 'com_regularlabsmanager'
-		)
-		{
-			return;
-		}
+    public static function update()
+    {
+        // Save the download key from the Regular Labs Extension Manager config to the update sites
+        if (
+            RL_Document::isClient('site')
+            || JFactory::getApplication()->input->get('option') != 'com_config'
+            || JFactory::getApplication()->input->get('task') != 'config.save.component.apply'
+            || JFactory::getApplication()->input->get('component') != 'com_regularlabsmanager'
+        )
+        {
+            return;
+        }
 
-		$form = JFactory::getApplication()->input->post->get('jform', [], 'array');
+        $form = JFactory::getApplication()->input->post->get('jform', [], 'array');
 
-		if ( ! isset($form['key']))
-		{
-			return;
-		}
+        if ( ! isset($form['key']))
+        {
+            return;
+        }
 
-		$key = $form['key'];
+        $key = $form['key'];
 
-		$db = JFactory::getDbo();
+        $db = JFactory::getDbo();
 
-		$query = $db->getQuery(true)
-			->update('#__update_sites')
-			->set($db->quoteName('extra_query') . ' = ' . $db->quote('k=' . $key))
-			->where($db->quoteName('location') . ' LIKE ' . $db->quote('%download.regularlabs.com%'));
-		$db->setQuery($query);
-		$db->execute();
-	}
+        $query = $db->getQuery(true)
+            ->update('#__update_sites')
+            ->set($db->quoteName('extra_query') . ' = ' . $db->quote('k=' . $key))
+            ->where($db->quoteName('location') . ' LIKE ' . $db->quote('%download.regularlabs.com%'));
+        $db->setQuery($query);
+        $db->execute();
+    }
 }

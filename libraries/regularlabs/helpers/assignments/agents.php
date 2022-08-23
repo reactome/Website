@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
 
 if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+    require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 }
 
 require_once dirname(__FILE__, 2) . '/assignment.php';
@@ -24,176 +24,176 @@ require_once dirname(__FILE__, 2) . '/mobile_detect.php';
 
 class RLAssignmentsAgents extends RLAssignment
 {
-	var $agent  = null;
-	var $device = null;
+    var $agent  = null;
+    var $device = null;
 
-	/**
-	 * isPhone
-	 */
-	public function isPhone()
-	{
-		return $this->isMobile();
-	}
+    /**
+     * isPhone
+     */
+    public function isPhone()
+    {
+        return $this->isMobile();
+    }
 
-	/**
-	 * isMobile
-	 */
-	public function isMobile()
-	{
-		return $this->getDevice() == 'mobile';
-	}
+    /**
+     * isMobile
+     */
+    public function isMobile()
+    {
+        return $this->getDevice() == 'mobile';
+    }
 
-	/**
-	 * setDevice
-	 */
-	private function getDevice()
-	{
-		if ( ! is_null($this->device))
-		{
-			return $this->device;
-		}
+    /**
+     * setDevice
+     */
+    private function getDevice()
+    {
+        if ( ! is_null($this->device))
+        {
+            return $this->device;
+        }
 
-		$detect = new RLMobile_Detect;
+        $detect = new RLMobile_Detect;
 
-		$this->is_mobile = $detect->isMobile();
+        $this->is_mobile = $detect->isMobile();
 
-		switch (true)
-		{
-			case($detect->isTablet()):
-				$this->device = 'tablet';
-				break;
+        switch (true)
+        {
+            case($detect->isTablet()):
+                $this->device = 'tablet';
+                break;
 
-			case ($detect->isMobile()):
-				$this->device = 'mobile';
-				break;
+            case ($detect->isMobile()):
+                $this->device = 'mobile';
+                break;
 
-			default:
-				$this->device = 'desktop';
-		}
+            default:
+                $this->device = 'desktop';
+        }
 
-		return $this->device;
-	}
+        return $this->device;
+    }
 
-	/**
-	 * passDevices
-	 */
-	public function passDevices()
-	{
-		$pass = (in_array('mobile', $this->selection) && $this->isMobile())
-			|| (in_array('tablet', $this->selection) && $this->isTablet())
-			|| (in_array('desktop', $this->selection) && $this->isDesktop());
+    /**
+     * passDevices
+     */
+    public function passDevices()
+    {
+        $pass = (in_array('mobile', $this->selection) && $this->isMobile())
+            || (in_array('tablet', $this->selection) && $this->isTablet())
+            || (in_array('desktop', $this->selection) && $this->isDesktop());
 
-		return $this->pass($pass);
-	}
+        return $this->pass($pass);
+    }
 
-	/**
-	 * isTablet
-	 */
-	public function isTablet()
-	{
-		return $this->getDevice() == 'tablet';
-	}
+    /**
+     * isTablet
+     */
+    public function isTablet()
+    {
+        return $this->getDevice() == 'tablet';
+    }
 
-	/**
-	 * isDesktop
-	 */
-	public function isDesktop()
-	{
-		return $this->getDevice() == 'desktop';
-	}
+    /**
+     * isDesktop
+     */
+    public function isDesktop()
+    {
+        return $this->getDevice() == 'desktop';
+    }
 
-	/**
-	 * passOS
-	 */
-	public function passOS()
-	{
-		return self::passBrowsers();
-	}
+    /**
+     * passOS
+     */
+    public function passOS()
+    {
+        return self::passBrowsers();
+    }
 
-	/**
-	 * passBrowsers
-	 */
-	public function passBrowsers()
-	{
-		if (empty($this->selection))
-		{
-			return $this->pass(false);
-		}
+    /**
+     * passBrowsers
+     */
+    public function passBrowsers()
+    {
+        if (empty($this->selection))
+        {
+            return $this->pass(false);
+        }
 
-		foreach ($this->selection as $browser)
-		{
-			if ( ! $this->passBrowser($browser))
-			{
-				continue;
-			}
+        foreach ($this->selection as $browser)
+        {
+            if ( ! $this->passBrowser($browser))
+            {
+                continue;
+            }
 
-			return $this->pass(true);
-		}
+            return $this->pass(true);
+        }
 
-		return $this->pass(false);
-	}
+        return $this->pass(false);
+    }
 
-	/**
-	 * passBrowser
-	 */
-	private function passBrowser($browser = '')
-	{
-		if ( ! $browser)
-		{
-			return false;
-		}
+    /**
+     * passBrowser
+     */
+    private function passBrowser($browser = '')
+    {
+        if ( ! $browser)
+        {
+            return false;
+        }
 
-		if ($browser == 'mobile')
-		{
-			return $this->isMobile();
-		}
+        if ($browser == 'mobile')
+        {
+            return $this->isMobile();
+        }
 
-		if ( ! (strpos($browser, '#') === 0))
-		{
-			$browser = '#' . RLText::pregQuote($browser) . '#';
-		}
+        if ( ! (strpos($browser, '#') === 0))
+        {
+            $browser = '#' . RLText::pregQuote($browser) . '#';
+        }
 
-		// also check for _ instead of .
-		$browser = preg_replace('#\\\.([^\]])#', '[\._]\1', $browser);
-		$browser = str_replace('\.]', '\._]', $browser);
+        // also check for _ instead of .
+        $browser = preg_replace('#\\\.([^\]])#', '[\._]\1', $browser);
+        $browser = str_replace('\.]', '\._]', $browser);
 
-		return preg_match($browser . 'i', $this->getAgent());
-	}
+        return preg_match($browser . 'i', $this->getAgent());
+    }
 
-	/**
-	 * getAgent
-	 */
-	private function getAgent()
-	{
-		if ( ! is_null($this->agent))
-		{
-			return $this->agent;
-		}
+    /**
+     * getAgent
+     */
+    private function getAgent()
+    {
+        if ( ! is_null($this->agent))
+        {
+            return $this->agent;
+        }
 
-		$detect = new RLMobile_Detect;
-		$agent  = $detect->getUserAgent();
+        $detect = new RLMobile_Detect;
+        $agent  = $detect->getUserAgent();
 
-		switch (true)
-		{
-			case (stripos($agent, 'Trident') !== false):
-				// Add MSIE to IE11
-				$agent = preg_replace('#(Trident/[0-9\.]+; rv:([0-9\.]+))#is', '\1 MSIE \2', $agent);
-				break;
+        switch (true)
+        {
+            case (stripos($agent, 'Trident') !== false):
+                // Add MSIE to IE11
+                $agent = preg_replace('#(Trident/[0-9\.]+; rv:([0-9\.]+))#is', '\1 MSIE \2', $agent);
+                break;
 
-			case (stripos($agent, 'Chrome') !== false):
-				// Remove Safari from Chrome
-				$agent = preg_replace('#(Chrome/.*)Safari/[0-9\.]*#is', '\1', $agent);
-				// Add MSIE to IE Edge and remove Chrome from IE Edge
-				$agent = preg_replace('#Chrome/.*(Edge/[0-9])#is', 'MSIE \1', $agent);
-				break;
+            case (stripos($agent, 'Chrome') !== false):
+                // Remove Safari from Chrome
+                $agent = preg_replace('#(Chrome/.*)Safari/[0-9\.]*#is', '\1', $agent);
+                // Add MSIE to IE Edge and remove Chrome from IE Edge
+                $agent = preg_replace('#Chrome/.*(Edge/[0-9])#is', 'MSIE \1', $agent);
+                break;
 
-			case (stripos($agent, 'Opera') !== false):
-				$agent = preg_replace('#(Opera/.*)Version/#is', '\1Opera/', $agent);
-				break;
-		}
+            case (stripos($agent, 'Opera') !== false):
+                $agent = preg_replace('#(Opera/.*)Version/#is', '\1Opera/', $agent);
+                break;
+        }
 
-		$this->agent = $agent;
+        $this->agent = $agent;
 
-		return $this->agent;
-	}
+        return $this->agent;
+    }
 }

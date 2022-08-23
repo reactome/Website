@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -21,10 +21,10 @@ use Joomla\CMS\Factory as JFactory;
  */
 class UserUser extends User
 {
-	public function pass()
-	{
-		$user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
+    public function pass()
+    {
+        $user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
 
-		return $this->passSimple($user->get('id'));
-	}
+        return $this->passSimple($user->get('id'));
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,13 +19,13 @@ defined('_JEXEC') or die;
  */
 class GeoCountry extends Geo
 {
-	public function pass()
-	{
-		if ( ! $this->getGeo() || empty($this->geo->countryCode))
-		{
-			return $this->_(false);
-		}
+    public function pass()
+    {
+        if ( ! $this->getGeo() || empty($this->geo->countryCode))
+        {
+            return $this->_(false);
+        }
 
-		return $this->passSimple([$this->geo->country, $this->geo->countryCode]);
-	}
+        return $this->passSimple([$this->geo->country, $this->geo->countryCode]);
+    }
 }

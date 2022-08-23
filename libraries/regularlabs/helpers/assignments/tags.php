@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -15,111 +15,111 @@ defined('_JEXEC') or die;
 
 if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+    require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 }
 
 require_once dirname(__FILE__, 2) . '/assignment.php';
 
 class RLAssignmentsTags extends RLAssignment
 {
-	public function passTags()
-	{
-		if (in_array($this->request->option, ['com_content', 'com_flexicontent']))
-		{
-			return $this->passTagsContent();
-		}
+    public function passTags()
+    {
+        if (in_array($this->request->option, ['com_content', 'com_flexicontent']))
+        {
+            return $this->passTagsContent();
+        }
 
-		if ($this->request->option != 'com_tags'
-			|| $this->request->view != 'tag'
-			|| ! $this->request->id
-		)
-		{
-			return $this->pass(false);
-		}
+        if ($this->request->option != 'com_tags'
+            || $this->request->view != 'tag'
+            || ! $this->request->id
+        )
+        {
+            return $this->pass(false);
+        }
 
-		return $this->passTag($this->request->id);
-	}
+        return $this->passTag($this->request->id);
+    }
 
-	private function passTagsContent()
-	{
-		$is_item     = in_array($this->request->view, ['', 'article', 'item']);
-		$is_category = in_array($this->request->view, ['category']);
+    private function passTagsContent()
+    {
+        $is_item     = in_array($this->request->view, ['', 'article', 'item']);
+        $is_category = in_array($this->request->view, ['category']);
 
-		switch (true)
-		{
-			case ($is_item):
-				$prefix = 'com_content.article';
-				break;
+        switch (true)
+        {
+            case ($is_item):
+                $prefix = 'com_content.article';
+                break;
 
-			case ($is_category):
-				$prefix = 'com_content.category';
-				break;
+            case ($is_category):
+                $prefix = 'com_content.category';
+                break;
 
-			default:
-				return $this->pass(false);
-		}
+            default:
+                return $this->pass(false);
+        }
 
-		// Load the tags.
-		$query = $this->db->getQuery(true)
-			->select($this->db->quoteName('t.id'))
-			->select($this->db->quoteName('t.title'))
-			->from('#__tags AS t')
-			->join(
-				'INNER', '#__contentitem_tag_map AS m'
-				. ' ON m.tag_id = t.id'
-				. ' AND m.type_alias = ' . $this->db->quote($prefix)
-				. ' AND m.content_item_id IN ( ' . $this->request->id . ')'
-			);
-		$this->db->setQuery($query);
-		$tags = $this->db->loadObjectList();
+        // Load the tags.
+        $query = $this->db->getQuery(true)
+            ->select($this->db->quoteName('t.id'))
+            ->select($this->db->quoteName('t.title'))
+            ->from('#__tags AS t')
+            ->join(
+                'INNER', '#__contentitem_tag_map AS m'
+                . ' ON m.tag_id = t.id'
+                . ' AND m.type_alias = ' . $this->db->quote($prefix)
+                . ' AND m.content_item_id IN ( ' . $this->request->id . ')'
+            );
+        $this->db->setQuery($query);
+        $tags = $this->db->loadObjectList();
 
-		if (empty($tags))
-		{
-			return $this->pass(false);
-		}
+        if (empty($tags))
+        {
+            return $this->pass(false);
+        }
 
-		foreach ($tags as $tag)
-		{
-			if ( ! $this->passTag($tag->id) && ! $this->passTag($tag->title))
-			{
-				continue;
-			}
+        foreach ($tags as $tag)
+        {
+            if ( ! $this->passTag($tag->id) && ! $this->passTag($tag->title))
+            {
+                continue;
+            }
 
-			return $this->pass(true);
-		}
+            return $this->pass(true);
+        }
 
-		return $this->pass(false);
-	}
+        return $this->pass(false);
+    }
 
-	private function passTag($tag)
-	{
-		$pass = in_array($tag, $this->selection);
+    private function passTag($tag)
+    {
+        $pass = in_array($tag, $this->selection);
 
-		if ($pass)
-		{
-			// If passed, return false if assigned to only children
-			// Else return true
-			return ($this->params->inc_children != 2);
-		}
+        if ($pass)
+        {
+            // If passed, return false if assigned to only children
+            // Else return true
+            return ($this->params->inc_children != 2);
+        }
 
-		if ( ! $this->params->inc_children)
-		{
-			return false;
-		}
+        if ( ! $this->params->inc_children)
+        {
+            return false;
+        }
 
-		// Return true if a parent id is present in the selection
-		return array_intersect(
-			$this->getTagsParentIds($tag),
-			$this->selection
-		);
-	}
+        // Return true if a parent id is present in the selection
+        return array_intersect(
+            $this->getTagsParentIds($tag),
+            $this->selection
+        );
+    }
 
-	private function getTagsParentIds($id = 0)
-	{
-		$parentids = $this->getParentIds($id, 'tags');
-		// Remove the root tag
-		$parentids = array_diff($parentids, [1]);
+    private function getTagsParentIds($id = 0)
+    {
+        $parentids = $this->getParentIds($id, 'tags');
+        // Remove the root tag
+        $parentids = array_diff($parentids, [1]);
 
-		return $parentids;
-	}
+        return $parentids;
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -21,92 +21,92 @@ use Joomla\CMS\Factory as JFactory;
  */
 class K2Category extends K2
 {
-	public function pass()
-	{
-		if ($this->request->option != 'com_k2')
-		{
-			return $this->_(false);
-		}
+    public function pass()
+    {
+        if ($this->request->option != 'com_k2')
+        {
+            return $this->_(false);
+        }
 
-		$pass = (
-			($this->params->inc_categories
-				&& (($this->request->view == 'itemlist' && $this->request->task == 'category')
-					|| $this->request->view == 'latest'
-				)
-			)
-			|| ($this->params->inc_items && $this->request->view == 'item')
-		);
+        $pass = (
+            ($this->params->inc_categories
+                && (($this->request->view == 'itemlist' && $this->request->task == 'category')
+                    || $this->request->view == 'latest'
+                )
+            )
+            || ($this->params->inc_items && $this->request->view == 'item')
+        );
 
-		if ( ! $pass)
-		{
-			return $this->_(false);
-		}
+        if ( ! $pass)
+        {
+            return $this->_(false);
+        }
 
-		$cats = $this->makeArray($this->getCategories());
-		$pass = $this->passSimple($cats, false, 'include');
+        $cats = $this->makeArray($this->getCategories());
+        $pass = $this->passSimple($cats, false, 'include');
 
-		if ($pass && $this->params->inc_children == 2)
-		{
-			return $this->_(false);
-		}
-		else if ( ! $pass && $this->params->inc_children)
-		{
-			foreach ($cats as $cat)
-			{
-				$cats = array_merge($cats, $this->getCatParentIds($cat));
-			}
-		}
+        if ($pass && $this->params->inc_children == 2)
+        {
+            return $this->_(false);
+        }
+        else if ( ! $pass && $this->params->inc_children)
+        {
+            foreach ($cats as $cat)
+            {
+                $cats = array_merge($cats, $this->getCatParentIds($cat));
+            }
+        }
 
-		return $this->passSimple($cats);
-	}
+        return $this->passSimple($cats);
+    }
 
-	private function getCategories()
-	{
-		switch ($this->request->view)
-		{
-			case 'item' :
-				return $this->getCategoryIDFromItem();
-				break;
+    private function getCategories()
+    {
+        switch ($this->request->view)
+        {
+            case 'item' :
+                return $this->getCategoryIDFromItem();
+                break;
 
-			case 'itemlist' :
-				return $this->getCategoryID();
-				break;
+            case 'itemlist' :
+                return $this->getCategoryID();
+                break;
 
-			default:
-				return '';
-		}
-	}
+            default:
+                return '';
+        }
+    }
 
-	private function getCatParentIds($id = 0)
-	{
-		$parent_field = RL_K2_VERSION == 3 ? 'parent_id' : 'parent';
+    private function getCatParentIds($id = 0)
+    {
+        $parent_field = RL_K2_VERSION == 3 ? 'parent_id' : 'parent';
 
-		return $this->getParentIds($id, 'k2_categories', $parent_field);
-	}
+        return $this->getParentIds($id, 'k2_categories', $parent_field);
+    }
 
-	private function getCategoryIDFromItem()
-	{
-		if ($this->article && isset($this->article->catid))
-		{
-			return $this->article->catid;
-		}
+    private function getCategoryIDFromItem()
+    {
+        if ($this->article && isset($this->article->catid))
+        {
+            return $this->article->catid;
+        }
 
-		if ( ! $this->request->id)
-		{
-			return $this->getCategoryID();
-		}
+        if ( ! $this->request->id)
+        {
+            return $this->getCategoryID();
+        }
 
-		$query = $this->db->getQuery(true)
-			->select('i.catid')
-			->from('#__k2_items AS i')
-			->where('i.id = ' . (int) $this->request->id);
-		$this->db->setQuery($query);
+        $query = $this->db->getQuery(true)
+            ->select('i.catid')
+            ->from('#__k2_items AS i')
+            ->where('i.id = ' . (int) $this->request->id);
+        $this->db->setQuery($query);
 
-		return $this->db->loadResult();
-	}
+        return $this->db->loadResult();
+    }
 
-	private function getCategoryID()
-	{
-		return $this->request->id ?: JFactory::getApplication()->getUserStateFromRequest('com_k2itemsfilter_category', 'catid', 0, 'int');
-	}
+    private function getCategoryID()
+    {
+        return $this->request->id ?: JFactory::getApplication()->getUserStateFromRequest('com_k2itemsfilter_category', 'catid', 0, 'int');
+    }
 }

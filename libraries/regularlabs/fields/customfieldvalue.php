@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -17,30 +17,30 @@ use RegularLabs\Library\StringHelper as RL_String;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_CustomFieldValue extends Field
 {
-	public $type = 'CustomFieldValue';
+    public $type = 'CustomFieldValue';
 
-	protected function getInput()
-	{
-		$label       = $this->get('label') ?: '';
-		$size        = $this->get('size') ? 'style="width:' . $this->get('size') . 'px"' : '';
-		$class       = 'class="' . ($this->get('class') ?: 'text_area') . '"';
-		$this->value = htmlspecialchars(RL_String::html_entity_decoder($this->value), ENT_QUOTES);
+    protected function getInput()
+    {
+        $label       = $this->get('label') ?: '';
+        $size        = $this->get('size') ? 'style="width:' . $this->get('size') . 'px"' : '';
+        $class       = 'class="' . ($this->get('class') ?: 'text_area') . '"';
+        $this->value = htmlspecialchars(RL_String::html_entity_decoder($this->value), ENT_QUOTES);
 
-		return
-			'</div></div></div>'
-			. '<input type="text" name="' . $this->name . '" id="' . $this->id . '" value="' . $this->value
-			. '" placeholder="' . JText::_($label) . '" title="' . JText::_($label) . '" ' . $class . ' ' . $size . '>';
-	}
+        return
+            '</div></div></div>'
+            . '<input type="text" name="' . $this->name . '" id="' . $this->id . '" value="' . $this->value
+            . '" placeholder="' . JText::_($label) . '" title="' . JText::_($label) . '" ' . $class . ' ' . $size . '>';
+    }
 
-	protected function getLabel()
-	{
-		return '';
-	}
+    protected function getLabel()
+    {
+        return '';
+    }
 }

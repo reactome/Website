@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -16,73 +16,73 @@ use RegularLabs\Library\Field;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_Block extends Field
 {
-	public $type = 'Block';
+    public $type = 'Block';
 
-	protected function getInput()
-	{
-		$title       = $this->get('label');
-		$description = $this->get('description');
-		$class       = $this->get('class');
-		$showclose   = $this->get('showclose', 0);
-		$nowell      = $this->get('nowell', 0);
+    protected function getInput()
+    {
+        $title       = $this->get('label');
+        $description = $this->get('description');
+        $class       = $this->get('class');
+        $showclose   = $this->get('showclose', 0);
+        $nowell      = $this->get('nowell', 0);
 
-		$start = $this->get('start', 0);
-		$end   = $this->get('end', 0);
+        $start = $this->get('start', 0);
+        $end   = $this->get('end', 0);
 
-		$html = [];
+        $html = [];
 
-		if ($start || ! $end)
-		{
-			$html[] = '</div>';
+        if ($start || ! $end)
+        {
+            $html[] = '</div>';
 
-			if (strpos($class, 'alert') !== false)
-			{
-				$class = 'alert ' . $class;
-			}
-			else if ( ! $nowell)
-			{
-				$class = 'well well-small ' . $class;
-			}
+            if (strpos($class, 'alert') !== false)
+            {
+                $class = 'alert ' . $class;
+            }
+            else if ( ! $nowell)
+            {
+                $class = 'well well-small ' . $class;
+            }
 
-			$html[] = '<div class="' . $class . '">';
+            $html[] = '<div class="' . $class . '">';
 
-			$user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
+            $user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
 
-			if ($showclose && $user->authorise('core.admin'))
-			{
-				$html[] = '<button type="button" class="close rl_remove_assignment" aria-label="Close">&times;</button>';
-			}
+            if ($showclose && $user->authorise('core.admin'))
+            {
+                $html[] = '<button type="button" class="close rl_remove_assignment" aria-label="Close">&times;</button>';
+            }
 
-			if ($title)
-			{
-				$html[] = '<h4>' . $this->prepareText($title) . '</h4>';
-			}
+            if ($title)
+            {
+                $html[] = '<h4>' . $this->prepareText($title) . '</h4>';
+            }
 
-			if ($description)
-			{
-				$html[] = '<div>' . $this->prepareText($description) . '</div>';
-			}
+            if ($description)
+            {
+                $html[] = '<div>' . $this->prepareText($description) . '</div>';
+            }
 
-			$html[] = '<div><div>';
-		}
+            $html[] = '<div><div>';
+        }
 
-		if ( ! $start && ! $end)
-		{
-			$html[] = '</div>';
-		}
+        if ( ! $start && ! $end)
+        {
+            $html[] = '</div>';
+        }
 
-		return '</div>' . implode('', $html);
-	}
+        return '</div>' . implode('', $html);
+    }
 
-	protected function getLabel()
-	{
-		return '';
-	}
+    protected function getLabel()
+    {
+        return '';
+    }
 }

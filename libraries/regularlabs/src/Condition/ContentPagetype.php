@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,23 +19,23 @@ defined('_JEXEC') or die;
  */
 class ContentPagetype extends Content
 {
-	public function pass()
-	{
-		$components = ['com_content', 'com_contentsubmit'];
+    public function pass()
+    {
+        $components = ['com_content', 'com_contentsubmit'];
 
-		if ( ! in_array($this->request->option, $components))
-		{
-			return $this->_(false);
-		}
-		if ($this->request->view == 'category' && $this->request->layout == 'blog')
-		{
-			$view = 'categoryblog';
-		}
-		else
-		{
-			$view = $this->request->view;
-		}
+        if ( ! in_array($this->request->option, $components))
+        {
+            return $this->_(false);
+        }
+        if ($this->request->view == 'category' && $this->request->layout == 'blog')
+        {
+            $view = 'categoryblog';
+        }
+        else
+        {
+            $view = $this->request->view;
+        }
 
-		return $this->passSimple($view);
-	}
+        return $this->passSimple($view);
+    }
 }

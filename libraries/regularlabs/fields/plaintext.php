@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -15,48 +15,48 @@ defined('_JEXEC') or die;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_PlainText extends Field
 {
-	public $type = 'PlainText';
+    public $type = 'PlainText';
 
-	protected function getInput()
-	{
-		$text = $this->prepareText($this->value);
+    protected function getInput()
+    {
+        $text = $this->prepareText($this->value);
 
-		if ( ! $text)
-		{
-			return '';
-		}
+        if ( ! $text)
+        {
+            return '';
+        }
 
-		return '<fieldset class="rl_plaintext">' . $text . '</fieldset>';
-	}
+        return '<fieldset class="rl_plaintext">' . $text . '</fieldset>';
+    }
 
-	protected function getLabel()
-	{
-		$label   = $this->prepareText($this->get('label'));
-		$tooltip = $this->prepareText($this->get('description'));
+    protected function getLabel()
+    {
+        $label   = $this->prepareText($this->get('label'));
+        $tooltip = $this->prepareText($this->get('description'));
 
-		if ( ! $label && ! $tooltip)
-		{
-			return '';
-		}
+        if ( ! $label && ! $tooltip)
+        {
+            return '';
+        }
 
-		if ( ! $label)
-		{
-			return '<div>' . $tooltip . '</div>';
-		}
+        if ( ! $label)
+        {
+            return '<div>' . $tooltip . '</div>';
+        }
 
-		if ( ! $tooltip)
-		{
-			return '<div>' . $label . '</div>';
-		}
+        if ( ! $tooltip)
+        {
+            return '<div>' . $label . '</div>';
+        }
 
-		return '<label class="hasPopover" title="' . $label . '" data-content="' . htmlentities($tooltip) . '">'
-			. $label . '</label>';
-	}
+        return '<label class="hasPopover" title="' . $label . '" data-content="' . htmlentities($tooltip) . '">'
+            . $label . '</label>';
+    }
 }

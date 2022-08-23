@@ -1,6 +1,6 @@
 /**
  * @package         Sliders
- * @version         8.2.0
+ * @version         8.2.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -15,205 +15,214 @@
 @import "bootstrap.less";
 
 .rl_sliders.accordion {
-	.clearfix();
+    .clearfix();
 
-	margin-bottom: 1em;
+    margin-bottom: 1em;
 
-	&:last-child {
-		margin-bottom: 0;
-	}
+    &:last-child {
+        margin-bottom: 0;
+    }
 
-	> .accordion-group {
-		.transition-duration(.2s);
+    > .accordion-group {
+        .transition-duration(.2s);
 
-		.panel-heading {
-			padding: 0;
-		}
+        .panel-heading {
+            padding: 0;
+        }
 
-		> .accordion-heading > a.accordion-toggle {
-			.transition-duration(.2s);
+        > .accordion-heading > a.accordion-toggle {
+            .transition-duration(.2s);
 
-			&:hover {
-				background-color: @grayLighter;
-				color:            @linkColorHover;
-				text-decoration:  none;
-			}
+            &:hover {
+                background-color: @grayLighter;
+                color:            @linkColorHover;
+                text-decoration:  none;
+            }
 
-			span.rl_sliders-title-inactive {
-				display: inherit;
-			}
+            span.rl_sliders-title-inactive {
+                display: inherit;
+            }
 
-			span.rl_sliders-title-active {
-				display: none;
-			}
-		}
+            span.rl_sliders-title-active {
+                display: none;
+            }
+        }
 
-		&.active > .accordion-heading > a.accordion-toggle {
-			background-color: lighten(@grayLighter, 4%);
-			color:            @linkColor;
+        &.active > .accordion-heading > a.accordion-toggle {
+            background-color: lighten(@grayLighter, 4%);
+            color:            @linkColor;
 
-			span.rl_sliders-title-inactive {
-				display: none;
-			}
+            span.rl_sliders-title-inactive {
+                display: none;
+            }
 
-			span.rl_sliders-title-active {
-				display: inherit;
-			}
-		}
+            span.rl_sliders-title-active {
+                display: inherit;
+            }
+        }
 
-		> div > a:focus,
-		&.active > div > a:focus {
-			outline:            none;
-			-webkit-box-shadow: inset 0 0 2px rgb(234, 176, 63);
-			box-shadow:         inset 0 0 2px rgb(234, 176, 63);
-		}
+        > div > a:focus,
+        &.active > div > a:focus {
+            outline:            none;
+            -webkit-box-shadow: inset 0 0 2px rgb(234, 176, 63);
+            box-shadow:         inset 0 0 2px rgb(234, 176, 63);
+        }
 
-		> .accordion-body > .accordion-inner {
-			padding:    15px;
-			overflow-y: hidden !important;
-			overflow-x: auto;
-			.clearfix();
+        > .accordion-body {
+            > .accordion-inner {
+                padding:    15px;
+                overflow-y: hidden !important;
+                overflow-x: auto;
+                .clearfix();
 
-			& > :first-child {
-				margin-top: 0;
-			}
+                & > :first-child {
+                    margin-top: 0;
+                }
 
-			& > :last-child {
-				margin-bottom: 0;
-			}
+                & > :last-child {
+                    margin-bottom: 0;
+                }
 
-			.rl_sliders-title {
-				display: none;
-			}
+                &[hidden] {
+                    display:block;
+                }
 
-		}
+                .rl_sliders-title {
+                    display: none;
+                }
+            }
+        }
 
-		// Class: icon: adds plus/minus icons to the slider titles
-		&.icon > .accordion-heading > a.accordion-toggle span.rl_sliders-toggle-inner:before {
-			display:       inline-block;
-			*margin-right: .3em;
-			font-family:   'IcoMoon';
-			font-style:    normal;
-			speak:         none;
-			content:       "\2a";
-			// float: right; // Use to make the icons display on the right side
-		}
+        &.active > .accordion-body > .accordion-inner {
+            visibility: visible;
+        }
 
-		&.icon.active > .accordion-heading > a.accordion-toggle span.rl_sliders-toggle-inner:before {
-			content: "\4b";
-		}
+        // Class: icon: adds plus/minus icons to the slider titles
+        &.icon > .accordion-heading > a.accordion-toggle span.rl_sliders-toggle-inner:before {
+            display:       inline-block;
+            *margin-right: .3em;
+            font-family:   'IcoMoon';
+            font-style:    normal;
+            speak:         none;
+            content:       "\2a";
+            // float: right; // Use to make the icons display on the right side
+        }
 
-		// Classes: Normal state + Hover state
-		.sliderColor(@name, @color) {
-			&.@{name} {
-				// Normal state
-				border-top:       5px solid #e5e5e5;
-				border-top-color: lighten(@color, 20%);
-				.border-radius(5px 5px 4px 4px);
-				// Hover & Active state
-				&:hover,
-				&.active {
-					border-top-color: @color;
-				}
+        &.icon.active > .accordion-heading > a.accordion-toggle span.rl_sliders-toggle-inner:before {
+            content: "\4b";
+        }
 
-				&.solid {
-					border-color: lighten(@color, 20%);
+        // Classes: Normal state + Hover state
+        .sliderColor(@name, @color) {
+            &.@{name} {
+                // Normal state
+                border-top:       5px solid #e5e5e5;
+                border-top-color: lighten(@color, 20%);
+                .border-radius(5px 5px 4px 4px);
+                // Hover & Active state
+                &:hover,
+                &.active {
+                    border-top-color: @color;
+                }
 
-					> .accordion-heading > a.accordion-toggle {
-						background-color: lighten(@color, 20%);
-						color:            #ffffff;
+                &.solid {
+                    border-color: lighten(@color, 20%);
 
-						&:focus {
-							-webkit-box-shadow: none;
-							box-shadow:         none;
-						}
-					}
+                    > .accordion-heading > a.accordion-toggle {
+                        background-color: lighten(@color, 20%);
+                        color:            #ffffff;
 
-					&.solid.color_content {
-						> .accordion-body > .accordion-inner {
-							background-color: lighten(@color, 50%);
-							border-color:     lighten(@color, 50%);
-							.border-radius(0 0 3px 3px);
-						}
-					}
+                        &:focus {
+                            -webkit-box-shadow: none;
+                            box-shadow:         none;
+                        }
+                    }
 
-					&:hover,
-					&.active {
-						border-color: @color;
-					}
-				}
+                    &.solid.color_content {
+                        > .accordion-body > .accordion-inner {
+                            background-color: lighten(@color, 50%);
+                            border-color:     lighten(@color, 50%);
+                            .border-radius(0 0 3px 3px);
+                        }
+                    }
 
-				&:hover,
-				&.active {
-					&.solid {
-						> .accordion-heading > a.accordion-toggle {
-							background-color: @color;
-						}
-					}
-				}
-			}
-		}
+                    &:hover,
+                    &.active {
+                        border-color: @color;
+                    }
+                }
 
-		.sliderColors();
+                &:hover,
+                &.active {
+                    &.solid {
+                        > .accordion-heading > a.accordion-toggle {
+                            background-color: @color;
+                        }
+                    }
+                }
+            }
+        }
 
-	}
+        .sliderColors();
 
-	.rl_sliders-scroll {
-		position:   relative;
-		visibility: hidden;
-		padding:    0;
-	}
+    }
+
+    .rl_sliders-scroll {
+        position:   relative;
+        visibility: hidden;
+        padding:    0;
+    }
 }
 
 @media print {
-	.rl_sliders {
-		.rl_sliders-group {
-			border: 0 !important;
-		}
+    .rl_sliders {
+        .rl_sliders-group {
+            border: 0 !important;
+        }
 
-		.accordion-heading {
-			display: none !important;
-		}
+        .accordion-heading {
+            display: none !important;
+        }
 
-		.accordion-body {
-			display: block !important;
-			opacity: 1 !important;
-			height:  auto !important;
-		}
+        .accordion-body {
+            display: block !important;
+            opacity: 1 !important;
+            height:  auto !important;
+        }
 
-		.rl_sliders-title {
-			display: block !important;
-		}
+        .rl_sliders-title {
+            display: block !important;
+        }
 
-		.accordion-inner {
-			border:  0 !important;
-			padding: 0 !important;
-		}
-	}
+        .accordion-inner {
+            border:  0 !important;
+            padding: 0 !important;
+        }
+    }
 }
 
 .sliderColors() {
-	// Style: blue
-	.sliderColor(~'blue', @btnPrimaryBackground);
-	.sliderColor(~'primary', @btnPrimaryBackground);
+    // Style: blue
+    .sliderColor(~'blue', @btnPrimaryBackground);
+    .sliderColor(~'primary', @btnPrimaryBackground);
 
-	// Style: info
-	.sliderColor(~'info', @btnInfoBackgroundHighlight);
+    // Style: info
+    .sliderColor(~'info', @btnInfoBackgroundHighlight);
 
-	// Style: green / success
-	.sliderColor(~'green', @btnSuccessBackgroundHighlight);
-	.sliderColor(~'success', @btnSuccessBackgroundHighlight);
+    // Style: green / success
+    .sliderColor(~'green', @btnSuccessBackgroundHighlight);
+    .sliderColor(~'success', @btnSuccessBackgroundHighlight);
 
-	// Style: orange / warning
-	.sliderColor(~'orange', @btnWarningBackgroundHighlight);
-	.sliderColor(~'warning', @btnWarningBackgroundHighlight);
+    // Style: orange / warning
+    .sliderColor(~'orange', @btnWarningBackgroundHighlight);
+    .sliderColor(~'warning', @btnWarningBackgroundHighlight);
 
-	// Style: red / danger
-	.sliderColor(~'red', @btnDangerBackgroundHighlight);
-	.sliderColor(~'danger', @btnDangerBackgroundHighlight);
-	.sliderColor(~'error', @btnDangerBackgroundHighlight);
+    // Style: red / danger
+    .sliderColor(~'red', @btnDangerBackgroundHighlight);
+    .sliderColor(~'danger', @btnDangerBackgroundHighlight);
+    .sliderColor(~'error', @btnDangerBackgroundHighlight);
 
-	// Style: grey / gray
-	.sliderColor(~'grey', #808080);
-	.sliderColor(~'gray', #808080);
+    // Style: grey / gray
+    .sliderColor(~'grey', #808080);
+    .sliderColor(~'gray', #808080);
 }

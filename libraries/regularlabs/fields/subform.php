@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
@@ -23,17 +23,17 @@ JFormHelper::loadFieldClass('subform');
 class JFormFieldRL_Subform extends JFormFieldSubform
 {
 
-	public function __construct($form = null)
-	{
+    public function __construct($form = null)
+    {
 
-		parent::__construct($form);
-	}
+        parent::__construct($form);
+    }
 
-	protected function getLayoutPaths()
-	{
-		$paths   = parent::getLayoutPaths();
-		$paths[] = JPATH_LIBRARIES . '/regularlabs/layouts';
+    protected function getLayoutPaths()
+    {
+        $paths   = parent::getLayoutPaths();
+        $paths[] = JPATH_LIBRARIES . '/regularlabs/layouts';
 
-		return $paths;
-	}
+        return $paths;
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -18,48 +18,48 @@ use RegularLabs\Library\Field;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_DateTime extends Field
 {
-	public $type = 'DateTime';
+    public $type = 'DateTime';
 
-	protected function getInput()
-	{
-		$label  = $this->get('label');
-		$format = $this->get('format');
+    protected function getInput()
+    {
+        $label  = $this->get('label');
+        $format = $this->get('format');
 
-		$date = JFactory::getDate();
+        $date = JFactory::getDate();
 
-		$tz = new DateTimeZone(JFactory::getApplication()->getCfg('offset'));
-		$date->setTimeZone($tz);
+        $tz = new DateTimeZone(JFactory::getApplication()->getCfg('offset'));
+        $date->setTimeZone($tz);
 
-		if ($format)
-		{
-			if (strpos($format, '%') !== false)
-			{
-				$format = RL_Date::strftimeToDateFormat($format);
-			}
-			$html = $date->format($format, true);
-		}
-		else
-		{
-			$html = $date->format('', true);
-		}
+        if ($format)
+        {
+            if (strpos($format, '%') !== false)
+            {
+                $format = RL_Date::strftimeToDateFormat($format);
+            }
+            $html = $date->format($format, true);
+        }
+        else
+        {
+            $html = $date->format('', true);
+        }
 
-		if ($label)
-		{
-			$html = JText::sprintf($label, $html);
-		}
+        if ($label)
+        {
+            $html = JText::sprintf($label, $html);
+        }
 
-		return '</div><div>' . $html;
-	}
+        return '</div><div>' . $html;
+    }
 
-	protected function getLabel()
-	{
-		return '';
-	}
+    protected function getLabel()
+    {
+        return '';
+    }
 }

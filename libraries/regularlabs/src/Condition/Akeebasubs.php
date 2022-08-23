@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -22,28 +22,28 @@ use RegularLabs\Library\Condition;
  */
 abstract class Akeebasubs extends Condition
 {
-	var $agent  = null;
-	var $device = null;
+    var $agent  = null;
+    var $device = null;
 
-	public function initRequest(&$request)
-	{
-		if ($request->id || $request->view != 'level')
-		{
-			return;
-		}
+    public function initRequest(&$request)
+    {
+        if ($request->id || $request->view != 'level')
+        {
+            return;
+        }
 
-		$slug = JFactory::getApplication()->input->getString('slug', '');
+        $slug = JFactory::getApplication()->input->getString('slug', '');
 
-		if ( ! $slug)
-		{
-			return;
-		}
+        if ( ! $slug)
+        {
+            return;
+        }
 
-		$query = $this->db->getQuery(true)
-			->select('l.akeebasubs_level_id')
-			->from('#__akeebasubs_levels AS l')
-			->where('l.slug = ' . $this->db->quote($slug));
-		$this->db->setQuery($query);
-		$request->id = $this->db->loadResult();
-	}
+        $query = $this->db->getQuery(true)
+            ->select('l.akeebasubs_level_id')
+            ->from('#__akeebasubs_levels AS l')
+            ->where('l.slug = ' . $this->db->quote($slug));
+        $this->db->setQuery($query);
+        $request->id = $this->db->loadResult();
+    }
 }

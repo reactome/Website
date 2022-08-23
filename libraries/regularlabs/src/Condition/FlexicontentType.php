@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,29 +19,29 @@ defined('_JEXEC') or die;
  */
 class FlexicontentType extends Flexicontent
 {
-	public function pass()
-	{
-		if ($this->request->option != 'com_flexicontent')
-		{
-			return $this->_(false);
-		}
+    public function pass()
+    {
+        if ($this->request->option != 'com_flexicontent')
+        {
+            return $this->_(false);
+        }
 
-		$pass = in_array($this->request->view, ['item', 'items']);
+        $pass = in_array($this->request->view, ['item', 'items']);
 
-		if ( ! $pass)
-		{
-			return $this->_(false);
-		}
+        if ( ! $pass)
+        {
+            return $this->_(false);
+        }
 
-		$query = $this->db->getQuery(true)
-			->select('x.type_id')
-			->from('#__flexicontent_items_ext AS x')
-			->where('x.item_id = ' . (int) $this->request->id);
-		$this->db->setQuery($query);
-		$type = $this->db->loadResult();
+        $query = $this->db->getQuery(true)
+            ->select('x.type_id')
+            ->from('#__flexicontent_items_ext AS x')
+            ->where('x.item_id = ' . (int) $this->request->id);
+        $this->db->setQuery($query);
+        $type = $this->db->loadResult();
 
-		$types = $this->makeArray($type);
+        $types = $this->makeArray($type);
 
-		return $this->passSimple($types);
-	}
+        return $this->passSimple($types);
+    }
 }

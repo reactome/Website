@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -17,64 +17,64 @@ use RegularLabs\Library\Field;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 class JFormFieldRL_Languages extends Field
 {
-	public $type = 'Languages';
+    public $type = 'Languages';
 
-	public function getAjaxRaw(Registry $attributes)
-	{
-		$name     = $attributes->get('name', $this->type);
-		$id       = $attributes->get('id', strtolower($name));
-		$value    = $attributes->get('value', []);
-		$size     = $attributes->get('size');
-		$multiple = $attributes->get('multiple');
+    public function getAjaxRaw(Registry $attributes)
+    {
+        $name     = $attributes->get('name', $this->type);
+        $id       = $attributes->get('id', strtolower($name));
+        $value    = $attributes->get('value', []);
+        $size     = $attributes->get('size');
+        $multiple = $attributes->get('multiple');
 
-		$options = $this->getLanguages($value);
+        $options = $this->getLanguages($value);
 
-		return $this->selectListSimple($options, $name, $value, $id, $size, $multiple);
-	}
+        return $this->selectListSimple($options, $name, $value, $id, $size, $multiple);
+    }
 
-	public function getLanguages($value)
-	{
-		$langs = JHtml::_('contentlanguage.existing');
+    public function getLanguages($value)
+    {
+        $langs = JHtml::_('contentlanguage.existing');
 
-		if ( ! is_array($value))
-		{
-			$value = [$value];
-		}
+        if ( ! is_array($value))
+        {
+            $value = [$value];
+        }
 
-		$options = [];
+        $options = [];
 
-		foreach ($langs as $lang)
-		{
-			if (empty($lang->value))
-			{
-				continue;
-			}
+        foreach ($langs as $lang)
+        {
+            if (empty($lang->value))
+            {
+                continue;
+            }
 
-			$options[] = (object) [
-				'value'    => $lang->value,
-				'text'     => $lang->text . ' [' . $lang->value . ']',
-				'selected' => in_array($lang->value, $value),
-			];
-		}
+            $options[] = (object) [
+                'value'    => $lang->value,
+                'text'     => $lang->text . ' [' . $lang->value . ']',
+                'selected' => in_array($lang->value, $value),
+            ];
+        }
 
-		return $options;
-	}
+        return $options;
+    }
 
-	protected function getInput()
-	{
-		$size     = (int) $this->get('size');
-		$multiple = $this->get('multiple');
+    protected function getInput()
+    {
+        $size     = (int) $this->get('size');
+        $multiple = $this->get('multiple');
 
-		return $this->selectListSimpleAjax(
-			$this->type, $this->name, $this->value, $this->id,
-			compact('size', 'multiple')
-		);
-	}
+        return $this->selectListSimpleAjax(
+            $this->type, $this->name, $this->value, $this->id,
+            compact('size', 'multiple')
+        );
+    }
 }

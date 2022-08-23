@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,8 +19,8 @@ defined('_JEXEC') or die;
  */
 class ZooPagetype extends Zoo
 {
-	public function pass()
-	{
-		return $this->passByPageType('com_zoo', $this->selection, $this->include_type);
-	}
+    public function pass()
+    {
+        return $this->passByPageType('com_zoo', $this->selection, $this->include_type);
+    }
 }

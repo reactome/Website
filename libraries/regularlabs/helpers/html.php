@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -17,18 +17,18 @@ use RegularLabs\Library\Form as RL_Form;
 
 if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
-	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+    require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 }
 
 class RLHtml
 {
-	static function selectlist(&$options, $name, $value, $id, $size = 0, $multiple = 0, $simple = 0)
-	{
-		return RL_Form::selectList($options, $name, $value, $id, $size, $multiple, $simple);
-	}
+    static function selectlist(&$options, $name, $value, $id, $size = 0, $multiple = 0, $simple = 0)
+    {
+        return RL_Form::selectList($options, $name, $value, $id, $size, $multiple, $simple);
+    }
 
-	static function selectlistsimple(&$options, $name, $value, $id, $size = 0, $multiple = 0)
-	{
-		return RL_Form::selectListSimple($options, $name, $value, $id, $size, $multiple);
-	}
+    static function selectlistsimple(&$options, $name, $value, $id, $size = 0, $multiple = 0)
+    {
+        return RL_Form::selectListSimple($options, $name, $value, $id, $size, $multiple);
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,12 +19,12 @@ defined('_JEXEC') or die;
  */
 class AgentDevice extends Agent
 {
-	public function pass()
-	{
-		$pass = (in_array('mobile', $this->selection) && $this->isMobile())
-			|| (in_array('tablet', $this->selection) && $this->isTablet())
-			|| (in_array('desktop', $this->selection) && $this->isDesktop());
+    public function pass()
+    {
+        $pass = (in_array('mobile', $this->selection) && $this->isMobile())
+            || (in_array('tablet', $this->selection) && $this->isTablet())
+            || (in_array('desktop', $this->selection) && $this->isDesktop());
 
-		return $this->_($pass);
-	}
+        return $this->_($pass);
+    }
 }

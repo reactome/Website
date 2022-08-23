@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         8.2.0
+ * @version         8.2.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -21,137 +21,137 @@ use RegularLabs\Library\Uri as RL_Uri;
 
 class Params
 {
-	protected static $params  = null;
-	protected static $regexes = null;
+    protected static $params  = null;
+    protected static $regexes = null;
 
-	public static function get()
-	{
-		if ( ! is_null(self::$params))
-		{
-			return self::$params;
-		}
+    public static function get()
+    {
+        if ( ! is_null(self::$params))
+        {
+            return self::$params;
+        }
 
-		$params = RL_Parameters::getPlugin('tabs');
+        $params = RL_Parameters::getPlugin('tabs');
 
-		$params->tag_open  = RL_PluginTag::clean($params->tag_open);
-		$params->tag_close = RL_PluginTag::clean($params->tag_close);
+        $params->tag_open  = RL_PluginTag::clean($params->tag_open);
+        $params->tag_close = RL_PluginTag::clean($params->tag_close);
 
-		$params->tag_link = $params->tag_link ?? 'tablink';
-		$params->tag_link = RL_PluginTag::clean($params->tag_link);
+        $params->tag_link = $params->tag_link ?? 'tablink';
+        $params->tag_link = RL_PluginTag::clean($params->tag_link);
 
-		$params->use_responsive_view = false;
+        $params->use_responsive_view = false;
 
-		self::$params = $params;
+        self::$params = $params;
 
-		return self::$params;
-	}
+        return self::$params;
+    }
 
-	public static function getAlignment()
-	{
-		$params = self::get();
-
-
-		if ( ! $params->alignment)
-		{
-			$params->alignment = JFactory::getLanguage()->isRTL() ? 'right' : 'left';
-		}
-
-		return 'align_' . $params->alignment;
-	}
-
-	public static function getPositioning()
-	{
+    public static function getAlignment()
+    {
+        $params = self::get();
 
 
-		return 'top';
-	}
+        if ( ! $params->alignment)
+        {
+            $params->alignment = JFactory::getLanguage()->isRTL() ? 'right' : 'left';
+        }
 
-	public static function getRegex($type = 'tag')
-	{
-		$regexes = self::getRegexes();
+        return 'align_' . $params->alignment;
+    }
 
-		return $regexes->{$type} ?? $regexes->tag;
-	}
+    public static function getPositioning()
+    {
 
-	public static function getTagCharacters()
-	{
-		if ( ! isset(self::$params->tag_character_start))
-		{
-			self::setTagCharacters();
-		}
 
-		return [self::$params->tag_character_start, self::$params->tag_character_end];
-	}
+        return 'top';
+    }
 
-	public static function getTags($only_start_tags = false)
-	{
-		$params = self::get();
+    public static function getRegex($type = 'tag')
+    {
+        $regexes = self::getRegexes();
 
-		[$tag_start, $tag_end] = self::getTagCharacters();
+        return $regexes->{$type} ?? $regexes->tag;
+    }
 
-		$tags = [
-			[
-				$tag_start . $params->tag_open,
-				$tag_start . $params->tag_link,
-			],
-			[
-				$tag_start . '/' . $params->tag_close . $tag_end,
-				$tag_start . '/' . $params->tag_link . $tag_end,
-			],
-		];
+    public static function getTagCharacters()
+    {
+        if ( ! isset(self::$params->tag_character_start))
+        {
+            self::setTagCharacters();
+        }
 
-		return $only_start_tags ? $tags[0] : $tags;
-	}
+        return [self::$params->tag_character_start, self::$params->tag_character_end];
+    }
 
-	public static function setTagCharacters()
-	{
-		$params = self::get();
+    public static function getTags($only_start_tags = false)
+    {
+        $params = self::get();
 
-		[self::$params->tag_character_start, self::$params->tag_character_end] = explode('.', $params->tag_characters);
-	}
+        [$tag_start, $tag_end] = self::getTagCharacters();
 
-	private static function getRegexes()
-	{
-		if ( ! is_null(self::$regexes))
-		{
-			return self::$regexes;
-		}
+        $tags = [
+            [
+                $tag_start . $params->tag_open,
+                $tag_start . $params->tag_link,
+            ],
+            [
+                $tag_start . '/' . $params->tag_close . $tag_end,
+                $tag_start . '/' . $params->tag_link . $tag_end,
+            ],
+        ];
 
-		$params = self::get();
+        return $only_start_tags ? $tags[0] : $tags;
+    }
 
-		// Tag character start and end
-		[$tag_start, $tag_end] = self::getTagCharacters();
+    public static function setTagCharacters()
+    {
+        $params = self::get();
 
-		$pre        = RL_PluginTag::getRegexSurroundingTagsPre();
-		$post       = RL_PluginTag::getRegexSurroundingTagsPost();
-		$inside_tag = RL_PluginTag::getRegexInsideTag($tag_start, $tag_end);
+        [self::$params->tag_character_start, self::$params->tag_character_end] = explode('.', $params->tag_characters);
+    }
 
-		$tag_start = RL_RegEx::quote($tag_start);
-		$tag_end   = RL_RegEx::quote($tag_end);
+    private static function getRegexes()
+    {
+        if ( ! is_null(self::$regexes))
+        {
+            return self::$regexes;
+        }
 
-		$delimiter = ($params->tag_delimiter == 'space') ? RL_PluginTag::getRegexSpaces() : '=';
-		$set_id    = '(?:-[a-zA-Z0-9-_]+)?';
+        $params = self::get();
 
-		self::$regexes = (object) [];
+        // Tag character start and end
+        [$tag_start, $tag_end] = self::getTagCharacters();
 
-		self::$regexes->tag =
-			'(?<pre>' . $pre . ')'
-			. $tag_start . '(?<tag>'
-			. $params->tag_open . 's?' . '(?<set_id>' . $set_id . ')' . $delimiter . '(?<data>' . $inside_tag . ')'
-			. '|/' . $params->tag_close . $set_id
-			. ')' . $tag_end
-			. '(?<post>' . $post . ')';
+        $pre        = RL_PluginTag::getRegexSurroundingTagsPre();
+        $post       = RL_PluginTag::getRegexSurroundingTagsPost();
+        $inside_tag = RL_PluginTag::getRegexInsideTag($tag_start, $tag_end);
 
-		self::$regexes->end =
-			'(?<pre>' . $pre . ')'
-			. $tag_start . '/' . $params->tag_close . $set_id . $tag_end
-			. '(?<post>' . $post . ')';
+        $tag_start = RL_RegEx::quote($tag_start);
+        $tag_end   = RL_RegEx::quote($tag_end);
 
-		self::$regexes->link =
-			$tag_start . $params->tag_link . $set_id . $delimiter . '(?<id>' . $inside_tag . ')' . $tag_end
-			. '(?<text>.*?)'
-			. $tag_start . '/' . $params->tag_link . $tag_end;
+        $delimiter = ($params->tag_delimiter == 'space') ? RL_PluginTag::getRegexSpaces() : '=';
+        $set_id    = '(?:-[a-zA-Z0-9-_]+)?';
 
-		return self::$regexes;
-	}
+        self::$regexes = (object) [];
+
+        self::$regexes->tag =
+            '(?<pre>' . $pre . ')'
+            . $tag_start . '(?<tag>'
+            . $params->tag_open . 's?' . '(?<set_id>' . $set_id . ')' . $delimiter . '(?<data>' . $inside_tag . ')'
+            . '|/' . $params->tag_close . $set_id
+            . ')' . $tag_end
+            . '(?<post>' . $post . ')';
+
+        self::$regexes->end =
+            '(?<pre>' . $pre . ')'
+            . $tag_start . '/' . $params->tag_close . $set_id . $tag_end
+            . '(?<post>' . $post . ')';
+
+        self::$regexes->link =
+            $tag_start . $params->tag_link . $set_id . $delimiter . '(?<id>' . $inside_tag . ')' . $tag_end
+            . '(?<text>.*?)'
+            . $tag_start . '/' . $params->tag_link . $tag_end;
+
+        return self::$regexes;
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -15,24 +15,23 @@ defined('_JEXEC') or die;
 
 if ( ! class_exists('RegularLabs\Library\SystemPlugin'))
 {
-	/**
-	 * Class Plugin
-	 * @package    RegularLabs\Library
-	 * @deprecated Use SystemPlugin
-	 */
-	class Plugin
-	{
-	}
+    /**
+     * Class Plugin
+     * @package    RegularLabs\Library
+     * @deprecated Use SystemPlugin
+     */
+    class Plugin
+    {
+    }
 }
 else
 {
-	/**
-	 * Class Plugin
-	 * @package    RegularLabs\Library
-	 * @deprecated Use SystemPlugin
-	 */
-	class Plugin extends SystemPlugin
-	{
-	}
+    /**
+     * Class Plugin
+     * @package    RegularLabs\Library
+     * @deprecated Use SystemPlugin
+     */
+    class Plugin extends SystemPlugin
+    {
+    }
 }
-

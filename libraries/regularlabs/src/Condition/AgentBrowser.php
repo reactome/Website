@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,23 +19,23 @@ defined('_JEXEC') or die;
  */
 class AgentBrowser extends Agent
 {
-	public function pass()
-	{
-		if (empty($this->selection))
-		{
-			return $this->_(false);
-		}
+    public function pass()
+    {
+        if (empty($this->selection))
+        {
+            return $this->_(false);
+        }
 
-		foreach ($this->selection as $browser)
-		{
-			if ( ! $this->passBrowser($browser))
-			{
-				continue;
-			}
+        foreach ($this->selection as $browser)
+        {
+            if ( ! $this->passBrowser($browser))
+            {
+                continue;
+            }
 
-			return $this->_(true);
-		}
+            return $this->_(true);
+        }
 
-		return $this->_(false);
-	}
+        return $this->_(false);
+    }
 }

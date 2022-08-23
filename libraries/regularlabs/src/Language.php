@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -21,24 +21,24 @@ use Joomla\CMS\Factory as JFactory;
  */
 class Language
 {
-	/**
-	 * Load the language of the given extension
-	 *
-	 * @param string $extension
-	 * @param string $basePath
-	 * @param bool   $reload
-	 *
-	 * @return bool
-	 */
-	public static function load($extension = 'plg_system_regularlabs', $basePath = '', $reload = false)
-	{
-		if ($basePath && JFactory::getLanguage()->load($extension, $basePath, null, $reload))
-		{
-			return true;
-		}
+    /**
+     * Load the language of the given extension
+     *
+     * @param string $extension
+     * @param string $basePath
+     * @param bool   $reload
+     *
+     * @return bool
+     */
+    public static function load($extension = 'plg_system_regularlabs', $basePath = '', $reload = false)
+    {
+        if ($basePath && JFactory::getLanguage()->load($extension, $basePath, null, $reload))
+        {
+            return true;
+        }
 
-		$basePath = Extension::getPath($extension, $basePath, 'language');
+        $basePath = Extension::getPath($extension, $basePath, 'language');
 
-		return JFactory::getLanguage()->load($extension, $basePath, null, $reload);
-	}
+        return JFactory::getLanguage()->load($extension, $basePath, null, $reload);
+    }
 }

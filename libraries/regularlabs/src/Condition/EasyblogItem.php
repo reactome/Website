@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,33 +19,33 @@ defined('_JEXEC') or die;
  */
 class EasyblogItem extends Easyblog
 {
-	public function pass()
-	{
-		if ( ! $this->request->id || $this->request->option != 'com_easyblog' || $this->request->view != 'entry')
-		{
-			return $this->_(false);
-		}
+    public function pass()
+    {
+        if ( ! $this->request->id || $this->request->option != 'com_easyblog' || $this->request->view != 'entry')
+        {
+            return $this->_(false);
+        }
 
-		$pass = false;
+        $pass = false;
 
-		// Pass Article Id
-		if ( ! $this->passItemByType($pass, 'ContentId'))
-		{
-			return $this->_(false);
-		}
+        // Pass Article Id
+        if ( ! $this->passItemByType($pass, 'ContentId'))
+        {
+            return $this->_(false);
+        }
 
-		// Pass Content Keywords
-		if ( ! $this->passItemByType($pass, 'ContentKeyword'))
-		{
-			return $this->_(false);
-		}
+        // Pass Content Keywords
+        if ( ! $this->passItemByType($pass, 'ContentKeyword'))
+        {
+            return $this->_(false);
+        }
 
-		// Pass Author
-		if ( ! $this->passItemByType($pass, 'Author'))
-		{
-			return $this->_(false);
-		}
+        // Pass Author
+        if ( ! $this->passItemByType($pass, 'Author'))
+        {
+            return $this->_(false);
+        }
 
-		return $this->_($pass);
-	}
+        return $this->_($pass);
+    }
 }

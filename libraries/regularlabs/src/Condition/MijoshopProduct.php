@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,13 +19,13 @@ defined('_JEXEC') or die;
  */
 class MijoshopProduct extends Mijoshop
 {
-	public function pass()
-	{
-		if ( ! $this->request->id || $this->request->option != 'com_mijoshop' || $this->request->view != 'product')
-		{
-			return $this->_(false);
-		}
+    public function pass()
+    {
+        if ( ! $this->request->id || $this->request->option != 'com_mijoshop' || $this->request->view != 'product')
+        {
+            return $this->_(false);
+        }
 
-		return $this->passSimple($this->request->id);
-	}
+        return $this->passSimple($this->request->id);
+    }
 }

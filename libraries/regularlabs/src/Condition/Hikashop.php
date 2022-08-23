@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -22,14 +22,14 @@ use RegularLabs\Library\Condition;
  */
 abstract class Hikashop extends Condition
 {
-	public function beforePass()
-	{
-		$input = JFactory::getApplication()->input;
+    public function beforePass()
+    {
+        $input = JFactory::getApplication()->input;
 
-		// Reset $this->request because HikaShop messes with the view after stuff is loaded!
-		$this->request->option = $input->get('option', $this->request->option);
-		$this->request->view   = $input->get('view', $input->get('ctrl', $this->request->view));
-		$this->request->id     = $input->getInt('id', $this->request->id);
-		$this->request->Itemid = $input->getInt('Itemid', $this->request->Itemid);
-	}
+        // Reset $this->request because HikaShop messes with the view after stuff is loaded!
+        $this->request->option = $input->get('option', $this->request->option);
+        $this->request->view   = $input->get('view', $input->get('ctrl', $this->request->view));
+        $this->request->id     = $input->getInt('id', $this->request->id);
+        $this->request->Itemid = $input->getInt('Itemid', $this->request->Itemid);
+    }
 }

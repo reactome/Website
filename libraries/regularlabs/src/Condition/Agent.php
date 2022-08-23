@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -23,129 +23,129 @@ use RegularLabs\Library\RegEx;
  */
 abstract class Agent extends Condition
 {
-	var $agent     = null;
-	var $device    = null;
-	var $is_mobile = false;
+    var $agent     = null;
+    var $device    = null;
+    var $is_mobile = false;
 
-	/**
-	 * isDesktop
-	 */
-	public function isDesktop()
-	{
-		return $this->getDevice() == 'desktop';
-	}
+    /**
+     * isDesktop
+     */
+    public function isDesktop()
+    {
+        return $this->getDevice() == 'desktop';
+    }
 
-	/**
-	 * setDevice
-	 */
-	private function getDevice()
-	{
-		if ( ! is_null($this->device))
-		{
-			return $this->device;
-		}
+    /**
+     * setDevice
+     */
+    private function getDevice()
+    {
+        if ( ! is_null($this->device))
+        {
+            return $this->device;
+        }
 
-		$detect = new MobileDetect;
+        $detect = new MobileDetect;
 
-		$this->is_mobile = $detect->isMobile();
+        $this->is_mobile = $detect->isMobile();
 
-		switch (true)
-		{
-			case($detect->isTablet()):
-				$this->device = 'tablet';
-				break;
+        switch (true)
+        {
+            case($detect->isTablet()):
+                $this->device = 'tablet';
+                break;
 
-			case ($detect->isMobile()):
-				$this->device = 'mobile';
-				break;
+            case ($detect->isMobile()):
+                $this->device = 'mobile';
+                break;
 
-			default:
-				$this->device = 'desktop';
-		}
+            default:
+                $this->device = 'desktop';
+        }
 
-		return $this->device;
-	}
+        return $this->device;
+    }
 
-	/**
-	 * isPhone
-	 */
-	public function isPhone()
-	{
-		return $this->isMobile();
-	}
+    /**
+     * isPhone
+     */
+    public function isPhone()
+    {
+        return $this->isMobile();
+    }
 
-	/**
-	 * isMobile
-	 */
-	public function isMobile()
-	{
-		return $this->getDevice() == 'mobile';
-	}
+    /**
+     * isMobile
+     */
+    public function isMobile()
+    {
+        return $this->getDevice() == 'mobile';
+    }
 
-	/**
-	 * isTablet
-	 */
-	public function isTablet()
-	{
-		return $this->getDevice() == 'tablet';
-	}
+    /**
+     * isTablet
+     */
+    public function isTablet()
+    {
+        return $this->getDevice() == 'tablet';
+    }
 
-	/**
-	 * passBrowser
-	 */
-	public function passBrowser($browser = '')
-	{
-		if ( ! $browser)
-		{
-			return false;
-		}
+    /**
+     * passBrowser
+     */
+    public function passBrowser($browser = '')
+    {
+        if ( ! $browser)
+        {
+            return false;
+        }
 
-		if ($browser == 'mobile')
-		{
-			return $this->isMobile();
-		}
+        if ($browser == 'mobile')
+        {
+            return $this->isMobile();
+        }
 
-		// also check for _ instead of .
-		$browser = RegEx::replace('\\\.([^\]])', '[\._]\1', $browser);
-		$browser = str_replace('\.]', '\._]', $browser);
+        // also check for _ instead of .
+        $browser = RegEx::replace('\\\.([^\]])', '[\._]\1', $browser);
+        $browser = str_replace('\.]', '\._]', $browser);
 
-		return RegEx::match($browser, $this->getAgent(), $match, 'i');
-	}
+        return RegEx::match($browser, $this->getAgent(), $match, 'i');
+    }
 
-	/**
-	 * getAgent
-	 */
-	private function getAgent()
-	{
-		if ( ! is_null($this->agent))
-		{
-			return $this->agent;
-		}
+    /**
+     * getAgent
+     */
+    private function getAgent()
+    {
+        if ( ! is_null($this->agent))
+        {
+            return $this->agent;
+        }
 
-		$detect = new MobileDetect;
-		$agent  = $detect->getUserAgent();
+        $detect = new MobileDetect;
+        $agent  = $detect->getUserAgent();
 
-		switch (true)
-		{
-			case (stripos($agent, 'Trident') !== false):
-				// Add MSIE to IE11 and others missing it
-				$agent = RegEx::replace('(Trident/[0-9\.]+;.*rv[: ]([0-9\.]+))', '\1 MSIE \2', $agent);
-				break;
+        switch (true)
+        {
+            case (stripos($agent, 'Trident') !== false):
+                // Add MSIE to IE11 and others missing it
+                $agent = RegEx::replace('(Trident/[0-9\.]+;.*rv[: ]([0-9\.]+))', '\1 MSIE \2', $agent);
+                break;
 
-			case (stripos($agent, 'Chrome') !== false):
-				// Remove Safari from Chrome
-				$agent = RegEx::replace('(Chrome/.*)Safari/[0-9\.]*', '\1', $agent);
-				// Add MSIE to IE Edge and remove Chrome from IE Edge
-				$agent = RegEx::replace('Chrome/.*(Edge/[0-9])', 'MSIE \1', $agent);
-				break;
+            case (stripos($agent, 'Chrome') !== false):
+                // Remove Safari from Chrome
+                $agent = RegEx::replace('(Chrome/.*)Safari/[0-9\.]*', '\1', $agent);
+                // Add MSIE to IE Edge and remove Chrome from IE Edge
+                $agent = RegEx::replace('Chrome/.*(Edge/[0-9])', 'MSIE \1', $agent);
+                break;
 
-			case (stripos($agent, 'Opera') !== false):
-				$agent = RegEx::replace('(Opera/.*)Version/', '\1Opera/', $agent);
-				break;
-		}
+            case (stripos($agent, 'Opera') !== false):
+                $agent = RegEx::replace('(Opera/.*)Version/', '\1Opera/', $agent);
+                break;
+        }
 
-		$this->agent = $agent;
+        $this->agent = $agent;
 
-		return $this->agent;
-	}
+        return $this->agent;
+    }
 }

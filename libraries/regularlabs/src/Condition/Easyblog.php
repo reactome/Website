@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -22,16 +22,16 @@ defined('_JEXEC') or die;
  */
 abstract class Easyblog extends Condition
 {
-	use ConditionContent;
+    use ConditionContent;
 
-	public function getItem($fields = [])
-	{
-		$query = $this->db->getQuery(true)
-			->select($fields)
-			->from('#__easyblog_post')
-			->where('id = ' . (int) $this->request->id);
-		$this->db->setQuery($query);
+    public function getItem($fields = [])
+    {
+        $query = $this->db->getQuery(true)
+            ->select($fields)
+            ->from('#__easyblog_post')
+            ->where('id = ' . (int) $this->request->id);
+        $this->db->setQuery($query);
 
-		return $this->db->loadObject();
-	}
+        return $this->db->loadObject();
+    }
 }

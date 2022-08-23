@@ -1,6 +1,6 @@
 /**
  * @package         Sliders
- * @version         8.2.0
+ * @version         8.2.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -11,630 +11,632 @@
 var RegularLabsSliders = null;
 
 (function($) {
-	"use strict";
+    "use strict";
 
-	RegularLabsSliders = {
-		options  : {},
-		timers   : [],
-		scroll_to: null,
-		scrolling: false,
+    RegularLabsSliders = {
+        options  : {},
+        timers   : [],
+        scroll_to: null,
+        scrolling: false,
 
-		init: function(options) {
-			var self = this;
+        init: function(options) {
+            var self = this;
 
-			options      = options ? options : this.getOptions();
-			this.options = options;
+            options      = options ? options : this.getOptions();
+            this.options = options;
 
-			try {
-				this.hash_id = decodeURIComponent(window.location.hash.replace('#', ''));
-				// Ignore the url hash if it contains weird characters
-				if (this.hash_id.indexOf('/') > -1 || this.hash_id.indexOf('/') > -1) {
-					this.hash_id = '';
-				}
-			} catch (err) {
-				this.hash_id = '';
-			}
+            try {
+                this.hash_id = decodeURIComponent(window.location.hash.replace('#', ''));
+                // Ignore the url hash if it contains weird characters
+                if (this.hash_id.indexOf('/') > -1 || this.hash_id.indexOf('/') > -1) {
+                    this.hash_id = '';
+                }
+            } catch (err) {
+                this.hash_id = '';
+            }
 
-			this.current_url = window.location.href;
-			if (this.current_url.indexOf('#') > -1) {
-				this.current_url = this.current_url.substr(0, this.current_url.indexOf('#'));
-			}
-			this.current_path = this.current_url.replace(/^.*\/\/.*?\//, '');
+            this.current_url = window.location.href;
+            if (this.current_url.indexOf('#') > -1) {
+                this.current_url = this.current_url.substr(0, this.current_url.indexOf('#'));
+            }
+            this.current_path = this.current_url.replace(/^.*\/\/.*?\//, '');
 
-			// Hide all non-active slider bodies
-			$('.rl_sliders-body:not(.in)').height(0);
+            // Hide all non-active slider bodies
+            $('.rl_sliders-body:not(.in)').height(0);
 
-			// Remove the transition durations off to make initial setting of active tabs as fast as possible
-			$('.rl_sliders').removeClass('has_effects');
+            // Remove the transition durations off to make initial setting of active tabs as fast as possible
+            $('.rl_sliders').removeClass('has_effects');
 
-			var timeout = $('.rl_tabs').length ? 250 : 0;
-			setTimeout((function() {
-				self.initActiveClasses();
+            var timeout = $('.rl_tabs').length ? 250 : 0;
+            setTimeout((function() {
+                self.initActiveClasses();
 
 
-				self.initScrollTracking();
+                self.initScrollTracking();
 
-				self.showByURL();
+                self.showByURL();
 
-				self.showByHash();
+                self.showByHash();
 
-				setTimeout((function() {
-					self.initClickMode();
+                setTimeout((function() {
+                    self.initClickMode();
 
 
-					if (options.use_hash) {
-						self.initHashHandling();
-					}
+                    if (options.use_hash) {
+                        self.initHashHandling();
+                    }
 
-					self.initHashLinkList();
+                    self.initHashLinkList();
 
-					if (options.reload_iframes) {
-						self.initIframeReloading();
-					}
+                    if (options.reload_iframes) {
+                        self.initIframeReloading();
+                    }
 
-					// Add the transition durations
-					// But not for Bootstrap 3!
-					if (typeof $().emulateTransitionEnd != 'function') {
-						$('.rl_sliders').addClass('has_effects');
-					}
-				}), 1000);
-			}), timeout);
-		},
+                    // Add the transition durations
+                    // But not for Bootstrap 3!
+                    if (typeof $().emulateTransitionEnd != 'function') {
+                        $('.rl_sliders').addClass('has_effects');
+                    }
+                }), 1000);
+            }), timeout);
+        },
 
-		show: function(id, scroll, openparents) {
-			if (openparents) {
-				this.openParents(id);
-				return;
-			}
+        show: function(id, scroll, openparents) {
+            if (openparents) {
+                this.openParents(id);
+                return;
+            }
 
-			var self = this;
-			var $el  = this.getElement(id);
+            var self = this;
+            var $el  = this.getElement(id);
 
-			if ( ! $el.length) {
-				return;
-			}
+            if ( ! $el.length) {
+                return;
+            }
 
-			$el.one('hidden.bs.collapse', function() {
-				$('a#slider-' + id).attr('aria-expanded', false);
-				$('div#' + id).attr('aria-hidden', true);
-			});
+            $el.one('hidden.bs.collapse', function() {
+                $(`a#slider-${id}`).attr('aria-expanded', false);
+                $(`div#${id} > .panel-body`).attr('hidden', true);
+            });
 
 
-			if (this.scroll_to) {
-				this.setScrollOnLoad($el);
-			}
+            if (this.scroll_to) {
+                this.setScrollOnLoad($el);
+            }
 
-			var show = ( ! $el.hasClass('in') && ! $el.hasClass('active'));
+            var show = ( ! $el.hasClass('in') && ! $el.hasClass('active'));
 
-			if (show) {
-				$el.collapse({
-					toggle: true,
-					parent: $el.parent().parent()
-				});
+            if (show) {
+                $el.closest('div.rl_sliders').find('.rl_sliders-body > .panel-body').removeAttr('hidden');
 
-				$el.collapse('show');
+                $el.collapse({
+                    toggle: true,
+                    parent: $el.parent().parent()
+                });
 
-				$el.closest('div.rl_sliders').find('.rl_sliders-toggle').attr('aria-expanded', false);
-				$('a#slider-' + id).attr('aria-expanded', true);
+                $el.closest('div.rl_sliders').find('.rl_sliders-toggle').attr('aria-expanded', false);
+                $(`a#slider-${id}`).attr('aria-expanded', true);
 
-				$el.closest('div.rl_sliders').find('.rl_sliders-body').attr('aria-hidden', true);
-				$('div#' + id).attr('aria-hidden', false);
+                $el.closest('div.rl_sliders').find('.rl_sliders-body > .panel-body').attr('hidden', true);
+                $(`div#${id} > .panel-body`).removeAttr('hidden');
 
-				// trigger resize event to make certain scripts (like galleries) work
-				window.dispatchEvent(new Event('resize'));
-			}
+                $el.collapse('show');
 
-			this.updateActiveClassesOnSliderLinks($el);
+                // trigger resize event to make certain scripts (like galleries) work
+                window.dispatchEvent(new Event('resize'));
+            }
 
-			// For some reason Chrome 67 throws an error when not using a small delay
-			setTimeout(function() {
-				$el[0].focus();
-			}, 10);
-		},
+            this.updateActiveClassesOnSliderLinks($el);
 
-		setScrollOnLoad: function($el) {
-			var self = this;
+            // For some reason Chrome 67 throws an error when not using a small delay
+            setTimeout(function() {
+                $el[0].focus();
+            }, 10);
+        },
 
-			// If slider is already open, do scroll immediately
-			if ($el.hasClass('in')) {
-				self.scrollOnLoad();
-				return;
-			}
+        setScrollOnLoad: function($el) {
+            var self = this;
 
-			// If slider is not open yet, do scroll when opened
-			$el.one('shown.bs.collapse', function() {
-				self.scrollOnLoad();
-			});
-		},
+            // If slider is already open, do scroll immediately
+            if ($el.hasClass('in')) {
+                self.scrollOnLoad();
+                return;
+            }
 
-		scrollOnLoad: function() {
-			var self = this;
+            // If slider is not open yet, do scroll when opened
+            $el.one('shown.bs.collapse', function() {
+                self.scrollOnLoad();
+            });
+        },
 
-			if (this.scrolling) {
-				setTimeout(function() {
-					self.scrollOnLoad();
-				}, 100);
+        scrollOnLoad: function() {
+            var self = this;
 
-				return;
-			}
+            if (this.scrolling) {
+                setTimeout(function() {
+                    self.scrollOnLoad();
+                }, 100);
 
-			clearTimeout(self.timers['scroll']);
+                return;
+            }
 
-			self.timers['scroll'] = setTimeout(function() {
-				if ( ! self.scroll_to) {
-					return;
-				}
+            clearTimeout(self.timers['scroll']);
 
-				$('html,body').animate({scrollTop: self.scroll_to.offset().top});
-				self.scroll_to = null;
-			}, 100);
-		},
+            self.timers['scroll'] = setTimeout(function() {
+                if ( ! self.scroll_to) {
+                    return;
+                }
 
-		getElement: function(id) {
-			return this.getSliderElement(id);
-		},
+                $('html,body').animate({scrollTop: self.scroll_to.offset().top});
+                self.scroll_to = null;
+            }, 100);
+        },
 
-		getTabElement: function(id) {
-			return $('a.rl_tabs-toggle[data-id="' + id + '"]');
-		},
+        getElement: function(id) {
+            return this.getSliderElement(id);
+        },
 
-		getSliderElement: function(id) {
-			return $('#' + id + '.rl_sliders-body');
-		},
+        getTabElement: function(id) {
+            return $(`a.rl_tabs-toggle[data-id="${id}"]`);
+        },
 
+        getSliderElement: function(id) {
+            return $(`#${id}.rl_sliders-body`);
+        },
 
-		initScrollTracking: function() {
-			var self = this;
 
-			self.scrolling = true;
+        initScrollTracking: function() {
+            var self = this;
 
-			self.timers['scrolling'] = setTimeout((function() {
-				self.scrolling = false;
-			}), 250);
+            self.scrolling = true;
 
-			var scroll_function_orig = window.onscroll;
+            self.timers['scrolling'] = setTimeout((function() {
+                self.scrolling = false;
+            }), 250);
 
-			window.onscroll = (function() {
-				self.scrolling = true;
+            var scroll_function_orig = window.onscroll;
 
-				clearTimeout(self.timers['scrolling']);
+            window.onscroll = (function() {
+                self.scrolling = true;
 
-				self.timers['scrolling'] = setTimeout((function() {
-					self.scrolling = false;
-				}), 1250);
+                clearTimeout(self.timers['scrolling']);
 
-				if (scroll_function_orig) {
-					scroll_function_orig();
-				}
-			});
-		},
+                self.timers['scrolling'] = setTimeout((function() {
+                    self.scrolling = false;
+                }), 1250);
 
-		showByURL: function() {
-			var id = this.getUrlVar();
+                if (scroll_function_orig) {
+                    scroll_function_orig();
+                }
+            });
+        },
 
-			if (id == '') {
-				return;
-			}
+        showByURL: function() {
+            var id = this.getUrlVar();
 
-			this.showByID(id);
-		},
+            if (id == '') {
+                return;
+            }
 
-		showByHash: function() {
-			if (this.hash_id == '') {
-				return;
-			}
+            this.showByID(id);
+        },
 
-			var id = this.hash_id;
+        showByHash: function() {
+            if (this.hash_id == '') {
+                return;
+            }
 
-			if (id == '' || id.indexOf("&") != -1 || id.indexOf("=") != -1) {
-				return;
-			}
+            var id = this.hash_id;
 
-			// check if element is a tab -> leave to Tabs
-			if ($('a.rl_tabs-toggle[data-id="' + id + '"]').length) {
-				return;
-			}
+            if (id == '' || id.indexOf("&") != -1 || id.indexOf("=") != -1) {
+                return;
+            }
 
-			// check if element is not a slider
-			if ( ! $('a#rl_sliders-scrollto_' + id).length) {
-				this.showByHashAnchor(id);
-				return;
-			}
+            // check if element is a tab -> leave to Tabs
+            if ($(`a.rl_tabs-toggle[data-id="${id}"]`).length) {
+                return;
+            }
 
-			// hash is a slider
-			if ( ! this.options.use_hash) {
-				return;
-			}
+            // check if element is not a slider
+            if ( ! $(`a#rl_sliders-scrollto_${id}`).length) {
+                this.showByHashAnchor(id);
+                return;
+            }
 
-			if ( ! this.options.urlscroll) {
-				// Prevent scrolling to anchor
-				$('html,body').animate({scrollTop: 0});
-			}
+            // hash is a slider
+            if ( ! this.options.use_hash) {
+                return;
+            }
 
-			this.showByID(id);
-		},
+            if ( ! this.options.urlscroll) {
+                // Prevent scrolling to anchor
+                $('html,body').animate({scrollTop: 0});
+            }
 
-		showByHashAnchor: function(id) {
-			if (id == '') {
-				return;
-			}
+            this.showByID(id);
+        },
 
-			var $anchor = $('[id="' + id + '"],a[name="' + id + '"],a#anchor-' + id);
+        showByHashAnchor: function(id) {
+            if (id == '') {
+                return;
+            }
 
-			if ( ! $anchor.length) {
-				return;
-			}
+            var $anchor = $(`[id="${id}"],a[name="${id}"],a#anchor-${id}`);
 
-			$anchor = $anchor.first();
+            if ( ! $anchor.length) {
+                return;
+            }
 
-			// Check if anchor has a parent slider
-			if ( ! $anchor.closest('.rl_sliders').length) {
-				return;
-			}
+            $anchor = $anchor.first();
 
-			var $slider = $anchor.closest('.rl_sliders-body').first();
+            // Check if anchor has a parent slider
+            if ( ! $anchor.closest('.rl_sliders').length) {
+                return;
+            }
 
-			this.setScrollToElement($anchor);
+            var $slider = $anchor.closest('.rl_sliders-body').first();
 
-			this.openParents($slider.attr('id'));
-		},
+            this.setScrollToElement($anchor);
 
-		showByID: function(id, scroll) {
-			var $el = $('a#rl_sliders-scrollto_' + id);
+            this.openParents($slider.attr('id'));
+        },
 
-			if ( ! $el.length) {
-				return;
-			}
+        showByID: function(id, scroll) {
+            var $el = $(`a#rl_sliders-scrollto_${id}`);
 
+            if ( ! $el.length) {
+                return;
+            }
 
-			this.openParents(id);
 
-		},
+            this.openParents(id);
 
+        },
 
-		setScrollToElement: function($el) {
-			if ( ! $el.length) {
-				return;
-			}
 
-			this.scroll_to = $el;
-		},
+        setScrollToElement: function($el) {
+            if ( ! $el.length) {
+                return;
+            }
 
-		openParents: function(id) {
-			var $el = this.getElement(id);
+            this.scroll_to = $el;
+        },
 
-			if ( ! $el.length) {
-				return;
-			}
+        openParents: function(id) {
+            var $el = this.getElement(id);
 
-			var parents = [];
+            if ( ! $el.length) {
+                return;
+            }
 
-			var parent = this.getElementArray($el);
-			while (parent) {
-				parents[parents.length] = parent;
+            var parents = [];
 
-				parent = this.getParent(parent.el);
-			}
+            var parent = this.getElementArray($el);
+            while (parent) {
+                parents[parents.length] = parent;
 
-			if ( ! parents.length) {
-				return false;
-			}
+                parent = this.getParent(parent.el);
+            }
 
-			this.stepThroughParents(parents, null);
-		},
+            if ( ! parents.length) {
+                return false;
+            }
 
-		stepThroughParents: function(parents, parent) {
-			var self = this;
+            this.stepThroughParents(parents, null);
+        },
 
-			if ( ! parents.length && parent) {
-				self.show(parent.id);
-				return;
-			}
+        stepThroughParents: function(parents, parent) {
+            var self = this;
 
-			parent = parents.pop();
+            if ( ! parents.length && parent) {
+                self.show(parent.id);
+                return;
+            }
 
-			if (parent.el.hasClass('in') || parent.el.parent().hasClass('active')) {
-				self.stepThroughParents(parents, parent);
-				return;
-			}
+            parent = parents.pop();
 
-			switch (parent.type) {
-				case 'tab':
-					if (typeof RegularLabsTabs === 'undefined') {
-						self.stepThroughParents(parents, parent);
-						break;
-					}
+            if (parent.el.hasClass('in') || parent.el.parent().hasClass('active')) {
+                self.stepThroughParents(parents, parent);
+                return;
+            }
 
-					parent.el.one('shown.bs.tab', function() {
-						self.stepThroughParents(parents, parent);
-					});
+            switch (parent.type) {
+                case 'tab':
+                    if (typeof RegularLabsTabs === 'undefined') {
+                        self.stepThroughParents(parents, parent);
+                        break;
+                    }
 
-					RegularLabsTabs.show(parent.id);
-					break;
+                    parent.el.one('shown.bs.tab', function() {
+                        self.stepThroughParents(parents, parent);
+                    });
 
-				case 'slider':
-					parent.el.one('shown.bs.collapse', function() {
-						self.stepThroughParents(parents, parent);
-					});
+                    RegularLabsTabs.show(parent.id);
+                    break;
 
-					self.show(parent.id);
-					break;
-			}
-		},
+                case 'slider':
+                    parent.el.one('shown.bs.collapse', function() {
+                        self.stepThroughParents(parents, parent);
+                    });
 
-		getParent: function($el) {
-			if ( ! $el) {
-				return false;
-			}
+                    self.show(parent.id);
+                    break;
+            }
+        },
 
-			var $parent = $el.parent().closest('.rl_tabs-pane, .rl_sliders-body');
+        getParent: function($el) {
+            if ( ! $el) {
+                return false;
+            }
 
-			if ( ! $parent.length) {
-				return false;
-			}
+            var $parent = $el.parent().closest('.rl_tabs-pane, .rl_sliders-body');
 
-			return this.getElementArray($parent);
-		},
+            if ( ! $parent.length) {
+                return false;
+            }
 
-		getElementArray: function($el) {
-			var id   = $el.attr('data-toggle') ? $el.attr('data-id') : $el.attr('id');
-			var type = ($el.hasClass('rl_tabs-pane') || $el.hasClass('rl_tabs-toggle')) ? 'tab' : 'slider';
+            return this.getElementArray($parent);
+        },
 
-			return {
-				'type': type,
-				'id'  : id,
-				'el'  : type == 'tab' ? this.getTabElement(id) : this.getSliderElement(id)
-			};
-		},
+        getElementArray: function($el) {
+            var id   = $el.attr('data-toggle') ? $el.attr('data-id') : $el.attr('id');
+            var type = ($el.hasClass('rl_tabs-pane') || $el.hasClass('rl_tabs-toggle')) ? 'tab' : 'slider';
 
-		initActiveClasses: function() {
-			$('.rl_sliders-body').on('show.bs.collapse', function(e) {
-				if ( ! $(e.target).hasClass('rl_sliders-body')) {
-					return;
-				}
+            return {
+                'type': type,
+                'id'  : id,
+                'el'  : type == 'tab' ? this.getTabElement(id) : this.getSliderElement(id)
+            };
+        },
 
-				$(this).parent().addClass('active');
-				$('a[data-toggle="collapse"][data-id="' + this.id + '"]').removeClass('collapsed');
-				e.stopPropagation();
-			});
-			$('.rl_sliders-body').on('hidden hidden.bs.collapse', function(e) {
-				if ( ! $(e.target).hasClass('rl_sliders-body')) {
-					return;
-				}
+        initActiveClasses: function() {
+            $('.rl_sliders-body').on('show.bs.collapse', function(e) {
+                if ( ! $(e.target).hasClass('rl_sliders-body')) {
+                    return;
+                }
 
-				$(this).parent().removeClass('active');
-				$('a[data-toggle="collapse"][data-id="' + this.id + '"]').addClass('collapsed');
-				e.stopPropagation();
-			});
-		},
+                $(this).parent().addClass('active');
+                $(`a[data-toggle="collapse"][data-id="${this.id}"]`).removeClass('collapsed');
+                e.stopPropagation();
+            });
+            $('.rl_sliders-body').on('hidden hidden.bs.collapse', function(e) {
+                if ( ! $(e.target).hasClass('rl_sliders-body')) {
+                    return;
+                }
 
-		updateActiveClassesOnSliderLinks: function(active_el) {
-			active_el.parent().parent().find('.rl_sliders-toggle').each(function($i, el) {
-				$('a.rl_sliders-link[data-id="' + $(el).attr('data-id') + '"]').each(function($i, el) {
-					var $link = $(el);
+                $(this).parent().removeClass('active');
+                $(`a[data-toggle="collapse"][data-id="${this.id}"]`).addClass('collapsed');
+                e.stopPropagation();
+            });
+        },
 
-					if ($link.attr('data-toggle') || $link.hasClass('rl_tabs-toggle-sm') || $link.hasClass('rl_sliders-toggle-sm')) {
-						return;
-					}
+        updateActiveClassesOnSliderLinks: function(active_el) {
+            active_el.parent().parent().find('.rl_sliders-toggle').each(function($i, el) {
+                $(`a.rl_sliders-link[data-id="${$(el).attr('data-id')}"]`).each(function($i, el) {
+                    var $link = $(el);
 
-					if ($link.attr('data-id') !== active_el.attr('id')) {
-						$link.removeClass('active');
-						return;
-					}
+                    if ($link.attr('data-toggle') || $link.hasClass('rl_tabs-toggle-sm') || $link.hasClass('rl_sliders-toggle-sm')) {
+                        return;
+                    }
 
-					$link.addClass('active');
-				});
-			});
-		},
+                    if ($link.attr('data-id') !== active_el.attr('id')) {
+                        $link.removeClass('active');
+                        return;
+                    }
 
-		initHashLinkList: function() {
-			var self = this;
+                    $link.addClass('active');
+                });
+            });
+        },
 
-			$(
-				'a[href^="#"],'
-				+ 'a[href^="' + this.current_url + '#"],'
-				+ 'a[href^="' + this.current_path + '#"],'
-				+ 'a[href^="/' + this.current_path + '#"],'
-				+ 'area[href^="#"],'
-				+ 'area[href^="' + this.current_url + '#"]'
-				+ 'area[href^="' + this.current_path + '#"]'
-				+ 'area[href^="/' + this.current_path + '#"]'
-			).each(function($i, el) {
-				self.initHashLink(el);
-			});
-		},
+        initHashLinkList: function() {
+            var self = this;
 
-		initHashLink: function(el) {
-			var self  = this;
-			var $link = $(el);
+            $(
+                'a[href^="#"],'
+                + 'a[href^="' + this.current_url + '#"],'
+                + 'a[href^="' + this.current_path + '#"],'
+                + 'a[href^="/' + this.current_path + '#"],'
+                + 'area[href^="#"],'
+                + 'area[href^="' + this.current_url + '#"]'
+                + 'area[href^="' + this.current_path + '#"]'
+                + 'area[href^="/' + this.current_path + '#"]'
+            ).each(function($i, el) {
+                self.initHashLink(el);
+            });
+        },
 
-			// link is a tab or slider or list link, so ignore
-			if ($link.attr('data-toggle')
-				|| $link.hasClass('rl_sliders-toggle')
-				|| $link.hasClass('rl_tabs-toggle')
-				|| $link.hasClass('rl_tabs-toggle-sm')
-				|| $link.hasClass('rl_tabs-link')
-			) {
-				return;
-			}
+        initHashLink: function(el) {
+            var self  = this;
+            var $link = $(el);
 
-			var id = $link.attr('href').substr($link.attr('href').indexOf('#') + 1);
+            // link is a tab or slider or list link, so ignore
+            if ($link.attr('data-toggle')
+                || $link.hasClass('rl_sliders-toggle')
+                || $link.hasClass('rl_tabs-toggle')
+                || $link.hasClass('rl_tabs-toggle-sm')
+                || $link.hasClass('rl_tabs-link')
+            ) {
+                return;
+            }
 
-			// clean up weird hash values
-			id = id.replace(/^\//, '');
-			id = id.replace(/^(.*?) .*$/, '$1');
+            var id = $link.attr('href').substr($link.attr('href').indexOf('#') + 1);
 
-			// No id found
-			if (id == '') {
-				return;
-			}
+            // clean up weird hash values
+            id = id.replace(/^\//, '');
+            id = id.replace(/^(.*?) .*$/, '$1');
 
-			var scroll = false;
+            // No id found
+            if (id == '') {
+                return;
+            }
 
-			var is_slider = true;
-			var $anchor   = $('a[data-toggle="collapse"][data-id="' + id + '"]');
+            var scroll = false;
+
+            var is_slider = true;
+            var $anchor   = $(`a[data-toggle="collapse"][data-id="${id}"]`);
 
-			if ( ! $anchor.length) {
-				$anchor = $('[id="' + id + '"],a[name="' + id + '"]');
+            if ( ! $anchor.length) {
+                $anchor = $(`[id="${id}"],a[name="${id}"]`);
 
-				// No accompanying link found
-				if ( ! $anchor.length) {
-					return;
-				}
-
-				scroll    = true;
-				is_slider = false;
-			}
-
-			$anchor = $anchor.first();
-
-			// Check if anchor has a parent slider
-			if ( ! $anchor.closest('.rl_sliders').length) {
-				return;
-			}
-
-			var $slider   = $anchor.closest('.rl_sliders-group').find('.rl_sliders-body').first();
-			var slider_id = $slider.attr('id');
-
-			// Check if link is inside the same slider
-			if ($link.closest('.rl_sliders').length) {
-				if ($link.closest('.rl_sliders-body').first().attr('id') == slider_id) {
-					return;
-				}
-			}
-
-			$link.click(function(e) {
-				// Open parent slider and parents
-				e.preventDefault();
-
-
-				self.showByID(slider_id);
-				e.stopPropagation();
-			});
-		},
-
-		initHashHandling: function() {
-			if ( ! window.history.replaceState) {
-				return;
-			}
-
-			var self = this;
-
-			$('.rl_sliders-body').on('shown.bs.collapse', function(e) {
-				history.replaceState({}, '', self.current_url + '#' + this.id);
-				e.stopPropagation();
-			});
-		},
-
-		initClickMode: function() {
-			var self = this;
-			$('body').on('click.collapse.data-api', 'a.rl_sliders-toggle', function(e) {
-				e.preventDefault();
-
-				var id  = $(this).attr('data-id');
-				var $el = self.getElement(id);
-
-				if ( ! $el.hasClass('in')) {
-					self.show(id, $(this).hasClass('rl_sliders-item-scroll'));
-				} else {
-					$el.collapse('hide');
-				}
-
-				e.stopPropagation();
-			});
-		},
-
-
-		initIframeReloading: function() {
-			$('.rl_sliders-body.in iframe').each(function() {
-				$(this).attr('reloaded', true);
-			});
-
-			$('.rl_sliders-body').on('show.bs.collapse', function(e) {
-				// Re-inintialize Google Maps on tabs show
-				if (typeof initialize == 'function') {
-					initialize();
-				}
-
-				var $el = $(this);
-
-				$el.find('iframe').each(function() {
-					if (this.src && ! $(this).attr('reloaded')) {
-						this.src += '';
-						$(this).attr('reloaded', true);
-					}
-				});
-			});
-
-			$(window).resize(function() {
-				if (typeof initialize == 'function') {
-					initialize();
-				}
-
-				$('.rl_sliders-body iframe').each(function() {
-					$(this).attr('reloaded', false);
-				});
-
-				$('.rl_sliders-body.in iframe').each(function() {
-					if (this.src) {
-						this.src += '';
-						$(this).attr('reloaded', true);
-					}
-				});
-			});
-		},
-
-		getUrlVar: function() {
-			var search = 'slider';
-			var query  = window.location.search.substring(1);
-
-			if (query.indexOf(search + '=') < 0) {
-				return '';
-			}
-
-			var vars = query.split('&');
-			for (var i = 0; i < vars.length; i++) {
-				var keyval = vars[i].split('=');
-
-				if (keyval[0] != search) {
-					continue;
-				}
-
-				return keyval[1];
-			}
-
-			return '';
-		},
-
-		getOptions: function() {
-			if (typeof rl_sliders_options !== 'undefined') {
-				return rl_sliders_options;
-			}
-
-			if (typeof Joomla === 'undefined' || typeof Joomla.getOptions === 'undefined') {
-				console.error('Joomla.getOptions not found!\nThe Joomla core.js file is not being loaded.');
-				return false;
-			}
-
-			return Joomla.getOptions('rl_sliders');
-		}
-	};
-
-	$(document).ready(function() {
-		var options = RegularLabsSliders.getOptions();
-
-		if ( ! options) {
-			return;
-		}
-
-		if (typeof options.init_timeout === 'undefined') {
-			return;
-		}
-
-		setTimeout(function() {
-			RegularLabsSliders.init(options);
-		}, options.init_timeout);
-	});
+                // No accompanying link found
+                if ( ! $anchor.length) {
+                    return;
+                }
+
+                scroll    = true;
+                is_slider = false;
+            }
+
+            $anchor = $anchor.first();
+
+            // Check if anchor has a parent slider
+            if ( ! $anchor.closest('.rl_sliders').length) {
+                return;
+            }
+
+            var $slider   = $anchor.closest('.rl_sliders-group').find('.rl_sliders-body').first();
+            var slider_id = $slider.attr('id');
+
+            // Check if link is inside the same slider
+            if ($link.closest('.rl_sliders').length) {
+                if ($link.closest('.rl_sliders-body').first().attr('id') == slider_id) {
+                    return;
+                }
+            }
+
+            $link.click(function(e) {
+                // Open parent slider and parents
+                e.preventDefault();
+
+
+                self.showByID(slider_id);
+                e.stopPropagation();
+            });
+        },
+
+        initHashHandling: function() {
+            if ( ! window.history.replaceState) {
+                return;
+            }
+
+            var self = this;
+
+            $('.rl_sliders-body').on('shown.bs.collapse', function(e) {
+                history.replaceState({}, '', `${self.current_url}#${this.id}`);
+                e.stopPropagation();
+            });
+        },
+
+        initClickMode: function() {
+            var self = this;
+            $('body').on('click.collapse.data-api', 'a.rl_sliders-toggle', function(e) {
+                e.preventDefault();
+
+                var id  = $(this).attr('data-id');
+                var $el = self.getElement(id);
+
+                if ( ! $el.hasClass('in')) {
+                    self.show(id, $(this).hasClass('rl_sliders-item-scroll'));
+                } else {
+                    $el.collapse('hide');
+                }
+
+                e.stopPropagation();
+            });
+        },
+
+
+        initIframeReloading: function() {
+            $('.rl_sliders-body.in iframe').each(function() {
+                $(this).attr('reloaded', true);
+            });
+
+            $('.rl_sliders-body').on('show.bs.collapse', function(e) {
+                // Re-inintialize Google Maps on tabs show
+                if (typeof initialize == 'function') {
+                    initialize();
+                }
+
+                var $el = $(this);
+
+                $el.find('iframe').each(function() {
+                    if (this.src && ! $(this).attr('reloaded')) {
+                        this.src += '';
+                        $(this).attr('reloaded', true);
+                    }
+                });
+            });
+
+            $(window).resize(function() {
+                if (typeof initialize == 'function') {
+                    initialize();
+                }
+
+                $('.rl_sliders-body iframe').each(function() {
+                    $(this).attr('reloaded', false);
+                });
+
+                $('.rl_sliders-body.in iframe').each(function() {
+                    if (this.src) {
+                        this.src += '';
+                        $(this).attr('reloaded', true);
+                    }
+                });
+            });
+        },
+
+        getUrlVar: function() {
+            var search = 'slider';
+            var query  = window.location.search.substring(1);
+
+            if (query.indexOf(`${search}=`) < 0) {
+                return '';
+            }
+
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var keyval = vars[i].split('=');
+
+                if (keyval[0] != search) {
+                    continue;
+                }
+
+                return keyval[1];
+            }
+
+            return '';
+        },
+
+        getOptions: function() {
+            if (typeof rl_sliders_options !== 'undefined') {
+                return rl_sliders_options;
+            }
+
+            if (typeof Joomla === 'undefined' || typeof Joomla.getOptions === 'undefined') {
+                console.error('Joomla.getOptions not found!\nThe Joomla core.js file is not being loaded.');
+                return false;
+            }
+
+            return Joomla.getOptions('rl_sliders');
+        }
+    };
+
+    $(document).ready(function() {
+        var options = RegularLabsSliders.getOptions();
+
+        if ( ! options) {
+            return;
+        }
+
+        if (typeof options.init_timeout === 'undefined') {
+            return;
+        }
+
+        setTimeout(function() {
+            RegularLabsSliders.init(options);
+        }, options.init_timeout);
+    });
 })(jQuery);
 
 /* For custom use */
@@ -643,64 +645,64 @@ var RegularLabsSliders = null;
 // If no id is given, all sliders will be opened
 // If the id of a single slider is given, only that slider will be opened
 function openSliders(id) {
-	var parent   = findSliderSetBy(id);
-	var elements = parent.find('.rl_sliders-body:not(.in)');
+    var parent   = findSliderSetBy(id);
+    var elements = parent.find('.rl_sliders-body:not(.in)');
 
-	if ( ! elements.length) {
-		return;
-	}
+    if ( ! elements.length) {
+        return;
+    }
 
-	elements.collapse('show');
+    elements.collapse('show');
 }
 
 // Alias for openSliders
 function openAllSliders(id) {
-	openSliders(id);
+    openSliders(id);
 }
 
 // Alias for openSliders
 function openSlider(id) {
-	openSliders(id);
+    openSliders(id);
 }
 
 // Close the sliders inside the given element (by id)
 // If no id is given, all sliders will be closed
 // If the id of a single slider is given, only that slider will be closed
 function closeSliders(id) {
-	var parent   = findSliderSetBy(id);
-	var elements = parent.find('.rl_sliders-body.in');
+    var parent   = findSliderSetBy(id);
+    var elements = parent.find('.rl_sliders-body.in');
 
-	if ( ! elements.length) {
-		return;
-	}
+    if ( ! elements.length) {
+        return;
+    }
 
-	elements.collapse('hide');
+    elements.collapse('hide');
 }
 
 // Alias for closeSliders
 function closeAllSliders(id) {
-	closeSliders(id);
+    closeSliders(id);
 }
 
 // Alias for closeSliders
 function closeSlider(id) {
-	closeSliders(id);
+    closeSliders(id);
 }
 
 function findSliderSetBy(id) {
-	// Try to find a slider with this id and return the children sliders of its parent
-	var el = jQuery('#' + id + '.rl_sliders-body');
+    // Try to find a slider with this id and return the children sliders of its parent
+    var el = jQuery(`#${id}.rl_sliders-body`);
 
-	if (el.length) {
-		return el.closest('.rl_sliders');
-	}
+    if (el.length) {
+        return el.closest('.rl_sliders');
+    }
 
-	// Try to find another element with this id and close its children sliders
-	el = jQuery('#' + id);
+    // Try to find another element with this id and close its children sliders
+    el = jQuery(`#${id}`);
 
-	if (el.length) {
-		return el;
-	}
+    if (el.length) {
+        return el;
+    }
 
-	return jQuery('body');
+    return jQuery('body');
 }

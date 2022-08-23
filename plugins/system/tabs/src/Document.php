@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         8.2.0
+ * @version         8.2.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,55 +19,55 @@ use RegularLabs\Library\Document as RL_Document;
 
 class Document
 {
-	public static function loadStylesAndScripts()
-	{
-		// do not load scripts/styles on feeds or print pages
-		if (RL_Document::isFeed() || JFactory::getApplication()->input->getInt('print', 0))
-		{
-			return;
-		}
+    public static function loadStylesAndScripts()
+    {
+        // do not load scripts/styles on feeds or print pages
+        if (RL_Document::isFeed() || JFactory::getApplication()->input->getInt('print', 0))
+        {
+            return;
+        }
 
-		$params = Params::get();
+        $params = Params::get();
 
-		if ( ! $params->load_bootstrap_framework && $params->load_jquery)
-		{
-			JHtml::_('jquery.framework');
-		}
+        if ( ! $params->load_bootstrap_framework && $params->load_jquery)
+        {
+            JHtml::_('jquery.framework');
+        }
 
-		if ($params->load_bootstrap_framework)
-		{
-			JHtml::_('bootstrap.framework');
-		}
+        if ($params->load_bootstrap_framework)
+        {
+            JHtml::_('bootstrap.framework');
+        }
 
 
-		$options = [
-			'use_hash'                => (int) $params->use_hash,
-			'reload_iframes'          => (int) $params->reload_iframes,
-			'init_timeout'            => (int) $params->init_timeout,
-			'urlscroll'               => 0,
-		];
+        $options = [
+            'use_hash'                => (int) $params->use_hash,
+            'reload_iframes'          => (int) $params->reload_iframes,
+            'init_timeout'            => (int) $params->init_timeout,
+            'urlscroll'               => 0,
+        ];
 
-		RL_Document::scriptOptions($options, 'Tabs');
+        RL_Document::scriptOptions($options, 'Tabs');
 
-		RL_Document::script('tabs/script.min.js', ($params->media_versioning ? '8.2.0' : ''), [], [], $params->load_jquery);
+        RL_Document::script('tabs/script.min.js', ($params->media_versioning ? '8.2.4' : ''), [], [], $params->load_jquery);
 
-		if ($params->load_stylesheet)
-		{
-			RL_Document::stylesheet('tabs/style.min.css', ($params->media_versioning ? '8.2.0' : ''));
-		}
+        if ($params->load_stylesheet)
+        {
+            RL_Document::stylesheet('tabs/style.min.css', ($params->media_versioning ? '8.2.4' : ''));
+        }
 
-	}
+    }
 
-	public static function removeHeadStuff(&$html)
-	{
-		// Don't remove if tabs class is found
-		if (strpos($html, 'class="rl_tabs-tab') !== false)
-		{
-			return;
-		}
+    public static function removeHeadStuff(&$html)
+    {
+        // Don't remove if tabs class is found
+        if (strpos($html, 'class="rl_tabs-tab') !== false)
+        {
+            return;
+        }
 
-		// remove style and script if no items are found
-		RL_Document::removeScriptsStyles($html, 'Tabs');
-		RL_Document::removeScriptsOptions($html, 'Tabs');
-	}
+        // remove style and script if no items are found
+        RL_Document::removeScriptsStyles($html, 'Tabs');
+        RL_Document::removeScriptsOptions($html, 'Tabs');
+    }
 }

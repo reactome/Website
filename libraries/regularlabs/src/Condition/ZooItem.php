@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.6.16896
+ * @version         22.8.15401
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,32 +19,32 @@ defined('_JEXEC') or die;
  */
 class ZooItem extends Zoo
 {
-	public function pass()
-	{
-		if ( ! $this->request->id || $this->request->option != 'com_zoo')
-		{
-			return $this->_(false);
-		}
+    public function pass()
+    {
+        if ( ! $this->request->id || $this->request->option != 'com_zoo')
+        {
+            return $this->_(false);
+        }
 
-		if ($this->request->view != 'item')
-		{
-			return $this->_(false);
-		}
+        if ($this->request->view != 'item')
+        {
+            return $this->_(false);
+        }
 
-		$pass = false;
+        $pass = false;
 
-		// Pass Article Id
-		if ( ! $this->passItemByType($pass, 'ContentId'))
-		{
-			return $this->_(false);
-		}
+        // Pass Article Id
+        if ( ! $this->passItemByType($pass, 'ContentId'))
+        {
+            return $this->_(false);
+        }
 
-		// Pass Author
-		if ( ! $this->passItemByType($pass, 'Author'))
-		{
-			return $this->_(false);
-		}
+        // Pass Author
+        if ( ! $this->passItemByType($pass, 'Author'))
+        {
+            return $this->_(false);
+        }
 
-		return $this->_($pass);
-	}
+        return $this->_($pass);
+    }
 }
