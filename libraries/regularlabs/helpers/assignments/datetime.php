@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -96,6 +104,7 @@ class RLAssignmentsDateTime extends RLAssignment
 		return ($this->assignment == 'include');
 	}
 
+<<<<<<< HEAD
 	private function getNow()
 	{
 		return strtotime($this->date->format('Y-m-d H:i:s', true));
@@ -118,6 +127,13 @@ class RLAssignmentsDateTime extends RLAssignment
 		}
 
 		return $this->dates[$id];
+=======
+	public function passDays()
+	{
+		$day = $this->date->format('N', true); // 1 (for Monday) though 7 (for Sunday )
+
+		return $this->passSimple($day);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	private function getTimeZone()
@@ -132,11 +148,11 @@ class RLAssignmentsDateTime extends RLAssignment
 		return $this->timezone;
 	}
 
-	public function passDays()
+	public function passSeasons()
 	{
-		$day = $this->date->format('N', true); // 1 (for Monday) though 7 (for Sunday )
+		$season = self::getSeason($this->date, $this->params->hemisphere);
 
-		return $this->passSimple($day);
+		return $this->passSimple($season);
 	}
 
 	public function passMonths()
@@ -151,6 +167,30 @@ class RLAssignmentsDateTime extends RLAssignment
 		$season = self::getSeason($this->date, $this->params->hemisphere);
 
 		return $this->passSimple($season);
+	}
+
+	private function getNow()
+	{
+		return strtotime($this->date->format('Y-m-d H:i:s', true));
+	}
+
+	private function getDate($date = '')
+	{
+		$id = 'date_' . $date;
+
+		if (isset($this->dates[$id]))
+		{
+			return $this->dates[$id];
+		}
+
+		$this->dates[$id] = JFactory::getDate($date);
+
+		if (empty($this->params->ignore_time_zone))
+		{
+			$this->dates[$id]->setTimeZone($this->getTimeZone());
+		}
+
+		return $this->dates[$id];
 	}
 
 	private function getSeason(&$d, $hemisphere = 'northern')
@@ -244,6 +284,7 @@ class RLAssignmentsDateTime extends RLAssignment
 		return 0;
 	}
 
+<<<<<<< HEAD
 	public function passTime()
 	{
 		$now  = $this->getNow();
@@ -269,6 +310,11 @@ class RLAssignmentsDateTime extends RLAssignment
 		// - after publish up
 		// - AND before publish down
 		if ($now >= $up && $now < $down)
+=======
+	private function getTimeZone()
+	{
+		if ( ! is_null($this->timezone))
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			return $this->pass(true);
 		}

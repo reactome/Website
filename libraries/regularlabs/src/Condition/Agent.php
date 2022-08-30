@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -29,6 +37,7 @@ abstract class Agent extends Condition
 
 	/**
 	 * isDesktop
+<<<<<<< HEAD
 	 */
 	public function isDesktop()
 	{
@@ -68,10 +77,12 @@ abstract class Agent extends Condition
 
 	/**
 	 * isPhone
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 */
-	public function isPhone()
+	public function isDesktop()
 	{
-		return $this->isMobile();
+		return $this->getDevice() == 'desktop';
 	}
 
 	/**
@@ -83,6 +94,16 @@ abstract class Agent extends Condition
 	}
 
 	/**
+	 * isPhone
+	 */
+	public function isPhone()
+	{
+		return $this->isMobile();
+	}
+
+	/**
+<<<<<<< HEAD
+=======
 	 * isTablet
 	 */
 	public function isTablet()
@@ -91,6 +112,7 @@ abstract class Agent extends Condition
 	}
 
 	/**
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 * passBrowser
 	 */
 	public function passBrowser($browser = '')
@@ -147,5 +169,36 @@ abstract class Agent extends Condition
 		$this->agent = $agent;
 
 		return $this->agent;
+	}
+
+	/**
+	 * setDevice
+	 */
+	private function getDevice()
+	{
+		if ( ! is_null($this->device))
+		{
+			return $this->device;
+		}
+
+		$detect = new MobileDetect;
+
+		$this->is_mobile = $detect->isMobile();
+
+		switch (true)
+		{
+			case($detect->isTablet()):
+				$this->device = 'tablet';
+				break;
+
+			case ($detect->isMobile()):
+				$this->device = 'mobile';
+				break;
+
+			default:
+				$this->device = 'desktop';
+		}
+
+		return $this->device;
 	}
 }

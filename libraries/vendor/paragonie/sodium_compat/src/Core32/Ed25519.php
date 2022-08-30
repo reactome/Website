@@ -207,7 +207,10 @@ abstract class ParagonIE_Sodium_Core32_Ed25519 extends ParagonIE_Sodium_Core32_C
      * @return string
      * @throws SodiumException
      * @throws TypeError
+<<<<<<< HEAD
      * @psalm-suppress PossiblyInvalidArgument
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
      */
     public static function sign_detached($message, $sk)
     {
@@ -279,7 +282,11 @@ abstract class ParagonIE_Sodium_Core32_Ed25519 extends ParagonIE_Sodium_Core32_C
         if (self::strlen($sig) < 64) {
             throw new SodiumException('Signature is too short');
         }
+<<<<<<< HEAD
         if ((self::chrToInt($sig[63]) & 240) && self::check_S_lt_L(self::substr($sig, 32, 32))) {
+=======
+        if (self::check_S_lt_L(self::substr($sig, 32, 32))) {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             throw new SodiumException('S < L - Invalid signature');
         }
         if (self::small_order($sig)) {
@@ -465,8 +472,13 @@ abstract class ParagonIE_Sodium_Core32_Ed25519 extends ParagonIE_Sodium_Core32_C
                 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
             )
         );
+<<<<<<< HEAD
         /** @var array<int, array<int, int>> $blocklist */
         $countBlocklist = count($blocklist);
+=======
+        /** @var array<int, array<int, int>> $blacklist */
+        $countBlacklist = count($blacklist);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         for ($i = 0; $i < $countBlocklist; ++$i) {
             $c = 0;

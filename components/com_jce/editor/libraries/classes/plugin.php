@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -194,7 +198,11 @@ class WFEditorPlugin extends JObject
         $document = WFDocument::getInstance();
 
         // ini language
+<<<<<<< HEAD
         $document->addScript(array(JURI::base(true) . '/index.php?option=com_jce&' . $document->getQueryString(
+=======
+        $document->addScript(array('index.php?option=com_jce&' . $document->getQueryString(
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             array('task' => 'plugin.loadlanguages', 'lang' => WFLanguage::getCode())
         )), 'joomla');
 
@@ -218,7 +226,10 @@ class WFEditorPlugin extends JObject
             'plugins' => array('core' => array($name), 'external' => array()),
             'sections' => array('dlg', $name . '_dlg', 'colorpicker'),
             'mode' => 'plugin',
+<<<<<<< HEAD
             'language' => WFLanguage::getTag()
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         ));
 
         $data = $parser->load();

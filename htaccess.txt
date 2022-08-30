@@ -1,6 +1,10 @@
 ##
 # @package    Joomla
+<<<<<<< HEAD
 # @copyright  (C) 2005 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+# @copyright  Copyright (C) 2005 - 2020 Open Source Matters. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 # @license    GNU General Public License version 2 or later; see LICENSE.txt
 ##
 
@@ -24,6 +28,16 @@
 ## Suppress mime type detection in browsers for unknown types
 <IfModule mod_headers.c>
 Header always set X-Content-Type-Options "nosniff"
+<<<<<<< HEAD
+=======
+##
+# Disable Federated Learning of Cohorts (FLoC)
+# If you uncomment the below directive you have to allow this technology in the 
+# Global Configuration of Joomla. Read more about this in the Post-Installation 
+# message in the backend.
+##
+# Header always set Permissions-Policy "interest-cohort=()"
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 </IfModule>
 
 ## Can be commented out if causes errors, see notes above.

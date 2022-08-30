@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -58,21 +66,13 @@ class Extension
 		return true;
 	}
 
-	/**
-	 * Check if the given extension is installed
-	 *
-	 * @param string $extension
-	 * @param string $type
-	 * @param string $folder
-	 *
-	 * @return bool
-	 */
-	public static function isInstalled($extension, $type = 'component', $folder = 'system')
+	public static function disable($alias, $type = 'plugin', $folder = 'system')
 	{
-		$extension = strtolower($extension);
+		$element = self::getElementByAlias($alias);
 
 		switch ($type)
 		{
+<<<<<<< HEAD
 			case 'component':
 				if (file_exists(JPATH_ADMINISTRATOR . '/components/com_' . $extension . '/' . $extension . '.php')
 					|| file_exists(JPATH_ADMINISTRATOR . '/components/com_' . $extension . '/admin.' . $extension . '.php')
@@ -84,17 +84,21 @@ class Extension
 						// Only Cookie Confirm 2.0.0.rc1 and above is supported, because
 						// previous versions don't have isCookiesAllowed()
 						require_once JPATH_ADMINISTRATOR . '/components/com_cookieconfirm/version.php';
+=======
+			case 'module':
+				$element = 'mod_' . $element;
+				break;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
-						if (version_compare(COOKIECONFIRM_VERSION, '2.2.0.rc1', '<'))
-						{
-							return false;
-						}
-					}
-
-					return true;
-				}
+			case 'component':
+				$element = 'com_' . $element;
 				break;
 
+			default:
+				break;
+		}
+
+<<<<<<< HEAD
 			case 'plugin':
 				return file_exists(JPATH_PLUGINS . '/' . $folder . '/' . $extension . '/' . $extension . '.php');
 
@@ -111,6 +115,23 @@ class Extension
 			default:
 				return false;
 		}
+=======
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true)
+			->update($db->quoteName('#__extensions'))
+			->set($db->quoteName('enabled') . ' = 0')
+			->where($db->quoteName('element') . ' = ' . $db->quote($element))
+			->where($db->quoteName('type') . ' = ' . $db->quote($type));
+
+		if ($type == 'plugin')
+		{
+			$query->where($db->quoteName('folder') . ' = ' . $db->quote($folder));
+		}
+
+		$db->setQuery($query);
+		$db->execute();
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	public static function disable($alias, $type = 'plugin', $folder = 'system')
@@ -149,6 +170,7 @@ class Extension
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Return an element name based on the given extension alias
 	 *
 	 * @param string $alias
@@ -176,6 +198,8 @@ class Extension
 	}
 
 	/**
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 * Return an alias based on the given extension name
 	 *
 	 * @param string $name
@@ -205,6 +229,7 @@ class Extension
 		}
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Return an alias and element name based on the given extension name
 	 *
@@ -219,6 +244,19 @@ class Extension
 		$element = self::getElementByAlias($alias);
 
 		return [$alias, $element];
+=======
+	public static function getById($id)
+	{
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true)
+			->select($db->quoteName(['extension_id', 'manifest_cache']))
+			->from($db->quoteName('#__extensions'))
+			->where($db->quoteName('extension_id') . ' = ' . (int) $id);
+		$db->setQuery($query);
+
+		return $db->loadObject();
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
@@ -236,6 +274,7 @@ class Extension
 			return JText::_($alias);
 		}
 
+<<<<<<< HEAD
 		// Alias has a space and/or capitals, so is already a name
 		if (strpos($alias, ' ') !== false || $alias !== strtolower($alias))
 		{
@@ -243,31 +282,103 @@ class Extension
 		}
 
 		return JText::_(self::getXMLValue('name', $alias));
+=======
+			case 'nonumberextensionmanager':
+				return 'nonumbermanager';
+
+			default:
+				return $alias;
+		}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
-	 * Return a value from an extensions main xml file based on the given key
+	 * Return the name based on the given extension alias
 	 *
-	 * @param string $key
 	 * @param string $alias
-	 * @param string $type
-	 * @param string $folder
 	 *
 	 * @return string
 	 */
+<<<<<<< HEAD
 	public static function getXMLValue($key, $alias, $type = '', $folder = '')
+=======
+	public static function getNameByAlias($alias)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	{
-		if ( ! $xml = self::getXML($alias, $type, $folder))
+		// Alias is a language string
+		if (strpos($alias, ' ') === false && strtoupper($alias) == $alias)
 		{
-			return '';
+			return JText::_($alias);
 		}
 
-		if ( ! isset($xml[$key]))
+		// Alias has a space and/or capitals, so is already a name
+		if (strpos($alias, ' ') !== false || $alias !== strtolower($alias))
 		{
-			return '';
+			return $alias;
 		}
 
+<<<<<<< HEAD
 		return $xml[$key] ?? '';
+=======
+		return JText::_(self::getXMLValue('name', $alias));
+	}
+
+	/**
+	 * Get the full path to the extension folder
+	 *
+	 * @param string $extension
+	 * @param string $basePath
+	 * @param string $check_folder
+	 *
+	 * @return string
+	 */
+	public static function getPath($extension = 'plg_system_regularlabs', $basePath = JPATH_ADMINISTRATOR, $check_folder = '')
+	{
+		$basePath = $basePath ?: JPATH_SITE;
+
+		if ( ! in_array($basePath, [JPATH_ADMINISTRATOR, JPATH_SITE]))
+		{
+			return $basePath;
+		}
+
+		$extension = str_replace('.sys', '', $extension);
+
+		switch (true)
+		{
+			case (strpos($extension, 'mod_') === 0):
+				$path = 'modules/' . $extension;
+				break;
+
+			case (strpos($extension, 'plg_') === 0):
+				[$prefix, $folder, $name] = explode('_', $extension, 3);
+				$path = 'plugins/' . $folder . '/' . $name;
+				break;
+
+			case (strpos($extension, 'com_') === 0):
+			default:
+				$path = 'components/' . $extension;
+				break;
+		}
+
+		$check_folder = $check_folder ? '/' . $check_folder : '';
+
+		if (is_dir($basePath . '/' . $path . $check_folder))
+		{
+			return $basePath . '/' . $path;
+		}
+
+		if (is_dir(JPATH_ADMINISTRATOR . '/' . $path . $check_folder))
+		{
+			return JPATH_ADMINISTRATOR . '/' . $path;
+		}
+
+		if (is_dir(JPATH_SITE . '/' . $path . $check_folder))
+		{
+			return JPATH_SITE . '/' . $path;
+		}
+
+		return $basePath;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
@@ -368,6 +479,7 @@ class Extension
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Get the full path to the extension folder
 	 *
 	 * @param string $extension
@@ -422,6 +534,30 @@ class Extension
 		}
 
 		return $basePath;
+=======
+	 * Return a value from an extensions main xml file based on the given key
+	 *
+	 * @param string $key
+	 * @param string $alias
+	 * @param string $type
+	 * @param string $folder
+	 *
+	 * @return string
+	 */
+	public static function getXMLValue($key, $alias, $type = '', $folder = '')
+	{
+		if ( ! $xml = self::getXML($alias, $type, $folder))
+		{
+			return '';
+		}
+
+		if ( ! isset($xml[$key]))
+		{
+			return '';
+		}
+
+		return $xml[$key] ?? '';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	public static function isAuthorised($require_core_auth = true)
@@ -522,6 +658,64 @@ class Extension
 		return JPluginHelper::isEnabled('system', 'regularlabs');
 	}
 
+<<<<<<< HEAD
+=======
+	/**
+	 * Check if the given extension is installed
+	 *
+	 * @param string $extension
+	 * @param string $type
+	 * @param string $folder
+	 *
+	 * @return bool
+	 */
+	public static function isInstalled($extension, $type = 'component', $folder = 'system')
+	{
+		$extension = strtolower($extension);
+
+		switch ($type)
+		{
+			case 'component':
+				if (file_exists(JPATH_ADMINISTRATOR . '/components/com_' . $extension . '/' . $extension . '.php')
+					|| file_exists(JPATH_ADMINISTRATOR . '/components/com_' . $extension . '/admin.' . $extension . '.php')
+					|| file_exists(JPATH_SITE . '/components/com_' . $extension . '/' . $extension . '.php')
+				)
+				{
+					if ($extension == 'cookieconfirm' && file_exists(JPATH_ADMINISTRATOR . '/components/com_cookieconfirm/version.php'))
+					{
+						// Only Cookie Confirm 2.0.0.rc1 and above is supported, because
+						// previous versions don't have isCookiesAllowed()
+						require_once JPATH_ADMINISTRATOR . '/components/com_cookieconfirm/version.php';
+
+						if (version_compare(COOKIECONFIRM_VERSION, '2.2.0.rc1', '<'))
+						{
+							return false;
+						}
+					}
+
+					return true;
+				}
+				break;
+
+			case 'plugin':
+				return file_exists(JPATH_PLUGINS . '/' . $folder . '/' . $extension . '/' . $extension . '.php');
+
+			case 'module':
+				return (file_exists(JPATH_ADMINISTRATOR . '/modules/mod_' . $extension . '/' . $extension . '.php')
+					|| file_exists(JPATH_ADMINISTRATOR . '/modules/mod_' . $extension . '/mod_' . $extension . '.php')
+					|| file_exists(JPATH_SITE . '/modules/mod_' . $extension . '/' . $extension . '.php')
+					|| file_exists(JPATH_SITE . '/modules/mod_' . $extension . '/mod_' . $extension . '.php')
+				);
+
+			case 'library':
+				return JFolder::exists(JPATH_LIBRARIES . '/' . $extension);
+
+			default:
+				return false;
+		}
+	}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	public static function orderPluginFirst($name, $folder = 'system')
 	{
 		$db = JFactory::getDbo();

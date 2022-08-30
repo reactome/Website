@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -39,6 +47,7 @@ class EditorButtonHelper
 		Document::style('regularlabs/style.min.css');
 	}
 
+<<<<<<< HEAD
 	public function renderPopupButton($editor_name, $width = 0, $height = 0)
 	{
 		$button = new JObject;
@@ -51,6 +60,26 @@ class EditorButtonHelper
 		$button->options = $this->getPopupOptions($width, $height);
 
 		return $button;
+=======
+	public function getButtonText()
+	{
+		$text_ini = strtoupper(str_replace(' ', '_', $this->params->button_text));
+		$text     = JText::_($text_ini);
+
+		if ($text == $text_ini)
+		{
+			$text = JText::_($this->params->button_text);
+		}
+
+		return trim($text);
+	}
+
+	public function getIcon($icon = '')
+	{
+		$icon = $icon ?: $this->_name;
+
+		return 'reglab icon-' . $icon;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	public function getPopupLink($editor_name)
@@ -96,5 +125,19 @@ class EditorButtonHelper
 			. 'y:' . $height
 			. '}'
 			. '}';
+	}
+
+	public function renderPopupButton($editor_name, $width = 0, $height = 0)
+	{
+		$button = new JObject;
+
+		$button->modal   = true;
+		$button->class   = 'btn rl_button_' . $this->_name;
+		$button->link    = $this->getPopupLink($editor_name);
+		$button->text    = $this->getButtonText();
+		$button->name    = $this->getIcon();
+		$button->options = $this->getPopupOptions($width, $height);
+
+		return $button;
 	}
 }

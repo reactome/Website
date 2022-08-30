@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD:components/com_jce/editor/tiny_mce/plugins/clipboard/config.php
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:components/com_jce/editor/tiny_mce/plugins/clipboard/classes/config.php
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -40,8 +44,11 @@ class WFClipboardPluginConfig
         $settings['clipboard_paste_keep_tags'] = $wf->getParam('clipboard.paste_keep_tags', '', '');
         $settings['clipboard_paste_filter'] = $wf->getParam('clipboard.paste_filter', '', '');
 
+<<<<<<< HEAD:components/com_jce/editor/tiny_mce/plugins/clipboard/config.php
         $settings['clipboard_paste_data_images'] = $wf->getParam('clipboard.paste_data_images', 0, 0, 'boolean');
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:components/com_jce/editor/tiny_mce/plugins/clipboard/classes/config.php
         // clean to remove duplicate items and empty values
         foreach(['clipboard_paste_retain_style_properties', 'clipboard_paste_remove_style_properties', 'clipboard_paste_remove_attributes', 'clipboard_paste_remove_tags', 'clipboard_paste_keep_tags'] as $key) {
             $value = $settings[$key];

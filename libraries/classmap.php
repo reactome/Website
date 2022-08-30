@@ -2,7 +2,11 @@
 /**
  * @package    Joomla.Libraries
  *
+<<<<<<< HEAD
  * @copyright  (C) 2014 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -435,6 +439,9 @@ JLoader::registerAlias('JStringController',                 '\\Joomla\\CMS\\File
 JLoader::registerAlias('JFilesystemWrapperFile',            '\\Joomla\\CMS\\Filesystem\\Wrapper\\FileWrapper', '5.0');
 JLoader::registerAlias('JFilesystemWrapperFolder',          '\\Joomla\\CMS\\Filesystem\\Wrapper\\FolderWrapper', '5.0');
 JLoader::registerAlias('JFilesystemWrapperPath',            '\\Joomla\\CMS\\Filesystem\\Wrapper\\PathWrapper', '5.0');
+<<<<<<< HEAD
 
 JLoader::registerAlias('JAdapter',                          '\\Joomla\\CMS\\Adapter\\Adapter', '5.0');
 JLoader::registerAlias('JAdapterInstance',                  '\\Joomla\\CMS\\Adapter\\AdapterInstance', '5.0');
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090

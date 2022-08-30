@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -15,7 +23,10 @@ use Joomla\CMS\Factory as JFactory;
 use Joomla\CMS\HTML\HTMLHelper as JHtml;
 use Joomla\CMS\Language\Text as JText;
 use Joomla\Registry\Registry;
+<<<<<<< HEAD
 use RegularLabs\Library\Field;
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
@@ -24,7 +35,11 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
+<<<<<<< HEAD
 class JFormFieldRL_Templates extends Field
+=======
+class JFormFieldRL_Templates extends \RegularLabs\Library\Field
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 {
 	public $type = 'Templates';
 
@@ -65,6 +80,22 @@ class JFormFieldRL_Templates extends Field
 		}
 
 		return $options;
+	}
+
+	protected function getInput()
+	{
+		// fix old '::' separator and change it to '--'
+		$value = json_encode($this->value);
+		$value = str_replace('::', '--', $value);
+		$value = (array) json_decode($value, true);
+
+		$size     = (int) $this->get('size');
+		$multiple = $this->get('multiple');
+
+		return $this->selectListAjax(
+			$this->type, $this->name, $value, $this->id,
+			compact('size', 'multiple')
+		);
 	}
 
 	protected function getTemplates()

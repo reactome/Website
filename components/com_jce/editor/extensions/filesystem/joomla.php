@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -674,10 +678,17 @@ class WFJoomlaFileSystem extends WFFileSystem
         $dest = WFUtility::makePath($destination, WFUtility::mb_basename($file));
         // destination full path
         $dest = $this->toAbsolute($dest);
+<<<<<<< HEAD
 
         // check destination path does not fall within a restricted folder
         $this->checkRestrictedDirectory($dest);
 
+=======
+
+        // check destination path does not fall within a restricted folder
+        $this->checkRestrictedDirectory($dest);
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         JFactory::getApplication()->triggerEvent('onWfFileSystemBeforeCopy', array(&$src, &$dest));
 
         // src is a file
@@ -726,10 +737,17 @@ class WFJoomlaFileSystem extends WFFileSystem
         $dest = WFUtility::makePath($destination, WFUtility::mb_basename($file));
         // destination full path
         $dest = $this->toAbsolute($dest);
+<<<<<<< HEAD
 
         // check destination path does not fall within a restricted folder
         $this->checkRestrictedDirectory($dest);
 
+=======
+
+        // check destination path does not fall within a restricted folder
+        $this->checkRestrictedDirectory($dest);
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         JFactory::getApplication()->triggerEvent('onWfFileSystemBeforeMove', array(&$src, &$dest));
 
         if ($src != $dest) {
@@ -891,11 +909,16 @@ class WFJoomlaFileSystem extends WFFileSystem
             'filepath' => $dest,
         ));
 
+<<<<<<< HEAD
         // vars for Joomla events
         $vars = array('com_jce.file', &$object_file, true, array());
 
         // trigger Joomla event before upload
         $app->triggerEvent('onContentBeforeSave', $vars);
+=======
+        // trigger Joomla event before upload
+        $app->triggerEvent('onContentBeforeSave', array('com_jce.file', &$object_file, true));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         if (JFile::upload($src, $dest, false, true)) {
             $result->state = true;
@@ -909,7 +932,11 @@ class WFJoomlaFileSystem extends WFFileSystem
         $object_file->filepath = $result->path;
 
         // trigger Joomla event after upload
+<<<<<<< HEAD
         $app->triggerEvent('onContentAfterSave', $vars);
+=======
+        $app->triggerEvent('onContentAfterSave', array('com_jce.file', &$object_file, true));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         return $result;
     }

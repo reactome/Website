@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Modals
+<<<<<<< HEAD
  * @version         11.10.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         11.9.0
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -67,7 +75,11 @@ class Document
 		return $url;
 	}
 
+<<<<<<< HEAD
 	public static function loadStylesAndScripts(&$buffer)
+=======
+	public static function loadStylesAndScripts()
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	{
 		// do not load scripts/styles on feeds or print pages
 		if (RL_Document::isFeed() || JFactory::getApplication()->input->getInt('print', 0))
@@ -107,12 +119,21 @@ class Document
 		RL_Document::scriptOptions($options, 'Modals');
 
 		JHtml::script('modals/jquery.touchSwipe.min.js', false, true);
+<<<<<<< HEAD
 		RL_Document::script('modals/jquery.modals.min.js', ($params->media_versioning ? '11.10.0' : ''), [], [], $params->load_jquery);
 		RL_Document::script('modals/script.min.js', ($params->media_versioning ? '11.10.0' : ''), [], [], $params->load_jquery);
 
 		if ($params->load_stylesheet)
 		{
 			RL_Document::style('modals/' . $params->style . '.min.css', ($params->media_versioning ? '11.10.0' : ''));
+=======
+		RL_Document::script('modals/jquery.modals.min.js', ($params->media_versioning ? '11.9.0' : ''), [], [], $params->load_jquery);
+		RL_Document::script('modals/script.min.js', ($params->media_versioning ? '11.9.0' : ''), [], [], $params->load_jquery);
+
+		if ($params->load_stylesheet)
+		{
+			RL_Document::style('modals/' . $params->style . '.min.css', ($params->media_versioning ? '11.9.0' : ''));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		}
 	}
 
@@ -148,7 +169,11 @@ class Document
 			. $key . '=1';
 	}
 
+<<<<<<< HEAD
 	private static function addRedirectScript(&$buffer)
+=======
+	private static function addRedirectScript()
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	{
 		// Add redirect script
 		$script =
@@ -167,8 +192,21 @@ class Document
 			return;
 		}
 
+<<<<<<< HEAD
 		$buffer = '<script type="text/javascript">' . $script . '</script>'
 			. $buffer;
+=======
+		if ( ! $buffer = RL_Document::getComponentBuffer())
+		{
+			return;
+		}
+
+		$buffer =
+			'<script type="text/javascript">' . $script . '</script>'
+			. $buffer;
+
+		RL_Document::setComponentBuffer($buffer);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	private static function getDefaults()

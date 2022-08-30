@@ -3,16 +3,24 @@
  * @package     Joomla.Administrator
  * @subpackage  com_joomlaupdate
  *
+<<<<<<< HEAD
  * @copyright   (C) 2012 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 defined('_JEXEC') or die;
 
+<<<<<<< HEAD
 use Joomla\CMS\Extension\ExtensionHelper;
 use Joomla\CMS\Filter\InputFilter;
 use Joomla\CMS\Http\HttpFactory;
 use Joomla\Registry\Registry;
+=======
+use Joomla\CMS\Filter\InputFilter;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
@@ -187,11 +195,26 @@ class JoomlaupdateModelDefault extends JModelLegacy
 
 		if (is_null($updateObject))
 		{
+<<<<<<< HEAD
 			$this->updateInformation['latest'] = JVERSION;
+=======
+			// We have not found any update in the database we seem to run the latest version
+			$ret['latest'] = JVERSION;
+
+			return $ret;
+		}
+
+		// Check whether this is a valid update or not
+		if (version_compare($updateObject->version, JVERSION, '<'))
+		{
+			// This update points to an outdated version we should not offer to update to this
+			$ret['latest'] = JVERSION;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 			return $this->updateInformation;
 		}
 
+<<<<<<< HEAD
 		// Check whether this is a valid update or not
 		if (version_compare($updateObject->version, JVERSION, '<'))
 		{
@@ -203,11 +226,18 @@ class JoomlaupdateModelDefault extends JModelLegacy
 
 		$this->updateInformation['latest']    = $updateObject->version;
 		$this->updateInformation['current']   = JVERSION;
+=======
+		$ret['latest'] = $updateObject->version;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		// Check whether this is an update or not.
 		if (version_compare($updateObject->version, JVERSION, '>'))
 		{
+<<<<<<< HEAD
 			$this->updateInformation['hasUpdate'] = true;
+=======
+			$ret['hasUpdate'] = true;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		}
 
 		$minimumStability      = JUpdater::STABILITY_STABLE;

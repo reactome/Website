@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -280,6 +284,7 @@ abstract class JceProfilesHelper
         $n = 0;
 
         $app = JFactory::getApplication();
+<<<<<<< HEAD
 
         // load data from file
         $data   = file_get_contents($file);
@@ -287,6 +292,9 @@ abstract class JceProfilesHelper
         $data   = preg_replace('#<params>{(.+?)}<\/params>#', '<params><![CDATA[{$1}]]></params>', $data);
         // load processed string
         $xml    = simplexml_load_string($data);
+=======
+        $xml = simplexml_load_file($file);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         $user = JFactory::getUser();
         $date = new JDate();

@@ -58,7 +58,11 @@ class JFormFieldMediaJce extends JFormFieldMedia
 
         $config = array(
             'element' => $this->id,
+<<<<<<< HEAD
             'mediatype' => strtolower($this->mediatype),
+=======
+            'mediatype' => $this->mediatype,
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             'converted' => (int) $this->element['converted'] ? true : false
         );
 
@@ -79,7 +83,11 @@ class JFormFieldMediaJce extends JFormFieldMedia
             'class'     => $this->element['class'] . ' input-medium wf-media-input wf-media-input-active'
         );
 
+<<<<<<< HEAD
         if ($options['upload'] == 1) {
+=======
+        if ($options['upload'] === 1) {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             $extraData['class'] .= ' wf-media-input-upload';
         }
 

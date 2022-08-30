@@ -14,7 +14,10 @@ $data = $displayData;
 ?>
 <textarea
 	spellcheck="false"
+<<<<<<< HEAD
 	autocomplete="off"
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	name="<?php echo $data->name; ?>"
 	id="<?php echo $data->id; ?>"
 	cols="<?php echo $data->cols; ?>"

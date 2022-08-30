@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -13,7 +21,10 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Language\Text as JText;
 use Joomla\Registry\Registry;
+<<<<<<< HEAD
 use RegularLabs\Library\Field;
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
@@ -22,7 +33,11 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
+<<<<<<< HEAD
 class JFormFieldRL_AccessLevel extends Field
+=======
+class JFormFieldRL_AccessLevel extends \RegularLabs\Library\Field
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 {
 	public $type = 'AccessLevel';
 
@@ -42,6 +57,20 @@ class JFormFieldRL_AccessLevel extends Field
 		return $this->selectList($options, $name, $value, $id, $size, $multiple);
 	}
 
+	protected function getAccessLevels($use_names = false)
+	{
+		$value = $use_names ? 'a.title' : 'a.id';
+
+		$query = $this->db->getQuery(true)
+			->select($value . ' as value, a.title as text')
+			->from('#__viewlevels AS a')
+			->group('a.id')
+			->order('a.ordering ASC');
+		$this->db->setQuery($query);
+
+		return $this->db->loadObjectList();
+	}
+
 	protected function getOptions($show_all = false, $use_names = false)
 	{
 		$options = $this->getAccessLevels($use_names);
@@ -58,18 +87,17 @@ class JFormFieldRL_AccessLevel extends Field
 		return $options;
 	}
 
-	protected function getAccessLevels($use_names = false)
+	protected function getInput()
 	{
-		$value = $use_names ? 'a.title' : 'a.id';
+		$size      = (int) $this->get('size');
+		$multiple  = $this->get('multiple');
+		$show_all  = $this->get('show_all');
+		$use_names = $this->get('use_names');
 
-		$query = $this->db->getQuery(true)
-			->select($value . ' as value, a.title as text')
-			->from('#__viewlevels AS a')
-			->group('a.id')
-			->order('a.ordering ASC');
-		$this->db->setQuery($query);
-
-		return $this->db->loadObjectList();
+		return $this->selectListAjax(
+			$this->type, $this->name, $this->value, $this->id,
+			compact('size', 'multiple', 'show_all', 'use_names')
+		);
 	}
 
 	protected function getInput()

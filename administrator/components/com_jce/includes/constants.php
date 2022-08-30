@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright 	Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright 	Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -11,7 +15,11 @@
 defined('JPATH_PLATFORM') or die('RESTRICTED');
 
 // Some shortcuts to make life easier
+<<<<<<< HEAD
 define('WF_VERSION', '2.9.24');
+=======
+define('WF_VERSION', '2.9.10');
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 // JCE Administration Component
 define('WF_ADMINISTRATOR',     JPATH_ADMINISTRATOR.'/components/com_jce');

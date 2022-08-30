@@ -100,7 +100,12 @@ class Tar implements ExtractableInterface
 	 */
 	public function extract($archive, $destination)
 	{
+<<<<<<< HEAD
 		$destination = Path::resolve($destination);
+=======
+		$this->data     = null;
+		$this->metadata = null;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		$this->metadata = null;
 		$this->data     = file_get_contents($archive);
@@ -119,7 +124,7 @@ class Tar implements ExtractableInterface
 			if ($type === 'file' || $type === 'unix file')
 			{
 				$buffer = $this->metadata[$i]['data'];
-				$path = Path::clean($destination . '/' . $this->metadata[$i]['name']);
+				$path   = Path::clean($destination . '/' . $this->metadata[$i]['name']);
 
 				if (!$this->isBelow($destination, $path))
 				{
@@ -183,16 +188,24 @@ class Tar implements ExtractableInterface
 			if (version_compare(\PHP_VERSION, '5.5', '>='))
 			{
 				$info = @unpack(
+<<<<<<< HEAD
 					'Z100filename/Z8mode/Z8uid/Z8gid/Z12size/Z12mtime/Z8checksum/Ctypeflag'
 					. '/Z100link/Z6magic/Z2version/Z32uname/Z32gname/Z8devmajor/Z8devminor',
+=======
+					'Z100filename/Z8mode/Z8uid/Z8gid/Z12size/Z12mtime/Z8checksum/Ctypeflag/Z100link/Z6magic/Z2version/Z32uname/Z32gname/Z8devmajor/Z8devminor',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 					substr($data, $position)
 				);
 			}
 			else
 			{
 				$info = @unpack(
+<<<<<<< HEAD
 					'a100filename/a8mode/a8uid/a8gid/a12size/a12mtime/a8checksum/Ctypeflag'
 					. '/a100link/a6magic/a2version/a32uname/a32gname/a8devmajor/a8devminor',
+=======
+					'a100filename/a8mode/a8uid/a8gid/a12size/a12mtime/a8checksum/Ctypeflag/a100link/a6magic/a2version/a32uname/a32gname/a8devmajor/a8devminor',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 					substr($data, $position)
 				);
 			}
@@ -244,7 +257,11 @@ class Tar implements ExtractableInterface
 						. (($mode & 0x002) ? 'w' : '-')
 						. (($mode & 0x001) ? 'x' : '-');
 				}
+<<<<<<< HEAD
 				elseif (\chr($info['typeflag']) === 'L' && $info['filename'] === '././@LongLink')
+=======
+				elseif (\chr($info['typeflag']) == 'L' && $info['filename'] == '././@LongLink')
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 				{
 					// GNU tar ././@LongLink support - the filename is actually in the contents, set a variable here so we can test in the next loop
 					$longlinkfilename = $contents;

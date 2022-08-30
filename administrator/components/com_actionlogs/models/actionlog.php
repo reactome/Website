@@ -3,7 +3,11 @@
  * @package     Joomla.Administrator
  * @subpackage  com_actionlogs
  *
+<<<<<<< HEAD
  * @copyright   (C) 2018 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -107,7 +111,10 @@ class ActionlogsModelActionlog extends JModelLegacy
 		$query
 			->select($db->quoteName(array('u.email', 'l.extensions')))
 			->from($db->quoteName('#__users', 'u'))
+<<<<<<< HEAD
 			->where($db->quoteName('u.block') . ' = 0')
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			->join(
 				'INNER',
 				$db->quoteName('#__action_logs_users', 'l') . ' ON ( ' . $db->quoteName('l.notify') . ' = 1 AND '

@@ -2,7 +2,11 @@
 /**
  * @package    Joomla.Libraries
  *
+<<<<<<< HEAD
  * @copyright  (C) 2011 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -68,7 +72,11 @@ if (!class_exists('FOFAutoloaderFof'))
 }
 
 // Register a handler for uncaught exceptions that shows a pretty error page when possible
+<<<<<<< HEAD
 set_exception_handler(array('Joomla\CMS\Exception\ExceptionHandler', 'handleException'));
+=======
+set_exception_handler(array('JErrorPage', 'render'));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 // Set up the message queue logger for web requests
 if (array_key_exists('REQUEST_METHOD', $_SERVER))

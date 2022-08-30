@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -10,7 +14,11 @@
  */
 defined('JPATH_PLATFORM') or die;
 
+<<<<<<< HEAD
 require_once JPATH_ADMINISTRATOR . '/components/com_jce/includes/base.php';
+=======
+require_once(JPATH_ADMINISTRATOR . '/components/com_jce/includes/base.php');
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 /**
  * JCE class.
@@ -77,6 +85,7 @@ class WFApplication extends JObject
 
     protected function getComponent($id = null, $option = null)
     {
+<<<<<<< HEAD
         if ($id) {
             $components = JComponentHelper::getComponents();
 
@@ -88,14 +97,43 @@ class WFApplication extends JObject
         }
 
         return JComponentHelper::getComponent($option);
+=======
+        $component = JTable::getInstance('extension');
+
+        // find component by option
+        if (empty($id) && $option) {
+            $id = $component->find(array('type' => 'component', 'element' => $option));
+        }
+
+        // load component
+        $component->load($id);
+
+        return $component;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     }
 
     public function getContext()
     {
         $option = JFactory::getApplication()->input->getCmd('option');
+<<<<<<< HEAD
         $component = JComponentHelper::getComponent($option, true);
 
         return $component->id;
+=======
+        $extension = $this->getComponent(null, $option);
+
+        $extension_id = 0;
+
+        if (isset($extension->extension_id)) {
+            return $extension->extension_id;
+        }
+
+        if (isset($extension->id)) {
+            return $extension->id;
+        }
+
+        return 0;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     }
 
     private function getProfileVars()
@@ -106,9 +144,15 @@ class WFApplication extends JObject
 
         $settings = array(
             'option' => $option,
+<<<<<<< HEAD
             'area' => 2,
             'device' => 'desktop',
             'groups' => array(),
+=======
+            'area'   => 2,
+            'device' => 'desktop',
+            'groups' => array()
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         );
 
         // find the component if this is called from within the JCE component
@@ -116,12 +160,20 @@ class WFApplication extends JObject
             $context = $app->input->getInt('context');
 
             if ($context) {
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                 if ($context === 'mediafield') {
                     $settings['option'] = 'mediafield';
                 } else {
                     $component = $this->getComponent($context);
+<<<<<<< HEAD
                     $settings['option'] = $component->option;
+=======
+                    $settings['option'] = $component->element;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                 }
             }
 
@@ -331,7 +383,11 @@ class WFApplication extends JObject
         if ($plugin) {
             // optional caller, eg: Link
             $caller = '';
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             // get name and caller from plugin name
             if (strpos($plugin, '.') !== false) {
                 list($plugin, $caller) = explode('.', $plugin);
@@ -420,10 +476,17 @@ class WFApplication extends JObject
         $value = $params->get($key);
 
         // key not present in params or was empty string or empty array (JRegistry returns null), use fallback value
+<<<<<<< HEAD
         if (self::isEmptyValue($value)) {
             // set default as empty string
             $value = '';
 
+=======
+        if (self::isEmptyValue($value)) {            
+            // set default as empty string
+            $value = '';
+            
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             // key does not exist (parameter was not set) - use fallback
             if ($params->exists($key) === false) {
                 $value = $fallback;
@@ -435,7 +498,11 @@ class WFApplication extends JObject
                     // reset $default to prevent clearing
                     $default = '';
                 }
+<<<<<<< HEAD
                 // parameter is set, but is empty, but fallback is not (inherited values)
+=======
+            // parameter is set, but is empty, but fallback is not (inherited values)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             } else if ($fallback != '') {
                 $value = $fallback;
             }

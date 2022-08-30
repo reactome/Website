@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Sliders
+<<<<<<< HEAD
  * @version         8.2.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         8.1.0
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -59,6 +67,7 @@ if ( ! RL_Document::isJoomlaVersion(3, 'SLIDERS'))
 {
 	RL_Extension::disable('sliders', 'plugin');
 
+<<<<<<< HEAD
 	RL_Document::adminError(
 		JText::sprintf('RL_PLUGIN_HAS_BEEN_DISABLED', JText::_('SLIDERS'))
 	);
@@ -66,6 +75,18 @@ if ( ! RL_Document::isJoomlaVersion(3, 'SLIDERS'))
 	return;
 }
 
+=======
+	RL_Language::load('plg_system_regularlabs');
+
+	JFactory::getApplication()->enqueueMessage(
+		JText::sprintf('RL_PLUGIN_HAS_BEEN_DISABLED', JText::_('SLIDERS')),
+		'error'
+	);
+
+	return;
+}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 if (true)
 {
 	class PlgSystemSliders extends RL_SystemPlugin

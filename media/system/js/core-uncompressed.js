@@ -1,5 +1,9 @@
 /**
+<<<<<<< HEAD
  * @copyright  (C) 2009 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -488,9 +492,15 @@ Joomla.editors.instances = Joomla.editors.instances || {
 	 *
 	 * Pops up a new window in the middle of the screen
 	 *
+<<<<<<< HEAD
 	 * @note  This will be moved out of core.js into a new file toolbar.js in Joomla 4
+=======
+	 * @deprecated  4.0 No replacement
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 */
 	Joomla.popupWindow = function( mypage, myname, w, h, scroll ) {
+		console.warn('Joomla.popupWindow() is deprecated without a replacement!');
+
 		var winl = ( screen.width - w ) / 2,
 		    wint = ( screen.height - h ) / 2,
 		    winprops = 'height=' + h +

@@ -116,7 +116,11 @@ class JFormFieldFiletype extends JFormFieldText
         $html[] = '     <input type="text" value="' . $value . '" disabled class="form-control" />';
         $html[] = '     <input type="hidden" name="' . $this->name . '" value="' . $value . '" />';
         $html[] = '     <div class="input-group-append">';
+<<<<<<< HEAD
         $html[] = '         <a class="btn btn-secondary filetype-edit add-on input-group-text" role="button"><i class="icon-edit icon-apply"></i><span role="none">Edit</span></a>';
+=======
+        $html[] = '         <a class="btn filetype-edit add-on input-group-text" role="button"><i class="icon-edit icon-apply"></i><span role="none">Edit</span></a>';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         $html[] = '     </div>';
         $html[] = ' </div>';
 

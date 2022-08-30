@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 3 - http://www.gnu.org/copyleft/gpl.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -18,6 +22,7 @@ class JceControllerPlugin extends JControllerLegacy
         'image'     => 'imgmanager',
         'imagepro'  => 'imgmanager_ext'
     );
+<<<<<<< HEAD
 
     private function createClassName($name) {
         $delim = array('-', '_');
@@ -31,6 +36,8 @@ class JceControllerPlugin extends JControllerLegacy
 
         return $className;
     }
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     
     public function execute($task)
     {
@@ -79,12 +86,18 @@ class JceControllerPlugin extends JControllerLegacy
 
         include_once $path . '/' . $plugin . '.php';
 
+<<<<<<< HEAD
         $className = $this->createClassName($plugin);
 
         if (class_exists($className)) {
             // load language file if any
             $language->load('plg_jce_' . basename($path), $path);
 
+=======
+        $className = 'WF' . ucwords($plugin, '_') . 'Plugin';
+
+        if (class_exists($className)) {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             $instance = new $className();
 
             if (strpos($task, '.') !== false) {

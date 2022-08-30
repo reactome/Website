@@ -1,6 +1,10 @@
 <?php
 /**
+<<<<<<< HEAD
  * @copyright 	Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright 	Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -22,7 +26,11 @@ defined('JPATH_PLATFORM') or die;
     <?php if ($this->features['mode'] && $this->features['print']) {
     ?>
         <div class="buttonheading"><a href="javascript:;" onClick="window.print();
+<<<<<<< HEAD
                 return false"><img src="<?php echo JURI::root(); ?>media/com_jce/img/print.png" width="16" height="16" alt="<?php echo JText::_('Print'); ?>" title="<?php echo JText::_('Print'); ?>" /></a></div>
+=======
+                return false"><img src="<?php echo JURI::root(); ?>components/com_jce/media/img/print.png" width="16" height="16" alt="<?php echo JText::_('Print'); ?>" title="<?php echo JText::_('Print'); ?>" /></a></div>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 <?php 
 } ?>
     <div><img src="<?php echo $this->features['img']; ?>" width="<?php echo $this->features['width']; ?>" height="<?php echo $this->features['height']; ?>" alt="<?php echo $this->features['alt']; ?>" onclick="window.close();" /></div>

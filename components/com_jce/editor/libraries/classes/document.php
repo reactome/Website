@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -463,6 +467,7 @@ class WFDocument extends JObject
     public function getQueryString($query = array())
     {
         $app = JFactory::getApplication();
+<<<<<<< HEAD
 
         // get plugin name and assign to query
         $name = $this->get('name');
@@ -480,6 +485,25 @@ class WFDocument extends JObject
         // set standalone mode (for File Browser etc)
         $query['standalone'] = $this->get('standalone');
 
+=======
+
+        // get plugin name and assign to query
+        $name = $this->get('name');
+
+        // re-map plugin name
+        if (array_key_exists($name, self::$queryMap)) {
+            $name = self::$queryMap[$name];
+        }
+
+        $query['plugin'] = $name;
+
+        // set layout
+        $query['layout'] = $app->input->getCmd('layout');
+
+        // set standalone mode (for File Browser etc)
+        $query['standalone'] = $this->get('standalone');
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         // set context id
         $query['context'] = $app->input->getInt('context');
 
@@ -665,7 +689,10 @@ class WFDocument extends JObject
                         'plugins' => array('core' => array($this->getName()), 'external' => array()),
                         'sections' => array('dlg', $this->getName() . '_dlg'),
                         'mode' => 'plugin',
+<<<<<<< HEAD
                         'language' => WFLanguage::getTag()
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                     ));
 
                     $data .= $parser->load();

@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -39,6 +47,16 @@ class JFormFieldRL_Text extends JFormFieldText
 		return parent::setup($element, $value, $group);
 	}
 
+	private function get($val, $default = '')
+	{
+		if ( ! isset($this->params[$val]) || (string) $this->params[$val] == '')
+		{
+			return $default;
+		}
+
+		return (string) $this->params[$val];
+	}
+
 	private function prepareText($string = '')
 	{
 		$string = trim($string);
@@ -61,15 +79,5 @@ class JFormFieldRL_Text extends JFormFieldText
 		$string = str_replace('span style="font-family:monospace;"', 'span class="rl-code"', $string);
 
 		return $string;
-	}
-
-	private function get($val, $default = '')
-	{
-		if ( ! isset($this->params[$val]) || (string) $this->params[$val] == '')
-		{
-			return $default;
-		}
-
-		return (string) $this->params[$val];
 	}
 }

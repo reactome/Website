@@ -3,7 +3,11 @@
  * @package     Joomla.Administrator
  * @subpackage  com_admin
  *
+<<<<<<< HEAD
  * @copyright   (C) 2011 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -2051,6 +2055,7 @@ class JoomlaInstallerScript
 			'/libraries/vendor/leafo/lessphp/phpunit.xml.dist',
 			'/libraries/vendor/leafo/lessphp/ruleset.xml',
 
+<<<<<<< HEAD
 			// Joomla 3.10.0
 			'/libraries/joomla/base/adapter.php',
 			'/libraries/joomla/base/adapterinstance.php',
@@ -2058,6 +2063,8 @@ class JoomlaInstallerScript
 			// Joomla 3.10.7-rc1 to 3.10.7 stable
 			'/administrator/components/com_admin/sql/updates/postgresql/3.10.7-2022-02-20.sql.sql',
 			'/administrator/components/com_admin/sql/updates/sqlazure/3.10.7-2022-02-20.sql.sql',
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		);
 
 		// TODO There is an issue while deleting folders using the ftp mode
@@ -2298,10 +2305,13 @@ class JoomlaInstallerScript
 			'/libraries/joomla/filesystem/support',
 			'/libraries/joomla/filesystem/wrapper',
 			'/libraries/joomla/filesystem',
+<<<<<<< HEAD
 			// Joomla 3.10.0
 			'/libraries/joomla/base',
 			// Joomla 3.10.8
 			'/administrator/components/com_users/models/fields/primaryauthproviders.php',
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		);
 
 		jimport('joomla.filesystem.file');

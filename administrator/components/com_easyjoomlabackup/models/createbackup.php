@@ -4,7 +4,11 @@
  * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
+<<<<<<< HEAD
  * @version    3.4.1.0-FREE - 2021-09-09
+=======
+ * @version    3.4.0.0-FREE - 2021-08-02
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -32,7 +36,11 @@ use Joomla\Registry\Registry;
  * Class EasyJoomlaBackupModelCreatebackup
  *
  * @since   3.0.0-FREE
+<<<<<<< HEAD
  * @version 3.4.1.0-FREE
+=======
+ * @version 3.4.0.0-FREE
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  */
 class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
 {
@@ -281,7 +289,10 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
                 ];
             }
 
+<<<<<<< HEAD
             $this->createBackupSqlArchiveDatabasePostProcess($hash);
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             $this->createBackupZipArchiveDatabaseAjax();
         }
 
@@ -717,14 +728,26 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @param string $hash
      *
      * @return bool
+<<<<<<< HEAD
      * @since   3.4.0.0-FREE
      * @version 3.4.1.0-FREE
+=======
+     * @since 3.4.0.0-FREE
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
      */
     private function createBackupSqlArchiveDatabaseAjax(string $hash): bool
     {
         // Create a temporary sql file first. This is required to avoid memory timeouts on large databases!
         if (!File::exists($this->backupFolder . $this->fileNameDatabase)) {
+<<<<<<< HEAD
             $data = Helper::getDatabaseDumpHeader();
+=======
+            $data = '-- Easy Joomla Backup for Joomla! - SQL Dump' . "\n";
+            $data .= '-- Author: Viktor Vogel' . "\n";
+            $data .= '-- Project page: https://kubik-rubik.de/ejb-easy-joomla-backup' . "\n";
+            $data .= '-- License: GNU/GPL - https://www.gnu.org/licenses/gpl.html' . "\n\n";
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             $this->writeDatabaseFile($data);
         }
 
@@ -734,7 +757,11 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
             $startTime = microtime(true);
             $dbTable = array_shift($dbTables);
 
+<<<<<<< HEAD
             $this->backupDatabaseAjax($dbTable, $hash);
+=======
+            $this->backupDatabaseAjax($dbTable);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
             $endTime = microtime(true);
             $this->maximumExecutionTime -= $this->ceilDecimalDigits($endTime - $startTime, 2);
@@ -766,6 +793,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * Creates a SQL Dump of the Joomla! database and add it directly to the archive
      *
      * @param string $dbTable
+<<<<<<< HEAD
      * @param string $hash
      *
      * @return void
@@ -773,6 +801,13 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @version 3.4.1.0-FREE
      */
     private function backupDatabaseAjax(string $dbTable, string $hash): void
+=======
+     *
+     * @return void
+     * @since 3.4.0.0-FREE
+     */
+    private function backupDatabaseAjax(string $dbTable): void
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     {
         $this->db->setUtf();
         $dbPrefix = $this->db->getPrefix();
@@ -794,7 +829,10 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
             // Set the query to get the table CREATE statement.
             $this->db->setQuery('SHOW CREATE TABLE ' . $dbTable);
             $rowCreate = $this->db->loadRow();
+<<<<<<< HEAD
             $this->checkPostProcessDataCreateTable($rowCreate, $hash);
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
             $data = $rowCreate[1] . ";\n\n";
             $this->writeDatabaseFile($data);
@@ -823,6 +861,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
     }
 
     /**
+<<<<<<< HEAD
      * Checks the create database command for post process rules
      *
      * @param array  $rowCreate
@@ -868,6 +907,8 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
     }
 
     /**
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
      * Gets a list of database entries from the table query - using an iterator if too many entries
      *
      * @param int $passes
@@ -958,6 +999,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
     }
 
     /**
+<<<<<<< HEAD
      * Adds post process data
      *
      * @param string $hash
@@ -984,6 +1026,8 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
     }
 
     /**
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
      * Creates a zip archive of the SQL dump file
      *
      * @return void
@@ -1305,9 +1349,14 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
         }
 
         // Set a correct extension for the database dump name
+<<<<<<< HEAD
         $hash = md5($this->fileNameDatabase);
         $this->setFileNameDatabase();
         $this->backupDatabase($hash);
+=======
+        $this->setFileNameDatabase();
+        $this->backupDatabase();
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         // Add file which was created from the database export to the zip archive - 0640
         $zipDatabase->addFile($this->backupFolder . $this->fileNameDatabase, $this->fileNameDatabase);
@@ -1322,6 +1371,7 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
     }
 
     /**
+<<<<<<< HEAD
      * Creates an SQL dump of the Joomla! database and add it directly to the archive
      *
      * @param string $hash
@@ -1331,6 +1381,14 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
      * @version 3.4.1.0-FREE
      */
     private function backupDatabase(string $hash): void
+=======
+     * Creates a SQL Dump of the Joomla! database and add it directly to the archive
+     *
+     * @return void
+     * @since 3.4.0.0-FREE
+     */
+    private function backupDatabase(): void
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     {
         $this->db->setUtf();
         $tables = $this->db->getTableList();
@@ -1345,7 +1403,15 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
         }
 
         // Create a temporary dump file first. This is required to avoid memory timeouts on large databases!
+<<<<<<< HEAD
         $data = Helper::getDatabaseDumpHeader();
+=======
+        $data = '-- Easy Joomla Backup for Joomla! - SQL Dump' . "\n";
+        $data .= '-- Author: Viktor Vogel' . "\n";
+        $data .= '-- Project page: https://kubik-rubik.de/ejb-easy-joomla-backup' . "\n";
+        $data .= '-- License: GNU/GPL - http://www.gnu.org/licenses/gpl.html' . "\n\n";
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         $this->writeDatabaseFile($data);
 
         foreach ($tables as $table) {
@@ -1384,8 +1450,11 @@ class EasyJoomlaBackupModelCreatebackup extends BaseDatabaseModel
                 $this->writeDatabaseFile($data);
             }
         }
+<<<<<<< HEAD
 
         $this->createBackupSqlArchiveDatabasePostProcess($hash);
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     }
 
     /**

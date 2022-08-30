@@ -46,6 +46,7 @@ class JFormFieldKeyValue extends JFormField
         $values = $this->value;
 
         if (is_string($values) && !empty($values)) {
+<<<<<<< HEAD
             $value = htmlspecialchars_decode($this->value);
 
             $values = json_decode($value, true);
@@ -68,6 +69,14 @@ class JFormFieldKeyValue extends JFormField
             }
         }
 
+=======
+            $values = json_decode(htmlspecialchars_decode($this->value), true);
+        }
+
+        // cast to array
+        $values = (array) $values;
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         // default
         if (empty($values)) {
             $values = array(
@@ -128,11 +137,15 @@ class JFormFieldKeyValue extends JFormField
             $str[] = '</div>';
         }
 
+<<<<<<< HEAD
         if (!empty($this->value)) {
             $this->value = htmlspecialchars(json_encode($values));
         }
 
         $str[] = '<input type="hidden" name="' . $this->name . '" value="' . $this->value . '" />';
+=======
+        $str[] = '<input type="hidden" name="' . $this->name . '" value="' . htmlspecialchars($this->value) . '" />';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         return implode("", $str);
     }

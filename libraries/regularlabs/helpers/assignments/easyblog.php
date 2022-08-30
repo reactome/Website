@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -69,39 +77,6 @@ class RLAssignmentsEasyBlog extends RLAssignment
 		return $this->passSimple($cats);
 	}
 
-	private function getCategories()
-	{
-		switch ($this->request->view)
-		{
-			case 'entry' :
-				return $this->getCategoryIDFromItem();
-				break;
-
-			case 'categories' :
-				return $this->request->id;
-				break;
-
-			default:
-				return '';
-		}
-	}
-
-	private function getCatParentIds($id = 0)
-	{
-		return $this->getParentIds($id, 'easyblog_category', 'parent_id');
-	}
-
-	private function getCategoryIDFromItem()
-	{
-		$query = $this->db->getQuery(true)
-			->select('i.category_id')
-			->from('#__easyblog_post AS i')
-			->where('i.id = ' . (int) $this->request->id);
-		$this->db->setQuery($query);
-
-		return $this->db->loadResult();
-	}
-
 	public function passContentKeywords($fields = ['title', 'intro', 'content'], $text = '')
 	{
 		parent::passContentKeywords($fields);
@@ -137,12 +112,57 @@ class RLAssignmentsEasyBlog extends RLAssignment
 		return $this->pass($pass);
 	}
 
+<<<<<<< HEAD
+	private function getCatParentIds($id = 0)
+	{
+		return $this->getParentIds($id, 'easyblog_category', 'parent_id');
+	}
+
+	private function getCategoryIDFromItem()
+=======
+	public function passPageTypes()
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	{
+		return $this->passByPageTypes('com_easyblog', $this->selection, $this->assignment);
+	}
+
+	public function passContentKeywords($fields = ['title', 'intro', 'content'], $text = '')
+	{
+		parent::passContentKeywords($fields);
+	}
+
+	private function getCatParentIds($id = 0)
+	{
+		return $this->getParentIds($id, 'easyblog_category', 'parent_id');
+	}
+
+	private function getCategories()
+	{
+		switch ($this->request->view)
+		{
+			case 'entry' :
+				return $this->getCategoryIDFromItem();
+				break;
+
+			case 'categories' :
+				return $this->request->id;
+				break;
+
+			default:
+				return '';
+		}
+	}
+
+<<<<<<< HEAD
 	public function passPageTypes()
 	{
 		return $this->passByPageTypes('com_easyblog', $this->selection, $this->assignment);
 	}
 
 	public function passTags()
+=======
+	private function getCategoryIDFromItem()
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	{
 		if ($this->request->option != 'com_easyblog')
 		{
@@ -173,14 +193,24 @@ class RLAssignmentsEasyBlog extends RLAssignment
 		}
 
 		$query = $this->db->getQuery(true)
+<<<<<<< HEAD
 			->select('t.alias')
 			->from('#__easyblog_post_tag AS x')
 			->join('LEFT', '#__easyblog_tag AS t ON t.id = x.tag_id')
 			->where('x.post_id = ' . (int) $this->request->id)
 			->where('t.published = 1');
+=======
+			->select('i.category_id')
+			->from('#__easyblog_post AS i')
+			->where('i.id = ' . (int) $this->request->id);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		$this->db->setQuery($query);
 		$tags = $this->db->loadColumn();
 
+<<<<<<< HEAD
 		return $this->passSimple($tags, true);
+=======
+		return $this->db->loadResult();
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 }

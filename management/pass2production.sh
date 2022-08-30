@@ -318,7 +318,10 @@ export_neo4j_database() {
 
     sudo service ${NEO4J_PROCESS} stop
     sudo neo4j-admin dump --database ${NEO4J_DB_NAME} --to "${CURR_DB_FILE}"
+<<<<<<< HEAD
     sudo chown neo4j:adm ${CURR_DB_FILE}
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     sudo service ${NEO4J_PROCESS} start
 
     echo "Transferring ${CURR_DB_FILE}"

@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -51,6 +59,69 @@ class DB
 		$glue = strtoupper($glue) == 'AND' ? 'AND' : 'OR';
 
 		return '(' . implode(' ' . $glue . ' ', $conditions) . ')';
+<<<<<<< HEAD
+=======
+	}
+
+	public static function getOperator(&$value, $default = '=')
+	{
+		if (empty($value))
+		{
+			return $default;
+		}
+
+		if (is_array($value))
+		{
+			$value = array_values($value);
+
+			$operator = self::getOperatorFromValue($value[0], $default);
+
+			// remove operators from other array values
+			foreach ($value as &$val)
+			{
+				$val = self::removeOperator($val);
+			}
+
+			return $operator;
+		}
+
+		$operator = self::getOperatorFromValue($value, $default);
+
+		$value = self::removeOperator($value);
+
+		return $operator;
+	}
+
+	public static function getOperatorFromValue($value, $default = '=')
+	{
+		$regex = '^' . RegEx::quote(self::getOperators(), 'operator');
+
+		if ( ! RegEx::match($regex, $value, $parts))
+		{
+			return $default;
+		}
+
+		$operator = $parts['operator'];
+
+		switch ($operator)
+		{
+			case '!':
+			case '!NOT!':
+				$operator = '!=';
+				break;
+
+			case '==':
+				$operator = '=';
+				break;
+		}
+
+		return $operator;
+	}
+
+	public static function getOperators()
+	{
+		return ['!NOT!', '!=', '!', '<>', '<=', '<', '>=', '>', '=', '=='];
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
@@ -79,6 +150,7 @@ class DB
 		if (count($value) == 1)
 		{
 			return ' ' . $operator . ' ' . reset($value);
+<<<<<<< HEAD
 		}
 
 		$operator = $operator == '!=' ? 'NOT IN' : 'IN';
@@ -182,6 +254,15 @@ class DB
 	public static function getOperators()
 	{
 		return ['!NOT!', '!=', '!', '<>', '<=', '<', '>=', '>', '=', '=='];
+=======
+		}
+
+		$operator = $operator == '!=' ? 'NOT IN' : 'IN';
+
+		$values = empty($value) ? "''" : implode(',', $value);
+
+		return ' ' . $operator . ' (' . $values . ')';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
@@ -201,6 +282,45 @@ class DB
 		return ' ' . $operator . ' ' . $value;
 	}
 
+<<<<<<< HEAD
+=======
+	public static function prepareValue($value, $handle_now = false)
+	{
+		if (is_array($value))
+		{
+			$array = $value;
+
+			foreach ($array as &$array_value)
+			{
+				$array_value = self::prepareValue($array_value, $handle_now);
+			}
+
+			return $array;
+		}
+
+		$dates = ['now', 'now()', 'date()', 'jfactory::getdate()'];
+
+		if ($handle_now && ! is_array($value) && in_array(strtolower($value), $dates))
+		{
+			return 'NOW()';
+		}
+
+		if (is_int($value) || ctype_digit($value))
+		{
+			return $value;
+		}
+
+		return JFactory::getDbo()->quote($value);
+	}
+
+	public static function removeOperator($string)
+	{
+		$regex = '^' . RegEx::quote(self::getOperators(), 'operator');
+
+		return RegEx::replace($regex, '', $string);
+	}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	/**
 	 * Check if a table exists in the database
 	 *

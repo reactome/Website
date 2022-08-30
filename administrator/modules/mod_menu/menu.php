@@ -3,7 +3,11 @@
  * @package     Joomla.Administrator
  * @subpackage  mod_menu
  *
+<<<<<<< HEAD
  * @copyright   (C) 2006 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -30,7 +34,10 @@ class JAdminCssMenu
 	 *
 	 * @var    Tree
 	 * @since  3.8.0
+<<<<<<< HEAD
 	 * @deprecated  4.0
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 */
 	protected $tree;
 
@@ -367,6 +374,7 @@ class JAdminCssMenu
 			elseif ($item->element === 'com_admin')
 			{
 				parse_str($item->link, $query);
+<<<<<<< HEAD
 
 				if (isset($query['view']) && $query['view'] === 'sysinfo' && !$this->user->authorise('core.admin'))
 				{
@@ -374,13 +382,26 @@ class JAdminCssMenu
 				}
 			}
 
+=======
+
+				if (isset($query['view']) && $query['view'] === 'sysinfo' && !$this->user->authorise('core.admin'))
+				{
+					continue;
+				}
+			}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			if ($assetName && !$this->user->authorise(($item->scope === 'edit') ? 'core.create' : 'core.manage', $assetName))
 			{
 				continue;
 			}
 
 			// Exclude if link is invalid
+<<<<<<< HEAD
 			if (is_null($item->link) || (!in_array($item->type, array('separator', 'heading', 'container')) && trim($item->link) === ''))
+=======
+			if (!in_array($item->type, array('separator', 'heading', 'container')) && trim($item->link) === '')
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			{
 				continue;
 			}

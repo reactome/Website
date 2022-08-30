@@ -3,7 +3,11 @@
  * @package     Joomla.Administrator
  * @subpackage  com_languages
  *
+<<<<<<< HEAD
  * @copyright   (C) 2011 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -74,7 +78,11 @@ class LanguagesModelStrings extends JModelLegacy
 		$files = array_merge($files, JFolder::files($base . '/templates', '.*ini$', 3, true));
 
 		// Parse language directories of plugins.
+<<<<<<< HEAD
 		$files = array_merge($files, JFolder::files(JPATH_PLUGINS, '.*ini$', 4, true));
+=======
+		$files = array_merge($files, JFolder::files(JPATH_PLUGINS, $language . '.*ini$', 4, true));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		// Parse all found ini files and add the strings to the database cache.
 		foreach ($files as $file)

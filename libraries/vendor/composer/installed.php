@@ -1,11 +1,20 @@
 <?php return array(
     'root' => array(
+<<<<<<< HEAD
         'pretty_version' => 'dev-3.10-dev',
         'version' => 'dev-3.10-dev',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../../',
         'aliases' => array(),
         'reference' => 'a637d32f7c99df4cbb09dbd51f372193226c26dc',
+=======
+        'pretty_version' => 'dev-staging',
+        'version' => 'dev-staging',
+        'type' => 'project',
+        'install_path' => __DIR__ . '/../../../',
+        'aliases' => array(),
+        'reference' => 'a4ca9c4ef3a7947f3db736be35772c236be927e1',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         'name' => 'joomla/joomla-cms',
         'dev' => false,
     ),
@@ -38,6 +47,7 @@
             'dev_requirement' => false,
         ),
         'joomla/application' => array(
+<<<<<<< HEAD
             'pretty_version' => '1.9.3',
             'version' => '1.9.3.0',
             'type' => 'joomla-package',
@@ -53,6 +63,23 @@
             'install_path' => __DIR__ . '/../joomla/archive',
             'aliases' => array(),
             'reference' => 'b1c1e6c3aecc0486453cadbb92bc529cfa89a89f',
+=======
+            'pretty_version' => '1.9.2',
+            'version' => '1.9.2.0',
+            'type' => 'joomla-package',
+            'install_path' => __DIR__ . '/../joomla/application',
+            'aliases' => array(),
+            'reference' => '6c89fdde878f7ebb7d6455f664133e9497163e2e',
+            'dev_requirement' => false,
+        ),
+        'joomla/archive' => array(
+            'pretty_version' => '1.1.10',
+            'version' => '1.1.10.0',
+            'type' => 'joomla-package',
+            'install_path' => __DIR__ . '/../joomla/archive',
+            'aliases' => array(),
+            'reference' => '32c9009a1020d16bc1060c0d06339898b697cf2c',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             'dev_requirement' => false,
         ),
         'joomla/compat' => array(
@@ -92,6 +119,7 @@
             'dev_requirement' => false,
         ),
         'joomla/filesystem' => array(
+<<<<<<< HEAD
             'pretty_version' => '1.6.2',
             'version' => '1.6.2.0',
             'type' => 'joomla-package',
@@ -107,6 +135,23 @@
             'install_path' => __DIR__ . '/../joomla/filter',
             'aliases' => array(),
             'reference' => '09733d70db6c6d91e53e0e0d0fcde9b8638175c4',
+=======
+            'pretty_version' => '1.6.0',
+            'version' => '1.6.0.0',
+            'type' => 'joomla-package',
+            'install_path' => __DIR__ . '/../joomla/filesystem',
+            'aliases' => array(),
+            'reference' => 'd8801f18db358b0284675381ab4195acd028b420',
+            'dev_requirement' => false,
+        ),
+        'joomla/filter' => array(
+            'pretty_version' => '1.4.3',
+            'version' => '1.4.3.0',
+            'type' => 'joomla-package',
+            'install_path' => __DIR__ . '/../joomla/filter',
+            'aliases' => array(),
+            'reference' => 'ec9517655b0b72e8a3f7665a88f8b8f6e21eb480',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             'dev_requirement' => false,
         ),
         'joomla/image' => array(
@@ -128,12 +173,21 @@
             'dev_requirement' => false,
         ),
         'joomla/joomla-cms' => array(
+<<<<<<< HEAD
             'pretty_version' => 'dev-3.10-dev',
             'version' => 'dev-3.10-dev',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../../',
             'aliases' => array(),
             'reference' => 'a637d32f7c99df4cbb09dbd51f372193226c26dc',
+=======
+            'pretty_version' => 'dev-staging',
+            'version' => 'dev-staging',
+            'type' => 'project',
+            'install_path' => __DIR__ . '/../../../',
+            'aliases' => array(),
+            'reference' => 'a4ca9c4ef3a7947f3db736be35772c236be927e1',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             'dev_requirement' => false,
         ),
         'joomla/ldap' => array(
@@ -146,12 +200,21 @@
             'dev_requirement' => false,
         ),
         'joomla/registry' => array(
+<<<<<<< HEAD
             'pretty_version' => '1.6.4',
             'version' => '1.6.4.0',
             'type' => 'joomla-package',
             'install_path' => __DIR__ . '/../joomla/registry',
             'aliases' => array(),
             'reference' => '87450394f093efcb3ac5fc978e73d1403ebe8a38',
+=======
+            'pretty_version' => '1.6.3',
+            'version' => '1.6.3.0',
+            'type' => 'joomla-package',
+            'install_path' => __DIR__ . '/../joomla/registry',
+            'aliases' => array(),
+            'reference' => '51c08b18838aaf2104e38c3846e34b4706e83644',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             'dev_requirement' => false,
         ),
         'joomla/session' => array(
@@ -164,6 +227,7 @@
             'dev_requirement' => false,
         ),
         'joomla/string' => array(
+<<<<<<< HEAD
             'pretty_version' => '1.4.6',
             'version' => '1.4.6.0',
             'type' => 'joomla-package',
@@ -179,6 +243,23 @@
             'install_path' => __DIR__ . '/../joomla/uri',
             'aliases' => array(),
             'reference' => 'e3968e05d3b741378c106b44d8d72b230a43f845',
+=======
+            'pretty_version' => '1.4.5',
+            'version' => '1.4.5.0',
+            'type' => 'joomla-package',
+            'install_path' => __DIR__ . '/../joomla/string',
+            'aliases' => array(),
+            'reference' => '21269bfcddef4e676c6a1a49b7d959f896522a96',
+            'dev_requirement' => false,
+        ),
+        'joomla/uri' => array(
+            'pretty_version' => '1.2.0',
+            'version' => '1.2.0.0',
+            'type' => 'joomla-package',
+            'install_path' => __DIR__ . '/../joomla/uri',
+            'aliases' => array(),
+            'reference' => '848a31dc895a9c8c9d7ea67571d6a4dd634a9dc1',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             'dev_requirement' => false,
         ),
         'joomla/utilities' => array(
@@ -198,7 +279,11 @@
             'aliases' => array(
                 0 => '9999999-dev',
             ),
+<<<<<<< HEAD
             'reference' => '802755b7632f59078843f38c9d57e5a8c496cc3a',
+=======
+            'reference' => 'a149187adb2eaec0be5e24203a2e25bda5e5073b',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             'dev_requirement' => false,
         ),
         'paragonie/random_compat' => array(
@@ -211,12 +296,21 @@
             'dev_requirement' => false,
         ),
         'paragonie/sodium_compat' => array(
+<<<<<<< HEAD
             'pretty_version' => 'v1.17.0',
             'version' => '1.17.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../paragonie/sodium_compat',
             'aliases' => array(),
             'reference' => 'c59cac21abbcc0df06a3dd18076450ea4797b321',
+=======
+            'pretty_version' => 'v1.9.1',
+            'version' => '1.9.1.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../paragonie/sodium_compat',
+            'aliases' => array(),
+            'reference' => '87125d5b265f98c4d1b8d83a1f0726607c229421',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             'dev_requirement' => false,
         ),
         'phpmailer/phpmailer' => array(
@@ -227,7 +321,11 @@
             'aliases' => array(
                 0 => '9999999-dev',
             ),
+<<<<<<< HEAD
             'reference' => '3bac61142e875279af98f16afef696b6bb7a19c9',
+=======
+            'reference' => '54bdc96e899a83a9956d756d51a458fcca587ca2',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             'dev_requirement' => false,
         ),
         'psr/container' => array(
@@ -255,12 +353,21 @@
             'dev_requirement' => false,
         ),
         'simplepie/simplepie' => array(
+<<<<<<< HEAD
             'pretty_version' => '1.3.3',
             'version' => '1.3.3.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../simplepie/simplepie',
             'aliases' => array(),
             'reference' => '9f6fdaa79d9888ae8f1626b4f2e6b5ff7ca29bb3',
+=======
+            'pretty_version' => '1.3.1',
+            'version' => '1.3.1.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../simplepie/simplepie',
+            'aliases' => array(),
+            'reference' => 'ce53709778bc1e2e4deda1651b66e5081398d5cc',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             'dev_requirement' => false,
         ),
         'symfony/polyfill-ctype' => array(
@@ -327,12 +434,21 @@
             'dev_requirement' => false,
         ),
         'typo3/phar-stream-wrapper' => array(
+<<<<<<< HEAD
             'pretty_version' => 'v2.2.2',
             'version' => '2.2.2.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../typo3/phar-stream-wrapper',
             'aliases' => array(),
             'reference' => 'cf7728109e0cab28da9ad357c3009e38d371116e',
+=======
+            'pretty_version' => 'v2.2.1',
+            'version' => '2.2.1.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../typo3/phar-stream-wrapper',
+            'aliases' => array(),
+            'reference' => '2e519bb30e24c405674b4d2dc4b4a1de292887d2',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             'dev_requirement' => false,
         ),
     ),

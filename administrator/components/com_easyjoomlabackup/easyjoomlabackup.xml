@@ -1,15 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
+<<<<<<<< HEAD:administrator/components/com_easyjoomlabackup/easyjoomlabackup.xml
 <extension type="component" version="3.9" method="upgrade">
     <name>COM_EASYJOOMLABACKUP</name>
     <version>3.4.1.0-FREE</version>
     <creationDate>2021-09-09</creationDate>
     <license>https://www.gnu.org/licenses/gpl</license>
     <copyright>Copyright 2021 Viktor Vogel. All rights reserved.</copyright>
+========
+<extension type="component" version="3.0" method="upgrade">
+    <name>COM_EASYJOOMLABACKUP</name>
+    <version>3.2.6</version>
+    <creationDate>2019-06-30</creationDate>
+    <license>http://www.gnu.org/licenses/gpl</license>
+    <copyright>Copyright 2019 Viktor Vogel. All rights reserved.</copyright>
+>>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:administrator/components/com_easyjoomlabackup/com_easyjoomlabackup.xml
+=======
+<extension type="component" version="3.9" method="upgrade">
+    <name>COM_EASYJOOMLABACKUP</name>
+    <version>3.4.0.0-FREE</version>
+    <creationDate>2021-08-02</creationDate>
+    <license>https://www.gnu.org/licenses/gpl</license>
+    <copyright>Copyright 2021 Viktor Vogel. All rights reserved.</copyright>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     <author>Viktor Vogel</author>
     <authorEmail>admin@kubik-rubik.de</authorEmail>
     <authorUrl>https://kubik-rubik.de/</authorUrl>
     <description>COM_EASYJOOMLABACKUP_XML_DESCRIPTION</description>
+<<<<<<< HEAD
+<<<<<<<< HEAD:administrator/components/com_easyjoomlabackup/easyjoomlabackup.xml
     <variant>free</variant>
+========
+>>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:administrator/components/com_easyjoomlabackup/com_easyjoomlabackup.xml
+=======
+    <variant>free</variant>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     <scriptfile>script.php</scriptfile>
     <install>
         <sql>
@@ -38,7 +63,15 @@
             <filename>controller.php</filename>
             <filename>config.xml</filename>
             <filename>access.xml</filename>
+<<<<<<< HEAD
+<<<<<<<< HEAD:administrator/components/com_easyjoomlabackup/easyjoomlabackup.xml
             <filename>ejbCli.php</filename>
+========
+            <filename>ejb_cli.php</filename>
+>>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:administrator/components/com_easyjoomlabackup/com_easyjoomlabackup.xml
+=======
+            <filename>ejbCli.php</filename>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             <folder>backups</folder>
             <folder>controllers</folder>
             <folder>css</folder>
@@ -56,4 +89,12 @@
             <language tag="de-DE">language/de-DE/de-DE.com_easyjoomlabackup.sys.ini</language>
         </languages>
     </administration>
+<<<<<<< HEAD
+<<<<<<<< HEAD:administrator/components/com_easyjoomlabackup/easyjoomlabackup.xml
 </extension>
+========
+</extension>
+>>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:administrator/components/com_easyjoomlabackup/com_easyjoomlabackup.xml
+=======
+</extension>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090

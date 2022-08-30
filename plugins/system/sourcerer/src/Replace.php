@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Sourcerer
+<<<<<<< HEAD
  * @version         9.2.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         8.5.0
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -419,7 +427,11 @@ class Replace
 		if ( ! $enabled)
 		{
 			// replace source block content with HTML comment
+<<<<<<< HEAD
 			$string = Protect::getMessageCommentTag(JText::sprintf('SRC_CODE_REMOVED_NOT_ALLOWED', JText::_('SRC_CSS')));
+=======
+			$string = Protect::getMessageCommentTag(JText::sprintf('SRC_CODE_REMOVED_NOT_ALLOWED', JText::_('SRC_CSS'), JText::_('SRC_CSS')));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 			return;
 		}
@@ -523,7 +535,11 @@ class Replace
 		{
 			// replace source block content with HTML comment
 			$string_array    = [];
+<<<<<<< HEAD
 			$string_array[0] = Protect::getMessageCommentTag(JText::sprintf('SRC_CODE_REMOVED_NOT_ALLOWED', JText::_('SRC_PHP')));
+=======
+			$string_array[0] = Protect::getMessageCommentTag(JText::sprintf('SRC_CODE_REMOVED_NOT_ALLOWED', JText::_('SRC_PHP'), JText::_('SRC_PHP')));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 			$string = implode('', $string_array);
 
@@ -536,6 +552,7 @@ class Replace
 			$string_array[0] = Protect::getMessageCommentTag(JText::sprintf('SRC_CODE_REMOVED_SECURITY', JText::_('SRC_PHP')));
 
 			$string = implode('', $string_array);
+<<<<<<< HEAD
 
 			return;
 		}
@@ -585,10 +602,64 @@ class Replace
 				: $string_array[1] = '';
 
 			$string = implode('', $string_array);
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 			return;
 		}
 
+<<<<<<< HEAD
+=======
+		// if source block content has more than 1 php block, combine them
+		if ($string_array_count > 3)
+		{
+			for ($i = 2; $i < $string_array_count - 1; $i++)
+			{
+				if (fmod($i, 2) == 0)
+				{
+					$string_array[1] .= "<!-- SRC_SEMICOLON --> ?>" . $string_array[$i] . "<?php ";
+					unset($string_array[$i]);
+					continue;
+				}
+
+				$string_array[1] .= $string_array[$i];
+				unset($string_array[$i]);
+			}
+		}
+
+		$semicolon = '<!-- SRC_SEMICOLON -->';
+		$script    = trim($string_array[1]) . $semicolon;
+		$script    = RL_RegEx::replace('(;\s*)?' . RL_RegEx::quote($semicolon), ';', $script);
+
+		$area = Params::getArea('default');
+
+		$forbidden_php_array = explode(',', $area->forbidden_php);
+		RL_Array::clean($forbidden_php_array);
+
+		$forbidden_php_regex = '[^a-z_](' . implode('|', $forbidden_php_array) . ')(\s*\(|\s+[\'"])';
+
+		RL_RegEx::matchAll($forbidden_php_regex, ' ' . $script, $functions);
+
+		if ( ! empty($functions))
+		{
+			$functionsArray = [];
+			foreach ($functions as $function)
+			{
+				$functionsArray[] = $function[1] . ')';
+			}
+
+			$comment = JText::_('SRC_PHP_CODE_REMOVED_FORBIDDEN') . ': ( ' . implode(', ', $functionsArray) . ' )';
+
+			$string_array[1] = RL_Document::isHtml()
+				? Protect::getMessageCommentTag($comment)
+				: $string_array[1] = '';
+
+			$string = implode('', $string_array);
+
+			return;
+		}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		global $src_variables;
 
 		$src_variables['article'] = $article;

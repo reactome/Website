@@ -7,6 +7,19 @@
  * @copyright   2008-2017 Nicholas K. Dionysopoulos / Akeeba Ltd.
  * @license     GNU GPL v2 or - at your option - any later version
  * @note        This file has been modified by the Joomla! Project and no longer reflects the original work of its author.
+<<<<<<< HEAD
+=======
+ */
+
+/**
+ * Akeeba Restore
+ * A JSON-powered JPA, JPS and ZIP archive extraction library
+ *
+ * @copyright   2008-2017 Nicholas K. Dionysopoulos / Akeeba Ltd.
+ * @license     GNU GPL v2 or - at your option - any later version
+ * @package     akeebabackup
+ * @subpackage  kickstart
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  */
 
 define('_AKEEBA_RESTORATION', 1);
@@ -113,10 +126,16 @@ function getQueryParam($key, $default = null)
 	{
 		$value = $_REQUEST[$key];
 
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 50400 && get_magic_quotes_gpc() && !is_null($value))
 		{
 			$value = stripslashes($value);
 		}
+=======
+	if (PHP_VERSION_ID < 50400 && get_magic_quotes_gpc() && !is_null($value))
+	{
+		$value = stripslashes($value);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	return $value;

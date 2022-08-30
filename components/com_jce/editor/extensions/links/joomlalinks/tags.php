@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -73,7 +77,11 @@ class JoomlalinksTags extends JObject
                     $language = $tag->language;
                 }
 
+<<<<<<< HEAD
                 $id = $router->getRoute($tag->slug, 'com_tags.tag', '', $language);
+=======
+                $id = $router->getRoute($tag->id, 'com_tags.tags', '', $language);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                 $id = $this->route($id);
 
                 $items[] = array(
@@ -134,6 +142,7 @@ class JoomlalinksTags extends JObject
         $wf = WFEditorPlugin::getInstance();
         
         if ((bool) $wf->getParam('links.joomlalinks.sef_url', 0)) {
+<<<<<<< HEAD
             $url = WFLinkHelper::route($url);
         }
 
@@ -143,6 +152,14 @@ class JoomlalinksTags extends JObject
         // remove Itemid
         if ((bool) $wf->getParam('links.joomlalinks.itemid', 1) === false) {
             $url = WFLinkHelper::removeItemId($url);
+=======
+            $url = WFLinkBrowser::route($url);
+        }
+
+        // remove Itemid
+        if ((bool) $wf->getParam('links.joomlalinks.itemid', 1) === false) {
+            $url = WFLinkBrowser::removeItemId($url);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         }
 
         return $url;

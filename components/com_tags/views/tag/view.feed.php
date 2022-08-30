@@ -3,7 +3,11 @@
  * @package     Joomla.Site
  * @subpackage  com_tags
  *
+<<<<<<< HEAD
  * @copyright   (C) 2013 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -27,12 +31,19 @@ class TagsViewTag extends JViewLegacy
 	{
 		$app       = JFactory::getApplication();
 		$document  = JFactory::getDocument();
+<<<<<<< HEAD
 		$ids       = (array) $app->input->get('id', array(), 'int');
 		$i         = 0;
 		$tagIds    = '';
 
 		// Remove zero values resulting from input filter
 		$ids = array_filter($ids);
+=======
+		$ids       = $app->input->get('id', array(), 'array');
+		$i         = 0;
+		$tagIds    = '';
+		$filter    = new JFilterInput;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		foreach ($ids as $id)
 		{
@@ -41,7 +52,11 @@ class TagsViewTag extends JViewLegacy
 				$tagIds .= '&';
 			}
 
+<<<<<<< HEAD
 			$tagIds .= 'id[' . $i . ']=' . $id;
+=======
+			$tagIds .= 'id[' . $i . ']=' . $filter->clean($id, 'INT');
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 			$i++;
 		}

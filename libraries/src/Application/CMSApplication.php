@@ -2,7 +2,11 @@
 /**
  * Joomla! Content Management System
  *
+<<<<<<< HEAD
  * @copyright  (C) 2013 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -229,6 +233,34 @@ class CMSApplication extends WebApplication
 		{
 			// Render the application output.
 			$this->render();
+		}
+
+		if ($this->get('block_floc', 1))
+		{
+			$headers = $this->getHeaders();
+
+			$notPresent = true;
+
+			foreach ($headers as $header)
+			{
+				if (strtolower($header['name']) === 'permissions-policy')
+				{
+					// Append interest-cohort if the Permissions-Policy is not set
+					if (strpos($header['value'], 'interest-cohort') === false)
+					{
+						$this->setHeader('Permissions-Policy', $header['value'] . ', interest-cohort=()', true);
+					}
+
+					$notPresent = false;
+
+					break;
+				}
+			}
+
+			if ($notPresent)
+			{
+				$this->setHeader('Permissions-Policy', 'interest-cohort=()');
+			}
 		}
 
 		// If gzip compression is enabled in configuration and the server is compliant, compress the output.

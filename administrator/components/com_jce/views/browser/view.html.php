@@ -32,6 +32,7 @@ class JceViewBrowser extends JViewLegacy
         JHtml::_('jquery.framework');
 
         $document = JFactory::getDocument();
+<<<<<<< HEAD
         $document->addStyleSheet(JURI::root(true) . '/media/com_jce/css/browser.min.css');
 
         $this->addToolbar();
@@ -40,6 +41,12 @@ class JceViewBrowser extends JViewLegacy
             $this->sidebar = JHtmlSidebar::render();
         }
 
+=======
+        $document->addStyleSheet('components/com_jce/media/css/browser.min.css');
+
+        $this->addToolbar();
+        $this->sidebar = JHtmlSidebar::render();
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         parent::display($tpl);
     }
 

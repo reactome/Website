@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -60,6 +68,43 @@ class ParametersNew
 	}
 
 	/**
+<<<<<<< HEAD
+=======
+	 * Get a usable parameter object for the module
+	 *
+	 * @param string    $name
+	 * @param int       $admin
+	 * @param JRegistry $params
+	 * @param bool      $use_cache
+	 *
+	 * @return object
+	 */
+	public static function getModule($name, $admin = true, $params = '', $use_cache = true)
+	{
+		$name = 'mod_' . RegEx::replace('^mod_', '', $name);
+
+		$cache = new Cache([__METHOD__, $name, $params]);
+
+		if ($use_cache && $cache->exists())
+		{
+			return $cache->get();
+		}
+
+		if (empty($params))
+		{
+			$params = null;
+		}
+
+		return $cache->set(
+			self::getObjectFromRegistry(
+				$params,
+				($admin ? JPATH_ADMINISTRATOR : JPATH_SITE) . '/modules/' . $name . '/' . $name . '.xml'
+			)
+		);
+	}
+
+	/**
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 * Get a usable parameter object based on the Joomla Registry object
 	 * The object will have all the available parameters with their value (default value if none is set)
 	 *
@@ -125,6 +170,7 @@ class ParametersNew
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Returns an array based on the data in a given xml file
 	 *
 	 * @param string $path
@@ -136,12 +182,25 @@ class ParametersNew
 	private static function loadXML($path, $default = '', $use_cache = true)
 	{
 		$cache = new Cache([__METHOD__, $path, $default]);
+=======
+	 * Returns an object based on the data in a given xml array
+	 *
+	 * @param      $xml
+	 * @param bool $use_cache
+	 *
+	 * @return bool|mixed
+	 */
+	public static function getObjectFromXml(&$xml, $use_cache = true)
+	{
+		$cache = new Cache([__METHOD__, $xml]);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		if ($use_cache && $cache->exists())
 		{
 			return $cache->get();
 		}
 
+<<<<<<< HEAD
 		if ( ! $path
 			|| ! file_exists($path)
 			|| ! $file = file_get_contents($path)
@@ -197,16 +256,39 @@ class ParametersNew
 	 *
 	 * @param string    $name
 	 * @param int       $admin
+=======
+		if ( ! is_array($xml))
+		{
+			$xml = [$xml];
+		}
+
+		$object = self::getObjectFromXmlNode($xml);
+
+		return $cache->set($object);
+	}
+
+	/**
+	 * Get a usable parameter object for the plugin
+	 *
+	 * @param string    $name
+	 * @param string    $type
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 * @param JRegistry $params
 	 * @param bool      $use_cache
 	 *
 	 * @return object
 	 */
+<<<<<<< HEAD
 	public static function getModule($name, $admin = true, $params = '', $use_cache = true)
 	{
 		$name = 'mod_' . RegEx::replace('^mod_', '', $name);
 
 		$cache = new Cache([__METHOD__, $name, $params]);
+=======
+	public static function getPlugin($name, $type = 'system', $params = '', $use_cache = true)
+	{
+		$cache = new Cache([__METHOD__, $name, $type, $params]);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		if ($use_cache && $cache->exists())
 		{
@@ -215,17 +297,27 @@ class ParametersNew
 
 		if (empty($params))
 		{
+<<<<<<< HEAD
 			$params = null;
+=======
+			$plugin = JPluginHelper::getPlugin($type, $name);
+			$params = (is_object($plugin) && isset($plugin->params)) ? $plugin->params : null;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		}
 
 		return $cache->set(
 			self::getObjectFromRegistry(
 				$params,
+<<<<<<< HEAD
 				($admin ? JPATH_ADMINISTRATOR : JPATH_SITE) . '/modules/' . $name . '/' . $name . '.xml'
+=======
+				JPATH_PLUGINS . '/' . $type . '/' . $name . '/' . $name . '.xml'
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			)
 		);
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Returns an object based on the data in a given xml array
 	 *
@@ -251,6 +343,43 @@ class ParametersNew
 		$object = self::getObjectFromXmlNode($xml);
 
 		return $cache->set($object);
+=======
+	public static function overrideFromObject($params, $object = null)
+	{
+		if (empty($object))
+		{
+			return $params;
+		}
+
+		foreach ($params as $key => $value)
+		{
+			if ( ! isset($object->{$key}))
+			{
+				continue;
+			}
+
+			$params->{$key} = $object->{$key};
+		}
+
+		return $params;
+	}
+
+	/**
+	 * Returns the main attributes key from an xml object
+	 *
+	 * @param $xml
+	 *
+	 * @return mixed
+	 */
+	private static function getKeyFromXML($xml)
+	{
+		if ( ! empty($xml->_attributes) && isset($xml->_attributes['name']))
+		{
+			return $xml->_attributes['name'];
+		}
+
+		return $xml->_name;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
@@ -287,6 +416,7 @@ class ParametersNew
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Returns the main attributes key from an xml object
 	 *
 	 * @param $xml
@@ -304,6 +434,8 @@ class ParametersNew
 	}
 
 	/**
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 * Returns the value from an xml object / node
 	 *
 	 * @param $xml
@@ -326,6 +458,7 @@ class ParametersNew
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Get a usable parameter object for the plugin
 	 *
 	 * @param string    $name
@@ -338,12 +471,26 @@ class ParametersNew
 	public static function getPlugin($name, $type = 'system', $params = '', $use_cache = true)
 	{
 		$cache = new Cache([__METHOD__, $name, $type, $params]);
+=======
+	 * Returns an array based on the data in a given xml file
+	 *
+	 * @param string $path
+	 * @param string $default
+	 * @param bool   $use_cache
+	 *
+	 * @return array
+	 */
+	private static function loadXML($path, $default = '', $use_cache = true)
+	{
+		$cache = new Cache([__METHOD__, $path, $default]);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		if ($use_cache && $cache->exists())
 		{
 			return $cache->get();
 		}
 
+<<<<<<< HEAD
 		if (empty($params))
 		{
 			$plugin = JPluginHelper::getPlugin($type, $name);
@@ -368,13 +515,62 @@ class ParametersNew
 		foreach ($params as $key => $value)
 		{
 			if ( ! isset($object->{$key}))
+=======
+		if ( ! $path
+			|| ! file_exists($path)
+			|| ! $file = file_get_contents($path)
+		)
+		{
+			return $cache->set([]);
+		}
+
+		$xml = [];
+
+		$xml_parser = xml_parser_create();
+		xml_parse_into_struct($xml_parser, $file, $fields);
+		xml_parser_free($xml_parser);
+
+		$default = $default ? strtoupper($default) : 'DEFAULT';
+		foreach ($fields as $field)
+		{
+			if ($field['tag'] != 'FIELD'
+				|| ! isset($field['attributes'])
+				|| ! isset($field['attributes']['NAME'])
+				|| $field['attributes']['NAME'] == ''
+				|| $field['attributes']['NAME'][0] == '@'
+				|| ! isset($field['attributes']['TYPE'])
+				|| $field['attributes']['TYPE'] == 'spacer'
+			)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			{
 				continue;
 			}
 
+<<<<<<< HEAD
 			$params->{$key} = $object->{$key};
 		}
 
 		return $params;
+=======
+			if (isset($field['attributes'][$default]))
+			{
+				$field['attributes']['DEFAULT'] = $field['attributes'][$default];
+			}
+
+			if ( ! isset($field['attributes']['DEFAULT']))
+			{
+				$field['attributes']['DEFAULT'] = '';
+			}
+
+			if ($field['attributes']['TYPE'] == 'textarea')
+			{
+				$field['attributes']['DEFAULT'] = str_replace('<br>', "\n", $field['attributes']['DEFAULT']);
+			}
+
+			$xml[$field['attributes']['NAME']] = $field['attributes']['DEFAULT'];
+		}
+
+		return $cache->set($xml);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 }

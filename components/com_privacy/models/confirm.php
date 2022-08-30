@@ -3,7 +3,11 @@
  * @package     Joomla.Site
  * @subpackage  com_privacy
  *
+<<<<<<< HEAD
  * @copyright   (C) 2018 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -29,6 +33,10 @@ class PrivacyModelConfirm extends JModelAdmin
 	{
 		// Get the form.
 		$form = $this->getForm();
+<<<<<<< HEAD
+=======
+		$data['email'] = JStringPunycode::emailToPunycode($data['email']);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		// Check for an error.
 		if ($form instanceof Exception)
@@ -58,9 +66,12 @@ class PrivacyModelConfirm extends JModelAdmin
 			return false;
 		}
 
+<<<<<<< HEAD
 		// Get the user email address
 		$data['email'] = JFactory::getUser()->email;
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		// Search for the information request
 		/** @var PrivacyTableRequest $table */
 		$table = $this->getTable();

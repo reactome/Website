@@ -3,7 +3,11 @@
  * @package     Joomla.Site
  * @subpackage  com_content
  *
+<<<<<<< HEAD
  * @copyright   (C) 2009 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -268,7 +272,11 @@ class ContentModelArticles extends JModelList
 		{
 			/**
 			 * If category is archived then article has to be published or archived.
+<<<<<<< HEAD
 			 * Or category is published then article has to be archived.
+=======
+			 * Or categogy is published then article has to be archived.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			 */
 			$query->where('((c.published = 2 AND a.state > 0) OR (c.published = 1 AND a.state = 2))');
 		}

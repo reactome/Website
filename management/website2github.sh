@@ -68,8 +68,12 @@ done;
 
 LOCAL_REPO="/usr/local/reactomes/Reactome/production/Website/static"
 
+<<<<<<< HEAD
 #GITHUB_USER="reactomebot"
 GITHUB_USER="adamjohnwright"
+=======
+GITHUB_USER="reactomebot"
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 GITHUB_EMAIL=$1
 
 GIT=`which git`

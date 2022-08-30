@@ -21,6 +21,10 @@ if (!$data) {
 	$data = (object) array('src' => $field->value, 'alt' => '');
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 $class  = (string) $fieldParams->get('media_class', '');
 $target = (string) $fieldParams->get('media_target', '');
 $type   = (string) $fieldParams->get('mediatype', 'images');

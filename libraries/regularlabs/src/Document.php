@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -25,6 +33,65 @@ use RegularLabs\Library\CacheNew as Cache;
  */
 class Document
 {
+	/* @var JDocument */
+	static $document;
+
+	/**
+	 * @return  JDocument  The document object
+	 */
+	public static function get()
+	{
+		if ( ! is_null(self::$document))
+		{
+			return self::$document;
+		}
+
+		self::$document = JFactory::getApplication()->getDocument();
+
+		if ( ! is_null(self::$document))
+		{
+			return self::$document;
+		}
+
+		JFactory::getApplication()->loadDocument();
+
+		self::$document = JFactory::getApplication()->getDocument();
+
+		return self::$document;
+	}
+
+	/**
+	 * @return null|string
+	 *
+	 * @depecated Use getComponentBuffer
+	 */
+	public static function getBuffer()
+	{
+		return self::getComponentBuffer();
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public static function getComponentBuffer()
+	{
+		$buffer = self::get()->getBuffer('component');
+
+		if (empty($buffer) || ! is_string($buffer))
+		{
+			return null;
+		}
+
+		$buffer = trim($buffer);
+
+		if (empty($buffer))
+		{
+			return null;
+		}
+
+		return $buffer;
+	}
+
 	/**
 	 * Enqueues an admin error
 	 *
@@ -81,6 +148,7 @@ class Document
 		);
 
 		return $cache->set($is_admin);
+<<<<<<< HEAD
 	}
 
 	/**
@@ -94,24 +162,32 @@ class Document
 		Language::load('plg_system_regularlabs');
 
 		JFactory::getApplication()->enqueueMessage($message, $type);
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
-	 * Check if page is an edit page
+	 * Checks if context/page is a category list
+	 *
+	 * @param string $context
 	 *
 	 * @return bool
 	 */
-	public static function isClient($identifier)
+	public static function isCategoryList($context)
 	{
-		$identifier = $identifier == 'admin' ? 'administrator' : $identifier;
+		$cache = new Cache([__METHOD__, $context]);
 
+<<<<<<< HEAD
 		$cache = new Cache([__METHOD__, $identifier]);
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		if ($cache->exists())
 		{
 			return $cache->get();
 		}
 
+<<<<<<< HEAD
 		return $cache->set(JFactory::getApplication()->isClient($identifier));
 	}
 
@@ -184,12 +260,7 @@ class Document
 	public static function isCategoryList($context)
 	{
 		$cache = new Cache([__METHOD__, $context]);
-
-		if ($cache->exists())
-		{
-			return $cache->get();
-		}
-
+=======
 		$app   = JFactory::getApplication();
 		$input = $app->input;
 
@@ -213,6 +284,52 @@ class Document
 
 		// Return true if it IS a list layout
 		return $cache->set(true);
+	}
+
+	/**
+	 * Check if page is an edit page
+	 *
+	 * @return bool
+	 */
+	public static function isClient($identifier)
+	{
+		$identifier = $identifier == 'admin' ? 'administrator' : $identifier;
+
+		$cache = new Cache([__METHOD__, $identifier]);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+
+		if ($cache->exists())
+		{
+			return $cache->get();
+		}
+
+<<<<<<< HEAD
+		$app   = JFactory::getApplication();
+		$input = $app->input;
+
+		// Return false if it is not a category page
+		if ($context != 'com_content.category' || $input->get('view') != 'category')
+		{
+			return $cache->set(false);
+		}
+
+		// Return false if layout is set and it is not a list layout
+		if ($input->get('layout') && $input->get('layout') != 'list')
+		{
+			return $cache->set(false);
+		}
+
+		// Return false if default layout is set to blog
+		if ($app->getParams()->get('category_layout') == '_:blog')
+		{
+			return $cache->set(false);
+		}
+
+		// Return true if it IS a list layout
+		return $cache->set(true);
+=======
+		return $cache->set(JFactory::getApplication()->isClient($identifier));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
@@ -370,6 +487,7 @@ class Document
 			return true;
 		}
 
+<<<<<<< HEAD
 		if ($title && self::isAdmin())
 		{
 			Language::load('plg_system_regularlabs');
@@ -427,11 +545,25 @@ class Document
 
 		self::script('regularlabs/script.min.js');
 		self::style('regularlabs/style.min.css');
+=======
+		if ($title)
+		{
+			Language::load('plg_system_regularlabs');
+
+			JFactory::getApplication()->enqueueMessage(
+				JText::sprintf('RL_NOT_COMPATIBLE_WITH_JOOMLA_VERSION', JText::_($title), (int) JVERSION),
+				'error'
+			);
+		}
+
+		return false;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
-	 * Adds a script file to the page (with optional versioning)
+	 * Checks if current page is a pdf
 	 *
+<<<<<<< HEAD
 	 * @param string $file
 	 * @param string $version
 	 * @param array  $options
@@ -484,15 +616,63 @@ class Document
 
 		$file = File::getMediaFile('css', $file);
 		if ( ! $file)
+=======
+	 * @return bool
+	 */
+	public static function isPDF()
+	{
+		$cache = new Cache(__METHOD__);
+
+		if ($cache->exists())
+		{
+			return $cache->get();
+		}
+
+		$input = JFactory::getApplication()->input;
+
+		$is_pdf = (
+			self::get()->getType() == 'pdf'
+			|| $input->getWord('format') == 'pdf'
+			|| $input->getWord('cAction') == 'pdf'
+		);
+
+		return $cache->set($is_pdf);
+	}
+
+	/**
+	 * Loads the required scripts and styles used in forms
+	 */
+	public static function loadEditorButtonDependencies()
+	{
+		self::loadMainDependencies();
+
+		JHtml::_('bootstrap.popover');
+	}
+
+	/**
+	 * Loads the required scripts and styles used in forms
+	 */
+	public static function loadFormDependencies()
+	{
+		if ((int) JVERSION != 3)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			return;
 		}
 
-		if ( ! empty($version))
-		{
-			$file .= '?v=' . $version;
-		}
+		JHtml::_('jquery.framework');
+		JHtml::_('behavior.tooltip');
+		JHtml::_('behavior.formvalidator');
+		JHtml::_('behavior.combobox');
+		JHtml::_('behavior.keepalive');
+		JHtml::_('behavior.tabstate');
 
+		JHtml::_('formbehavior.chosen', '#jform_position', null, ['disable_search_threshold' => 0]);
+		JHtml::_('formbehavior.chosen', '.multipleCategories', null, ['placeholder_text_multiple' => JText::_('JOPTION_SELECT_CATEGORY')]);
+		JHtml::_('formbehavior.chosen', '.multipleTags', null, ['placeholder_text_multiple' => JText::_('JOPTION_SELECT_TAG')]);
+		JHtml::_('formbehavior.chosen', 'select');
+
+<<<<<<< HEAD
 		self::get()->addStylesheet($file, $options, $attribs);
 	}
 
@@ -528,6 +708,53 @@ class Document
 
 		self::script('regularlabs/form.min.js');
 		self::style('regularlabs/form.min.css');
+=======
+		self::script('regularlabs/form.min.js');
+		self::style('regularlabs/form.min.css');
+	}
+
+	/**
+	 * Loads the required scripts and styles used in forms
+	 */
+	public static function loadMainDependencies()
+	{
+		JHtml::_('jquery.framework');
+
+		self::script('regularlabs/script.min.js');
+		self::style('regularlabs/style.min.css');
+	}
+
+	public static function loadPopupDependencies()
+	{
+		self::loadMainDependencies();
+		self::loadFormDependencies();
+
+		self::style('regularlabs/popup.min.css');
+	}
+
+	/**
+	 * Minify the given string
+	 *
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	public static function minify($string)
+	{
+		// place new lines around string to make regex searching easier
+		$string = "\n" . $string . "\n";
+
+		// Remove comment lines
+		$string = RegEx::replace('\n\s*//.*?\n', '', $string);
+		// Remove comment blocks
+		$string = RegEx::replace('/\*.*?\*/', '', $string);
+		// Remove enters
+		$string = RegEx::replace('\n\s*', ' ', $string);
+
+		// Remove surrounding whitespace
+		$string = trim($string);
+
+		return $string;
 	}
 
 	/**
@@ -586,6 +813,146 @@ class Document
 	}
 
 	/**
+	 * Adds a script file to the page (with optional versioning)
+	 *
+	 * @param string $file
+	 * @param string $version
+	 * @param array  $options
+	 * @param array  $attribs
+	 * @param bool   $load_jquery
+	 */
+	public static function script($file, $version = '', $options = [], $attribs = [], $load_jquery = true)
+	{
+		if ( ! $url = File::getMediaFile('js', $file))
+		{
+			return;
+		}
+
+		if ($load_jquery)
+		{
+			JHtml::_('jquery.framework');
+		}
+
+		if (strpos($file, 'regularlabs/') !== false
+			&& strpos($file, 'regular.') === false
+		)
+		{
+			JHtml::_('behavior.core');
+			JHtml::_('script', 'jui/cms.js', ['version' => 'auto', 'relative' => true]);
+			$version = '21.7.10061';
+		}
+
+		if ( ! empty($version))
+		{
+			$url .= '?v=' . $version;
+		}
+
+		self::get()->addScript($url, $options, $attribs);
+	}
+
+	/**
+	 * Adds a javascript declaration to the page
+	 *
+	 * @param string $content
+	 * @param string $name
+	 * @param bool   $minify
+	 * @param string $type
+	 */
+	public static function scriptDeclaration($content = '', $name = '', $minify = true, $type = 'text/javascript')
+	{
+		if ($minify)
+		{
+			$content = self::minify($content);
+		}
+
+		if ( ! empty($name))
+		{
+			$content = Protect::wrapScriptDeclaration($content, $name, $minify);
+		}
+
+		self::get()->addScriptDeclaration($content, $type);
+	}
+
+	/**
+	 * Adds extension options to the page
+	 *
+	 * @param array  $options
+	 * @param string $name
+	 */
+	public static function scriptOptions($options = [], $name = '')
+	{
+		$key = 'rl_' . Extension::getAliasByName($name);
+		JHtml::_('behavior.core');
+
+		self::get()->addScriptOptions($key, $options);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	}
+
+	/**
+	 * @param string $buffer
+	 *
+	 * @depecated Use setComponentBuffer
+	 */
+	public static function setBuffer($buffer = '')
+	{
+		self::setComponentBuffer($buffer);
+	}
+
+	/**
+	 * @param string $buffer
+	 */
+	public static function setComponentBuffer($buffer = '')
+	{
+		self::get()->setBuffer($buffer, 'component');
+	}
+
+	/**
+	 * Adds a stylesheet file to the page(with optional versioning)
+	 *
+	 * @param string $file
+	 * @param string $version
+	 * @param array  $options
+	 * @param array  $attribs
+	 */
+	public static function style($file, $version = '', $options = [], $attribs = [])
+	{
+		if (strpos($file, 'regularlabs/') === 0)
+		{
+			$version = '21.7.10061';
+		}
+
+		if ( ! $file = File::getMediaFile('css', $file))
+		{
+			return;
+		}
+
+		if ( ! empty($version))
+		{
+			$file .= '?v=' . $version;
+		}
+
+		self::get()->addStylesheet($file, $options, $attribs);
+	}
+
+	/**
+<<<<<<< HEAD
+	 * Remove style/css blocks from html string
+	 *
+	 * @param string $string
+	 * @param string $name
+	 * @param string $alias
+	 */
+	public static function removeScriptsStyles(&$string, $name, $alias = '')
+	{
+		[$start, $end] = Protect::getInlineCommentTags($name, null, true);
+		$alias = $alias ?: Extension::getAliasByName($name);
+
+		$string = RegEx::replace('((?:;\s*)?)(;?)' . $start . '.*?' . $end . '\s*', '\1', $string);
+		$string = RegEx::replace('\s*<link [^>]*href="[^"]*/(' . $alias . '/css|css/' . $alias . ')/[^"]*\.css[^"]*"[^>]*( /)?>', '', $string);
+		$string = RegEx::replace('\s*<script [^>]*src="[^"]*/(' . $alias . '/js|js/' . $alias . ')/[^"]*\.js[^"]*"[^>]*></script>', '', $string);
+	}
+
+	/**
 	 * Adds a javascript declaration to the page
 	 *
 	 * @param string $content
@@ -612,25 +979,39 @@ class Document
 	 * Minify the given string
 	 *
 	 * @param string $string
+=======
+	 * Adds a stylesheet declaration to the page
 	 *
-	 * @return string
+	 * @param string $content
+	 * @param string $name
+	 * @param bool   $minify
+	 * @param string $type
 	 */
-	public static function minify($string)
+	public static function styleDeclaration($content = '', $name = '', $minify = true, $type = 'text/css')
 	{
-		// place new lines around string to make regex searching easier
-		$string = "\n" . $string . "\n";
+		if ($minify)
+		{
+			$content = self::minify($content);
+		}
 
-		// Remove comment lines
-		$string = RegEx::replace('\n\s*//.*?\n', '', $string);
-		// Remove comment blocks
-		$string = RegEx::replace('/\*.*?\*/', '', $string);
-		// Remove enters
-		$string = RegEx::replace('\n\s*', ' ', $string);
+		if ( ! empty($name))
+		{
+			$content = Protect::wrapStyleDeclaration($content, $name, $minify);
+		}
 
-		// Remove surrounding whitespace
-		$string = trim($string);
+		self::get()->addStyleDeclaration($content, $type);
+	}
 
-		return $string;
+	/**
+	 * Alias of \RegularLabs\Library\Document::style()
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @param string $file
+	 * @param string $version
+	 */
+	public static function stylesheet($file, $version = '')
+	{
+		self::style($file, $version);
 	}
 
 	/**

@@ -3,7 +3,11 @@
  * @package     Joomla.Site
  * @subpackage  Templates.protostar
  *
+<<<<<<< HEAD
  * @copyright   (C) 2012 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -27,6 +31,18 @@ $layout   = $app->input->getCmd('layout', '');
 $task     = $app->input->getCmd('task', '');
 $itemid   = $app->input->getCmd('Itemid', '');
 $sitename = htmlspecialchars($app->get('sitename'), ENT_QUOTES, 'UTF-8');
+<<<<<<< HEAD
+=======
+
+if ($task === 'edit' || $layout === 'form')
+{
+	$fullWidth = 1;
+}
+else
+{
+	$fullWidth = 0;
+}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 // Add JavaScript Frameworks
 JHtml::_('bootstrap.framework');

@@ -19,12 +19,17 @@ class PlgSystemJce extends JPlugin
         return $this->onContentPrepareForm($form, $data);
     }
 
+<<<<<<< HEAD
     private function getMediaRedirectUrl()
+=======
+    private function redirectMedia()
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     {
         $app = JFactory::getApplication();
 
         require_once JPATH_ADMINISTRATOR . '/components/com_jce/helpers/browser.php';
 
+<<<<<<< HEAD
         $id = $app->input->get('fieldid', '');
         $mediatype = $app->input->getVar('mediatype', $app->input->getVar('view', 'images'));
         $context = $app->input->getVar('context', '');
@@ -49,11 +54,25 @@ class PlgSystemJce extends JPlugin
 
         if ($url) {
             JFactory::getApplication()->redirect($url);
+=======
+        $id = $app->input->get('fieldid');
+        $mediatype = $app->input->getVar('mediatype', $app->input->getVar('view', 'images'));
+
+        $options = WFBrowserHelper::getMediaFieldOptions(array(
+            'element' => $id,
+            'converted' => true,
+            'mediatype' => $mediatype,
+        ));
+
+        if (!empty($options['url'])) {
+            $app->redirect($options['url']);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         }
     }
 
     private function isEditorEnabled()
     {
+<<<<<<< HEAD
         return JPluginHelper::isEnabled('editors', 'jce');
     }
 
@@ -80,13 +99,42 @@ class PlgSystemJce extends JPlugin
         }
 
         return false;
+=======
+        $config = JFactory::getConfig();
+        $user = JFactory::getUser();
+
+        if (!JPluginHelper::getPlugin('editors', 'jce')) {
+            return false;
+        }
+
+        if ($user->getParam('editor', $config->get('editor')) !== 'jce') {
+            return false;
+        }
+
+        return true;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     }
 
     public function onAfterRoute()
     {
+<<<<<<< HEAD
         if ($this->canRedirectMedia() && $this->isEditorEnabled()) {
             // redirect to file browser
             $this->redirectMedia();
+=======
+        $app = JFactory::getApplication();
+
+        if ($app->input->getCmd('option') == 'com_jce' && $app->input->getCmd('task') == 'mediafield.display' && $app->input->get('fieldid')) {
+            
+            if ($this->isEditorEnabled()) {
+                $params = JComponentHelper::getParams('com_jce');
+
+                if ((bool) $params->get('replace_media_manager', 1) == true) {
+                    // redirect to file browser
+                    $this->redirectMedia();
+                }
+            }
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         }
     }
 
@@ -141,6 +189,7 @@ class PlgSystemJce extends JPlugin
 
         $params = JComponentHelper::getParams('com_jce');
 
+<<<<<<< HEAD
         // editor not enabled
         if (false == $this->isEditorEnabled()) {
             return true;
@@ -148,6 +197,35 @@ class PlgSystemJce extends JPlugin
 
         // File Browser not enabled
         if (false == $this->getMediaRedirectUrl()) {
+=======
+        // get form name.
+        $name = $form->getName();
+
+        if (!$version->isCompatible('3.6')) {
+            $valid = array(
+                'com_content.article',
+                'com_categories.categorycom_content',
+                'com_templates.style',
+                'com_tags.tag',
+                'com_banners.banner',
+                'com_contact.contact',
+                'com_newsfeeds.newsfeed',
+            );
+
+            // only allow some forms, see - https://github.com/joomla/joomla-cms/pull/8657
+            if (!in_array($name, $valid)) {
+                return true;
+            }
+        }
+
+        // editor not enabled
+        if (!$this->isEditorEnabled()) {
+            return true;
+        }
+
+        // media replacement disabled
+        if ((bool) $params->get('replace_media_manager', 1) === false) {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             return true;
         }
 
@@ -162,12 +240,17 @@ class PlgSystemJce extends JPlugin
             $name = $field->getAttribute('name');
 
             // avoid processing twice
+<<<<<<< HEAD
             if ($form->getFieldAttribute($name, 'class') && strpos($form->getFieldAttribute($name, 'class'), 'wf-media-input') !== false) {
+=======
+            if (strpos($form->getFieldAttribute($name, 'class'), 'wf-media-input') !== false) {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                 continue;
             }
 
             $type = $field->getAttribute('type');
 
+<<<<<<< HEAD
             if ($type) {
                 // joomla media field and flexi-content converted media field
                 if (strtolower($type) === 'media' || strtolower($type) === 'fcmedia') {
@@ -187,17 +270,32 @@ class PlgSystemJce extends JPlugin
                 if (strtolower($type) === 'mediajce') {
                     $hasMedia = true;
                 }
+=======
+            if (strtolower($type) === 'media') {
+
+                $group = (string) $field->group;
+                $form->setFieldAttribute($name, 'type', 'mediajce', $group);
+                $form->setFieldAttribute($name, 'converted', '1', $group);
+                $hasMedia = true;
+            }
+
+            if (strtolower($type) === 'mediajce') {
+                $hasMedia = true;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             }
         }
 
         // form has a converted media field
         if ($hasMedia) {
+<<<<<<< HEAD
             if ((bool) $params->get('replace_media_manager', 1)) {
                 $option     = $app->input->getCmd('option'); 
                 $component  = JComponentHelper::getComponent($option);                
                 JFactory::getDocument()->addScriptOptions('plg_system_jce', array('replace_media' => true, 'context' => $component->id), true);
             }
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             $form->addFieldPath(JPATH_PLUGINS . '/system/jce/fields');
 
             // Include jQuery

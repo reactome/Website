@@ -1,19 +1,35 @@
 /**
  * @package         Modals
+<<<<<<< HEAD
  * @version         11.10.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         11.9.0
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 /**
  * @package         Modals
+<<<<<<< HEAD
  * @version         11.10.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         11.9.0
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 /*
@@ -23,6 +39,7 @@
 #rl_modals,
 #rl_modals_overlay,
 #rl_modals_wrapper {
+<<<<<<< HEAD
   position: absolute;
   top: 0;
   left: 0;
@@ -59,17 +76,70 @@
   width: 100%;
   height: 100%;
 }
+=======
+    position: absolute;
+    z-index:  9999;
+    top:      0;
+    left:     0;
+    overflow: hidden;
+}
+
+#rl_modals_wrapper {
+    max-width: none;
+}
+
+#rl_modals_overlay {
+    position: fixed;
+    width:    100%;
+    height:   100%;
+}
+
+#rl_modals_middle_left,
+#rl_modals_bottom_left {
+    clear: left;
+}
+
+#rl_modals_content {
+    position: relative;
+}
+
+#rl_modals_loaded_content {
+    overflow:                   auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#rl_modals_title {
+    margin: 0;
+}
+
+#rl_modals_loading_overlay,
+#rl_modals_loading_graphic {
+    position: absolute;
+    top:      0;
+    left:     0;
+    width:    100%;
+    height:   100%;
+}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 #rl_modals_previous,
 #rl_modals_next,
 #rl_modals_close,
 #rl_modals_slideshow {
+<<<<<<< HEAD
   cursor: pointer;
 }
+=======
+    cursor: pointer;
+}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 #rl_modals.no_navigation #rl_modals_previous,
 #rl_modals.no_navigation #rl_modals_next,
 #rl_modals.no_navigation #rl_modals_close,
 #rl_modals.no_navigation #rl_modals_slideshow,
 #rl_modals.no_navigation #rl_modals_current {
+<<<<<<< HEAD
   display: none !important;
 }
 .rl_modals_photo {
@@ -181,11 +251,149 @@
   font-weight: bold;
   color: #7c7c7c;
 }
+=======
+    display: none !important;
+}
+
+.rl_modals_photo {
+    display:                block;
+    float:                  left;
+    max-width:              none;
+    margin:                 auto;
+    border:                 0;
+    -ms-interpolation-mode: bicubic;
+}
+
+.rl_modals_iframe {
+    display: block;
+    width:   100%;
+    height:  100%;
+    margin:  0;
+    padding: 0;
+    border:  0;
+}
+
+#rl_modals,
+#rl_modals_content,
+#rl_modals_loaded_content {
+    -moz-box-sizing:    content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing:         content-box;
+}
+
+#rl_modals_title .modals_description {
+    font-size:   0.7em;
+    font-weight: normal;
+}
+
+.modal_link_hidden {
+    display: none !important;
+}
+
+#rl_modals_overlay {
+    background: #000000;
+}
+
+#rl_modals {
+    outline: 0;
+}
+
+#rl_modals_top_left {
+    width:      14px;
+    height:     14px;
+    background: url(../images/colorbox5/controls.png) no-repeat 0 0;
+}
+
+#rl_modals_top_center {
+    height:     14px;
+    background: url(../images/colorbox5/border.png) repeat-x top left;
+}
+
+#rl_modals_top_right {
+    width:      14px;
+    height:     14px;
+    background: url(../images/colorbox5/controls.png) no-repeat -36px 0;
+}
+
+#rl_modals_bottom_left {
+    width:      14px;
+    height:     43px;
+    background: url(../images/colorbox5/controls.png) no-repeat 0 -32px;
+}
+
+#rl_modals_bottom_center {
+    height:     43px;
+    background: url(../images/colorbox5/border.png) repeat-x bottom left;
+}
+
+#rl_modals_bottom_right {
+    width:      14px;
+    height:     43px;
+    background: url(../images/colorbox5/controls.png) no-repeat -36px -32px;
+}
+
+#rl_modals_middle_left {
+    width:      14px;
+    background: url(../images/colorbox5/controls.png) repeat-y -175px 0;
+}
+
+#rl_modals_middle_right {
+    width:      14px;
+    background: url(../images/colorbox5/controls.png) repeat-y -211px 0;
+}
+
+#rl_modals_content {
+    overflow:   visible;
+    background: #ffffff;
+}
+
+.rl_modals_iframe {
+    background: #ffffff;
+}
+
+#rl_modals_error {
+    padding: 50px;
+    border:  1px solid #cccccc;
+}
+
+#rl_modals_loaded_content {
+    margin-bottom: 5px;
+}
+
+#rl_modals_loading_overlay {
+    background: url(../images/colorbox5/loading_background.png) no-repeat center center;
+}
+
+#rl_modals_loading_graphic {
+    background: url(../images/colorbox5/loading.gif) no-repeat center center;
+}
+
+#rl_modals_title {
+    font-weight: bold;
+    position:    absolute;
+    bottom:      -25px;
+    left:        0;
+    width:       100%;
+    text-align:  center;
+    color:       #7c7c7c;
+    background:  #e9e8e8;
+}
+
+#rl_modals_current {
+    font-weight: bold;
+    position:    absolute;
+    bottom:      -25px;
+    left:        58px;
+    color:       #7c7c7c;
+}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
 #rl_modals_previous,
 #rl_modals_next,
 #rl_modals_slideshow,
 #rl_modals_close {
+<<<<<<< HEAD
   border: 0;
   padding: 0;
   margin: 0;
@@ -197,11 +405,26 @@
   height: 23px;
   text-indent: -9999px;
 }
+=======
+    position:    absolute;
+    bottom:      -29px;
+    overflow:    visible;
+    width:       23px;
+    height:      23px;
+    margin:      0;
+    padding:     0;
+    text-indent: -9999px;
+    border:      0;
+    background:  url(../images/colorbox5/controls.png) no-repeat 0px 0px;
+}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
 #rl_modals_previous:active,
 #rl_modals_next:active,
 #rl_modals_slideshow:active,
 #rl_modals_close:active {
+<<<<<<< HEAD
   outline: 0;
 }
 #rl_modals_previous {
@@ -238,4 +461,52 @@
 }
 .rl_modals_slideshow_off #rl_modals_slideshow:hover {
   background-position: -125px 0px;
+=======
+    outline: 0;
+}
+
+#rl_modals_previous {
+    left:                0px;
+    background-position: -51px -25px;
+}
+
+#rl_modals_previous:hover {
+    background-position: -51px 0px;
+}
+
+#rl_modals_next {
+    left:                27px;
+    background-position: -75px -25px;
+}
+
+#rl_modals_next:hover {
+    background-position: -75px 0px;
+}
+
+#rl_modals_close {
+    right:               0;
+    background-position: -100px -25px;
+}
+
+#rl_modals_close:hover {
+    background-position: -100px 0px;
+}
+
+.rl_modals_slideshow_on #rl_modals_slideshow {
+    right:               27px;
+    background-position: -125px 0px;
+}
+
+.rl_modals_slideshow_on #rl_modals_slideshow:hover {
+    background-position: -150px 0px;
+}
+
+.rl_modals_slideshow_off #rl_modals_slideshow {
+    right:               27px;
+    background-position: -150px -25px;
+}
+
+.rl_modals_slideshow_off #rl_modals_slideshow:hover {
+    background-position: -125px 0px;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 }

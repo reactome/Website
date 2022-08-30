@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -56,6 +64,7 @@ class Version
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Get the full footer
 	 *
 	 * @param     $name
@@ -79,6 +88,206 @@ class Version
 		}
 
 		return '<div class="rl_footer">' . implode('', $html) . '</div>';
+	}
+
+	/**
+	 * Get the extension name and version for the footer
+=======
+	 * Get the version of the given component
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @param $name
+	 *
+	 * @return string
+	 */
+	private static function getFooterName($name)
+	{
+		$name = JText::_($name);
+
+		if ( ! $version = self::get($name))
+		{
+			return $name;
+		}
+
+		if (strpos($version, 'PRO') !== false)
+		{
+			return $name . ' v' . str_replace('PRO', '', $version) . ' <small>[PRO]</small>';
+		}
+
+		if (strpos($version, 'FREE') !== false)
+		{
+			return $name . ' v' . str_replace('FREE', '', $version) . ' <small>[FREE]</small>';
+		}
+
+		return $name . ' v' . $version;
+	}
+
+	/**
+<<<<<<< HEAD
+	 * Get the review text for the footer
+	 *
+	 * @param $name
+	 *
+	 * @return string
+	 */
+	private static function getFooterReview($name)
+	{
+		$alias = Extension::getAliasByName($name);
+
+		$jed_url = 'http://regl.io/jed-' . $alias . '#reviews';
+
+		return StringHelper::html_entity_decoder(
+			JText::sprintf(
+				'RL_JED_REVIEW',
+				'<a href="' . $jed_url . '" target="_blank">',
+				'</a>'
+				. ' <a href="' . $jed_url . '" target="_blank" class="stars">'
+				. str_repeat('<span class="icon-star"></span>', 5)
+				. '</a>'
+			)
+		);
+	}
+
+	/**
+	 * Get the Regular Labs logo for the footer
+	 *
+	 * @return string
+	 */
+	private static function getFooterLogo()
+	{
+		return JText::sprintf(
+			'RL_POWERED_BY',
+			'<a href="https://regularlabs.com" target="_blank">'
+			. '<img src="' . JUri::root() . 'media/regularlabs/images/logo.svg" width="112" height="24" alt="Regular Labs">'
+			. '</a>'
+		);
+	}
+
+	/**
+	 * Get the copyright text for the footer
+	 *
+	 * @return string
+	 */
+	private static function getFooterCopyright()
+	{
+		return JText::_('RL_COPYRIGHT') . ' &copy; ' . date('Y') . ' Regular Labs - ' . JText::_('RL_ALL_RIGHTS_RESERVED');
+=======
+	 * Get the full footer
+	 *
+	 * @param     $name
+	 * @param int $copyright
+	 *
+	 * @return string
+	 */
+	public static function getFooter($name, $copyright = true)
+	{
+		Document::loadMainDependencies();
+
+		$html = [];
+
+		$html[] = '<div class="rl_footer_extension">' . self::getFooterName($name) . '</div>';
+
+		if ($copyright)
+		{
+			$html[] = '<div class="rl_footer_review">' . self::getFooterReview($name) . '</div>';
+			$html[] = '<div class="rl_footer_logo">' . self::getFooterLogo() . '</div>';
+			$html[] = '<div class="rl_footer_copyright">' . self::getFooterCopyright() . '</div>';
+		}
+
+		return '<div class="rl_footer">' . implode('', $html) . '</div>';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	}
+
+	/**
+	 * Get the version message
+	 *
+	 * @param $alias
+	 *
+	 * @return string
+	 */
+	public static function getMessage($alias)
+	{
+		if ( ! $alias)
+		{
+			return '';
+		}
+
+		$name  = Extension::getNameByAlias($alias);
+		$alias = Extension::getAliasByName($alias);
+
+		if ( ! $version = self::get($alias))
+		{
+			return '';
+		}
+
+		Document::loadMainDependencies();
+
+		$url    = 'download.regularlabs.com/extensions.xml?j=3&e=' . $alias;
+		$script = "
+			jQuery(document).ready(function() {
+				RegularLabsScripts.loadajax(
+					'" . $url . "',
+					'RegularLabsScripts.displayVersion( data, \"" . $alias . "\", \"" . str_replace(['FREE', 'PRO'], '', $version) . "\" )',
+					'RegularLabsScripts.displayVersion( \"\" )',
+					null, null, null, (60 * 60)
+				);
+			});
+		";
+		JFactory::getDocument()->addScriptDeclaration($script);
+
+		return '<div class="alert alert-success" style="display:none;" id="regularlabs_version_' . $alias . '">' . self::getMessageText($alias, $name, $version) . '</div>';
+	}
+
+	/**
+<<<<<<< HEAD
+=======
+	 * Get the version of the given module
+	 *
+	 * @param $alias
+	 *
+	 * @return string
+	 */
+	public static function getModuleVersion($alias)
+	{
+		return self::get($alias, 'module');
+	}
+
+	/**
+	 * Get the version of the given plugin
+	 *
+	 * @param        $alias
+	 * @param string $folder
+	 *
+	 * @return string
+	 */
+	public static function getPluginVersion($alias, $folder = 'system')
+	{
+		return self::get($alias, 'plugin', $folder);
+	}
+
+	/**
+	 * Get the copyright text for the footer
+	 *
+	 * @return string
+	 */
+	private static function getFooterCopyright()
+	{
+		return JText::_('RL_COPYRIGHT') . ' &copy; ' . date('Y') . ' Regular Labs - ' . JText::_('RL_ALL_RIGHTS_RESERVED');
+	}
+
+	/**
+	 * Get the Regular Labs logo for the footer
+	 *
+	 * @return string
+	 */
+	private static function getFooterLogo()
+	{
+		return JText::sprintf(
+			'RL_POWERED_BY',
+			'<a href="https://regularlabs.com" target="_blank">'
+			. '<img src="' . JUri::root() . 'media/regularlabs/images/logo.svg" width="112" height="24" alt="Regular Labs">'
+			. '</a>'
+		);
 	}
 
 	/**
@@ -136,71 +345,7 @@ class Version
 	}
 
 	/**
-	 * Get the Regular Labs logo for the footer
-	 *
-	 * @return string
-	 */
-	private static function getFooterLogo()
-	{
-		return JText::sprintf(
-			'RL_POWERED_BY',
-			'<a href="https://regularlabs.com" target="_blank">'
-			. '<img src="' . JUri::root() . 'media/regularlabs/images/logo.svg" width="112" height="24" alt="Regular Labs">'
-			. '</a>'
-		);
-	}
-
-	/**
-	 * Get the copyright text for the footer
-	 *
-	 * @return string
-	 */
-	private static function getFooterCopyright()
-	{
-		return JText::_('RL_COPYRIGHT') . ' &copy; ' . date('Y') . ' Regular Labs - ' . JText::_('RL_ALL_RIGHTS_RESERVED');
-	}
-
-	/**
-	 * Get the version message
-	 *
-	 * @param $alias
-	 *
-	 * @return string
-	 */
-	public static function getMessage($alias)
-	{
-		if ( ! $alias)
-		{
-			return '';
-		}
-
-		$name  = Extension::getNameByAlias($alias);
-		$alias = Extension::getAliasByName($alias);
-
-		if ( ! $version = self::get($alias))
-		{
-			return '';
-		}
-
-		Document::loadMainDependencies();
-
-		$url    = 'download.regularlabs.com/extensions.xml?j=3&e=' . $alias;
-		$script = "
-			jQuery(document).ready(function() {
-				RegularLabsScripts.loadajax(
-					'" . $url . "',
-					'RegularLabsScripts.displayVersion( data, \"" . $alias . "\", \"" . str_replace(['FREE', 'PRO'], '', $version) . "\" )',
-					'RegularLabsScripts.displayVersion( \"\" )',
-					null, null, null, (60 * 60)
-				);
-			});
-		";
-		JFactory::getDocument()->addScriptDeclaration($script);
-
-		return '<div class="alert alert-success" style="display:none;" id="regularlabs_version_' . $alias . '">' . self::getMessageText($alias, $name, $version) . '</div>';
-	}
-
-	/**
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 * Get the version message text
 	 *
 	 * @param $alias
@@ -300,7 +445,11 @@ class Version
 			var RLEM_TOKEN = '" . JSession::getFormToken() . "';
 		"
 		);
+<<<<<<< HEAD
 		Document::script('regularlabsmanager/script.min.js', '22.6.8549');
+=======
+		Document::script('regularlabsmanager/script.min.js', '21.7.10061');
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		$url = 'https://download.regularlabs.com?ext=' . $alias . '&j=3';
 
@@ -311,6 +460,7 @@ class Version
 
 		return ['', 'RegularLabsManager.openModal(\'update\', [\'' . $alias . '\'], [\'' . $url . '\'], true);'];
 	}
+<<<<<<< HEAD
 
 	/**
 	 * Get the version of the given module
@@ -336,4 +486,6 @@ class Version
 	{
 		return self::get($alias, 'plugin', $folder);
 	}
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 }

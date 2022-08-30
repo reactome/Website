@@ -2,7 +2,11 @@
 /**
  * Joomla! Content Management System
  *
+<<<<<<< HEAD
  * @copyright  (C) 2013 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -121,7 +125,11 @@ class ContentHelper
 
 		$relationsAll = $db->setQuery($query)->loadObjectList();
 
+<<<<<<< HEAD
 		// Loop through the DB data overwriting the above zeros with the found count
+=======
+		// Loop through the DB data overwritting the above zeros with the found count
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		foreach ($relationsAll as $relation)
 		{
 			// Sanity check in case someone removes the state IN above ... and some views may start throwing warnings

@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -52,6 +60,7 @@ class UserGrouplevel extends User
 		return $this->passSimple($groups);
 	}
 
+<<<<<<< HEAD
 	private function setUserGroupChildrenIds()
 	{
 		$children = $this->getUserGroupChildrenIds($this->selection);
@@ -66,6 +75,8 @@ class UserGrouplevel extends User
 		$this->selection = array_merge($this->selection, $children);
 	}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	private function convertUsergroupNamesToIds($selection)
 	{
 		$names = [];
@@ -101,6 +112,7 @@ class UserGrouplevel extends User
 		return array_unique(array_merge($selection, $group_ids));
 	}
 
+<<<<<<< HEAD
 	private function passMatchAll($groups)
 	{
 		$pass = ! array_diff($this->selection, $groups) && ! array_diff($groups, $this->selection);
@@ -108,6 +120,8 @@ class UserGrouplevel extends User
 		return $this->_($pass);
 	}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	private function getUserGroupChildrenIds($groups)
 	{
 		$children = [];
@@ -138,6 +152,7 @@ class UserGrouplevel extends User
 		return $children;
 	}
 
+<<<<<<< HEAD
 	private function getUserGroupChildrenIdsByGroup($group)
 	{
 		$group = (int) $group;
@@ -167,5 +182,26 @@ class UserGrouplevel extends User
 		}
 
 		return self::$user_group_children[$group] ?? [];
+=======
+	private function passMatchAll($groups)
+	{
+		$pass = ! array_diff($this->selection, $groups) && ! array_diff($groups, $this->selection);
+
+		return $this->_($pass);
+	}
+
+	private function setUserGroupChildrenIds()
+	{
+		$children = $this->getUserGroupChildrenIds($this->selection);
+
+		if ($this->params->inc_children == 2)
+		{
+			$this->selection = $children;
+
+			return;
+		}
+
+		$this->selection = array_merge($this->selection, $children);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 }

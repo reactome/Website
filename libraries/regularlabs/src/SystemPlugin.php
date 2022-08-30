@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -41,7 +49,10 @@ class SystemPlugin extends JCMSPlugin
 	public    $_page_types            = [];
 	public    $_protected_formats     = [];
 	public    $_title                 = '';
+<<<<<<< HEAD
 	protected $_doc_ready             = false;
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	protected $_pass                  = null;
 	/**
 	 * @var    JCMSApplication
@@ -99,19 +110,30 @@ class SystemPlugin extends JCMSPlugin
 
 		$buffer = Document::getComponentBuffer();
 
+<<<<<<< HEAD
 		$this->loadStylesAndScripts($buffer);
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		if ( ! $buffer)
 		{
 			return;
 		}
 
+<<<<<<< HEAD
 		$this->changeDocumentBuffer($buffer);
+=======
+		if ( ! $this->changeDocumentBuffer($buffer))
+		{
+			return;
+		}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		Document::setComponentBuffer($buffer);
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @return  bool
 	 */
 	protected function passChecks()
@@ -171,16 +193,138 @@ class SystemPlugin extends JCMSPlugin
 		}
 
 		if ( ! $this->extraChecks())
+=======
+	 * @return  void
+	 */
+	public function onAfterInitialise()
+	{
+		if ( ! $this->passChecks())
+		{
+			return;
+		}
+
+		$this->handleOnAfterInitialise();
+	}
+
+	/**
+	 * @return  void
+	 */
+	public function onAfterRender()
+	{
+		if ( ! $this->passChecks())
+		{
+			return;
+		}
+
+		$this->handleOnAfterRender();
+
+		$html = $this->app->getBody();
+
+		if ($html == '')
+		{
+			return;
+		}
+
+		if ( ! $this->changeFinalHtmlOutput($html))
+		{
+			return;
+		}
+
+		$this->cleanFinalHtmlOutput($html);
+
+		$this->app->setBody($html);
+	}
+
+	/**
+	 * @param string $buffer
+	 * @param string $params
+	 *
+	 * @return  void
+	 */
+	public function onAfterRenderModules(&$buffer, &$params)
+	{
+		if ( ! $this->passChecks())
+		{
+			return;
+		}
+
+		$this->handleOnAfterRenderModules($buffer, $params);
+
+		if (empty($buffer))
+		{
+			return;
+		}
+
+		$this->changeModulePositionOutput($buffer, $params);
+	}
+
+	/**
+	 * @return  void
+	 */
+	public function onAfterRoute()
+	{
+		if ( ! $this->passChecks())
+		{
+			return;
+		}
+
+		$this->handleOnAfterRoute();
+	}
+
+	/**
+	 * @return  void
+	 */
+	public function onBeforeCompileHead(): void
+	{
+		if ( ! $this->passChecks())
+		{
+			return;
+		}
+
+		$this->handleOnBeforeCompileHead();
+
+		$buffer = Document::getComponentBuffer();
+
+		$this->loadStylesAndScripts($buffer);
+
+		Document::setComponentBuffer($buffer);
+	}
+
+	/**
+	 * @param string    $context The context of the content being passed to the plugin.
+	 * @param mixed    &$row     An object with a "text" property
+	 * @param mixed    &$params  Additional parameters. See {@see PlgContentContent()}.
+	 * @param integer   $page    Optional page number. Unused. Defaults to zero.
+	 *
+	 * @return  bool
+	 */
+	public function onContentPrepare($context, &$article, &$params, $page = 0)
+	{
+		if ( ! $this->passChecks())
+		{
+			return true;
+		}
+
+		$area    = isset($article->created_by) ? 'article' : 'other';
+		$context = (($params instanceof JRegistry) && $params->get('rl_search')) ? 'com_search.' . $params->get('readmore_limit') : $context;
+
+		if ( ! $this->handleOnContentPrepare($area, $context, $article, $params, $page))
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			return false;
 		}
 
+<<<<<<< HEAD
 		$this->setPass(true);
+=======
+		Article::process($article, $context, $this, 'processArticle', [$area, $context, $article, $page]);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		return true;
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @return  void
 	 */
 	protected function handleOnAfterDispatch()
@@ -194,6 +338,33 @@ class SystemPlugin extends JCMSPlugin
 	 * @return  void
 	 */
 	protected function loadStylesAndScripts(&$buffer)
+=======
+	 * @param JForm $form The form to be altered.
+	 * @param mixed $data The associated data for the form.
+	 *
+	 * @return  bool
+	 */
+	public function onContentPrepareForm(JForm $form, $data)
+	{
+		if ( ! $this->passChecks())
+		{
+			return true;
+		}
+
+		return $this->handleOnContentPrepareForm($form, $data);
+	}
+
+	/**
+	 * @param string &$string
+	 * @param string  $area
+	 * @param string  $context The context of the content being passed to the plugin.
+	 * @param mixed   $article An object with a "text" property
+	 * @param int     $page    Optional page number. Unused. Defaults to zero.
+	 *
+	 * @return  void
+	 */
+	public function processArticle(&$string, $area = 'article', $context = '', $article = null, $page = 0)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	{
 	}
 
@@ -208,6 +379,7 @@ class SystemPlugin extends JCMSPlugin
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @param bool $pass
 	 *
 	 * @return  void
@@ -277,6 +449,34 @@ class SystemPlugin extends JCMSPlugin
 		}
 
 		return false;
+=======
+	 * @param string $html
+	 *
+	 * @return  bool
+	 */
+	protected function changeFinalHtmlOutput(&$html)
+	{
+		return false;
+	}
+
+	/**
+	 * @param string $buffer
+	 * @param string $params
+	 *
+	 * @return  void
+	 */
+	protected function changeModulePositionOutput(&$buffer, &$params)
+	{
+	}
+
+	/**
+	 * @param string $html
+	 *
+	 * @return  void
+	 */
+	protected function cleanFinalHtmlOutput(&$html)
+	{
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	protected function extraChecks()
@@ -333,6 +533,7 @@ class SystemPlugin extends JCMSPlugin
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Set the define with whether the Regular Labs Library is enabled
 	 */
 	private function setIsFrameworkEnabled()
@@ -382,6 +583,53 @@ class SystemPlugin extends JCMSPlugin
 		}
 
 		JFactory::getApplication()->enqueueMessage($text, 'error');
+=======
+	 * @return  void
+	 */
+	protected function handleOnAfterDispatch()
+	{
+		$this->handleFeedArticles();
+	}
+
+	/**
+	 * @return  void
+	 */
+	protected function handleOnAfterInitialise()
+	{
+	}
+
+	/**
+	 * @return  void
+	 *
+	 * Consider using changeFinalHtmlOutput instead
+	 */
+	protected function handleOnAfterRender()
+	{
+	}
+
+	/**
+	 * @param string $buffer
+	 * @param string $params
+	 *
+	 * @return  void
+	 */
+	protected function handleOnAfterRenderModules(&$buffer, &$params)
+	{
+	}
+
+	/**
+	 * @return  void
+	 */
+	protected function handleOnAfterRoute()
+	{
+	}
+
+	/**
+	 * @return  void
+	 */
+	protected function handleOnBeforeCompileHead()
+	{
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
@@ -399,6 +647,7 @@ class SystemPlugin extends JCMSPlugin
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @return  void
 	 */
 	public function onAfterInitialise()
@@ -415,10 +664,34 @@ class SystemPlugin extends JCMSPlugin
 	 * @return  void
 	 */
 	protected function handleOnAfterInitialise()
+=======
+	 * @param JForm    $form The form
+	 * @param stdClass $data The data
+	 *
+	 * @return  bool
+	 */
+	protected function handleOnContentPrepareForm(JForm $form, $data)
+	{
+		return true;
+	}
+
+	protected function init()
+	{
+		return;
+	}
+
+	/**
+	 * @param string $buffer
+	 *
+	 * @return  void
+	 */
+	protected function loadStylesAndScripts(&$buffer)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	{
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @return  void
 	 */
 	public function onAfterRender()
@@ -633,3 +906,183 @@ class SystemPlugin extends JCMSPlugin
 		return;
 	}
 }
+=======
+	 * @return  bool
+	 */
+	protected function passChecks()
+	{
+		if ( ! is_null($this->_pass))
+		{
+			return $this->_pass;
+		}
+
+		$this->_pass = false;
+
+		if ( ! $this->isFrameworkEnabled())
+		{
+			return false;
+		}
+
+		if ( ! $this->passPageTypes())
+		{
+			return false;
+		}
+
+		// allow in frontend?
+		if ( ! $this->_enable_in_frontend
+			&& ! $this->_is_admin)
+		{
+			return false;
+		}
+
+		$params = Parameters::getPlugin($this->_name);
+
+		// allow in admin?
+		if ( ! $this->_enable_in_admin
+			&& $this->_is_admin
+			&& ( ! isset($params->enable_admin) || ! $params->enable_admin))
+		{
+			return false;
+		}
+
+		// disabled by url?
+		if ($this->_can_disable_by_url
+			&& Protect::isDisabledByUrl($this->_alias))
+		{
+			return false;
+		}
+
+		// disabled by component?
+		if ($this->_disable_on_components
+			&& Protect::isRestrictedComponent($params->disabled_components ?? [], 'component'))
+		{
+			return false;
+		}
+
+		// restricted page?
+		if (Protect::isRestrictedPage($this->_has_tags, $this->_protected_formats))
+		{
+			return false;
+		}
+
+		if ( ! $this->extraChecks())
+		{
+			return false;
+		}
+
+		$this->_pass = true;
+
+		return true;
+	}
+
+	protected function passPageTypes()
+	{
+		if (empty($this->_page_types))
+		{
+			return true;
+		}
+
+		if (in_array('*', $this->_page_types))
+		{
+			return true;
+		}
+
+		if (empty(JFactory::$document))
+		{
+			return true;
+		}
+
+		if (Document::isFeed())
+		{
+			return in_array('feed', $this->_page_types);
+		}
+
+		if (Document::isPDF())
+		{
+			return in_array('pdf', $this->_page_types);
+		}
+
+		$page_type = Document::get()->getType();
+
+		if (in_array($page_type, $this->_page_types))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Place an error in the message queue
+	 */
+	protected function throwError($error)
+	{
+		$user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
+
+		// Return if page is not an admin page or the admin login page
+		if (
+			! JFactory::getApplication()->isClient('administrator')
+			|| $user->get('guest')
+		)
+		{
+			return;
+		}
+
+		// load the admin language file
+		JFactory::getLanguage()->load('plg_' . $this->_type . '_' . $this->_name, JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name);
+
+		$text = JText::sprintf($this->_lang_prefix . '_' . $error, JText::_($this->_title));
+		$text = JText::_($text) . ' ' . JText::sprintf($this->_lang_prefix . '_EXTENSION_CAN_NOT_FUNCTION', JText::_($this->_title));
+
+		// Check if message is not already in queue
+		$messagequeue = JFactory::getApplication()->getMessageQueue();
+		foreach ($messagequeue as $message)
+		{
+			if ($message['message'] == $text)
+			{
+				return;
+			}
+		}
+
+		JFactory::getApplication()->enqueueMessage($text, 'error');
+	}
+
+	/**
+	 * Check if the Regular Labs Library is enabled
+	 *
+	 * @return bool
+	 */
+	private function isFrameworkEnabled()
+	{
+		if ( ! defined('REGULAR_LABS_LIBRARY_ENABLED'))
+		{
+			$this->setIsFrameworkEnabled();
+		}
+
+		if ( ! REGULAR_LABS_LIBRARY_ENABLED)
+		{
+			$this->throwError('REGULAR_LABS_LIBRARY_NOT_ENABLED');
+		}
+
+		return REGULAR_LABS_LIBRARY_ENABLED;
+	}
+
+	/**
+	 * Set the define with whether the Regular Labs Library is enabled
+	 */
+	private function setIsFrameworkEnabled()
+	{
+		if ( ! JPluginHelper::isEnabled('system', 'regularlabs'))
+		{
+			$this->throwError('REGULAR_LABS_LIBRARY_NOT_ENABLED');
+
+			define('REGULAR_LABS_LIBRARY_ENABLED', false);
+
+			return;
+		}
+
+		define('REGULAR_LABS_LIBRARY_ENABLED', true);
+	}
+}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090

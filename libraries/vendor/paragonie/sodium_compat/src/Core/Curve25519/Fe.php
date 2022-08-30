@@ -102,8 +102,13 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
     /**
      * @internal You should not use this directly from another application
      *
+<<<<<<< HEAD
      * @param int $offset
      * @return int
+=======
+     * @param mixed $offset
+     * @return mixed|null
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
      * @psalm-suppress MixedArrayOffset
      */
     #[ReturnTypeWillChange]

@@ -4,6 +4,7 @@
  *
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://github.com/regularlabs/regularjs
+<<<<<<< HEAD
  * @copyright       Copyright © 2022 Regular Labs - All Rights Reserved
  * @license         https://github.com/regularlabs/regularjs/blob/master/LICENCE MIT
  */
@@ -13,6 +14,17 @@
 if (typeof window.Regular === 'undefined'
 	|| typeof Regular.version === 'undefined'
 	|| Regular.version < 1.5) {
+=======
+ * @copyright       Copyright © 2021 Regular Labs - All Rights Reserved
+ * @license         https://github.com/regularlabs/regularjs/blob/master/LICENCE MIT
+ */
+
+if (typeof window.Regular === 'undefined'
+	|| typeof Regular.version === 'undefined'
+	|| Regular.version < 1.3) {
+
+	"use strict";
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 	window.Regular = new function() {
 		/**
@@ -21,7 +33,11 @@ if (typeof window.Regular === 'undefined'
 		 *
 		 */
 
+<<<<<<< HEAD
 		this.version = 1.5;
+=======
+		this.version = 1.3;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		/**
 		 *
@@ -38,7 +54,11 @@ if (typeof window.Regular === 'undefined'
 		 */
 		this.alias = function(word) {
 			if (typeof window[word] !== 'undefined') {
+<<<<<<< HEAD
 				console.error(`Cannot set '${word}' as an alias of Regular, as it already exists.`);
+=======
+				console.error(`Cannot set '${word}' as am alias of Regular, as it already exists.`);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 				return false;
 			}
@@ -63,6 +83,7 @@ if (typeof window.Regular === 'undefined'
 			}
 
 			const element = typeof selector === 'string'
+<<<<<<< HEAD
 				? document.querySelector(selector)
 				: selector;
 
@@ -70,6 +91,11 @@ if (typeof window.Regular === 'undefined'
 				return false;
 			}
 
+=======
+				? document.querySelectorAll(selector)
+				: selector;
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			if (typeof classes === 'string') {
 				classes = classes.split(' ');
 			}
@@ -116,6 +142,7 @@ if (typeof window.Regular === 'undefined'
 		 *
 		 * @param selector  A CSS selector string, a HTMLElement object or a collection of HTMLElement objects.
 		 * @param classes   A string or array of class names.
+<<<<<<< HEAD
 		 * @param force     An optional boolean value that forces the class to be added or removed.
 		 */
 		this.toggleClasses = function(selector, classes, force) {
@@ -140,6 +167,19 @@ if (typeof window.Regular === 'undefined'
 		 * @param selector  A CSS selector string, a HTMLElement object or a collection of HTMLElement objects.
 		 */
 		this.makeVisible = function(selector) {
+=======
+		 */
+		this.toggleClasses = function(selector, classes) {
+			doClasses('toggle', selector, classes);
+		};
+
+		/**
+		 * Shows the given element(s) (changes opacity and display attributes).
+		 *
+		 * @param selector  A CSS selector string, a HTMLElement object or a collection of HTMLElement objects.
+		 */
+		this.show = function(selector) {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			if ( ! selector) {
 				return;
 			}
@@ -149,7 +189,11 @@ if (typeof window.Regular === 'undefined'
 				: selector;
 
 			if ('forEach' in element) {
+<<<<<<< HEAD
 				element.forEach(subElement => $.makeVisible(subElement));
+=======
+				element.forEach(subElement => $.show(subElement));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 				return;
 			}
 
@@ -171,6 +215,7 @@ if (typeof window.Regular === 'undefined'
 			}
 
 			element.style.visibility = 'visible';
+<<<<<<< HEAD
 		};
 
 		/**
@@ -195,6 +240,9 @@ if (typeof window.Regular === 'undefined'
 			this.makeVisible(element);
 
 			element.style.opacity = 1;
+=======
+			element.style.opacity    = 1;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		};
 
 		/**
@@ -228,6 +276,7 @@ if (typeof window.Regular === 'undefined'
 		};
 
 		/**
+<<<<<<< HEAD
 		 * Shows or hides the given element(s).
 		 *
 		 * @param selector  A CSS selector string, a HTMLElement object or a collection of HTMLElement objects.
@@ -264,6 +313,9 @@ if (typeof window.Regular === 'undefined'
 
 		/**
 		 * Fades in the given element(s).
+=======
+		 * Fades in the the given element(s).
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		 *
 		 * @param selector    A CSS selector string, a HTMLElement object or a collection of HTMLElement objects.
 		 * @param duration    Optional duration of the effect in milliseconds.
@@ -278,6 +330,7 @@ if (typeof window.Regular === 'undefined'
 				? document.querySelectorAll(selector)
 				: selector;
 
+<<<<<<< HEAD
 			this.makeVisible(element);
 
 			$.fadeTo(
@@ -331,6 +384,63 @@ if (typeof window.Regular === 'undefined'
 		 * @param oncomplete  Optional callback function to execute when effect is completed.
 		 */
 		this.fadeTo = function(selector, opacity, duration = 250, oncomplete) {
+=======
+			if ('forEach' in element) {
+				element.forEach(subElement => $.fadeIn(subElement, duration, oncomplete));
+				return;
+			}
+
+			element.setAttribute('data-fading', 'in');
+
+			const wait        = 50; // amount of time between steps
+			const nr_of_steps = duration / wait;
+			const change      = 1 / nr_of_steps; // time to wait before next step
+
+			element.style.opacity = getComputedStyle(element, 'opacity');
+
+			if ( ! element.style.opacity) {
+				element.style.opacity = 0;
+			}
+
+			if (element.style.display === 'none') {
+				element.style.display = 'block';
+			}
+
+			element.style.visibility = 'visible';
+
+			(function fade() {
+				if (element.getAttribute('data-fading') === 'out') {
+					return;
+				}
+
+				const new_opacity = parseFloat(element.style.opacity) + change;
+
+				if (new_opacity >= 1) {
+					$.show(element);
+					element.setAttribute('data-fading', '');
+					if (oncomplete) {
+						oncomplete.call(element);
+					}
+					return;
+				}
+
+				element.style.opacity = new_opacity;
+
+				setTimeout(function() {
+					fade.call();
+				}, wait);
+			})();
+		};
+
+		/**
+		 * Fades out the the given element(s).
+		 *
+		 * @param selector    A CSS selector string, a HTMLElement object or a collection of HTMLElement objects.
+		 * @param duration    Optional duration of the effect in milliseconds.
+		 * @param oncomplete  Optional callback function to execute when effect is completed.
+		 */
+		this.fadeOut = function(selector, duration = 250, oncomplete) {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			if ( ! selector) {
 				return;
 			}
@@ -340,16 +450,26 @@ if (typeof window.Regular === 'undefined'
 				: selector;
 
 			if ('forEach' in element) {
+<<<<<<< HEAD
 				element.forEach(subElement => $.fadeTo(subElement, opacity, duration));
 				return;
 			}
 
+=======
+				element.forEach(subElement => $.fadeOut(subElement, duration, oncomplete));
+				return;
+			}
+
+			element.setAttribute('data-fading', 'out');
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			const wait        = 50; // amount of time between steps
 			const nr_of_steps = duration / wait;
 			const change      = 1 / nr_of_steps; // time to wait before next step
 
 			element.style.opacity = getComputedStyle(element, 'opacity');
 
+<<<<<<< HEAD
 			if (opacity === element.style.opacity) {
 				element.setAttribute('data-fading', '');
 
@@ -388,12 +508,31 @@ if (typeof window.Regular === 'undefined'
 						oncomplete.call(element);
 					}
 
+=======
+			(function fade() {
+				if (element.getAttribute('data-fading') === 'in') {
+					return;
+				}
+
+				const new_opacity = parseFloat(element.style.opacity) - change;
+
+				if (element.style.opacity <= 0) {
+					$.hide(element);
+					element.setAttribute('data-fading', '');
+					if (oncomplete) {
+						oncomplete.call(element);
+					}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 					return;
 				}
 
 				element.style.opacity = new_opacity;
 
+<<<<<<< HEAD
 				setTimeout(() => {
+=======
+				setTimeout(function() {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 					fade.call();
 				}, wait);
 			})();
@@ -430,7 +569,11 @@ if (typeof window.Regular === 'undefined'
 		this.loadUrl = function(url, data, success, fail) {
 			const request = new XMLHttpRequest();
 
+<<<<<<< HEAD
 			request.open('POST', url, true);
+=======
+			request.open("POST", url, true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 			request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
@@ -447,6 +590,7 @@ if (typeof window.Regular === 'undefined'
 				fail && fail.call(null, this.responseText, this.status, this);
 			};
 
+<<<<<<< HEAD
 			request.send(this.toUrlQueryString(data));
 		};
 
@@ -494,6 +638,9 @@ if (typeof window.Regular === 'undefined'
 			}
 
 			return parts.join('&');
+=======
+			request.send(data);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		};
 
 		/**

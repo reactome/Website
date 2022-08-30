@@ -3,7 +3,11 @@
  * @package     Joomla.Administrator
  * @subpackage  com_privacy
  *
+<<<<<<< HEAD
  * @copyright   (C) 2018 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -28,6 +32,7 @@ class PrivacyControllerConsents extends JControllerForm
 		// Check for request forgeries
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
+<<<<<<< HEAD
 		$ids = (array) $this->input->get('cid', array(), 'int');
 
 		// Remove zero values resulting from input filter
@@ -38,6 +43,13 @@ class PrivacyControllerConsents extends JControllerForm
 			$message = JText::_('JERROR_NO_ITEMS_SELECTED');
 
 			$this->setError($message);
+=======
+		$ids    = $this->input->get('cid', array(), 'array');
+
+		if (empty($ids))
+		{
+			$this->setError(JText::_('JERROR_NO_ITEMS_SELECTED'));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		}
 		else
 		{

@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -16,8 +20,13 @@ class JceViewPopup extends JViewLegacy
         $app = JFactory::getApplication();
         $document = JFactory::getDocument();
 
+<<<<<<< HEAD
         $document->addScript(JURI::root(true) . '/media/com_jce/js/popup.min.js');
         $document->addStylesheet(JURI::root(true) . '/media/com_jce/css/popup.min.css');
+=======
+        $document->addScript(JURI::root(true) . '/components/com_jce/media/js/popup.js');
+        $document->addStylesheet(JURI::root(true) . '/components/com_jce/media/css/popup.css');
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         // Get variables
         $img    = $app->input->get('img', '', 'STRING');

@@ -3,7 +3,11 @@
  * @package     Joomla.Administrator
  * @subpackage  com_templates
  *
+<<<<<<< HEAD
  * @copyright   (C) 2009 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -25,8 +29,11 @@ class TemplatesControllerStyles extends JControllerAdmin
 	{
 		// Check for request forgeries
 		$this->checkToken();
+<<<<<<< HEAD
 
 		$pks = (array) $this->input->post->get('cid', array(), 'int');
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		// Remove zero values resulting from input filter
 		$pks = array_filter($pks);
@@ -115,8 +122,11 @@ class TemplatesControllerStyles extends JControllerAdmin
 	{
 		// Check for request forgeries
 		$this->checkToken('request');
+<<<<<<< HEAD
 
 		$pks = (array) $this->input->get->get('cid', array(), 'int');
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		// Remove zero values resulting from input filter
 		$pks = array_filter($pks);

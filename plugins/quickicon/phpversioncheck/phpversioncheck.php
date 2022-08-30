@@ -3,7 +3,11 @@
  * @package     Joomla.Plugin
  * @subpackage  Quickicon.phpversioncheck
  *
+<<<<<<< HEAD
  * @copyright   (C) 2016 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -144,10 +148,13 @@ class PlgQuickiconPhpVersionCheck extends JPlugin
 			'8.0' => array(
 				'security' => '2022-11-26',
 				'eos'      => '2023-11-26',
+<<<<<<< HEAD
 			),
 			'8.1' => array(
 				'security' => '2023-11-25',
 				'eos'      => '2024-11-25',
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			),
 		);
 

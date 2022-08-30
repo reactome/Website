@@ -2,6 +2,19 @@
 <form>
 	<fieldset name="default" label="COM_PRIVACY_CONFIRM_REQUEST_FIELDSET_LABEL">
 		<field
+<<<<<<< HEAD
+=======
+			name="email"
+			type="text"
+			label="JGLOBAL_EMAIL"
+			description="COM_PRIVACY_FIELD_CONFIRM_EMAIL_DESC"
+			validate="email"
+			required="true"
+			size="30"
+		/>
+
+		<field
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			name="confirm_token"
 			type="text"
 			label="COM_PRIVACY_FIELD_CONFIRM_CONFIRM_TOKEN_LABEL"

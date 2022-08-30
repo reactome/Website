@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -87,6 +91,7 @@ class JoomlalinksContact extends JObject
                     // language
                     if (isset($category->language)) {
                         $language = $category->language;
+<<<<<<< HEAD
                     }
 
                     if ($children) {
@@ -95,6 +100,16 @@ class JoomlalinksContact extends JObject
                         $id = JHelperRoute::getCategoryRoute($category->slug, $language, 'com_contact');
                     }
 
+=======
+                    }
+
+                    if ($children) {
+                        $id = JHelperRoute::getCategoryRoute($category->id, $language, 'com_contact');
+                    } else {
+                        $id = JHelperRoute::getCategoryRoute($category->slug, $language, 'com_contact');
+                    }
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                     // convert to SEF
                     $url = self::route($id);
 
@@ -134,6 +149,7 @@ class JoomlalinksContact extends JObject
         $wf = WFEditorPlugin::getInstance();
         
         if ((bool) $wf->getParam('links.joomlalinks.sef_url', 0)) {
+<<<<<<< HEAD
             $url = WFLinkHelper::route($url);
         }
 
@@ -143,6 +159,14 @@ class JoomlalinksContact extends JObject
         // remove Itemid
         if ((bool) $wf->getParam('links.joomlalinks.itemid', 1) === false) {
             $url = WFLinkHelper::removeItemId($url);
+=======
+            $url = WFLinkBrowser::route($url);
+        }
+
+        // remove Itemid
+        if ((bool) $wf->getParam('links.joomlalinks.itemid', 1) === false) {
+            $url = WFLinkBrowser::removeItemId($url);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         }
 
         return $url;

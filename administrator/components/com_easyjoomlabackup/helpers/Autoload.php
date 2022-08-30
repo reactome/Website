@@ -4,7 +4,11 @@
  * @copyright
  * @package    Easybook Reloaded - EBR for Joomla! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
+<<<<<<< HEAD
  * @version    3.4.1.0-FREE - 2021-09-09
+=======
+ * @version    3.4.0.0-FREE - 2021-08-02
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL

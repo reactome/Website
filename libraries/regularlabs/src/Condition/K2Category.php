@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -60,6 +68,13 @@ class K2Category extends K2
 		return $this->passSimple($cats);
 	}
 
+	private function getCatParentIds($id = 0)
+	{
+		$parent_field = RL_K2_VERSION == 3 ? 'parent_id' : 'parent';
+
+		return $this->getParentIds($id, 'k2_categories', $parent_field);
+	}
+
 	private function getCategories()
 	{
 		switch ($this->request->view)
@@ -104,9 +119,12 @@ class K2Category extends K2
 
 		return $this->db->loadResult();
 	}
+<<<<<<< HEAD
 
 	private function getCategoryID()
 	{
 		return $this->request->id ?: JFactory::getApplication()->getUserStateFromRequest('com_k2itemsfilter_category', 'catid', 0, 'int');
 	}
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 }

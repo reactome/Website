@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -30,6 +34,7 @@ abstract class WfBrowserHelper
             'mediatype' => $mediatype,
             'callback' => $callback,
         ));
+<<<<<<< HEAD
 
         return $options['url'];
     }
@@ -44,6 +49,28 @@ abstract class WfBrowserHelper
 
     public static function getMediaFieldOptions($options = array())
     {
+=======
+
+        return $options['url'];
+    }
+
+    private static function getUrl()
+    {
+        $app = JFactory::getApplication();
+        $token = JFactory::getSession()->getFormToken();
+
+        $url = 'index.php?option=com_jce&task=plugin.display&plugin=browser&standalone=1&' . $token . '=1&client=' . $app->getClientId();
+
+        if ($app->isClient('administrator')) {
+            return $url;
+        }
+
+        return $url;
+    }
+
+    public static function getMediaFieldOptions($options = array())
+    {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         if (!isset($options['element'])) {
             $options['element'] = null;
         }

@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -14,6 +22,16 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory as JFactory;
+<<<<<<< HEAD
+
+if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+}
+
+require_once dirname(__FILE__, 2) . '/assignment.php';
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
@@ -24,17 +42,6 @@ require_once dirname(__FILE__, 2) . '/assignment.php';
 
 class RLAssignmentsTemplates extends RLAssignment
 {
-	public function passTemplates()
-	{
-		$template = $this->getTemplate();
-
-		// Put template name and name + style id into array
-		// The '::' separator was used in pre Joomla 3.3
-		$template = [$template->template, $template->template . '--' . $template->id, $template->template . '::' . $template->id];
-
-		return $this->passSimple($template, true);
-	}
-
 	public function getTemplate()
 	{
 		$template = JFactory::getApplication()->getTemplate(true);
@@ -71,5 +78,16 @@ class RLAssignmentsTemplates extends RLAssignment
 		$template->id = $this->db->loadResult('id');
 
 		return $template;
+	}
+
+	public function passTemplates()
+	{
+		$template = $this->getTemplate();
+
+		// Put template name and name + style id into array
+		// The '::' separator was used in pre Joomla 3.3
+		$template = [$template->template, $template->template . '--' . $template->id, $template->template . '::' . $template->id];
+
+		return $this->passSimple($template, true);
 	}
 }

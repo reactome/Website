@@ -20,6 +20,7 @@ use Composer\Semver\VersionParser;
  *
  * See also https://getcomposer.org/doc/07-runtime.md#installed-versions
  *
+<<<<<<< HEAD
  * To require its presence, you can require `composer-runtime-api ^2.0`
  */
 class InstalledVersions
@@ -39,6 +40,14 @@ class InstalledVersions
      * @var array[]
      * @psalm-var array<string, array{root: array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string, type: string}, versions: array<string, array{dev_requirement: bool, pretty_version?: string, version?: string, aliases?: string[], reference?: string, replaced?: string[], provided?: string[], install_path?: string, type?: string}>}>
      */
+=======
+ * To require it's presence, you can require `composer-runtime-api ^2.0`
+ */
+class InstalledVersions
+{
+    private static $installed;
+    private static $canGetVendors;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     private static $installedByVendor = array();
 
     /**
@@ -241,7 +250,11 @@ class InstalledVersions
 
     /**
      * @return array
+<<<<<<< HEAD
      * @psalm-return array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string, type: string}
+=======
+     * @psalm-return array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
      */
     public static function getRootPackage()
     {
@@ -255,7 +268,11 @@ class InstalledVersions
      *
      * @deprecated Use getAllRawData() instead which returns all datasets for all autoloaders present in the process. getRawData only returns the first dataset loaded, which may not be what you expect.
      * @return array[]
+<<<<<<< HEAD
      * @psalm-return array{root: array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string, type: string}, versions: array<string, array{dev_requirement: bool, pretty_version?: string, version?: string, aliases?: string[], reference?: string, replaced?: string[], provided?: string[], install_path?: string, type?: string}>}
+=======
+     * @psalm-return array{root: array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string}, versions: array<string, array{dev_requirement: bool, pretty_version?: string, version?: string, aliases?: string[], reference?: string, replaced?: string[], provided?: string[], install_path?: string}>}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
      */
     public static function getRawData()
     {
@@ -278,7 +295,11 @@ class InstalledVersions
      * Returns the raw data of all installed.php which are currently loaded for custom implementations
      *
      * @return array[]
+<<<<<<< HEAD
      * @psalm-return list<array{root: array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string, type: string}, versions: array<string, array{dev_requirement: bool, pretty_version?: string, version?: string, aliases?: string[], reference?: string, replaced?: string[], provided?: string[], install_path?: string, type?: string}>}>
+=======
+     * @psalm-return list<array{root: array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string}, versions: array<string, array{dev_requirement: bool, pretty_version?: string, version?: string, aliases?: string[], reference?: string, replaced?: string[], provided?: string[], install_path?: string}>}>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
      */
     public static function getAllRawData()
     {
@@ -301,7 +322,11 @@ class InstalledVersions
      * @param  array[] $data A vendor/composer/installed.php data set
      * @return void
      *
+<<<<<<< HEAD
      * @psalm-param array{root: array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string, type: string}, versions: array<string, array{dev_requirement: bool, pretty_version?: string, version?: string, aliases?: string[], reference?: string, replaced?: string[], provided?: string[], install_path?: string, type?: string}>} $data
+=======
+     * @psalm-param array{root: array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string}, versions: array<string, array{dev_requirement: bool, pretty_version?: string, version?: string, aliases?: string[], reference?: string, replaced?: string[], provided?: string[], install_path?: string}>} $data
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
      */
     public static function reload($data)
     {
@@ -311,7 +336,11 @@ class InstalledVersions
 
     /**
      * @return array[]
+<<<<<<< HEAD
      * @psalm-return list<array{root: array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string, type: string}, versions: array<string, array{dev_requirement: bool, pretty_version?: string, version?: string, aliases?: string[], reference?: string, replaced?: string[], provided?: string[], install_path?: string, type?: string}>}>
+=======
+     * @psalm-return list<array{root: array{name: string, version: string, reference: string, pretty_version: string, aliases: string[], dev: bool, install_path: string}, versions: array<string, array{dev_requirement: bool, pretty_version?: string, version?: string, aliases?: string[], reference?: string, replaced?: string[], provided?: string[], install_path?: string}>}>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
      */
     private static function getInstalled()
     {

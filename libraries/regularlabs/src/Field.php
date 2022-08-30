@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -69,8 +77,16 @@ class Field extends JFormField
 	}
 
 	public static function selectListAjax($field, $name, $value, $id, $attributes = [], $simple = false)
+<<<<<<< HEAD
+=======
 	{
 		return Form::selectListAjax($field, $name, $value, $id, $attributes, $simple);
+	}
+
+	public static function selectListSimple(&$options, $name, $value, $id, $size = 0, $multiple = false, $ignore_max_count = false)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	{
+		return Form::selectListSimple($options, $name, $value, $id, $size, $multiple, false, $ignore_max_count);
 	}
 
 	public static function selectListSimple(&$options, $name, $value, $id, $size = 0, $multiple = false, $ignore_max_count = false)
@@ -84,6 +100,7 @@ class Field extends JFormField
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Return a array of options using the custom prepare methods
 	 *
 	 * @param array $list
@@ -104,6 +121,8 @@ class Field extends JFormField
 	}
 
 	/**
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 * Return a list option using the custom prepare methods
 	 *
 	 * @param object $item
@@ -146,6 +165,26 @@ class Field extends JFormField
 		}
 
 		return $option;
+	}
+
+	/**
+	 * Return a array of options using the custom prepare methods
+	 *
+	 * @param array $list
+	 * @param array $extras
+	 * @param int   $levelOffset
+	 *
+	 * @return array
+	 */
+	public function getOptionsByList($list, $extras = [], $levelOffset = 0)
+	{
+		$options = [];
+		foreach ($list as $id => $item)
+		{
+			$options[$id] = $this->getOptionByListItem($item, $extras, $levelOffset);
+		}
+
+		return $options;
 	}
 
 	/**
@@ -200,6 +239,7 @@ class Field extends JFormField
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Get a value from the field params
 	 *
 	 * @param string $key
@@ -230,6 +270,8 @@ class Field extends JFormField
 	}
 
 	/**
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 * Passes along to the JText method.
 	 * This is used for the array_walk in the sprintf method above.
 	 *
@@ -269,6 +311,52 @@ class Field extends JFormField
 		}
 
 		return $this->fixLanguageStringSyntax($string);
+	}
+
+	public function setup(SimpleXMLElement $element, $value, $group = null)
+	{
+		$this->params = $element->attributes();
+
+		return parent::setup($element, $value, $group);
+	}
+
+	/**
+	 * Return the field input markup
+	 * Return empty by default
+	 *
+	 * @return string
+	 */
+	protected function getInput()
+	{
+		return '';
+	}
+
+	/**
+	 * Return the field options (array)
+	 * Overrules the Joomla core functionality
+	 *
+	 * @return array
+	 */
+	protected function getOptions()
+	{
+		// This only returns 1 option!!!
+		if (empty($this->element->option))
+		{
+			return [];
+		}
+
+		$option = $this->element->option;
+
+		$fieldname = RegEx::replace('[^a-z0-9_\-]', '_', $this->fieldname);
+		$value     = (string) $option['value'];
+		$text      = trim((string) $option) ? trim((string) $option) : $value;
+
+		return [
+			[
+				'value' => $value,
+				'text'  => '- ' . JText::alt($text, $fieldname) . ' -',
+			],
+		];
 	}
 
 	/**
@@ -383,4 +471,26 @@ class Field extends JFormField
 
 		return vsprintf($first_part, $string_parts);
 	}
+<<<<<<< HEAD
+=======
+
+	/**
+	 * Replace language strings in an old syntax string
+	 *
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	private function sprintf_old($string = '')
+	{
+		// variables
+		$var1 = JText::_($this->get('var1'));
+		$var2 = JText::_($this->get('var2'));
+		$var3 = JText::_($this->get('var3'));
+		$var4 = JText::_($this->get('var4'));
+		$var5 = JText::_($this->get('var5'));
+
+		return JText::sprintf(JText::_(trim($string)), $var1, $var2, $var3, $var4, $var5);
+	}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 }

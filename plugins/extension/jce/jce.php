@@ -178,6 +178,7 @@ class PlgExtensionJce extends JPlugin
             $plugin->path = $installer->getPath('extension_root');
 
             JcePluginsHelper::postInstall('uninstall', $plugin, $installer);
+<<<<<<< HEAD
         }
     }
 
@@ -213,6 +214,8 @@ class PlgExtensionJce extends JPlugin
                     $updatesite->store();
                 }
             }
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         }
     }
 }

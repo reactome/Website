@@ -2,7 +2,11 @@
 /**
  * Joomla! Content Management System
  *
+<<<<<<< HEAD
  * @copyright  (C) 2012 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -55,7 +59,11 @@ class PostgresqlChangeItem extends ChangeItem
 		$find = array('#((\s*)\(\s*([^)\s]+)\s*)(\))#', '#(\s)(\s*)#');
 		$replace = array('($3)', '$1');
 		$updateQuery = preg_replace($find, $replace, $this->updateQuery);
+<<<<<<< HEAD
 		$wordArray = preg_split($splitIntoWords, $updateQuery, -1, PREG_SPLIT_NO_EMPTY);
+=======
+		$wordArray = preg_split($splitIntoWords, $updateQuery, null, PREG_SPLIT_NO_EMPTY);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		$totalWords = count($wordArray);
 
@@ -77,7 +85,11 @@ class PostgresqlChangeItem extends ChangeItem
 			$actions = preg_split($splitIntoActions, $actions);
 
 			// Get the last action
+<<<<<<< HEAD
 			$lastActionArray = preg_split($splitIntoWords, end($actions), -1, PREG_SPLIT_NO_EMPTY);
+=======
+			$lastActionArray = preg_split($splitIntoWords, end($actions), null, PREG_SPLIT_NO_EMPTY);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 			// Replace all actions by the last one
 			array_splice($wordArray, 3, $totalWords, $lastActionArray);

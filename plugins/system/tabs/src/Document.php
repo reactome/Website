@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Tabs
+<<<<<<< HEAD
  * @version         8.2.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         8.1.0
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -49,11 +57,19 @@ class Document
 
 		RL_Document::scriptOptions($options, 'Tabs');
 
+<<<<<<< HEAD
 		RL_Document::script('tabs/script.min.js', ($params->media_versioning ? '8.2.0' : ''), [], [], $params->load_jquery);
 
 		if ($params->load_stylesheet)
 		{
 			RL_Document::stylesheet('tabs/style.min.css', ($params->media_versioning ? '8.2.0' : ''));
+=======
+		RL_Document::script('tabs/script.min.js', ($params->media_versioning ? '8.1.0' : ''), [], [], $params->load_jquery);
+
+		if ($params->load_stylesheet)
+		{
+			RL_Document::stylesheet('tabs/style.min.css', ($params->media_versioning ? '8.1.0' : ''));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		}
 
 	}

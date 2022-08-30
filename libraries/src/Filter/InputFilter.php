@@ -2,7 +2,11 @@
 /**
  * Joomla! Content Management System
  *
+<<<<<<< HEAD
  * @copyright  (C) 2006 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -493,8 +497,12 @@ class InputFilter extends BaseInputFilter
 
 			// Forbidden string in extension (e.g. php matched .php, .xxx.php, .php.xxx and so on)
 			'forbidden_extensions'       => array(
+<<<<<<< HEAD
 				'php', 'phps', 'pht', 'phtml', 'php3', 'php4', 'php5', 'php6', 'php7',
 				'php8', 'phar', 'inc', 'pl', 'cgi', 'fcgi', 'java', 'jar', 'py',
+=======
+				'php', 'phps', 'pht', 'phtml', 'php3', 'php4', 'php5', 'php6', 'php7', 'phar', 'inc', 'pl', 'cgi', 'fcgi', 'java', 'jar', 'py',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			),
 
 			// <?php tag in file contents

@@ -24,7 +24,11 @@ class UriHelper
 	 *
 	 * @return  array|boolean  Associative array or false if badly formed URL.
 	 *
+<<<<<<< HEAD
 	 * @link    https://www.php.net/manual/en/function.parse-url.php
+=======
+	 * @link    https://secure.php.net/manual/en/function.parse-url.php
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 * @since   1.0
 	 */
 	public static function parse_url($url)

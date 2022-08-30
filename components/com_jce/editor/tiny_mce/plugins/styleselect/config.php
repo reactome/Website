@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD:components/com_jce/editor/tiny_mce/plugins/styleselect/config.php
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:components/com_jce/editor/tiny_mce/plugins/styleselect/classes/config.php
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -94,6 +98,11 @@ class WFStyleselectPluginConfig
 
                 foreach ((array) $custom_styles as $style) {
                     $style = (object) $style;
+<<<<<<< HEAD:components/com_jce/editor/tiny_mce/plugins/styleselect/config.php
+=======
+
+                    $style->ceFalseOverride = true;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:components/com_jce/editor/tiny_mce/plugins/styleselect/classes/config.php
 
                     // clean up title
                     if (isset($style->title)) {
@@ -118,8 +127,12 @@ class WFStyleselectPluginConfig
                         $style->classes = self::cleanString($style->classes);
                     }
 
+<<<<<<< HEAD:components/com_jce/editor/tiny_mce/plugins/styleselect/config.php
                     // validate and cleanup styles
                     if (isset($style->styles) && preg_match('#\s*([^:]+):\s*([^;]+);?#', $style->styles)) {
+=======
+                    if (isset($style->styles)) {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:components/com_jce/editor/tiny_mce/plugins/styleselect/classes/config.php
                         // replace comma with semi-colon and remove duplicates
                         $style->styles = preg_replace('#[;]+#', ';', $style->styles);
                     }

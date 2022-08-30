@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -29,6 +37,205 @@ JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/
  */
 trait ConditionContent
 {
+<<<<<<< HEAD
+=======
+	public static function hasTime($string)
+	{
+		if ( ! self::isDateTimeString($string))
+		{
+			return false;
+		}
+
+		return RegEx::match('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}', $string);
+	}
+
+	public static function isDateTimeString($string)
+	{
+		return RegEx::match('^[0-9]{4}-[0-9]{2}-[0-9]{2}', $string);
+	}
+
+	public static function runThroughArticlesAnywhere($string)
+	{
+		$articlesanywhere_params = Parameters::getPlugin('articlesanywhere');
+
+		if (empty($articlesanywhere_params) || ! isset($articlesanywhere_params->article_tag) || ! isset($articlesanywhere_params->articles_tag))
+		{
+			return $string;
+		}
+
+		AA_Replace::replaceTags($string);
+		Protect::removeCommentTags($string, 'Articles Anywhere');
+
+		return $string;
+	}
+
+	private static function passComparison($needle, $haystack, $comparison = 'equals')
+	{
+		$haystack = ArrayHelper::toArray($haystack);
+
+		if (empty($haystack))
+		{
+			return false;
+		}
+
+		// For list values
+		if (count($haystack) > 1)
+		{
+			switch ($comparison)
+			{
+				case 'not_equals':
+					$needle = ArrayHelper::toArray($needle);
+					sort($needle);
+					sort($haystack);
+
+					return $needle != $haystack;
+
+				case 'contains':
+					$needle = ArrayHelper::toArray($needle);
+					sort($needle);
+
+					$intersect = array_intersect($needle, $haystack);
+
+					return $needle == $intersect;
+
+				case 'contains_one':
+					return ArrayHelper::find($needle, $haystack);
+
+				case 'not_contains':
+					return ! ArrayHelper::find($needle, $haystack);
+
+				case 'equals':
+				default:
+					$needle = ArrayHelper::toArray($needle);
+					sort($needle);
+					sort($haystack);
+
+					return $needle == $haystack;
+			}
+		}
+
+		$haystack = $haystack[0];
+
+		if ($comparison == 'regex')
+		{
+			return RegEx::match($needle, $haystack);
+		}
+
+		// What's the use case? Not sure yet :)
+		$needle = self::runThroughArticlesAnywhere($needle);
+
+		// Convert dynamic date values i, like date('yesterday')
+		$haystack = self::valueToDateString($haystack, true);
+		$has_time = self::hasTime($haystack);
+		$needle   = self::valueToDateString($needle, false, $has_time);
+
+		// make the needle and haystack lowercase, so comparisons are case insensitive
+		$needle   = StringHelper::strtolower($needle);
+		$haystack = StringHelper::strtolower($haystack);
+
+		switch ($comparison)
+		{
+			case 'not_equals':
+				return $needle != $haystack;
+
+			case 'contains':
+			case 'contains_one':
+				return strpos($haystack, $needle) !== false;
+
+			case 'not_contains':
+				return strpos($haystack, $needle) === false;
+
+			case 'begins_with':
+				$length = strlen($needle);
+
+				return substr($haystack, 0, $length) === $needle;
+
+			case 'ends_with':
+				$length = strlen($needle);
+
+				if ($length == 0)
+				{
+					return true;
+				}
+
+				return substr($haystack, -$length) === $needle;
+
+			case 'less_than':
+				return $haystack < $needle;
+
+			case 'greater_than':
+				return $haystack > $needle;
+
+			case 'equals':
+			default:
+				return $needle == $haystack;
+		}
+	}
+
+	private static function valueToDateString($value, $apply_offset = true, $add_time = false)
+	{
+		$value = trim($value);
+
+		if (in_array($value, [
+			'now()',
+			'JFactory::getDate()',
+		]))
+		{
+			if ( ! $apply_offset)
+			{
+				return date('Y-m-d H:i:s', strtotime('now'));
+			}
+
+			$date = new JDate('now', JFactory::getConfig()->get('offset', 'UTC'));
+
+			return $date->format('Y-m-d H:i:s');
+		}
+
+		if (self::isDateTimeString($value))
+		{
+			$format = 'Y-m-d H:i:s';
+			$date   = new JDate($value, JFactory::getConfig()->get('offset', 'UTC'));
+
+			if ($apply_offset)
+			{
+				$date = JFactory::getDate($value, 'UTC');
+				$date->setTimezone(new DateTimeZone(JFactory::getConfig()->get('offset')));
+			}
+
+			return $date->format($format, true, false);
+		}
+
+		$regex = '^date\(\s*'
+			. '(?:\'(?<datetime>.*?)\')?'
+			. '(?:\\\\?,\s*\'(?<format>.*?)\')?'
+			. '\s*\)$';
+
+		if ( ! RegEx::match($regex, $value, $match))
+		{
+			return $value;
+		}
+
+		$datetime = ($match['datetime'] ?? null) ?: 'now';
+		$format   = $match['format'] ?? '';
+
+		if (empty($format))
+		{
+			$time   = date('His', strtotime($datetime));
+			$format = (int) $time || $add_time ? 'Y-m-d H:i:s' : 'Y-m-d';
+		}
+
+		$date = new JDate($datetime, JFactory::getConfig()->get('offset', 'UTC'));
+
+		if ($apply_offset)
+		{
+			$date = JFactory::getDate($datetime, 'UTC');
+			$date->setTimezone(new DateTimeZone(JFactory::getConfig()->get('offset')));
+		}
+
+		return $date->format($format, true, false);
+	}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	abstract public function getItem($fields = []);
 
 	public function passAuthor($field = 'created_by', $author = '')
@@ -69,6 +276,26 @@ trait ConditionContent
 		return in_array($author, $this->params->authors);
 	}
 
+<<<<<<< HEAD
+=======
+	public function passBoolean($field = 'featured')
+	{
+		if ( ! isset($this->params->{$field}) || $this->params->{$field} == '')
+		{
+			return null;
+		}
+
+		$item = $this->getItem($field);
+
+		if ( ! isset($item->{$field}))
+		{
+			return false;
+		}
+
+		return $this->params->{$field} == $item->{$field};
+	}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	public function passContentId()
 	{
 		if (empty($this->selection))
@@ -129,6 +356,7 @@ trait ConditionContent
 		}
 
 		$field = $this->params->date;
+<<<<<<< HEAD
 
 		$item = $this->getItem($field);
 
@@ -244,10 +472,49 @@ trait ConditionContent
 		$haystack = ArrayHelper::toArray($haystack);
 
 		if (empty($haystack))
+=======
+
+		$item = $this->getItem($field);
+
+		if ( ! isset($item->{$field}))
 		{
 			return false;
 		}
 
+		$date = $this->getDateString($item->{$field});
+
+		switch ($this->params->date_comparison)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+		{
+			case 'before':
+				if ($this->params->date_type == 'now')
+				{
+					return $date < $this->getNow();
+				}
+
+				return $date < $this->getDateString($this->params->date_date);
+
+			case 'after':
+				if ($this->params->date_type == 'now')
+				{
+					return $date > $this->getNow();
+				}
+
+				return $date > $this->getDateString($this->params->date_date);
+
+			case 'fromto':
+				$from = (int) $this->params->date_from ? $this->getDateString($this->params->date_from) : false;
+				$to   = (int) $this->params->date_to ? $this->getDateString($this->params->date_to) : false;
+
+				return ( ! $from || $date >= $from)
+					&& ( ! $to || $date <= $to);
+
+			default:
+				return false;
+		}
+	}
+
+<<<<<<< HEAD
 		// For list values
 		if (count($haystack) > 1)
 		{
@@ -437,6 +704,63 @@ trait ConditionContent
 
 	public function passMetaKeyword($field = 'metakey', $keywords = '')
 	{
+=======
+	public function passFeatured()
+	{
+		return $this->passBoolean('featured');
+	}
+
+	public function passField()
+	{
+		if (empty($this->params->fields))
+		{
+			return null;
+		}
+
+		$item = $this->getItem();
+
+		if ( ! isset($item->id))
+		{
+			return false;
+		}
+
+		$fields         = $this->params->fields;
+		$article_fields = FieldsHelper::getFields('com_content.article', $item, true);
+
+		foreach ($fields as $i => $field)
+		{
+			$pass = false;
+
+			foreach ($article_fields as $article_field)
+			{
+				if ($article_field->name != $field->field)
+				{
+					continue;
+				}
+
+				$comparison = ($field->field_comparison ?? null) ?: 'equals';
+
+				if ( ! self::passComparison($field->field_value, $article_field->rawvalue, $comparison))
+				{
+					return false;
+				}
+
+				$pass = true;
+				break;
+			}
+
+			if ( ! $pass)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public function passMetaKeyword($field = 'metakey', $keywords = '')
+	{
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		if (empty($this->params->meta_keywords))
 		{
 			return null;

@@ -2,8 +2,13 @@
 /**
  * Joomla! Content Management System
  *
+<<<<<<< HEAD:libraries/src/Adapter/Adapter.php
  * @copyright  (C) 2008 Open Source Matters, Inc. <https://www.joomla.org>
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:libraries/joomla/base/adapter.php
  */
 
 namespace Joomla\CMS\Adapter;
@@ -25,7 +30,11 @@ class Adapter extends CMSObject
 	/**
 	 * Associative array of adapters
 	 *
+<<<<<<< HEAD:libraries/src/Adapter/Adapter.php
 	 * @var    static[]
+=======
+	 * @var    JAdapterInstance[]
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:libraries/joomla/base/adapter.php
 	 * @since  1.6
 	 */
 	protected $_adapters = array();
@@ -57,7 +66,11 @@ class Adapter extends CMSObject
 	/**
 	 * Database Connector Object
 	 *
+<<<<<<< HEAD:libraries/src/Adapter/Adapter.php
 	 * @var    \JDatabaseDriver
+=======
+	 * @var    JDatabaseDriver
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:libraries/joomla/base/adapter.php
 	 * @since  1.6
 	 */
 	protected $_db;
@@ -98,7 +111,11 @@ class Adapter extends CMSObject
 	 * @param   string  $name     Name of adapter to return
 	 * @param   array   $options  Adapter options
 	 *
+<<<<<<< HEAD:libraries/src/Adapter/Adapter.php
 	 * @return  static|boolean  Adapter of type 'name' or false
+=======
+	 * @return  JAdapterInstance|boolean  Adapter of type 'name' or false
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:libraries/joomla/base/adapter.php
 	 *
 	 * @since   1.6
 	 */

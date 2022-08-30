@@ -3,7 +3,11 @@
  * @package     Joomla.Administrator
  * @subpackage  com_installer
  *
+<<<<<<< HEAD
  * @copyright   (C) 2008 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -246,7 +250,11 @@ class InstallerModelUpdate extends JModelList
 	 * Finds updates for an extension.
 	 *
 	 * @param   int  $eid               Extension identifier to look for
+<<<<<<< HEAD
 	 * @param   int  $cacheTimeout      Cache timeout
+=======
+	 * @param   int  $cacheTimeout      Cache timout
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 * @param   int  $minimumStability  Minimum stability for updates {@see JUpdater} (0=dev, 1=alpha, 2=beta, 3=rc, 4=stable)
 	 *
 	 * @return  boolean Result

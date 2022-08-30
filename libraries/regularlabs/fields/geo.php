@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -13,7 +21,10 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\HTML\HTMLHelper as JHtml;
 use Joomla\Registry\Registry;
+<<<<<<< HEAD
 use RegularLabs\Library\Field;
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 use RegularLabs\Library\Form as RL_Form;
 use RegularLabs\Library\RegEx as RL_RegEx;
 
@@ -24,7 +35,11 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
+<<<<<<< HEAD
 class JFormFieldRL_Geo extends Field
+=======
+class JFormFieldRL_Geo extends \RegularLabs\Library\Field
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 {
 	public $continents       = [
 		'AF' => 'Africa',
@@ -2590,6 +2605,48 @@ class JFormFieldRL_Geo extends Field
 	];
 	public $type             = 'Geo';
 
+<<<<<<< HEAD
+=======
+	public function cleanRegions($regions)
+	{
+		$regions = str_replace('"', '', $regions);
+
+		$regions = htmlspecialchars($regions);
+
+		// LR,MY, name for US-MD,Maryland,Maryland
+		// >>
+		// LR,MY,Maryland,Maryland
+		// US,MD,Maryland,Maryland
+		$regex = '(\n[^,]*),([^\n]*), name for ([^-]*)-([^,]*),([^\n]*\n)';
+		RL_RegEx::match($regex, $regions, $match);
+		while ($match)
+		{
+			$regions = RL_RegEx::replace($regex, '\1,\2,\5\3,\4,\5', $regions);
+
+			RL_RegEx::match($regex, $regions, $match);
+		}
+
+		// LR,MY,Maryland,Maryland
+		// >>
+		// LR,MY,Maryland
+		$regions = RL_RegEx::replace('(\n[^,]*,[^,]*),([^,]*),\2', '\1,\2', $regions);
+
+		// LR,MY,District of Columbia,Disricte de Columbia
+		// >>
+		// LR, MY, District of Columbia, Disricte de Columbia
+		$regions = str_replace(',', ', ', $regions);
+
+		// GB, WRX, Wrexham;Wrecsam
+		// >>
+		// GB, WRX, Wrexham (Wrecsam)
+		$regions = RL_RegEx::replace('(\n[^,]*,[^,]*,[^;]*);([^\n]*)', '\1 (\2)', $regions);
+
+		$regions = trim(RL_RegEx::replace('  +', ' ', $regions));
+
+		return explode("\n", $regions);
+	}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	public function getAjaxRaw(Registry $attributes)
 	{
 		$name  = $attributes->get('name', $this->type);
@@ -2615,6 +2672,41 @@ class JFormFieldRL_Geo extends Field
 				$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', true);
 				continue;
 			}
+<<<<<<< HEAD
+=======
+
+			if ($key[0] == '-')
+			{
+				$options[] = JHtml::_('select.option', '-', $val, 'value', 'text', true);
+				continue;
+			}
+
+			$val       = RL_Form::prepareSelectItem($val);
+			$options[] = JHtml::_('select.option', $use_names ? $val : $key, $val);
+		}
+
+		return $options;
+	}
+
+	protected function getInput()
+	{
+
+		if ( ! is_array($this->value))
+		{
+			$this->value = explode(',', $this->value);
+		}
+
+		$size      = (int) $this->get('size');
+		$multiple  = $this->get('multiple');
+		$group     = $this->get('group', 'countries');
+		$use_names = $this->get('use_names', false);
+
+		return $this->selectListSimpleAjax(
+			$this->type, $this->name, $this->value, $this->id,
+			compact('size', 'multiple', 'group', 'use_names')
+		);
+	}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 			if ($key[0] == '-')
 			{

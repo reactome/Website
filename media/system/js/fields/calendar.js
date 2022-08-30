@@ -1,5 +1,9 @@
 /**
+<<<<<<< HEAD
  * @copyright  (C) 2016 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 !(function(window, document){
@@ -253,7 +257,11 @@
 			this.params.onUpdate(this);
 		}
 
+<<<<<<< HEAD
 		this.inputField.dispatchEvent(new CustomEvent('change', {bubbles: true, cancelable: true}));
+=======
+		this.inputField.dispatchEvent(new Event('change', {bubbles: true, cancelable: true}));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		if (this.dateClicked) {
 			this.close();
@@ -811,7 +819,11 @@
 				self.inputField.setAttribute('data-alt-value', "0000-00-00 00:00:00");
 				self.inputField.setAttribute('value', '');
 				self.inputField.value = '';
+<<<<<<< HEAD
 				self.inputField.dispatchEvent(new CustomEvent('change', {bubbles: true, cancelable: true}));
+=======
+				self.inputField.dispatchEvent(new Event('change', {bubbles: true, cancelable: true}));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			});
 
 		if (this.params.showsTodayBtn) {

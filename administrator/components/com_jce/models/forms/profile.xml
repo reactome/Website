@@ -2,14 +2,20 @@
 <form>
     <fields>
         <fieldset name="setup">
+<<<<<<< HEAD
             <field name="name" type="text" class="input-xxlarge input-large-text" size="40" label="JGLOBAL_TITLE" description="WF_PROFILES_NAME_DESC" required="true" />
             
             <field name="description" type="text" class="input-xxlarge" label="JGLOBAL_DESCRIPTION" description="WF_PROFILES_DESCRIPTION_DESC" />
             
+=======
+            <field name="name" type="text" class="input-xxlarge input-large-text" size="40" label="JGLOBAL_TITLE" description="WF_PROFILES_NAME_DESC" required="true"/>
+            <field name="description" type="text" class="input-xxlarge" label="JGLOBAL_DESCRIPTION" description="WF_PROFILES_DESCRIPTION_DESC"/>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             <field name="published" type="radio" label="JSTATUS" description="WF_PROFILES_ENABLED_DESC" class="btn-group btn-group-yesno" default="1">
                 <option value="1">JPUBLISHED</option>
                 <option value="0">JUNPUBLISHED</option>
             </field>
+<<<<<<< HEAD
 
             <field name="ordering" type="Profileordering" label="JFIELD_ORDERING_LABEL" description="JFIELD_ORDERING_DESC"/>
         </fieldset>
@@ -20,21 +26,40 @@
             </field>
             
             <field name="device" type="checkboxes" multiple="multiple" class="inline" label="WF_PROFILES_DEVICE" description="WF_PROFILES_DEVICE_DESC" checked="desktop,tablet,phone">
+=======
+            <field name="ordering" type="Profileordering" label="JFIELD_ORDERING_LABEL" description="JFIELD_ORDERING_DESC"/>
+        </fieldset>
+        <fieldset name="assignment" addfieldpath="/administrator/components/com_categories/models/fields">
+            <field name="area" type="checkboxes" multiple="multiple" class="inline" label="WF_PROFILES_AREA" description="WF_PROFILES_AREA_DESC" default="">
+                <option value="1">WF_PROFILES_AREA_FRONTEND</option>
+                <option value="2">WF_PROFILES_AREA_BACKEND</option>
+            </field>
+            <field name="device" type="checkboxes" multiple="multiple" class="inline" label="WF_PROFILES_DEVICE" description="WF_PROFILES_DEVICE_DESC" default="">
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                 <option value="phone">WF_PROFILES_DEVICE_PHONE</option>
                 <option value="tablet">WF_PROFILES_DEVICE_TABLET</option>
                 <option value="desktop">WF_PROFILES_DEVICE_DESKTOP</option>
             </field>
+<<<<<<< HEAD
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             <field name="components_select" type="radio" label="WF_PROFILES_COMPONENTS" description="WF_PROFILES_COMPONENTS_DESC" class="extensions-select" default="0">
                 <option value="0">WF_PROFILES_COMPONENTS_ALL</option>
                 <option value="1">WF_PROFILES_COMPONENTS_SELECT</option>
             </field>
+<<<<<<< HEAD
 
             <field name="components" type="components" multiple="multiple" label="" layout="joomla.form.field.list-fancy-select" />
  
             <field name="types" type="usergrouplist" multiple="multiple" label="WF_PROFILES_GROUPS" description="WF_PROFILES_GROUPS_DESC" layout="joomla.form.field.list-fancy-select" />
             <field name="users" type="users" multiple="multiple" label="WF_PROFILES_USERS" description="WF_PROFILES_USERS_DESC" />
 
+=======
+            <field name="components" type="components" multiple="multiple" label="" description="" disabled="true" />
+            <field name="types" type="usergrouplist" multiple="multiple" label="WF_PROFILES_GROUPS" description="WF_PROFILES_GROUPS_DESC" />
+            <field name="users" type="users" multiple="multiple" label="WF_PROFILES_USERS" description="WF_PROFILES_USERS_DESC" />
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         </fieldset>
     </fields>
     <fields name="config"></fields>

@@ -4,7 +4,11 @@
  * @copyright
  * @package    Easy Joomla Backup - EJB for Joomal! 3.x
  * @author     Viktor Vogel <admin@kubik-rubik.de>
+<<<<<<< HEAD
  * @version    3.4.1.0-FREE - 2021-09-09
+=======
+ * @version    3.4.0.0-FREE - 2021-08-02
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @link       https://kubik-rubik.de/ejb-easy-joomla-backup
  *
  * @license    GNU/GPL
@@ -35,7 +39,11 @@ use Joomla\Registry\Registry;
  *
  * @package EasyJoomlaBackup
  * @since   3.0.0-FREE
+<<<<<<< HEAD
  * @version 3.4.1.0-FREE
+=======
+ * @version 3.4.0.0-FREE
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  */
 class Helper
 {
@@ -59,9 +67,15 @@ class Helper
 
     /**
      * @var string EASYJOOMLABACKUP_VERSION
+<<<<<<< HEAD
      * @since 3.4.1.0-FREE
      */
     public const EASYJOOMLABACKUP_VERSION = '3.4.1.0-FREE';
+=======
+     * @since 3.4.0.0-FREE
+     */
+    public const EASYJOOMLABACKUP_VERSION = '3.4.0.0-FREE';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
     /**
      * @var string MESSAGE_TYPE_ERROR
@@ -313,6 +327,7 @@ class Helper
     {
         return '<div style="text-align: center; margin-top: 10px;"><p>' . Text::sprintf('COM_EASYJOOMLABACKUP_VERSION', self::EASYJOOMLABACKUP_VERSION) . '</p></div>';
     }
+<<<<<<< HEAD
 
     /**
      * Removes a trailing comma from a string
@@ -347,4 +362,6 @@ class Helper
 
         return $data;
     }
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 }

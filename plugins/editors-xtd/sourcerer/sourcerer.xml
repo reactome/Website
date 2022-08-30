@@ -2,12 +2,21 @@
 <extension version="3.9" type="plugin" group="editors-xtd" method="upgrade">
 	<name>PLG_EDITORS-XTD_SOURCERER</name>
 	<description>PLG_EDITORS-XTD_SOURCERER_DESC</description>
+<<<<<<< HEAD
 	<version>9.2.3</version>
 	<creationDate>June 2022</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://regularlabs.com</authorUrl>
 	<copyright>Copyright © 2022 Regular Labs - All Rights Reserved</copyright>
+=======
+	<version>8.5.0</version>
+	<creationDate>July 2021</creationDate>
+	<author>Regular Labs (Peter van Westen)</author>
+	<authorEmail>info@regularlabs.com</authorEmail>
+	<authorUrl>https://regularlabs.com</authorUrl>
+	<copyright>Copyright © 2021 Regular Labs - All Rights Reserved</copyright>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 
 	<scriptfile>script.install.php</scriptfile>
@@ -42,7 +51,11 @@
 					   description="SOURCERER_DESC"
 					   url="https://regularlabs.com/sourcerer" />
 
+<<<<<<< HEAD
 				<field name="@note__settings" type="note" class="alert alert-info"
+=======
+				<field name="@notice_settings" type="note" class="alert alert-info"
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 					   description="SRC_SETTINGS,&lt;a href=&quot;index.php?option=com_plugins&amp;filter_folder=system&amp;filter_search=sourcerer&quot; target=&quot;_blank&quot;&gt;,&lt;/a&gt;" />
 			</fieldset>
 		</fields>

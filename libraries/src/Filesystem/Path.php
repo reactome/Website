@@ -2,7 +2,11 @@
 /**
  * Joomla! Content Management System
  *
+<<<<<<< HEAD:libraries/src/Filesystem/Path.php
  * @copyright  (C) 2006 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:libraries/joomla/filesystem/path.php
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -189,7 +193,11 @@ class Path
 				sprintf(
 					'%1$s() - Snooping out of bounds @ %2$s',
 					__METHOD__,
+<<<<<<< HEAD:libraries/src/Filesystem/Path.php
 					self::removeRoot($path)
+=======
+					$path
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:libraries/joomla/filesystem/path.php
 				),
 				20
 			);
@@ -386,6 +394,7 @@ class Path
 
 		return $startCharacter . implode(DIRECTORY_SEPARATOR, $parts);
 	}
+<<<<<<< HEAD:libraries/src/Filesystem/Path.php
 
 	/**
 	 * Remove all references to root directory path and the system tmp path from a message
@@ -425,4 +434,6 @@ class Path
 	{
 		return '~' . str_replace('~', '\\~', preg_replace('~[/\\\\]+~', '[/\\\\\\\\]+', $dir)) . '~';
 	}
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090:libraries/joomla/filesystem/path.php
 }

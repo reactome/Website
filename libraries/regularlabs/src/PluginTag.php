@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -43,6 +51,7 @@ class PluginTag
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Extract the plugin style div tags with the possible attributes. like:
 	 * {div width:100|float:left}...{/div}
 	 *
@@ -171,6 +180,45 @@ class PluginTag
 		}
 
 		return $attributes;
+=======
+	 * Convert an object using the old param style to the new syntax
+	 *
+	 * @param object $attributes
+	 * @param array  $known_boolean_keys
+	 * @param string $extra_key
+	 */
+	public static function convertOldSyntax(&$attributes, $known_boolean_keys = [], $extra_key = 'class')
+	{
+		$extra = isset($attributes->class) ? [$attributes->class] : [];
+
+		foreach ($attributes->params as $i => $param)
+		{
+			if ( ! $param)
+			{
+				continue;
+			}
+
+			if (in_array($param, $known_boolean_keys))
+			{
+				$attributes->{$param} = true;
+				continue;
+			}
+
+			if (strpos($param, '=') == false)
+			{
+				$extra[] = $param;
+				continue;
+			}
+
+			[$key, $val] = explode('=', $param, 2);
+
+			$attributes->{$key} = $val;
+		}
+
+		$attributes->{$extra_key} = trim(implode(' ', $extra));
+
+		unset($attributes->params);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
@@ -242,6 +290,7 @@ class PluginTag
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Replace special characters in the string with the protected versions
 	 *
 	 * @param string $string
@@ -315,6 +364,8 @@ class PluginTag
 	}
 
 	/**
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 * Only used for old syntaxes
 	 *
 	 * @param string $string
@@ -423,6 +474,18 @@ class PluginTag
 				{
 					$value = false;
 				}
+<<<<<<< HEAD
+
+				$attributes->{$keyval[0]} = $value;
+				continue;
+			}
+
+			$attributes->params[] = implode($equal, $keyval);
+		}
+
+		return $attributes;
+	}
+=======
 
 				$attributes->{$keyval[0]} = $value;
 				continue;
@@ -435,45 +498,106 @@ class PluginTag
 	}
 
 	/**
-	 * Convert an object using the old param style to the new syntax
+	 * Extract the plugin style div tags with the possible attributes. like:
+	 * {div width:100|float:left}...{/div}
 	 *
-	 * @param object $attributes
-	 * @param array  $known_boolean_keys
-	 * @param string $extra_key
+	 * @param string $start_tag
+	 * @param string $end_tag
+	 * @param string $tag_start
+	 * @param string $tag_end
+	 *
+	 * @return array
 	 */
-	public static function convertOldSyntax(&$attributes, $known_boolean_keys = [], $extra_key = 'class')
+	public static function getDivTags($start_tag = '', $end_tag = '', $tag_start = '{', $tag_end = '}')
 	{
-		$extra = isset($attributes->class) ? [$attributes->class] : [];
+		$tag_start = RegEx::quote($tag_start);
+		$tag_end   = RegEx::quote($tag_end);
 
-		foreach ($attributes->params as $i => $param)
+		$start_div = ['pre' => '', 'tag' => '', 'post' => ''];
+		$end_div   = ['pre' => '', 'tag' => '', 'post' => ''];
+
+		if ( ! empty($start_tag)
+			&& RegEx::match(
+				'^(?<pre>.*?)(?<tag>' . $tag_start . 'div(?: .*?)?' . $tag_end . ')(?<post>.*)$',
+				$start_tag,
+				$match
+			)
+		)
 		{
-			if ( ! $param)
-			{
-				continue;
-			}
-
-			if (in_array($param, $known_boolean_keys))
-			{
-				$attributes->{$param} = true;
-				continue;
-			}
-
-			if (strpos($param, '=') == false)
-			{
-				$extra[] = $param;
-				continue;
-			}
-
-			[$key, $val] = explode('=', $param, 2);
-
-			$attributes->{$key} = $val;
+			$start_div = $match;
 		}
 
-		$attributes->{$extra_key} = trim(implode(' ', $extra));
+		if ( ! empty($end_tag)
+			&& RegEx::match(
+				'^(?<pre>.*?)(?<tag>' . $tag_start . '/div' . $tag_end . ')(?<post>.*)$',
+				$end_tag,
+				$match
+			)
+		)
+		{
+			$end_div = $match;
+		}
 
-		unset($attributes->params);
-	}
+		if (empty($start_div['tag']) || empty($end_div['tag']))
+		{
+			return [$start_div, $end_div];
+		}
 
+		$attribs = trim(RegEx::replace($tag_start . 'div(.*)' . $tag_end, '\1', $start_div['tag']));
+
+		$start_div['tag'] = '<div>';
+		$end_div['tag']   = '</div>';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+
+		if (empty($attribs))
+		{
+			return [$start_div, $end_div];
+		}
+
+		$attribs = self::getDivAttributes($attribs);
+
+		$style = [];
+
+		if (isset($attribs->width))
+		{
+			if (is_numeric($attribs->width))
+			{
+				$attribs->width .= 'px';
+			}
+			$style[] = 'width:' . $attribs->width;
+		}
+
+		if (isset($attribs->height))
+		{
+			if (is_numeric($attribs->height))
+			{
+				$attribs->height .= 'px';
+			}
+			$style[] = 'height:' . $attribs->height;
+		}
+
+<<<<<<< HEAD
+			[$key, $val] = explode('=', $param, 2);
+=======
+		if (isset($attribs->align))
+		{
+			$style[] = 'float:' . $attribs->align;
+		}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+
+		if ( ! isset($attribs->align) && isset($attribs->float))
+		{
+			$style[] = 'float:' . $attribs->float;
+		}
+
+		$attribs = isset($attribs->class) ? 'class="' . $attribs->class . '"' : '';
+
+		if ( ! empty($style))
+		{
+			$attribs .= ' style="' . implode(';', $style) . ';"';
+		}
+
+<<<<<<< HEAD
 	/**
 	 * Get the value from a found attribute match
 	 *
@@ -517,6 +641,11 @@ class PluginTag
 		}
 
 		return $match['not'] ? '!NOT!' . $value : $value;
+=======
+		$start_div['tag'] = trim('<div ' . trim($attribs)) . '>';
+
+		return [$start_div, $end_div];
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
@@ -706,17 +835,73 @@ class PluginTag
 	public static function getRegexTrailingHtml($group_id = '')
 	{
 		$group = 'leading_block_element';
+<<<<<<< HEAD
 
 		if ($group_id)
 		{
 			$group .= '_' . $group_id;
 		}
 
+=======
+
+		if ($group_id)
+		{
+			$group .= '_' . $group_id;
+		}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		// If the grouped name is found, then grab all content till ending html tag is found. Otherwise grab nothing.
 		return '(?(<' . $group . '>)'
 			. '(?:.*?</(?P=' . $group . ')>)?'
 			. ')';
 	}
+<<<<<<< HEAD
+=======
+
+	/**
+	 * Replace special characters in the string with the protected versions
+	 *
+	 * @param string $string
+	 */
+	public static function protectSpecialChars(&$string)
+	{
+		$unescaped_chars = array_keys(self::$protected_characters);
+		array_walk($unescaped_chars, function (&$char) {
+			$char = '\\' . $char;
+		});
+
+		// replace escaped characters with special markup
+		$string = str_replace(
+			$unescaped_chars,
+			array_values(self::$protected_characters),
+			$string
+		);
+
+		if ( ! RegEx::matchAll(
+			'(<.*?>|{.*?}|\[.*?\])',
+			$string,
+			$tags,
+			null,
+			PREG_PATTERN_ORDER
+		)
+		)
+		{
+			return;
+		}
+
+		foreach ($tags[0] as $tag)
+		{
+			// replace unescaped characters with special markup
+			$protected = str_replace(
+				['=', '"'],
+				[self::$protected_characters['='], self::$protected_characters['"']],
+				$tag
+			);
+
+			$string = str_replace($tag, $protected, $string);
+		}
+	}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 	/**
 	 * Replace keys aliases with the main key names in an object
@@ -740,6 +925,7 @@ class PluginTag
 				{
 					continue;
 				}
+<<<<<<< HEAD
 
 				if (self::replaceKeyAlias($attributes, $key, $alias, $handle_plurals))
 				{
@@ -747,6 +933,135 @@ class PluginTag
 				}
 			}
 		}
+=======
+
+				if (self::replaceKeyAlias($attributes, $key, $alias, $handle_plurals))
+				{
+					break;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Replace protected characters in the string with the original special versions
+	 *
+	 * @param string $string
+	 * @param array  $keep_escaped_chars
+	 */
+	public static function unprotectSpecialChars(&$string, $keep_escaped_chars = [])
+	{
+		$unescaped_chars = array_keys(self::$protected_characters);
+
+		if ( ! empty($keep_escaped_chars))
+		{
+			array_walk($unescaped_chars, function (&$char, $key, $keep_escaped_chars) {
+				if (is_array($keep_escaped_chars) && ! in_array($char, $keep_escaped_chars))
+				{
+					return;
+				}
+				$char = '\\' . $char;
+			}, $keep_escaped_chars);
+		}
+
+		// replace special markup with unescaped characters
+		$string = str_replace(
+			array_values(self::$protected_characters),
+			$unescaped_chars,
+			$string
+		);
+	}
+
+	/**
+	 * Get the value from a found attribute match
+	 *
+	 * @param array $match
+	 * @param array $known_boolean_keys
+	 * @param array $keep_escaped_chars
+	 *
+	 * @return bool|int|string
+	 */
+	private static function getAttributeValueFromMatch($match, $known_boolean_keys = [], $keep_escaped_chars = [','])
+	{
+		$value = $match['value'];
+
+		self::unprotectSpecialChars($value, $keep_escaped_chars);
+
+		if (is_numeric($value)
+			&& (
+				in_array($match['key'], $known_boolean_keys)
+				|| in_array(strtolower($match['key']), $known_boolean_keys)
+			)
+		)
+		{
+			$value = $value ? 'true' : 'false';
+		}
+
+		// Convert numeric values to ints/floats
+		if (is_numeric($value))
+		{
+			$value = $value + 0;
+		}
+
+		// Convert boolean values to actual booleans
+		if ($value === 'true' || $value === true)
+		{
+			return $match['not'] ? false : true;
+		}
+
+		if ($value === 'false' || $value === false)
+		{
+			return $match['not'] ? true : false;
+		}
+
+		return $match['not'] ? '!NOT!' . $value : $value;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	}
+
+	/**
+	 * Replace specific key alias with the main key name in an object
+	 *
+	 * @param object $attributes
+	 * @param string $key
+	 * @param string $alias
+	 * @param bool   $handle_plurals
+	 *
+	 * @return bool
+	 */
+	private static function replaceKeyAlias(&$attributes, $key, $alias, $handle_plurals = false)
+	{
+		if ($handle_plurals)
+		{
+			if (self::replaceKeyAlias($attributes, $key, $alias . 's'))
+			{
+				return true;
+			}
+
+			if (substr($alias, -1) == 's' && self::replaceKeyAlias($attributes, $key, substr($alias, 0, -1)))
+			{
+				return true;
+			}
+		}
+
+<<<<<<< HEAD
+		if (isset($attributes->{$key}))
+		{
+			return true;
+=======
+			[$key, $val] = explode(':', $e, 2);
+			$attributes->{$key} = $val;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+		}
+
+		if ( ! isset($attributes->{$alias}))
+		{
+			return false;
+		}
+
+		$attributes->{$key} = $attributes->{$alias};
+		unset($attributes->{$alias});
+
+		return true;
 	}
 
 	/**

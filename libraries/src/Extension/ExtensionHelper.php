@@ -2,7 +2,11 @@
 /**
  * Joomla! Content Management System
  *
+<<<<<<< HEAD
  * @copyright  (C) 2017 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -218,7 +222,10 @@ class ExtensionHelper
 		array('plugin', 'joomlaupdate', 'quickicon', 0),
 		array('plugin', 'phpversioncheck', 'quickicon', 0),
 		array('plugin', 'privacycheck', 'quickicon', 0),
+<<<<<<< HEAD
 		array('plugin', 'eos310', 'quickicon', 0),
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		// Core plugin extensions - sample data
 		array('plugin', 'blog', 'sampledata', 0),

@@ -3,7 +3,11 @@
  * @package     Joomla.Site
  * @subpackage  com_privacy
  *
+<<<<<<< HEAD
  * @copyright   (C) 2018 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -38,7 +42,12 @@ class PrivacyModelRequest extends JModelAdmin
 		}
 
 		// Get the form.
+<<<<<<< HEAD
 		$form = $this->getForm();		
+=======
+		$form = $this->getForm();
+		$data['email'] = JStringPunycode::emailToPunycode($data['email']);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		// Check for an error.
 		if ($form instanceof Exception)
@@ -68,9 +77,12 @@ class PrivacyModelRequest extends JModelAdmin
 			return false;
 		}
 
+<<<<<<< HEAD
 		// Get the user email address
 		$data['email'] = JFactory::getUser()->email;
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		// Search for an open information request matching the email and type
 		$db = $this->getDbo();
 		$query = $db->getQuery(true)

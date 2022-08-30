@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -52,6 +60,63 @@ class ActionLogPlugin extends JCMSPlugin
 		$this->option = $this->option ?: 'com_' . $this->alias;
 	}
 
+<<<<<<< HEAD
+=======
+	public function onContentAfterDelete($context, $table)
+	{
+		if (strpos($context, $this->option) === false)
+		{
+			return;
+		}
+
+		if ( ! ArrayHelper::find(['*', 'delete'], $this->events))
+		{
+			return;
+		}
+
+		$item = $this->getItem($context);
+
+		$title = $table->title ?? $table->name ?? $table->id;
+
+		$message = [
+			'type'  => $item->title,
+			'id'    => $table->id,
+			'title' => $title,
+		];
+
+		Log::delete($message, $context);
+	}
+
+	public function onContentAfterSave($context, $table, $isNew)
+	{
+		if (strpos($context, $this->option) === false)
+		{
+			return;
+		}
+
+		$event = $isNew ? 'create' : 'update';
+
+		if ( ! ArrayHelper::find(['*', $event], $this->events))
+		{
+			return;
+		}
+
+		$item = $this->getItem($context);
+
+		$title    = $table->title ?? $table->name ?? $table->id;
+		$item_url = str_replace('{id}', $table->id, $item->url);
+
+		$message = [
+			'type'     => $item->title,
+			'id'       => $table->id,
+			'title'    => $title,
+			'itemlink' => $item_url,
+		];
+
+		Log::save($message, $context, $isNew);
+	}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	public function onContentChangeState($context, $ids, $value)
 	{
 		if (strpos($context, $this->option) === false)
@@ -96,6 +161,7 @@ class ActionLogPlugin extends JCMSPlugin
 		}
 	}
 
+<<<<<<< HEAD
 	private function getItem($context)
 	{
 		$item = $this->getItemData($context);
@@ -158,16 +224,38 @@ class ActionLogPlugin extends JCMSPlugin
 
 	public function onContentAfterDelete($context, $table)
 	{
+=======
+	public function onExtensionAfterDelete($context, $table)
+	{
+		self::onContentAfterDelete($context, $table);
+	}
+
+	public function onExtensionAfterInstall($installer, $eid)
+	{
+		// Prevent duplicate logs
+		if (in_array('install_' . $eid, self::$ids))
+		{
+			return;
+		}
+
+		$context = JFactory::getApplication()->input->get('option');
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		if (strpos($context, $this->option) === false)
 		{
 			return;
 		}
 
+<<<<<<< HEAD
 		if ( ! ArrayHelper::find(['*', 'delete'], $this->events))
+=======
+		if ( ! ArrayHelper::find(['*', 'install'], $this->events))
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			return;
 		}
 
+<<<<<<< HEAD
 		$item = $this->getItem($context);
 
 		$title = $table->title ?? $table->name ?? $table->id;
@@ -189,17 +277,29 @@ class ActionLogPlugin extends JCMSPlugin
 	public function onContentAfterSave($context, $table, $isNew)
 	{
 		if (strpos($context, $this->option) === false)
+=======
+		$extension = Extension::getById($eid);
+
+		if (empty($extension->manifest_cache))
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			return;
 		}
 
+<<<<<<< HEAD
 		$event = $isNew ? 'create' : 'update';
 
 		if ( ! ArrayHelper::find(['*', $event], $this->events))
+=======
+		$manifest = json_decode($extension->manifest_cache);
+
+		if (empty($manifest->name))
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			return;
 		}
 
+<<<<<<< HEAD
 		$item = $this->getItem($context);
 
 		$title    = $table->title ?? $table->name ?? $table->id;
@@ -213,6 +313,21 @@ class ActionLogPlugin extends JCMSPlugin
 		];
 
 		Log::save($message, $context, $isNew);
+=======
+		self::$ids[] = 'install_' . $eid;
+
+		$message = [
+			'id'             => $eid,
+			'extension_name' => JText::_($manifest->name),
+		];
+
+		Log::install($message, 'com_regularlabsmanager', $manifest->type);
+	}
+
+	public function onExtensionAfterSave($context, $table, $isNew)
+	{
+		self::onContentAfterSave($context, $table, $isNew);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	public function onExtensionAfterUninstall($installer, $eid, $result)
@@ -256,4 +371,62 @@ class ActionLogPlugin extends JCMSPlugin
 
 		Log::uninstall($message, 'com_regularlabsmanager', $manifest->attributes()->type);
 	}
+<<<<<<< HEAD
+=======
+
+	private function getItem($context)
+	{
+		$item = $this->getItemData($context);
+
+		$item->title = isset($item->title)
+			? JText::_($item->title)
+			: $item->type . ' ' . JText::_('RL_ITEM');
+
+		if ( ! isset($item->file))
+		{
+			$item->file = JPATH_ADMINISTRATOR . '/components/' . $this->option . '/models/' . $item->type . '.php';
+		}
+
+		if ( ! isset($item->model))
+		{
+			$item->model = $this->alias . 'Model' . ucfirst($item->type);
+		}
+
+		if ( ! isset($item->url))
+		{
+			$item->url = 'index.php?option=' . $this->option . '&view=' . $item->type . '&layout=edit&id={id}';
+		}
+
+		return $item;
+	}
+
+	private function getItemData($context)
+	{
+		$default = (object) [
+			'type' => 'item',
+		];
+
+		$type = key($this->items) ?: 'item';
+
+		if (strpos($context, '.') !== false)
+		{
+			$parts = explode('.', $context);
+			$type  = $parts[1];
+		}
+
+		if ( ! isset($this->items[$type]))
+		{
+			return $default;
+		}
+
+		$item = $this->items[$type];
+
+		if ( ! isset($item->type))
+		{
+			$item->type = $type;
+		}
+
+		return $item;
+	}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 }

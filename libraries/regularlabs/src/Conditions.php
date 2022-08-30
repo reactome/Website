@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -67,15 +75,52 @@ class Conditions
 	{
 		$params->conditions = $params->conditions ?? [];
 
+<<<<<<< HEAD
 		foreach ($params as $key => $value)
+=======
+		$type_params = [];
+
+		foreach ($attributes as $type_param => $value)
+		{
+			if (strpos($type_param, '_') === false)
+			{
+				continue;
+			}
+
+			[$type, $param] = explode('_', $type_param, 2);
+
+			$condition_type = self::getType($type, $only_types);
+
+			if ( ! $condition_type)
+			{
+				continue;
+			}
+
+			$type_params[$type_param] = $value;
+			unset($attributes->{$type_param});
+		}
+
+		foreach ($attributes as $type => $value)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			if (strpos($key, 'condition_') === false && strpos($key, 'assignto_') === false)
 			{
 				continue;
 			}
 
+<<<<<<< HEAD
 			$new_key                      = substr($key, strpos($key, '_') + 1);
 			$params->conditions[$new_key] = $value;
+=======
+			$value = html_entity_decode($value);
+
+			$params             = self::getDefaultParamsByType($condition_type, $type);
+			$params->conditions = $type_params;
+
+			$reverse = false;
+
+			$selection = self::getSelectionFromTagAttribute($condition_type, $value, $params, $reverse);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 			unset($params->{$key});
 		}
@@ -151,6 +196,7 @@ class Conditions
 		return array_intersect_key($types, array_flip($only_types));
 	}
 
+<<<<<<< HEAD
 	private static function getSelection($selection, $type = '')
 	{
 		if (in_array($type, self::getNotArrayTextAreaTypes()))
@@ -189,8 +235,67 @@ class Conditions
 
 			case 'User.Grouplevel':
 				$extra_params = ['inc_children'];
-				break;
+=======
+	public static function getMatchAllTypes()
+	{
+		return [
+			'User.Grouplevel',
+			'Tag',
+		];
+	}
 
+	public static function hasConditions($conditions)
+	{
+		if (empty($conditions))
+		{
+			return false;
+		}
+
+		foreach (self::getTypes() as $type)
+		{
+			if (isset($conditions[$type]) && isset($conditions[$type]->include_type) && $conditions[$type]->include_type)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static function pass($conditions, $matching_method = 'all', $article = null, $module = null)
+	{
+		if (empty($conditions))
+		{
+			return true;
+		}
+
+		$article_id      = $article->id ?? '';
+		$module_id       = $module->id ?? '';
+		$matching_method = in_array($matching_method, ['any', 'or']) ? 'any' : 'all';
+
+		$cache = new Cache([__METHOD__, $article_id, $module_id, $matching_method, $conditions]);
+
+		if ($cache->exists())
+		{
+			return $cache->get();
+		}
+
+		$pass = (bool) ($matching_method == 'all');
+
+		foreach (self::getTypes() as $type)
+		{
+			// Break if not passed and matching method is ALL
+			// Or if passed and matching method is ANY
+			if (
+				( ! $pass && $matching_method == 'all')
+				|| ($pass && $matching_method == 'any')
+			)
+			{
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+				break;
+			}
+
+<<<<<<< HEAD
 			case 'Url':
 				if (is_array($object->selection))
 				{
@@ -307,43 +412,155 @@ class Conditions
 			'Php',
 		];
 	}
+=======
+			if ( ! isset($conditions[$type]))
+			{
+				continue;
+			}
 
-	private static function makeArray($array = '', $delimiter = ',', $trim = true)
-	{
-		if (empty($array))
-		{
-			return [];
+			$pass = self::passByType($conditions[$type], $type, $article, $module);
 		}
 
+		return $cache->set($pass);
+	}
+
+	private static function addParams(&$object, $type, $id, &$params)
+	{
+		$extra_params = [];
+		$array_params = [];
+		$includes     = [];
+
+		switch ($type)
+		{
+			case 'Menu':
+				$extra_params = ['inc_children', 'inc_noitemid'];
+				break;
+
+			case 'Date.Date':
+				$extra_params = ['publish_up', 'publish_down', 'recurring', 'ignore_time_zone'];
+				break;
+
+			case 'Date.Season':
+				$extra_params = ['hemisphere'];
+				break;
+
+			case 'Date.Time':
+				$extra_params = ['publish_up', 'publish_down'];
+				break;
+
+			case 'User.Grouplevel':
+				$extra_params = ['inc_children'];
+				break;
+
+			case 'Url':
+				if (is_array($object->selection))
+				{
+					$object->selection = implode("\n", $object->selection);
+				}
+				if (isset($params->conditions['urls_selection_sef']))
+				{
+					$object->selection .= "\n" . $params->conditions['urls_selection_sef'];
+				}
+				$object->selection             = trim(str_replace("\r", '', $object->selection));
+				$object->selection             = explode("\n", $object->selection);
+				$object->params->casesensitive = $params->conditions['urls_casesensitive'] ?? false;
+				$object->params->regex         = $params->conditions['urls_regex'] ?? false;
+				break;
+
+			case 'Agent.Browser':
+				if ( ! empty($params->conditions['mobile_selection']))
+				{
+					$object->selection = array_merge(self::makeArray($object->selection), self::makeArray($params->conditions['mobile_selection']));
+				}
+				if ( ! empty($params->conditions['searchbots_selection']))
+				{
+					$object->selection = array_merge($object->selection, self::makeArray($params->conditions['searchbots_selection']));
+				}
+				break;
+
+			case 'Tag':
+				$extra_params = ['inc_children'];
+				break;
+
+			case 'Content.Category':
+				$extra_params = ['inc_children'];
+				$includes     = ['cats' => 'categories', 'arts' => 'articles', 'others'];
+				break;
+
+			case 'Easyblog.Category':
+			case 'K2.Category':
+			case 'Hikashop.Category':
+			case 'Mijoshop.Category':
+			case 'Redshop.Category':
+			case 'Virtuemart.Category':
+				$extra_params = ['inc_children'];
+				$includes     = ['cats' => 'categories', 'items'];
+				break;
+
+			case 'Zoo.Category':
+				$extra_params = ['inc_children'];
+				$includes     = ['apps', 'cats' => 'categories', 'items'];
+				break;
+
+			case 'Easyblog.Tag':
+			case 'Flexicontent.Tag':
+			case 'K2.Tag':
+				$includes = ['tags', 'items'];
+				break;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+
+			case 'Content.Article':
+				$extra_params = [
+					'featured',
+					'content_keywords', 'keywords' => 'meta_keywords',
+					'authors',
+					'date', 'date_comparison', 'date_type', 'date_date', 'date_from', 'date_to',
+					'fields',
+				];
+				break;
+
+<<<<<<< HEAD
 		$cache = new Cache([__METHOD__, $array, $delimiter, $trim]);
 
 		if ($cache->exists())
 		{
 			return $cache->get();
 		}
+=======
+			case 'K2.Item':
+				$extra_params = ['content_keywords', 'meta_keywords', 'authors'];
+				break;
 
-		$array = self::mixedDataToArray($array, $delimiter);
+			case 'Easyblog.Item':
+				$extra_params = ['content_keywords', 'authors'];
+				break;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
-		if (empty($array))
-		{
-			return $array;
+			case 'Zoo.Item':
+				$extra_params = ['authors'];
+				break;
+
+			default:
+				break;
 		}
 
-		if ( ! $trim)
+		if (in_array($type, self::getMatchAllTypes()))
 		{
-			return $array;
-		}
+			$extra_params[] = 'match_all';
 
-		foreach ($array as $k => $v)
-		{
-			if ( ! is_string($v))
+			if (count($object->selection) == 1 && strpos($object->selection[0], '+') !== false)
 			{
-				continue;
+				$object->selection = ArrayHelper::toArray($object->selection[0], '+');
+				$params->match_all = true;
 			}
-
-			$array[$k] = trim($v);
 		}
 
+		if (empty($extra_params) && empty($array_params) && empty($includes))
+		{
+			return;
+		}
+
+<<<<<<< HEAD
 		return $cache->set($array);
 	}
 
@@ -388,30 +605,31 @@ class Conditions
 		}
 
 		unset($object->params->inc);
+=======
+		self::addParamsByType($object, $id, $params, $extra_params, $array_params, $includes);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
-	private static function mixedDataToArray($array = '', $delimiter = ',')
+	private static function addParamsByType(&$object, $id, $params, $extra_params = [], $array_params = [], $includes = [])
 	{
-		if ( ! is_array($array))
+		foreach ($extra_params as $key => $param)
 		{
-			return explode($delimiter, $array);
+			$key                      = is_numeric($key) ? $param : $key;
+			$object->params->{$param} = self::getTypeParamValue($id, $params, $key);
 		}
 
-		if (empty($array))
+		foreach ($array_params as $key => $param)
 		{
-			return $array;
+			$key                      = is_numeric($key) ? $param : $key;
+			$object->params->{$param} = self::getTypeParamValue($id, $params, $key, true);
 		}
 
-		if (isset($array[0]) && is_array($array[0]))
+		if (empty($includes))
 		{
-			return $array[0];
+			return;
 		}
 
-		if (count($array) === 1 && strpos($array[0], $delimiter) !== false)
-		{
-			return explode($delimiter, $array[0]);
-		}
-
+<<<<<<< HEAD
 		return $array;
 	}
 
@@ -571,6 +789,44 @@ class Conditions
 		}
 
 		return false;
+=======
+		$incs = self::getTypeParamValue($id, $params, 'inc', true);
+
+		if (empty($incs) && ! empty($params->conditions[$id]) && ! isset($params->conditions[$id . '_inc']))
+		{
+			$incs = ['inc_items', 'inc_arts', 'inc_cats', 'inc_others', 'x'];
+		}
+
+		foreach ($includes as $key => $param)
+		{
+			$key                               = is_numeric($key) ? $param : $key;
+			$object->params->{'inc_' . $param} = in_array('inc_' . $key, $incs) ? 1 : 0;
+		}
+
+		unset($object->params->inc);
+	}
+
+	private static function getConditionState($include_type)
+	{
+		switch ($include_type . '')
+		{
+			case 1:
+			case 'include':
+				return 'include';
+
+			case 2:
+			case 'exclude':
+				return 'exclude';
+
+			case 3:
+			case -1:
+			case 'none':
+				return 'none';
+
+			default:
+				return 'all';
+		}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	private static function getDefaultParamsByType($condition_type, $type)
@@ -604,10 +860,36 @@ class Conditions
 		}
 	}
 
+<<<<<<< HEAD
 	private static function getSelectionFromTagAttribute($type, $value, &$params, &$reverse)
 	{
 		if ($type == 'Date.Date')
 		{
+=======
+	private static function getNotArrayTextAreaTypes()
+	{
+		return [
+			'Php',
+		];
+	}
+
+	private static function getSelection($selection, $type = '')
+	{
+		if (in_array($type, self::getNotArrayTextAreaTypes()))
+		{
+			return $selection;
+		}
+
+		$delimiter = in_array($type, self::getTextAreaTypes()) ? "\n" : ',';
+
+		return self::makeArray($selection, $delimiter);
+	}
+
+	private static function getSelectionFromTagAttribute($type, $value, &$params, &$reverse)
+	{
+		if ($type == 'Date.Date')
+		{
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			$value = str_replace('from', '', $value);
 			$dates = explode(' - ', str_replace('to', ' - ', $value));
 
@@ -640,6 +922,7 @@ class Conditions
 		if (in_array($type, self::getTextAreaTypes()))
 		{
 			$value = Html::convertWysiwygToPlainText($value);
+<<<<<<< HEAD
 		}
 
 		if (strpos($value, '!NOT!') === 0)
@@ -673,6 +956,94 @@ class Conditions
 		}
 
 		return false;
+=======
+		}
+
+		if (strpos($value, '!NOT!') === 0)
+		{
+			$reverse = true;
+			$value   = substr($value, 5);
+		}
+
+		if ( ! in_array($type, self::getNotArrayTextAreaTypes()))
+		{
+			$value = str_replace('[[:COMMA:]]', ',', str_replace(',', '[[:SPLIT:]]', str_replace('\\,', '[[:COMMA:]]', $value)));
+			$value = explode('[[:SPLIT:]]', $value);
+		}
+
+		return $value;
+	}
+
+	private static function getTextAreaTypes()
+	{
+		return [
+			'Ip',
+			'Url',
+			'Php',
+		];
+	}
+
+	private static function getType(&$type, $only_types = [])
+	{
+		$types = self::getTypes($only_types);
+
+		if (isset($types[$type]))
+		{
+			return $types[$type];
+		}
+
+		// Make it plural
+		$type = rtrim($type, 's') . 's';
+
+		if (isset($types[$type]))
+		{
+			return $types[$type];
+		}
+
+		// Replace incorrect plural endings
+		$type = str_replace('ys', 'ies', $type);
+
+		if (isset($types[$type]))
+		{
+			return $types[$type];
+		}
+
+		return false;
+	}
+
+	private static function getTypeAliases()
+	{
+		return [
+			'matching_method'  => ['method'],
+			'menuitems'        => ['menu'],
+			'homepage'         => ['home'],
+			'date'             => ['daterange'],
+			'seasons'          => [''],
+			'months'           => [''],
+			'days'             => [''],
+			'time'             => [''],
+			'accesslevels'     => ['access'],
+			'usergrouplevels'  => ['usergroups', 'groups'],
+			'users'            => [''],
+			'languages'        => ['langs'],
+			'ips'              => ['ipaddress', 'ipaddresses'],
+			'geocontinents'    => ['continents'],
+			'geocountries'     => ['countries'],
+			'georegions'       => ['regions'],
+			'geopostalcodes'   => ['postalcodes', 'postcodes'],
+			'templates'        => [''],
+			'urls'             => [''],
+			'devices'          => [''],
+			'os'               => [''],
+			'browsers'         => [''],
+			'components'       => [''],
+			'tags'             => [''],
+			'contentpagetypes' => ['pagetypes'],
+			'cats'             => ['categories', 'category'],
+			'articles'         => [''],
+			'php'              => [''],
+		];
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	public static function pass($conditions, $matching_method = 'all', $article = null, $module = null)
@@ -715,7 +1086,11 @@ class Conditions
 			$pass = self::passByType($conditions[$type], $type, $article, $module);
 		}
 
+<<<<<<< HEAD
 		return $cache->set($pass);
+=======
+		return '';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	private static function passByType($condition, $type, $article = null, $module = null)
@@ -732,6 +1107,7 @@ class Conditions
 
 		self::initParametersByType($condition, $type);
 
+<<<<<<< HEAD
 		$cache = new Cache([__METHOD__, $type, $article_id, $module_id, $condition]);
 
 		if ($cache->exists())
@@ -797,6 +1173,147 @@ class Conditions
 
 			default:
 				return 'all';
+=======
+	private static function initParametersByType(&$params, $type = '')
+	{
+		$params->class_name = str_replace('.', '', $type);
+
+		$params->include_type = self::getConditionState($params->include_type);
+	}
+
+	private static function makeArray($array = '', $delimiter = ',', $trim = true)
+	{
+		if (empty($array))
+		{
+			return [];
+		}
+
+		$cache = new Cache([__METHOD__, $array, $delimiter, $trim]);
+
+		if ($cache->exists())
+		{
+			return $cache->get();
+		}
+
+		$array = self::mixedDataToArray($array, $delimiter);
+
+		if (empty($array))
+		{
+			return $array;
+		}
+
+		if ( ! $trim)
+		{
+			return $array;
+		}
+
+		foreach ($array as $k => $v)
+		{
+			if ( ! is_string($v))
+			{
+				continue;
+			}
+
+			$array[$k] = trim($v);
+		}
+
+		return $cache->set($array);
+	}
+
+	private static function mixedDataToArray($array = '', $delimiter = ',')
+	{
+		if ( ! is_array($array))
+		{
+			return explode($delimiter, $array);
+		}
+
+		if (empty($array))
+		{
+			return $array;
+		}
+
+		if (isset($array[0]) && is_array($array[0]))
+		{
+			return $array[0];
+		}
+
+		if (count($array) === 1 && strpos($array[0], $delimiter) !== false)
+		{
+			return explode($delimiter, $array[0]);
+		}
+
+		return $array;
+	}
+
+	private static function passByType($condition, $type, $article = null, $module = null)
+	{
+		$article_id = $article->id ?? '';
+		$module_id  = $module->id ?? '';
+
+		$cache = new Cache([__METHOD__, $type, $article_id, $module_id, $condition]);
+
+		if ($cache->exists())
+		{
+			return $cache->get();
+		}
+
+		self::initParametersByType($condition, $type);
+
+		$cache = new Cache([__METHOD__, $type, $article_id, $module_id, $condition]);
+
+		if ($cache->exists())
+		{
+			return $cache->get();
+		}
+
+		$pass = false;
+
+		switch ($condition->include_type)
+		{
+			case 'all':
+				$pass = true;
+				break;
+
+			case 'none':
+				$pass = false;
+				break;
+
+			default:
+				if ( ! file_exists(__DIR__ . '/Condition/' . $condition->class_name . '.php'))
+				{
+					break;
+				}
+
+				$className = '\\RegularLabs\\Library\\Condition\\' . $condition->class_name;
+
+				$class = new $className($condition, $article, $module);
+
+				$class->beforePass();
+
+				$pass = $class->pass();
+
+				break;
+		}
+
+		return $cache->set($pass);
+	}
+
+	private static function renameParamKeys(&$params)
+	{
+		$params->conditions = $params->conditions ?? [];
+
+		foreach ($params as $key => $value)
+		{
+			if (strpos($key, 'condition_') === false && strpos($key, 'assignto_') === false)
+			{
+				continue;
+			}
+
+			$new_key                      = substr($key, strpos($key, '_') + 1);
+			$params->conditions[$new_key] = $value;
+
+			unset($params->{$key});
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		}
 	}
 }

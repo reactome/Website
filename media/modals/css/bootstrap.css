@@ -1,10 +1,18 @@
 /**
  * @package         Modals
+<<<<<<< HEAD
  * @version         11.10.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         11.9.0
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 /*
@@ -13,11 +21,19 @@
  */
 /**
  * @package         Modals
+<<<<<<< HEAD
  * @version         11.10.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         11.9.0
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 /*
@@ -27,6 +43,7 @@
 #rl_modals,
 #rl_modals_overlay,
 #rl_modals_wrapper {
+<<<<<<< HEAD
   position: absolute;
   top: 0;
   left: 0;
@@ -63,17 +80,70 @@
   width: 100%;
   height: 100%;
 }
+=======
+    position: absolute;
+    z-index:  9999;
+    top:      0;
+    left:     0;
+    overflow: hidden;
+}
+
+#rl_modals_wrapper {
+    max-width: none;
+}
+
+#rl_modals_overlay {
+    position: fixed;
+    width:    100%;
+    height:   100%;
+}
+
+#rl_modals_middle_left,
+#rl_modals_bottom_left {
+    clear: left;
+}
+
+#rl_modals_content {
+    position: relative;
+}
+
+#rl_modals_loaded_content {
+    overflow:                   auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#rl_modals_title {
+    margin: 0;
+}
+
+#rl_modals_loading_overlay,
+#rl_modals_loading_graphic {
+    position: absolute;
+    top:      0;
+    left:     0;
+    width:    100%;
+    height:   100%;
+}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 #rl_modals_previous,
 #rl_modals_next,
 #rl_modals_close,
 #rl_modals_slideshow {
+<<<<<<< HEAD
   cursor: pointer;
 }
+=======
+    cursor: pointer;
+}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 #rl_modals.no_navigation #rl_modals_previous,
 #rl_modals.no_navigation #rl_modals_next,
 #rl_modals.no_navigation #rl_modals_close,
 #rl_modals.no_navigation #rl_modals_slideshow,
 #rl_modals.no_navigation #rl_modals_current {
+<<<<<<< HEAD
   display: none !important;
 }
 .rl_modals_photo {
@@ -103,15 +173,53 @@
   font-size: 0.7em;
   font-weight: normal;
 }
-.modal_link_hidden {
-  display: none !important;
+=======
+    display: none !important;
 }
+
+.rl_modals_photo {
+    display:                block;
+    float:                  left;
+    max-width:              none;
+    margin:                 auto;
+    border:                 0;
+    -ms-interpolation-mode: bicubic;
+}
+
+.rl_modals_iframe {
+    display: block;
+    width:   100%;
+    height:  100%;
+    margin:  0;
+    padding: 0;
+    border:  0;
+}
+
+#rl_modals,
+#rl_modals_content,
+#rl_modals_loaded_content {
+    -moz-box-sizing:    content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing:         content-box;
+}
+
+#rl_modals_title .modals_description {
+    font-size:   0.7em;
+    font-weight: normal;
+}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+.modal_link_hidden {
+    display: none !important;
+}
+
 /*
  * User Style:
  * Change the following styles to modify the appearance of ColorBox.  They are
  * ordered & tabbed in a way that represents the nesting of the generated HTML.
  */
 #rl_modals_overlay {
+<<<<<<< HEAD
   background-color: #000;
   opacity: 0.8;
   filter: alpha(opacity=80);
@@ -201,10 +309,111 @@
   width: 42px;
   height: 44px;
 }
+=======
+    opacity:          0.8;
+    background-color: #000000;
+    filter:           alpha(opacity=80);
+}
+
+#rl_modals {
+    top:                     50%;
+    left:                    50%;
+    margin:                  0 !important;
+    border:                  1px solid rgba(0, 0, 0, 0.3);
+    -moz-border-radius:      6px;
+    -webkit-border-radius:   6px;
+    border-radius:           6px;
+    outline:                 0;
+    background-color:        #ffffff;
+    -moz-background-clip:    padding-box;
+    -webkit-background-clip: padding-box;
+    background-clip:         padding-box;
+    -moz-box-shadow:         0 3px 7px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow:      0 3px 7px rgba(0, 0, 0, 0.3);
+    box-shadow:              0 3px 7px rgba(0, 0, 0, 0.3);
+}
+
+#rl_modals_content {
+    overflow: hidden;
+}
+
+#rl_modals_loaded_content {
+    overflow-y:    auto;
+    max-height:    none;
+    margin-top:    44px;
+    margin-bottom: 0;
+    padding:       15px;
+}
+
+#rl_modals.is_image #rl_modals_loaded_content,
+#rl_modals.is_video #rl_modals_loaded_content {
+    padding: 0;
+}
+
+#rl_modals_title {
+    font-size:      20px;
+    font-weight:    bold;
+    line-height:    24px;
+    position:       absolute;
+    top:            0;
+    right:          0;
+    left:           0;
+    min-height:     24px;
+    margin:         0;
+    padding:        9px 25px 9px 15px;
+    text-align:     left;
+    color:          inherit;
+    border-bottom:  1px solid #eeeeee;
+    text-rendering: optimizelegibility;
+}
+
+#rl_modals_title small {
+    font-weight: normal;
+}
+
+.cbimg {
+    font:               0/0 a;
+    line-height:        14px;
+    position:           absolute;
+    -moz-box-sizing:    border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing:         border-box;
+    width:              14px;
+    height:             14px;
+    *margin-right:      0.3em;
+    color:              transparent;
+    border:             0;
+    background:         transparent url("../images/bootstrap/controls.png") no-repeat 0 0;
+    text-shadow:        none;
+}
+
+#rl_modals_previous,
+#rl_modals_next,
+#rl_modals_slideshow {
+    font:               0/0 a;
+    line-height:        14px;
+    position:           absolute;
+    top:                50%;
+    -moz-box-sizing:    border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing:         border-box;
+    width:              14px;
+    width:              42px;
+    height:             14px;
+    height:             44px;
+    *margin-right:      0.3em;
+    color:              transparent;
+    border:             0;
+    background:         transparent url("../images/bootstrap/controls.png") no-repeat 0 0;
+    text-shadow:        none;
+}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 #rl_modals_current,
 #rl_modals_previous,
 #rl_modals_next,
 #rl_modals_slideshow {
+<<<<<<< HEAD
   position: absolute;
   background-color: #fff;
   border: 15px solid #fff;
@@ -217,10 +426,26 @@
   opacity: 0;
   filter: alpha(opacity=0);
 }
+=======
+    position:              absolute;
+    opacity:               0;
+    border:                15px solid #ffffff;
+    -moz-border-radius:    6px;
+    -webkit-border-radius: 6px;
+    border-radius:         6px;
+    background-color:      #ffffff;
+    -moz-box-shadow:       0 0 10px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow:    0 0 10px rgba(0, 0, 0, 0.5);
+    box-shadow:            0 0 10px rgba(0, 0, 0, 0.5);
+    filter:                alpha(opacity=0);
+}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 #rl_modals_content:hover #rl_modals_current,
 #rl_modals_content:hover #rl_modals_previous,
 #rl_modals_content:hover #rl_modals_next,
 #rl_modals_content:hover #rl_modals_slideshow {
+<<<<<<< HEAD
   opacity: 1;
   filter: alpha(opacity=100);
 }
@@ -308,4 +533,106 @@
   top: 0;
   left: 0;
   background-color: #049cdb;
+=======
+    opacity: 1;
+    filter:  alpha(opacity=100);
+}
+
+#rl_modals_current {
+    font-weight:           bold;
+    line-height:           1em;
+    right:                 0;
+    bottom:                0;
+    -moz-border-radius:    6px 0 6px 0;
+    -webkit-border-radius: 6px 0 6px 0;
+    border-radius:         6px 0 6px 0;
+}
+
+#rl_modals_previous {
+    left:                  0;
+    -moz-border-radius:    0 6px 6px 0;
+    -webkit-border-radius: 0 6px 6px 0;
+    border-radius:         0 6px 6px 0;
+    background-position:   0 0;
+}
+
+#rl_modals_next {
+    right:                 0;
+    -moz-border-radius:    6px 0 0 6px;
+    -webkit-border-radius: 6px 0 0 6px;
+    border-radius:         6px 0 0 6px;
+    background-position:   -24px 0;
+}
+
+#rl_modals_slideshow {
+    right:               50%;
+    left:                50%;
+    background-position: -48px 0;
+}
+
+.rl_modals_slideshow_on #rl_modals_slideshow {
+    background-position: -72px 0;
+}
+
+#rl_modals_close {
+    font:                0/0 a;
+    line-height:         14px;
+    position:            absolute;
+    top:                 14px;
+    right:               15px;
+    -moz-box-sizing:     border-box;
+    -webkit-box-sizing:  border-box;
+    box-sizing:          border-box;
+    width:               14px;
+    height:              14px;
+    *margin-right:       0.3em;
+    opacity:             0.3;
+    color:               transparent;
+    border:              0;
+    background:          transparent url("../images/bootstrap/controls.png") no-repeat 0 0;
+    background-position: -96px 0;
+    text-shadow:         none;
+    filter:              alpha(opacity=30);
+}
+
+#rl_modals_close:hover {
+    opacity: 0.8;
+    filter:  alpha(opacity=80);
+}
+
+#rl_modals_loading_graphic {
+    height:     100%;
+    opacity:    0.8;
+    background: transparent url(../images/bootstrap/loading.gif) no-repeat 50% 50%;
+    filter:     alpha(opacity=80);
+}
+
+.no_title #rl_modals_title {
+    height:        0 !important;
+    min-height:    0;
+    padding:       0;
+    border-bottom: none;
+}
+
+.no_title #rl_modals_loaded_content {
+    margin-top: 0 !important;
+}
+
+.no_title #rl_modals_close {
+    top:   3px;
+    right: 3px;
+}
+
+.no_title.has_scrollbar #rl_modals_close {
+    right: 18px;
+}
+
+#rl_modals_title .countdown {
+    position:         absolute;
+    top:              0;
+    left:             0;
+    width:            100%;
+    height:           2px;
+    background-color: #049cdb;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 }

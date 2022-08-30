@@ -9,7 +9,11 @@ defined('JPATH_BASE') or die;
 class WfTemplateGantry extends JPlugin
 {
     public function onWfGetTemplateStylesheets(&$files, $template)
+<<<<<<< HEAD
     {
+=======
+    {                        
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         $path = JPATH_SITE . '/templates/' . $template->name;
 
         // not a gantry template
@@ -24,6 +28,7 @@ class WfTemplateGantry extends JPlugin
         $gantry4 = $path . '/css-compiled';
 
         if (is_dir($gantry5)) {
+<<<<<<< HEAD
             // update url
             $url = 'templates/' . $template->name . '/custom/css-compiled';
 
@@ -33,6 +38,31 @@ class WfTemplateGantry extends JPlugin
             // check for editor.css file
             if (is_file($editor_css) && filesize($editor_css) > 0) {
                 $files[] = $url . '/' . basename($editor_css);
+=======
+            $items = array();
+            
+            $files = glob($gantry5 . '/' . $name . '_[0-9]*.css');
+
+            foreach($files as $file) {
+                $items[filemtime($file)] = $file;
+            }
+
+            // sort by modified time key
+            ksort($items, SORT_NUMERIC);
+
+            // get the last item in the array
+            $item = end($items);
+                        
+            // update url
+            $url = 'templates/' . $template->name . '/custom/css-compiled';
+
+            $path = dirname($item);
+            $file = basename($item);
+
+            // check for editor.css file
+            if (is_file($path) && filesize($path) > 0) {
+                $files[] = $url . '/' . basename($css);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                 return true;
             }
 
@@ -40,6 +70,7 @@ class WfTemplateGantry extends JPlugin
             $files[] = 'media/gantry5/assets/css/bootstrap-gantry.css';
             $files[] = 'media/gantry5/engines/nucleus/css-compiled/nucleus.css';
 
+<<<<<<< HEAD
             $items  = array();
             $custom = array();
 
@@ -76,10 +107,22 @@ class WfTemplateGantry extends JPlugin
                 $custom_file = end($custom);
                 // create custom file url
                 $files[] = $url . '/' . basename($custom_file);
+=======
+            // load css files
+            $files[] = $url . '/' . $file;
+
+            // create name of possible custom.css file
+            $custom = str_replace($name, 'custom', $file);
+
+            // load custom css file if it exists
+            if (is_file($path . '/' . $custom)) {
+                $files[] = $url . '/' . $custom;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             }
         }
 
         if (is_dir($gantry4)) {
+<<<<<<< HEAD
             // update url
             $url = 'templates/' . $template->name . '/css-compiled';
             // load gantry bootstrap files
@@ -106,3 +149,28 @@ class WfTemplateGantry extends JPlugin
         }
     }
 }
+=======
+            $items = array();
+            
+            $list = glob($gantry4 . '/master-*.css');
+
+            foreach($list as $file) {
+                $items[filemtime($file)] = $file;
+            }
+
+            // sort by modified time key
+            ksort($items, SORT_NUMERIC);
+
+            // get the last item in the array
+            $item = end($items);
+            
+            // update url
+            $url = 'templates/' . $template->name . '/css-compiled';
+            // load gantry bootstrap files
+            $files[] = $url . '/bootstrap.css';
+            // load css files
+            $files[] = $url . '/' . basename($item);
+        }
+    }
+}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090

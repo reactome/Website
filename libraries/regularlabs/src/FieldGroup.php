@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -31,6 +39,16 @@ class FieldGroup extends Field
 		$size     = $attributes->get('size');
 		$multiple = $attributes->get('multiple');
 		$simple   = $attributes->get('simple');
+<<<<<<< HEAD
+=======
+
+		$options = $this->getOptions(
+			$attributes->get('group')
+		);
+
+		return $this->selectList($options, $name, $value, $id, $size, $multiple, $simple);
+	}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		$options = $this->getOptions(
 			$attributes->get('group')
@@ -59,6 +77,7 @@ class FieldGroup extends Field
 		return $this->getSelectList();
 	}
 
+<<<<<<< HEAD
 	public function getGroup()
 	{
 		$this->params = $this->element->attributes();
@@ -66,6 +85,8 @@ class FieldGroup extends Field
 		return $this->get('group', $this->default_group ?: $this->type);
 	}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	public function getSelectList($group = '')
 	{
 		if ( ! is_array($this->value))

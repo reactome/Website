@@ -2,7 +2,11 @@
 /**
  * Joomla! Content Management System
  *
+<<<<<<< HEAD
  * @copyright  (C) 2005 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -41,7 +45,11 @@ final class Version
 	 * @var    integer
 	 * @since  3.8.0
 	 */
+<<<<<<< HEAD
 	const MINOR_VERSION = 10;
+=======
+	const MINOR_VERSION = 9;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 	/**
 	 * Patch release version.
@@ -49,7 +57,11 @@ final class Version
 	 * @var    integer
 	 * @since  3.8.0
 	 */
+<<<<<<< HEAD
 	const PATCH_VERSION = 9;
+=======
+	const PATCH_VERSION = 28;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 	/**
 	 * Extra release version info.
@@ -69,7 +81,11 @@ final class Version
 	 * @since  3.5
 	 * @deprecated  4.0  Use separated version constants instead
 	 */
+<<<<<<< HEAD
 	const RELEASE = '3.10';
+=======
+	const RELEASE = '3.9';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 	/**
 	 * Maintenance version.
@@ -78,7 +94,11 @@ final class Version
 	 * @since  3.5
 	 * @deprecated  4.0  Use separated version constants instead
 	 */
+<<<<<<< HEAD
 	const DEV_LEVEL = '9';
+=======
+	const DEV_LEVEL = '28';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 	/**
 	 * Development status.
@@ -111,7 +131,11 @@ final class Version
 	 * @var    string
 	 * @since  3.5
 	 */
+<<<<<<< HEAD
 	const RELDATE = '7-May-2022';
+=======
+	const RELDATE = '6-July-2021';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 	/**
 	 * Release time.
@@ -135,7 +159,11 @@ final class Version
 	 * @var    string
 	 * @since  3.5
 	 */
+<<<<<<< HEAD
 	const COPYRIGHT = '(C) 2005 Open Source Matters, Inc. <https://www.joomla.org>';
+=======
+	const COPYRIGHT = 'Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 	/**
 	 * Link text.

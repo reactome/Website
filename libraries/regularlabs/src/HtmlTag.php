@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -53,6 +61,87 @@ class HtmlTag
 	/**
 	 * Combine attribute values from 2 given html tag strings (or arrays of attributes)
 	 * And return as a sting of attributes
+<<<<<<< HEAD
+=======
+	 *
+	 * @param string /array $string1
+	 * @param string /array $string2
+	 *
+	 * @return string
+	 */
+	public static function combineAttributes($string1, $string2, $flatten = true)
+	{
+		$attribsutes1 = is_array($string1) ? $string1 : self::getAttributes($string1);
+		$attribsutes2 = is_array($string2) ? $string2 : self::getAttributes($string2);
+
+		$duplicate_attributes = array_intersect_key($attribsutes1, $attribsutes2);
+
+		// Fill $attributes with the unique ids
+		$attributes = array_diff_key($attribsutes1, $attribsutes2) + array_diff_key($attribsutes2, $attribsutes1);
+
+		// List of attrubute types that can only contain one value
+		$single_value_attributes = ['id', 'href'];
+
+		// Add/combine the duplicate ids
+		foreach ($duplicate_attributes as $key => $val)
+		{
+			if (in_array($key, $single_value_attributes))
+			{
+				$attributes[$key] = $attribsutes2[$key];
+				continue;
+			}
+			// Combine strings, but remove duplicates
+			// "aaa bbb" + "aaa ccc" = "aaa bbb ccc"
+
+			// use a ';' as a concatenated for javascript values (keys beginning with 'on')
+			// Otherwise use a space (like for classes)
+			$glue = substr($key, 0, 2) == 'on' ? ';' : ' ';
+
+			$attributes[$key] = implode($glue, array_merge(explode($glue, $attribsutes1[$key]), explode($glue, $attribsutes2[$key])));
+		}
+
+		return $flatten ? self::flattenAttributes($attributes) : $attributes;
+	}
+
+	/**
+	 * Convert array of attributes to a html style string
+	 *
+	 * @param array $attributes
+	 *
+	 * @return string
+	 */
+	public static function flattenAttributes($attributes, $prefix = '')
+	{
+		$output = [];
+
+		foreach ($attributes as $key => $val)
+		{
+			if (is_null($val) || $val === '')
+			{
+				continue;
+			}
+
+			if ($val === false)
+			{
+				$val = 'false';
+			}
+
+			if ($val === true)
+			{
+				$val = 'true';
+			}
+
+			$val = str_replace('"', '&quot;', $val);
+
+			$output[] = $prefix . $key . '="' . $val . '"';
+		}
+
+		return implode(' ', $output);
+	}
+
+	/**
+	 * Extract attribute value from a html tag string by given attribute key
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 *
 	 * @param string /array $string1
 	 * @param string /array $string2
@@ -125,6 +214,7 @@ class HtmlTag
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Convert array of attributes to a html style string
 	 *
 	 * @param array $attributes
@@ -165,9 +255,15 @@ class HtmlTag
 	 *
 	 * @param string $key
 	 * @param string $string
+=======
+	 * Returns true/false based on whether the html tag type is a single tag
 	 *
-	 * @return string
+	 * @param string $type
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @return bool
 	 */
+<<<<<<< HEAD
 	public static function getAttributeValue($key, $string)
 	{
 		if (empty($key) || empty($string))
@@ -194,6 +290,10 @@ class HtmlTag
 	 */
 	public static function isSelfClosingTag($type)
 	{
+=======
+	public static function isSelfClosingTag($type)
+	{
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		return in_array($type, [
 			'area',
 			'base',

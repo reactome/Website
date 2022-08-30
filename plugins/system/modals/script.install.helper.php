@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Modals
+<<<<<<< HEAD
  * @version         11.10.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         11.9.0
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -41,7 +49,11 @@ class PlgSystemModalsInstallerScriptHelper
 		$this->db      = JFactory::getDbo();
 	}
 
+<<<<<<< HEAD
 	public function addInstalledMessage()
+=======
+	public function preflight($route, $adapter)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	{
 		if ( ! $this->show_message)
 		{
@@ -58,17 +70,40 @@ class PlgSystemModalsInstallerScriptHelper
 		);
 	}
 
+<<<<<<< HEAD
 	public function canInstall()
 	{
 		if ( ! is_null($this->can_install))
+=======
+		$this->installed_version        = $this->getVersion($this->getInstalledXMLFile());
+		$this->current_joomla_version   = $this->getXmlJoomlaVersion($this->getCurrentXMLFile());
+		$this->installed_joomla_version = $this->getXmlJoomlaVersion($this->getInstalledXMLFile());
+
+		if ($this->show_message && $this->isInstalled())
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			return $this->can_install;
 		}
 
+<<<<<<< HEAD
 		$this->can_install = false;
 
 		// The extension is not installed yet
 		if ( ! $this->installed_version)
+=======
+//		if ($this->extension_type == 'component')
+//		{
+//			// Remove admin menu to prevent error on creating it again
+//			$query = $this->db->getQuery(true)
+//				->delete('#__menu')
+//				->where($this->db->quoteName('path') . ' = ' . $this->db->quote('com-' . $this->extname))
+//				->where($this->db->quoteName('client_id') . ' = 1');
+//			$this->db->setQuery($query);
+//			$this->db->execute();
+//		}
+
+		if ($this->onBeforeInstall($route) === false)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			$this->can_install = true;
 
@@ -109,6 +144,7 @@ class PlgSystemModalsInstallerScriptHelper
 		return false;
 	}
 
+<<<<<<< HEAD
 	public function delete($files = [])
 	{
 		foreach ($files as $file)
@@ -117,6 +153,17 @@ class PlgSystemModalsInstallerScriptHelper
 			{
 				JFolder::delete($file);
 			}
+=======
+	public function postflight($route, $adapter)
+	{
+		if ( ! $this->canInstall())
+		{
+			return true;
+		}
+
+		$this->removeGlobalLanguageFiles();
+		$this->removeUnusedLanguageFiles();
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 			if (is_file($file))
 			{
@@ -174,6 +221,7 @@ class PlgSystemModalsInstallerScriptHelper
 			return;
 		}
 
+<<<<<<< HEAD
 		if ( ! is_string($file) || ! is_file($file))
 		{
 			return;
@@ -190,6 +238,10 @@ class PlgSystemModalsInstallerScriptHelper
 		{
 			return;
 		}
+=======
+		$this->publishExtension($route);
+		$this->addInstalledMessage();
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		$contents = str_replace(
 			['FREEFREE', 'FREEPRO', 'PROFREE', 'PROPRO'],
@@ -210,8 +262,19 @@ class PlgSystemModalsInstallerScriptHelper
 			}
 		}
 
+<<<<<<< HEAD
 		return false;
 	}
+=======
+		$query = $this->db->getQuery(true)
+			->select($this->db->quoteName('extension_id'))
+			->from('#__extensions')
+			->where($this->db->quoteName('type') . ' = ' . $this->db->quote($this->extension_type))
+			->where($this->db->quoteName('element') . ' = ' . $this->db->quote($this->getElementName()))
+			->setLimit(1);
+		$this->db->setQuery($query);
+		$result = $this->db->loadResult();
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 	public function getCurrentXMLFile()
 	{
@@ -316,12 +379,19 @@ class PlgSystemModalsInstallerScriptHelper
 
 		if ( ! $xml)
 		{
+<<<<<<< HEAD
 			return null;
 		}
+=======
+			case 'plugin':
+				$folders[] = JPATH_PLUGINS . '/' . $folder . '/' . $extname;
+				break;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		return $xml;
 	}
 
+<<<<<<< HEAD
 	public function getXmlJoomlaVersion($file = '')
 	{
 		$file = $file ?: $this->getCurrentXMLFile();
@@ -329,6 +399,16 @@ class PlgSystemModalsInstallerScriptHelper
 		if ( ! is_file($file))
 		{
 			return null;
+=======
+			case 'module':
+				$folders[] = JPATH_ADMINISTRATOR . '/modules/mod_' . $extname;
+				$folders[] = JPATH_SITE . '/modules/mod_' . $extname;
+				break;
+
+			case 'library':
+				$folders[] = JPATH_SITE . '/libraries/' . $extname;
+				break;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		}
 
 		$xml = simplexml_load_file($file);
@@ -341,9 +421,24 @@ class PlgSystemModalsInstallerScriptHelper
 		return (int) $xml->attributes()->version;
 	}
 
+<<<<<<< HEAD
 	public function getXmlValue($key, $file = '')
 	{
 		$xml = $this->getXmlData($file);
+=======
+		if (empty($ids))
+		{
+			foreach ($folders as $folder)
+			{
+				if ( ! is_dir($folder))
+				{
+					continue;
+				}
+
+				JFactory::getApplication()->enqueueMessage('2. Deleting: ' . $folder, 'notice');
+				JFolder::delete($folder);
+			}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		if ( ! $xml || ! isset($xml[$key]))
 		{
@@ -379,9 +474,21 @@ class PlgSystemModalsInstallerScriptHelper
 			return true;
 		}
 
+<<<<<<< HEAD
 		$package_version = $this->getVersion();
 
 		return version_compare($this->installed_version, $package_version, '<=');
+=======
+		if ($show_message)
+		{
+			JFactory::getApplication()->enqueueMessage(
+				JText::sprintf(
+					'COM_INSTALLER_UNINSTALL_SUCCESS',
+					JText::_('COM_INSTALLER_TYPE_TYPE_' . strtoupper($type))
+				), 'success'
+			);
+		}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	public function onAfterInstall($route)
@@ -476,6 +583,7 @@ class PlgSystemModalsInstallerScriptHelper
 		return true;
 	}
 
+<<<<<<< HEAD
 	public function publishExtension($route)
 	{
 		if ($this->extension_type == 'module')
@@ -484,6 +592,15 @@ class PlgSystemModalsInstallerScriptHelper
 			$this->enableAdministratorModuleExtension();
 		}
 
+=======
+	public function uninstallLibrary($extname, $show_message = true)
+	{
+		$this->uninstallExtension($extname, 'library', null, $show_message);
+	}
+
+	public function publishExtension($route)
+	{
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		if ($route == 'update'
 			&& $this->installed_joomla_version >= $this->current_joomla_version
 		)
@@ -575,6 +692,7 @@ class PlgSystemModalsInstallerScriptHelper
 		$this->db->execute();
 	}
 
+<<<<<<< HEAD
 	public function publishPlugin()
 	{
 		$query = $this->db->getQuery(true)
@@ -585,6 +703,44 @@ class PlgSystemModalsInstallerScriptHelper
 			->where($this->db->quoteName('folder') . ' = ' . $this->db->quote($this->plugin_folder));
 		$this->db->setQuery($query);
 		$this->db->execute();
+=======
+	public function addInstalledMessage()
+	{
+		if ( ! $this->show_message)
+		{
+			return;
+		}
+
+		JFactory::getApplication()->enqueueMessage(
+			JText::sprintf(
+				$this->install_type == 'update' ? 'RLI_THE_EXTENSION_HAS_BEEN_UPDATED_SUCCESSFULLY' : 'RLI_THE_EXTENSION_HAS_BEEN_INSTALLED_SUCCESSFULLY',
+				'<strong>' . JText::_($this->name) . '</strong>',
+				'<strong>' . $this->getVersion() . '</strong>',
+				$this->getFullType()
+			), 'success'
+		);
+	}
+
+	public function getPrefix()
+	{
+		switch ($this->extension_type)
+		{
+			case 'plugin':
+				return JText::_('plg_' . strtolower($this->plugin_folder));
+
+			case 'component':
+				return JText::_('com');
+
+			case 'module':
+				return JText::_('mod');
+
+			case 'library':
+				return JText::_('lib');
+
+			default:
+				return $this->extension_type;
+		}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/*
@@ -598,6 +754,7 @@ class PlgSystemModalsInstallerScriptHelper
 
 	public function uninstallExtension($extname, $type = 'plugin', $folder = 'system', $show_message = true)
 	{
+<<<<<<< HEAD
 		if (empty($extname))
 		{
 			return;
@@ -606,6 +763,64 @@ class PlgSystemModalsInstallerScriptHelper
 		$folders = [];
 
 		switch ($type)
+=======
+		return $this->getXmlValue('version', $file);
+	}
+
+	public function getXmlValue($key, $file = '')
+	{
+		$xml = $this->getXmlData($file);
+
+		if ( ! $xml || ! isset($xml[$key]))
+		{
+			return '';
+		}
+
+		return $xml[$key];
+	}
+
+	public function getXmlData($file = '')
+	{
+		$file = $file ?: $this->getCurrentXMLFile();
+
+		if ( ! is_file($file))
+		{
+			return null;
+		}
+
+		$xml = JInstaller::parseXMLInstallFile($file);
+
+		if ( ! $xml)
+		{
+			return null;
+		}
+
+		return $xml;
+	}
+
+	public function getXmlJoomlaVersion($file = '')
+	{
+		$file = $file ?: $this->getCurrentXMLFile();
+
+		if ( ! is_file($file))
+		{
+			return null;
+		}
+
+		$xml = simplexml_load_file($file);
+
+		if ( ! $xml)
+		{
+			return null;
+		}
+
+		return (int) $xml->attributes()->version;
+	}
+
+	public function isNewer()
+	{
+		if ( ! $this->installed_version)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			case 'plugin':
 				$folders[] = JPATH_PLUGINS . '/' . $folder . '/' . $extname;
@@ -616,6 +831,7 @@ class PlgSystemModalsInstallerScriptHelper
 				$folders[] = JPATH_SITE . '/components/com_' . $extname;
 				break;
 
+<<<<<<< HEAD
 			case 'module':
 				$folders[] = JPATH_ADMINISTRATOR . '/modules/mod_' . $extname;
 				$folders[] = JPATH_SITE . '/modules/mod_' . $extname;
@@ -631,14 +847,68 @@ class PlgSystemModalsInstallerScriptHelper
 			->from('#__extensions')
 			->where($this->db->quoteName('element') . ' = ' . $this->db->quote($this->getElementName($type, $extname)))
 			->where($this->db->quoteName('type') . ' = ' . $this->db->quote($type));
+=======
+		return version_compare($this->installed_version, $package_version, '<=');
+	}
+
+	public function canInstall()
+	{
+		if ( ! is_null($this->can_install))
+		{
+			return $this->can_install;
+		}
+
+		$this->can_install = false;
+
+		// The extension is not installed yet
+		if ( ! $this->installed_version)
+		{
+			$this->can_install = true;
+
+			return true;
+		}
+
+		// The free version is installed. So any version is ok to install
+		if (strpos($this->installed_version, 'PRO') === false)
+		{
+			$this->can_install = true;
+
+			return true;
+		}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		if ($type == 'plugin')
 		{
+<<<<<<< HEAD
 			$query->where($this->db->quoteName('folder') . ' = ' . $this->db->quote($folder));
 		}
 
 		$this->db->setQuery($query);
 		$ids = $this->db->loadColumn();
+=======
+			$this->can_install = true;
+
+			return true;
+		}
+
+		JFactory::getLanguage()->load($this->getPrefix() . '_' . $this->extname, __DIR__);
+
+		JFactory::getApplication()->enqueueMessage(JText::_('RLI_ERROR_PRO_TO_FREE'), 'error');
+
+		JFactory::getApplication()->enqueueMessage(
+			html_entity_decode(
+				JText::sprintf(
+					'RLI_ERROR_UNINSTALL_FIRST',
+					'<a href="https://regularlabs.com/' . $this->alias . '" target="_blank">',
+					'</a>',
+					JText::_($this->name)
+				)
+			), 'error'
+		);
+
+		return false;
+	}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		if (empty($ids))
 		{
@@ -694,7 +964,11 @@ class PlgSystemModalsInstallerScriptHelper
 
 	public function uninstallLibrary($extname, $show_message = true)
 	{
+<<<<<<< HEAD
 		$this->uninstallExtension($extname, 'library', null, $show_message);
+=======
+		return true;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	public function uninstallModule($extname, $show_message = true)
@@ -702,9 +976,47 @@ class PlgSystemModalsInstallerScriptHelper
 		$this->uninstallExtension($extname, 'module', null, $show_message);
 	}
 
+<<<<<<< HEAD
 	public function uninstallPlugin($extname, $folder = 'system', $show_message = true)
 	{
 		$this->uninstallExtension($extname, 'plugin', $folder, $show_message);
+=======
+	public function fixAssetsRules()
+	{
+		$query = $this->db->getQuery(true)
+			->select($this->db->quoteName('rules'))
+			->from('#__assets')
+			->where($this->db->quoteName('title') . ' = ' . $this->db->quote('com_' . $this->extname))
+			->setLimit(1);
+		$this->db->setQuery($query);
+		$rules = $this->db->loadResult();
+
+		$rules = json_decode($rules);
+
+		if (empty($rules))
+		{
+			return;
+		}
+
+		foreach ($rules as $key => $value)
+		{
+			if ( ! empty($value))
+			{
+				continue;
+			}
+
+			unset($rules->$key);
+		}
+
+		$rules = json_encode($rules);
+
+		$query = $this->db->getQuery(true)
+			->update($this->db->quoteName('#__assets'))
+			->set($this->db->quoteName('rules') . ' = ' . $this->db->quote($rules))
+			->where($this->db->quoteName('title') . ' = ' . $this->db->quote('com_' . $this->extname));
+		$this->db->setQuery($query);
+		$this->db->execute();
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	private function fixExtensionNames()
@@ -733,6 +1045,8 @@ class PlgSystemModalsInstallerScriptHelper
 		}
 
 		$title = 'Regular Labs - ' . JText::_($this->name);
+<<<<<<< HEAD
+=======
 
 		$query->clear()
 			->update('#__modules')
@@ -755,6 +1069,99 @@ class PlgSystemModalsInstallerScriptHelper
 		$asset_id = $this->db->loadResult();
 
 		if (empty($asset_id))
+		{
+			return;
+		}
+
+		$query->clear()
+			->update('#__assets')
+			->set($this->db->quoteName('title') . ' = ' . $this->db->quote($title))
+			->where($this->db->quoteName('id') . ' = ' . (int) $asset_id);
+		$this->db->setQuery($query);
+		$this->db->execute();
+	}
+
+	private function updateUpdateSites()
+	{
+		$this->removeOldUpdateSites();
+		$this->removeXXXUpdateSites();
+		$this->updateNamesInUpdateSites();
+		$this->updateHttptoHttpsInUpdateSites();
+		$this->removeDuplicateUpdateSite();
+		$this->updateDownloadKey();
+	}
+
+	private function removeOldUpdateSites()
+	{
+		$query = $this->db->getQuery(true)
+			->select($this->db->quoteName('update_site_id'))
+			->from('#__update_sites')
+			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%nonumber.nl%'))
+			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%e=' . $this->alias . '%'));
+		$this->db->setQuery($query, 0, 1);
+		$id = $this->db->loadResult();
+
+		if ( ! $id)
+		{
+			return;
+		}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+
+		$query->clear()
+			->update('#__modules')
+			->set($this->db->quoteName('title') . ' = ' . $this->db->quote($title))
+			->where($this->db->quoteName('id') . ' = ' . (int) $module_id)
+			->where($this->db->quoteName('title') . ' LIKE ' . $this->db->quote('NoNumber%'));
+		$this->db->setQuery($query);
+		$this->db->execute();
+
+		// Fix module assets
+
+		// Get asset id
+		$query = $this->db->getQuery(true)
+			->select($this->db->quoteName('id'))
+			->from('#__assets')
+			->where($this->db->quoteName('name') . ' = ' . $this->db->quote('com_modules.module.' . (int) $module_id))
+			->where($this->db->quoteName('title') . ' LIKE ' . $this->db->quote('NoNumber%'))
+			->setLimit(1);
+		$this->db->setQuery($query);
+		$asset_id = $this->db->loadResult();
+
+<<<<<<< HEAD
+		if (empty($asset_id))
+=======
+	private function removeXXXUpdateSites()
+	{
+		$query = $this->db->getQuery(true)
+			->select($this->db->quoteName('update_site_id'))
+			->from('#__update_sites')
+			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%regularlabs.com/updates.xml?e=XXX%'));
+		$this->db->setQuery($query);
+		$ids = $this->db->loadColumn();
+
+		if ( empty($ids))
+		{
+			return;
+		}
+
+		$query->clear()
+			->delete('#__update_sites')
+			->where($this->db->quoteName('update_site_id') . ' IN (' . implode(',', $ids) . ')');
+		$this->db->setQuery($query);
+		$this->db->execute();
+
+		$query->clear()
+			->delete('#__update_sites_extensions')
+			->where($this->db->quoteName('update_site_id') . ' IN (' . implode(',', $ids) . ')');
+		$this->db->setQuery($query);
+		$this->db->execute();
+	}
+
+	private function updateNamesInUpdateSites()
+	{
+		$name = JText::_($this->name);
+		if ($this->alias != 'extensionmanager')
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			return;
 		}

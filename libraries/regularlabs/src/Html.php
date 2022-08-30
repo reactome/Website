@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -33,6 +41,7 @@ class Html
 	{
 		$breaks = '(?:(?:<br ?/?>|<\!--[^>]*-->|:\|:)\s*)*';
 		$keys   = array_keys($parts);
+<<<<<<< HEAD
 
 		$string = implode(':|:', $parts);
 		Protect::protectHtmlCommentTags($string);
@@ -155,6 +164,97 @@ class Html
 		$string = RegEx::replace('&_([a-z0-9\#]+?);', '&\1;', $string);
 
 		return $string;
+=======
+
+		$string = implode(':|:', $parts);
+		Protect::protectHtmlCommentTags($string);
+
+		// Remove empty tags
+		$regex = '<(' . implode('|', $elements) . ')(?: [^>]*)?>\s*(' . $breaks . ')<\/\1>\s*';
+
+		while (RegEx::match($regex, $string, $match))
+		{
+			$string = str_replace($match[0], $match[2], $string);
+		}
+
+		// Remove paragraphs around block elements
+		$block_elements = [
+			'p', 'div',
+			'table', 'tr', 'td', 'thead', 'tfoot',
+			'h[1-6]',
+		];
+		$block_elements = '(' . implode('|', $block_elements) . ')';
+
+		$regex = '(<p(?: [^>]*)?>)(\s*' . $breaks . ')(<' . $block_elements . '(?: [^>]*)?>)';
+
+		while (RegEx::match($regex, $string, $match))
+		{
+			if ($match[4] == 'p')
+			{
+				$match[3] = $match[1] . $match[3];
+				self::combinePTags($match[3]);
+			}
+
+			$string = str_replace($match[0], $match[2] . $match[3], $string);
+		}
+
+		$regex = '(</' . $block_elements . '>\s*' . $breaks . ')</p>';
+
+		while (RegEx::match($regex, $string, $match))
+		{
+			$string = str_replace($match[0], $match[1], $string);
+		}
+
+		Protect::unprotect($string);
+		$parts = explode(':|:', $string);
+
+		$new_tags = [];
+
+		foreach ($parts as $key => $val)
+		{
+			$key            = $keys[$key] ?? $key;
+			$new_tags[$key] = $val;
+		}
+
+		return $new_tags;
+	}
+
+	/**
+	 * Combine duplicate <p> tags
+	 * input: <p class="aaa" a="1"><!-- ... --><p class="bbb" b="2">
+	 * output: <p class="aaa bbb" a="1" b="2"><!-- ... -->
+	 *
+	 * @param $string
+	 */
+	public static function combinePTags(&$string)
+	{
+		if (empty($string))
+		{
+			return;
+		}
+
+		$p_start_tag   = '<p(?: [^>]*)?>';
+		$optional_tags = '\s*(?:<\!--[^>]*-->|&nbsp;|&\#160;)*\s*';
+
+		Protect::protectHtmlCommentTags($string);
+
+		RegEx::matchAll('(' . $p_start_tag . ')(' . $optional_tags . ')(' . $p_start_tag . ')', $string, $tags);
+
+		if (empty($tags))
+		{
+
+			Protect::unprotect($string);
+
+			return;
+		}
+
+		foreach ($tags as $tag)
+		{
+			$string = str_replace($tag[0], $tag[2] . HtmlTag::combine($tag[1], $tag[3]), $string);
+		}
+
+		Protect::unprotect($string);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
@@ -174,6 +274,39 @@ class Html
 
 		// use original keys but new values
 		return array_combine(array_keys($array), $parts);
+	}
+
+	/**
+	 * Convert content saved in a WYSIWYG editor to plain text (like removing html tags)
+	 *
+	 * @param $string
+	 *
+	 * @return string
+	 */
+	public static function convertWysiwygToPlainText($string)
+	{
+		// replace chr style enters with normal enters
+		$string = str_replace([chr(194) . chr(160), '&#160;', '&nbsp;'], ' ', $string);
+
+		// replace linebreak tags with normal linebreaks (paragraphs, enters, etc).
+		$enter_tags = ['p', 'br'];
+		$regex      = '</?((' . implode(')|(', $enter_tags) . '))+[^>]*?>\n?';
+		$string     = RegEx::replace($regex, " \n", $string);
+
+		// replace indent characters with spaces
+		$string = RegEx::replace('<img [^>]*/sourcerer/images/tab\.png[^>]*>', '    ', $string);
+
+		// strip all other tags
+		$regex  = '<(/?\w+((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+\s*|\s*)/?)>';
+		$string = RegEx::replace($regex, '', $string);
+
+		// reset htmlentities
+		$string = StringHelper::html_entity_decoder($string);
+
+		// convert protected html entities &_...; -> &...;
+		$string = RegEx::replace('&_([a-z0-9\#]+?);', '&\1;', $string);
+
+		return $string;
 	}
 
 	/**
@@ -224,19 +357,53 @@ class Html
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Removes empty tags which span concatenating parts in the array
+=======
+	 * Fix broken/invalid html syntax in an array of strings
 	 *
 	 * @param array $array
 	 *
 	 * @return array
 	 */
-	public static function removeEmptyTags($array)
+	public static function fixArray($array)
 	{
 		$splitter = ':|:';
+
+		$string = self::fix(implode($splitter, $array));
+
+		$parts = self::removeEmptyTags(explode($splitter, $string));
+
+		// use original keys but new values
+		return array_combine(array_keys($array), $parts);
+	}
+
+	/**
+	 * Return an array of block element names, optionally without any of the names given $exclude
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @param array $exclude
+	 *
+	 * @return array
+	 */
+	public static function getBlockElements($exclude = [])
+	{
+<<<<<<< HEAD
+		$splitter = ':|:';
 		$comments = '(?:\s*<\!--[^>]*-->\s*)*';
+=======
+		if ( ! is_array($exclude))
+		{
+			$exclude = [$exclude];
+		}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
-		$string = implode($splitter, $array);
+		$elements = [
+			'div', 'p', 'pre',
+			'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+		];
 
+<<<<<<< HEAD
 		Protect::protectHtmlCommentTags($string);
 
 		$string = RegEx::replace(
@@ -252,9 +419,23 @@ class Html
 
 	/**
 	 * Check if string contains block elements
+=======
+		$elements = array_diff($elements, $exclude);
+
+		$elements = implode(',', $elements);
+		$elements = str_replace('h1,h2,h3,h4,h5,h6', 'h[1-6]', $elements);
+		$elements = explode(',', $elements);
+
+		return $elements;
+	}
+
+	/**
+	 * Return an array of block element names, without divs and any of the names given $exclude
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 *
-	 * @param string $string
+	 * @param array $exclude
 	 *
+<<<<<<< HEAD
 	 * @return string
 	 */
 	public static function containsBlockElements($string)
@@ -321,289 +502,12 @@ class Html
 		foreach ($matches as $match)
 		{
 			if (strpos($match, '</div>') === false)
-			{
-				continue;
-			}
-
-			$searches[]     = $match;
-			$replacements[] = str_replace(
-				['<div>', '<div ', '</div>'],
-				['<span>', '<span ', '</span>'],
-				$match
-			);
-		}
-
-		if (empty($searches))
-		{
-			return $string;
-		}
-
-		return str_replace($searches, $replacements, $string);
-	}
-
-	/**
-	 * Remove <p> tags around block elements
-	 *
-	 * @param string $string
-	 *
-	 * @return mixed
-	 */
-	private static function removeParagraphsAroundBlockElements($string)
-	{
-		if (strpos($string, '</p>') == false)
-		{
-			return $string;
-		}
-
-		Protect::protectHtmlCommentTags($string);
-
-		$string = RegEx::replace(
-			'<p(?: [^>]*)?>\s*'
-			. '((?:<\!--[^>]*-->\s*)*</?(?:' . implode('|', self::getBlockElements()) . ')' . '(?: [^>]*)?>)',
-			'\1',
-			$string
-		);
-
-		$string = RegEx::replace(
-			'(</?(?:' . implode('|', self::getBlockElements()) . ')' . '(?: [^>]*)?>(?:\s*<\!--[^>]*-->)*)'
-			. '(?:\s*</p>)',
-			'\1',
-			$string
-		);
-
-		Protect::unprotect($string);
-
-		return $string;
-	}
-
-	/**
-	 * Remove inline elements around block elements
-	 *
-	 * @param string $string
-	 *
-	 * @return mixed
-	 */
-	public static function removeInlineElementsAroundBlockElements($string)
-	{
-		$string = RegEx::replace(
-			'(?:<(?:' . implode('|', self::getInlineElementsNoAnchor()) . ')(?: [^>]*)?>\s*)'
-			. '(</?(?:' . implode('|', self::getBlockElements()) . ')(?: [^>]*)?>)',
-			'\1',
-			$string
-		);
-
-		$string = RegEx::replace(
-			'(</?(?:' . implode('|', self::getBlockElements()) . ')(?: [^>]*)?>)'
-			. '(?:\s*</(?:' . implode('|', self::getInlineElementsNoAnchor()) . ')>)',
-			'\1',
-			$string
-		);
-
-		return $string;
-	}
-
-	/**
-	 * Fix <p> tags around other <p> elements
-	 *
-	 * @param string $string
-	 *
-	 * @return mixed
-	 */
-	private static function fixParagraphsAroundParagraphElements($string)
-	{
-		if (strpos($string, '</p>') == false)
-		{
-			return $string;
-		}
-
-		$parts  = explode('</p>', $string);
-		$ending = '</p>' . array_pop($parts);
-
-		foreach ($parts as &$part)
-		{
-			if (strpos($part, '<p>') === false && strpos($part, '<p ') === false)
-			{
-				$part = '<p>' . $part;
-				continue;
-			}
-
-			$part = RegEx::replace(
-				'(<p(?: [^>]*)?>.*?)(<p(?: [^>]*)?>)',
-				'\1</p>\2',
-				$part
-			);
-		}
-
-		return implode('</p>', $parts) . $ending;
-	}
-
-	/**
-	 * Fix broken/invalid html syntax in a string using php DOMDocument functionality
-	 *
-	 * @param string $string
-	 *
-	 * @return mixed
-	 */
-	private static function fixUsingDOMDocument($string)
-	{
-		$doc = new DOMDocument;
-
-		$doc->substituteEntities = false;
-
-		[$pre, $body, $post] = Html::getBody($string, false);
-
-		// Add temporary document structures
-		$body = '<html><body><div>' . $body . '</div></body></html>';
-
-		@$doc->loadHTML($body);
-
-		$body = $doc->saveHTML();
-
-		if (strpos($doc->documentElement->textContent, 'Ã') !== false)
-		{
-			// Need to do this utf8 workaround to deal with special characters
-			// DOMDocument doesn't seem to deal with them very well
-			// See: https://stackoverflow.com/questions/8218230/php-domdocument-loadhtml-not-encoding-utf-8-correctly/47396055#47396055
-			$body = utf8_decode($doc->saveHTML($doc->documentElement));
-		}
-
-		// Remove temporary document structures and surrounding div
-		$body = RegEx::replace('^.*?<html>.*?(?:<head>(.*)</head>.*?)?<body>\s*<div>(.*)</div>\s*</body>.*?$', '\1\2', $body);
-
-		// Remove leading/trailing empty paragraph
-		$body = RegEx::replace('(^\s*<div>\s*</div>|<div>\s*</div>\s*$)', '', $body);
-
-		// Remove leading/trailing empty paragraph
-		$body = RegEx::replace('(^\s*<div>\s*</div>|<div>\s*</div>\s*$)', '', $body);
-
-		// Remove leading/trailing empty paragraph
-		$body = RegEx::replace('(^\s*<p(?: [^>]*)?>\s*</p>|<p(?: [^>]*)?>\s*</p>\s*$)', '', $body);
-
-		return $pre . $body . $post;
-	}
-
-	/**
-	 * Fix broken/invalid html syntax in a string using custom code as an alternative to php DOMDocument functionality
-	 *
-	 * @param string $string
-	 *
-	 * @return string
-	 */
-	private static function fixUsingCustomFixer($string)
-	{
-		$block_regex = '<(' . implode('|', self::getBlockElementsNoDiv()) . ')[\s>]';
-
-		$string = RegEx::replace('(' . $block_regex . ')', '[:SPLIT-BLOCK:]\1', $string);
-		$parts  = explode('[:SPLIT-BLOCK:]', $string);
-
-		foreach ($parts as $i => &$part)
-		{
-			if ( ! RegEx::match('^' . $block_regex, $part, $type))
-			{
-				continue;
-			}
-
-			$type = strtolower($type[1]);
-
-			// remove endings of other block elements
-			$part = RegEx::replace('</(?:' . implode('|', self::getBlockElementsNoDiv($type)) . ')>', '', $part);
-
-			if (strpos($part, '</' . $type . '>') !== false)
-			{
-				continue;
-			}
-
-			// Add ending tag once
-			$part = RegEx::replaceOnce('(\s*)$', '</' . $type . '>\1', $part);
-
-			// Remove empty block tags
-			$part = RegEx::replace('^<' . $type . '(?: [^>]*)?>\s*</' . $type . '>', '', $part);
-		}
-
-		return implode('', $parts);
-	}
-
-	/**
-	 * Unprotect protected tags
-	 *
-	 * @param $string
-	 *
-	 * @return mixed
-	 */
-	private static function unprotectSpecialCode($string)
-	{
-		Protect::unprotectHtmlSafe($string);
-
-		return $string;
-	}
-
-	/**
-	 * Remove <p> tags around comments
-	 *
-	 * @param string $string
-	 *
-	 * @return mixed
-	 */
-	private static function removeParagraphsAroundComments($string)
-	{
-		if (strpos($string, '</p>') == false)
-		{
-			return $string;
-		}
-
-		Protect::protectHtmlCommentTags($string);
-
-		$string = RegEx::replace(
-			'(?:<p(?: [^>]*)?>\s*)'
-			. '(<\!--[^>]*-->)'
-			. '(?:\s*</p>)',
-			'\1',
-			$string
-		);
-
-		Protect::unprotect($string);
-
-		return $string;
-	}
-
-	/**
-	 * Return an array of block element names, optionally without any of the names given $exclude
-	 *
-	 * @param array $exclude
-	 *
+=======
 	 * @return array
 	 */
-	public static function getBlockElements($exclude = [])
+	public static function getBlockElementsNoDiv($exclude = [])
 	{
-		if ( ! is_array($exclude))
-		{
-			$exclude = [$exclude];
-		}
-
-		$elements = [
-			'div', 'p', 'pre',
-			'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-		];
-
-		$elements = array_diff($elements, $exclude);
-
-		$elements = implode(',', $elements);
-		$elements = str_replace('h1,h2,h3,h4,h5,h6', 'h[1-6]', $elements);
-		$elements = explode(',', $elements);
-
-		return $elements;
-	}
-
-	/**
-	 * Return an array of block element names, without anchors (a) and any of the names given $exclude
-	 *
-	 * @param array $exclude
-	 *
-	 * @return array
-	 */
-	public static function getInlineElementsNoAnchor($exclude = [])
-	{
-		return array_diff(self::getInlineElements($exclude), ['a']);
+		return array_diff(self::getBlockElements($exclude), ['div']);
 	}
 
 	/**
@@ -648,41 +552,6 @@ class Html
 			$body_start . $body . $body_end,
 			$post,
 		];
-	}
-
-	/**
-	 * Return an array of block element names, without divs and any of the names given $exclude
-	 *
-	 * @param array $exclude
-	 *
-	 * @return array
-	 */
-	public static function getBlockElementsNoDiv($exclude = [])
-	{
-		return array_diff(self::getBlockElements($exclude), ['div']);
-	}
-
-	/**
-	 * Return an array of inline element names, optionally without any of the names given $exclude
-	 *
-	 * @param array $exclude
-	 *
-	 * @return array
-	 */
-	public static function getInlineElements($exclude = [])
-	{
-		if ( ! is_array($exclude))
-		{
-			$exclude = [$exclude];
-		}
-
-		$elements = [
-			'span', 'code', 'a',
-			'strong', 'b', 'em', 'i', 'u', 'big', 'small', 'font',
-			'sup', 'sub',
-		];
-
-		return array_diff($elements, $exclude);
 	}
 
 	/**
@@ -755,10 +624,27 @@ class Html
 			$pos = strrpos($string, $search);
 
 			if ($pos === false)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			{
 				continue;
 			}
 
+<<<<<<< HEAD
+			$searches[]     = $match;
+			$replacements[] = str_replace(
+				['<div>', '<div ', '</div>'],
+				['<span>', '<span ', '</span>'],
+				$match
+			);
+		}
+
+		if (empty($searches))
+		{
+			return $string;
+		}
+
+		return str_replace($searches, $replacements, $string);
+=======
 			$end_split = max($end_split, $pos + strlen($search));
 			$found     = true;
 		}
@@ -777,58 +663,88 @@ class Html
 		self::fixBrokenTagsByPostString($post, $string);
 
 		return [$pre, $string, $post];
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
-	 * Prevents broken html tags at the end of $pre (other half at beginning of $string)
-	 * It will move the broken part to the beginning of $string to complete it
+	 * Return an array of inline element names, optionally without any of the names given $exclude
 	 *
-	 * @param $pre
-	 * @param $string
+	 * @param array $exclude
+	 *
+	 * @return array
 	 */
-	private static function fixBrokenTagsByPreString(&$pre, &$string)
+	public static function getInlineElements($exclude = [])
 	{
-		if ( ! RegEx::match('<(\![^>]*|/?[a-z][^>]*(="[^"]*)?)$', $pre, $match))
+		if ( ! is_array($exclude))
 		{
-			return;
+			$exclude = [$exclude];
 		}
 
-		$pre    = substr($pre, 0, strlen($pre) - strlen($match[0]));
-		$string = $match[0] . $string;
+<<<<<<< HEAD
+		Protect::protectHtmlCommentTags($string);
+
+		$string = RegEx::replace(
+			'<p(?: [^>]*)?>\s*'
+			. '((?:<\!--[^>]*-->\s*)*</?(?:' . implode('|', self::getBlockElements()) . ')' . '(?: [^>]*)?>)',
+			'\1',
+			$string
+		);
+
+		$string = RegEx::replace(
+			'(</?(?:' . implode('|', self::getBlockElements()) . ')' . '(?: [^>]*)?>(?:\s*<\!--[^>]*-->)*)'
+			. '(?:\s*</p>)',
+			'\1',
+			$string
+		);
+
+		Protect::unprotect($string);
+
+		return $string;
 	}
 
 	/**
-	 * Prevents broken html tags at the beginning of $pre (other half at end of $string)
-	 * It will move the broken part to the end of $string to complete it
+	 * Remove inline elements around block elements
+=======
+		$elements = [
+			'span', 'code', 'a',
+			'strong', 'b', 'em', 'i', 'u', 'big', 'small', 'font',
+			'sup', 'sub',
+		];
+
+		return array_diff($elements, $exclude);
+	}
+
+	/**
+	 * Return an array of block element names, without anchors (a) and any of the names given $exclude
 	 *
-	 * @param $post
-	 * @param $string
+	 * @param array $exclude
+	 *
+	 * @return array
 	 */
-	private static function fixBrokenTagsByPostString(&$post, &$string)
+	public static function getInlineElementsNoAnchor($exclude = [])
 	{
-		if ( ! RegEx::match('<(\![^>]*|/?[a-z][^>]*(="[^"]*)?)$', $string, $match))
-		{
-			return;
-		}
-
-		if ( ! RegEx::match('^[^>]*>', $post, $match))
-		{
-			return;
-		}
-
-		$post = substr($post, strlen($match[0]));
-
-		$string .= $match[0];
+		return array_diff(self::getInlineElements($exclude), ['a']);
 	}
 
 	/**
 	 * Remove empty tags
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 *
 	 * @param string $string
 	 * @param array  $elements
 	 *
 	 * @return mixed
 	 */
+<<<<<<< HEAD
+	public static function removeInlineElementsAroundBlockElements($string)
+	{
+		$string = RegEx::replace(
+			'(?:<(?:' . implode('|', self::getInlineElementsNoAnchor()) . ')(?: [^>]*)?>\s*)'
+			. '(</?(?:' . implode('|', self::getBlockElements()) . ')(?: [^>]*)?>)',
+			'\1',
+			$string
+		);
+=======
 	public static function removeEmptyTagPairs($string, $elements = ['p', 'span'])
 	{
 		$breaks = '(?:(?:<br ?/?>|<\!--[^>]*-->)\s*)*';
@@ -840,10 +756,44 @@ class Html
 		{
 			$string = str_replace($match[0], $match[2], $string);
 		}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		Protect::unprotect($string);
 
 		return $string;
+	}
+
+	/**
+	 * Removes empty tags which span concatenating parts in the array
+	 *
+	 * @param array $array
+	 *
+	 * @return array
+	 */
+	public static function removeEmptyTags($array)
+	{
+		$splitter = ':|:';
+		$comments = '(?:\s*<\!--[^>]*-->\s*)*';
+
+		$string = implode($splitter, $array);
+
+		Protect::protectHtmlCommentTags($string);
+
+		$string = RegEx::replace(
+<<<<<<< HEAD
+			'(</?(?:' . implode('|', self::getBlockElements()) . ')(?: [^>]*)?>)'
+			. '(?:\s*</(?:' . implode('|', self::getInlineElementsNoAnchor()) . ')>)',
+			'\1',
+=======
+			'<([a-z][a-z0-9]*)(?: [^>]*)?>\s*(' . $comments . RegEx::quote($splitter) . $comments . ')\s*</\1>',
+			'\2',
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+			$string
+		);
+
+		Protect::unprotect($string);
+
+		return explode($splitter, $string);
 	}
 
 	/**
@@ -882,6 +832,646 @@ class Html
 		$string = RegEx::replace('</?[a-z].*?>', ' ', $string);
 		// remove double whitespace
 		$string = trim(RegEx::replace('(\s)[ ]+', '\1', $string));
+
+		return $string;
+	}
+
+	/**
+<<<<<<< HEAD
+	 * Fix broken/invalid html syntax in a string using php DOMDocument functionality
+=======
+	 * Remove inline elements around block elements
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @param string $string
+	 *
+	 * @return mixed
+	 */
+<<<<<<< HEAD
+	private static function fixUsingDOMDocument($string)
+	{
+		$doc = new DOMDocument;
+
+		$doc->substituteEntities = false;
+
+		[$pre, $body, $post] = Html::getBody($string, false);
+
+		// Add temporary document structures
+		$body = '<html><body><div>' . $body . '</div></body></html>';
+
+		@$doc->loadHTML($body);
+
+		$body = $doc->saveHTML();
+
+		if (strpos($doc->documentElement->textContent, 'Ã') !== false)
+		{
+			// Need to do this utf8 workaround to deal with special characters
+			// DOMDocument doesn't seem to deal with them very well
+			// See: https://stackoverflow.com/questions/8218230/php-domdocument-loadhtml-not-encoding-utf-8-correctly/47396055#47396055
+			$body = utf8_decode($doc->saveHTML($doc->documentElement));
+		}
+=======
+	public static function removeInlineElementsAroundBlockElements($string)
+	{
+		$string = RegEx::replace(
+			'(?:<(?:' . implode('|', self::getInlineElementsNoAnchor()) . ')(?: [^>]*)?>\s*)'
+			. '(</?(?:' . implode('|', self::getBlockElements()) . ')(?: [^>]*)?>)',
+			'\1',
+			$string
+		);
+
+		$string = RegEx::replace(
+			'(</?(?:' . implode('|', self::getBlockElements()) . ')(?: [^>]*)?>)'
+			. '(?:\s*</(?:' . implode('|', self::getInlineElementsNoAnchor()) . ')>)',
+			'\1',
+			$string
+		);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+
+		// Remove temporary document structures and surrounding div
+		$body = RegEx::replace('^.*?<html>.*?(?:<head>(.*)</head>.*?)?<body>\s*<div>(.*)</div>\s*</body>.*?$', '\1\2', $body);
+
+		// Remove leading/trailing empty paragraph
+		$body = RegEx::replace('(^\s*<div>\s*</div>|<div>\s*</div>\s*$)', '', $body);
+
+		// Remove leading/trailing empty paragraph
+		$body = RegEx::replace('(^\s*<div>\s*</div>|<div>\s*</div>\s*$)', '', $body);
+
+		// Remove leading/trailing empty paragraph
+		$body = RegEx::replace('(^\s*<p(?: [^>]*)?>\s*</p>|<p(?: [^>]*)?>\s*</p>\s*$)', '', $body);
+
+		return $pre . $body . $post;
+	}
+
+	/**
+	 * Fix broken/invalid html syntax in a string using custom code as an alternative to php DOMDocument functionality
+	 *
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	private static function fixUsingCustomFixer($string)
+	{
+		$block_regex = '<(' . implode('|', self::getBlockElementsNoDiv()) . ')[\s>]';
+
+		$string = RegEx::replace('(' . $block_regex . ')', '[:SPLIT-BLOCK:]\1', $string);
+		$parts  = explode('[:SPLIT-BLOCK:]', $string);
+
+		foreach ($parts as $i => &$part)
+		{
+			if ( ! RegEx::match('^' . $block_regex, $part, $type))
+			{
+				continue;
+			}
+
+			$type = strtolower($type[1]);
+
+			// remove endings of other block elements
+			$part = RegEx::replace('</(?:' . implode('|', self::getBlockElementsNoDiv($type)) . ')>', '', $part);
+
+			if (strpos($part, '</' . $type . '>') !== false)
+			{
+				continue;
+			}
+
+			// Add ending tag once
+			$part = RegEx::replaceOnce('(\s*)$', '</' . $type . '>\1', $part);
+
+			// Remove empty block tags
+			$part = RegEx::replace('^<' . $type . '(?: [^>]*)?>\s*</' . $type . '>', '', $part);
+		}
+
+<<<<<<< HEAD
+		return implode('', $parts);
+	}
+
+	/**
+	 * Unprotect protected tags
+=======
+		return str_replace($searches, $replacements, $string);
+	}
+
+	/**
+	 * Prevents broken html tags at the beginning of $pre (other half at end of $string)
+	 * It will move the broken part to the end of $string to complete it
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @param $post
+	 * @param $string
+	 *
+	 * @return mixed
+	 */
+<<<<<<< HEAD
+	private static function unprotectSpecialCode($string)
+	{
+		Protect::unprotectHtmlSafe($string);
+
+		return $string;
+	}
+
+	/**
+	 * Remove <p> tags around comments
+	 *
+	 * @param string $string
+=======
+	private static function fixBrokenTagsByPostString(&$post, &$string)
+	{
+		if ( ! RegEx::match('<(\![^>]*|/?[a-z][^>]*(="[^"]*)?)$', $string, $match))
+		{
+			return;
+		}
+
+		if ( ! RegEx::match('^[^>]*>', $post, $match))
+		{
+			return;
+		}
+
+		$post = substr($post, strlen($match[0]));
+
+		$string .= $match[0];
+	}
+
+	/**
+	 * Prevents broken html tags at the end of $pre (other half at beginning of $string)
+	 * It will move the broken part to the beginning of $string to complete it
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @param $pre
+	 * @param $string
+	 */
+<<<<<<< HEAD
+	private static function removeParagraphsAroundComments($string)
+	{
+		if (strpos($string, '</p>') == false)
+		{
+			return $string;
+		}
+
+		Protect::protectHtmlCommentTags($string);
+
+		$string = RegEx::replace(
+			'(?:<p(?: [^>]*)?>\s*)'
+			. '(<\!--[^>]*-->)'
+			. '(?:\s*</p>)',
+			'\1',
+			$string
+		);
+
+		Protect::unprotect($string);
+
+		return $string;
+=======
+	private static function fixBrokenTagsByPreString(&$pre, &$string)
+	{
+		if ( ! RegEx::match('<(\![^>]*|/?[a-z][^>]*(="[^"]*)?)$', $pre, $match))
+		{
+			return;
+		}
+
+		$pre    = substr($pre, 0, strlen($pre) - strlen($match[0]));
+		$string = $match[0] . $string;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	}
+
+	/**
+	 * Fix <p> tags around other <p> elements
+	 *
+	 * @param string $string
+	 *
+	 * @return mixed
+	 */
+	private static function fixParagraphsAroundParagraphElements($string)
+	{
+		if (strpos($string, '</p>') == false)
+		{
+			return $string;
+		}
+
+		$parts  = explode('</p>', $string);
+		$ending = '</p>' . array_pop($parts);
+
+		foreach ($parts as &$part)
+		{
+			if (strpos($part, '<p>') === false && strpos($part, '<p ') === false)
+			{
+				$part = '<p>' . $part;
+				continue;
+			}
+
+			$part = RegEx::replace(
+				'(<p(?: [^>]*)?>.*?)(<p(?: [^>]*)?>)',
+				'\1</p>\2',
+				$part
+			);
+		}
+
+		return implode('</p>', $parts) . $ending;
+	}
+
+	/**
+<<<<<<< HEAD
+	 * Return an array of block element names, without anchors (a) and any of the names given $exclude
+=======
+	 * Fix broken/invalid html syntax in a string using custom code as an alternative to php DOMDocument functionality
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+<<<<<<< HEAD
+	public static function getInlineElementsNoAnchor($exclude = [])
+	{
+		return array_diff(self::getInlineElements($exclude), ['a']);
+	}
+
+	/**
+	 * Extract the <body>...</body> part from an entire html output string
+	 *
+	 * @param string $html
+	 *
+	 * @return array
+	 */
+	public static function getBody($html, $include_body_tag = true)
+	{
+		if (strpos($html, '<body') === false || strpos($html, '</body>') === false)
+		{
+			return ['', $html, ''];
+		}
+
+		// Force string to UTF-8
+		$html = StringHelper::convertToUtf8($html);
+
+		$split = explode('<body', $html, 2);
+		$pre   = $split[0];
+
+		$split      = explode('>', $split[1], 2);
+		$body_start = '<body' . $split[0] . '>';
+		$body_end   = '</body>';
+
+		$split = explode('</body>', $split[1]);
+		$post  = array_pop($split);
+		$body  = implode('</body>', $split);
+
+		if ( ! $include_body_tag)
+		{
+			return [
+				$pre . $body_start,
+				$body,
+				$body_end . $post,
+			];
+		}
+
+		return [
+			$pre,
+			$body_start . $body . $body_end,
+			$post,
+		];
+	}
+=======
+	private static function fixUsingCustomFixer($string)
+	{
+		$block_regex = '<(' . implode('|', self::getBlockElementsNoDiv()) . ')[\s>]';
+
+		$string = RegEx::replace('(' . $block_regex . ')', '[:SPLIT-BLOCK:]\1', $string);
+		$parts  = explode('[:SPLIT-BLOCK:]', $string);
+
+		foreach ($parts as $i => &$part)
+		{
+			if ( ! RegEx::match('^' . $block_regex, $part, $type))
+			{
+				continue;
+			}
+
+			$type = strtolower($type[1]);
+
+			// remove endings of other block elements
+			$part = RegEx::replace('</(?:' . implode('|', self::getBlockElementsNoDiv($type)) . ')>', '', $part);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+
+			if (strpos($part, '</' . $type . '>') !== false)
+			{
+				continue;
+			}
+
+			// Add ending tag once
+			$part = RegEx::replaceOnce('(\s*)$', '</' . $type . '>\1', $part);
+
+			// Remove empty block tags
+			$part = RegEx::replace('^<' . $type . '(?: [^>]*)?>\s*</' . $type . '>', '', $part);
+		}
+
+		return implode('', $parts);
+	}
+
+	/**
+<<<<<<< HEAD
+	 * Return an array of inline element names, optionally without any of the names given $exclude
+=======
+	 * Fix broken/invalid html syntax in a string using php DOMDocument functionality
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @param string $string
+	 *
+	 * @return mixed
+	 */
+<<<<<<< HEAD
+	public static function getInlineElements($exclude = [])
+	{
+		if ( ! is_array($exclude))
+		{
+			$exclude = [$exclude];
+		}
+
+		$elements = [
+			'span', 'code', 'a',
+			'strong', 'b', 'em', 'i', 'u', 'big', 'small', 'font',
+			'sup', 'sub',
+		];
+
+		return array_diff($elements, $exclude);
+=======
+	private static function fixUsingDOMDocument($string)
+	{
+		$doc = new DOMDocument;
+
+		$doc->substituteEntities = false;
+
+		[$pre, $body, $post] = Html::getBody($string, false);
+
+		// Add temporary document structures
+		$body = '<html><body><div>' . $body . '</div></body></html>';
+
+		@$doc->loadHTML($body);
+
+		$body = $doc->saveHTML();
+
+		if (strpos($doc->documentElement->textContent, 'Ã') !== false)
+		{
+			// Need to do this utf8 workaround to deal with special characters
+			// DOMDocument doesn't seem to deal with them very well
+			// See: https://stackoverflow.com/questions/8218230/php-domdocument-loadhtml-not-encoding-utf-8-correctly/47396055#47396055
+			$body = utf8_decode($doc->saveHTML($doc->documentElement));
+		}
+
+		// Remove temporary document structures and surrounding div
+		$body = RegEx::replace('^.*?<html>.*?(?:<head>(.*)</head>.*?)?<body>\s*<div>(.*)</div>\s*</body>.*?$', '\1\2', $body);
+
+		// Remove leading/trailing empty paragraph
+		$body = RegEx::replace('(^\s*<div>\s*</div>|<div>\s*</div>\s*$)', '', $body);
+
+		// Remove leading/trailing empty paragraph
+		$body = RegEx::replace('(^\s*<div>\s*</div>|<div>\s*</div>\s*$)', '', $body);
+
+		// Remove leading/trailing empty paragraph
+		$body = RegEx::replace('(^\s*<p(?: [^>]*)?>\s*</p>|<p(?: [^>]*)?>\s*</p>\s*$)', '', $body);
+
+		return $pre . $body . $post;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	}
+
+	/**
+	 * Search the string for the start and end searches and split the string in a pre, body and post part
+	 * This is used to be able to do replacements on the body part, which will be lighter than doing it on the entire string
+	 *
+	 * @param string $string
+	 * @param array  $start_searches
+	 * @param array  $end_searches
+	 * @param int    $start_offset
+	 * @param null   $end_offset
+	 *
+	 * @return array
+	 */
+	public static function getContentContainingSearches($string, $start_searches = [], $end_searches = [], $start_offset = 1000, $end_offset = null)
+	{
+		// String is too short to split and search through
+		if (strlen($string) < 2000)
+		{
+			return ['', $string, ''];
+		}
+
+		$end_offset = is_null($end_offset) ? $start_offset : $end_offset;
+
+		$found       = false;
+		$start_split = strlen($string);
+
+		foreach ($start_searches as $search)
+		{
+			$pos = strpos($string, $search);
+
+			if ($pos === false)
+			{
+				continue;
+			}
+
+			$start_split = min($start_split, $pos);
+			$found       = true;
+		}
+
+		// No searches are found
+		if ( ! $found)
+		{
+			return [$string, '', ''];
+		}
+
+<<<<<<< HEAD
+		// String is too short to split
+		if (strlen($string) < ($start_offset + $end_offset + 1000))
+		{
+			return ['', $string, ''];
+		}
+
+		$start_split = max($start_split - $start_offset, 0);
+
+		$pre    = substr($string, 0, $start_split);
+		$string = substr($string, $start_split);
+
+		self::fixBrokenTagsByPreString($pre, $string);
+
+		if (empty($end_searches))
+		{
+			$end_searches = $start_searches;
+		}
+
+		$end_split = 0;
+		$found     = false;
+
+		foreach ($end_searches as $search)
+		{
+			$pos = strrpos($string, $search);
+
+			if ($pos === false)
+			{
+				continue;
+			}
+
+			$end_split = max($end_split, $pos + strlen($search));
+			$found     = true;
+		}
+
+		// No end split is found, so don't split remainder
+		if ( ! $found)
+		{
+			return [$pre, $string, ''];
+		}
+
+		$end_split = min($end_split + $end_offset, strlen($string));
+
+		$post   = substr($string, $end_split);
+		$string = substr($string, 0, $end_split);
+
+		self::fixBrokenTagsByPostString($post, $string);
+
+		return [$pre, $string, $post];
+	}
+
+	/**
+	 * Prevents broken html tags at the end of $pre (other half at beginning of $string)
+	 * It will move the broken part to the beginning of $string to complete it
+	 *
+	 * @param $pre
+	 * @param $string
+	 */
+	private static function fixBrokenTagsByPreString(&$pre, &$string)
+=======
+	/**
+	 * Remove <p> tags around block elements
+	 *
+	 * @param string $string
+	 *
+	 * @return mixed
+	 */
+	private static function removeParagraphsAroundBlockElements($string)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	{
+		if (strpos($string, '</p>') == false)
+		{
+			return $string;
+		}
+
+		Protect::protectHtmlCommentTags($string);
+
+		$string = RegEx::replace(
+			'<p(?: [^>]*)?>\s*'
+			. '((?:<\!--[^>]*-->\s*)*</?(?:' . implode('|', self::getBlockElements()) . ')' . '(?: [^>]*)?>)',
+			'\1',
+			$string
+		);
+
+		$string = RegEx::replace(
+			'(</?(?:' . implode('|', self::getBlockElements()) . ')' . '(?: [^>]*)?>(?:\s*<\!--[^>]*-->)*)'
+			. '(?:\s*</p>)',
+			'\1',
+			$string
+		);
+
+		Protect::unprotect($string);
+
+		return $string;
+	}
+
+	/**
+	 * Remove <p> tags around comments
+	 *
+	 * @param string $string
+	 *
+	 * @return mixed
+	 */
+	private static function removeParagraphsAroundComments($string)
+	{
+		if (strpos($string, '</p>') == false)
+		{
+			return $string;
+		}
+
+		Protect::protectHtmlCommentTags($string);
+
+		$string = RegEx::replace(
+			'(?:<p(?: [^>]*)?>\s*)'
+			. '(<\!--[^>]*-->)'
+			. '(?:\s*</p>)',
+			'\1',
+			$string
+		);
+
+		Protect::unprotect($string);
+
+		return $string;
+	}
+
+	/**
+<<<<<<< HEAD
+	 * Remove empty tags
+	 *
+	 * @param string $string
+	 * @param array  $elements
+	 *
+	 * @return mixed
+	 */
+	public static function removeEmptyTagPairs($string, $elements = ['p', 'span'])
+	{
+		$breaks = '(?:(?:<br ?/?>|<\!--[^>]*-->)\s*)*';
+
+		$regex = '<(' . implode('|', $elements) . ')(?: [^>]*)?>\s*(' . $breaks . ')<\/\1>\s*';
+
+		Protect::protectHtmlCommentTags($string);
+		while (RegEx::match($regex, $string, $match))
+		{
+			$string = str_replace($match[0], $match[2], $string);
+		}
+
+		Protect::unprotect($string);
+
+		return $string;
+	}
+
+	/**
+	 * Removes html tags from string
+	 *
+	 * @param string $string
+	 * @param bool   $remove_comments
+=======
+	 * Unprotect protected tags
+	 *
+	 * @param $string
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @return mixed
+	 */
+<<<<<<< HEAD
+	public static function removeHtmlTags($string, $remove_comments = false)
+	{
+		// remove pagenavcounter
+		$string = RegEx::replace('<div class="pagenavcounter">.*?</div>', ' ', $string);
+		// remove pagenavbar
+		$string = RegEx::replace('<div class="pagenavbar">(<div>.*?</div>)*</div>', ' ', $string);
+		// remove inline scripts
+		$string = RegEx::replace('<script[^a-z0-9].*?</script>', '', $string);
+		$string = RegEx::replace('<noscript[^a-z0-9].*?</noscript>', '', $string);
+		// remove inline styles
+		$string = RegEx::replace('<style[^a-z0-9].*?</style>', '', $string);
+		// remove inline html tags
+		$string = RegEx::replace(
+			'</?(' . implode('|', self::getInlineElements()) . ')( [^>]*)?>',
+			'',
+			$string
+		);
+
+		if ($remove_comments)
+		{
+			// remove html comments
+			$string = RegEx::replace('<!--.*?-->', ' ', $string);
+		}
+
+		// replace other tags with a space
+		$string = RegEx::replace('</?[a-z].*?>', ' ', $string);
+		// remove double whitespace
+		$string = trim(RegEx::replace('(\s)[ ]+', '\1', $string));
+=======
+	private static function unprotectSpecialCode($string)
+	{
+		Protect::unprotectHtmlSafe($string);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		return $string;
 	}

@@ -275,6 +275,7 @@ class Stream
 		}
 
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -291,6 +292,11 @@ class Stream
 			/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
 			error_clear_last();
 		}
+=======
+		$php_errormsg = 'Error Unknown whilst opening a file';
+		$trackErrors  = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		// Decide which context to use:
 		switch ($this->processingmethod)
@@ -329,10 +335,14 @@ class Stream
 				break;
 		}
 
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
 		if (!$this->fh)
 		{
 			$error = error_get_last();
 
+<<<<<<< HEAD
 			if ($error === null || $error['message'] === '')
 			{
 				// Error but nothing from php? Create our own
@@ -344,6 +354,8 @@ class Stream
 			throw new FilesystemException($error['message']);
 		}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		// Return the result
 		return true;
 	}
@@ -367,6 +379,7 @@ class Stream
 		}
 
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -383,6 +396,11 @@ class Stream
 			/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
 			error_clear_last();
 		}
+=======
+		$php_errormsg = 'Error Unknown';
+		$trackErrors  = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		switch ($this->processingmethod)
 		{
@@ -402,6 +420,9 @@ class Stream
 
 				break;
 		}
+
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
 
 		if (!$res)
 		{
@@ -447,6 +468,7 @@ class Stream
 		}
 
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -463,6 +485,11 @@ class Stream
 			/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
 			error_clear_last();
 		}
+=======
+		$php_errormsg = '';
+		$trackErrors  = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		switch ($this->processingmethod)
 		{
@@ -479,9 +506,16 @@ class Stream
 				break;
 		}
 
+<<<<<<< HEAD
 		$error = error_get_last();
 
 		if ($error !== null && $error['message'] !== '')
+=======
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
+		if ($php_errormsg)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			throw new FilesystemException($error['message']);
 		}
@@ -506,6 +540,7 @@ class Stream
 		}
 
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -523,13 +558,31 @@ class Stream
 			error_clear_last();
 		}
 
+=======
+		$php_errormsg = '';
+		$trackErrors  = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		$res = @filesize($this->filename);
 
 		if (!$res)
 		{
+<<<<<<< HEAD
+=======
+			$tmpError = '';
+
+			if ($php_errormsg)
+			{
+				// Something went wrong.
+				// Store the error in case we need it.
+				$tmpError = $php_errormsg;
+			}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			$res = Helper::remotefsize($this->filename);
 		}
 
+<<<<<<< HEAD
 		if (!$res)
 		{
 			$error = error_get_last();
@@ -546,6 +599,34 @@ class Stream
 		}
 
 		$this->filesize = $res;
+=======
+			if (!$res)
+			{
+				// Restore error tracking to what it was before.
+				ini_set('track_errors', $trackErrors);
+
+				if ($tmpError)
+				{
+					// Use the php_errormsg from before
+					throw new FilesystemException($tmpError);
+				}
+
+				// Error but nothing from php? How strange! Create our own
+				throw new FilesystemException('Failed to get file size. This may not work for all streams.');
+			}
+
+			$this->filesize = $res;
+			$retval         = $res;
+		}
+		else
+		{
+			$this->filesize = $res;
+			$retval         = $res;
+		}
+
+		// Restore error tracking to what it was before.
+		ini_set('track_errors', $trackErrors);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		// Return the result
 		return $this->filesize;
@@ -569,6 +650,7 @@ class Stream
 		}
 
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -585,6 +667,11 @@ class Stream
 			/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
 			error_clear_last();
 		}
+=======
+		$php_errormsg = 'Error Unknown';
+		$trackErrors  = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		switch ($this->processingmethod)
 		{
@@ -601,6 +688,9 @@ class Stream
 				break;
 		}
 
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
 		if (!$res)
 		{
 			$error = error_get_last();
@@ -613,9 +703,12 @@ class Stream
 				);
 			}
 
+<<<<<<< HEAD
 			throw new FilesystemException($error['message']);
 		}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		// Return the result
 		return $res;
 	}
@@ -659,6 +752,7 @@ class Stream
 		$retval = false;
 
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -676,6 +770,11 @@ class Stream
 			error_clear_last();
 		}
 
+=======
+		$php_errormsg = 'Error Unknown';
+		$trackErrors  = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		$remaining = $length;
 
 		do
@@ -702,6 +801,7 @@ class Stream
 
 			if (!$res)
 			{
+<<<<<<< HEAD
 				$error = error_get_last();
 
 				if ($error === null || $error['message'] === '')
@@ -713,6 +813,12 @@ class Stream
 				}
 
 				throw new FilesystemException($error['message']);
+=======
+				// Restore error tracking to what it was before
+				ini_set('track_errors', $trackErrors);
+
+				throw new FilesystemException($php_errormsg);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			}
 
 			if (!$retval)
@@ -736,6 +842,12 @@ class Stream
 		}
 		while ($remaining || !$length);
 
+<<<<<<< HEAD
+=======
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		// Return the result
 		return $retval;
 	}
@@ -762,6 +874,7 @@ class Stream
 		}
 
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -778,6 +891,11 @@ class Stream
 			/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
 			error_clear_last();
 		}
+=======
+		$php_errormsg = '';
+		$trackErrors  = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		switch ($this->processingmethod)
 		{
@@ -794,11 +912,15 @@ class Stream
 				break;
 		}
 
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
 		// Seek, interestingly, returns 0 on success or -1 on failure.
 		if ($res == -1)
 		{
 			$error = error_get_last();
 
+<<<<<<< HEAD
 			if ($error === null || $error['message'] === '')
 			{
 				// Error but nothing from php? Create our own
@@ -810,6 +932,8 @@ class Stream
 			throw new FilesystemException($error['message']);
 		}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		// Return the result
 		return true;
 	}
@@ -830,6 +954,7 @@ class Stream
 		}
 
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -846,6 +971,11 @@ class Stream
 			/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
 			error_clear_last();
 		}
+=======
+		$php_errormsg = '';
+		$trackErrors  = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		switch ($this->processingmethod)
 		{
@@ -862,11 +992,15 @@ class Stream
 				break;
 		}
 
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
 		// May return 0 so check if it's really false
 		if ($res === false)
 		{
 			$error = error_get_last();
 
+<<<<<<< HEAD
 			if ($error === null || $error['message'] === '')
 			{
 				// Error but nothing from php? Create our own
@@ -878,6 +1012,8 @@ class Stream
 			throw new FilesystemException($error['message']);
 		}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		// Return the result
 		return $res;
 	}
@@ -930,6 +1066,7 @@ class Stream
 		$retval = true;
 
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -947,6 +1084,11 @@ class Stream
 			error_clear_last();
 		}
 
+=======
+		$php_errormsg = '';
+		$trackErrors  = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		$remaining = $length;
 		$start     = 0;
 
@@ -959,6 +1101,7 @@ class Stream
 			// Returns false on error or the number of bytes written
 			if ($res === false)
 			{
+<<<<<<< HEAD
 				$error = error_get_last();
 
 				if ($error === null || $error['message'] === '')
@@ -970,10 +1113,20 @@ class Stream
 				}
 
 				throw new FilesystemException($error['message']);
+=======
+				// Restore error tracking to what it was before
+				ini_set('track_errors', $trackErrors);
+
+				// Returned error
+				throw new FilesystemException($php_errormsg);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			}
 
 			if ($res === 0)
 			{
+				// Restore error tracking to what it was before
+				ini_set('track_errors', $trackErrors);
+
 				// Wrote nothing?
 				throw new FilesystemException('Warning: No data written');
 			}
@@ -984,6 +1137,12 @@ class Stream
 		}
 		while ($remaining);
 
+<<<<<<< HEAD
+=======
+		// Restore error tracking to what it was before.
+		ini_set('track_errors', $trackErrors);
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		// Return the result
 		return $retval;
 	}
@@ -1018,6 +1177,7 @@ class Stream
 		}
 
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -1035,6 +1195,11 @@ class Stream
 			error_clear_last();
 		}
 
+=======
+		$php_errormsg = '';
+		$trackErrors  = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		$sch = parse_url($filename, \PHP_URL_SCHEME);
 
 		// Scheme specific options; ftp's chmod support is fun.
@@ -1052,10 +1217,18 @@ class Stream
 				break;
 		}
 
+<<<<<<< HEAD
+=======
+		// Restore error tracking to what it was before.
+		ini_set('track_errors', $trackErrors);
+
+		// Seek, interestingly, returns 0 on success or -1 on failure
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		if ($res === false)
 		{
 			$error = error_get_last();
 
+<<<<<<< HEAD
 			if ($error === null || $error['message'] === '')
 			{
 				// Error but nothing from php? Create our own
@@ -1067,6 +1240,8 @@ class Stream
 			throw new FilesystemException($error['message']);
 		}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		// Return the result
 		return true;
 	}
@@ -1200,6 +1375,7 @@ class Stream
 		if ($this->fh)
 		{
 			// Capture PHP errors
+<<<<<<< HEAD
 			if (PHP_VERSION_ID < 70000)
 			{
 				// @Todo Remove this path, when PHP5 support is dropped.
@@ -1217,10 +1393,19 @@ class Stream
 				error_clear_last();
 			}
 
+=======
+			$php_errormsg = 'Unknown error setting context option';
+			$trackErrors  = ini_get('track_errors');
+			ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			$retval = @stream_context_set_option($this->fh, $this->contextOptions);
+
+			// Restore error tracking to what it was before
+			ini_set('track_errors', $trackErrors);
 
 			if (!$retval)
 			{
+<<<<<<< HEAD
 				$error = error_get_last();
 
 				if ($error === null || $error['message'] === '')
@@ -1232,6 +1417,9 @@ class Stream
 				}
 
 				throw new FilesystemException($error['message']);
+=======
+				throw new FilesystemException($php_errormsg);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			}
 		}
 
@@ -1259,6 +1447,7 @@ class Stream
 		if ($this->fh)
 		{
 			// Capture PHP errors
+<<<<<<< HEAD
 			if (PHP_VERSION_ID < 70000)
 			{
 				// @Todo Remove this path, when PHP5 support is dropped.
@@ -1277,6 +1466,16 @@ class Stream
 			}
 
 			$res = @stream_filter_append($this->fh, $filtername, $readWrite, $params);
+=======
+			$php_errormsg = '';
+			$trackErrors  = ini_get('track_errors');
+			ini_set('track_errors', true);
+
+			$res = @stream_filter_append($this->fh, $filtername, $readWrite, $params);
+
+			// Restore error tracking to what it was before.
+			ini_set('track_errors', $trackErrors);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 			if (!$res)
 			{
@@ -1314,6 +1513,7 @@ class Stream
 		if ($this->fh)
 		{
 			// Capture PHP errors
+<<<<<<< HEAD
 			if (PHP_VERSION_ID < 70000)
 			{
 				// @Todo Remove this path, when PHP5 support is dropped.
@@ -1326,11 +1526,23 @@ class Stream
 				restore_error_handler();
 			}
 			else
+=======
+			$php_errormsg = '';
+			$trackErrors  = ini_get('track_errors');
+			ini_set('track_errors', true);
+			$res = @stream_filter_prepend($this->fh, $filtername, $readWrite, $params);
+
+			// Restore error tracking to what it was before.
+			ini_set('track_errors', $trackErrors);
+
+			if (!$res && $php_errormsg)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			{
 				/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
 				error_clear_last();
 			}
 
+<<<<<<< HEAD
 			$res = @stream_filter_prepend($this->fh, $filtername, $readWrite, $params);
 
 			if (!$res)
@@ -1343,6 +1555,8 @@ class Stream
 				}
 			}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			array_unshift($this->filters, '');
 			$this->filters[0] = &$res;
 		}
@@ -1365,6 +1579,7 @@ class Stream
 	public function removeFilter(&$resource, $byindex = false)
 	{
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -1381,6 +1596,11 @@ class Stream
 			/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
 			error_clear_last();
 		}
+=======
+		$php_errormsg = '';
+		$trackErrors  = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		if ($byindex)
 		{
@@ -1391,6 +1611,12 @@ class Stream
 			$res = stream_filter_remove($resource);
 		}
 
+<<<<<<< HEAD
+=======
+		// Restore error tracking to what it was before.
+		ini_set('track_errors', $trackErrors);
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		if (!$res)
 		{
 			$error = error_get_last();
@@ -1403,9 +1629,12 @@ class Stream
 				);
 			}
 
+<<<<<<< HEAD
 			throw new FilesystemException($error['message']);
 		}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		return $res;
 	}
 
@@ -1426,6 +1655,7 @@ class Stream
 	public function copy($src, $dest, $context = null, $usePrefix = true, $relative = false)
 	{
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -1442,6 +1672,10 @@ class Stream
 			/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
 			error_clear_last();
 		}
+=======
+		$trackErrors = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		$chmodDest = $this->_getFilename($dest, 'w', $usePrefix, $relative);
 
@@ -1467,7 +1701,14 @@ class Stream
 			$res = @copy($src, $dest);
 		}
 
+<<<<<<< HEAD
 		if (!$res)
+=======
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
+		if (!$res && $php_errormsg)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			$error = error_get_last();
 
@@ -1499,6 +1740,7 @@ class Stream
 	public function move($src, $dest, $context = null, $usePrefix = true, $relative = false)
 	{
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -1515,6 +1757,11 @@ class Stream
 			/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
 			error_clear_last();
 		}
+=======
+		$php_errormsg = '';
+		$trackErrors  = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		$src  = $this->_getFilename($src, 'w', $usePrefix, $relative);
 		$dest = $this->_getFilename($dest, 'w', $usePrefix, $relative);
@@ -1535,6 +1782,12 @@ class Stream
 			$res = @rename($src, $dest);
 		}
 
+<<<<<<< HEAD
+=======
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		if (!$res)
 		{
 			$error = error_get_last();
@@ -1571,6 +1824,7 @@ class Stream
 	public function delete($filename, $context = null, $usePrefix = true, $relative = false)
 	{
 		// Capture PHP errors
+<<<<<<< HEAD
 		if (PHP_VERSION_ID < 70000)
 		{
 			// @Todo Remove this path, when PHP5 support is dropped.
@@ -1587,6 +1841,11 @@ class Stream
 			/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
 			error_clear_last();
 		}
+=======
+		$php_errormsg = '';
+		$trackErrors  = ini_get('track_errors');
+		ini_set('track_errors', true);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		$filename = $this->_getFilename($filename, 'w', $usePrefix, $relative);
 
@@ -1606,10 +1865,17 @@ class Stream
 			$res = @unlink($filename);
 		}
 
+<<<<<<< HEAD
+=======
+		// Restore error tracking to what it was before.
+		ini_set('track_errors', $trackErrors);
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		if (!$res)
 		{
 			$error = error_get_last();
 
+<<<<<<< HEAD
 			if ($error === null || $error['message'] === '')
 			{
 				// Error but nothing from php? Create our own
@@ -1621,6 +1887,8 @@ class Stream
 			throw new FilesystemException($error['message']);
 		}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		return $res;
 	}
 

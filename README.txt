@@ -1,8 +1,13 @@
 1- What is this?
 	* This is a Joomla! installation/upgrade package to version 3.x
 	* Joomla! Official site: https://www.joomla.org
+<<<<<<< HEAD
 	* Joomla! 3.10 version history - https://docs.joomla.org/Special:MyLanguage/Joomla_3.10_version_history
 	* Detailed changes in the Changelog: https://github.com/joomla/joomla-cms/commits/3.10-dev
+=======
+	* Joomla! 3.9 version history - https://docs.joomla.org/Special:MyLanguage/Joomla_3.9_version_history
+	* Detailed changes in the Changelog: https://github.com/joomla/joomla-cms/commits/staging
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 2- What is Joomla?
 	* Joomla! is a Content Management System (CMS) which enables you to build Web sites and powerful online applications.
@@ -66,6 +71,10 @@
 	* Documentation for Web designers: https://docs.joomla.org/Special:MyLanguage/Web_designers
 
 Copyright:
+<<<<<<< HEAD
 	* (C) 2005 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+	* Copyright (C) 2005 - 2020 Open Source Matters. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	* Distributed under the GNU General Public License version 2 or later
 	* See License details at https://docs.joomla.org/Special:MyLanguage/Joomla_Licenses

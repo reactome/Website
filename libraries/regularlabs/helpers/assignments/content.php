@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -188,6 +196,30 @@ class RLAssignmentsContent extends RLAssignment
 		return $this->pass($pass);
 	}
 
+	public function passPageTypes()
+	{
+		$components = ['com_content', 'com_contentsubmit'];
+		if ( ! in_array($this->request->option, $components))
+		{
+			return $this->pass(false);
+		}
+		if ($this->request->view == 'category' && $this->request->layout == 'blog')
+		{
+			$view = 'categoryblog';
+		}
+		else
+		{
+			$view = $this->request->view;
+		}
+
+		return $this->passSimple($view);
+	}
+
+	private function getCatParentIds($id = 0)
+	{
+		return $this->getParentIds($id, 'categories');
+	}
+
 	private function getCategoryIds($is_category = false)
 	{
 		if ($is_category)
@@ -214,6 +246,7 @@ class RLAssignmentsContent extends RLAssignment
 			$menuparams = $this->getMenuItemParams($this->request->Itemid);
 
 			return (array) ($menuparams->featured_categories ?? $catid);
+<<<<<<< HEAD
 		}
 
 		return (array) ($menuparams->catid ?? $catid);
@@ -241,5 +274,10 @@ class RLAssignmentsContent extends RLAssignment
 		}
 
 		return $this->passSimple($view);
+=======
+		}
+
+		return (array) ($menuparams->catid ?? $catid);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 }

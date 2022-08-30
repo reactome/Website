@@ -46,6 +46,7 @@ class JFormFieldSearchPlugins extends JFormFieldPlugins
 
 		return $return;
 	}
+<<<<<<< HEAD
 
 	/**
      * Method to get a list of options for a list input.
@@ -89,4 +90,6 @@ class JFormFieldSearchPlugins extends JFormFieldPlugins
         // Merge any additional options in the XML definition.
         return $options;
     }
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 }

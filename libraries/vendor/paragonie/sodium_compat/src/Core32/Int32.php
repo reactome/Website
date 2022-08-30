@@ -291,9 +291,12 @@ class ParagonIE_Sodium_Core32_Int32
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($int, 'int', 1);
         ParagonIE_Sodium_Core32_Util::declareScalarType($size, 'int', 2);
+<<<<<<< HEAD
         if (ParagonIE_Sodium_Compat::$fastMult) {
             return $this->mulIntFast((int) $int);
         }
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         /** @var int $int */
         $int = (int) $int;
         /** @var int $size */

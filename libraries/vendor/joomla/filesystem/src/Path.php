@@ -191,10 +191,16 @@ class Path
 		{
 			throw new FilesystemException(
 				sprintf(
+<<<<<<< HEAD
 					'%1$s() - Snooping out of bounds @ %2$s (root %3$s)',
 					__METHOD__,
 					$path,
 					JPATH_ROOT
+=======
+					'%1$s() - Snooping out of bounds @ %2$s',
+					__METHOD__,
+					$path
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 				),
 				20
 			);
@@ -386,6 +392,7 @@ class Path
 
 		return $startCharacter . implode(DIRECTORY_SEPARATOR, $parts);
 	}
+<<<<<<< HEAD
 
 	/**
 	 * Remove all references to root directory path and the system tmp path from a message
@@ -425,4 +432,6 @@ class Path
 	{
 		return '~' . str_replace('~', '\\~', preg_replace('~[/\\\\]+~', '[/\\\\\\\\]+', $dir)) . '~';
 	}
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 }

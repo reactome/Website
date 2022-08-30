@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -206,6 +214,7 @@ class ArrayHelper
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Clean array by trimming values
 	 *
 	 * @param array $array
@@ -234,72 +243,7 @@ class ArrayHelper
 
 	/**
 	 * Removes duplicate values from the array
-	 *
-	 * @param array $array
-	 *
-	 * @return array
-	 */
-	public static function unique($array)
-	{
-		if ( ! is_array($array))
-		{
-			return $array;
-		}
-
-		$values = [];
-
-		foreach ($array as $key => $value)
-		{
-			if ( ! is_numeric($key))
-			{
-				continue;
-			}
-
-			if ( ! in_array($value, $values))
-			{
-				$values[] = $value;
-				continue;
-			}
-
-			unset($array[$key]);
-		}
-
-		return $array;
-	}
-
-	/**
-	 * Removes empty values from the array
-	 *
-	 * @param array $array
-	 *
-	 * @return array
-	 */
-	public static function removeEmpty($array)
-	{
-		if ( ! is_array($array))
-		{
-			return $array;
-		}
-
-		foreach ($array as $key => &$value)
-		{
-			if ($key && ! is_numeric($key))
-			{
-				continue;
-			}
-
-			if ($value !== '')
-			{
-				continue;
-			}
-
-			unset($array[$key]);
-		}
-
-		return $array;
-	}
-
-	/**
+=======
 	 * Check if any of the given values is found in the array
 	 *
 	 * @param array $needles
@@ -328,62 +272,41 @@ class ArrayHelper
 	}
 
 	/**
-	 * Convert data (string or object) to an array
-	 *
-	 * @param mixed  $data
-	 * @param string $separator
-	 * @param bool   $unique
-	 *
-	 * @return array
-	 */
-	public static function toArray($data, $separator = ',', $unique = false, $trim = true)
-	{
-		if (is_array($data))
-		{
-			return $data;
-		}
-
-		if (is_object($data))
-		{
-			return (array) $data;
-		}
-
-		if ($data === '' || is_null($data))
-		{
-			return [];
-		}
-
-		if ($separator === '')
-		{
-			return [$data];
-		}
-
-		// explode on separator, but keep escaped separators
-		$splitter = uniqid('RL_SPLIT');
-		$data     = str_replace($separator, $splitter, $data);
-		$data     = str_replace('\\' . $splitter, $separator, $data);
-		$array    = explode($splitter, $data);
-
-		if ($trim)
-		{
-			$array = self::trim($array);
-		}
-
-		if ($unique)
-		{
-			$array = array_unique($array);
-		}
-
-		return $array;
-	}
-
-	/**
 	 * Flatten an array of nested arrays, keeping the order
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 *
 	 * @param array $array
 	 *
 	 * @return array
 	 */
+<<<<<<< HEAD
+	public static function unique($array)
+	{
+		if ( ! is_array($array))
+		{
+			return $array;
+		}
+
+		$values = [];
+
+		foreach ($array as $key => $value)
+		{
+			if ( ! is_numeric($key))
+			{
+				continue;
+			}
+
+			if ( ! in_array($value, $values))
+			{
+				$values[] = $value;
+				continue;
+			}
+
+			unset($array[$key]);
+		}
+
+		return $array;
+=======
 	public static function flatten($array)
 	{
 		$flattened = [];
@@ -429,9 +352,69 @@ class ArrayHelper
 		$last_item = array_pop($pieces);
 
 		return implode($glue, $pieces) . $last_glue . $last_item;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
+	 * Removes empty values from the array
+	 *
+	 * @param array $array
+	 *
+	 * @return array
+	 */
+	public static function removeEmpty($array)
+	{
+		if ( ! is_array($array))
+		{
+			return $array;
+		}
+
+		foreach ($array as $key => &$value)
+		{
+			if ($key && ! is_numeric($key))
+			{
+				continue;
+			}
+
+			if ($value !== '')
+			{
+				continue;
+			}
+
+			unset($array[$key]);
+		}
+
+		return $array;
+	}
+
+	/**
+<<<<<<< HEAD
+	 * Check if any of the given values is found in the array
+	 *
+	 * @param array $needles
+	 * @param array $haystack
+	 *
+	 * @return boolean
+	 */
+	public static function find($needles, $haystack)
+	{
+		if ( ! is_array($haystack) || empty($haystack))
+		{
+			return false;
+		}
+
+		$needles = self::toArray($needles);
+
+		foreach ($needles as $value)
+		{
+			if (in_array($value, $haystack))
+			{
+				return true;
+			}
+		}
+
+		return false;
+=======
 	 * Removes the trailing part of all keys in an array
 	 *
 	 * @param array  $array
@@ -526,6 +509,262 @@ class ArrayHelper
 		uksort($array, function ($key1, $key2) use ($order) {
 			return (array_search($key1, $order) > array_search($key2, $order));
 		});
+
+		return $array;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	}
+
+	/**
+	 * Convert data (string or object) to an array
+	 *
+	 * @param mixed  $data
+	 * @param string $separator
+	 * @param bool   $unique
+	 *
+	 * @return array
+	 */
+	public static function toArray($data, $separator = ',', $unique = false, $trim = true)
+	{
+		if (is_array($data))
+		{
+			return $data;
+		}
+
+		if (is_object($data))
+		{
+			return (array) $data;
+		}
+
+		if ($data === '' || is_null($data))
+		{
+			return [];
+		}
+
+		if ($separator === '')
+		{
+			return [$data];
+		}
+
+		// explode on separator, but keep escaped separators
+		$splitter = uniqid('RL_SPLIT');
+		$data     = str_replace($separator, $splitter, $data);
+		$data     = str_replace('\\' . $splitter, $separator, $data);
+		$array    = explode($splitter, $data);
+
+		if ($trim)
+		{
+			$array = self::trim($array);
+		}
+
+		if ($unique)
+		{
+			$array = array_unique($array);
+		}
+
+		return $array;
+	}
+
+	/**
+<<<<<<< HEAD
+	 * Flatten an array of nested arrays, keeping the order
+=======
+	 * Clean array by trimming values
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @param array $array
+	 *
+	 * @return array
+	 */
+<<<<<<< HEAD
+	public static function flatten($array)
+	{
+		$flattened = [];
+
+		foreach ($array as $nested)
+		{
+			if ( ! is_array($nested))
+			{
+				$flattened[] = $nested;
+				continue;
+			}
+
+			$flattened = array_merge($flattened, self::flatten($nested));
+		}
+
+		return $flattened;
+	}
+
+	/**
+	 * Join array elements with a string
+	 *
+	 * @param array|string $pieces
+	 * @param string       $glue
+	 * @param string       $last_glue
+	 *
+	 * @return string
+	 */
+	public static function implode($pieces, $glue = '', $last_glue = null)
+	{
+		if ( ! is_array($pieces))
+		{
+			$pieces = self::toArray($pieces, $glue);
+		}
+
+		if (is_null($last_glue)
+			|| $last_glue == $glue
+			|| count($pieces) < 2
+		)
+		{
+			return implode($glue, $pieces);
+		}
+
+		$last_item = array_pop($pieces);
+
+		return implode($glue, $pieces) . $last_glue . $last_item;
+	}
+
+	/**
+	 * Removes the trailing part of all keys in an array
+	 *
+	 * @param array  $array
+	 * @param string $postfix
+	 *
+	 * @return array
+	 */
+	public static function removePostfixFromKeys($array, $postfix)
+	{
+		$pefixed = [];
+
+		foreach ($array as $key => $value)
+		{
+			$pefixed[StringHelper::removePostfix($key, $postfix)] = $value;
+		}
+
+		return $pefixed;
+	}
+
+	/**
+	 * Removes the trailing part of all string values in an array
+	 *
+	 * @param array  $array
+	 * @param string $postfix
+	 *
+	 * @return array
+	 */
+	public static function removePostfixFromValues($array, $postfix)
+	{
+		foreach ($array as &$value)
+		{
+			$value = StringHelper::removePostfix($value, $postfix);
+=======
+	public static function trim($array)
+	{
+		if ( ! is_array($array))
+		{
+			return $array;
+		}
+
+		foreach ($array as &$value)
+		{
+			if ( ! is_string($value))
+			{
+				continue;
+			}
+
+			$value = trim($value);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+		}
+
+		return $array;
+	}
+
+	/**
+<<<<<<< HEAD
+	 * Removes the first part of all keys in an array
+	 *
+	 * @param array  $array
+	 * @param string $prefix
+	 *
+	 * @return array
+	 */
+	public static function removePrefixFromKeys($array, $prefix)
+	{
+		$pefixed = [];
+
+		foreach ($array as $key => $value)
+		{
+			$pefixed[StringHelper::removePrefix($key, $prefix)] = $value;
+		}
+
+		return $pefixed;
+	}
+
+	/**
+	 * Removes the first part of all string values in an array
+	 *
+	 * @param array  $array
+	 * @param string $prefix
+	 * @param bool   $keep_leading_slash
+	 *
+	 * @return array
+	 */
+	public static function removePrefixFromValues($array, $prefix, $keep_leading_slash = true)
+	{
+		foreach ($array as &$value)
+		{
+			$value = StringHelper::removePrefix($value, $prefix, $keep_leading_slash);
+		}
+
+		return $array;
+	}
+
+	/**
+	 * Sorts the array by keys based on the values of another array
+=======
+	 * Removes duplicate values from the array
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @param array $array
+	 * @param array $order
+	 *
+	 * @return array
+	 */
+<<<<<<< HEAD
+	public static function sortByOtherArray($array, $order)
+	{
+		if (empty($order))
+=======
+	public static function unique($array)
+	{
+		if ( ! is_array($array))
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+		{
+			return $array;
+		}
+
+<<<<<<< HEAD
+		uksort($array, function ($key1, $key2) use ($order) {
+			return (array_search($key1, $order) > array_search($key2, $order));
+		});
+=======
+		$values = [];
+
+		foreach ($array as $key => $value)
+		{
+			if ( ! is_numeric($key))
+			{
+				continue;
+			}
+
+			if ( ! in_array($value, $values))
+			{
+				$values[] = $value;
+				continue;
+			}
+
+			unset($array[$key]);
+		}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		return $array;
 	}

@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -203,6 +207,7 @@ class JceModelProfile extends JModelAdmin
     {
         $data = $this->getItem();
 
+<<<<<<< HEAD
         // convert 0 value to null to force defaults
         if (empty($data->area)) {
             $data->area = null;
@@ -212,13 +217,40 @@ class JceModelProfile extends JModelAdmin
         if (!empty($data->device)) {
         	$data->device = explode(',', $data->device);
         }
+=======
+        // convert 0 value to string containing both options
+        if (empty($data->area)) {
+            $data->area = '1,2';
+        }
+
+        $data->device = explode(',', $data->device);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         if (!empty($data->components)) {
             $data->components = explode(',', $data->components);
             $data->components_select = 1;
         }
 
+<<<<<<< HEAD
         $data->types    = explode(',', $data->types);
+=======
+        $data->types = explode(',', $data->types);
+
+        $table = JTable::getInstance('user');
+        $users = array();
+
+        foreach (explode(',', $data->users) as $id) {
+            if ($table->load((int) $id)) {
+                $user = new StdClass();
+                $user->value = $id;
+                $user->text = htmlspecialchars($table->name, ENT_COMPAT, 'UTF-8');
+
+                $users[] = $user;
+            }
+        }
+
+        $data->users    = $users;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         $data->config   = $data->params;
         
         $this->preprocessData('com_jce.profiles', $data);
@@ -722,11 +754,14 @@ class JceModelProfile extends JModelAdmin
             $data['params'] = json_encode(WFUtility::array_merge_recursive_distinct($params, $json));
         }
 
+<<<<<<< HEAD
         // set a default value for validation
         if (empty($data['params'])) {
         	$data['params'] = '{}';
         }
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         if (parent::save($data)) {
             return true;
         }
@@ -802,7 +837,11 @@ class JceModelProfile extends JModelAdmin
                 }
 
                 if ($key == 'params') {
+<<<<<<< HEAD
                     $buffer .= "\n\t\t\t" . '<' . $key . '><![CDATA[' . trim($value) . ']]></' . $key . '>';
+=======
+                    $buffer .= "\n\t\t\t" . '<' . $key . '>' . trim($value) . '</' . $key . '>';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                 } else {
                     $buffer .= "\n\t\t\t" . '<' . $key . '>' . JceProfilesHelper::encodeData($value) . '</' . $key . '>';
                 }

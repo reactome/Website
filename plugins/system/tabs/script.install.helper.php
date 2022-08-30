@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Tabs
+<<<<<<< HEAD
  * @version         8.2.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         8.1.0
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -386,14 +394,26 @@ class PlgSystemTabsInstallerScriptHelper
 
 	public function onAfterInstall($route)
 	{
+<<<<<<< HEAD
 		if ($this->extension_type == 'component')
 		{
 			$this->fixAssetsRules();
+=======
+		return true;
+	}
+
+	public function onBeforeInstall($route)
+	{
+		if ( ! $this->canInstall())
+		{
+			return false;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		}
 
 		return true;
 	}
 
+<<<<<<< HEAD
 	public function onBeforeInstall($route)
 	{
 		if ( ! $this->canInstall())
@@ -411,6 +431,15 @@ class PlgSystemTabsInstallerScriptHelper
 			return true;
 		}
 
+=======
+	public function postflight($route, $adapter)
+	{
+		if ( ! $this->canInstall())
+		{
+			return true;
+		}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		$this->removeGlobalLanguageFiles();
 		$this->removeUnusedLanguageFiles();
 
@@ -478,12 +507,15 @@ class PlgSystemTabsInstallerScriptHelper
 
 	public function publishExtension($route)
 	{
+<<<<<<< HEAD
 		if ($this->extension_type == 'module')
 		{
 			// Force enable administrator module extension to solve disabled J3 modules on J4 setups
 			$this->enableAdministratorModuleExtension();
 		}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		if ($route == 'update'
 			&& $this->installed_joomla_version >= $this->current_joomla_version
 		)
@@ -503,6 +535,7 @@ class PlgSystemTabsInstallerScriptHelper
 		}
 	}
 
+<<<<<<< HEAD
 	public function enableAdministratorModuleExtension()
 	{
 		$query = $this->db->getQuery(true)
@@ -515,6 +548,8 @@ class PlgSystemTabsInstallerScriptHelper
 		$this->db->execute();
 	}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	public function publishModule()
 	{
 		// Get module id

@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -69,6 +77,18 @@ class Cache
 
 	// Get the cached object from the Joomla cache
 
+<<<<<<< HEAD
+=======
+	public static function set($id, $data)
+	{
+		self::$cache[md5($id)] = $data;
+
+		return $data;
+	}
+
+	// Save the cached object to the Joomla cache
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	public static function write($id, $data, $time_to_life_in_minutes = 0, $force_caching = true)
 	{
 		if (JFactory::getApplication()->get('debug'))

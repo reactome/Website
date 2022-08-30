@@ -3,7 +3,11 @@
  * @package     Joomla.Administrator
  * @subpackage  com_categories
  *
+<<<<<<< HEAD
  * @copyright   (C) 2008 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -193,7 +197,11 @@ class CategoriesModelCategory extends JModelAdmin
 			// Convert the metadata field to an array.
 			$registry = new Registry($result->metadata);
 			$result->metadata = $registry->toArray();
+<<<<<<< HEAD
 
+=======
+			
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			if (!empty($result->id))
 			{
 				$result->tags = new JHelperTags;

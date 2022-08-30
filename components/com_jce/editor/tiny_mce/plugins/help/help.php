@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -35,9 +39,16 @@ class WFHelpPlugin extends WFEditorPlugin
 
         $params = JComponentHelper::getParams('com_jce');
 
+<<<<<<< HEAD
         $url = $params->get('help_url', 'https://www.joomlacontenteditor.net');
         $method = $params->get('help_method', 'reference');
         $pattern = $params->get('help_pattern', '/$1/$2/$3');
+=======
+        $registry = new JRegistry($params);
+        $url = $registry->get('preferences.help_url', 'https://www.joomlacontenteditor.net');
+        $method = $registry->get('preferences.help_method', 'reference');
+        $pattern = $registry->get('preferences.help_pattern', '/$1/$2/$3');
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         // trim url of trailing slash
         $url = trim($url, '/');
@@ -80,10 +91,13 @@ class WFHelpPlugin extends WFEditorPlugin
 
         $document = WFDocument::getInstance();
 
+<<<<<<< HEAD
         if ($document->get('standalone') == 1) {
             $document->addScript(array('window.min'));
         }
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         $document->addScript(array('help.min'), 'plugins');
         $document->addStyleSheet(array('help.min'), 'plugins');
 
@@ -208,7 +222,11 @@ class WFHelpPlugin extends WFEditorPlugin
 
         $result = '';
 
+<<<<<<< HEAD
         $result .= '<ul class="uk-nav" id="help-menu"><li class="uk-nav-header">' . JText::_('WF_' . strtoupper($category) . '_TITLE') . '</li>';
+=======
+        $result .= '<ul class="uk-nav uk-nav-side" id="help-menu"><li class="uk-nav-header">' . JText::_('WF_' . strtoupper($category) . '_TITLE') . '</li>';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         $result .= $this->getTopics($file);
         $result .= '</ul>';
 

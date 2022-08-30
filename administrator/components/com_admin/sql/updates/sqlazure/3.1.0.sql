@@ -318,7 +318,11 @@ CREATE NONCLUSTERED INDEX [idx_core_type_id] ON [#__ucm_content]
 SET IDENTITY_INSERT [#__extensions] ON;
 
 INSERT INTO [#__extensions] ([extension_id], [name], [type], [element], [folder], [client_id], [enabled], [access], [protected], [manifest_cache], [params], [custom_data], [system_data], [checked_out], [checked_out_time], [ordering], [state])
+<<<<<<< HEAD
 SELECT 29, 'com_tags', 'component', 'com_tags', '', 1, 1, 1, 1, '{"name":"com_joomlaupdate","type":"component","creationDate":"March 2013","author":"Joomla! Project","copyright":"(C) 2013 Open Source Matters, Inc.","authorEmail":"admin@joomla.org","authorUrl":"www.joomla.org","version":"3.1.0","description":"COM_TAGS_XML_DESCRIPTION","group":""}', '{}', '', '', 0, '1900-01-01 00:00:00', 0, 0;
+=======
+SELECT 29, 'com_tags', 'component', 'com_tags', '', 1, 1, 1, 1, '{"name":"com_joomlaupdate","type":"component","creationDate":"March 2013","author":"Joomla! Project","copyright":"(C) 2005 - 2020 Open Source Matters. All rights reserved.","authorEmail":"admin@joomla.org","authorUrl":"www.joomla.org","version":"3.1.0","description":"COM_TAGS_XML_DESCRIPTION","group":""}', '{}', '', '', 0, '1900-01-01 00:00:00', 0, 0;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 SET IDENTITY_INSERT [#__extensions] OFF;
 

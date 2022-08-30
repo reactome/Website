@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -17,6 +21,16 @@ use Joomla\Utilities\ArrayHelper;
  */
 class JFormFieldStyleFormat extends JFormField
 {
+<<<<<<< HEAD
+=======
+    protected $wrapper = array();
+    protected $merge = array();
+
+    protected $sections = array('section', 'nav', 'article', 'aside', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'footer', 'address', 'main');
+    protected $grouping = array('p', 'pre', 'blockquote', 'figure', 'figcaption', 'div');
+    protected $textlevel = array('a', 'em', 'strong', 'small', 's', 'cite', 'q', 'dfn', 'abbr', 'data', 'time', 'code', 'var', 'samp', 'kbd', 'sub', 'i', 'b', 'u', 'mark', 'ruby', 'rt', 'rp', 'bdi', 'bdo', 'span', 'wbr');
+    protected $formelements = array('form', 'input', 'button', 'fieldset', 'legend');
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     /*
      * Element type
      *
@@ -62,6 +76,7 @@ class JFormFieldStyleFormat extends JFormField
             $items = array($default);
         }
 
+<<<<<<< HEAD
         $subForm = new JForm($this->name);
 
         // editor manifest
@@ -93,6 +108,22 @@ class JFormFieldStyleFormat extends JFormField
                 $field->name = '';
 
                 $elements[] = '<div class="styleformat-item-' . $key . '" data-key="' . $key . '">' . $field->renderField(array('description' => $field->description)) . '</div>';
+=======
+        // store element options
+        $this->elements = $this->getElementOptions();
+
+        $output[] = '<div class="styleformat-list">';
+
+        foreach ($items as $item) {
+            $elements = array('<div class="styleformat">');
+
+            foreach ($default as $key => $value) {
+                if (array_key_exists($key, $item)) {
+                    $value = htmlspecialchars_decode($item[$key], ENT_QUOTES);
+                }
+
+                $elements[] = '<div class="styleformat-item-' . $key . '">' . $this->getField($key, $value) . '</div>';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             }
 
             $elements[] = '<div class="styleformat-header">';
@@ -102,15 +133,22 @@ class JFormFieldStyleFormat extends JFormField
             // delete button
             $elements[] = '<button class="styleformat-item-trash btn btn-link pull-right float-right"><i class="icon icon-trash"></i></button>';
             // collapse
+<<<<<<< HEAD
             $elements[] = '<button class="close collapse btn btn-link"><i class="icon icon-chevron-up"></i><i class="icon icon-chevron-down"></i></button>';
+=======
+            $elements[] = '<button class="close collapse"><span class="icon-chevron-up"></span><span class="icon-chevron-down"></span></button>';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
             $elements[] = '</div>';
 
             $elements[] = '</div>';
 
             $output[] = implode('', $elements);
+<<<<<<< HEAD
 
             $x++;
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         }
 
         $output[] = '<button class="btn btn-link styleformat-item-plus"><span class="span10 col-md-10 text-left">' . JText::_('WF_STYLEFORMAT_NEW') . '</span><i class="icon icon-plus pull-right float-right"></i></button>';
@@ -126,4 +164,92 @@ class JFormFieldStyleFormat extends JFormField
 
         return implode("\n", $output);
     }
+<<<<<<< HEAD
+=======
+
+    protected function getElementOptions()
+    {
+        // create elements list
+        $options = array(
+            JHTML::_('select.option', '', JText::_('WF_OPTION_SELECTED_ELEMENT')),
+        );
+
+        $options[] = JHTML::_('select.option', '<OPTGROUP>', JText::_('WF_OPTION_SECTION_ELEMENTS'));
+
+        foreach ($this->sections as $item) {
+            $options[] = JHTML::_('select.option', $item, $item);
+        }
+
+        $options[] = JHTML::_('select.option', '</OPTGROUP>');
+
+        $options[] = JHTML::_('select.option', '<OPTGROUP>', JText::_('WF_OPTION_GROUPING_ELEMENTS'));
+
+        foreach ($this->grouping as $item) {
+            $options[] = JHTML::_('select.option', $item, $item);
+        }
+
+        $options[] = JHTML::_('select.option', '</OPTGROUP>');
+
+        $options[] = JHTML::_('select.option', '<OPTGROUP>', JText::_('WF_OPTION_TEXT_LEVEL_ELEMENTS'));
+
+        foreach ($this->textlevel as $item) {
+            $options[] = JHTML::_('select.option', $item, $item);
+        }
+
+        $options[] = JHTML::_('select.option', '</OPTGROUP>');
+
+        $options[] = JHTML::_('select.option', '<OPTGROUP>', JText::_('WF_OPTION_FORM_ELEMENTS', 'Form Elements'));
+
+        foreach ($this->formelements as $item) {
+            $options[] = JHTML::_('select.option', $item, $item);
+        }
+
+        $options[] = JHTML::_('select.option', '</OPTGROUP>');
+
+        return $options;
+    }
+
+    protected function getField($key, $value)
+    {
+        $item = array();
+
+        if ($key !== 'title') {
+            $item[] = '<label for="' . $key . '">' . JText::_('WF_STYLEFORMAT_' . strtoupper($key)) . '</label>';
+        }
+
+        // encode value
+        $value = htmlspecialchars($value);
+
+        $attribs = array(
+            "class" => "form-control",
+            "data-key" => $key
+        );
+
+        switch ($key) {
+            case 'inline':
+            case 'block':
+            case 'element':
+
+                $item[] = JHTML::_('select.genericlist', $this->elements, null, ArrayHelper::toString($attribs), 'value', 'text', $value);
+
+                break;
+            case 'title':
+                $item[] = '<input type="text" ' . ArrayHelper::toString($attribs) . ' placeholder="' . JText::_('WF_STYLEFORMAT_' . strtoupper($key)) . '" value="' . $value . '" />';
+                break;
+            case 'styles':
+            case 'attributes':
+            case 'selector':
+            case 'classes':
+
+                $item[] = '<input type="text" ' . ArrayHelper::toString($attribs) . ' value="' . $value . '" />';
+
+                break;
+        }
+        if ($key !== 'title') {
+            $item[] = '<small class="help-block">' . JText::_('WF_STYLEFORMAT_' . strtoupper($key) . '_DESC') . '</small>';
+        }
+
+        return implode('', $item);
+    }
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 }

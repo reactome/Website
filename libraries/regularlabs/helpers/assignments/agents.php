@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -28,7 +36,43 @@ class RLAssignmentsAgents extends RLAssignment
 	var $device = null;
 
 	/**
+<<<<<<< HEAD
 	 * isPhone
+=======
+	 * isDesktop
+	 */
+	public function isDesktop()
+	{
+		return $this->getDevice() == 'desktop';
+	}
+
+	/**
+	 * isMobile
+	 */
+	public function isMobile()
+	{
+		return $this->getDevice() == 'mobile';
+	}
+
+	/**
+	 * isPhone
+	 */
+	public function isPhone()
+	{
+		return $this->isMobile();
+	}
+
+	/**
+	 * isTablet
+	 */
+	public function isTablet()
+	{
+		return $this->getDevice() == 'tablet';
+	}
+
+	/**
+	 * passBrowsers
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 */
 	public function isPhone()
 	{
@@ -71,9 +115,12 @@ class RLAssignmentsAgents extends RLAssignment
 				$this->device = 'desktop';
 		}
 
+<<<<<<< HEAD
 		return $this->device;
 	}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	/**
 	 * passDevices
 	 */
@@ -87,6 +134,7 @@ class RLAssignmentsAgents extends RLAssignment
 	}
 
 	/**
+<<<<<<< HEAD
 	 * isTablet
 	 */
 	public function isTablet()
@@ -131,33 +179,12 @@ class RLAssignmentsAgents extends RLAssignment
 		}
 
 		return $this->pass(false);
-	}
-
-	/**
-	 * passBrowser
+=======
+	 * passOS
 	 */
-	private function passBrowser($browser = '')
+	public function passOS()
 	{
-		if ( ! $browser)
-		{
-			return false;
-		}
-
-		if ($browser == 'mobile')
-		{
-			return $this->isMobile();
-		}
-
-		if ( ! (strpos($browser, '#') === 0))
-		{
-			$browser = '#' . RLText::pregQuote($browser) . '#';
-		}
-
-		// also check for _ instead of .
-		$browser = preg_replace('#\\\.([^\]])#', '[\._]\1', $browser);
-		$browser = str_replace('\.]', '\._]', $browser);
-
-		return preg_match($browser . 'i', $this->getAgent());
+		return self::passBrowsers();
 	}
 
 	/**
@@ -195,5 +222,97 @@ class RLAssignmentsAgents extends RLAssignment
 		$this->agent = $agent;
 
 		return $this->agent;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	}
+
+	/**
+	 * passBrowser
+	 */
+	private function passBrowser($browser = '')
+	{
+		if ( ! $browser)
+		{
+			return false;
+		}
+
+		if ($browser == 'mobile')
+		{
+			return $this->isMobile();
+		}
+
+		if ( ! (strpos($browser, '#') === 0))
+		{
+			$browser = '#' . RLText::pregQuote($browser) . '#';
+		}
+
+		// also check for _ instead of .
+		$browser = preg_replace('#\\\.([^\]])#', '[\._]\1', $browser);
+		$browser = str_replace('\.]', '\._]', $browser);
+
+		return preg_match($browser . 'i', $this->getAgent());
+	}
+
+	/**
+<<<<<<< HEAD
+	 * getAgent
+	 */
+	private function getAgent()
+	{
+		if ( ! is_null($this->agent))
+		{
+			return $this->agent;
+		}
+
+		$detect = new RLMobile_Detect;
+		$agent  = $detect->getUserAgent();
+
+		switch (true)
+		{
+			case (stripos($agent, 'Trident') !== false):
+				// Add MSIE to IE11
+				$agent = preg_replace('#(Trident/[0-9\.]+; rv:([0-9\.]+))#is', '\1 MSIE \2', $agent);
+				break;
+
+			case (stripos($agent, 'Chrome') !== false):
+				// Remove Safari from Chrome
+				$agent = preg_replace('#(Chrome/.*)Safari/[0-9\.]*#is', '\1', $agent);
+				// Add MSIE to IE Edge and remove Chrome from IE Edge
+				$agent = preg_replace('#Chrome/.*(Edge/[0-9])#is', 'MSIE \1', $agent);
+				break;
+
+			case (stripos($agent, 'Opera') !== false):
+				$agent = preg_replace('#(Opera/.*)Version/#is', '\1Opera/', $agent);
+				break;
+		}
+
+		$this->agent = $agent;
+
+		return $this->agent;
+=======
+	 * passBrowser
+	 */
+	private function passBrowser($browser = '')
+	{
+		if ( ! $browser)
+		{
+			return false;
+		}
+
+		if ($browser == 'mobile')
+		{
+			return $this->isMobile();
+		}
+
+		if ( ! (strpos($browser, '#') === 0))
+		{
+			$browser = '#' . RLText::pregQuote($browser) . '#';
+		}
+
+		// also check for _ instead of .
+		$browser = preg_replace('#\\\.([^\]])#', '[\._]\1', $browser);
+		$browser = str_replace('\.]', '\._]', $browser);
+
+		return preg_match($browser . 'i', $this->getAgent());
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 }

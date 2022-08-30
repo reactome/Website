@@ -245,6 +245,7 @@
 
 			<field
 				name="class"
+<<<<<<< HEAD
 				type="textarea"
 				label="COM_FIELDS_FIELD_CLASS_LABEL"
 				description="COM_FIELDS_FIELD_CLASS_DESC"
@@ -284,19 +285,56 @@
 
 			<field
 				name="render_class"
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 				type="textarea"
-				label="COM_FIELDS_FIELD_RENDER_CLASS_LABEL"
-				description="COM_FIELDS_FIELD_RENDER_CLASS_DESC"
+				label="COM_FIELDS_FIELD_CLASS_LABEL"
+				description="COM_FIELDS_FIELD_CLASS_DESC"
 				class="input-xxlarge"
 				validate="CssIdentifierSubstring"
 				size="40"
 			/>
 			
 			<field
+<<<<<<< HEAD
 				name="value_render_class"
 				type="textarea"
 				label="COM_FIELDS_FIELD_VALUE_RENDER_CLASS_LABEL"
 				description="COM_FIELDS_FIELD_VALUE_RENDER_CLASS_DESC"
+=======
+				name="label_class"
+				type="textarea"
+				label="COM_FIELDS_FIELD_LABEL_FORM_CLASS_LABEL"
+				description="COM_FIELDS_FIELD_LABEL_FORM_CLASS_DESC"
+				class="input-xxlarge"
+				size="40"
+			/>
+
+			<field
+				name="show_on"
+				type="radio"
+				label="COM_FIELDS_FIELD_EDITABLE_IN_LABEL"
+				description="COM_FIELDS_FIELD_EDITABLE_IN_DESC"
+				class="btn-group btn-group-yesno"
+				default=""
+				>
+				<option value="1">COM_FIELDS_FIELD_EDITABLE_IN_SITE</option>
+				<option value="2">COM_FIELDS_FIELD_EDITABLE_IN_ADMIN</option>
+				<option value="">COM_FIELDS_FIELD_EDITABLE_IN_BOTH</option>
+			</field>
+
+			<field
+				name="renderoptions"
+				type="note"
+				label="COM_FIELDS_FIELD_RENDEROPTIONS_HEADING"
+			/>
+
+			<field
+				name="render_class"
+				type="textarea"
+				label="COM_FIELDS_FIELD_RENDER_CLASS_LABEL"
+				description="COM_FIELDS_FIELD_RENDER_CLASS_DESC"
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 				class="input-xxlarge"
 				validate="CssIdentifierSubstring"
 				size="40"
@@ -321,7 +359,10 @@
 				description="COM_FIELDS_FIELD_LABEL_RENDER_CLASS_DESC"
 				class="input-xxlarge"
 				size="40"
+<<<<<<< HEAD
 				validate="CssIdentifierSubstring"
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 				showon="showlabel:1"
 			/>
 

@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -39,7 +43,11 @@ class WFLinkBrowser_Joomlalinks
                 }
 
                 // skip weblinks if it doesn't exist!
+<<<<<<< HEAD
                 if ($name == 'weblinks' && !JComponentHelper::isEnabled('com_weblinks')) {
+=======
+                if ($name === 'weblinks' && !is_file(JPATH_SITE . '/components/com_weblinks/weblinks.php')) {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                     continue;
                 }
 

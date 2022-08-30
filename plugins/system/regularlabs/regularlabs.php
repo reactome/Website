@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -39,6 +47,7 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php')
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+<<<<<<< HEAD
 
 if ( ! RL_Document::isJoomlaVersion(3))
 {
@@ -68,6 +77,77 @@ if ( ! in_array($config->error_reporting, ['none', '0'])
 
 	error_reporting(E_ERROR);
 }
+=======
+
+if ( ! RL_Document::isJoomlaVersion(3))
+{
+	RL_Extension::disable('regularlabs', 'plugin');
+
+	return;
+}
+
+JFactory::getLanguage()->load('plg_system_regularlabs', __DIR__);
+
+$config = new JConfig;
+
+$input = JFactory::getApplication()->input;
+
+// Deal with error reporting when loading pages we don't want to break due to php warnings
+if ( ! in_array($config->error_reporting, ['none', '0'])
+	&& (
+		($input->get('option') == 'com_regularlabsmanager'
+			&& ($input->get('task') == 'update' || $input->get('view') == 'process')
+		)
+		||
+		($input->getInt('rl_qp') == 1 && $input->get('url') != '')
+	)
+)
+{
+	RL_Extension::orderPluginFirst('regularlabs');
+
+	error_reporting(E_ERROR);
+}
+
+class PlgSystemRegularLabs extends JPlugin
+{
+	public function getAjaxClass($field, $field_type = '')
+	{
+		if (empty($field))
+		{
+			return false;
+		}
+
+		if ($field_type)
+		{
+			return $this->getFieldClass($field, $field_type);
+		}
+
+		$file = JPATH_LIBRARIES . '/regularlabs/fields/' . strtolower($field) . '.php';
+
+		if ( ! file_exists($file))
+		{
+			return $this->getFieldClass($field, $field);
+		}
+
+		require_once $file;
+
+		return 'JFormFieldRL_' . ucfirst($field);
+	}
+
+	public function getFieldClass($field, $field_type)
+	{
+		$file = JPATH_PLUGINS . '/fields/' . strtolower($field_type) . '/fields/' . strtolower($field) . '.php';
+
+		if ( ! file_exists($file))
+		{
+			return false;
+		}
+
+		require_once $file;
+
+		return 'JFormField' . ucfirst($field);
+	}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 class PlgSystemRegularLabs extends JPlugin
 {
@@ -101,14 +181,21 @@ class PlgSystemRegularLabs extends JPlugin
 		}
 
 		$this->fixQuotesInTooltips();
+<<<<<<< HEAD
 
 		AdminMenu::combine();
 
+=======
+
+		AdminMenu::combine();
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		AdminMenu::addHelpItem();
 
 		DownloadKey::cloak();
 	}
 
+<<<<<<< HEAD
 	private function fixQuotesInTooltips()
 	{
 		$html = JFactory::getApplication()->getBody();
@@ -142,6 +229,17 @@ class PlgSystemRegularLabs extends JPlugin
 				JFactory::getApplication()->enqueueMessage('The Regular Labs Library folder is missing or incomplete: ' . JPATH_LIBRARIES . '/regularlabs', 'error');
 			}
 
+=======
+	public function onAfterRoute()
+	{
+		if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+		{
+			if (JFactory::getApplication()->isClient('administrator'))
+			{
+				JFactory::getApplication()->enqueueMessage('The Regular Labs Library folder is missing or incomplete: ' . JPATH_LIBRARIES . '/regularlabs', 'error');
+			}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			return;
 		}
 
@@ -185,42 +283,63 @@ class PlgSystemRegularLabs extends JPlugin
 		return $class->$method($attributes);
 	}
 
-	public function getAjaxClass($field, $field_type = '')
+	public function onInstallerBeforePackageDownload(&$url, &$headers)
 	{
-		if (empty($field))
+		$uri  = JUri::getInstance($url);
+		$host = $uri->getHost();
+
+		if (
+			strpos($host, 'regularlabs.com') === false
+			&& strpos($host, 'nonumber.nl') === false
+		)
 		{
-			return false;
+			return true;
 		}
 
-		if ($field_type)
-		{
-			return $this->getFieldClass($field, $field_type);
-		}
+		$uri->setScheme('https');
+		$uri->setHost('download.regularlabs.com');
+		$uri->delVar('pro');
+		$url = $uri->toString();
 
-		$file = JPATH_LIBRARIES . '/regularlabs/fields/' . strtolower($field) . '.php';
+		$params = RL_Parameters::getComponent('regularlabsmanager');
 
-		if ( ! file_exists($file))
+		if (empty($params) || empty($params->key))
 		{
+<<<<<<< HEAD
 			return $this->getFieldClass($field, $field);
+=======
+			return true;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		}
 
-		require_once $file;
+		$uri->setVar('k', $params->key);
+		$url = $uri->toString();
 
-		return 'JFormFieldRL_' . ucfirst($field);
+		return true;
 	}
 
-	public function getFieldClass($field, $field_type)
+	private function fixQuotesInTooltips()
 	{
-		$file = JPATH_PLUGINS . '/fields/' . strtolower($field_type) . '/fields/' . strtolower($field) . '.php';
+		$html = JFactory::getApplication()->getBody();
 
-		if ( ! file_exists($file))
+		if ($html == '')
 		{
-			return false;
+			return;
 		}
 
-		require_once $file;
+		if (strpos($html, '&amp;quot;rl-code&amp;quot;') === false
+			&& strpos($html, '&amp;quot;rl_code&amp;quot;') === false)
+		{
+			return;
+		}
 
-		return 'JFormField' . ucfirst($field);
+		$html = str_replace(
+			['&amp;quot;rl-code&amp;quot;', '&amp;quot;rl_code&amp;quot;'],
+			'&quot;rl-code&quot;',
+			$html
+		);
+
+		JFactory::getApplication()->setBody($html);
 	}
 
 	public function onInstallerBeforePackageDownload(&$url, &$headers)

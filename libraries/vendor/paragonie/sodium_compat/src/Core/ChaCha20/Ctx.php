@@ -86,6 +86,7 @@ class ParagonIE_Sodium_Core_ChaCha20_Ctx extends ParagonIE_Sodium_Core_Util impl
      *
      * @param int $offset
      * @return bool
+     * @psalm-suppress MixedArrayOffset
      */
     #[ReturnTypeWillChange]
     public function offsetExists($offset)

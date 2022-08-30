@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -93,13 +97,18 @@ class WFBrowserPlugin extends WFMediaManager
         $app = JFactory::getApplication();
 
         $document = WFDocument::getInstance();
+<<<<<<< HEAD
         $slot = $app->input->getCmd('slot', 'plugin');
+=======
+        $layout = $app->input->getCmd('layout', 'plugin');
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         // update some document variables
         $document->setName('browser');
         $document->setTitle(JText::_('WF_BROWSER_TITLE'));
 
         if ($document->get('standalone') == 1) {
+<<<<<<< HEAD
             if ($slot === 'plugin') {
                 $document->addScript(array('window.min'));
 
@@ -108,6 +117,16 @@ class WFBrowserPlugin extends WFMediaManager
 
                 // Joomla 4 field variable not converted
                 if ($element == 'field-media-id') {
+=======
+            if ($layout === 'plugin') {
+                $document->addScript(array('window.min'), 'plugins');
+
+                $callback = $app->input->getCmd('callback', '');
+                $element = $app->input->getCmd('fieldid', '');
+
+                // Joomla 4 field variable not converted
+                if (!$element || $element === 'field-media-id') {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                     $element = $app->input->getCmd('element', '');
                 }
 
@@ -130,7 +149,11 @@ class WFBrowserPlugin extends WFMediaManager
             $document->addStyleSheet(array('browser.min'), 'plugins');
         }
 
+<<<<<<< HEAD
         if ($slot === 'plugin') {
+=======
+        if ($layout === 'plugin') {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             $document->addScript(array('browser'), 'plugins');
         }
     }

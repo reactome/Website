@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -20,6 +28,125 @@ use RegularLabs\Library\ParametersNew as Parameters;
 
 class Form
 {
+	public static function getAddToLoadAjaxListScript($field, $name, $value, $id, $attributes = [], $simple = false)
+	{
+		$attributes['field'] = $field;
+		$attributes['name']  = $name;
+		$attributes['value'] = $value;
+		$attributes['id']    = $id;
+
+		$url = 'index.php?option=com_ajax&plugin=regularlabs&format=raw'
+			. '&' . Uri::createCompressedAttributes(json_encode($attributes));
+
+		$remove_spinner = "$('#" . $id . "_spinner').remove();";
+		$replace_field  = "$('#" . $id . "').replaceWith(data);";
+		$init_chosen    = 'document.getElementById("' . $id . '") && document.getElementById("' . $id . '").nodeName == "SELECT" && $("#' . $id . '").chosen();';
+
+		$success = $replace_field;
+
+		if ($simple)
+		{
+			$success .= $init_chosen;
+		}
+		else
+		{
+			Document::script('regularlabs/multiselect.min.js');
+			Document::stylesheet('regularlabs/multiselect.min.css');
+
+			$success .= "if(data.indexOf('rl_multiselect') > -1)\{RegularLabsMultiSelect.init($('#" . $id . "'));\} else { " . $init_chosen . "}";
+		}
+
+//		$success .= "console.log('#" . $id . "');";
+//		$success .= "console.log(data);";
+
+		$error   = $remove_spinner;
+		$success = "if(data)\{" . $success . "\}" . $remove_spinner;
+
+		$script = "jQuery(document).ready(function() {"
+			. "RegularLabsScripts.addToLoadAjaxList("
+			. "'" . addslashes($url) . "',"
+			. "'" . addslashes($success) . "',"
+			. "'" . addslashes($error) . "'"
+			. ")"
+			. "});";
+
+		return '<script>' . $script . '</script>';
+	}
+
+	public static function getOptionsCount($options)
+	{
+		$count = 0;
+
+		foreach ($options as $option)
+		{
+			$count++;
+			if ( ! empty($option->links))
+			{
+				$count += self::getOptionsCount($option->links);
+			}
+		}
+
+		return $count;
+	}
+
+	/**
+	 * Prepare the string for a select form field item
+	 *
+	 * @param string $string
+	 * @param int    $published
+	 * @param string $type
+	 * @param int    $remove_first
+	 *
+	 * @return string
+	 */
+	public static function prepareSelectItem($string, $published = 1, $type = '', $remove_first = 0)
+	{
+		if (empty($string))
+		{
+			return '';
+		}
+
+		$string = str_replace(['&nbsp;', '&#160;'], ' ', $string);
+		$string = RegEx::replace('- ', '  ', $string);
+
+		for ($i = 0; $remove_first > $i; $i++)
+		{
+			$string = RegEx::replace('^  ', '', $string, '');
+		}
+
+		if (RegEx::match('^( *)(.*)$', $string, $match, ''))
+		{
+			[$string, $pre, $name] = $match;
+
+			$pre = str_replace('  ', ' ·  ', $pre);
+			$pre = RegEx::replace('(( ·  )*) ·  ', '\1 »  ', $pre);
+			$pre = str_replace('  ', ' &nbsp; ', $pre);
+
+			$string = $pre . $name;
+		}
+
+		switch (true)
+		{
+			case ($type == 'separator'):
+				$string = '[[:font-weight:normal;font-style:italic;color:grey;:]]' . $string;
+				break;
+
+			case ($published == -2):
+				$string = '[[:font-style:italic;color:grey;:]]' . $string . ' [' . JText::_('JTRASHED') . ']';
+				break;
+
+			case ($published == 0):
+				$string = '[[:font-style:italic;color:grey;:]]' . $string . ' [' . JText::_('JUNPUBLISHED') . ']';
+				break;
+
+			case ($published == 2):
+				$string = '[[:font-style:italic;:]]' . $string . ' [' . JText::_('JARCHIVED') . ']';
+				break;
+		}
+
+		return $string;
+	}
+
 	/**
 	 * Prepare the string for a select form field item
 	 *
@@ -370,12 +497,21 @@ class Form
 			{
 				$selected = in_array($option->value, $value) ? ' checked="checked"' : '';
 				$disabled = (isset($option->disable) && $option->disable) ? ' disabled="disabled"' : '';
+<<<<<<< HEAD
 
 				if (empty($option->hide_select))
 				{
 					$item .= '<input type="checkbox" class="pull-left" name="' . $name . '" id="' . $id . $option->value . '" value="' . $option->value . '"' . $selected . $disabled . '>';
 				}
 
+=======
+
+				if (empty($option->hide_select))
+				{
+					$item .= '<input type="checkbox" class="pull-left" name="' . $name . '" id="' . $id . $option->value . '" value="' . $option->value . '"' . $selected . $disabled . '>';
+				}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 				$item .= '<label for="' . $id . $option->value . '" class="' . $labelclass . '">' . $option->text . '</label>';
 			}
 			$item   .= '</div>';
@@ -419,7 +555,11 @@ class Form
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Replace style placeholders with actual style attributes
+=======
+	 * Render a select list loaded via Ajax
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 *
 	 * @param string $string
 	 *
@@ -427,6 +567,7 @@ class Form
 	 */
 	private static function handlePreparedStyles($string)
 	{
+<<<<<<< HEAD
 		// No placeholders found
 		if (strpos($string, '[[:') === false)
 		{
@@ -475,6 +616,11 @@ class Form
 
 		return $string;
 	}
+=======
+		JHtml::_('jquery.framework');
+
+		$script = self::getAddToLoadAjaxListScript($field, $name, $value, $id, $attributes, $simple);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 	public static function getOptionsCount($options)
 	{
@@ -489,33 +635,51 @@ class Form
 			}
 		}
 
+<<<<<<< HEAD
 		return $count;
+=======
+		Document::script('regularlabs/script.min.js');
+		Document::stylesheet('regularlabs/style.min.css');
+
+		$input = '<textarea name="' . $name . '" id="' . $id . '" cols="40" rows="5">' . $value . '</textarea>'
+			. '<div id="' . $id . '_spinner" class="rl_spinner"></div>';
+
+		return $input . $script;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	/**
-	 * Render a simple select list loaded via Ajax
+	 * Render a simple select list
 	 *
-	 * @param string $field
-	 * @param string $name
+	 * @param array  $options
+	 * @param        $string $name
 	 * @param string $value
 	 * @param string $id
-	 * @param array  $attributes
+	 * @param int    $size
+	 * @param bool   $multiple
+	 * @param bool   $readonly
+	 * @param bool   $ignore_max_count
 	 *
 	 * @return string
 	 */
-	public static function selectListSimpleAjax($field, $name, $value, $id, $attributes = [])
+	public static function selectListSimple(&$options, $name, $value, $id, $size = 0, $multiple = false, $readonly = false, $ignore_max_count = false)
 	{
-		return self::selectListAjax($field, $name, $value, $id, $attributes, true);
+		return self::selectlist($options, $name, $value, $id, $size, $multiple, true, $readonly, $ignore_max_count);
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Render a select list loaded via Ajax
+=======
+	 * Render a simple select list loaded via Ajax
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 *
 	 * @param string $field
 	 * @param string $name
 	 * @param string $value
 	 * @param string $id
 	 * @param array  $attributes
+<<<<<<< HEAD
 	 * @param bool   $simple
 	 *
 	 * @return string
@@ -555,12 +719,41 @@ class Form
 		$init_chosen    = 'document.getElementById("' . $id . '") && document.getElementById("' . $id . '").nodeName == "SELECT" && $("#' . $id . '").chosen();';
 
 		$success = $replace_field;
+=======
+	 *
+	 * @return string
+	 */
+	public static function selectListSimpleAjax($field, $name, $value, $id, $attributes = [])
+	{
+		return self::selectListAjax($field, $name, $value, $id, $attributes, true);
+	}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		if ($simple)
 		{
 			$success .= $init_chosen;
 		}
+<<<<<<< HEAD
 		else
+=======
+
+		// Doing following replacement in 3 steps to prevent the Regular Expressions engine from exploding
+
+		// Replace style tags right after the html tags
+		$string = RegEx::replace(
+			';?:\]\]\s*\[\[:',
+			';',
+			$string
+		);
+		$string = RegEx::replace(
+			'>\s*\[\[\:(.*?)\:\]\]',
+			' style="\1">',
+			$string
+		);
+
+		// No more placeholders found
+		if (strpos($string, '[[:') === false)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			Document::script('regularlabs/multiselect.min.js');
 			Document::stylesheet('regularlabs/multiselect.min.css');

@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -25,6 +33,7 @@ class Uri
 {
 	/**
 	 * adds the given url parameter (key + value) to the url or replaces it already exists
+<<<<<<< HEAD
 	 *
 	 * @param string $url
 	 * @param string $key
@@ -148,21 +157,36 @@ class Uri
 
 	/**
 	 * Returns the full uri and optionally adds/replaces the hash
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 *
-	 * @param string $hash
+	 * @param string $url
+	 * @param string $key
+	 * @param string $value
+	 * @param bool   $replace
 	 *
 	 * @return string
 	 */
-	public static function get($hash = '')
+	public static function addParameter($url, $key, $value = '', $replace = true)
 	{
-		$url = JUri::getInstance()->toString();
-
-		if ($hash == '')
+		if (empty($key))
 		{
 			return $url;
 		}
 
-		return self::appendHash($url, $hash);
+		$uri   = parse_url($url);
+		$query = self::parse_query($uri['query'] ?? '');
+
+		if ( ! $replace && isset($query[$key]))
+		{
+			return $url;
+		}
+
+		$query[$key] = $value;
+
+		$uri['query'] = http_build_query($query);
+
+		return self::createUrlFromArray($uri);
 	}
 
 	/**
@@ -187,6 +211,75 @@ class Uri
 		return self::createUrlFromArray($uri);
 	}
 
+<<<<<<< HEAD
+=======
+	public static function createCompressedAttributes($string)
+	{
+		$parameters = [];
+
+		$compressed   = base64_encode(gzdeflate($string));
+		$chunk_length = ceil(strlen($compressed) / 10);
+		$chunks       = str_split($compressed, $chunk_length);
+
+		foreach ($chunks as $i => $chunk)
+		{
+			$parameters[] = 'rlatt_' . $i . '=' . urlencode($chunk);
+		}
+
+		return implode('&', $parameters);
+	}
+
+	/**
+	 * Converts an array of url parts (like made by parse_url) to a string
+	 *
+	 * @param array $uri
+	 *
+	 * @return string
+	 */
+	public static function createUrlFromArray($uri)
+	{
+		$user = $uri['user'] ?? '';
+		$pass = ! empty($uri['pass']) ? ':' . $uri['pass'] : '';
+
+		return (! empty($uri['scheme']) ? $uri['scheme'] . '://' : '')
+			. (($user || $pass) ? $user . $pass . '@' : '')
+			. (! empty($uri['host']) ? $uri['host'] : '')
+			. (! empty($uri['port']) ? ':' . $uri['port'] : '')
+			. (! empty($uri['path']) ? $uri['path'] : '')
+			. (! empty($uri['query']) ? '?' . $uri['query'] : '')
+			. (! empty($uri['fragment']) ? '#' . $uri['fragment'] : '');
+	}
+
+	public static function decode($string)
+	{
+		return gzinflate(base64_decode(urldecode($string)));
+	}
+
+	public static function encode($string)
+	{
+		return urlencode(base64_encode(gzdeflate($string)));
+	}
+
+	/**
+	 * Returns the full uri and optionally adds/replaces the hash
+	 *
+	 * @param string $hash
+	 *
+	 * @return string
+	 */
+	public static function get($hash = '')
+	{
+		$url = JUri::getInstance()->toString();
+
+		if ($hash == '')
+		{
+			return $url;
+		}
+
+		return self::appendHash($url, $hash);
+	}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	public static function getCompressedAttributes()
 	{
 		$input = JFactory::getApplication()->input;
@@ -248,4 +341,51 @@ class Uri
 	{
 		return JRoute::_(JUri::root(true) . '/' . $url);
 	}
+<<<<<<< HEAD
+=======
+
+	/**
+	 * Parse a query string into an associative array.
+	 *
+	 * @param string $string
+	 *
+	 * @return array
+	 */
+	private static function parse_query($string)
+	{
+		$result = [];
+
+		if ($string === '')
+		{
+			return $result;
+		}
+
+		$decoder = function ($value) {
+			return rawurldecode(str_replace('+', ' ', $value));
+		};
+
+		foreach (explode('&', $string) as $kvp)
+		{
+			$parts = explode('=', $kvp, 2);
+
+			$key   = $decoder($parts[0]);
+			$value = isset($parts[1]) ? $decoder($parts[1]) : null;
+
+			if ( ! isset($result[$key]))
+			{
+				$result[$key] = $value;
+				continue;
+			}
+
+			if ( ! is_array($result[$key]))
+			{
+				$result[$key] = [$result[$key]];
+			}
+
+			$result[$key][] = $value;
+		}
+
+		return $result;
+	}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 }

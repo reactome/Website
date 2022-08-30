@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Modals
+<<<<<<< HEAD
  * @version         11.10.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         11.9.0
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -57,10 +65,20 @@ if ( ! RL_Document::isJoomlaVersion(3, 'MODALS'))
 {
 	RL_Extension::disable('modals', 'plugin');
 
+<<<<<<< HEAD
 	RL_Document::adminError(
 		JText::sprintf('RL_PLUGIN_HAS_BEEN_DISABLED', JText::_('MODALS'))
 	);
 
+=======
+	RL_Language::load('plg_system_regularlabs');
+
+	JFactory::getApplication()->enqueueMessage(
+		JText::sprintf('RL_PLUGIN_HAS_BEEN_DISABLED', JText::_('MODALS')),
+		'error'
+	);
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	return;
 }
 
@@ -80,7 +98,11 @@ if (true)
 
 		protected function loadStylesAndScripts(&$buffer)
 		{
+<<<<<<< HEAD
 			Document::loadStylesAndScripts($buffer);
+=======
+			Document::loadStylesAndScripts();
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		}
 
 		protected function changeDocumentBuffer(&$buffer)

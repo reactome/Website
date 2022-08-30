@@ -1,18 +1,29 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
 use RegularLabs\Library\DB as RL_DB;
+<<<<<<< HEAD
 use RegularLabs\Library\FieldGroup;
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
@@ -21,7 +32,11 @@ if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
+<<<<<<< HEAD
 class JFormFieldRL_RedShop extends FieldGroup
+=======
+class JFormFieldRL_RedShop extends \RegularLabs\Library\FieldGroup
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 {
 	public $type = 'RedShop';
 
@@ -45,6 +60,39 @@ class JFormFieldRL_RedShop extends FieldGroup
 		return $this->getOptionsTreeByList($items);
 	}
 
+<<<<<<< HEAD
+=======
+	public function getProducts()
+	{
+		$query = $this->db->getQuery(true)
+			->select('COUNT(*)')
+			->from('#__redshop_product AS p')
+			->where('p.published > -1');
+		$this->db->setQuery($query);
+		$total = $this->db->loadResult();
+
+		if ($total > $this->max_list_count)
+		{
+			return -1;
+		}
+
+		$this->db->setQuery($this->getProductsQuery());
+		$list = $this->db->loadObjectList();
+
+		return $this->getOptionsByList($list, ['number', 'cat']);
+	}
+
+	protected function getInput()
+	{
+		if ($error = $this->missingFilesOrTables(['categories' => 'category', 'products' => 'product']))
+		{
+			return $error;
+		}
+
+		return $this->getSelectList();
+	}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	private function getCategoriesQuery()
 	{
 		$query = $this->db->getQuery(true)

@@ -222,6 +222,10 @@ class Zip implements ExtractableInterface
 	 */
 	protected function extractCustom($archive, $destination)
 	{
+<<<<<<< HEAD
+=======
+		$this->data     = null;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		$this->metadata = null;
 		$this->data     = file_get_contents($archive);
 
@@ -244,9 +248,15 @@ class Zip implements ExtractableInterface
 				$buffer = $this->getFileData($i);
 				$path   = Path::clean($destination . '/' . $metadata['name']);
 
+<<<<<<< HEAD
 				if (!$this->isBelow($destination, $path))
 				{
 					throw new \OutOfBoundsException('Unable to write outside of destination path', 100);
+=======
+				if (!$this->isBelow($destination, $destination . '/' . $metadata['name']))
+				{
+					throw new \RuntimeException('Unable to write outside of destination path', 100);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 				}
 
 				// Make sure the destination folder exists
@@ -428,10 +438,14 @@ class Zip implements ExtractableInterface
 				throw new \RuntimeException('Invalid ZIP Data');
 			}
 
+<<<<<<< HEAD
 			$info                         = unpack(
 				'vMethod/VTime/VCRC32/VCompressed/VUncompressed/vLength/vExtraLength',
 				substr($data, $lfhStart + 8, 25)
 			);
+=======
+			$info                         = unpack('vMethod/VTime/VCRC32/VCompressed/VUncompressed/vLength/vExtraLength', substr($data, $lfhStart + 8, 25));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			$name                         = substr($data, $lfhStart + 30, $info['Length']);
 			$entries[$name]['_dataStart'] = $lfhStart + 30 + $info['Length'] + $info['ExtraLength'];
 
@@ -680,12 +694,19 @@ class Zip implements ExtractableInterface
 	/**
 	 * Check if a path is below a given destination path
 	 *
+<<<<<<< HEAD
 	 * @param   string  $destination  Root path
 	 * @param   string  $path         Path to check
 	 *
 	 * @return  boolean
 	 *
 	 * @since   1.1.10
+=======
+	 * @param   string  $destination
+	 * @param   string  $path
+	 *
+	 * @return  boolean
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 */
 	private function isBelow($destination, $path)
 	{

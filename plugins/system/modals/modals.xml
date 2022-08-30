@@ -2,12 +2,21 @@
 <extension version="3.9" type="plugin" group="system" method="upgrade">
 	<name>PLG_SYSTEM_MODALS</name>
 	<description>PLG_SYSTEM_MODALS_DESC</description>
+<<<<<<< HEAD
 	<version>11.10.0</version>
 	<creationDate>February 2022</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://regularlabs.com</authorUrl>
 	<copyright>Copyright © 2022 Regular Labs - All Rights Reserved</copyright>
+=======
+	<version>11.9.0</version>
+	<creationDate>June 2021</creationDate>
+	<author>Regular Labs (Peter van Westen)</author>
+	<authorEmail>info@regularlabs.com</authorEmail>
+	<authorUrl>https://regularlabs.com</authorUrl>
+	<copyright>Copyright © 2021 Regular Labs - All Rights Reserved</copyright>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 
 	<scriptfile>script.install.php</scriptfile>
@@ -277,7 +286,8 @@
 				</field>
 				<field name="load_head" type="radio" class="btn-group" default="0"
 					   label="MDL_LOAD_HEAD"
-					   description="MDL_LOAD_HEAD_DESC">
+					   description="MDL_LOAD_HEAD_DESC"
+					   showon="iframe:0">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>

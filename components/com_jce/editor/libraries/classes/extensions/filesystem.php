@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -42,11 +46,17 @@ class WFFileSystem extends WFExtension
      */
     public static function getInstance($type = 'joomla', $config = array())
     {
+<<<<<<< HEAD
         static $instances = array();
 
         $signature = md5($type . serialize($config));
 
         if (!isset($instances[$signature])) {
+=======
+        static $instance = array();
+
+        if (!isset($instance[$type])) {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             $fs = parent::loadExtensions('filesystem', $type);
 
             // load the default...
@@ -62,6 +72,7 @@ class WFFileSystem extends WFExtension
             $classname = 'WF' . ucfirst($fs->name) . 'FileSystem';
 
             if (class_exists($classname)) {
+<<<<<<< HEAD
                 $instances[$signature] = new $classname($config);
             } else {
                 $instances[$signature] = new self($config);
@@ -69,6 +80,15 @@ class WFFileSystem extends WFExtension
         }
 
         return $instances[$signature];
+=======
+                $instance[$type] = new $classname($config);
+            } else {
+                $instance[$type] = new self($config);
+            }
+        }
+
+        return $instance[$type];
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     }
 
     public function updateOptions(&$options)

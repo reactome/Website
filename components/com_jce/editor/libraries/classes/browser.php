@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -175,6 +179,7 @@ class WFFileBrowser extends JObject
 
     public function getFileSystem()
     {
+<<<<<<< HEAD
         static $instances = array();
 
         $fs = $this->get('filesystem', 'joomla');
@@ -195,6 +200,26 @@ class WFFileBrowser extends JObject
         }
 
         return $instances[$signature];
+=======
+        static $filesystem = array();
+
+        $fs = $this->get('filesystem', 'joomla');
+
+        if (!isset($filesystem[$fs])) {
+            $wf = WFEditorPlugin::getInstance();
+
+            $config = array(
+                'dir' => $this->get('dir'),
+                'upload_conflict' => $wf->getParam('editor.upload_conflict', 'overwrite'),
+                'upload_suffix' => $wf->getParam('editor.upload_suffix', '_copy'),
+                'filetypes' => $this->listFileTypes(),
+            );
+
+            $filesystem[$fs] = WFFileSystem::getInstance($fs, $config);
+        }
+
+        return $filesystem[$fs];
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     }
 
     private function getViewable()
@@ -360,6 +385,7 @@ class WFFileBrowser extends JObject
 
             // remove slashes
             $path = trim($path, '/');
+<<<<<<< HEAD
 
             foreach ($filters as $filter) {
                 // remove whitespace
@@ -375,6 +401,23 @@ class WFFileBrowser extends JObject
                     // remove "+" from filter
                     $filter = substr($filter, 1);
 
+=======
+
+            foreach ($filters as $filter) {
+                // remove whitespace
+                $filter = trim($filter);
+
+                // remove slashes
+                $filter = trim($filter, '/');
+
+                // show this folder
+                if ($filter[0] === "+") {
+                    $path_parts = explode('/', $path);
+
+                    // remove "+" from filter
+                    $filter = substr($filter, 1);
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                     // process path for variables, text case etc.
                     $filesystem->processPath($filter);
 
@@ -388,7 +431,11 @@ class WFFileBrowser extends JObject
 
                     $return = false;
 
+<<<<<<< HEAD
                     // hide this folder
+=======
+                // hide this folder
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                 } else {
                     $return = true;
 
@@ -488,7 +535,11 @@ class WFFileBrowser extends JObject
     {
         try {
             $q = preg_replace('#[^a-zA-Z0-9_\.\-\:~\pL\pM\pN\s\* ]#u', '', $query);
+<<<<<<< HEAD
         } catch (\Exception$e) {
+=======
+        } catch (\Exception $e) {
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             // PCRE replace failed, use ASCII
             $q = preg_replace('#[^a-zA-Z0-9_\.\-\:~\s\* ]#', '', $query);
         }
@@ -497,6 +548,7 @@ class WFFileBrowser extends JObject
         if (is_null($q) || $q === false) {
             $q = preg_replace('#[^a-zA-Z0-9_\.\-\:~\s\* ]#', '', $query);
         }
+<<<<<<< HEAD
 
         // trim and return
         return trim($q);
@@ -530,6 +582,41 @@ class WFFileBrowser extends JObject
         // get source dir from path eg: images/stories/fruit.jpg = images/stories
         $dir = $filesystem->getSourceDir($path);
 
+=======
+
+        // trim and return
+        return trim($q);
+    }
+
+    public function searchItems($path, $limit = 25, $start = 0, $query = '', $sort = '')
+    {
+        $result = array(
+            'folders' => array(),
+            'files' => array(),
+            'total' => array(
+                'folders' => 0,
+                'files' => 0,
+            ),
+        );
+
+        // no query value? bail...
+        if ($query == '') {
+            return $result;
+        }
+
+        $filesystem = $this->getFileSystem();
+
+        if (method_exists($filesystem, 'searchItems') === false) {
+            return $this->getItems($path, $limit, $start, $query, $sort);
+        }
+
+        // trim leading slash
+        $path = ltrim($path, '/');
+
+        // get source dir from path eg: images/stories/fruit.jpg = images/stories
+        $dir = $filesystem->getSourceDir($path);
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         $filetypes = (array) $this->getFileTypes('array');
 
         // copy query
@@ -798,8 +885,13 @@ class WFFileBrowser extends JObject
                 . '       <i class="uk-icon uk-icon-home"></i>'
                 . '     </span>'
                 . '     <span class="uk-tree-text">' . JText::_('WF_LABEL_HOME', 'Home') . '</span>'
+<<<<<<< HEAD
                     . '   </a>'
                     . ' </div>';
+=======
+                . '   </a>'
+                . ' </div>';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
                 $dir = '/';
             }
@@ -816,6 +908,7 @@ class WFFileBrowser extends JObject
                 $open = preg_match('#' . $name . '\b#', $treedir);
 
                 $result .= '<li data-id="' . $this->escape($name) . '" class="' . ($open ? 'uk-tree-open' : '') . '">'
+<<<<<<< HEAD
                     . ' <div class="uk-tree-row">'
                     . '   <a href="#">'
                     . '     <span class="uk-tree-icon" role="presentation"></span>'
@@ -825,6 +918,17 @@ class WFFileBrowser extends JObject
 
                 /*if ($open) {
                 $result .= $this->getTreeItems($folder['id'], false, false);
+=======
+                . ' <div class="uk-tree-row">'
+                . '   <a href="#">'
+                . '     <span class="uk-tree-icon" role="presentation"></span>'
+                . '     <span class="uk-tree-text uk-text-truncate" title="' . $folder['name'] . '">' . $folder['name'] . '</span>'
+                . '   </a>'
+                . ' </div>';
+                
+                /*if ($open) {                    
+                    $result .= $this->getTreeItems($folder['id'], false, false);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                 }*/
 
                 $result .= '</li>';

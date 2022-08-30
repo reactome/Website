@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -66,20 +74,28 @@ class StringHelper extends \Joomla\String\StringHelper
 		$array = ArrayHelper::applyMethodToValues([$string, $prefix, $keep_leading_slash]);
 
 		if ( ! is_null($array))
+<<<<<<< HEAD
 		{
 			return $array;
 		}
 
 		if (empty($prefix))
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
-			return $string;
+			return $array;
 		}
 
+<<<<<<< HEAD
 		if ( ! is_string($string) && ! is_numeric($string))
+=======
+		if (empty($prefix))
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			return $string;
 		}
 
+<<<<<<< HEAD
 		if ($keep_leading_slash && ! empty($string) && $string[0] == '/')
 		{
 
@@ -123,11 +139,140 @@ class StringHelper extends \Joomla\String\StringHelper
 		$string = JNormalise::toUnderscoreSeparated(JNormalise::fromCamelCase($string));
 
 		if ( ! $to_lowercase)
+=======
+		if ( ! is_string($string) && ! is_numeric($string))
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			return $string;
 		}
 
+<<<<<<< HEAD
 		return strtolower($string);
+=======
+		if ($keep_leading_slash && ! empty($string) && $string[0] == '/')
+		{
+
+			return $string[0] . $prefix . substr($string, 1);
+		}
+
+		return $prefix . $string;
+	}
+
+	/**
+	 * @param string $string
+	 * @param bool   $to_lowercase
+	 *
+	 * @return string
+	 * @deprecated Use StringHelper::toUnderscoreCase()
+	 */
+	public static function camelToUnderscore($string = '', $to_lowercase = true)
+	{
+		return self::toUnderscoreCase($string, $to_lowercase);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	}
+
+	/**
+	 * Converts a string to a UTF-8 encoded string
+	 *
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	public static function convertToUtf8($string = '')
+	{
+		$array = ArrayHelper::applyMethodToValues([$string]);
+
+		if ( ! is_null($array))
+		{
+			return $array;
+		}
+
+		if (self::detectUTF8($string))
+		{
+			// Already UTF-8, so skip
+			return $string;
+		}
+
+		if ( ! function_exists('iconv'))
+		{
+			// Still need to find a stable fallback
+			return $string;
+		}
+
+		$utf8_string = @iconv('UTF8', 'UTF-8//IGNORE', $string);
+
+		if (empty($utf8_string))
+		{
+			return $string;
+		}
+
+		return $utf8_string;
+	}
+
+	/**
+	 * Check whether string is a UTF-8 encoded string
+	 *
+	 * @param string $string
+	 *
+	 * @return bool
+	 */
+	public static function detectUTF8($string = '')
+	{
+		// Try to check the string via the mb_check_encoding function
+		if (function_exists('mb_check_encoding'))
+		{
+			return mb_check_encoding($string, 'UTF-8');
+		}
+
+		// Otherwise: Try to check the string via the iconv function
+		if (function_exists('iconv'))
+		{
+			$converted = iconv('UTF-8', 'UTF-8//IGNORE', $string);
+
+			return (md5($converted) == md5($string));
+		}
+
+		// As last fallback, check if the preg_match finds anything using the unicode flag
+		return preg_match('#.#u', $string);
+	}
+
+	/**
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	public static function escape($string)
+	{
+		return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+	}
+
+	/**
+	 * Decode html entities in string (array of strings)
+	 *
+	 * @param string $string
+	 * @param int    $quote_style
+	 * @param string $encoding
+	 *
+	 * @return array|string
+	 */
+	public static function html_entity_decoder($string, $quote_style = ENT_QUOTES, $encoding = 'UTF-8')
+	{
+		$array = ArrayHelper::applyMethodToValues([$string, $quote_style, $encoding]);
+
+		if ( ! is_null($array))
+		{
+			return $array;
+		}
+
+		if ( ! is_string($string))
+		{
+			return $string;
+		}
+
+		$string = html_entity_decode($string, $quote_style | ENT_HTML5, $encoding);
+		$string = str_replace(chr(194) . chr(160), ' ', $string);
+
+		return $string;
 	}
 
 	/**
@@ -452,7 +597,11 @@ class StringHelper extends \Joomla\String\StringHelper
 		}
 
 		// preg_quote all delimiters
+<<<<<<< HEAD
 		$array = preg_split('#(' . RegEx::quote($delimiters) . ')#s', $string, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+=======
+		$array = preg_split('#(' . RegEx::quote($delimiters) . ')#s', $string, null, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		if ( ! $maximize_parts)
 		{
@@ -494,13 +643,23 @@ class StringHelper extends \Joomla\String\StringHelper
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Check if any of the needles are found in any of the haystacks
 	 *
 	 * @param $haystacks
 	 * @param $needles
+=======
+	 * Converts a string to a camel case
+	 * eg: foo_bar => FooBar
+	 * eg: foo-bar => FooBar
 	 *
-	 * @return bool
+	 * @param string $string
+	 * @param bool   $to_lowercase
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @return string
 	 */
+<<<<<<< HEAD
 	public static function contains($haystacks, $needles)
 	{
 		$haystacks = (array) $haystacks;
@@ -518,18 +677,7 @@ class StringHelper extends \Joomla\String\StringHelper
 		}
 
 		return false;
-	}
-
-	/**
-	 * Converts a string to a camel case
-	 * eg: foo_bar => FooBar
-	 * eg: foo-bar => FooBar
-	 *
-	 * @param string $string
-	 * @param bool   $to_lowercase
-	 *
-	 * @return string
-	 */
+=======
 	public static function toCamelCase($string = '', $to_lowercase = true)
 	{
 		$array = ArrayHelper::applyMethodToValues([$string, $to_lowercase]);
@@ -540,6 +688,56 @@ class StringHelper extends \Joomla\String\StringHelper
 		}
 
 		$string = JNormalise::toCamelCase($string);
+
+		if ( ! $to_lowercase)
+		{
+			return $string;
+		}
+
+		return strtolower($string);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	}
+
+	/**
+	 * Converts a string to a camel case
+<<<<<<< HEAD
+	 * eg: foo_bar => FooBar
+	 * eg: foo-bar => FooBar
+	 *
+	 * @param string $string
+	 * @param bool   $to_lowercase
+=======
+	 * eg: FooBar => foo-bar
+	 * eg: foo_bar => foo-bar
+	 *
+	 * @param string|array|object $string
+	 * @param bool                $to_lowercase
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	 *
+	 * @return string|array
+	 */
+<<<<<<< HEAD
+	public static function toCamelCase($string = '', $to_lowercase = true)
+	{
+		$array = ArrayHelper::applyMethodToValues([$string, $to_lowercase]);
+
+		if ( ! is_null($array))
+=======
+	public static function toDashCase($string = '', $to_lowercase = true)
+	{
+		$array = ArrayHelper::applyMethodToValues([$string, $to_lowercase]);
+
+		if ( ! is_string($string))
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+		{
+			return $array;
+		}
+
+<<<<<<< HEAD
+		$string = JNormalise::toCamelCase($string);
+=======
+		$string = JNormalise::toDashSeparated(JNormalise::fromCamelCase($string));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		if ( ! $to_lowercase)
 		{
@@ -574,25 +772,46 @@ class StringHelper extends \Joomla\String\StringHelper
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Converts a string to a camel case
 	 * eg: FooBar => foo-bar
 	 * eg: foo_bar => foo-bar
 	 *
 	 * @param string|array|object $string
 	 * @param bool                $to_lowercase
+=======
+	 * Converts a string to a underscore separated string
+	 * eg: FooBar => foo_bar
+	 * eg: foo-bar => foo_bar
+	 *
+	 * @param string $string
+	 * @param bool   $to_lowercase
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 *
 	 * @return string|array
 	 */
+<<<<<<< HEAD
 	public static function toDashCase($string = '', $to_lowercase = true)
 	{
 		$array = ArrayHelper::applyMethodToValues([$string, $to_lowercase]);
 
 		if ( ! is_string($string))
+=======
+	public static function toUnderscoreCase($string = '', $to_lowercase = true)
+	{
+		$array = ArrayHelper::applyMethodToValues([$string, $to_lowercase]);
+
+		if ( ! is_null($array))
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		{
 			return $array;
 		}
 
+<<<<<<< HEAD
 		$string = JNormalise::toDashSeparated(JNormalise::fromCamelCase($string));
+=======
+		$string = JNormalise::toUnderscoreSeparated(JNormalise::fromCamelCase($string));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 		if ( ! $to_lowercase)
 		{

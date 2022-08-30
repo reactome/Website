@@ -1,20 +1,29 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+=======
+ * @copyright 	Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+ * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses
  */
 defined('JPATH_PLATFORM') or die;
+<<<<<<< HEAD
 
 use Joomla\String\StringHelper;
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
 class WFLinkSearchExtension extends WFSearchExtension
 {
     private $enabled = array();
+<<<<<<< HEAD
 
     protected function loadDefaultAdapter($plugin)
     {
@@ -65,6 +74,9 @@ class WFLinkSearchExtension extends WFSearchExtension
         $this->enabled[] = $plugin;
     }
 
+=======
+    
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     /**
      * Constructor activating the default information of the class.
      */
@@ -78,6 +90,7 @@ class WFLinkSearchExtension extends WFSearchExtension
         $request->setRequest(array($this, 'getAreas'));
 
         $wf = WFEditorPlugin::getInstance();
+<<<<<<< HEAD
 
         // get plugins
         $plugins = $wf->getParam('search.link.plugins', array());
@@ -86,23 +99,49 @@ class WFLinkSearchExtension extends WFSearchExtension
         if (empty($plugins)) {
             $plugins = array('categories', 'contacts', 'content', 'tags');
         }
+=======
+
+        // get plugins
+        $plugins = $wf->getParam('search.link.plugins', array());
+
+        $default = array('categories', 'contacts', 'content', 'newsfeeds', 'weblinks', 'tags');
+
+        // use tested defaults
+        $plugins = empty($plugins) ? $default : $plugins;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         // list core adapters
         $adapters = array('categories', 'contacts', 'content', 'tags', 'weblinks');
 
         // check and load external search plugins
         foreach ($plugins as $plugin) {
+<<<<<<< HEAD
             // process core search plugins
             if (in_array($plugin, $adapters)) {
                 $this->loadDefaultAdapter($plugin);
                 continue;
             }
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             // plugin must be enabled
             if (!JPluginHelper::isEnabled('search', $plugin)) {
                 continue;
             }
 
+<<<<<<< HEAD
+=======
+            // create component name from plugin - special case for "contacts"
+            if (in_array($plugin, $default)) {
+                $component = ($plugin == 'contacts') ? 'com_contact' : 'com_' . $plugin;
+
+                // check for associated component
+                if (!JComponentHelper::isEnabled($component)) {
+                    continue;
+                }
+            }
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             // check plugin imports correctly - plugin may have a db entry, but is missing files
             if (JPluginHelper::importPlugin('search', $plugin)) {
                 $this->enabled[] = $plugin;
@@ -238,7 +277,11 @@ class WFLinkSearchExtension extends WFSearchExtension
 
         $view->searchareas = self::getAreas();
         $view->lists = $lists;
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         $view->display();
     }
 
@@ -259,9 +302,15 @@ class WFLinkSearchExtension extends WFSearchExtension
         $language = JFactory::getLanguage();
 
         $option = $values['option'];
+<<<<<<< HEAD
 
         // load system language file
         $language->load($option . '.sys', JPATH_ADMINISTRATOR);
+=======
+        
+        // load system language file
+        $language->load($option.'.sys', JPATH_ADMINISTRATOR);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         $language->load($option, JPATH_ADMINISTRATOR);
 
         return JText::_($option);
@@ -280,9 +329,15 @@ class WFLinkSearchExtension extends WFSearchExtension
     public function doSearch($query)
     {
         $wf = WFEditorPlugin::getInstance();
+<<<<<<< HEAD
 
         $results = array();
 
+=======
+        
+        $results = array();
+        
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         if (empty($query)) {
             return $results;
         }
@@ -298,8 +353,13 @@ class WFLinkSearchExtension extends WFSearchExtension
             preg_match('#^(' . implode('|', $areas) . ')\:(.+)#', $query, $matches);
 
             if ($matches) {
+<<<<<<< HEAD
                 $area = array($matches[1]);
                 $query = $matches[2];
+=======
+                $area   = array($matches[1]);
+                $query  = $matches[2];
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             }
         }
 
@@ -311,9 +371,17 @@ class WFLinkSearchExtension extends WFSearchExtension
         $app = JFactory::getApplication('site');
         $filter = JFilterInput::getInstance();
         $router = $app::getRouter('site');
+<<<<<<< HEAD
+=======
+
+        // get SearchHelper
+        require_once JPATH_ADMINISTRATOR.'/components/com_search/helpers/search.php';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         // get router mode
-        $sef = (int) $wf->getParam('search.link.sef_url', 0);
+        $sef 	= (int) $wf->getParam('search.link.sef_url', 0);
+        
+        $limit 	= (int) $wf->getParam('search.link.limit', 50);
 
         $limit = (int) $wf->getParam('search.link.limit', 50);
 
@@ -325,8 +393,13 @@ class WFLinkSearchExtension extends WFSearchExtension
         // slashes cause errors, <> get stripped anyway later on. # causes problems.
         $searchword = trim(str_replace(array('#', '>', '<', '\\'), '', $filter->clean($query)));
 
+<<<<<<< HEAD
         $ordering = null;
         $searchphrase = 'all';
+=======
+        $ordering       = null;
+        $searchphrase   = 'all';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         // if searchword enclosed in double quotes, strip quotes and do exact match
         if (substr($searchword, 0, 1) == '"' && substr($searchword, -1) == '"') {
@@ -335,10 +408,17 @@ class WFLinkSearchExtension extends WFSearchExtension
         }
 
         $searchphrase = $app->input->post->getWord('searchphrase', $searchphrase);
+<<<<<<< HEAD
 
         // get passed through ordering
         $ordering = $app->input->post->getWord('ordering', $ordering);
 
+=======
+
+        // get passed through ordering
+        $ordering = $app->input->post->getWord('ordering', $ordering);
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         // get passed through area
         $area = $app->input->post->getCmd('areas', (array) $area);
 
@@ -359,6 +439,11 @@ class WFLinkSearchExtension extends WFSearchExtension
         foreach ($searches as $search) {
             $rows = array_merge((array) $rows, (array) $search);
         }
+        
+        // get first 10
+        $rows = array_slice($rows, 0, $limit);
+
+        $areas = array();
 
         // get first 10
         $rows = array_slice($rows, 0, $limit);
@@ -368,11 +453,19 @@ class WFLinkSearchExtension extends WFSearchExtension
         for ($i = 0, $count = count($rows); $i < $count; ++$i) {
             $row = &$rows[$i];
 
+<<<<<<< HEAD
             if (empty($row->href) || empty($row->title)) {
                 continue;
             }
 
             $area = isset($row->section) ? $row->section : self::getSearchAreaFromUrl($row->href);
+=======
+            if (empty($row->href) || empty($row->text)) {
+                continue;
+            }
+
+            $area = self::getSearchAreaFromUrl($row->href);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
             if (!isset($areas[$area])) {
                 $areas[$area] = array();
@@ -392,6 +485,7 @@ class WFLinkSearchExtension extends WFSearchExtension
             // get anchors if any...
             $row->anchors = self::getAnchors($row->text);
 
+<<<<<<< HEAD
             // prepare and truncate search text
             $row->text = $this->prepareSearchContent($row->text, $needle);
 
@@ -409,6 +503,13 @@ class WFLinkSearchExtension extends WFSearchExtension
 
             if (!empty($row->anchors)) {
                 $result->anchors = $row->anchors;
+=======
+            $row->text = SearchHelper::prepareSearchContent($row->text, $needle);
+
+            // remove base url
+            if (JURI::base(true) && strpos($row->href, JURI::base(true)) !== false) {
+                $row->href = substr_replace($row->href, '', 0, strlen(JURI::base(true)) + 1);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             }
 
             $areas[$area][] = $result;
@@ -429,12 +530,28 @@ class WFLinkSearchExtension extends WFSearchExtension
             $url = WFLinkHelper::route($url);
         }
 
+<<<<<<< HEAD
         // remove Itemid if "home"
         $url = WFLinkHelper::removeHomeItemId($url);
 
         // remove Itemid if set
         if ((bool) $wf->getParam('search.link.itemid', 1) === false) {
             $url = WFLinkHelper::removeItemId($url);
+=======
+            $result->title  = $row->title;
+            $result->text   = $row->text;
+            $result->link   = $row->href;
+
+            if (!empty($row->anchors)) {
+                $result->anchors = $row->anchors;
+            }
+
+            $areas[$area][] = $result;
+        }
+
+        if (!empty($areas)) {
+            $results[] = $areas;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         }
 
         return $url;

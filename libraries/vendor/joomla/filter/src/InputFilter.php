@@ -263,6 +263,7 @@ class InputFilter
 		{
 			return (array) $source;
 		}
+<<<<<<< HEAD
 
 		if ($type === 'Raw')
 		{
@@ -293,6 +294,38 @@ class InputFilter
 
 		$method = 'clean' . $type;
 
+=======
+
+		if ($type === 'Raw')
+		{
+			return $source;
+		}
+
+		if (\is_array($source))
+		{
+			$result = array();
+
+			foreach ($source as $key => $value)
+			{
+				$result[$key] = $this->clean($value, $type);
+			}
+
+			return $result;
+		}
+
+		if (\is_object($source))
+		{
+			foreach (get_object_vars($source) as $key => $value)
+			{
+				$source->$key = $this->clean($value, $type);
+			}
+
+			return $source;
+		}
+
+		$method = 'clean' . $type;
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		if (method_exists($this, $method))
 		{
 			return $this->$method((string) $source);
@@ -410,7 +443,11 @@ class InputFilter
 
 			if (($tagOpenNested !== false) && ($tagOpenNested < $tagOpenEnd))
 			{
+<<<<<<< HEAD
 				$preTag       .= StringHelper::substr($postTag, 1, $tagOpenNested);
+=======
+				$preTag       .= StringHelper::substr($postTag, 0, ($tagOpenNested + 1));
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 				$postTag      = StringHelper::substr($postTag, ($tagOpenNested + 1));
 				$tagOpenStart = StringHelper::strpos($postTag, '<');
 
@@ -1016,6 +1053,7 @@ class InputFilter
 	 */
 	private function cleanPath($source)
 	{
+<<<<<<< HEAD
 		// Linux and other Unixoids
 		$filePattern          = '(?:[^\x00\/:*?]{1,255})';
 		$pathSeparatorPattern = '(?:\/+)';
@@ -1034,12 +1072,27 @@ class InputFilter
 		if ($this->pathMatches($source, $rootPattern, $pathSeparatorPattern, $filePattern, '\\'))
 		{
 			return $source;
+=======
+		$linuxPattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/]+[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
+
+		if (preg_match($linuxPattern, $source))
+		{
+			return preg_replace('~/+~', '/', $source);
+		}
+
+		$windowsPattern = '/^([A-Za-z]:(\\\\|\/))?[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*((\\\\|\/)+[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
+
+		if (preg_match($windowsPattern, $source))
+		{
+			return preg_replace('~(\\\\|\/)+~', '\\', $source);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		}
 
 		return '';
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Fix a path, if and only if it matches the provided patterns.
 	 *
 	 * If a path matches but is longer than 4095 bytes, it is cleared.
@@ -1073,6 +1126,8 @@ class InputFilter
 	}
 
 	/**
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	 * Trim filter
 	 *
 	 * @param   string  $source  The string to be filtered

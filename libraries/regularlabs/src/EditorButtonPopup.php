@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -32,6 +40,23 @@ class EditorButtonPopup
 	{
 		$this->extension = $extension;
 		$this->params    = Parameters::getPlugin($extension);
+<<<<<<< HEAD
+=======
+	}
+
+	public function loadLanguages()
+	{
+		Language::load('plg_editors-xtd_' . $this->extension);
+		Language::load('plg_system_' . $this->extension);
+	}
+
+	public function loadScripts()
+	{
+	}
+
+	public function loadStyles()
+	{
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	public function render()
@@ -59,6 +84,7 @@ class EditorButtonPopup
 		echo $this->renderTemplate();
 	}
 
+<<<<<<< HEAD
 	private function loadLibraryLanguages()
 	{
 		Language::load('plg_system_regularlabs');
@@ -73,6 +99,14 @@ class EditorButtonPopup
 	{
 		Language::load('plg_editors-xtd_' . $this->extension);
 		Language::load('plg_system_' . $this->extension);
+=======
+	private function getDir()
+	{
+		// use static::class instead of get_class($this) after php 5.4 support is dropped
+		$rc = new ReflectionClass(get_class($this));
+
+		return dirname($rc->getFileName());
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	public function loadScripts()
@@ -81,6 +115,10 @@ class EditorButtonPopup
 
 	public function loadStyles()
 	{
+<<<<<<< HEAD
+=======
+		Document::loadPopupDependencies();
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	private function renderTemplate()
@@ -92,6 +130,7 @@ class EditorButtonPopup
 
 		return $html;
 	}
+<<<<<<< HEAD
 
 	private function getDir()
 	{
@@ -100,4 +139,6 @@ class EditorButtonPopup
 
 		return dirname($rc->getFileName());
 	}
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 }

@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -54,6 +62,7 @@ class Date
 		return strtr((string) $format, self::getDateToStrftimeFormats());
 	}
 
+<<<<<<< HEAD
 	private static function getDateToStrftimeFormats()
 	{
 		return [
@@ -92,6 +101,8 @@ class Date
 		];
 	}
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	/**
 	 * Convert string to a correct date format ('00-00-00 00:00:00' or '00-00-00') or null
 	 *
@@ -150,6 +161,47 @@ class Date
 		return strtr((string) $format, self::getStrftimeToDateFormats());
 	}
 
+<<<<<<< HEAD
+=======
+	private static function getDateToStrftimeFormats()
+	{
+		return [
+			// Day - no strf eq : S
+			'd'  => '%d',
+			'D'  => '%a',
+			'jS' => '%#d[TH]',
+			'j'  => '%#d',
+			'l'  => '%A',
+			'N'  => '%u',
+			'w'  => '%w',
+			'z'  => '%j',
+			// Week - no date eq : %U, %W
+			'W'  => '%V',
+			// Month - no strf eq : n, t
+			'F'  => '%B',
+			'm'  => '%m',
+			'M'  => '%b',
+			// Year - no strf eq : L; no date eq : %C, %g
+			'o'  => '%G',
+			'Y'  => '%Y',
+			'y'  => '%y',
+			// Time - no strf eq : B, G, u; no date eq : %r, %R, %T, %X
+			'a'  => '%P',
+			'A'  => '%p',
+			'g'  => '%l',
+			'h'  => '%I',
+			'H'  => '%H',
+			'i'  => '%M',
+			's'  => '%S',
+			// Timezone - no strf eq : e, I, P, Z
+			'O'  => '%z',
+			'T'  => '%Z',
+			// Full Date / Time - no strf eq : c, r; no date eq : %c, %D, %F, %x
+			'U'  => '%s',
+		];
+	}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	private static function getStrftimeToDateFormats()
 	{
 		return [

@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -50,6 +58,13 @@ abstract class Condition
 		$this->selection    = $condition->selection ?? [];
 		$this->params       = $condition->params ?? [];
 		$this->include_type = $condition->include_type ?? 'none';
+<<<<<<< HEAD
+
+		if (is_array($this->selection))
+		{
+			$this->selection = ArrayHelper::clean($this->selection);
+		}
+=======
 
 		if (is_array($this->selection))
 		{
@@ -60,8 +75,21 @@ abstract class Condition
 		$this->module  = $module;
 	}
 
-	private function getRequest()
+	public function _($pass = true, $include_type = null)
 	{
+		$include_type = $include_type ?: $this->include_type;
+
+		return $pass ? ($include_type == 'include') : ($include_type == 'exclude');
+	}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+
+		$this->article = $article;
+		$this->module  = $module;
+	}
+
+	public function getDate($date = '')
+	{
+<<<<<<< HEAD
 		$return_early = ! is_null(self::$_request);
 
 		$app   = JFactory::getApplication();
@@ -135,77 +163,7 @@ abstract class Condition
 				{
 					self::$_request->id = (empty($menuItem->query[self::$_request->idname])) ? $menuItem->params->get(self::$_request->idname) : $menuItem->query[self::$_request->idname];
 				}
-			}
-
-			unset($menuItem);
-		}
-
-		return self::$_request;
-	}
-
-	private function getItemId()
-	{
-		$id = JFactory::getApplication()->input->getInt('Itemid', 0);
-
-		if ($id)
-		{
-			return $id;
-		}
-
-		$menu = $this->getActiveMenu();
-
-		return $menu->id ?? 0;
-	}
-
-	public function initRequest(&$request)
-	{
-	}
-
-	private function getActiveMenu()
-	{
-		$menu = JFactory::getApplication()->getMenu()->getActive();
-
-		if (empty($menu->id))
-		{
-			return false;
-		}
-
-		return $this->getMenuById($menu->id);
-	}
-
-	private function getMenuById($id = 0)
-	{
-		$menu = JFactory::getApplication()->getMenu()->getItem($id);
-
-		if (empty($menu->id))
-		{
-			return false;
-		}
-
-		if ($menu->type == 'alias')
-		{
-			$params = $menu->getParams();
-
-			return $this->getMenuById($params->get('aliasoptions'));
-		}
-
-		return $menu;
-	}
-
-	public function beforePass()
-	{
-	}
-
-	public function getDateString($date = '')
-	{
-		$date = $this->getDate($date);
-		$date = strtotime($date->format('Y-m-d H:i:s', true));
-
-		return $date;
-	}
-
-	public function getDate($date = '')
-	{
+=======
 		$date = Date::fix($date);
 
 		$id = 'date_' . $date;
@@ -225,16 +183,12 @@ abstract class Condition
 		return $this->dates[$id];
 	}
 
-	private function getTimeZone()
+	public function getDateString($date = '')
 	{
-		if ( ! is_null($this->timezone))
-		{
-			return $this->timezone;
-		}
+		$date = $this->getDate($date);
+		$date = strtotime($date->format('Y-m-d H:i:s', true));
 
-		$this->timezone = new DateTimeZone(JFactory::getApplication()->getCfg('offset'));
-
-		return $this->timezone;
+		return $date;
 	}
 
 	public function getMenuItemParams($id = 0)
@@ -290,11 +244,319 @@ abstract class Condition
 			if ( ! $id || in_array($id, $parent_ids))
 			{
 				break;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 			}
 
 			$parent_ids[] = $id;
 		}
 
+<<<<<<< HEAD
+		return self::$_request;
+	}
+
+	private function getItemId()
+	{
+		$id = JFactory::getApplication()->input->getInt('Itemid', 0);
+
+		if ($id)
+		{
+			return $id;
+		}
+
+		$menu = $this->getActiveMenu();
+
+		return $menu->id ?? 0;
+	}
+
+	public function initRequest(&$request)
+	{
+	}
+
+	private function getActiveMenu()
+	{
+		$menu = JFactory::getApplication()->getMenu()->getActive();
+
+		if (empty($menu->id))
+		{
+			return false;
+		}
+
+		return $this->getMenuById($menu->id);
+=======
+		return $cache->set($parent_ids);
+	}
+
+	public function init()
+	{
+	}
+
+	public function initRequest(&$request)
+	{
+	}
+
+	public function makeArray($array = '', $delimiter = ',', $trim = false)
+	{
+		if (empty($array))
+		{
+			return [];
+		}
+
+		$cache = new Cache([__METHOD__, $array, $delimiter, $trim]);
+
+		if ($cache->exists())
+		{
+			return $cache->get();
+		}
+
+		$array = $this->mixedDataToArray($array, $delimiter);
+
+		if (empty($array))
+		{
+			return $array;
+		}
+
+		if ( ! $trim)
+		{
+			return $array;
+		}
+
+		foreach ($array as $k => $v)
+		{
+			if ( ! is_string($v))
+			{
+				continue;
+			}
+
+			$array[$k] = trim($v);
+		}
+
+		return $cache->set($array);
+	}
+
+	public function passByPageType($option, $selection = [], $include_type = 'all', $add_view = false, $get_task = false, $get_layout = true)
+	{
+		if ($this->request->option != $option)
+		{
+			return $this->_(false, $include_type);
+		}
+
+		if ($get_task && $this->request->task && $this->request->task != $this->request->view && $this->request->task != 'default')
+		{
+			$pagetype = ($add_view ? $this->request->view . '_' : '') . $this->request->task;
+
+			return $this->passSimple($pagetype, $selection, $include_type);
+		}
+
+		if ($get_layout && $this->request->layout && $this->request->layout != $this->request->view && $this->request->layout != 'default')
+		{
+			$pagetype = ($add_view ? $this->request->view . '_' : '') . $this->request->layout;
+
+			return $this->passSimple($pagetype, $selection, $include_type);
+		}
+
+		return $this->passSimple($this->request->view, $selection, $include_type);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	}
+
+	private function getMenuById($id = 0)
+	{
+		$menu = JFactory::getApplication()->getMenu()->getItem($id);
+
+		if (empty($menu->id))
+		{
+			return false;
+		}
+
+		if ($menu->type == 'alias')
+		{
+<<<<<<< HEAD
+			$params = $menu->getParams();
+=======
+			if (empty($selection))
+			{
+				continue;
+			}
+
+			if (strpos($selection, '-') === false)
+			{
+				if ((int) $value == (int) $selection)
+				{
+					$pass = true;
+					break;
+				}
+
+				continue;
+			}
+
+			[$min, $max] = explode('-', $selection, 2);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+
+			return $this->getMenuById($params->get('aliasoptions'));
+		}
+
+		return $menu;
+	}
+
+	public function beforePass()
+	{
+<<<<<<< HEAD
+	}
+=======
+		$pass_type = ! empty($data) ? $this->{'pass' . $type}($data) : $this->{'pass' . $type}();
+
+		if ($pass_type === null)
+		{
+			return true;
+		}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+
+	public function getDateString($date = '')
+	{
+		$date = $this->getDate($date);
+		$date = strtotime($date->format('Y-m-d H:i:s', true));
+
+		return $date;
+	}
+
+<<<<<<< HEAD
+	public function getDate($date = '')
+	{
+		$date = Date::fix($date);
+
+		$id = 'date_' . $date;
+
+		if (isset($this->dates[$id]))
+		{
+			return $this->dates[$id];
+		}
+
+		$this->dates[$id] = JFactory::getDate($date);
+
+		if (empty($this->params->ignore_time_zone))
+		{
+			$this->dates[$id]->setTimeZone($this->getTimeZone());
+		}
+
+		return $this->dates[$id];
+	}
+
+	private function getTimeZone()
+	{
+		if ( ! is_null($this->timezone))
+		{
+			return $this->timezone;
+		}
+
+		$this->timezone = new DateTimeZone(JFactory::getApplication()->getCfg('offset'));
+
+		return $this->timezone;
+=======
+	public function passSimple($values = '', $caseinsensitive = false, $include_type = null, $selection = null)
+	{
+		$values       = $this->makeArray($values);
+		$include_type = $include_type ?: $this->include_type;
+		$selection    = $selection ?: $this->selection;
+
+		$pass = false;
+		foreach ($values as $value)
+		{
+			if ($caseinsensitive)
+			{
+				if (in_array(strtolower($value), array_map('strtolower', $selection)))
+				{
+					$pass = true;
+					break;
+				}
+
+				continue;
+			}
+
+			if (in_array($value, $selection))
+			{
+				$pass = true;
+				break;
+			}
+		}
+
+		return $this->_($pass, $include_type);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	}
+
+	private function getActiveMenu()
+	{
+<<<<<<< HEAD
+		$cache = new Cache([__METHOD__, $id]);
+
+		if ($cache->exists())
+		{
+			return $cache->get();
+		}
+
+		$query = $this->db->getQuery(true)
+			->select('m.params')
+			->from('#__menu AS m')
+			->where('m.id = ' . (int) $id);
+		$this->db->setQuery($query);
+		$params = $this->db->loadResult();
+
+		return $cache->set(Parameters::getObjectFromRegistry($params));
+	}
+
+	public function getNow()
+	{
+		return strtotime($this->date->format('Y-m-d H:i:s', true));
+=======
+		$menu = JFactory::getApplication()->getMenu()->getActive();
+
+		if (empty($menu->id))
+		{
+			return false;
+		}
+
+		return $this->getMenuById($menu->id);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+	}
+
+	private function getItemId()
+	{
+		$id = JFactory::getApplication()->input->getInt('Itemid', 0);
+
+		if ($id)
+		{
+			return $id;
+		}
+
+<<<<<<< HEAD
+		$cache = new Cache([__METHOD__, $id, $table, $parent, $child]);
+
+		if ($cache->exists())
+		{
+			return $cache->get();
+		}
+=======
+		$menu = $this->getActiveMenu();
+
+		return $menu->id ?? 0;
+	}
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+
+	private function getMenuById($id = 0)
+	{
+		$menu = JFactory::getApplication()->getMenu()->getItem($id);
+
+		if (empty($menu->id))
+		{
+			return false;
+		}
+
+		if ($menu->type == 'alias')
+		{
+			$params = $menu->getParams();
+
+			return $this->getMenuById($params->get('aliasoptions'));
+		}
+
+<<<<<<< HEAD
 		return $cache->set($parent_ids);
 	}
 
@@ -361,45 +623,116 @@ abstract class Condition
 		}
 
 		return $this->_($pass, $include_type);
+=======
+		return $menu;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
-	public function makeArray($array = '', $delimiter = ',', $trim = false)
+	private function getRequest()
 	{
-		if (empty($array))
-		{
-			return [];
-		}
+		$return_early = ! is_null(self::$_request);
 
+		$app   = JFactory::getApplication();
+		$input = $app->input;
+
+<<<<<<< HEAD
 		$cache = new Cache([__METHOD__, $array, $delimiter, $trim]);
 
 		if ($cache->exists())
 		{
 			return $cache->get();
+=======
+		$id = $input->get(
+			'a_id',
+			$input->get('id', [0], 'array'),
+			'array'
+		);
+
+		self::$_request = (object) [
+			'idname' => 'id',
+			'option' => $input->get('option'),
+			'view'   => $input->get('view'),
+			'task'   => $input->get('task'),
+			'layout' => $input->getString('layout'),
+			'Itemid' => $this->getItemId(),
+			'id'     => (int) $id[0],
+		];
+
+		switch (self::$_request->option)
+		{
+			case 'com_categories':
+				$extension              = $input->getCmd('extension');
+				self::$_request->option = $extension ?: 'com_content';
+				self::$_request->view   = 'category';
+				break;
+
+			case 'com_breezingforms':
+				if (self::$_request->view == 'article')
+				{
+					self::$_request->option = 'com_content';
+				}
+				break;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 		}
 
-		$array = $this->mixedDataToArray($array, $delimiter);
+		$this->initRequest(self::$_request);
 
-		if (empty($array))
+		if ( ! self::$_request->id)
 		{
-			return $array;
+			$cid                = $input->get('cid', [0], 'array');
+			self::$_request->id = (int) $cid[0];
 		}
 
-		if ( ! $trim)
+		if ($return_early)
 		{
-			return $array;
+			return self::$_request;
 		}
 
-		foreach ($array as $k => $v)
+		// if no id is found, check if menuitem exists to get view and id
+		if (Document::isClient('site')
+			&& ( ! self::$_request->option || ! self::$_request->id)
+		)
 		{
-			if ( ! is_string($v))
+			$menuItem = empty(self::$_request->Itemid)
+				? $app->getMenu('site')->getActive()
+				: $app->getMenu('site')->getItem(self::$_request->Itemid);
+
+			if ($menuItem)
 			{
-				continue;
+				if ( ! self::$_request->option)
+				{
+					self::$_request->option = (empty($menuItem->query['option'])) ? null : $menuItem->query['option'];
+				}
+
+				self::$_request->view = (empty($menuItem->query['view'])) ? null : $menuItem->query['view'];
+				self::$_request->task = (empty($menuItem->query['task'])) ? null : $menuItem->query['task'];
+
+				if ( ! self::$_request->id)
+				{
+					self::$_request->id = (empty($menuItem->query[self::$_request->idname])) ? $menuItem->params->get(self::$_request->idname) : $menuItem->query[self::$_request->idname];
+				}
 			}
 
-			$array[$k] = trim($v);
+			unset($menuItem);
 		}
 
+<<<<<<< HEAD
 		return $cache->set($array);
+=======
+		return self::$_request;
+	}
+
+	private function getTimeZone()
+	{
+		if ( ! is_null($this->timezone))
+		{
+			return $this->timezone;
+		}
+
+		$this->timezone = new DateTimeZone(JFactory::getApplication()->getCfg('offset'));
+
+		return $this->timezone;
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	private function mixedDataToArray($array = '', $onlycommas = false)
@@ -428,6 +761,7 @@ abstract class Condition
 
 		return $array;
 	}
+<<<<<<< HEAD
 
 	public function passInRange($value = '', $include_type = null, $selection = null)
 	{
@@ -484,4 +818,6 @@ abstract class Condition
 
 		return $pass;
 	}
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 }

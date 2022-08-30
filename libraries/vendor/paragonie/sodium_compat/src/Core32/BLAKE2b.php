@@ -657,13 +657,19 @@ abstract class ParagonIE_Sodium_Core32_BLAKE2b extends ParagonIE_Sodium_Core_Uti
             self::intToChr(($ctx4 >> 8) & 0xff),
             self::intToChr(($ctx4 >> 16) & 0xff),
             self::intToChr(($ctx4 >> 24) & 0xff),
+<<<<<<< HEAD
             "\x00\x00\x00\x00"
             /*
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             self::intToChr(($ctx4 >> 32) & 0xff),
             self::intToChr(($ctx4 >> 40) & 0xff),
             self::intToChr(($ctx4 >> 48) & 0xff),
             self::intToChr(($ctx4 >> 56) & 0xff)
+<<<<<<< HEAD
             */
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         ));
         # uint8_t last_node;
         return $str . self::intToChr($ctx[5]) . str_repeat("\x00", 23);

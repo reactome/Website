@@ -1,7 +1,11 @@
 <?php
 
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -44,9 +48,12 @@ class WFPreviewPlugin extends WFEditorPlugin
         // load paramter class
         jimport('joomla.html.parameter');
 
+<<<<<<< HEAD
         // register autoload for ContentHelperRoute
         JLoader::register('ContentHelperRoute', JPATH_SITE . '/components/com_content/helpers/route.php');
 
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         // get post data
         $data = $app->input->post->get('data', '', 'RAW');
 
@@ -78,7 +85,10 @@ class WFPreviewPlugin extends WFEditorPlugin
         $article->parameters = new JRegistry();
         $article->text = $data;
 
+<<<<<<< HEAD
         // load system plugins
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         JPluginHelper::importPlugin('system');
 
         $app->triggerEvent('onWfContentPreview', array($context, &$article, &$params, 0));
@@ -87,9 +97,17 @@ class WFPreviewPlugin extends WFEditorPlugin
         if ((bool) $this->getParam('process_content', 1)) {
             $page = 0;
 
+<<<<<<< HEAD
             // load content plugins
             JPluginHelper::importPlugin('content');
 
+=======
+            JPluginHelper::importPlugin('content');
+
+            // load content router
+            require_once JPATH_SITE . '/components/com_content/helpers/route.php';
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             // set error reporting off to produce empty string on Fatal error
             error_reporting(0);
 

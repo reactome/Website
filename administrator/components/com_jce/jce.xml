@@ -2,12 +2,21 @@
 <extension type="component" version="3.8" method="upgrade">
     <name>COM_JCE</name>
     <author>Ryan Demmer</author>
+<<<<<<< HEAD
     <creationDate>27-05-2022</creationDate>
     <copyright>Copyright (C) 2006 - 2022 Ryan Demmer. All rights reserved</copyright>
     <license>GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html</license>
     <authorEmail>info@joomlacontenteditor.net</authorEmail>
     <authorUrl>www.joomlacontenteditor.net</authorUrl>
     <version>2.9.24</version>
+=======
+    <creationDate>08-07-2021</creationDate>
+    <copyright>Copyright (C) 2006 - 2021 Ryan Demmer. All rights reserved</copyright>
+    <license>GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html</license>
+    <authorEmail>info@joomlacontenteditor.net</authorEmail>
+    <authorUrl>www.joomlacontenteditor.net</authorUrl>
+    <version>2.9.10</version>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     <description>COM_JCE_XML_DESCRIPTION</description>
 
     <files folder="components/com_jce">
@@ -18,11 +27,17 @@
         <file>licence.txt</file>
     </files>
 
+<<<<<<< HEAD
     <!-- Component Media -->
     <media folder="media/com_jce" destination="com_jce">
         <folder>css</folder>
         <folder>img</folder>
         <folder>js</folder>
+=======
+    <!-- Media -->
+    <media folder="media/jce" destination="jce">
+        <folder>icons</folder>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
     </media>
 
     <languages folder="language/en-GB">
@@ -44,7 +59,11 @@
     </install>
 
     <administration>
+<<<<<<< HEAD
         <menu view="cpanel" img="media/com_jce/img/logo.svg" link="option=com_jce">COM_JCE</menu>
+=======
+        <menu view="cpanel" img="components/com_jce/media/img/logo.svg" link="option=com_jce">COM_JCE</menu>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 
         <submenu>
             <menu view="cpanel" link="option=com_jce">COM_JCE_MENU_CPANEL</menu>
@@ -58,6 +77,10 @@
             <folder>helpers</folder>
             <folder>includes</folder>
             <folder>layouts</folder>
+<<<<<<< HEAD
+=======
+            <folder>media</folder>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             <folder>models</folder>
             <folder>sql</folder>
             <folder>tables</folder>

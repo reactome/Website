@@ -132,8 +132,13 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
             throw new SodiumException('y[1] is not an integer');
         }
         return self::new64(
+<<<<<<< HEAD
             (int) (($x[0] ^ $y[0]) & 0xffffffff),
             (int) (($x[1] ^ $y[1]) & 0xffffffff)
+=======
+            (int) ($x[0] ^ $y[0]),
+            (int) ($x[1] ^ $y[1])
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         );
     }
 

@@ -3,7 +3,11 @@
  * @package     Joomla.Administrator
  * @subpackage  com_joomlaupdate
  *
+<<<<<<< HEAD
  * @copyright   (C) 2012 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -71,6 +75,7 @@ JS
 			<?php JFactory::getApplication()->enqueueMessage(JText::_('COM_JOOMLAUPDATE_VIEW_DEFAULT_INSTALL_SELF_UPDATE_FIRST'), 'error'); ?>
 			<?php echo $this->loadTemplate('updatemefirst'); ?>
 		<?php else : ?>
+<<<<<<< HEAD
 			<?php if ((!isset($this->updateInfo['object']->downloadurl->_data)
 				&& !$this->updateInfo['hasUpdate'])
 				|| !$this->getModel()->isDatabaseTypeSupported()
@@ -78,6 +83,13 @@ JS
 		<?php // If we have no download URL or our PHP version or our DB type is not supported we can't reinstall or update ?>
 				<?php echo $this->loadTemplate('noupdate'); ?>
 			<?php elseif (!isset($this->updateInfo['object']->downloadurl->_data)) : ?>
+=======
+			<?php if (!isset($this->updateInfo['object']->downloadurl->_data) && !$this->updateInfo['hasUpdate']) : ?>
+				<?php // If we have no download URL and this is also not a new update at all ?>
+				<?php echo $this->loadTemplate('noupdate'); ?>
+			<?php elseif (!isset($this->updateInfo['object']->downloadurl->_data)) : ?>
+				<?php // If we have no download URL we can't reinstall or update ?>
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 				<?php echo $this->loadTemplate('nodownload'); ?>
 			<?php elseif (!$this->updateInfo['hasUpdate']) : ?>
 				<?php // If we have no update but we have a downloadurl we can reinstall the core ?>

@@ -1,11 +1,19 @@
 <?php
 /**
  * @package         Regular Labs Library
+<<<<<<< HEAD
  * @version         22.6.8549
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
  * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+=======
+ * @version         21.7.10061
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2021 Regular Labs All Rights Reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -28,6 +36,33 @@ use RegularLabs\Library\RegEx;
  */
 class Php extends Condition
 {
+<<<<<<< HEAD
+=======
+	public static function createFunctionInMemory($string = '')
+	{
+		$file_name = getmypid() . '_' . md5($string);
+
+		$tmp_path  = JFactory::getConfig()->get('tmp_path', JPATH_ROOT . '/tmp');
+		$temp_file = $tmp_path . '/regularlabs' . '/' . $file_name;
+
+		// Write file
+		if ( ! file_exists($temp_file) || is_writable($temp_file))
+		{
+			JFile::write($temp_file, $string);
+		}
+
+		// Include file
+		include_once $temp_file;
+
+		// Delete file
+		if ( ! JFactory::getApplication()->get('debug'))
+		{
+			@chmod($temp_file, 0777);
+			@unlink($temp_file);
+		}
+	}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	public static function getApplication()
 	{
 		if (JFactory::getApplication()->input->get('option') != 'com_finder')
@@ -60,6 +95,31 @@ class Php extends Condition
 		return JDocument::getInstance('html', $attributes);
 	}
 
+<<<<<<< HEAD
+=======
+	public static function getVarInits()
+	{
+		return [
+			'$app = $mainframe = RegularLabs\Library\Condition\Php::getApplication();',
+			'$document = $doc = RegularLabs\Library\Condition\Php::getDocument();',
+			'$database = $db = JFactory::getDbo();',
+			'$user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();',
+			'$Itemid = $app->input->getInt(\'Itemid\');',
+		];
+	}
+
+	public function execute($string = '', $article = null, $module = null)
+	{
+		if ( ! $function_name = $this->getFunctionName($string))
+		{
+			// Something went wrong!
+			return true;
+		}
+
+		return $this->runFunction($function_name, $string, $article, $module);
+	}
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	public function pass()
 	{
 		if ( ! is_array($this->selection))
@@ -94,15 +154,68 @@ class Php extends Condition
 		return $this->_($pass);
 	}
 
+<<<<<<< HEAD
 	public function execute($string = '', $article = null, $module = null)
+=======
+	private function generateFileContents($function_name = 'rl_function', $string = '')
+	{
+		$init_variables = self::getVarInits();
+
+		$contents = [
+			'<?php',
+			'defined(\'_JEXEC\') or die;',
+			'function ' . $function_name . '($article, $module){',
+			implode("\n", $init_variables),
+			$string,
+			';return true;',
+			';}',
+		];
+
+		$contents = implode("\n", $contents);
+
+		// Remove Zero Width spaces / (non-)joiners
+		$contents = str_replace(
+			[
+				"\xE2\x80\x8B",
+				"\xE2\x80\x8C",
+				"\xE2\x80\x8D",
+			],
+			'',
+			$contents
+		);
+
+		return $contents;
+	}
+
+	private function getArticleById($id = 0)
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	{
 		if ( ! $function_name = $this->getFunctionName($string))
 		{
+<<<<<<< HEAD
 			// Something went wrong!
 			return true;
 		}
 
 		return $this->runFunction($function_name, $string, $article, $module);
+=======
+			return null;
+		}
+
+		if ( ! class_exists('ContentModelArticle'))
+		{
+			require_once JPATH_SITE . '/components/com_content/models/article.php';
+		}
+
+		$model = JModel::getInstance('article', 'contentModel');
+
+		if ( ! method_exists($model, 'getItem'))
+		{
+			return null;
+		}
+
+		return $model->getItem($id);
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 
 	private function getFunctionName($string = '')
@@ -137,6 +250,7 @@ class Php extends Condition
 		}
 
 		return $function_name($article, $module);
+<<<<<<< HEAD
 	}
 
 	private function generateFileContents($function_name = 'rl_function', $string = '')
@@ -224,5 +338,7 @@ class Php extends Condition
 			'$user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();',
 			'$Itemid = $app->input->getInt(\'Itemid\');',
 		];
+=======
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
 	}
 }

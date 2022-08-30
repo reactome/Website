@@ -1,6 +1,10 @@
 <?php
 /**
+<<<<<<< HEAD
  * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+=======
+ * @copyright     Copyright (c) 2009-2021 Ryan Demmer. All rights reserved
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -94,6 +98,7 @@ class pkg_jceInstallerScript
                 }
             }
         }
+<<<<<<< HEAD
 
         $message .= JText::_('COM_JCE_XML_DESCRIPTION');
 
@@ -102,6 +107,16 @@ class pkg_jceInstallerScript
 
         $parent->set('message', $message);
 
+=======
+
+        $message .= JText::_('COM_JCE_XML_DESCRIPTION');
+
+        $message .= '   </div>';
+        $message .= '</div>';
+
+        $parent->set('message', $message);
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         // add index files to each folder
         $this->addIndexfiles(array(
             __DIR__,
@@ -180,6 +195,7 @@ class pkg_jceInstallerScript
     public function preflight($route, $installer)
     {
         // skip on uninstall etc.
+<<<<<<< HEAD
         if ($route == 'remove' || $route == 'uninstall') {
             return true;
         }
@@ -209,6 +225,37 @@ class pkg_jceInstallerScript
         // set current variant
         $parent->set('current_variant', $variant);
 
+=======
+        if ($route === "remove") {
+            return true;
+        }
+
+        $requirements = '<a href="https://www.joomlacontenteditor.net/support/documentation/editor/requirements" title="Editor Requirements" target="_blank" rel="noopener">https://www.joomlacontenteditor.net/support/documentation/editor/requirements</a>';
+
+        // php version check
+        if (version_compare(PHP_VERSION, '5.6', 'lt')) {
+            throw new RuntimeException('JCE requires PHP 5.6 or later - ' . $requirements);
+        }
+
+        $jversion = new JVersion();
+
+        // joomla version check
+        if (version_compare($jversion->getShortVersion(), '3.6', 'lt')) {
+            throw new RuntimeException('JCE requires Joomla 3.6 or later - ' . $requirements);
+        }
+
+        $parent = $installer->getParent();
+
+        // set current package version and variant
+        list($version, $variant) = $this->getCurrentVersion();
+
+        // set current version
+        $parent->set('current_version', $version);
+
+        // set current variant
+        $parent->set('current_variant', $variant);
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         // core cannot be installed over pro
         if ($variant === "pro" && (string) $parent->manifest->variant === "core") {
             throw new RuntimeException('JCE Core cannot be installed over JCE Pro. Please install JCE Pro. To downgrade, please first uninstall JCE Pro.');
@@ -246,6 +293,7 @@ class pkg_jceInstallerScript
         }
     }
 
+<<<<<<< HEAD
     private function checkTableUpdate()
     {
         $db = JFactory::getDBO();
@@ -294,6 +342,18 @@ class pkg_jceInstallerScript
 
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jce/tables');
 
+=======
+    public function postflight($route, $installer)
+    {
+        $app = JFactory::getApplication();
+        $extension = JTable::getInstance('extension');
+        $parent = $installer->getParent();
+
+        $db = JFactory::getDBO();
+
+        JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jce/tables');
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
         // remove legacy jcefilebrowser quickicon
         $plugin = JPluginHelper::getPlugin('quickicon', 'jcefilebrowser');
 
@@ -305,6 +365,8 @@ class pkg_jceInstallerScript
                 if ($extension->load($plugin->id)) {
                     $extension->publish(null, 0);
                 }
+<<<<<<< HEAD
+=======
             }
         }
 
@@ -317,6 +379,40 @@ class pkg_jceInstallerScript
                 // remove branding plugin
                 $branding = JPATH_SITE . '/components/com_jce/editor/tiny_mce/plugins/branding';
 
+                if (is_dir($branding)) {
+                    JFolder::delete($branding);
+                }
+
+                // clean up updates sites
+                $query = $db->getQuery(true);
+
+                $query->select('update_site_id')->from('#__update_sites');
+                $query->where($db->qn('location') . ' = ' . $db->q('https://cdn.joomlacontenteditor.net/updates/xml/editor/pkg_jce.xml'));
+                $db->setQuery($query);
+                $id = $db->loadResult();
+
+                if ($id) {
+                    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_installer/models');
+                    $model = JModelLegacy::getInstance('Updatesites', 'InstallerModel');
+
+                    if ($model) {
+                        $model->delete(array($id));
+                    }
+                }
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
+            }
+        }
+
+        if ($route == 'update') {
+            $version = (string) $parent->manifest->version;
+            $current_version = (string) $parent->get('current_version');
+
+            // process core to pro upgrade - remove branding plugin
+            if ((string) $parent->manifest->variant === "pro") {
+                // remove branding plugin
+                $branding = JPATH_SITE . '/components/com_jce/editor/tiny_mce/plugins/branding';
+
+<<<<<<< HEAD
                 if (is_dir($branding)) {
                     JFolder::delete($branding);
                 }
@@ -678,6 +774,18 @@ class pkg_jceInstallerScript
                         JFolder::delete($folder);
                     } catch (Exception $e) {}
                 }
+=======
+            $theme = '';
+
+            // update toolbar_theme for 2.8.0 and 2.8.1 beta
+            if (version_compare($current_version, '2.8.0', '>=') && version_compare($current_version, '2.8.1', '<')) {
+                $theme = 'modern';
+            }
+
+            // update toolbar_theme for 2.7.x
+            if (version_compare($current_version, '2.8', '<')) {
+                $theme = 'default';
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
             }
         }
 
@@ -692,6 +800,325 @@ class pkg_jceInstallerScript
                     continue;
                 }
 
+<<<<<<< HEAD
+=======
+            // update toolbar_theme if one has been set
+            if ($theme) {
+                $table = JTable::getInstance('Profiles', 'JceTable');
+
+                $query = $db->getQuery(true);
+
+                $query->select('*')->from('#__wf_profiles');
+                $db->setQuery($query);
+                $profiles = $db->loadObjectList();
+
+                foreach ($profiles as $profile) {
+                    if (empty($profile->params)) {
+                        $profile->params = '{}';
+                    }
+
+                    $data = json_decode($profile->params, true);
+
+                    if (false !== $data) {
+                        if (empty($data)) {
+                            $data = array();
+                        }
+
+                        // no editor parameters set at all!
+                        if (!isset($data['editor'])) {
+                            $data['editor'] = array();
+                        }
+
+                        $param = array(
+                            'toolbar_theme' => $theme
+                        );
+
+                        // add variant for "mobile" profile
+                        if ($profile->name === "Mobile") {
+                            $param['toolbar_theme'] .= '.touch';
+                        }
+ 
+                        if (empty($data['editor']['toolbar_theme'])) {
+                            $data['editor']['toolbar_theme'] = $param['toolbar_theme'];
+
+                            if (!$table->load($profile->id)) {
+                                throw new Exception('Unable to update profile - ' . $profile->name);
+                            }
+
+                            $table->params = json_encode($data);
+
+                            if (!$table->store()) {
+                                throw new Exception('Unable to update profile - ' . $profile->name);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // enable content, system and quickicon plugins
+            foreach (array('content', 'system', 'quickicon') as $folder) {
+                $plugin = $extension->find(array(
+                    'type' => 'plugin',
+                    'element' => 'jce',
+                    'folder' => $folder,
+                ));
+
+                if ($plugin) {
+                    $extension->publish(null, 1);
+                }
+            }
+
+            self::cleanupInstall($installer);
+        }
+    }
+
+    protected static function cleanupInstall($installer)
+    {
+        $parent = $installer->getParent();
+        $current_version = $parent->get('current_version');
+
+        $admin = JPATH_ADMINISTRATOR . '/components/com_jce';
+        $site = JPATH_SITE . '/components/com_jce';
+
+        $folders = array();
+        $files = array();
+
+        $folders['2.6.38'] = array(
+            // admin
+            $admin . '/classes',
+            $admin . '/elements',
+            $admin . '/media/fonts',
+            $admin . '/img/menu',
+            $admin . '/views/preferences',
+            $admin . '/views/users',
+            // site
+            $site . '/editor/elements',
+            $site . '/editor/extensions/aggregator/vine',
+            $site . '/editor/extensions/popups/window',
+            // site - tinymce plugins
+            $site . '/editor/tiny_mce/plugins/advlist/classes',
+            $site . '/editor/tiny_mce/plugins/article/classes',
+            $site . '/editor/tiny_mce/plugins/browser/classes',
+            $site . '/editor/tiny_mce/plugins/caption/classes',
+            $site . '/editor/tiny_mce/plugins/charmap/classes',
+            $site . '/editor/tiny_mce/plugins/cleanup/classes',
+            $site . '/editor/tiny_mce/plugins/clipboard/classes',
+            $site . '/editor/tiny_mce/plugins/code/classes',
+            $site . '/editor/tiny_mce/plugins/colorpicker/classes',
+            $site . '/editor/tiny_mce/plugins/emotions/classes',
+            $site . '/editor/tiny_mce/plugins/filemanager/classes',
+            $site . '/editor/tiny_mce/plugins/fontcolor/classes',
+            $site . '/editor/tiny_mce/plugins/fontselect/classes',
+            $site . '/editor/tiny_mce/plugins/fontsizeselect/classes',
+            $site . '/editor/tiny_mce/plugins/format/classes',
+            $site . '/editor/tiny_mce/plugins/formatselect/classes',
+            $site . '/editor/tiny_mce/plugins/iframe/classes',
+            $site . '/editor/tiny_mce/plugins/imgmanager/classes',
+            $site . '/editor/tiny_mce/plugins/imgmanager_ext/classes',
+            $site . '/editor/tiny_mce/plugins/inlinepopups/classes',
+            $site . '/editor/tiny_mce/plugins/link/classes',
+            $site . '/editor/tiny_mce/plugins/media/classes',
+            $site . '/editor/tiny_mce/plugins/mediamanager/classes',
+            $site . '/editor/tiny_mce/plugins/microdata/classes',
+            $site . '/editor/tiny_mce/plugins/preview/classes',
+            $site . '/editor/tiny_mce/plugins/searchreplace/classes',
+            $site . '/editor/tiny_mce/plugins/source/classes',
+            $site . '/editor/tiny_mce/plugins/style/classes',
+            $site . '/editor/tiny_mce/plugins/styleselect/classes',
+            $site . '/editor/tiny_mce/plugins/tabfocus/classes',
+            $site . '/editor/tiny_mce/plugins/table/classes',
+            $site . '/editor/tiny_mce/plugins/templatemanager/classes',
+            $site . '/editor/tiny_mce/plugins/textpattern/classes',
+            $site . '/editor/tiny_mce/plugins/visualblocks/classes',
+            $site . '/editor/tiny_mce/plugins/visualchars/classes',
+            $site . '/editor/tiny_mce/plugins/xhtmlxtras/classes',
+        );
+
+        // remove flexicontent
+        if (!JComponentHelper::isInstalled('com_flexicontent')) {
+            $files['2.7'] = array(
+                $site . '/editor/extensions/links/flexicontentlinks.php',
+                $site . '/editor/extensions/links/flexicontentlinks.xml',
+            );
+
+            $folders['2.7'] = array(
+                $site . '/editor/extensions/links/flexicontentlinks'
+            );
+        }
+
+        // remove inlinepopups
+        $folders['2.7.13'] = array(
+            $site . '/editor/tiny_mce/plugins/inlinepopups',
+        );
+
+        // remove classpath / classbar
+        $folders['2.8.0'] = array(
+            $site . '/editor/tiny_mce/plugins/classpath',
+            $site . '/editor/tiny_mce/plugins/classbar',
+        );
+
+        // remove help files
+        $folders['2.8.6'] = array(
+            $admin . '/views/help'
+        );
+
+        // remove mediaplayer
+        $folders['2.8.11'] = array(
+            $site . '/editor/libraries/mediaplayer'
+        );
+
+        // delete img folder in Image Manager Extended
+        $folders['2.9.1'] = array(
+            $site . '/editor/tiny_mce/plugins/imgmanager_ext/img'
+        );
+
+        // remove getid3
+        $folders['2.9.7'] = array(
+            $site . '/editor/libraries/classes/vendor/getid3'
+        );
+
+        // remove old logo
+        $files['2.9.9'] = array(
+            $admin . '/media/img/logo.png'
+        );
+
+        $files['2.6.38'] = array(
+            $admin . '/install.php',
+            $admin . '/install.script.php',
+            // controller
+            $admin . '/controller/preferences.php',
+            $admin . '/controller/popups.php',
+            $admin . '/controller/updates.php',
+            // helpers
+            $admin . '/helpers/cacert.pem',
+            $admin . '/helpers/editor.php',
+            $admin . '/helpers/toolbar.php',
+            $admin . '/helpers/updates.php',
+            $admin . '/helpers/xml.php',
+            // includes
+            $admin . '/includes/loader.php',
+            // css
+            $admin . '/media/css/cpanel.css',
+            $admin . '/media/css/legacy.min.css',
+            $admin . '/media/css/module.css',
+            $admin . '/media/css/preferences.css',
+            $admin . '/media/css/updates.css',
+            $admin . '/media/css/users.css',
+            // js
+            $admin . '/media/js/cpanel.js',
+            $admin . '/media/js/jce.js',
+            $admin . '/media/js/preferences.js',
+            $admin . '/media/js/updates.js',
+            $admin . '/media/js/users.js',
+            // models
+            $admin . '/models/commands.json',
+            $admin . '/models/config.xml',
+            $admin . '/models/cpanel.xml',
+            $admin . '/models/model.php',
+            $admin . '/models/plugins.json',
+            $admin . '/models/plugins.php',
+            $admin . '/models/preferences.php',
+            $admin . '/models/preferences.xml',
+            $admin . '/models/pro.json',
+            $admin . '/models/updates.php',
+            $admin . '/models/users.php',
+            // views
+            $admin . '/views/cpanel/tmpl/default_pro_footer.php',
+            $admin . '/views/profiles/tmpl/form_editor.php',
+            $admin . '/views/profiles/tmpl/form_features.php',
+            $admin . '/views/profiles/tmpl/form_plugin.php',
+            $admin . '/views/profiles/tmpl/form_setup.php',
+            $admin . '/views/profiles/tmpl/form.php',
+            // site - extensions
+            $site . '/editor/extensions/aggregator/vine.php',
+            $site . '/editor/extensions/aggregator/vine.xml',
+            $site . '/editor/extensions/popups/window.php',
+            $site . '/editor/extensions/popups/window.xml',
+            // site - libraries
+            $site . '/editor/libraries/classes/token.php',
+            // site - fonts
+            $site . '/editor/libraries/fonts/fontawesome-webfont.eot',
+            $site . '/editor/libraries/fonts/fontawesome-webfont.woff',
+            // sites - img
+            $site . '/editor/libraries/img/cloud.png',
+            $site . '/editor/libraries/img/power.png',
+            $site . '/editor/libraries/img/spacer.gif',
+            // site - tinymce plugins
+            $site . '/editor/tiny_mce/plugins/caption/licence.txt',
+            $site . '/editor/tiny_mce/plugins/caption/README',
+            $site . '/editor/tiny_mce/plugins/iframe/licence.txt',
+            $site . '/editor/tiny_mce/plugins/imgmanager_ext/install.php',
+            $site . '/editor/tiny_mce/plugins/imgmanager_ext/licence.txt',
+            $site . '/editor/tiny_mce/plugins/imgmanager_ext/README',
+            $site . '/editor/tiny_mce/plugins/mediamanager/README',
+            $site . '/editor/tiny_mce/plugins/spellchecker/classes/config.php',
+            $site . '/editor/tiny_mce/plugins/templatemanager/licence.txt',
+            $site . '/editor/tiny_mce/plugins/templatemanager/README',
+        );
+
+        // remove help files
+        $files['2.8.6'] = array(
+            $admin . '/controller/help.php',
+            $admin . '/models/help.php',
+            $admin . '/media/css/help.min.css',
+            $admin . '/media/js/help.min.js'
+        );
+
+        $files['2.8.11'] = array(
+            $admin . '/views/cpanel/default_pro.php'
+        );
+
+        foreach ($folders as $version => $list) {
+            // version check
+            if (version_compare($version, $current_version, 'gt')) {
+                continue;
+            }
+
+            foreach ($list as $folder) {
+                if (!@is_dir($folder)) {
+                    continue;
+                }
+
+                $items = JFolder::files($folder, '.', false, true, array(), array());
+
+                foreach ($items as $file) {
+                    if (!@unlink($file)) {
+                        try {
+                            JFile::delete($file);
+                        } catch (Exception $e) {}
+                    }
+                }
+
+                $items = JFolder::folders($folder, '.', false, true, array(), array());
+
+                foreach ($items as $dir) {
+                    if (!@rmdir($dir)) {
+                        try {
+                            JFolder::delete($dir);
+                        } catch (Exception $e) {}
+                    }
+                }
+
+                if (!@rmdir($folder)) {
+                    try {
+                        JFolder::delete($folder);
+                    } catch (Exception $e) {}
+                }
+            }
+        }
+
+        foreach ($files as $version => $list) {
+            // version check
+            if (version_compare($version, $current_version, 'gt')) {
+                continue;
+            }
+
+            foreach ($list as $file) {
+                if (!@file_exists($file)) {
+                    continue;
+                }
+
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
                 if (@unlink($file)) {
                     continue;
                 }

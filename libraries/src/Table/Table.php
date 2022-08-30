@@ -2,7 +2,11 @@
 /**
  * Joomla! Content Management System
  *
+<<<<<<< HEAD
  * @copyright  (C) 2005 Open Source Matters, Inc. <https://www.joomla.org>
+=======
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+>>>>>>> e1b2f01623577002e6d005616cb059ca4e2f8090
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -1163,6 +1167,9 @@ abstract class Table extends \JObject implements \JObservableInterface, \JTableI
 		// Set table values in the object.
 		$this->$checkedOutField     = $this->_supportNullValue ? null : 0;
 		$this->$checkedOutTimeField = $this->_supportNullValue ? null : '';
+
+		$dispatcher = \JEventDispatcher::getInstance();
+		$dispatcher->trigger('onAfterCheckin', array($this->_tbl));
 
 		$dispatcher = \JEventDispatcher::getInstance();
 		$dispatcher->trigger('onAfterCheckin', array($this->_tbl));
