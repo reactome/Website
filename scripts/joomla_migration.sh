@@ -92,14 +92,13 @@ sshpass_exists () {
 }
 
 normalise_owner_and_permissions () {
-    SERVER="${RELEASE_SERVER}.reactome.org"
     # make sure files have set user and group before moving them (SOURCE)
     echo "Updating file's owner in the source server [${RELEASE_SERVER}] before synchronisation."
 
     sshpass -p ${SRCOSPASSWD} sudo -S -u ${SRCOSUSER} sudo chown -R ${OWNER} ${_JOOMLA_STATIC}
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${SERVER}]"
+        echo "[ERROR] Couldn't normalise the owner (${OWNER}) of the static folder ${_JOOMLA_STATIC} in the Source server [${RELEASE_SERVER}]"
         exit
     fi
 
@@ -107,7 +106,7 @@ normalise_owner_and_permissions () {
     sshpass -p ${SRCOSPASSWD} sudo -S -u ${SRCOSUSER} sudo find ${_JOOMLA_STATIC} -type d -exec chmod 775 {} \; &> /dev/null
     OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        echo "[ERROR] Couldn't normalise the mode bits in the static folder ${_JOOMLA_STATIC} in the Source server [${SERVER}]"
+        echo "[ERROR] Couldn't normalise the mode bits in the static folder ${_JOOMLA_STATIC} in the Source server [${RELEASE_SERVER}]"
         exit
     fi
 }
@@ -126,12 +125,11 @@ normalise_owner_permissions_and_flags_remote () {
 
 # Credentials in for the source (mainly release) is needed in the website update phase.
 validate_source_credentials () {
-    SERVER="${RELEASE_SERVER}.reactome.org"
-    echo "Validating [${SERVER}] credentials..."
+    echo "Validating [${RELEASE_SERVER}] credentials..."
     sshpass -p ${SRCOSPASSWD} sudo -S -u ${SRCOSUSER} sudo ls &> /dev/null
     local OUT=$?
     if [[ "$OUT" -ne 0 ]]; then
-        echo "[ERROR] Can't connect to SOURCE server [${SERVER}]. Please type a valid OS user [${SRCOSUSER}] and password"
+        echo "[ERROR] Can't connect to SOURCE server [${RELEASE_SERVER}]. Please type a valid OS user [${SRCOSUSER}] and password"
         exit
     fi
 }
