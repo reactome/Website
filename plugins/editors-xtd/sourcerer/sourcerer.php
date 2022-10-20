@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         9.2.3
+ * @version         9.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -16,24 +16,24 @@ use RegularLabs\Library\Extension as RL_Extension;
 defined('_JEXEC') or die;
 
 if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php')
-	|| ! is_file(JPATH_LIBRARIES . '/regularlabs/src/EditorButtonPlugin.php')
+    || ! is_file(JPATH_LIBRARIES . '/regularlabs/src/EditorButtonPlugin.php')
 )
 {
-	return;
+    return;
 }
 
 require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 if ( ! RL_Document::isJoomlaVersion(3))
 {
-	RL_Extension::disable('sourcerer', 'plugin', 'editors-xtd');
+    RL_Extension::disable('sourcerer', 'plugin', 'editors-xtd');
 
-	return;
+    return;
 }
 
 if (true)
 {
-	class PlgButtonSourcerer extends RL_EditorButtonPlugin
-	{
-	}
+    class PlgButtonSourcerer extends RL_EditorButtonPlugin
+    {
+    }
 }

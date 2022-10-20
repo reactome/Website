@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -58,6 +58,11 @@ class HikashopCategory extends Hikashop
         return $this->passSimple($cats);
     }
 
+    private function getCatParentIds($id = 0)
+    {
+        return $this->getParentIds($id, 'hikashop_category', 'category_parent_id', 'category_id');
+    }
+
     private function getCategories()
     {
         switch (true)
@@ -85,10 +90,5 @@ class HikashopCategory extends Hikashop
             default:
                 return [];
         }
-    }
-
-    private function getCatParentIds($id = 0)
-    {
-        return $this->getParentIds($id, 'hikashop_category', 'category_parent_id', 'category_id');
     }
 }

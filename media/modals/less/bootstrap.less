@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         11.10.1
+ * @version         11.11.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -21,179 +21,179 @@
  */
 
 #rl_modals_overlay {
-	background-color: @black;
-	.opacity(80);
+    background-color: @black;
+    .opacity(80);
 }
 
 #rl_modals {
-	outline:          0;
-	top:              50%;
-	left:             50%;
-	background-color: @white;
-	border:           1px solid rgba(0, 0, 0, .3);
-	.border-radius(6px);
-	.box-shadow(0 3px 7px rgba(0, 0, 0, 0.3));
-	.background-clip(padding-box);
-	margin:           0 !important;
+    outline:          0;
+    top:              50%;
+    left:             50%;
+    background-color: @white;
+    border:           1px solid rgba(0, 0, 0, .3);
+    .border-radius(6px);
+    .box-shadow(0 3px 7px rgba(0, 0, 0, 0.3));
+    .background-clip(padding-box);
+    margin:           0 !important;
 }
 
 #rl_modals_content {
-	overflow: hidden;
+    overflow: hidden;
 }
 
 #rl_modals_loaded_content {
-	overflow-y:    auto;
-	padding:       15px;
-	margin-top:    44px;
-	margin-bottom: 0;
-	max-height:    none;
+    overflow-y:    auto;
+    padding:       15px;
+    margin-top:    44px;
+    margin-bottom: 0;
+    max-height:    none;
 
-	#rl_modals.is_image &,
-	#rl_modals.is_video & {
-		padding: 0;
-	}
+    #rl_modals.is_image &,
+    #rl_modals.is_video & {
+        padding: 0;
+    }
 }
 
 #rl_modals_title {
-	border-bottom:  1px solid #eeeeee;
-	position:       absolute;
-	top:            0;
-	left:           0;
-	right:          0;
-	margin:         0;
-	padding:        9px 25px 9px 15px;
-	color:          @headingsColor;
-	text-align:     left;
-	text-rendering: optimizelegibility;
-	font-size:      20px;
-	line-height:    24px;
-	font-weight:    bold;
-	min-height:     24px;
+    border-bottom:  1px solid #eeeeee;
+    position:       absolute;
+    top:            0;
+    left:           0;
+    right:          0;
+    margin:         0;
+    padding:        9px 25px 9px 15px;
+    color:          @headingsColor;
+    text-align:     left;
+    text-rendering: optimizelegibility;
+    font-size:      20px;
+    line-height:    24px;
+    font-weight:    bold;
+    min-height:     24px;
 
-	small {
-		font-weight: normal;
-	}
+    small {
+        font-weight: normal;
+    }
 }
 
 .cbimg {
-	border:      0;
-	font:        0/0 a;
-	text-shadow: none;
-	color:       transparent;
-	position:    absolute;
-	width:       14px;
-	height:      14px;
-	line-height: 14px;
-	background:  transparent url("../images/bootstrap/controls.png") no-repeat 0 0;
-	.ie7-restore-right-whitespace();
-	.box-sizing(border-box);
+    border:      0;
+    font:        0/0 a;
+    text-shadow: none;
+    color:       transparent;
+    position:    absolute;
+    width:       14px;
+    height:      14px;
+    line-height: 14px;
+    background:  transparent url("../images/bootstrap/controls.png") no-repeat 0 0;
+    .ie7-restore-right-whitespace();
+    .box-sizing(border-box);
 }
 
 #rl_modals_previous,
 #rl_modals_next,
 #rl_modals_slideshow {
-	.cbimg();
-	top:    50%;
-	width:  42px;
-	height: 44px;
+    .cbimg();
+    top:    50%;
+    width:  42px;
+    height: 44px;
 }
 
 #rl_modals_current,
 #rl_modals_previous,
 #rl_modals_next,
 #rl_modals_slideshow {
-	position:         absolute;
-	background-color: @white;
-	border:           15px solid @white;
-	.border-radius(6px);
-	.box-shadow(0 0 10px rgba(0, 0, 0, .5));
-	.opacity(0);
+    position:         absolute;
+    background-color: @white;
+    border:           15px solid @white;
+    .border-radius(6px);
+    .box-shadow(0 0 10px rgba(0, 0, 0, .5));
+    .opacity(0);
 }
 
 #rl_modals_content:hover #rl_modals_current,
 #rl_modals_content:hover #rl_modals_previous,
 #rl_modals_content:hover #rl_modals_next,
 #rl_modals_content:hover #rl_modals_slideshow {
-	.opacity(100);
+    .opacity(100);
 }
 
 #rl_modals_current {
-	font-weight: bold;
-	line-height: 1em;
-	bottom:      0;
-	right:       0;
-	.border-radius(6px 0 6px 0);
+    font-weight: bold;
+    line-height: 1em;
+    bottom:      0;
+    right:       0;
+    .border-radius(6px 0 6px 0);
 }
 
 #rl_modals_previous {
-	background-position: 0 0;
-	left:                0;
-	.border-radius(0 6px 6px 0);
+    background-position: 0 0;
+    left:                0;
+    .border-radius(0 6px 6px 0);
 }
 
 #rl_modals_next {
-	background-position: -24px 0;
-	right:               0;
-	.border-radius(6px 0 0 6px);
+    background-position: -24px 0;
+    right:               0;
+    .border-radius(6px 0 0 6px);
 }
 
 #rl_modals_slideshow {
-	background-position: -48px 0;
-	left:                50%;
-	right:               50%;
+    background-position: -48px 0;
+    left:                50%;
+    right:               50%;
 }
 
 .rl_modals_slideshow_on #rl_modals_slideshow {
-	background-position: -72px 0;
+    background-position: -72px 0;
 }
 
 #rl_modals_close {
-	.cbimg();
-	background-position: -96px 0;
-	top:                 14px;
-	right:               15px;
-	.opacity(30);
+    .cbimg();
+    background-position: -96px 0;
+    top:                 14px;
+    right:               15px;
+    .opacity(30);
 
-	&:hover {
-		.opacity(80);
-	}
+    &:hover {
+        .opacity(80);
+    }
 }
 
 #rl_modals_loading_graphic {
-	background: transparent url(../images/bootstrap/loading.gif) no-repeat 50% 50%;
-	.opacity(80);
-	height:     100%;
+    background: transparent url(../images/bootstrap/loading.gif) no-repeat 50% 50%;
+    .opacity(80);
+    height:     100%;
 }
 
 .no_title {
-	#rl_modals_title {
-		height:        0 !important;
-		min-height:    0;
-		padding:       0;
-		border-bottom: none;
-	}
+    #rl_modals_title {
+        height:        0 !important;
+        min-height:    0;
+        padding:       0;
+        border-bottom: none;
+    }
 
-	#rl_modals_loaded_content {
-		margin-top: 0 !important;
-	}
+    #rl_modals_loaded_content {
+        margin-top: 0 !important;
+    }
 
-	#rl_modals_close {
-		right: 3px;
-		top:   3px;
-	}
+    #rl_modals_close {
+        right: 3px;
+        top:   3px;
+    }
 
-	&.has_scrollbar {
-		#rl_modals_close {
-			right: 18px;
-		}
-	}
+    &.has_scrollbar {
+        #rl_modals_close {
+            right: 18px;
+        }
+    }
 }
 
 #rl_modals_title .countdown {
-	width:            100%;
-	height:           2px;
-	position:         absolute;
-	top:              0;
-	left:             0;
-	background-color: @blue;
+    width:            100%;
+    height:           2px;
+    position:         absolute;
+    top:              0;
+    left:             0;
+    background-color: @blue;
 }

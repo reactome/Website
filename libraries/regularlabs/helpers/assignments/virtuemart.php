@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -114,11 +114,6 @@ class RLAssignmentsVirtueMart extends RLAssignment
         return $this->passSimple($cats);
     }
 
-    private function getCatParentIds($id = 0)
-    {
-        return $this->getParentIds($id, 'virtuemart_category_categories', 'category_parent_id', 'category_child_id');
-    }
-
     public function passPageTypes()
     {
         // Because VM sucks, we have to get the view again
@@ -138,5 +133,10 @@ class RLAssignmentsVirtueMart extends RLAssignment
         }
 
         return $this->passSimple($this->request->id);
+    }
+
+    private function getCatParentIds($id = 0)
+    {
+        return $this->getParentIds($id, 'virtuemart_category_categories', 'category_parent_id', 'category_child_id');
     }
 }

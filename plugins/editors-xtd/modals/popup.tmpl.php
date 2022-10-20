@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.10.1
+ * @version         11.11.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -27,55 +27,55 @@ $form->loadFile($xmlfile, 1, '//config');
 <?php include 'layouts/nav.php'; ?>
 
 <div class="container-fluid container-main">
-	<form action="index.php" id="modalsForm" method="post">
-		<input type="hidden" name="type" id="type" value="url">
+    <form action="index.php" id="modalsForm" method="post">
+        <input type="hidden" name="type" id="type" value="url">
 
-		<div class="form-inline form-inline-header">
-			<?php echo $form->renderFieldset('text'); ?>
-		</div>
+        <div class="form-inline form-inline-header">
+            <?php echo $form->renderFieldset('text'); ?>
+        </div>
 
-		<div class="row">
+        <div class="row">
 
-			<div class="span8">
-				<?php
-				$tabs = [
-					'url'     => ['RL_URL', 'link'],
-					'image'   => ['RL_IMAGE', 'image'],
-					'gallery' => ['RL_GALLERY', 'images'],
-					'video'   => ['RL_VIDEO', 'video-2'],
-					'article' => ['RL_ARTICLE', 'file-2'],
-					'content' => ['RL_CONTENT', 'paragraph-justify'],
-				];
+            <div class="span8">
+                <?php
+                $tabs = [
+                    'url'     => ['RL_URL', 'link'],
+                    'image'   => ['RL_IMAGE', 'image'],
+                    'gallery' => ['RL_GALLERY', 'images'],
+                    'video'   => ['RL_VIDEO', 'video-2'],
+                    'article' => ['RL_ARTICLE', 'file-2'],
+                    'content' => ['RL_CONTENT', 'paragraph-justify'],
+                ];
 
-				echo JHtml::_('bootstrap.startTabSet', 'myTab', ['active' => 'tab-url']);
+                echo JHtml::_('bootstrap.startTabSet', 'myTab', ['active' => 'tab-url']);
 
-				foreach ($tabs as $id => $data)
-				{
-					echo JHtml::_('bootstrap.addTab', 'myTab', 'tab-' . $id,
-						'<span class="icon-' . $data[1] . '"></span> ' . JText::_($data[0])
-					);
-					echo $form->renderFieldset($id);
-					echo JHtml::_('bootstrap.endTab');
-				}
+                foreach ($tabs as $id => $data)
+                {
+                    echo JHtml::_('bootstrap.addTab', 'myTab', 'tab-' . $id,
+                        '<span class="icon-' . $data[1] . '"></span> ' . JText::_($data[0])
+                    );
+                    echo $form->renderFieldset($id);
+                    echo JHtml::_('bootstrap.endTab');
+                }
 
-				echo JHtml::_('bootstrap.endTabSet');
-				?>
-			</div>
+                echo JHtml::_('bootstrap.endTabSet');
+                ?>
+            </div>
 
-			<div class="span4">
-				<?php echo $form->renderFieldset('settings'); ?>
-			</div>
-		</div>
+            <div class="span4">
+                <?php echo $form->renderFieldset('settings'); ?>
+            </div>
+        </div>
 
-		<div class="alert alert-warning">
-			<?php
-			echo JText::sprintf(
-				'MDL_MORE_SETTINGS',
-				'<a href="https://regularlabs.com/modals" target="_blank">',
-				'</a>'
-			);
-			?>
-		</div>
+        <div class="alert alert-warning">
+            <?php
+            echo JText::sprintf(
+                'MDL_MORE_SETTINGS',
+                '<a href="https://regularlabs.com/modals" target="_blank">',
+                '</a>'
+            );
+            ?>
+        </div>
 
-	</form>
+    </form>
 </div>

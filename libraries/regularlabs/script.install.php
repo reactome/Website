@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -11,25 +11,20 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory as JFactory;
+
 if ( ! class_exists('RegularLabsInstallerScript'))
 {
-    require_once __DIR__ . '/script.install.helper.php';
-
-    class RegularLabsInstallerScript extends RegularLabsInstallerScriptHelper
+    class RegularLabsInstallerScript
     {
-        public $name           = 'Regular Labs Library';
-        public $alias          = 'regularlabs';
-        public $extension_type = 'library';
-        public $soft_break     = true;
-
-        public function onBeforeInstall($route)
+        public function postflight($install_type, $adapter)
         {
-            if ( ! parent::onBeforeInstall($route))
+            if ( ! in_array($install_type, ['install', 'update']))
             {
-                return false;
+                return true;
             }
 
-            return $this->isNewer();
+            JFactory::getCache()->clean('_system');
         }
     }
 }

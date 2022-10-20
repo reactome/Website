@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -81,7 +81,7 @@ $attributes_number = [
     $autofocus ? 'autofocus' : '',
 ];
 
-$chars = strlen($max) ?: $size ?: 4;
+$chars = (strlen($max) ?: $size) ?: 4;
 $width = $chars * 8;
 
 $classes = [];

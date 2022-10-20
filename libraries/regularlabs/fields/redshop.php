@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -45,6 +45,37 @@ class JFormFieldRL_RedShop extends FieldGroup
         return $this->getOptionsTreeByList($items);
     }
 
+    public function getProducts()
+    {
+        $query = $this->db->getQuery(true)
+            ->select('COUNT(*)')
+            ->from('#__redshop_product AS p')
+            ->where('p.published > -1');
+        $this->db->setQuery($query);
+        $total = $this->db->loadResult();
+
+        if ($total > $this->max_list_count)
+        {
+            return -1;
+        }
+
+        $this->db->setQuery($this->getProductsQuery());
+        $list = $this->db->loadObjectList();
+
+        return $this->getOptionsByList($list, ['number', 'cat']);
+    }
+
+    protected function getInput()
+    {
+        $error = $this->missingFilesOrTables(['categories' => 'category', 'products' => 'product']);
+        if ($error)
+        {
+            return $error;
+        }
+
+        return $this->getSelectList();
+    }
+
     private function getCategoriesQuery()
     {
         $query = $this->db->getQuery(true)
@@ -70,26 +101,6 @@ class JFormFieldRL_RedShop extends FieldGroup
         return $query;
     }
 
-    public function getProducts()
-    {
-        $query = $this->db->getQuery(true)
-            ->select('COUNT(*)')
-            ->from('#__redshop_product AS p')
-            ->where('p.published > -1');
-        $this->db->setQuery($query);
-        $total = $this->db->loadResult();
-
-        if ($total > $this->max_list_count)
-        {
-            return -1;
-        }
-
-        $this->db->setQuery($this->getProductsQuery());
-        $list = $this->db->loadObjectList();
-
-        return $this->getOptionsByList($list, ['number', 'cat']);
-    }
-
     private function getProductsQuery()
     {
         $query = $this->db->getQuery(true)
@@ -113,16 +124,5 @@ class JFormFieldRL_RedShop extends FieldGroup
             ->join('LEFT', '#__redshop_category AS c ON c.id = x.category_id');
 
         return $query;
-    }
-
-    protected function getInput()
-    {
-        $error = $this->missingFilesOrTables(['categories' => 'category', 'products' => 'product']);
-        if ($error)
-        {
-            return $error;
-        }
-
-        return $this->getSelectList();
     }
 }

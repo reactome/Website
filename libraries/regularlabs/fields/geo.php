@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -2590,6 +2590,45 @@ class JFormFieldRL_Geo extends Field
     ];
     public $type             = 'Geo';
 
+    public function cleanRegions($regions)
+    {
+        $regions = str_replace('"', '', $regions);
+
+        $regions = htmlspecialchars($regions);
+
+        // LR,MY, name for US-MD,Maryland,Maryland
+        // >>
+        // LR,MY,Maryland,Maryland
+        // US,MD,Maryland,Maryland
+        $regex = '(\n[^,]*),([^\n]*), name for ([^-]*)-([^,]*),([^\n]*\n)';
+        RL_RegEx::match($regex, $regions, $match);
+        while ($match)
+        {
+            $regions = RL_RegEx::replace($regex, '\1,\2,\5\3,\4,\5', $regions);
+
+            RL_RegEx::match($regex, $regions, $match);
+        }
+
+        // LR,MY,Maryland,Maryland
+        // >>
+        // LR,MY,Maryland
+        $regions = RL_RegEx::replace('(\n[^,]*,[^,]*),([^,]*),\2', '\1,\2', $regions);
+
+        // LR,MY,District of Columbia,Disricte de Columbia
+        // >>
+        // LR, MY, District of Columbia, Disricte de Columbia
+        $regions = str_replace(',', ', ', $regions);
+
+        // GB, WRX, Wrexham;Wrecsam
+        // >>
+        // GB, WRX, Wrexham (Wrecsam)
+        $regions = RL_RegEx::replace('(\n[^,]*,[^,]*,[^;]*);([^\n]*)', '\1 (\2)', $regions);
+
+        $regions = trim(RL_RegEx::replace('  +', ' ', $regions));
+
+        return explode("\n", $regions);
+    }
+
     public function getAjaxRaw(Registry $attributes)
     {
         $name  = $attributes->get('name', $this->type);
@@ -2654,45 +2693,6 @@ class JFormFieldRL_Geo extends Field
 
     private function getRegionArrayByFile()
     {
-    }
-
-    public function cleanRegions($regions)
-    {
-        $regions = str_replace('"', '', $regions);
-
-        $regions = htmlspecialchars($regions);
-
-        // LR,MY, name for US-MD,Maryland,Maryland
-        // >>
-        // LR,MY,Maryland,Maryland
-        // US,MD,Maryland,Maryland
-        $regex = '(\n[^,]*),([^\n]*), name for ([^-]*)-([^,]*),([^\n]*\n)';
-        RL_RegEx::match($regex, $regions, $match);
-        while ($match)
-        {
-            $regions = RL_RegEx::replace($regex, '\1,\2,\5\3,\4,\5', $regions);
-
-            RL_RegEx::match($regex, $regions, $match);
-        }
-
-        // LR,MY,Maryland,Maryland
-        // >>
-        // LR,MY,Maryland
-        $regions = RL_RegEx::replace('(\n[^,]*,[^,]*),([^,]*),\2', '\1,\2', $regions);
-
-        // LR,MY,District of Columbia,Disricte de Columbia
-        // >>
-        // LR, MY, District of Columbia, Disricte de Columbia
-        $regions = str_replace(',', ', ', $regions);
-
-        // GB, WRX, Wrexham;Wrecsam
-        // >>
-        // GB, WRX, Wrexham (Wrecsam)
-        $regions = RL_RegEx::replace('(\n[^,]*,[^,]*,[^;]*);([^\n]*)', '\1 (\2)', $regions);
-
-        $regions = trim(RL_RegEx::replace('  +', ' ', $regions));
-
-        return explode("\n", $regions);
     }
 
     private function getRegionName($country, $region)

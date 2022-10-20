@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -26,20 +26,6 @@ require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 class JFormFieldRL_Agents extends Field
 {
     public $type = 'Agents';
-
-    public function getAjaxRaw(Registry $attributes)
-    {
-        $name  = $attributes->get('name', $this->type);
-        $id    = $attributes->get('id', strtolower($name));
-        $value = $attributes->get('value', []);
-        $size  = $attributes->get('size');
-
-        $options = $this->getAgents(
-            $attributes->get('group')
-        );
-
-        return $this->selectListSimple($options, $name, $value, $id, $size, true);
-    }
 
     public function getAgents($group = 'os')
     {
@@ -106,6 +92,20 @@ class JFormFieldRL_Agents extends Field
         }
 
         return $options;
+    }
+
+    public function getAjaxRaw(Registry $attributes)
+    {
+        $name  = $attributes->get('name', $this->type);
+        $id    = $attributes->get('id', strtolower($name));
+        $value = $attributes->get('value', []);
+        $size  = $attributes->get('size');
+
+        $options = $this->getAgents(
+            $attributes->get('group')
+        );
+
+        return $this->selectListSimple($options, $name, $value, $id, $size, true);
     }
 
     protected function getInput()

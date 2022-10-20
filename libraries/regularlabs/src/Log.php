@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -24,6 +24,22 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel as JModel;
  */
 class Log
 {
+    public static function add($message, $languageKey, $context)
+    {
+        $user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
+
+        $message['userid']      = $user->id;
+        $message['username']    = $user->username;
+        $message['accountlink'] = 'index.php?option=com_users&task=user.edit&id=' . $user->id;
+
+        JLoader::register('ActionlogsHelper', JPATH_ADMINISTRATOR . '/components/com_actionlogs/helpers/actionlogs.php');
+        JLoader::register('ActionlogsModelActionlog', JPATH_ADMINISTRATOR . '/components/com_actionlogs/models/actionlog.php');
+
+        /* @var ActionlogsModelActionlog $model */
+        $model = JModel::getInstance('Actionlog', 'ActionlogsModel');
+        $model->addLog([$message], $languageKey, $context, $user->id);
+    }
+
     public static function changeState($message, $context, $value)
     {
         switch ($value)
@@ -49,22 +65,6 @@ class Log
         }
 
         self::add($message, $languageKey, $context);
-    }
-
-    public static function add($message, $languageKey, $context)
-    {
-        $user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
-
-        $message['userid']      = $user->id;
-        $message['username']    = $user->username;
-        $message['accountlink'] = 'index.php?option=com_users&task=user.edit&id=' . $user->id;
-
-        JLoader::register('ActionlogsHelper', JPATH_ADMINISTRATOR . '/components/com_actionlogs/helpers/actionlogs.php');
-        JLoader::register('ActionlogsModelActionlog', JPATH_ADMINISTRATOR . '/components/com_actionlogs/models/actionlog.php');
-
-        /* @var ActionlogsModelActionlog $model */
-        $model = JModel::getInstance('Actionlog', 'ActionlogsModel');
-        $model->addLog([$message], $languageKey, $context, $user->id);
     }
 
     public static function delete($message, $context)

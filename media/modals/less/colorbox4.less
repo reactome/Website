@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         11.10.1
+ * @version         11.11.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -11,135 +11,135 @@
 @import "base.less";
 
 #rl_modals_overlay {
-	background: #ffffff;
+    background: #ffffff;
 }
 
 #rl_modals {
-	outline: 0;
+    outline: 0;
 }
 
 #rl_modals_top_left {
-	width:      25px;
-	height:     25px;
-	background: url(../images/colorbox4/border1.png) no-repeat 0 0;
+    width:      25px;
+    height:     25px;
+    background: url(../images/colorbox4/border1.png) no-repeat 0 0;
 }
 
 #rl_modals_top_center {
-	height:     25px;
-	background: url(../images/colorbox4/border1.png) repeat-x 0 -50px;
+    height:     25px;
+    background: url(../images/colorbox4/border1.png) repeat-x 0 -50px;
 }
 
 #rl_modals_top_right {
-	width:      25px;
-	height:     25px;
-	background: url(../images/colorbox4/border1.png) no-repeat -25px 0;
+    width:      25px;
+    height:     25px;
+    background: url(../images/colorbox4/border1.png) no-repeat -25px 0;
 }
 
 #rl_modals_bottom_left {
-	width:      25px;
-	height:     25px;
-	background: url(../images/colorbox4/border1.png) no-repeat 0 -25px;
+    width:      25px;
+    height:     25px;
+    background: url(../images/colorbox4/border1.png) no-repeat 0 -25px;
 }
 
 #rl_modals_bottom_center {
-	height:     25px;
-	background: url(../images/colorbox4/border1.png) repeat-x 0 -75px;
+    height:     25px;
+    background: url(../images/colorbox4/border1.png) repeat-x 0 -75px;
 }
 
 #rl_modals_bottom_right {
-	width:      25px;
-	height:     25px;
-	background: url(../images/colorbox4/border1.png) no-repeat -25px -25px;
+    width:      25px;
+    height:     25px;
+    background: url(../images/colorbox4/border1.png) no-repeat -25px -25px;
 }
 
 #rl_modals_middle_left {
-	width:      25px;
-	background: url(../images/colorbox4/border2.png) repeat-y 0 0;
+    width:      25px;
+    background: url(../images/colorbox4/border2.png) repeat-y 0 0;
 }
 
 #rl_modals_middle_right {
-	width:      25px;
-	background: url(../images/colorbox4/border2.png) repeat-y -25px 0;
+    width:      25px;
+    background: url(../images/colorbox4/border2.png) repeat-y -25px 0;
 }
 
 #rl_modals_content {
-	background: #ffffff;
-	overflow:   hidden;
+    background: #ffffff;
+    overflow:   hidden;
 }
 
 .rl_modals_iframe {
-	background: #ffffff;
+    background: #ffffff;
 }
 
 #rl_modals_error {
-	padding: 50px;
-	border:  1px solid #cccccc;
+    padding: 50px;
+    border:  1px solid #cccccc;
 }
 
 #rl_modals_loaded_content {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 #rl_modals_title {
-	position:   absolute;
-	bottom:     0px;
-	left:       0;
-	text-align: center;
-	width:      100%;
-	color:      #999999;
+    position:   absolute;
+    bottom:     0px;
+    left:       0;
+    text-align: center;
+    width:      100%;
+    color:      #999999;
 }
 
 #rl_modals_current {
-	position: absolute;
-	bottom:   0px;
-	left:     100px;
-	color:    #999999;
+    position: absolute;
+    bottom:   0px;
+    left:     100px;
+    color:    #999999;
 }
 
 #rl_modals_loading_overlay {
-	background: #ffffff url(../images/colorbox4/loading.gif) no-repeat 5px 5px;
+    background: #ffffff url(../images/colorbox4/loading.gif) no-repeat 5px 5px;
 }
 
 /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
 #rl_modals_previous, #rl_modals_next, #rl_modals_slideshow, #rl_modals_close {
-	border:     0;
-	padding:    0;
-	margin:     0;
-	overflow:   visible;
-	width:      auto;
-	background: none;
+    border:     0;
+    padding:    0;
+    margin:     0;
+    overflow:   visible;
+    width:      auto;
+    background: none;
 }
 
 /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
 #rl_modals_previous:active, #rl_modals_next:active, #rl_modals_slideshow:active, #rl_modals_close:active {
-	outline: 0;
+    outline: 0;
 }
 
 #rl_modals_slideshow {
-	position: absolute;
-	bottom:   0px;
-	right:    42px;
-	color:    #444444;
+    position: absolute;
+    bottom:   0px;
+    right:    42px;
+    color:    #444444;
 }
 
 #rl_modals_previous {
-	position: absolute;
-	bottom:   0px;
-	left:     0;
-	color:    #444444;
+    position: absolute;
+    bottom:   0px;
+    left:     0;
+    color:    #444444;
 }
 
 #rl_modals_next {
-	position: absolute;
-	bottom:   0px;
-	left:     63px;
-	color:    #444444;
+    position: absolute;
+    bottom:   0px;
+    left:     63px;
+    color:    #444444;
 }
 
 #rl_modals_close {
-	position: absolute;
-	bottom:   0;
-	right:    0;
-	display:  block;
-	color:    #444444;
+    position: absolute;
+    bottom:   0;
+    right:    0;
+    display:  block;
+    color:    #444444;
 }

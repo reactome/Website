@@ -1,6 +1,6 @@
 /**
  * @package         Modals
- * @version         11.10.1
+ * @version         11.11.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -11,162 +11,162 @@
 @import "base.less";
 
 #rl_modals_overlay {
-	background: #000000;
+    background: #000000;
 }
 
 #rl_modals {
-	outline: 0;
+    outline: 0;
 }
 
 #rl_modals_top_left {
-	width:      14px;
-	height:     14px;
-	background: url(../images/colorbox5/controls.png) no-repeat 0 0;
+    width:      14px;
+    height:     14px;
+    background: url(../images/colorbox5/controls.png) no-repeat 0 0;
 }
 
 #rl_modals_top_center {
-	height:     14px;
-	background: url(../images/colorbox5/border.png) repeat-x top left;
+    height:     14px;
+    background: url(../images/colorbox5/border.png) repeat-x top left;
 }
 
 #rl_modals_top_right {
-	width:      14px;
-	height:     14px;
-	background: url(../images/colorbox5/controls.png) no-repeat -36px 0;
+    width:      14px;
+    height:     14px;
+    background: url(../images/colorbox5/controls.png) no-repeat -36px 0;
 }
 
 #rl_modals_bottom_left {
-	width:      14px;
-	height:     43px;
-	background: url(../images/colorbox5/controls.png) no-repeat 0 -32px;
+    width:      14px;
+    height:     43px;
+    background: url(../images/colorbox5/controls.png) no-repeat 0 -32px;
 }
 
 #rl_modals_bottom_center {
-	height:     43px;
-	background: url(../images/colorbox5/border.png) repeat-x bottom left;
+    height:     43px;
+    background: url(../images/colorbox5/border.png) repeat-x bottom left;
 }
 
 #rl_modals_bottom_right {
-	width:      14px;
-	height:     43px;
-	background: url(../images/colorbox5/controls.png) no-repeat -36px -32px;
+    width:      14px;
+    height:     43px;
+    background: url(../images/colorbox5/controls.png) no-repeat -36px -32px;
 }
 
 #rl_modals_middle_left {
-	width:      14px;
-	background: url(../images/colorbox5/controls.png) repeat-y -175px 0;
+    width:      14px;
+    background: url(../images/colorbox5/controls.png) repeat-y -175px 0;
 }
 
 #rl_modals_middle_right {
-	width:      14px;
-	background: url(../images/colorbox5/controls.png) repeat-y -211px 0;
+    width:      14px;
+    background: url(../images/colorbox5/controls.png) repeat-y -211px 0;
 }
 
 #rl_modals_content {
-	background: #ffffff;
-	overflow:   visible;
+    background: #ffffff;
+    overflow:   visible;
 }
 
 .rl_modals_iframe {
-	background: #ffffff;
+    background: #ffffff;
 }
 
 #rl_modals_error {
-	padding: 50px;
-	border:  1px solid #cccccc;
+    padding: 50px;
+    border:  1px solid #cccccc;
 }
 
 #rl_modals_loaded_content {
-	margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 #rl_modals_loading_overlay {
-	background: url(../images/colorbox5/loading_background.png) no-repeat center center;
+    background: url(../images/colorbox5/loading_background.png) no-repeat center center;
 }
 
 #rl_modals_loading_graphic {
-	background: url(../images/colorbox5/loading.gif) no-repeat center center;
+    background: url(../images/colorbox5/loading.gif) no-repeat center center;
 }
 
 #rl_modals_title {
-	position:    absolute;
-	bottom:      -25px;
-	left:        0;
-	text-align:  center;
-	width:       100%;
-	font-weight: bold;
-	color:       #7c7c7c;
-	background:  #e9e8e8;
+    position:    absolute;
+    bottom:      -25px;
+    left:        0;
+    text-align:  center;
+    width:       100%;
+    font-weight: bold;
+    color:       #7c7c7c;
+    background:  #e9e8e8;
 }
 
 #rl_modals_current {
-	position:    absolute;
-	bottom:      -25px;
-	left:        58px;
-	font-weight: bold;
-	color:       #7c7c7c;
+    position:    absolute;
+    bottom:      -25px;
+    left:        58px;
+    font-weight: bold;
+    color:       #7c7c7c;
 }
 
 /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
 #rl_modals_previous, #rl_modals_next, #rl_modals_slideshow, #rl_modals_close {
-	border:      0;
-	padding:     0;
-	margin:      0;
-	overflow:    visible;
-	position:    absolute;
-	bottom:      -29px;
-	background:  url(../images/colorbox5/controls.png) no-repeat 0px 0px;
-	width:       23px;
-	height:      23px;
-	text-indent: -9999px;
+    border:      0;
+    padding:     0;
+    margin:      0;
+    overflow:    visible;
+    position:    absolute;
+    bottom:      -29px;
+    background:  url(../images/colorbox5/controls.png) no-repeat 0px 0px;
+    width:       23px;
+    height:      23px;
+    text-indent: -9999px;
 }
 
 /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
 #rl_modals_previous:active, #rl_modals_next:active, #rl_modals_slideshow:active, #rl_modals_close:active {
-	outline: 0;
+    outline: 0;
 }
 
 #rl_modals_previous {
-	left:                0px;
-	background-position: -51px -25px;
+    left:                0px;
+    background-position: -51px -25px;
 }
 
 #rl_modals_previous:hover {
-	background-position: -51px 0px;
+    background-position: -51px 0px;
 }
 
 #rl_modals_next {
-	left:                27px;
-	background-position: -75px -25px;
+    left:                27px;
+    background-position: -75px -25px;
 }
 
 #rl_modals_next:hover {
-	background-position: -75px 0px;
+    background-position: -75px 0px;
 }
 
 #rl_modals_close {
-	right:               0;
-	background-position: -100px -25px;
+    right:               0;
+    background-position: -100px -25px;
 }
 
 #rl_modals_close:hover {
-	background-position: -100px 0px;
+    background-position: -100px 0px;
 }
 
 .rl_modals_slideshow_on #rl_modals_slideshow {
-	background-position: -125px 0px;
-	right:               27px;
+    background-position: -125px 0px;
+    right:               27px;
 }
 
 .rl_modals_slideshow_on #rl_modals_slideshow:hover {
-	background-position: -150px 0px;
+    background-position: -150px 0px;
 }
 
 .rl_modals_slideshow_off #rl_modals_slideshow {
-	background-position: -150px -25px;
-	right:               27px;
+    background-position: -150px -25px;
+    right:               27px;
 }
 
 .rl_modals_slideshow_off #rl_modals_slideshow:hover {
-	background-position: -125px 0px;
+    background-position: -125px 0px;
 }

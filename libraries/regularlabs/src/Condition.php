@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -26,17 +26,17 @@ use RegularLabs\Library\ParametersNew as Parameters;
 abstract class Condition
     implements ConditionInterface
 {
-    static  $_request     = null;
-    public  $article      = null;
-    public  $date         = null;
-    public  $db           = null;
-    public  $include_type = null;
-    public  $module       = null;
-    public  $params       = null;
-    public  $request      = null;
-    public  $selection    = null;
-    private $dates        = [];
-    private $timezone     = null;
+    static        $_request     = null;
+    public        $article      = null;
+    public        $date         = null;
+    public        $db           = null;
+    public        $include_type = null;
+    public        $module       = null;
+    public        $params       = null;
+    public        $request      = null;
+    public        $selection    = null;
+    private array $dates        = [];
+    private       $timezone     = null;
 
     public function __construct($condition = [], $article = null, $module = null)
     {
@@ -58,6 +58,309 @@ abstract class Condition
 
         $this->article = $article;
         $this->module  = $module;
+    }
+
+    public function _($pass = true, $include_type = null)
+    {
+        $include_type = $include_type ?: $this->include_type;
+
+        return $pass ? ($include_type == 'include') : ($include_type == 'exclude');
+    }
+
+    public function beforePass()
+    {
+    }
+
+    public function getDate($date = '')
+    {
+        $date = Date::fix($date);
+
+        $id = 'date_' . $date;
+
+        if (isset($this->dates[$id]))
+        {
+            return $this->dates[$id];
+        }
+
+        $this->dates[$id] = JFactory::getDate($date);
+
+        if (empty($this->params->ignore_time_zone))
+        {
+            $this->dates[$id]->setTimeZone($this->getTimeZone());
+        }
+
+        return $this->dates[$id];
+    }
+
+    public function getDateString($date = '')
+    {
+        $date = $this->getDate($date);
+        $date = strtotime($date->format('Y-m-d H:i:s', true));
+
+        return $date;
+    }
+
+    public function getMenuItemParams($id = 0)
+    {
+        $cache = new Cache([__METHOD__, $id]);
+
+        if ($cache->exists())
+        {
+            return $cache->get();
+        }
+
+        $query = $this->db->getQuery(true)
+            ->select('m.params')
+            ->from('#__menu AS m')
+            ->where('m.id = ' . (int) $id);
+        $this->db->setQuery($query);
+        $params = $this->db->loadResult();
+
+        return $cache->set(Parameters::getObjectFromRegistry($params));
+    }
+
+    public function getNow()
+    {
+        return strtotime($this->date->format('Y-m-d H:i:s', true));
+    }
+
+    public function getParentIds($id = 0, $table = 'menu', $parent = 'parent_id', $child = 'id')
+    {
+        if ( ! $id)
+        {
+            return [];
+        }
+
+        $cache = new Cache([__METHOD__, $id, $table, $parent, $child]);
+
+        if ($cache->exists())
+        {
+            return $cache->get();
+        }
+
+        $parent_ids = [];
+
+        while ($id)
+        {
+            $query = $this->db->getQuery(true)
+                ->select('t.' . $parent)
+                ->from('#__' . $table . ' as t')
+                ->where('t.' . $child . ' = ' . (int) $id);
+            $this->db->setQuery($query);
+            $id = $this->db->loadResult();
+
+            // Break if no parent is found or parent already found before for some reason
+            if ( ! $id || in_array($id, $parent_ids))
+            {
+                break;
+            }
+
+            $parent_ids[] = $id;
+        }
+
+        return $cache->set($parent_ids);
+    }
+
+    public function init()
+    {
+    }
+
+    public function initRequest(&$request)
+    {
+    }
+
+    public function makeArray($array = '', $delimiter = ',', $trim = false)
+    {
+        if (empty($array))
+        {
+            return [];
+        }
+
+        $cache = new Cache([__METHOD__, $array, $delimiter, $trim]);
+
+        if ($cache->exists())
+        {
+            return $cache->get();
+        }
+
+        $array = $this->mixedDataToArray($array, $delimiter);
+
+        if (empty($array))
+        {
+            return $array;
+        }
+
+        if ( ! $trim)
+        {
+            return $array;
+        }
+
+        foreach ($array as $k => $v)
+        {
+            if ( ! is_string($v))
+            {
+                continue;
+            }
+
+            $array[$k] = trim($v);
+        }
+
+        return $cache->set($array);
+    }
+
+    public function passByPageType($option, $selection = [], $include_type = 'all', $add_view = false, $get_task = false, $get_layout = true)
+    {
+        if ($this->request->option != $option)
+        {
+            return $this->_(false, $include_type);
+        }
+
+        if ($get_task && $this->request->task && $this->request->task != $this->request->view && $this->request->task != 'default')
+        {
+            $pagetype = ($add_view ? $this->request->view . '_' : '') . $this->request->task;
+
+            return $this->passSimple($pagetype, $selection, $include_type);
+        }
+
+        if ($get_layout && $this->request->layout && $this->request->layout != $this->request->view && $this->request->layout != 'default')
+        {
+            $pagetype = ($add_view ? $this->request->view . '_' : '') . $this->request->layout;
+
+            return $this->passSimple($pagetype, $selection, $include_type);
+        }
+
+        return $this->passSimple($this->request->view, $selection, $include_type);
+    }
+
+    public function passInRange($value = '', $include_type = null, $selection = null)
+    {
+        $include_type = $include_type ?: $this->include_type;
+
+        if (empty($value))
+        {
+            return $this->_(false, $include_type);
+        }
+
+        $selections = $this->makeArray($selection ?: $this->selection);
+
+        $pass = false;
+        foreach ($selections as $selection)
+        {
+            if (empty($selection))
+            {
+                continue;
+            }
+
+            if (strpos($selection, '-') === false)
+            {
+                if ((int) $value == (int) $selection)
+                {
+                    $pass = true;
+                    break;
+                }
+
+                continue;
+            }
+
+            [$min, $max] = explode('-', $selection, 2);
+
+            if ((int) $value >= (int) $min && (int) $value <= (int) $max)
+            {
+                $pass = true;
+                break;
+            }
+        }
+
+        return $this->_($pass, $include_type);
+    }
+
+    public function passItemByType(&$pass, $type = '', $data = null)
+    {
+        $pass_type = ! empty($data) ? $this->{'pass' . $type}($data) : $this->{'pass' . $type}();
+
+        if ($pass_type === null)
+        {
+            return true;
+        }
+
+        $pass = $pass_type;
+
+        return $pass;
+    }
+
+    public function passSimple($values = '', $caseinsensitive = false, $include_type = null, $selection = null)
+    {
+        $values       = $this->makeArray($values);
+        $include_type = $include_type ?: $this->include_type;
+        $selection    = $selection ?: $this->selection;
+
+        $pass = false;
+        foreach ($values as $value)
+        {
+            if ($caseinsensitive)
+            {
+                if (in_array(strtolower($value), array_map('strtolower', $selection)))
+                {
+                    $pass = true;
+                    break;
+                }
+
+                continue;
+            }
+
+            if (in_array($value, $selection))
+            {
+                $pass = true;
+                break;
+            }
+        }
+
+        return $this->_($pass, $include_type);
+    }
+
+    private function getActiveMenu()
+    {
+        $menu = JFactory::getApplication()->getMenu()->getActive();
+
+        if (empty($menu->id))
+        {
+            return false;
+        }
+
+        return $this->getMenuById($menu->id);
+    }
+
+    private function getItemId()
+    {
+        $id = JFactory::getApplication()->input->getInt('Itemid', 0);
+
+        if ($id)
+        {
+            return $id;
+        }
+
+        $menu = $this->getActiveMenu();
+
+        return $menu->id ?? 0;
+    }
+
+    private function getMenuById($id = 0)
+    {
+        $menu = JFactory::getApplication()->getMenu()->getItem($id);
+
+        if (empty($menu->id))
+        {
+            return false;
+        }
+
+        if ($menu->type == 'alias')
+        {
+            $params = $menu->getParams();
+
+            return $this->getMenuById($params->get('aliasoptions'));
+        }
+
+        return $menu;
     }
 
     private function getRequest()
@@ -143,88 +446,6 @@ abstract class Condition
         return self::$_request;
     }
 
-    private function getItemId()
-    {
-        $id = JFactory::getApplication()->input->getInt('Itemid', 0);
-
-        if ($id)
-        {
-            return $id;
-        }
-
-        $menu = $this->getActiveMenu();
-
-        return $menu->id ?? 0;
-    }
-
-    public function initRequest(&$request)
-    {
-    }
-
-    private function getActiveMenu()
-    {
-        $menu = JFactory::getApplication()->getMenu()->getActive();
-
-        if (empty($menu->id))
-        {
-            return false;
-        }
-
-        return $this->getMenuById($menu->id);
-    }
-
-    private function getMenuById($id = 0)
-    {
-        $menu = JFactory::getApplication()->getMenu()->getItem($id);
-
-        if (empty($menu->id))
-        {
-            return false;
-        }
-
-        if ($menu->type == 'alias')
-        {
-            $params = $menu->getParams();
-
-            return $this->getMenuById($params->get('aliasoptions'));
-        }
-
-        return $menu;
-    }
-
-    public function beforePass()
-    {
-    }
-
-    public function getDateString($date = '')
-    {
-        $date = $this->getDate($date);
-        $date = strtotime($date->format('Y-m-d H:i:s', true));
-
-        return $date;
-    }
-
-    public function getDate($date = '')
-    {
-        $date = Date::fix($date);
-
-        $id = 'date_' . $date;
-
-        if (isset($this->dates[$id]))
-        {
-            return $this->dates[$id];
-        }
-
-        $this->dates[$id] = JFactory::getDate($date);
-
-        if (empty($this->params->ignore_time_zone))
-        {
-            $this->dates[$id]->setTimeZone($this->getTimeZone());
-        }
-
-        return $this->dates[$id];
-    }
-
     private function getTimeZone()
     {
         if ( ! is_null($this->timezone))
@@ -235,171 +456,6 @@ abstract class Condition
         $this->timezone = new DateTimeZone(JFactory::getApplication()->getCfg('offset'));
 
         return $this->timezone;
-    }
-
-    public function getMenuItemParams($id = 0)
-    {
-        $cache = new Cache([__METHOD__, $id]);
-
-        if ($cache->exists())
-        {
-            return $cache->get();
-        }
-
-        $query = $this->db->getQuery(true)
-            ->select('m.params')
-            ->from('#__menu AS m')
-            ->where('m.id = ' . (int) $id);
-        $this->db->setQuery($query);
-        $params = $this->db->loadResult();
-
-        return $cache->set(Parameters::getObjectFromRegistry($params));
-    }
-
-    public function getNow()
-    {
-        return strtotime($this->date->format('Y-m-d H:i:s', true));
-    }
-
-    public function getParentIds($id = 0, $table = 'menu', $parent = 'parent_id', $child = 'id')
-    {
-        if ( ! $id)
-        {
-            return [];
-        }
-
-        $cache = new Cache([__METHOD__, $id, $table, $parent, $child]);
-
-        if ($cache->exists())
-        {
-            return $cache->get();
-        }
-
-        $parent_ids = [];
-
-        while ($id)
-        {
-            $query = $this->db->getQuery(true)
-                ->select('t.' . $parent)
-                ->from('#__' . $table . ' as t')
-                ->where('t.' . $child . ' = ' . (int) $id);
-            $this->db->setQuery($query);
-            $id = $this->db->loadResult();
-
-            // Break if no parent is found or parent already found before for some reason
-            if ( ! $id || in_array($id, $parent_ids))
-            {
-                break;
-            }
-
-            $parent_ids[] = $id;
-        }
-
-        return $cache->set($parent_ids);
-    }
-
-    public function init()
-    {
-    }
-
-    public function passByPageType($option, $selection = [], $include_type = 'all', $add_view = false, $get_task = false, $get_layout = true)
-    {
-        if ($this->request->option != $option)
-        {
-            return $this->_(false, $include_type);
-        }
-
-        if ($get_task && $this->request->task && $this->request->task != $this->request->view && $this->request->task != 'default')
-        {
-            $pagetype = ($add_view ? $this->request->view . '_' : '') . $this->request->task;
-
-            return $this->passSimple($pagetype, $selection, $include_type);
-        }
-
-        if ($get_layout && $this->request->layout && $this->request->layout != $this->request->view && $this->request->layout != 'default')
-        {
-            $pagetype = ($add_view ? $this->request->view . '_' : '') . $this->request->layout;
-
-            return $this->passSimple($pagetype, $selection, $include_type);
-        }
-
-        return $this->passSimple($this->request->view, $selection, $include_type);
-    }
-
-    public function _($pass = true, $include_type = null)
-    {
-        $include_type = $include_type ?: $this->include_type;
-
-        return $pass ? ($include_type == 'include') : ($include_type == 'exclude');
-    }
-
-    public function passSimple($values = '', $caseinsensitive = false, $include_type = null, $selection = null)
-    {
-        $values       = $this->makeArray($values);
-        $include_type = $include_type ?: $this->include_type;
-        $selection    = $selection ?: $this->selection;
-
-        $pass = false;
-        foreach ($values as $value)
-        {
-            if ($caseinsensitive)
-            {
-                if (in_array(strtolower($value), array_map('strtolower', $selection)))
-                {
-                    $pass = true;
-                    break;
-                }
-
-                continue;
-            }
-
-            if (in_array($value, $selection))
-            {
-                $pass = true;
-                break;
-            }
-        }
-
-        return $this->_($pass, $include_type);
-    }
-
-    public function makeArray($array = '', $delimiter = ',', $trim = false)
-    {
-        if (empty($array))
-        {
-            return [];
-        }
-
-        $cache = new Cache([__METHOD__, $array, $delimiter, $trim]);
-
-        if ($cache->exists())
-        {
-            return $cache->get();
-        }
-
-        $array = $this->mixedDataToArray($array, $delimiter);
-
-        if (empty($array))
-        {
-            return $array;
-        }
-
-        if ( ! $trim)
-        {
-            return $array;
-        }
-
-        foreach ($array as $k => $v)
-        {
-            if ( ! is_string($v))
-            {
-                continue;
-            }
-
-            $array[$k] = trim($v);
-        }
-
-        return $cache->set($array);
     }
 
     private function mixedDataToArray($array = '', $onlycommas = false)
@@ -427,61 +483,5 @@ abstract class Condition
         }
 
         return $array;
-    }
-
-    public function passInRange($value = '', $include_type = null, $selection = null)
-    {
-        $include_type = $include_type ?: $this->include_type;
-
-        if (empty($value))
-        {
-            return $this->_(false, $include_type);
-        }
-
-        $selections = $this->makeArray($selection ?: $this->selection);
-
-        $pass = false;
-        foreach ($selections as $selection)
-        {
-            if (empty($selection))
-            {
-                continue;
-            }
-
-            if (strpos($selection, '-') === false)
-            {
-                if ((int) $value == (int) $selection)
-                {
-                    $pass = true;
-                    break;
-                }
-
-                continue;
-            }
-
-            [$min, $max] = explode('-', $selection, 2);
-
-            if ((int) $value >= (int) $min && (int) $value <= (int) $max)
-            {
-                $pass = true;
-                break;
-            }
-        }
-
-        return $this->_($pass, $include_type);
-    }
-
-    public function passItemByType(&$pass, $type = '', $data = null)
-    {
-        $pass_type = ! empty($data) ? $this->{'pass' . $type}($data) : $this->{'pass' . $type}();
-
-        if ($pass_type === null)
-        {
-            return true;
-        }
-
-        $pass = $pass_type;
-
-        return $pass;
     }
 }

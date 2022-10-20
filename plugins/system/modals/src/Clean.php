@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.10.1
+ * @version         11.11.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -17,21 +17,21 @@ use RegularLabs\Library\Protect as RL_Protect;
 
 class Clean
 {
-	/**
-	 * Just in case you can't figure the method name out: this cleans the left-over junk
-	 */
-	public static function cleanFinalHtmlOutput(&$html)
-	{
-		[$tag_start, $tag_end] = Params::getTagCharacters();
+    /**
+     * Just in case you can't figure the method name out: this cleans the left-over junk
+     */
+    public static function cleanFinalHtmlOutput(&$html)
+    {
+        [$tag_start, $tag_end] = Params::getTagCharacters();
 
-		Protect::unprotectTags($html);
+        Protect::unprotectTags($html);
 
-		RL_Protect::removeFromHtmlTagContent($html, Params::getTags(true));
-		RL_Protect::removeInlineComments($html, 'Modals');
-		RL_Protect::removePluginTags($html,
-			Params::getTagWords(),
-			$tag_start,
-			$tag_end
-		);
-	}
+        RL_Protect::removeFromHtmlTagContent($html, Params::getTags(true));
+        RL_Protect::removeInlineComments($html, 'Modals');
+        RL_Protect::removePluginTags($html,
+            Params::getTagWords(),
+            $tag_start,
+            $tag_end
+        );
+    }
 }

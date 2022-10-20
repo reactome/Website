@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.10.1
+ * @version         11.11.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,109 +19,109 @@ use RegularLabs\Library\StringHelper as RL_String;
 
 class File
 {
-	public static function getCleanFileName($url)
-	{
-		$params = Params::get();
+    public static function getCleanFileName($url)
+    {
+        $params = Params::get();
 
-		$title = RL_File::getFileName($url);
+        $title = RL_File::getFileName($url);
 
-		// Remove trailing numbers and dimensions
-		$title = RL_RegEx::replace('[_-][0-9]+(x[0-9]+)?$', '', $title);
+        // Remove trailing numbers and dimensions
+        $title = RL_RegEx::replace('[_-][0-9]+(x[0-9]+)?$', '', $title);
 
 
-		return $title;
-	}
+        return $title;
+    }
 
-	public static function getCleanTitle($url)
-	{
-		$title = self::getCleanFileName($url);
+    public static function getCleanTitle($url)
+    {
+        $title = self::getCleanFileName($url);
 
-		// Replace dashes with spaces
-		return str_replace(['-', '_'], ' ', $title);
-	}
+        // Replace dashes with spaces
+        return str_replace(['-', '_'], ' ', $title);
+    }
 
-	public static function getTitle($url, $case)
-	{
-		$params = Params::get();
+    public static function getTitle($url, $case)
+    {
+        $params = Params::get();
 
-		$title = self::getCleanTitle($url);
+        $title = self::getCleanTitle($url);
 
-		switch ($case)
-		{
-			case 'lowercase':
-				return RL_String::strtolower($title);
+        switch ($case)
+        {
+            case 'lowercase':
+                return RL_String::strtolower($title);
 
-			case 'uppercase':
-				return RL_String::strtoupper($title);
+            case 'uppercase':
+                return RL_String::strtoupper($title);
 
-			case 'uppercasefirst':
-				return RL_String::strtoupper(RL_String::substr($title, 0, 1))
-					. RL_String::strtolower(RL_String::substr($title, 1));
+            case 'uppercasefirst':
+                return RL_String::strtoupper(RL_String::substr($title, 0, 1))
+                    . RL_String::strtolower(RL_String::substr($title, 1));
 
-			case 'titlecase':
-				return function_exists('mb_convert_case')
-					? mb_convert_case(RL_String::strtolower($title), MB_CASE_TITLE)
-					: ucwords(strtolower($title));
+            case 'titlecase':
+                return function_exists('mb_convert_case')
+                    ? mb_convert_case(RL_String::strtolower($title), MB_CASE_TITLE)
+                    : ucwords(strtolower($title));
 
-			case 'titlecase_smart':
-				$title           = function_exists('mb_convert_case')
-					? mb_convert_case(RL_String::strtolower($title), MB_CASE_TITLE)
-					: ucwords(strtolower($title));
-				$lowercase_words = explode(',', ' ' . str_replace(',', ' , ', RL_String::strtolower($params->lowercase_words)) . ' ');
+            case 'titlecase_smart':
+                $title           = function_exists('mb_convert_case')
+                    ? mb_convert_case(RL_String::strtolower($title), MB_CASE_TITLE)
+                    : ucwords(strtolower($title));
+                $lowercase_words = explode(',', ' ' . str_replace(',', ' , ', RL_String::strtolower($params->lowercase_words)) . ' ');
 
-				return str_ireplace($lowercase_words, $lowercase_words, $title);
-		}
+                return str_ireplace($lowercase_words, $lowercase_words, $title);
+        }
 
-		return $title;
-	}
+        return $title;
+    }
 
-	public static function isIframe($url, &$data)
-	{
-		if ( ! empty($data['inline']))
-		{
-			return false;
-		}
+    public static function isIframe($url, &$data)
+    {
+        if ( ! empty($data['inline']))
+        {
+            return false;
+        }
 
-		$params = Params::get();
+        $params = Params::get();
 
-		if (RL_File::isMedia($url, $params->iframefiles))
-		{
-			return true;
-		}
+        if (RL_File::isMedia($url, $params->iframefiles))
+        {
+            return true;
+        }
 
-		if (RL_File::isMedia($url, $params->mediafiles))
-		{
-			unset($data['iframe']);
+        if (RL_File::isMedia($url, $params->mediafiles))
+        {
+            unset($data['iframe']);
 
-			return false;
-		}
+            return false;
+        }
 
-		if (empty($data['iframe']))
-		{
-			return $params->iframe;
-		}
+        if (empty($data['iframe']))
+        {
+            return $params->iframe;
+        }
 
-		return ($data['iframe'] !== 0 && $data['iframe'] !== 'false');
-	}
+        return ($data['iframe'] !== 0 && $data['iframe'] !== 'false');
+    }
 
-	public static function isVideo($url, $data)
-	{
-		if (isset($data['video']) && $data['video'] == 'true')
-		{
-			return true;
-		}
+    public static function isVideo($url, $data)
+    {
+        if (isset($data['video']) && $data['video'] == 'true')
+        {
+            return true;
+        }
 
-		return RL_File::isExternalVideo($url) || RL_File::isVideo($url);
-	}
+        return RL_File::isExternalVideo($url) || RL_File::isVideo($url);
+    }
 
-	public static function retinaImageExists($url)
-	{
-		$params = Params::get();
+    public static function retinaImageExists($url)
+    {
+        $params = Params::get();
 
-		$suffix = str_replace('.$1', '.\1', $params->retinasuffix);
+        $suffix = str_replace('.$1', '.\1', $params->retinasuffix);
 
-		$retina_file = RL_RegEx::replace('(\.[a-z0-9]+)$', $suffix, $url);
+        $retina_file = RL_RegEx::replace('(\.[a-z0-9]+)$', $suffix, $url);
 
-		return file_exists(JPATH_SITE . '/' . $retina_file);
-	}
+        return file_exists(JPATH_SITE . '/' . $retina_file);
+    }
 }

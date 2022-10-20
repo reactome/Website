@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -29,6 +29,36 @@ JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/
  */
 trait ConditionContent
 {
+    public static function hasTime($string)
+    {
+        if ( ! self::isDateTimeString($string))
+        {
+            return false;
+        }
+
+        return RegEx::match('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}', $string);
+    }
+
+    public static function isDateTimeString($string)
+    {
+        return RegEx::match('^[0-9]{4}-[0-9]{2}-[0-9]{2}', $string);
+    }
+
+    public static function runThroughArticlesAnywhere($string)
+    {
+        $articlesanywhere_params = Parameters::getPlugin('articlesanywhere');
+
+        if (empty($articlesanywhere_params) || ! isset($articlesanywhere_params->article_tag) || ! isset($articlesanywhere_params->articles_tag))
+        {
+            return $string;
+        }
+
+        AA_Replace::replaceTags($string);
+        Protect::removeCommentTags($string, 'Articles Anywhere');
+
+        return $string;
+    }
+
     abstract public function getItem($fields = []);
 
     public function passAuthor($field = 'created_by', $author = '')
@@ -67,6 +97,23 @@ trait ConditionContent
         }
 
         return in_array($author, $this->params->authors);
+    }
+
+    public function passBoolean($field = 'featured')
+    {
+        if ( ! isset($this->params->{$field}) || $this->params->{$field} == '')
+        {
+            return null;
+        }
+
+        $item = $this->getItem($field);
+
+        if ( ! isset($item->{$field}))
+        {
+            return false;
+        }
+
+        return $this->params->{$field} == $item->{$field};
     }
 
     public function passContentId()
@@ -174,23 +221,6 @@ trait ConditionContent
         return $this->passBoolean('featured');
     }
 
-    public function passBoolean($field = 'featured')
-    {
-        if ( ! isset($this->params->{$field}) || $this->params->{$field} == '')
-        {
-            return null;
-        }
-
-        $item = $this->getItem($field);
-
-        if ( ! isset($item->{$field}))
-        {
-            return false;
-        }
-
-        return $this->params->{$field} == $item->{$field};
-    }
-
     public function passField()
     {
         if (empty($this->params->fields))
@@ -237,6 +267,52 @@ trait ConditionContent
         }
 
         return true;
+    }
+
+    public function passMetaKeyword($field = 'metakey', $keywords = '')
+    {
+        if (empty($this->params->meta_keywords))
+        {
+            return null;
+        }
+
+        if ( ! $keywords)
+        {
+            $item = $this->getItem($field);
+
+            if ( ! isset($item->metakey) || empty($item->metakey))
+            {
+                return false;
+            }
+
+            $keywords = $item->metakey;
+        }
+
+        if (empty($keywords))
+        {
+            return false;
+        }
+
+        if (is_string($keywords))
+        {
+            $keywords = str_replace(' ', ',', $keywords);
+        }
+
+        $keywords = $this->makeArray($keywords);
+
+        $this->params->meta_keywords = $this->makeArray($this->params->meta_keywords);
+
+        foreach ($this->params->meta_keywords as $keyword)
+        {
+            if ( ! $keyword || ! in_array(trim($keyword), $keywords))
+            {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     private static function passComparison($needle, $haystack, $comparison = 'equals')
@@ -342,21 +418,6 @@ trait ConditionContent
         }
     }
 
-    public static function runThroughArticlesAnywhere($string)
-    {
-        $articlesanywhere_params = Parameters::getPlugin('articlesanywhere');
-
-        if (empty($articlesanywhere_params) || ! isset($articlesanywhere_params->article_tag) || ! isset($articlesanywhere_params->articles_tag))
-        {
-            return $string;
-        }
-
-        AA_Replace::replaceTags($string);
-        Protect::removeCommentTags($string, 'Articles Anywhere');
-
-        return $string;
-    }
-
     private static function valueToDateString($value, $apply_offset = true, $add_time = false)
     {
         $value = trim($value);
@@ -418,66 +479,5 @@ trait ConditionContent
         }
 
         return $date->format($format, true, false);
-    }
-
-    public static function hasTime($string)
-    {
-        if ( ! self::isDateTimeString($string))
-        {
-            return false;
-        }
-
-        return RegEx::match('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}', $string);
-    }
-
-    public static function isDateTimeString($string)
-    {
-        return RegEx::match('^[0-9]{4}-[0-9]{2}-[0-9]{2}', $string);
-    }
-
-    public function passMetaKeyword($field = 'metakey', $keywords = '')
-    {
-        if (empty($this->params->meta_keywords))
-        {
-            return null;
-        }
-
-        if ( ! $keywords)
-        {
-            $item = $this->getItem($field);
-
-            if ( ! isset($item->metakey) || empty($item->metakey))
-            {
-                return false;
-            }
-
-            $keywords = $item->metakey;
-        }
-
-        if (empty($keywords))
-        {
-            return false;
-        }
-
-        if (is_string($keywords))
-        {
-            $keywords = str_replace(' ', ',', $keywords);
-        }
-
-        $keywords = $this->makeArray($keywords);
-
-        $this->params->meta_keywords = $this->makeArray($this->params->meta_keywords);
-
-        foreach ($this->params->meta_keywords as $keyword)
-        {
-            if ( ! $keyword || ! in_array(trim($keyword), $keywords))
-            {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
     }
 }

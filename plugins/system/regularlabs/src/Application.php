@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -18,6 +18,26 @@ use Joomla\CMS\Plugin\PluginHelper as JPluginHelper;
 
 class Application
 {
+    static function getThemesDirectory()
+    {
+        if (JFactory::getApplication()->get('themes.base'))
+        {
+            return JFactory::getApplication()->get('themes.base');
+        }
+
+        if (defined('JPATH_THEMES'))
+        {
+            return JPATH_THEMES;
+        }
+
+        if (defined('JPATH_BASE'))
+        {
+            return JPATH_BASE . '/themes';
+        }
+
+        return __DIR__ . '/themes';
+    }
+
     public function render()
     {
         $app      = JFactory::getApplication();
@@ -59,25 +79,5 @@ class Application
         // Mark afterRender in the profiler.
         // Causes issues, so commented out.
         // JDEBUG ? $app->profiler->mark('afterRender') : null;
-    }
-
-    static function getThemesDirectory()
-    {
-        if (JFactory::getApplication()->get('themes.base'))
-        {
-            return JFactory::getApplication()->get('themes.base');
-        }
-
-        if (defined('JPATH_THEMES'))
-        {
-            return JPATH_THEMES;
-        }
-
-        if (defined('JPATH_BASE'))
-        {
-            return JPATH_BASE . '/themes';
-        }
-
-        return __DIR__ . '/themes';
     }
 }

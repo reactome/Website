@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -34,6 +34,20 @@ class EditorButtonPopup
         $this->params    = Parameters::getPlugin($extension);
     }
 
+    public function loadLanguages()
+    {
+        Language::load('plg_editors-xtd_' . $this->extension);
+        Language::load('plg_system_' . $this->extension);
+    }
+
+    public function loadScripts()
+    {
+    }
+
+    public function loadStyles()
+    {
+    }
+
     public function render()
     {
         if ( ! Extension::isAuthorised($this->require_core_auth))
@@ -59,6 +73,14 @@ class EditorButtonPopup
         echo $this->renderTemplate();
     }
 
+    private function getDir()
+    {
+        // use static::class instead of get_class($this) after php 5.4 support is dropped
+        $rc = new ReflectionClass(get_class($this));
+
+        return dirname($rc->getFileName());
+    }
+
     private function loadLibraryLanguages()
     {
         Language::load('plg_system_regularlabs');
@@ -69,20 +91,6 @@ class EditorButtonPopup
         Document::loadPopupDependencies();
     }
 
-    public function loadLanguages()
-    {
-        Language::load('plg_editors-xtd_' . $this->extension);
-        Language::load('plg_system_' . $this->extension);
-    }
-
-    public function loadScripts()
-    {
-    }
-
-    public function loadStyles()
-    {
-    }
-
     private function renderTemplate()
     {
         ob_start();
@@ -91,13 +99,5 @@ class EditorButtonPopup
         ob_end_clean();
 
         return $html;
-    }
-
-    private function getDir()
-    {
-        // use static::class instead of get_class($this) after php 5.4 support is dropped
-        $rc = new ReflectionClass(get_class($this));
-
-        return dirname($rc->getFileName());
     }
 }

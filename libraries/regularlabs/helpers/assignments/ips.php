@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -36,6 +36,23 @@ class RLAssignmentsIPs extends RLAssignment
         return $this->pass($pass);
     }
 
+    private function checkIP($range)
+    {
+        if (empty($range))
+        {
+            return false;
+        }
+
+        if (strpos($range, '-') !== false)
+        {
+            // Selection is an IP range
+            return $this->checkIPRange($range);
+        }
+
+        // Selection is a single IP (part)
+        return $this->checkIPPart($range);
+    }
+
     private function checkIPList()
     {
         foreach ($this->selection as $range)
@@ -54,22 +71,35 @@ class RLAssignmentsIPs extends RLAssignment
         return false;
     }
 
-    private function checkIP($range)
+    private function checkIPPart($range)
     {
-        if (empty($range))
+        $ip = $_SERVER['REMOTE_ADDR'];
+
+        // Return if no IP address can be found (shouldn't happen, but who knows)
+        if (empty($ip))
         {
             return false;
         }
 
-        if (strpos($range, '-') !== false)
+        $ip_parts    = explode('.', $ip);
+        $range_parts = explode('.', trim($range));
+
+        // Trim the IP to the part length of the range
+        $ip = implode('.', array_slice($ip_parts, 0, count($range_parts)));
+
+        // Return false if ip does not match the range
+        if ($range != $ip)
         {
-            // Selection is an IP range
-            return $this->checkIPRange($range);
+            return false;
         }
 
-        // Selection is a single IP (part)
-        return $this->checkIPPart($range);
+        return true;
     }
+
+    /* Fill the max range by prefixing it with the missing parts from the min range
+     * So 101.102.103.104-201.202 becomes:
+     * max: 101.102.201.202
+     */
 
     private function checkIPRange($range)
     {
@@ -94,36 +124,6 @@ class RLAssignmentsIPs extends RLAssignment
 
         // Return false if IP is larger than the range end
         if ($ip > trim($max))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /* Fill the max range by prefixing it with the missing parts from the min range
-     * So 101.102.103.104-201.202 becomes:
-     * max: 101.102.201.202
-     */
-
-    private function checkIPPart($range)
-    {
-        $ip = $_SERVER['REMOTE_ADDR'];
-
-        // Return if no IP address can be found (shouldn't happen, but who knows)
-        if (empty($ip))
-        {
-            return false;
-        }
-
-        $ip_parts    = explode('.', $ip);
-        $range_parts = explode('.', trim($range));
-
-        // Trim the IP to the part length of the range
-        $ip = implode('.', array_slice($ip_parts, 0, count($range_parts)));
-
-        // Return false if ip does not match the range
-        if ($range != $ip)
         {
             return false;
         }

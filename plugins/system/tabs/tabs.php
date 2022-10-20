@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         8.2.4
+ * @version         8.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -16,7 +16,6 @@ use Joomla\CMS\Language\Text as JText;
 use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\Extension as RL_Extension;
 use RegularLabs\Library\Html as RL_Html;
-use RegularLabs\Library\Language as RL_Language;
 use RegularLabs\Library\Protect as RL_Protect;
 use RegularLabs\Library\SystemPlugin as RL_SystemPlugin;
 use RegularLabs\Plugin\System\Tabs\Document;

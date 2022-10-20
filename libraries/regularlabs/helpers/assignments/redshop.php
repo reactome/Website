@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -84,11 +84,6 @@ class RLAssignmentsRedShop extends RLAssignment
         return $this->passSimple($cats);
     }
 
-    private function getCatParentIds($id = 0)
-    {
-        return $this->getParentIds($id, 'redshop_category_xref', 'category_parent_id', 'category_child_id');
-    }
-
     public function passPageTypes()
     {
         return $this->passByPageTypes('com_redshop', $this->selection, $this->assignment, true);
@@ -102,5 +97,10 @@ class RLAssignmentsRedShop extends RLAssignment
         }
 
         return $this->passSimple($this->request->id);
+    }
+
+    private function getCatParentIds($id = 0)
+    {
+        return $this->getParentIds($id, 'redshop_category_xref', 'category_parent_id', 'category_child_id');
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -43,6 +43,25 @@ class JFormFieldRL_Tags extends Field
         return $this->selectList($options, $name, $value, $id, $size, true, $simple);
     }
 
+    protected function getInput()
+    {
+        $size        = (int) $this->get('size');
+        $simple      = (int) $this->get('simple');
+        $show_ignore = $this->get('show_ignore');
+        $use_names   = $this->get('use_names');
+
+        if ($show_ignore && in_array('-1', $this->value))
+        {
+            $this->value = ['-1'];
+        }
+
+        return $this->selectListAjax(
+            $this->type, $this->name, $this->value, $this->id,
+            compact('size', 'simple', 'show_ignore', 'use_names'),
+            $simple
+        );
+    }
+
     protected function getOptions($show_ignore = false, $use_names = false, $value = [])
     {
         // assemble items to the array
@@ -75,24 +94,5 @@ class JFormFieldRL_Tags extends Field
         $this->db->setQuery($query);
 
         return $this->db->loadObjectList();
-    }
-
-    protected function getInput()
-    {
-        $size        = (int) $this->get('size');
-        $simple      = (int) $this->get('simple');
-        $show_ignore = $this->get('show_ignore');
-        $use_names   = $this->get('use_names');
-
-        if ($show_ignore && in_array('-1', $this->value))
-        {
-            $this->value = ['-1'];
-        }
-
-        return $this->selectListAjax(
-            $this->type, $this->name, $this->value, $this->id,
-            compact('size', 'simple', 'show_ignore', 'use_names'),
-            $simple
-        );
     }
 }

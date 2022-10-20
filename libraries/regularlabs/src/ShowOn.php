@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -21,16 +21,9 @@ use Joomla\CMS\Form\FormHelper as JFormHelper;
  */
 class ShowOn
 {
-    public static function show($string = '', $condition = '', $formControl = '', $group = '', $animate = true, $class = '')
+    public static function close()
     {
-        if ( ! $condition || ! $string)
-        {
-            return $string;
-        }
-
-        return self::open($condition, $formControl, $group, $animate, $class)
-            . $string
-            . self::close();
+        return '</div>';
     }
 
     public static function open($condition = '', $formControl = '', $group = '', $class = '')
@@ -49,8 +42,15 @@ class ShowOn
         return '<div data-showon=\'' . $json . '\' style="display: none;"' . $class . '>';
     }
 
-    public static function close()
+    public static function show($string = '', $condition = '', $formControl = '', $group = '', $animate = true, $class = '')
     {
-        return '</div>';
+        if ( ! $condition || ! $string)
+        {
+            return $string;
+        }
+
+        return self::open($condition, $formControl, $group, $animate, $class)
+            . $string
+            . self::close();
     }
 }

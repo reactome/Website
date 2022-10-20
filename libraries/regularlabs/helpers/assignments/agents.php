@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -28,11 +28,11 @@ class RLAssignmentsAgents extends RLAssignment
     var $device = null;
 
     /**
-     * isPhone
+     * isDesktop
      */
-    public function isPhone()
+    public function isDesktop()
     {
-        return $this->isMobile();
+        return $this->getDevice() == 'desktop';
     }
 
     /**
@@ -44,46 +44,11 @@ class RLAssignmentsAgents extends RLAssignment
     }
 
     /**
-     * setDevice
+     * isPhone
      */
-    private function getDevice()
+    public function isPhone()
     {
-        if ( ! is_null($this->device))
-        {
-            return $this->device;
-        }
-
-        $detect = new RLMobile_Detect;
-
-        $this->is_mobile = $detect->isMobile();
-
-        switch (true)
-        {
-            case($detect->isTablet()):
-                $this->device = 'tablet';
-                break;
-
-            case ($detect->isMobile()):
-                $this->device = 'mobile';
-                break;
-
-            default:
-                $this->device = 'desktop';
-        }
-
-        return $this->device;
-    }
-
-    /**
-     * passDevices
-     */
-    public function passDevices()
-    {
-        $pass = (in_array('mobile', $this->selection) && $this->isMobile())
-            || (in_array('tablet', $this->selection) && $this->isTablet())
-            || (in_array('desktop', $this->selection) && $this->isDesktop());
-
-        return $this->pass($pass);
+        return $this->isMobile();
     }
 
     /**
@@ -92,22 +57,6 @@ class RLAssignmentsAgents extends RLAssignment
     public function isTablet()
     {
         return $this->getDevice() == 'tablet';
-    }
-
-    /**
-     * isDesktop
-     */
-    public function isDesktop()
-    {
-        return $this->getDevice() == 'desktop';
-    }
-
-    /**
-     * passOS
-     */
-    public function passOS()
-    {
-        return self::passBrowsers();
     }
 
     /**
@@ -134,30 +83,23 @@ class RLAssignmentsAgents extends RLAssignment
     }
 
     /**
-     * passBrowser
+     * passDevices
      */
-    private function passBrowser($browser = '')
+    public function passDevices()
     {
-        if ( ! $browser)
-        {
-            return false;
-        }
+        $pass = (in_array('mobile', $this->selection) && $this->isMobile())
+            || (in_array('tablet', $this->selection) && $this->isTablet())
+            || (in_array('desktop', $this->selection) && $this->isDesktop());
 
-        if ($browser == 'mobile')
-        {
-            return $this->isMobile();
-        }
+        return $this->pass($pass);
+    }
 
-        if ( ! (strpos($browser, '#') === 0))
-        {
-            $browser = '#' . RLText::pregQuote($browser) . '#';
-        }
-
-        // also check for _ instead of .
-        $browser = preg_replace('#\\\.([^\]])#', '[\._]\1', $browser);
-        $browser = str_replace('\.]', '\._]', $browser);
-
-        return preg_match($browser . 'i', $this->getAgent());
+    /**
+     * passOS
+     */
+    public function passOS()
+    {
+        return self::passBrowsers();
     }
 
     /**
@@ -195,5 +137,63 @@ class RLAssignmentsAgents extends RLAssignment
         $this->agent = $agent;
 
         return $this->agent;
+    }
+
+    /**
+     * setDevice
+     */
+    private function getDevice()
+    {
+        if ( ! is_null($this->device))
+        {
+            return $this->device;
+        }
+
+        $detect = new RLMobile_Detect;
+
+        $this->is_mobile = $detect->isMobile();
+
+        switch (true)
+        {
+            case($detect->isTablet()):
+                $this->device = 'tablet';
+                break;
+
+            case ($detect->isMobile()):
+                $this->device = 'mobile';
+                break;
+
+            default:
+                $this->device = 'desktop';
+        }
+
+        return $this->device;
+    }
+
+    /**
+     * passBrowser
+     */
+    private function passBrowser($browser = '')
+    {
+        if ( ! $browser)
+        {
+            return false;
+        }
+
+        if ($browser == 'mobile')
+        {
+            return $this->isMobile();
+        }
+
+        if ( ! (strpos($browser, '#') === 0))
+        {
+            $browser = '#' . RLText::pregQuote($browser) . '#';
+        }
+
+        // also check for _ instead of .
+        $browser = preg_replace('#\\\.([^\]])#', '[\._]\1', $browser);
+        $browser = str_replace('\.]', '\._]', $browser);
+
+        return preg_match($browser . 'i', $this->getAgent());
     }
 }

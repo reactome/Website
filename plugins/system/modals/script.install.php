@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.10.1
+ * @version         11.11.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -9,130 +9,102 @@
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
+defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory as JFactory;
 use Joomla\CMS\Filesystem\File as JFile;
 
-defined('_JEXEC') or die;
-
-require_once __DIR__ . '/script.install.helper.php';
-
-class PlgSystemModalsInstallerScript extends PlgSystemModalsInstallerScriptHelper
+class PlgSystemModalsInstallerScript
 {
-	public $alias          = 'modals';
-	public $extension_type = 'plugin';
-	public $name           = 'MODALS';
+    public function postflight($install_type, $adapter)
+    {
+        if ( ! in_array($install_type, ['install', 'update']))
+        {
+            return true;
+        }
 
-	public function fixOldParams()
-	{
-		$query = $this->db->getQuery(true)
-			->select($this->db->quoteName('params'))
-			->from('#__extensions')
-			->where($this->db->quoteName('element') . ' = ' . $this->db->quote('modals'))
-			->where($this->db->quoteName('folder') . ' = ' . $this->db->quote('system'));
-		$this->db->setQuery($query);
-		$db_params = $this->db->loadResult();
+        self::copyModalFile();
+        self::fixOldParams();
 
-		if (empty($db_params))
-		{
-			return;
-		}
+        return true;
+    }
 
-		$params = json_decode($db_params);
+    private static function copyModalFile()
+    {
+        // Copy modal.php to system template folder
+        JFile::copy(__DIR__ . '/modal.php', JPATH_SITE . '/templates/system/modal.php');
+    }
 
-		if (empty($params))
-		{
-			return;
-		}
+    private static function fixOldParams()
+    {
+        $db = JFactory::getDbo();
 
-		// Since v9.14.0
+        $query = $db->getQuery(true)
+            ->select($db->quoteName('params'))
+            ->from('#__extensions')
+            ->where($db->quoteName('element') . ' = ' . $db->quote('modals'))
+            ->where($db->quoteName('folder') . ' = ' . $db->quote('system'));
+        $db->setQuery($query);
+        $db_params = $db->loadResult();
 
-		if (isset($params->gallery_create_thumbnails) && ! isset($params->create_thumbnails))
-		{
-			$params->create_thumbnails = $params->gallery_create_thumbnails;
-			unset($params->gallery_create_thumbnails);
-		}
+        if (empty($db_params))
+        {
+            return;
+        }
 
-		if (isset($params->gallery_thumb) && ! isset($params->thumbnail))
-		{
-			$params->thumbnail = $params->gallery_thumb;
-			unset($params->gallery_thumb);
-		}
+        $params = json_decode($db_params);
 
-		// Since v9.9.0
-		if (isset($params->images_use_title_attribute) && $params->images_use_title_attribute === 1)
-		{
-			$params->images_use_title_attribute = 'title';
-		}
+        if (empty($params))
+        {
+            return;
+        }
 
-		// Since v10.0.0
-		if (isset($params->thumbnail_quality) && is_numeric($params->thumbnail_quality))
-		{
-			$params->thumbnail_quality = 'medium';
-		}
+        // Since v9.14.0
 
-		if ( ! isset($params->thumbnail_legacy) && ! empty($params->thumbnail_suffix))
-		{
-			$params->thumbnail_legacy = 1;
-		}
+        if (isset($params->gallery_create_thumbnails) && ! isset($params->create_thumbnails))
+        {
+            $params->create_thumbnails = $params->gallery_create_thumbnails;
+            unset($params->gallery_create_thumbnails);
+        }
 
-		// Since v11.3.0
-		if (isset($params->thumbnail_crop) && is_numeric($params->thumbnail_crop))
-		{
-			$params->thumbnail_resize_type = $params->thumbnail_crop ? 'crop' : 'scale';
-			unset($params->thumbnail_crop);
-		}
+        if (isset($params->gallery_thumb) && ! isset($params->thumbnail))
+        {
+            $params->thumbnail = $params->gallery_thumb;
+            unset($params->gallery_thumb);
+        }
 
-		$query->clear()
-			->update('#__extensions')
-			->set($this->db->quoteName('params') . ' = ' . $this->db->quote(json_encode($params)))
-			->where($this->db->quoteName('element') . ' = ' . $this->db->quote('modals'))
-			->where($this->db->quoteName('folder') . ' = ' . $this->db->quote('system'));
-		$this->db->setQuery($query);
-		$this->db->execute();
+        // Since v9.9.0
+        if (isset($params->images_use_title_attribute) && $params->images_use_title_attribute === 1)
+        {
+            $params->images_use_title_attribute = 'title';
+        }
 
-		JFactory::getCache()->clean('_system');
-	}
+        // Since v10.0.0
+        if (isset($params->thumbnail_quality) && is_numeric($params->thumbnail_quality))
+        {
+            $params->thumbnail_quality = 'medium';
+        }
 
-	public function onAfterInstall($route)
-	{
-		// Copy modal.php to system template folder
-		JFile::copy(__DIR__ . '/modal.php', JPATH_SITE . '/templates/system/modal.php');
+        if ( ! isset($params->thumbnail_legacy) && ! empty($params->thumbnail_suffix))
+        {
+            $params->thumbnail_legacy = 1;
+        }
 
-		$this->fixOldParams();
+        // Since v11.3.0
+        if (isset($params->thumbnail_crop) && is_numeric($params->thumbnail_crop))
+        {
+            $params->thumbnail_resize_type = $params->thumbnail_crop ? 'crop' : 'scale';
+            unset($params->thumbnail_crop);
+        }
 
-		return parent::onAfterInstall($route);
-	}
+        $query->clear()
+            ->update('#__extensions')
+            ->set($db->quoteName('params') . ' = ' . $db->quote(json_encode($params)))
+            ->where($db->quoteName('element') . ' = ' . $db->quote('modals'))
+            ->where($db->quoteName('folder') . ' = ' . $db->quote('system'));
+        $db->setQuery($query);
+        $db->execute();
 
-	public function onBeforeInstall($route)
-	{
-		if ( ! parent::onBeforeInstall($route))
-		{
-			return false;
-		}
-
-		$this->showDivMessage();
-
-		return true;
-	}
-
-	public function uninstall($adapter)
-	{
-		$this->uninstallPlugin($this->extname, 'editors-xtd');
-	}
-
-	private function showDivMessage()
-	{
-		$installed_version = $this->getVersion($this->getInstalledXMLFile());
-
-		if ($installed_version && version_compare($installed_version, 11, '<'))
-		{
-			JFactory::getApplication()->enqueueMessage(
-				'Modals no longer uses the external Colorbox script. As a result, the script name and all element ids and have been changed.<br>'
-				. 'This means that any custom styles and scripts you are using for Modals will need updating.<br><br>'
-				. 'References in your custom CSS styling to <code>cboxTitle</code>, <code>cboxLoadedContent</code>, etc. will need to be changed to <code>rl_modals_title</code>, <code>rl_modals_loaded_content</code>, etc.<br>'
-				. 'References in your custom code to <code>jQuery.colorbox</code> will need to be changed to <code>jQuery.rl_modals</code>'
-				, 'warning'
-			);
-		}
-	}
+        JFactory::getCache()->clean('_system');
+    }
 }

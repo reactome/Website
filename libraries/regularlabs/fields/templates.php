@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -39,6 +39,22 @@ class JFormFieldRL_Templates extends Field
         $options = $this->getOptions();
 
         return $this->selectList($options, $name, $value, $id, $size, $multiple);
+    }
+
+    protected function getInput()
+    {
+        // fix old '::' separator and change it to '--'
+        $value = json_encode($this->value);
+        $value = str_replace('::', '--', $value);
+        $value = (array) json_decode($value, true);
+
+        $size     = (int) $this->get('size');
+        $multiple = $this->get('multiple');
+
+        return $this->selectListAjax(
+            $this->type, $this->name, $value, $this->id,
+            compact('size', 'multiple')
+        );
     }
 
     protected function getOptions()
@@ -110,21 +126,5 @@ class JFormFieldRL_Templates extends Field
         }
 
         return $groups;
-    }
-
-    protected function getInput()
-    {
-        // fix old '::' separator and change it to '--'
-        $value = json_encode($this->value);
-        $value = str_replace('::', '--', $value);
-        $value = (array) json_decode($value, true);
-
-        $size     = (int) $this->get('size');
-        $multiple = $this->get('multiple');
-
-        return $this->selectListAjax(
-            $this->type, $this->name, $value, $this->id,
-            compact('size', 'multiple')
-        );
     }
 }

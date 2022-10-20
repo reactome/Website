@@ -1,229 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3.9" type="plugin" group="system" method="upgrade">
-    <name>PLG_SYSTEM_SLIDERS</name>
-    <description>PLG_SYSTEM_SLIDERS_DESC</description>
-    <version>8.2.4</version>
-    <creationDate>August 2022</creationDate>
-    <author>Regular Labs (Peter van Westen)</author>
-    <authorEmail>info@regularlabs.com</authorEmail>
-    <authorUrl>https://regularlabs.com</authorUrl>
-    <copyright>Copyright © 2022 Regular Labs - All Rights Reserved</copyright>
-    <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-
-    <scriptfile>script.install.php</scriptfile>
-
-    <updateservers>
-        <server type="extension" priority="1" name="Regular Labs - Sliders">
-            https://download.regularlabs.com/updates.xml?e=sliders&amp;type=.xml
-        </server>
-    </updateservers>
-
-    <files>
-        <file plugin="sliders">sliders.php</file>
-        <file>script.install.helper.php</file>
-        <folder>language</folder>
-        <folder>src</folder>
-        <folder>vendor</folder>
-    </files>
-
-    <media folder="media" destination="sliders">
-        <folder>css</folder>
-        <folder>js</folder>
-        <folder>less</folder>
-    </media>
-
-    <config>
-        <fields name="params" addfieldpath="/libraries/regularlabs/fields">
-            <fieldset name="basic">
-                <field name="@load_language_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
-                <field name="@load_language" type="rl_loadlanguage" extension="plg_system_sliders" />
-                <field name="@license" type="rl_license" extension="SLIDERS" />
-                <field name="@version" type="rl_version" extension="SLIDERS" />
-                <field name="@header" type="rl_header"
-                       label="SLIDERS"
-                       description="SLIDERS_DESC"
-                       url="https://regularlabs.com/sliders" />
-            </fieldset>
-
-            <fieldset name="RL_STYLING">
-                <field name="load_stylesheet" type="radio" class="btn-group" default="1"
-                       label="RL_LOAD_STYLESHEET"
-                       description="RL_LOAD_STYLESHEET_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
-                <field name="mainclass" type="text" default=""
-                       label="SLD_MAIN_CLASS"
-                       description="SLD_MAIN_CLASS_DESC" />
-            </fieldset>
-
-            <fieldset name="RL_BEHAVIOUR">
-                <field name="@note__mode" type="rl_onlypro"
-                       label="SLD_MODE"
-                       description="SLD_MODE_DESC" />
-                
-                <field name="@note__slide_speed" type="rl_onlypro"
-                       label="SLD_SLIDE_SPEED"
-                       description="SLD_SLIDE_SPEED_DESC" />
-                <field name="state_first" type="radio" class="btn-group" default="open"
-                       label="SLD_STATE_FIRST_SLIDER"
-                       description="SLD_STATE_FIRST_SLIDER_DESC">
-                    <option value="open">SLD_OPENED</option>
-                    <option value="close">SLD_CLOSED</option>
-                </field>
-
-                <field name="@block__scroll__a" type="rl_block" start="1" label="SLD_SCROLL" />
-                <field name="@note__scroll" type="rl_onlypro"
-                       label="SLD_SCROLL"
-                       description="SLD_SCROLL_DESC" />
-                <field name="@note__linkscroll" type="rl_onlypro"
-                       label="SLD_SCROLL_LINKS"
-                       description="SLD_SCROLL_LINKS_DESC" />
-                <field name="@note__urlscroll" type="rl_onlypro"
-                       label="SLD_SCROLL_BY_URL"
-                       description="SLD_SCROLL_BY_URL_DESC" />
-                <field name="@note__scrolloffset" type="rl_onlypro"
-                       label="SLD_SCROLL_OFFSET"
-                       description="SLD_SCROLL_OFFSET_DESC" />
-                <field name="@block__scroll__b" type="rl_block" end="1" />
-            </fieldset>
-
-            <fieldset name="RL_SETTINGS_EDITOR_BUTTON">
-                <field name="button_text" type="text" default="Sliders"
-                       label="RL_BUTTON_TEXT"
-                       description="RL_BUTTON_TEXT_DESC" />
-                <field name="enable_frontend" type="radio" class="btn-group" default="1"
-                       label="RL_ENABLE_IN_FRONTEND"
-                       description="RL_ENABLE_IN_FRONTEND_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
-                <field name="button_use_simple_button" type="radio" class="btn-group" default="0"
-                       label="RL_USE_SIMPLE_BUTTON"
-                       description="RL_USE_SIMPLE_BUTTON_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
-                <field name="button_max_count" type="list" class="input-mini" default="10"
-                       label="SLD_MAX_SLIDER_COUNT"
-                       description="SLD_MAX_SLIDER_COUNT_DESC"
-                       showon="button_use_simple_button:0">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                </field>
-                <field name="@showon__button_use_simple_button_yes__a" type="rl_showon" value="button_use_simple_button:1" />
-                <field name="button_use_custom_code" type="radio" class="btn-group" default="0"
-                       label="RL_USE_CUSTOM_CODE"
-                       description="RL_USE_CUSTOM_CODE_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
-                <field name="button_custom_code" type="rl_textareaplus" filter="RAW" texttype="html" width="400" height="300"
-                       default="&lt;p>{slider Slider Title 1}&lt;/p>[:SELECTION:]&lt;p>{slider Slider Title 2}&lt;/p>&lt;p>Slider text...&lt;/p>&lt;p>{/sliders}&lt;/p>"
-                       label="RL_CUSTOM_CODE"
-                       description="RL_CUSTOM_CODE_DESC"
-                       showon="button_use_custom_code:1" />
-                <field name="@showon__button_use_simple_button_yes__b" type="rl_showon" />
-            </fieldset>
-
-            <fieldset name="RL_TAG_SYNTAX">
-                <field name="tag_open" type="text" size="20" default="slider"
-                       label="SLD_OPENING_TAG"
-                       description="SLD_OPENING_TAG_DESC" />
-                <field name="tag_close" type="text" size="20" default="sliders"
-                       label="SLD_CLOSING_TAG"
-                       description="SLD_CLOSING_TAG_DESC" />
-                <field name="tag_delimiter" type="radio" class="btn-group" size="2" default="space"
-                       label="RL_TAG_SYNTAX"
-                       description="SLD_TAG_SYNTAX_DESC"
-                       showon="tag_delimiter:=">
-                    <option value="space">SLD_SYNTAX_SPACE</option>
-                    <option value="=">SLD_SYNTAX_IS</option>
-                </field>
-                <field name="tag_characters" type="list" default="{.}" class="input-small"
-                       label="RL_TAG_CHARACTERS"
-                       description="RL_TAG_CHARACTERS_DESC">
-                    <option value="{.}">{...}</option>
-                    <option value="[.]">[...]</option>
-                    <option value="«.»">«...»</option>
-                    <option value="{{.}}">{{...}}</option>
-                    <option value="[[.]]">[[...]]</option>
-                    <option value="[:.:]">[:...:]</option>
-                    <option value="[%.%]">[%...%]</option>
-                </field>
-            </fieldset>
-
-            <fieldset name="advanced">
-                <field name="output_title_tag" type="radio" class="btn-group" default="1"
-                       label="SLD_OUTPUT_TITLE_TAG"
-                       description="SLD_OUTPUT_TITLE_TAG_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
-                <field name="title_tag" type="text" size="5" class="input-mini" default="h2"
-                       label="SLD_TITLE_TAG"
-                       description="SLD_TITLE_TAG_DESC" />
-                <field name="use_hash" type="radio" class="btn-group" default="1"
-                       label="SLD_USE_HASH"
-                       description="SLD_USE_HASH_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
-                <field name="reload_iframes" type="radio" class="btn-group" default="0"
-                       label="SLD_RELOAD_IFRAMES"
-                       description="SLD_RELOAD_IFRAMES_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
-                <field name="init_timeout" type="number" size="5" class="input-mini" default="0"
-                       label="SLD_INIT_TIMEOUT"
-                       description="SLD_INIT_TIMEOUT_DESC" />
-                <field name="@note__use_cookies" type="rl_onlypro"
-                       label="SLD_USE_COOKIES"
-                       description="SLD_USE_COOKIES_DESC" />
-                
-                <field name="@note__disabled_components" type="rl_onlypro"
-                       label="RL_DISABLE_ON_COMPONENTS"
-                       description="RL_DISABLE_ON_COMPONENTS_DESC" />
-                <field name="enable_admin" type="radio" class="btn-group" default="0"
-                       label="RL_ENABLE_IN_ADMIN"
-                       description="RL_ENABLE_IN_ADMIN_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
-                <field name="place_comments" type="radio" class="btn-group" default="1"
-                       label="RL_PLACE_HTML_COMMENTS"
-                       description="RL_PLACE_HTML_COMMENTS_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
-                <field name="media_versioning" type="radio" class="btn-group" default="1"
-                       label="RL_MEDIA_VERSIONING"
-                       description="RL_MEDIA_VERSIONING_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
-                <field name="load_bootstrap_framework" type="radio" class="btn-group" default="1"
-                       label="RL_LOAD_BOOTSTRAP_FRAMEWORK"
-                       description="RL_LOAD_BOOTSTRAP_FRAMEWORK_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
-                <field name="@showon__no_load_bootstrap_framework__a" type="rl_showon" value="load_bootstrap_framework:0" />
-                <field name="@note__no_load_bootstrap_framework" type="note" class="alert alert-danger" description="RL_BOOTSTRAP_FRAMEWORK_DISABLED,SLIDERS" />
-                <field name="load_jquery" type="radio" class="btn-group" default="0"
-                       label="RL_LOAD_JQUERY"
-                       description="RL_LOAD_JQUERY_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
-                <field name="@note__no_load_jquery" type="note" class="alert alert-danger"
-                       description="RL_JQUERY_DISABLED,SLIDERS"
-                       showon="load_jquery:0" />
-                <field name="@showon__no_load_bootstrap_framework__b" type="rl_showon" />
-            </fieldset>
-        </fields>
-    </config>
+<extension version="3" type="plugin" group="system" method="upgrade">
+  <name>PLG_SYSTEM_SLIDERS</name>
+  <description>PLG_SYSTEM_SLIDERS_DESC</description>
+  <version>8.3.0</version>
+  <creationDate>October 2022</creationDate>
+  <author>Regular Labs (Peter van Westen)</author>
+  <authorEmail>info@regularlabs.com</authorEmail>
+  <authorUrl>https://regularlabs.com</authorUrl>
+  <copyright>Copyright © 2022 Regular Labs - All Rights Reserved</copyright>
+  <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+  <files>
+    <file plugin="sliders">sliders.php</file>
+    <folder>language</folder>
+    <folder>src</folder>
+    <folder>vendor</folder>
+  </files>
+  <media folder="media" destination="sliders">
+    <folder>css</folder>
+    <folder>js</folder>
+    <folder>less</folder>
+  </media>
+  <config>
+    <fields name="params" addfieldpath="/libraries/regularlabs/fields">
+      <fieldset name="basic">
+        <field name="@load_language_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs"/>
+        <field name="@load_language" type="rl_loadlanguage" extension="plg_system_sliders"/>
+        <field name="@license" type="rl_license" extension="SLIDERS"/>
+        <field name="@version" type="rl_version" extension="SLIDERS"/>
+        <field name="@header" type="rl_header" label="SLIDERS" description="SLIDERS_DESC" url="https://regularlabs.com/sliders"/>
+      </fieldset>
+      <fieldset name="RL_STYLING">
+        <field name="load_stylesheet" type="radio" class="btn-group" default="1" label="RL_LOAD_STYLESHEET" description="RL_LOAD_STYLESHEET_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="mainclass" type="text" default="" label="SLD_MAIN_CLASS" description="SLD_MAIN_CLASS_DESC"/>
+      </fieldset>
+      <fieldset name="RL_BEHAVIOUR">
+        <field name="@note__mode" type="rl_onlypro" label="SLD_MODE" description="SLD_MODE_DESC"/>
+        <field name="@note__slide_speed" type="rl_onlypro" label="SLD_SLIDE_SPEED" description="SLD_SLIDE_SPEED_DESC"/>
+        <field name="state_first" type="radio" class="btn-group" default="open" label="SLD_STATE_FIRST_SLIDER" description="SLD_STATE_FIRST_SLIDER_DESC">
+          <option value="open">SLD_OPENED</option>
+          <option value="close">SLD_CLOSED</option>
+        </field>
+        <field name="@block__scroll__a" type="rl_block" start="1" label="SLD_SCROLL"/>
+        <field name="@note__scroll" type="rl_onlypro" label="SLD_SCROLL" description="SLD_SCROLL_DESC"/>
+        <field name="@note__linkscroll" type="rl_onlypro" label="SLD_SCROLL_LINKS" description="SLD_SCROLL_LINKS_DESC"/>
+        <field name="@note__urlscroll" type="rl_onlypro" label="SLD_SCROLL_BY_URL" description="SLD_SCROLL_BY_URL_DESC"/>
+        <field name="@note__scrolloffset" type="rl_onlypro" label="SLD_SCROLL_OFFSET" description="SLD_SCROLL_OFFSET_DESC"/>
+        <field name="@block__scroll__b" type="rl_block" end="1"/>
+      </fieldset>
+      <fieldset name="RL_SETTINGS_EDITOR_BUTTON">
+        <field name="button_text" type="text" default="Sliders" label="RL_BUTTON_TEXT" description="RL_BUTTON_TEXT_DESC"/>
+        <field name="enable_frontend" type="radio" class="btn-group" default="1" label="RL_ENABLE_IN_FRONTEND" description="RL_ENABLE_IN_FRONTEND_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="button_use_simple_button" type="radio" class="btn-group" default="0" label="RL_USE_SIMPLE_BUTTON" description="RL_USE_SIMPLE_BUTTON_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="button_max_count" type="list" class="input-mini" default="10" label="SLD_MAX_SLIDER_COUNT" description="SLD_MAX_SLIDER_COUNT_DESC" showon="button_use_simple_button:0">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+        </field>
+        <field name="@showon__button_use_simple_button_yes__a" type="rl_showon" value="button_use_simple_button:1"/>
+        <field name="button_use_custom_code" type="radio" class="btn-group" default="0" label="RL_USE_CUSTOM_CODE" description="RL_USE_CUSTOM_CODE_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="button_custom_code" type="rl_textareaplus" filter="RAW" texttype="html" width="400" height="300" default="&lt;p&gt;{slider Slider Title 1}&lt;/p&gt;[:SELECTION:]&lt;p&gt;{slider Slider Title 2}&lt;/p&gt;&lt;p&gt;Slider text...&lt;/p&gt;&lt;p&gt;{/sliders}&lt;/p&gt;" label="RL_CUSTOM_CODE" description="RL_CUSTOM_CODE_DESC" showon="button_use_custom_code:1"/>
+        <field name="@showon__button_use_simple_button_yes__b" type="rl_showon"/>
+      </fieldset>
+      <fieldset name="RL_TAG_SYNTAX">
+        <field name="tag_open" type="text" size="20" default="slider" label="SLD_OPENING_TAG" description="SLD_OPENING_TAG_DESC"/>
+        <field name="tag_close" type="text" size="20" default="sliders" label="SLD_CLOSING_TAG" description="SLD_CLOSING_TAG_DESC"/>
+        <field name="tag_delimiter" type="radio" class="btn-group" size="2" default="space" label="RL_TAG_SYNTAX" description="SLD_TAG_SYNTAX_DESC" showon="tag_delimiter:=">
+          <option value="space">SLD_SYNTAX_SPACE</option>
+          <option value="=">SLD_SYNTAX_IS</option>
+        </field>
+        <field name="tag_characters" type="list" default="{.}" class="input-small" label="RL_TAG_CHARACTERS" description="RL_TAG_CHARACTERS_DESC">
+          <option value="{.}">{...}</option>
+          <option value="[.]">[...]</option>
+          <option value="«.»">«...»</option>
+          <option value="{{.}}">{{...}}</option>
+          <option value="[[.]]">[[...]]</option>
+          <option value="[:.:]">[:...:]</option>
+          <option value="[%.%]">[%...%]</option>
+        </field>
+      </fieldset>
+      <fieldset name="advanced">
+        <field name="output_title_tag" type="radio" class="btn-group" default="1" label="SLD_OUTPUT_TITLE_TAG" description="SLD_OUTPUT_TITLE_TAG_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="title_tag" type="text" size="5" class="input-mini" default="h2" label="SLD_TITLE_TAG" description="SLD_TITLE_TAG_DESC"/>
+        <field name="use_hash" type="radio" class="btn-group" default="1" label="SLD_USE_HASH" description="SLD_USE_HASH_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="reload_iframes" type="radio" class="btn-group" default="0" label="SLD_RELOAD_IFRAMES" description="SLD_RELOAD_IFRAMES_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="init_timeout" type="number" size="5" class="input-mini" default="0" label="SLD_INIT_TIMEOUT" description="SLD_INIT_TIMEOUT_DESC"/>
+        <field name="@note__use_cookies" type="rl_onlypro" label="SLD_USE_COOKIES" description="SLD_USE_COOKIES_DESC"/>
+        <field name="@note__disabled_components" type="rl_onlypro" label="RL_DISABLE_ON_COMPONENTS" description="RL_DISABLE_ON_COMPONENTS_DESC"/>
+        <field name="enable_admin" type="radio" class="btn-group" default="0" label="RL_ENABLE_IN_ADMIN" description="RL_ENABLE_IN_ADMIN_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="place_comments" type="radio" class="btn-group" default="1" label="RL_PLACE_HTML_COMMENTS" description="RL_PLACE_HTML_COMMENTS_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="media_versioning" type="radio" class="btn-group" default="1" label="RL_MEDIA_VERSIONING" description="RL_MEDIA_VERSIONING_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="load_bootstrap_framework" type="radio" class="btn-group" default="1" label="RL_LOAD_BOOTSTRAP_FRAMEWORK" description="RL_LOAD_BOOTSTRAP_FRAMEWORK_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="@showon__no_load_bootstrap_framework__a" type="rl_showon" value="load_bootstrap_framework:0"/>
+        <field name="@note__no_load_bootstrap_framework" type="note" class="alert alert-danger" description="RL_BOOTSTRAP_FRAMEWORK_DISABLED,SLIDERS"/>
+        <field name="load_jquery" type="radio" class="btn-group" default="0" label="RL_LOAD_JQUERY" description="RL_LOAD_JQUERY_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="@note__no_load_jquery" type="note" class="alert alert-danger" description="RL_JQUERY_DISABLED,SLIDERS" showon="load_jquery:0"/>
+        <field name="@showon__no_load_bootstrap_framework__b" type="rl_showon"/>
+      </fieldset>
+    </fields>
+  </config>
 </extension>

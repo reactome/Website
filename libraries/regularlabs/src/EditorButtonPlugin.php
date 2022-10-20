@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -25,13 +25,24 @@ use RegularLabs\Library\ParametersNew as Parameters;
  */
 class EditorButtonPlugin extends JCMSPlugin
 {
-    var     $check_installed      = null;
-    var     $enable_on_acymailing = false;
-    var     $folder               = null; // The type of extension that holds the parameters
-    var     $main_type            = 'plugin'; // The types of extensions that need to be checked (will default to main_type)
-    var     $require_core_auth    = true; // Whether or not the core content create/edit permissions are required
-    private $_helper              = null; // The path to the original caller file
-    private $_init                = false; // Whether or not to enable the editor button on AcyMailing
+    var          $check_installed      = null;
+    var          $enable_on_acymailing = false;
+    var          $folder               = null; // The type of extension that holds the parameters
+    var          $main_type            = 'plugin'; // The types of extensions that need to be checked (will default to main_type)
+    var          $require_core_auth    = true; // Whether or not the core content create/edit permissions are required
+    private      $_helper              = null; // The path to the original caller file
+    private bool $_init                = false; // Whether or not to enable the editor button on AcyMailing
+
+    public function extraChecks($params)
+    {
+        return true;
+    }
+
+    /*
+     * Below methods are general functions used in most of the Regular Labs extensions
+     * The reason these are not placed in the Regular Labs Library files is that they also
+     * need to be used when the Regular Labs Library is not installed
+     */
 
     /**
      * Display the button
@@ -50,11 +61,13 @@ class EditorButtonPlugin extends JCMSPlugin
         return $this->_helper->render($editor_name, $this->_subject);
     }
 
-    /*
-     * Below methods are general functions used in most of the Regular Labs extensions
-     * The reason these are not placed in the Regular Labs Library files is that they also
-     * need to be used when the Regular Labs Library is not installed
-     */
+    private function getDir()
+    {
+        // use static::class instead of get_class($this) after php 5.4 support is dropped
+        $rc = new ReflectionClass(get_class($this));
+
+        return dirname($rc->getFileName());
+    }
 
     /**
      * Create the helper object
@@ -115,15 +128,6 @@ class EditorButtonPlugin extends JCMSPlugin
         return $this->_helper;
     }
 
-    private function isInstalled()
-    {
-        $extensions = ! is_null($this->check_installed)
-            ? $this->check_installed
-            : [$this->main_type];
-
-        return Extension::areInstalled($this->_name, $extensions);
-    }
-
     private function getParams()
     {
         switch ($this->main_type)
@@ -149,16 +153,12 @@ class EditorButtonPlugin extends JCMSPlugin
         }
     }
 
-    public function extraChecks($params)
+    private function isInstalled()
     {
-        return true;
-    }
+        $extensions = ! is_null($this->check_installed)
+            ? $this->check_installed
+            : [$this->main_type];
 
-    private function getDir()
-    {
-        // use static::class instead of get_class($this) after php 5.4 support is dropped
-        $rc = new ReflectionClass(get_class($this));
-
-        return dirname($rc->getFileName());
+        return Extension::areInstalled($this->_name, $extensions);
     }
 }

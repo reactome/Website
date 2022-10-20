@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="package" method="upgrade">
+  <packagename>regularlabs</packagename>
+  <name>PKG_REGULARLABS</name>
+  <version>22.10.10828</version>
+  <creationDate>October 2022</creationDate>
+  <author>Regular Labs (Peter van Westen)</author>
+  <authorEmail>info@regularlabs.com</authorEmail>
+  <authorUrl>https://regularlabs.com</authorUrl>
+  <copyright>Copyright © 2022 Regular Labs - All Rights Reserved</copyright>
+  <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+  <scriptfile>script.install.php</scriptfile>
+  <blockChildUninstall>true</blockChildUninstall>
+  <files folder="packages">
+    <file type="library" id="regularlabs">lib_regularlabs</file>
+    <file type="plugin" group="system" id="regularlabs">plg_system_regularlabs</file>
+  </files>
+  <updateservers>
+    <server type="extension" priority="1" name="Regular Labs Library">https://download.regularlabs.com/updates.xml?e=library&amp;type=.xml</server>
+  </updateservers>
+  <languages folder="language">
+    <language tag="en-GB">en-GB/en-GB.pkg_regularlabs.sys.ini</language>
+  </languages>
+</extension>

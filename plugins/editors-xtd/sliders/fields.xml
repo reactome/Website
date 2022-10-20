@@ -1,58 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config addfieldpath="/libraries/regularlabs/fields">
-    <fieldset name="slider_notice">
-        <field name="@note__title_empty" type="note" class="alert alert-warning"
-               description="SLD_TITLE_EMPTY"
-               showon="title:" />
-    </fieldset>
-
-    <fieldset name="slider_params">
-        <field name="open" type="radio" class="btn-group" default=""
-               label="SLD_DEFAULT"
-               description="SLD_DEFAULT_DESC">
-            <option value="">JDEFAULT</option>
-            <option value="0">JNO</option>
-            <option value="1">JYES</option>
-        </field>
-        <field name="alias" type="text"
-               label="JFIELD_ALIAS_LABEL"
-               description="SLD_ALIAS_DESC" />
-        <field name="class" type="text"
-               label="RL_CSS_CLASS"
-               description="RL_CSS_CLASS_DESC" />
-        <field name="icon" type="radio" class="btn-group" default="0"
-               label="SLD_SHOW_ICON"
-               description="SLD_SHOW_ICON_DESC">
-            <option value="0">JNO</option>
-            <option value="1">JYES</option>
-        </field>
-        <field name="@note__scroll" type="rl_onlypro"
-               label="SLD_SCROLL"
-               description="SLD_SCROLL_DESC" />
-        <field name="@note__access" type="rl_onlypro"
-               label="JFIELD_ACCESS_LABEL"
-               description="JFIELD_ACCESS_DESC" />
-        <field name="@note__usergroup" type="rl_onlypro"
-               label="RL_USER_GROUPS"
-               description="RL_USER_GROUPS_DESC" />
-        <field name="@note__extra" type="rl_onlypro"
-               label="RL_EXTRA_PARAMETERS"
-               description="RL_EXTRA_PARAMETERS_DESC" />
-    </fieldset>
-
-    <fieldset name="params">
-        <field name="mainclass" type="text" default=""
-               label="SLD_MAIN_CLASS"
-               description="SLD_MAIN_CLASS_DESC" />
-        <field name="nested" type="radio" class="btn-group" default="0"
-               label="SLD_NESTED_SET"
-               description="SLD_NESTED_SET_DESC">
-            <option value="0">JNO</option>
-            <option value="1">JYES</option>
-        </field>
-        <field name="nested_id" type="text" class="btn-group" default="nested"
-               label="SLD_NESTED_ID"
-               description="SLD_NESTED_ID_DESC"
-               showon="nested:1" />
-    </fieldset>
+  <fieldset name="slider_notice">
+    <field name="@note__title_empty" type="note" class="alert alert-warning" description="SLD_TITLE_EMPTY" showon="title:"/>
+  </fieldset>
+  <fieldset name="slider_params">
+    <field name="open" type="radio" class="btn-group" default="" label="SLD_DEFAULT" description="SLD_DEFAULT_DESC">
+      <option value="">JDEFAULT</option>
+      <option value="0">JNO</option>
+      <option value="1">JYES</option>
+    </field>
+    <field name="alias" type="text" label="JFIELD_ALIAS_LABEL" description="SLD_ALIAS_DESC"/>
+    <field name="class" type="text" label="RL_CSS_CLASS" description="RL_CSS_CLASS_DESC"/>
+    <field name="icon" type="radio" class="btn-group" default="0" label="SLD_SHOW_ICON" description="SLD_SHOW_ICON_DESC">
+      <option value="0">JNO</option>
+      <option value="1">JYES</option>
+    </field>
+    <field name="@note__scroll" type="rl_onlypro" label="SLD_SCROLL" description="SLD_SCROLL_DESC"/>
+    <field name="@note__access" type="rl_onlypro" label="JFIELD_ACCESS_LABEL" description="JFIELD_ACCESS_DESC"/>
+    <field name="@note__usergroup" type="rl_onlypro" label="RL_USER_GROUPS" description="RL_USER_GROUPS_DESC"/>
+    <field name="@note__extra" type="rl_onlypro" label="RL_EXTRA_PARAMETERS" description="RL_EXTRA_PARAMETERS_DESC"/>
+  </fieldset>
+  <fieldset name="params">
+    <field name="mainclass" type="text" default="" label="SLD_MAIN_CLASS" description="SLD_MAIN_CLASS_DESC"/>
+    <field name="nested" type="radio" class="btn-group" default="0" label="SLD_NESTED_SET" description="SLD_NESTED_SET_DESC">
+      <option value="0">JNO</option>
+      <option value="1">JYES</option>
+    </field>
+    <field name="nested_id" type="text" class="btn-group" default="nested" label="SLD_NESTED_ID" description="SLD_NESTED_ID_DESC" showon="nested:1"/>
+  </fieldset>
 </config>

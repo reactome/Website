@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -60,40 +60,6 @@ class RLAssignmentsHikaShop extends RLAssignment
         return $this->passSimple($cats);
     }
 
-    private function getCategories()
-    {
-        switch (true)
-        {
-            case (($this->request->view == 'category' || $this->request->layout == 'listing') && $this->request->id):
-                return [$this->request->id];
-
-            case ($this->request->view == 'category' || $this->request->layout == 'listing'):
-                include_once JPATH_ADMINISTRATOR . '/components/com_hikashop/helpers/helper.php';
-                $menuClass = hikashop_get('class.menus');
-                $menuData  = $menuClass->get($this->request->Itemid);
-
-                return $this->makeArray($menuData->hikashop_params['selectparentlisting']);
-
-            case ($this->request->id):
-                $query = $this->db->getQuery(true)
-                    ->select('c.category_id')
-                    ->from('#__hikashop_product_category AS c')
-                    ->where('c.product_id = ' . (int) $this->request->id);
-                $this->db->setQuery($query);
-                $cats = $this->db->loadColumn();
-
-                return $this->makeArray($cats);
-
-            default:
-                return [];
-        }
-    }
-
-    private function getCatParentIds($id = 0)
-    {
-        return $this->getParentIds($id, 'hikashop_category', 'category_parent_id', 'category_id');
-    }
-
     public function passPageTypes()
     {
         if ($this->request->option != 'com_hikashop')
@@ -121,5 +87,39 @@ class RLAssignmentsHikaShop extends RLAssignment
         }
 
         return $this->passSimple($this->request->id);
+    }
+
+    private function getCatParentIds($id = 0)
+    {
+        return $this->getParentIds($id, 'hikashop_category', 'category_parent_id', 'category_id');
+    }
+
+    private function getCategories()
+    {
+        switch (true)
+        {
+            case (($this->request->view == 'category' || $this->request->layout == 'listing') && $this->request->id):
+                return [$this->request->id];
+
+            case ($this->request->view == 'category' || $this->request->layout == 'listing'):
+                include_once JPATH_ADMINISTRATOR . '/components/com_hikashop/helpers/helper.php';
+                $menuClass = hikashop_get('class.menus');
+                $menuData  = $menuClass->get($this->request->Itemid);
+
+                return $this->makeArray($menuData->hikashop_params['selectparentlisting']);
+
+            case ($this->request->id):
+                $query = $this->db->getQuery(true)
+                    ->select('c.category_id')
+                    ->from('#__hikashop_product_category AS c')
+                    ->where('c.product_id = ' . (int) $this->request->id);
+                $this->db->setQuery($query);
+                $cats = $this->db->loadColumn();
+
+                return $this->makeArray($cats);
+
+            default:
+                return [];
+        }
     }
 }

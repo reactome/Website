@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -27,6 +27,11 @@ require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 class JFormFieldRL_ConditionSelection extends Field
 {
     public $type = 'ConditionSelection';
+
+    protected function closeShowOn()
+    {
+        return RL_ShowOn::close();
+    }
 
     protected function getInput()
     {
@@ -113,9 +118,9 @@ class JFormFieldRL_ConditionSelection extends Field
         return '</div>' . implode('', $html);
     }
 
-    protected function closeShowOn()
+    protected function getLabel()
     {
-        return RL_ShowOn::close();
+        return '';
     }
 
     protected function openShowOn($condition = '')
@@ -134,10 +139,5 @@ class JFormFieldRL_ConditionSelection extends Field
         }
 
         return RL_ShowOn::open($condition, $formControl);
-    }
-
-    protected function getLabel()
-    {
-        return '';
     }
 }

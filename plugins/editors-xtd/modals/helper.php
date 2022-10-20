@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.10.1
+ * @version         11.11.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,15 +19,15 @@ use RegularLabs\Library\EditorButtonHelper as RL_EditorButtonHelper;
  */
 class PlgButtonModalsHelper extends RL_EditorButtonHelper
 {
-	/**
-	 * Display the button
-	 *
-	 * @param string $editor_name
-	 *
-	 * @return JObject|null A button object
-	 */
-	public function render($editor_name)
-	{
-		return $this->renderPopupButton($editor_name);
-	}
+    /**
+     * Display the button
+     *
+     * @param string $editor_name
+     *
+     * @return JObject|null A button object
+     */
+    public function render($editor_name)
+    {
+        return $this->renderPopupButton($editor_name);
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         9.2.3
+ * @version         9.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -15,8 +15,8 @@ use Joomla\CMS\Language\Text as JText;
 
 ?>
 <div class="header">
-	<h1 class="page-title">
-		<span class="icon-reglab icon-sourcerer"></span>
-		<?php echo JText::_('SRC_CODE'); ?>
-	</h1>
+    <h1 class="page-title">
+        <span class="icon-reglab icon-sourcerer"></span>
+        <?php echo JText::_('SRC_CODE'); ?>
+    </h1>
 </div>

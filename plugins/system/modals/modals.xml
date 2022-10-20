@@ -1,341 +1,192 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3.9" type="plugin" group="system" method="upgrade">
-	<name>PLG_SYSTEM_MODALS</name>
-	<description>PLG_SYSTEM_MODALS_DESC</description>
-	<version>11.10.1</version>
-	<creationDate>June 2022</creationDate>
-	<author>Regular Labs (Peter van Westen)</author>
-	<authorEmail>info@regularlabs.com</authorEmail>
-	<authorUrl>https://regularlabs.com</authorUrl>
-	<copyright>Copyright © 2022 Regular Labs - All Rights Reserved</copyright>
-	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-
-	<scriptfile>script.install.php</scriptfile>
-
-	<updateservers>
-		<server type="extension" priority="1" name="Regular Labs - Modals">
-			https://download.regularlabs.com/updates.xml?e=modals&amp;type=.xml
-		</server>
-	</updateservers>
-
-	<files>
-		<file plugin="modals">modals.php</file>
-		<file>modal.php</file>
-		<file>script.install.helper.php</file>
-		<folder>language</folder>
-		<folder>src</folder>
-		<folder>vendor</folder>
-	</files>
-
-	<media folder="media" destination="modals">
-		<folder>css</folder>
-		<folder>images</folder>
-		<folder>js</folder>
-		<folder>less</folder>
-	</media>
-
-	<config>
-		<fields name="params" addfieldpath="/libraries/regularlabs/fields">
-			<fieldset name="basic">
-				<field name="@load_language_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs" />
-				<field name="@load_language" type="rl_loadlanguage" extension="plg_system_modals" />
-				<field name="@license" type="rl_license" extension="MODALS" />
-				<field name="@version" type="rl_version" extension="MODALS" />
-				<field name="@header" type="rl_header"
-					   label="MODALS"
-					   description="MODALS_DESC"
-					   url="https://regularlabs.com/modals" />
-			</fieldset>
-
-			<fieldset name="RL_STYLING">
-				<field name="load_stylesheet" type="radio" class="btn-group" default="1"
-					   label="RL_LOAD_STYLESHEET"
-					   description="RL_LOAD_STYLESHEET_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="style" type="filelist" default="bootstrap"
-					   directory="media/modals/css" filter="^[^\.]+\.css$"
-					   stripext="true" hide_none="true" hide_default="true"
-					   label="MDL_STYLE"
-					   description="MDL_STYLE_DESC"
-					   showon="load_stylesheet:1" />
-				<field name="overlay" type="radio" class="btn-group" default="1"
-					   label="MDL_ENABLE_OVERLAY"
-					   description="MDL_ENABLE_OVERLAY_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="opacity" type="number" size="10" class="input-mini" default="0.8"
-					   min="0" max="1"
-					   label="MDL_OPACITY"
-					   description="MDL_OPACITY_DESC"
-					   showon="overlay:1" />
-
-				<field name="@block__dimensions__a" type="rl_block" start="1" label="MDL_DIMENSIONS" />
-				<field name="width" type="text" size="10" class="input-mini" default=""
-					   label="RL_WIDTH"
-					   description="MDL_DIMENSION_DESC" />
-				<field name="height" type="text" size="10" class="input-mini" default=""
-					   label="RL_HEIGHT"
-					   description="MDL_DIMENSION_DESC" />
-				<field name="externalwidth" type="text" size="10" class="input-mini" default="95%"
-					   label="MDL_EXTERNAL_WIDTH"
-					   description="MDL_EXTERNAL_DIMENSION_DESC" />
-				<field name="externalheight" type="text" size="10" class="input-mini" default="95%"
-					   label="MDL_EXTERNAL_HEIGHT"
-					   description="MDL_EXTERNAL_DIMENSION_DESC" />
-				<field name="initialwidth" type="text" size="10" class="input-mini" default="600"
-					   label="MDL_INITIAL_WIDTH"
-					   description="MDL_INITIAL_DIMENSION_DESC" />
-				<field name="initialheight" type="text" size="10" class="input-mini" default="450"
-					   label="MDL_INITIAL_HEIGHT"
-					   description="MDL_INITIAL_DIMENSION_DESC" />
-				<field name="maxwidth" type="text" size="10" class="input-mini" default="95%"
-					   label="MDL_MAX_WIDTH"
-					   description="MDL_MAX_DIMENSION_DESC" />
-				<field name="maxheight" type="text" size="10" class="input-mini" default="95%"
-					   label="MDL_MAX_HEIGHT"
-					   description="MDL_MAX_DIMENSION_DESC" />
-				<field name="auto_correct_size" type="radio" class="btn-group" default="1"
-					   label="MDL_AUTO_CORRECT_SIZE"
-					   description="MDL_AUTO_CORRECT_SIZE_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="auto_correct_size_delay" type="text" size="5" class="input input-mini"
-					   default="0"
-					   label="MDL_AUTO_CORRECT_SIZE_DELAY"
-					   description="MDL_AUTO_CORRECT_SIZE_DELAY_DESC"
-					   showon="auto_correct_size:1" />
-				<field name="@block__dimensions__b" type="rl_block" end="1" />
-
-				<field name="@block__positioning__a" type="rl_block" start="1" label="MDL_POSITIONING" />
-				<field name="@positioning" type="rl_onlypro" />
-				<field name="@block__positioning__b" type="rl_block" end="1" />
-			</fieldset>
-
-
-			<fieldset name="RL_MEDIA">
-				<field name="@block__images__a" type="rl_block" start="1" label="MDL_IMAGES" />
-				<field name="auto_titles" type="radio" class="btn-group" default="1"
-					   label="MDL_AUTO_TITLES"
-					   description="MDL_AUTO_TITLES_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="title_case" type="list" default="titlecase"
-					   label="MDL_CASE_TITLES"
-					   description="MDL_CASE_TITLES_DESC"
-					   showon="auto_titles:1">
-					<option value="0">JNONE</option>
-					<option value="lowercase">MDL_LOWERCASE</option>
-					<option value="uppercase">MDL_UPPERCASE</option>
-					<option value="uppercasefirst">MDL_UPPERCASE_FIRST</option>
-					<option value="titlecase">MDL_TITLECASE</option>
-					<option value="titlecase_smart">MDL_TITLECASE_SMART</option>
-				</field>
-				<field name="lowercase_words" type="text" default="a,the,to,at,in,with,and,but,or"
-					   label="MDL_TITLECASE_LOWERCASE_WORDS"
-					   description="MDL_TITLECASE_LOWERCASE_WORDS_DESC"
-					   showon="auto_titles:1[AND]title_case:titlecase_smart" />
-				<field name="scalephotos" type="radio" class="btn-group" default="1"
-					   label="MDL_SCALE_PHOTOS"
-					   description="MDL_SCALE_PHOTOS_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="retinaimage" type="radio" class="btn-group" default="0"
-					   label="MDL_RETINA_IMAGE"
-					   description="MDL_RETINA_IMAGE_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="retinaurl" type="radio" class="btn-group" default="0"
-					   label="MDL_RETINA_URL"
-					   description="MDL_RETINA_URL_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="retinasuffix" type="text" default="@2x.$1"
-					   label="MDL_RETINA_SUFFIX"
-					   description="MDL_RETINA_SUFFIX_DESC"
-					   showon="retinaurl:1" />
-				<!-- <<< [PRO] <<< -->
-				<field name="@block__images__b" type="rl_block" end="1" />
-
-				<field name="@block__thumbnails__a" type="rl_block" start="1" label="MDL_THUMBNAILS" />
-				<field name="@thumbnails" type="rl_onlypro" />
-				<field name="@block__thumbnails__b" type="rl_block" end="1" />
-
-				<field name="@block__galleries__a" type="rl_block" start="1" label="MDL_GALLERIES" />
-				<field name="@galleries" type="rl_onlypro" />
-				<field name="@block__galleries__b" type="rl_block" end="1" />
-
-				<field name="@block__groups__a" type="rl_block" start="1" label="MDL_GROUPS" />
-				<field name="@groups" type="rl_onlypro" />
-				<field name="@block__groups__b" type="rl_block" end="1" />
-			</fieldset>
-
-
-			<fieldset name="MDL_AUTOCONVERT">
-				<field name="@block__autoconvert__a" type="rl_block" start="1" label="MDL_LINKS" />
-
-				<field name="@block__classnames__a" type="rl_block" start="1" label="MDL_CLASSNAMES" />
-				<field name="autoconvert_classnames" type="radio" class="btn-group" default="1"
-					   label="MDL_AUTOCONVERT"
-					   description="MDL_AUTOCONVERT_CLASSNAMES_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="classnames" type="text" size="80" class="input-xlarge" default="modal"
-					   label="MDL_CLASSNAMES"
-					   description="MDL_CLASSNAMES_DESC"
-					   showon="autoconvert_classnames:1" />
-				<field name="@block__classnames__b" type="rl_block" end="1" />
-
-				<field name="@block__external__a" type="rl_block" start="1" label="MDL_EXTERNAL_LINKS" />
-				<field name="@external" type="rl_onlypro"
-					   label="MDL_AUTOCONVERT"
-					   description="MDL_EXTERNAL_LINKS_DESC" />
-				<field name="@block__external__b" type="rl_block" end="1" label="MDL_TARGET" />
-
-				<field name="@block__target__a" type="rl_block" start="1" label="MDL_TARGET" />
-				<field name="@target" type="rl_onlypro"
-					   label="MDL_AUTOCONVERT"
-					   description="MDL_TARGET_DESC" />
-				<field name="@block__target__b" type="rl_block" end="1" />
-
-				<field name="@block__filetypes__a" type="rl_block" start="1" label="MDL_FILETYPES" />
-				<field name="@filetypes" type="rl_onlypro"
-					   label="MDL_AUTOCONVERT"
-					   description="MDL_AUTOCONVERT_FILETYPES_DESC" />
-				<field name="@block__filetypes__b" type="rl_block" end="1" />
-
-				<field name="@block__urls__a" type="rl_block" start="1" label="RL_URL_PARTS" />
-				<field name="@urls" type="rl_onlypro"
-					   label="MDL_AUTOCONVERT"
-					   description="MDL_AUTOCONVERT_URLS_DESC" />
-				<field name="@block__urls__b" type="rl_block" end="1" />
-
-				<field name="exclude_urls" type="textarea" cols="40" rows="5" default=""
-					   label="MDL_EXCLUDE_URLS"
-					   description="MDL_EXCLUDE_URLS_DESC"
-					   showon="autoconvert_classnames:1[OR]external:1[OR]target:1[OR]filetypes:1[OR]autoconvert_urls:1" />
-
-				<field name="@block__autoconvert__b" type="rl_block" end="1" />
-
-				<field name="@block__autoconvert_images__a" type="rl_block" start="1" label="MDL_IMAGES" />
-				<field name="@image_autoconvert_images" type="rl_onlypro"
-					   label="MDL_AUTOCONVERT"
-					   description="MDL_AUTOCONVERT_CLASSNAMES_IMAGES_DESC" />
-				<field name="@block__autoconvert_images__b" type="rl_block" end="1" />
-			</fieldset>
-
-
-			<fieldset name="RL_SETTINGS_EDITOR_BUTTON">
-				<field name="button_text" type="text" default="Modal"
-					   label="RL_BUTTON_TEXT"
-					   description="RL_BUTTON_TEXT_DESC" />
-				<field name="enable_frontend" type="radio" class="btn-group" default="1"
-					   label="RL_ENABLE_IN_FRONTEND"
-					   description="RL_ENABLE_IN_FRONTEND_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-			</fieldset>
-
-			<fieldset name="RL_TAG_SYNTAX">
-				<field name="tag" type="text" default="modal"
-					   label="MDL_TAG"
-					   description="MDL_TAG_DESC" />
-				<field name="@tag_content" type="rl_onlypro"
-					   label="MDL_CONTENT_TAG"
-					   description="MDL_CONTENT_TAG_DESC" />
-				<field name="tag_characters" type="list" default="{.}" class="input-small"
-					   label="RL_TAG_CHARACTERS"
-					   description="RL_TAG_CHARACTERS_DESC">
-					<option value="{.}">{...}</option>
-					<option value="[.]">[...]</option>
-					<option value="«.»">«...»</option>
-					<option value="{{.}}">{{...}}</option>
-					<option value="[[.]]">[[...]]</option>
-					<option value="[:.:]">[:...:]</option>
-					<option value="[%.%]">[%...%]</option>
-				</field>
-			</fieldset>
-
-			<fieldset name="advanced">
-				<field name="tmpl" type="text" default="modal"
-					   label="MDL_SUB_TEMPLATE"
-					   description="MDL_SUB_TEMPLATE_DESC" />
-				<field name="iframe" type="radio" class="btn-group" default="0"
-					   label="MDL_IFRAME"
-					   description="MDL_IFRAME_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="load_head" type="radio" class="btn-group" default="0"
-					   label="MDL_LOAD_HEAD"
-					   description="MDL_LOAD_HEAD_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="mediafiles" type="text" default="jpg,png,gif,eps,pdf"
-					   label="MDL_MEDIA_FILES"
-					   description="MDL_MEDIA_FILES_DESC" />
-				<field name="iframefiles" type="text" default="pdf"
-					   label="MDL_IFRAME_FILES"
-					   description="MDL_IFRAME_FILES_DESC" />
-				<field name="@note__open_count_based_on" type="rl_onlypro"
-					   label="MDL_OPEN_COUNT_BASED_ON"
-					   description="MDL_OPEN_COUNT_BASED_ON_DESC" />
-				
-				<field name="@note__disable_background_scrolling" type="rl_onlypro"
-					   label="MDL_DISABLE_BACKGROUND_SCROLLING"
-					   description="MDL_DISABLE_BACKGROUND_SCROLLING_DESC" />
-				
-				<field name="@note__disable_on_mobile" type="rl_onlypro"
-					   label="MDL_DISABLE_ON_MOBILE"
-					   description="MDL_DISABLE_ON_MOBILE_DESC" />
-				
-				<field name="@note__disabled_components" type="rl_onlypro"
-					   label="RL_DISABLE_ON_COMPONENTS"
-					   description="RL_DISABLE_ON_COMPONENTS_DESC" />
-				<field name="enable_admin" type="radio" class="btn-group" default="0"
-					   label="RL_ENABLE_IN_ADMIN"
-					   description="RL_ENABLE_IN_ADMIN_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="place_comments" type="radio" class="btn-group" default="1"
-					   label="RL_PLACE_HTML_COMMENTS"
-					   description="RL_PLACE_HTML_COMMENTS_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="add_redirect" type="radio" class="btn-group" default="1"
-					   label="MDL_ADD_REDIRECT"
-					   description="MDL_ADD_REDIRECT_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="media_versioning" type="radio" class="btn-group" default="1"
-					   label="RL_MEDIA_VERSIONING"
-					   description="RL_MEDIA_VERSIONING_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="load_jquery" type="radio" class="btn-group" default="1"
-					   label="RL_LOAD_JQUERY"
-					   description="RL_LOAD_JQUERY_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
-				</field>
-				<field name="@note__load_jquery" type="note" class="alert alert-danger"
-					   description="RL_JQUERY_DISABLED,MODALS"
-					   showon="load_jquery:0" />
-			</fieldset>
-		</fields>
-	</config>
+<extension version="3" type="plugin" group="system" method="upgrade">
+  <name>PLG_SYSTEM_MODALS</name>
+  <description>PLG_SYSTEM_MODALS_DESC</description>
+  <version>11.11.0</version>
+  <creationDate>October 2022</creationDate>
+  <author>Regular Labs (Peter van Westen)</author>
+  <authorEmail>info@regularlabs.com</authorEmail>
+  <authorUrl>https://regularlabs.com</authorUrl>
+  <copyright>Copyright © 2022 Regular Labs - All Rights Reserved</copyright>
+  <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+  <scriptfile>script.install.php</scriptfile>
+  <files>
+    <file plugin="modals">modals.php</file>
+    <file>modal.php</file>
+    <folder>language</folder>
+    <folder>src</folder>
+    <folder>vendor</folder>
+  </files>
+  <media folder="media" destination="modals">
+    <folder>css</folder>
+    <folder>images</folder>
+    <folder>js</folder>
+    <folder>less</folder>
+  </media>
+  <config>
+    <fields name="params" addfieldpath="/libraries/regularlabs/fields">
+      <fieldset name="basic">
+        <field name="@load_language_regularlabs" type="rl_loadlanguage" extension="plg_system_regularlabs"/>
+        <field name="@load_language" type="rl_loadlanguage" extension="plg_system_modals"/>
+        <field name="@license" type="rl_license" extension="MODALS"/>
+        <field name="@version" type="rl_version" extension="MODALS"/>
+        <field name="@header" type="rl_header" label="MODALS" description="MODALS_DESC" url="https://regularlabs.com/modals"/>
+      </fieldset>
+      <fieldset name="RL_STYLING">
+        <field name="load_stylesheet" type="radio" class="btn-group" default="1" label="RL_LOAD_STYLESHEET" description="RL_LOAD_STYLESHEET_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="style" type="filelist" default="bootstrap" directory="media/modals/css" filter="^[^\.]+\.css$" stripext="true" hide_none="true" hide_default="true" label="MDL_STYLE" description="MDL_STYLE_DESC" showon="load_stylesheet:1"/>
+        <field name="overlay" type="radio" class="btn-group" default="1" label="MDL_ENABLE_OVERLAY" description="MDL_ENABLE_OVERLAY_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="opacity" type="number" size="10" class="input-mini" default="0.8" min="0" max="1" label="MDL_OPACITY" description="MDL_OPACITY_DESC" showon="overlay:1"/>
+        <field name="@block__dimensions__a" type="rl_block" start="1" label="MDL_DIMENSIONS"/>
+        <field name="width" type="text" size="10" class="input-mini" default="" label="RL_WIDTH" description="MDL_DIMENSION_DESC"/>
+        <field name="height" type="text" size="10" class="input-mini" default="" label="RL_HEIGHT" description="MDL_DIMENSION_DESC"/>
+        <field name="externalwidth" type="text" size="10" class="input-mini" default="95%" label="MDL_EXTERNAL_WIDTH" description="MDL_EXTERNAL_DIMENSION_DESC"/>
+        <field name="externalheight" type="text" size="10" class="input-mini" default="95%" label="MDL_EXTERNAL_HEIGHT" description="MDL_EXTERNAL_DIMENSION_DESC"/>
+        <field name="initialwidth" type="text" size="10" class="input-mini" default="600" label="MDL_INITIAL_WIDTH" description="MDL_INITIAL_DIMENSION_DESC"/>
+        <field name="initialheight" type="text" size="10" class="input-mini" default="450" label="MDL_INITIAL_HEIGHT" description="MDL_INITIAL_DIMENSION_DESC"/>
+        <field name="maxwidth" type="text" size="10" class="input-mini" default="95%" label="MDL_MAX_WIDTH" description="MDL_MAX_DIMENSION_DESC"/>
+        <field name="maxheight" type="text" size="10" class="input-mini" default="95%" label="MDL_MAX_HEIGHT" description="MDL_MAX_DIMENSION_DESC"/>
+        <field name="auto_correct_size" type="radio" class="btn-group" default="1" label="MDL_AUTO_CORRECT_SIZE" description="MDL_AUTO_CORRECT_SIZE_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="auto_correct_size_delay" type="text" size="5" class="input input-mini" default="0" label="MDL_AUTO_CORRECT_SIZE_DELAY" description="MDL_AUTO_CORRECT_SIZE_DELAY_DESC" showon="auto_correct_size:1"/>
+        <field name="@block__dimensions__b" type="rl_block" end="1"/>
+        <field name="@block__positioning__a" type="rl_block" start="1" label="MDL_POSITIONING"/>
+        <field name="@positioning" type="rl_onlypro"/>
+        <field name="@block__positioning__b" type="rl_block" end="1"/>
+      </fieldset>
+      <fieldset name="RL_MEDIA">
+        <field name="@block__images__a" type="rl_block" start="1" label="MDL_IMAGES"/>
+        <field name="auto_titles" type="radio" class="btn-group" default="1" label="MDL_AUTO_TITLES" description="MDL_AUTO_TITLES_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="title_case" type="list" default="titlecase" label="MDL_CASE_TITLES" description="MDL_CASE_TITLES_DESC" showon="auto_titles:1">
+          <option value="0">JNONE</option>
+          <option value="lowercase">MDL_LOWERCASE</option>
+          <option value="uppercase">MDL_UPPERCASE</option>
+          <option value="uppercasefirst">MDL_UPPERCASE_FIRST</option>
+          <option value="titlecase">MDL_TITLECASE</option>
+          <option value="titlecase_smart">MDL_TITLECASE_SMART</option>
+        </field>
+        <field name="lowercase_words" type="text" default="a,the,to,at,in,with,and,but,or" label="MDL_TITLECASE_LOWERCASE_WORDS" description="MDL_TITLECASE_LOWERCASE_WORDS_DESC" showon="auto_titles:1[AND]title_case:titlecase_smart"/>
+        <field name="scalephotos" type="radio" class="btn-group" default="1" label="MDL_SCALE_PHOTOS" description="MDL_SCALE_PHOTOS_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="retinaimage" type="radio" class="btn-group" default="0" label="MDL_RETINA_IMAGE" description="MDL_RETINA_IMAGE_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="retinaurl" type="radio" class="btn-group" default="0" label="MDL_RETINA_URL" description="MDL_RETINA_URL_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="retinasuffix" type="text" default="@2x.$1" label="MDL_RETINA_SUFFIX" description="MDL_RETINA_SUFFIX_DESC" showon="retinaurl:1"/>
+        <!-- <<< [PRO] <<< -->
+        <field name="@block__images__b" type="rl_block" end="1"/>
+        <field name="@block__thumbnails__a" type="rl_block" start="1" label="MDL_THUMBNAILS"/>
+        <field name="@thumbnails" type="rl_onlypro"/>
+        <field name="@block__thumbnails__b" type="rl_block" end="1"/>
+        <field name="@block__galleries__a" type="rl_block" start="1" label="MDL_GALLERIES"/>
+        <field name="@galleries" type="rl_onlypro"/>
+        <field name="@block__galleries__b" type="rl_block" end="1"/>
+        <field name="@block__groups__a" type="rl_block" start="1" label="MDL_GROUPS"/>
+        <field name="@groups" type="rl_onlypro"/>
+        <field name="@block__groups__b" type="rl_block" end="1"/>
+      </fieldset>
+      <fieldset name="MDL_AUTOCONVERT">
+        <field name="@block__autoconvert__a" type="rl_block" start="1" label="MDL_LINKS"/>
+        <field name="@block__classnames__a" type="rl_block" start="1" label="MDL_CLASSNAMES"/>
+        <field name="autoconvert_classnames" type="radio" class="btn-group" default="1" label="MDL_AUTOCONVERT" description="MDL_AUTOCONVERT_CLASSNAMES_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="classnames" type="text" size="80" class="input-xlarge" default="modal" label="MDL_CLASSNAMES" description="MDL_CLASSNAMES_DESC" showon="autoconvert_classnames:1"/>
+        <field name="@block__classnames__b" type="rl_block" end="1"/>
+        <field name="@block__external__a" type="rl_block" start="1" label="MDL_EXTERNAL_LINKS"/>
+        <field name="@external" type="rl_onlypro" label="MDL_AUTOCONVERT" description="MDL_EXTERNAL_LINKS_DESC"/>
+        <field name="@block__external__b" type="rl_block" end="1" label="MDL_TARGET"/>
+        <field name="@block__target__a" type="rl_block" start="1" label="MDL_TARGET"/>
+        <field name="@target" type="rl_onlypro" label="MDL_AUTOCONVERT" description="MDL_TARGET_DESC"/>
+        <field name="@block__target__b" type="rl_block" end="1"/>
+        <field name="@block__filetypes__a" type="rl_block" start="1" label="MDL_FILETYPES"/>
+        <field name="@filetypes" type="rl_onlypro" label="MDL_AUTOCONVERT" description="MDL_AUTOCONVERT_FILETYPES_DESC"/>
+        <field name="@block__filetypes__b" type="rl_block" end="1"/>
+        <field name="@block__urls__a" type="rl_block" start="1" label="RL_URL_PARTS"/>
+        <field name="@urls" type="rl_onlypro" label="MDL_AUTOCONVERT" description="MDL_AUTOCONVERT_URLS_DESC"/>
+        <field name="@block__urls__b" type="rl_block" end="1"/>
+        <field name="exclude_urls" type="textarea" cols="40" rows="5" default="" label="MDL_EXCLUDE_URLS" description="MDL_EXCLUDE_URLS_DESC" showon="autoconvert_classnames:1[OR]external:1[OR]target:1[OR]filetypes:1[OR]autoconvert_urls:1"/>
+        <field name="@block__autoconvert__b" type="rl_block" end="1"/>
+        <field name="@block__autoconvert_images__a" type="rl_block" start="1" label="MDL_IMAGES"/>
+        <field name="@image_autoconvert_images" type="rl_onlypro" label="MDL_AUTOCONVERT" description="MDL_AUTOCONVERT_CLASSNAMES_IMAGES_DESC"/>
+        <field name="@block__autoconvert_images__b" type="rl_block" end="1"/>
+      </fieldset>
+      <fieldset name="RL_SETTINGS_EDITOR_BUTTON">
+        <field name="button_text" type="text" default="Modal" label="RL_BUTTON_TEXT" description="RL_BUTTON_TEXT_DESC"/>
+        <field name="enable_frontend" type="radio" class="btn-group" default="1" label="RL_ENABLE_IN_FRONTEND" description="RL_ENABLE_IN_FRONTEND_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+      </fieldset>
+      <fieldset name="RL_TAG_SYNTAX">
+        <field name="tag" type="text" default="modal" label="MDL_TAG" description="MDL_TAG_DESC"/>
+        <field name="@tag_content" type="rl_onlypro" label="MDL_CONTENT_TAG" description="MDL_CONTENT_TAG_DESC"/>
+        <field name="tag_characters" type="list" default="{.}" class="input-small" label="RL_TAG_CHARACTERS" description="RL_TAG_CHARACTERS_DESC">
+          <option value="{.}">{...}</option>
+          <option value="[.]">[...]</option>
+          <option value="«.»">«...»</option>
+          <option value="{{.}}">{{...}}</option>
+          <option value="[[.]]">[[...]]</option>
+          <option value="[:.:]">[:...:]</option>
+          <option value="[%.%]">[%...%]</option>
+        </field>
+      </fieldset>
+      <fieldset name="advanced">
+        <field name="tmpl" type="text" default="modal" label="MDL_SUB_TEMPLATE" description="MDL_SUB_TEMPLATE_DESC"/>
+        <field name="iframe" type="radio" class="btn-group" default="0" label="MDL_IFRAME" description="MDL_IFRAME_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="load_head" type="radio" class="btn-group" default="0" label="MDL_LOAD_HEAD" description="MDL_LOAD_HEAD_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="mediafiles" type="text" default="jpg,png,gif,eps,pdf" label="MDL_MEDIA_FILES" description="MDL_MEDIA_FILES_DESC"/>
+        <field name="iframefiles" type="text" default="pdf" label="MDL_IFRAME_FILES" description="MDL_IFRAME_FILES_DESC"/>
+        <field name="@note__open_count_based_on" type="rl_onlypro" label="MDL_OPEN_COUNT_BASED_ON" description="MDL_OPEN_COUNT_BASED_ON_DESC"/>
+        <field name="@note__disable_background_scrolling" type="rl_onlypro" label="MDL_DISABLE_BACKGROUND_SCROLLING" description="MDL_DISABLE_BACKGROUND_SCROLLING_DESC"/>
+        <field name="@note__disable_on_mobile" type="rl_onlypro" label="MDL_DISABLE_ON_MOBILE" description="MDL_DISABLE_ON_MOBILE_DESC"/>
+        <field name="@note__disabled_components" type="rl_onlypro" label="RL_DISABLE_ON_COMPONENTS" description="RL_DISABLE_ON_COMPONENTS_DESC"/>
+        <field name="enable_admin" type="radio" class="btn-group" default="0" label="RL_ENABLE_IN_ADMIN" description="RL_ENABLE_IN_ADMIN_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="place_comments" type="radio" class="btn-group" default="1" label="RL_PLACE_HTML_COMMENTS" description="RL_PLACE_HTML_COMMENTS_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="add_redirect" type="radio" class="btn-group" default="1" label="MDL_ADD_REDIRECT" description="MDL_ADD_REDIRECT_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="media_versioning" type="radio" class="btn-group" default="1" label="RL_MEDIA_VERSIONING" description="RL_MEDIA_VERSIONING_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="load_jquery" type="radio" class="btn-group" default="1" label="RL_LOAD_JQUERY" description="RL_LOAD_JQUERY_DESC">
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="@note__load_jquery" type="note" class="alert alert-danger" description="RL_JQUERY_DISABLED,MODALS" showon="load_jquery:0"/>
+      </fieldset>
+    </fields>
+  </config>
 </extension>

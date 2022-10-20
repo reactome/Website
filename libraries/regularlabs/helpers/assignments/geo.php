@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -26,19 +26,6 @@ require_once dirname(__FILE__, 2) . '/assignment.php';
 class RLAssignmentsGeo extends RLAssignment
 {
     var $geo = null;
-
-    /**
-     * passContinents
-     */
-    public function passContinents()
-    {
-        if ( ! $this->getGeo() || empty($this->geo->continentCode))
-        {
-            return $this->pass(false);
-        }
-
-        return $this->passSimple([$this->geo->continent, $this->geo->continentCode]);
-    }
 
     public function getGeo($ip = '')
     {
@@ -65,21 +52,17 @@ class RLAssignmentsGeo extends RLAssignment
         return $this->geo;
     }
 
-    private function getGeoObject($ip)
+    /**
+     * passContinents
+     */
+    public function passContinents()
     {
-        if ( ! file_exists(JPATH_LIBRARIES . '/geoip/geoip.php'))
+        if ( ! $this->getGeo() || empty($this->geo->continentCode))
         {
-            return false;
+            return $this->pass(false);
         }
 
-        require_once JPATH_LIBRARIES . '/geoip/geoip.php';
-
-        if ( ! class_exists('RegularLabs_GeoIp'))
-        {
-            return new GeoIp($ip);
-        }
-
-        return new RegularLabs_GeoIp($ip);
+        return $this->passSimple([$this->geo->continent, $this->geo->continentCode]);
     }
 
     /**
@@ -129,5 +112,22 @@ class RLAssignmentsGeo extends RLAssignment
         });
 
         return $this->passSimple($regions);
+    }
+
+    private function getGeoObject($ip)
+    {
+        if ( ! file_exists(JPATH_LIBRARIES . '/geoip/geoip.php'))
+        {
+            return false;
+        }
+
+        require_once JPATH_LIBRARIES . '/geoip/geoip.php';
+
+        if ( ! class_exists('RegularLabs_GeoIp'))
+        {
+            return new GeoIp($ip);
+        }
+
+        return new RegularLabs_GeoIp($ip);
     }
 }

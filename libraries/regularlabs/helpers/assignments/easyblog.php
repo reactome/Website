@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -67,39 +67,6 @@ class RLAssignmentsEasyBlog extends RLAssignment
         }
 
         return $this->passSimple($cats);
-    }
-
-    private function getCategories()
-    {
-        switch ($this->request->view)
-        {
-            case 'entry' :
-                return $this->getCategoryIDFromItem();
-                break;
-
-            case 'categories' :
-                return $this->request->id;
-                break;
-
-            default:
-                return '';
-        }
-    }
-
-    private function getCatParentIds($id = 0)
-    {
-        return $this->getParentIds($id, 'easyblog_category', 'parent_id');
-    }
-
-    private function getCategoryIDFromItem()
-    {
-        $query = $this->db->getQuery(true)
-            ->select('i.category_id')
-            ->from('#__easyblog_post AS i')
-            ->where('i.id = ' . (int) $this->request->id);
-        $this->db->setQuery($query);
-
-        return $this->db->loadResult();
     }
 
     public function passContentKeywords($fields = ['title', 'intro', 'content'], $text = '')
@@ -182,5 +149,38 @@ class RLAssignmentsEasyBlog extends RLAssignment
         $tags = $this->db->loadColumn();
 
         return $this->passSimple($tags, true);
+    }
+
+    private function getCatParentIds($id = 0)
+    {
+        return $this->getParentIds($id, 'easyblog_category', 'parent_id');
+    }
+
+    private function getCategories()
+    {
+        switch ($this->request->view)
+        {
+            case 'entry' :
+                return $this->getCategoryIDFromItem();
+                break;
+
+            case 'categories' :
+                return $this->request->id;
+                break;
+
+            default:
+                return '';
+        }
+    }
+
+    private function getCategoryIDFromItem()
+    {
+        $query = $this->db->getQuery(true)
+            ->select('i.category_id')
+            ->from('#__easyblog_post AS i')
+            ->where('i.id = ' . (int) $this->request->id);
+        $this->db->setQuery($query);
+
+        return $this->db->loadResult();
     }
 }

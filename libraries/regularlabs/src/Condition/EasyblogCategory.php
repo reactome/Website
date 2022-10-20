@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -55,6 +55,11 @@ class EasyblogCategory extends Easyblog
         return $this->passSimple($cats);
     }
 
+    private function getCatParentIds($id = 0)
+    {
+        return $this->getParentIds($id, 'easyblog_category', 'parent_id');
+    }
+
     private function getCategories()
     {
         switch ($this->request->view)
@@ -70,11 +75,6 @@ class EasyblogCategory extends Easyblog
             default:
                 return '';
         }
-    }
-
-    private function getCatParentIds($id = 0)
-    {
-        return $this->getParentIds($id, 'easyblog_category', 'parent_id');
     }
 
     private function getCategoryIDFromItem()

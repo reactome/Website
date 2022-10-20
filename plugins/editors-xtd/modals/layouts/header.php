@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.10.1
+ * @version         11.11.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -15,8 +15,8 @@ use Joomla\CMS\Language\Text as JText;
 
 ?>
 <div class="header">
-	<h1 class="page-title">
-		<span class="icon-reglab icon-modals"></span>
-		<?php echo JText::_('INSERT_MODAL'); ?>
-	</h1>
+    <h1 class="page-title">
+        <span class="icon-reglab icon-modals"></span>
+        <?php echo JText::_('INSERT_MODAL'); ?>
+    </h1>
 </div>

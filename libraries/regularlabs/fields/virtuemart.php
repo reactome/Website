@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -53,6 +53,45 @@ class JFormFieldRL_VirtueMart extends FieldGroup
         return $this->getOptionsTreeByList($items);
     }
 
+    public function getProducts()
+    {
+        $query = $this->db->getQuery(true)
+            ->select('COUNT(*)')
+            ->from('#__virtuemart_products AS p')
+            ->where('p.published > -1');
+        $this->db->setQuery($query);
+        $total = $this->db->loadResult();
+
+        if ($total > $this->max_list_count)
+        {
+            return -1;
+        }
+
+        $query->clear('select')
+            ->select('p.virtuemart_product_id as id, l.product_name AS name, p.product_sku as sku, cl.category_name AS cat, p.published')
+            ->join('LEFT', '#__virtuemart_products_' . $this->getActiveLanguage() . ' AS l ON l.virtuemart_product_id = p.virtuemart_product_id')
+            ->join('LEFT', '#__virtuemart_product_categories AS x ON x.virtuemart_product_id = p.virtuemart_product_id')
+            ->join('LEFT', '#__virtuemart_categories AS c ON c.virtuemart_category_id = x.virtuemart_category_id')
+            ->join('LEFT', '#__virtuemart_categories_' . $this->getActiveLanguage() . ' AS cl ON cl.virtuemart_category_id = c.virtuemart_category_id')
+            ->group('p.virtuemart_product_id')
+            ->order('l.product_name, p.product_sku');
+        $this->db->setQuery($query);
+        $list = $this->db->loadObjectList();
+
+        return $this->getOptionsByList($list, ['sku', 'cat', 'id']);
+    }
+
+    protected function getInput()
+    {
+        $error = $this->missingFilesOrTables(['categories', 'products']);
+        if ($error)
+        {
+            return $error;
+        }
+
+        return $this->getSelectList();
+    }
+
     private function getActiveLanguage()
     {
         if (isset($this->language))
@@ -91,44 +130,5 @@ class JFormFieldRL_VirtueMart extends FieldGroup
         $this->language = str_replace('-', '_', strtolower($active_languages[0]));
 
         return $this->language;
-    }
-
-    public function getProducts()
-    {
-        $query = $this->db->getQuery(true)
-            ->select('COUNT(*)')
-            ->from('#__virtuemart_products AS p')
-            ->where('p.published > -1');
-        $this->db->setQuery($query);
-        $total = $this->db->loadResult();
-
-        if ($total > $this->max_list_count)
-        {
-            return -1;
-        }
-
-        $query->clear('select')
-            ->select('p.virtuemart_product_id as id, l.product_name AS name, p.product_sku as sku, cl.category_name AS cat, p.published')
-            ->join('LEFT', '#__virtuemart_products_' . $this->getActiveLanguage() . ' AS l ON l.virtuemart_product_id = p.virtuemart_product_id')
-            ->join('LEFT', '#__virtuemart_product_categories AS x ON x.virtuemart_product_id = p.virtuemart_product_id')
-            ->join('LEFT', '#__virtuemart_categories AS c ON c.virtuemart_category_id = x.virtuemart_category_id')
-            ->join('LEFT', '#__virtuemart_categories_' . $this->getActiveLanguage() . ' AS cl ON cl.virtuemart_category_id = c.virtuemart_category_id')
-            ->group('p.virtuemart_product_id')
-            ->order('l.product_name, p.product_sku');
-        $this->db->setQuery($query);
-        $list = $this->db->loadObjectList();
-
-        return $this->getOptionsByList($list, ['sku', 'cat', 'id']);
-    }
-
-    protected function getInput()
-    {
-        $error = $this->missingFilesOrTables(['categories', 'products']);
-        if ($error)
-        {
-            return $error;
-        }
-
-        return $this->getSelectList();
     }
 }

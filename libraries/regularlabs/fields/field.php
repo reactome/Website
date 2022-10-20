@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -26,13 +26,6 @@ require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 class JFormFieldRL_Field extends Field
 {
     public $type = 'Field';
-
-    protected function getInput()
-    {
-        $options = $this->getFields();
-
-        return $this->selectListSimple($options, $this->name, $this->value, $this->id);
-    }
 
     public function getFields()
     {
@@ -68,5 +61,12 @@ class JFormFieldRL_Field extends Field
         }
 
         return $options;
+    }
+
+    protected function getInput()
+    {
+        $options = $this->getFields();
+
+        return $this->selectListSimple($options, $this->name, $this->value, $this->id);
     }
 }

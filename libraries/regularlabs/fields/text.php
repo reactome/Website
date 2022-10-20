@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -39,6 +39,16 @@ class JFormFieldRL_Text extends JFormFieldText
         return parent::setup($element, $value, $group);
     }
 
+    private function get($val, $default = '')
+    {
+        if ( ! isset($this->params[$val]) || (string) $this->params[$val] == '')
+        {
+            return $default;
+        }
+
+        return (string) $this->params[$val];
+    }
+
     private function prepareText($string = '')
     {
         $string = trim($string);
@@ -61,15 +71,5 @@ class JFormFieldRL_Text extends JFormFieldText
         $string = str_replace('span style="font-family:monospace;"', 'span class="rl-code"', $string);
 
         return $string;
-    }
-
-    private function get($val, $default = '')
-    {
-        if ( ! isset($this->params[$val]) || (string) $this->params[$val] == '')
-        {
-            return $default;
-        }
-
-        return (string) $this->params[$val];
     }
 }

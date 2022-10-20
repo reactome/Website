@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Tabs
- * @version         8.2.4
+ * @version         8.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -41,6 +41,41 @@ class PlgButtonTabsHelper extends RL_EditorButtonHelper
         return $this->renderPopupButton($editor_name);
     }
 
+    private function getCustomText()
+    {
+        $text = trim($this->params->button_custom_code);
+        $text = str_replace(["\r", "\n"], ['', '</p>\n<p>'], trim($text)) . '</p>';
+        $text = RL_RegEx::replace('^(.*?)</p>', '\1', $text);
+        $text = str_replace(
+            ['{tab ', '{/tabs}'],
+            ['{' . $this->params->tag_open . $this->params->tag_delimiter, '{/' . $this->params->tag_close . '}'],
+            trim($text)
+        );
+
+        return $text;
+    }
+
+    private function getDefaultText()
+    {
+        return
+            '{' . $this->params->tag_open . $this->params->tag_delimiter . JText::_('TAB_TITLE') . ' 1}\n' .
+            '<p>[:SELECTION:]</p>\n' .
+            '<p>{' . $this->params->tag_open . $this->params->tag_delimiter . JText::_('TAB_TITLE') . ' 2}</p>\n' .
+            '<p>' . JText::_('TAB_TEXT') . '</p>\n' .
+            '<p>{/' . $this->params->tag_close . '}</p>';
+    }
+
+    private function getExampleText()
+    {
+        switch (true)
+        {
+            case ($this->params->button_use_custom_code && $this->params->button_custom_code):
+                return $this->getCustomText();
+            default:
+                return $this->getDefaultText();
+        }
+    }
+
     private function renderSimpleButton($editor_name)
     {
         $this->params->tag_open      = RL_RegEx::replace('[^a-z0-9-_]', '', $this->params->tag_open);
@@ -74,40 +109,5 @@ class PlgButtonTabsHelper extends RL_EditorButtonHelper
         $button->name    = $this->getIcon();
 
         return $button;
-    }
-
-    private function getExampleText()
-    {
-        switch (true)
-        {
-            case ($this->params->button_use_custom_code && $this->params->button_custom_code):
-                return $this->getCustomText();
-            default:
-                return $this->getDefaultText();
-        }
-    }
-
-    private function getCustomText()
-    {
-        $text = trim($this->params->button_custom_code);
-        $text = str_replace(["\r", "\n"], ['', '</p>\n<p>'], trim($text)) . '</p>';
-        $text = RL_RegEx::replace('^(.*?)</p>', '\1', $text);
-        $text = str_replace(
-            ['{tab ', '{/tabs}'],
-            ['{' . $this->params->tag_open . $this->params->tag_delimiter, '{/' . $this->params->tag_close . '}'],
-            trim($text)
-        );
-
-        return $text;
-    }
-
-    private function getDefaultText()
-    {
-        return
-            '{' . $this->params->tag_open . $this->params->tag_delimiter . JText::_('TAB_TITLE') . ' 1}\n' .
-            '<p>[:SELECTION:]</p>\n' .
-            '<p>{' . $this->params->tag_open . $this->params->tag_delimiter . JText::_('TAB_TITLE') . ' 2}</p>\n' .
-            '<p>' . JText::_('TAB_TEXT') . '</p>\n' .
-            '<p>{/' . $this->params->tag_close . '}</p>';
     }
 }

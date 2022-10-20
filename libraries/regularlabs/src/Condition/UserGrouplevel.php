@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -52,20 +52,6 @@ class UserGrouplevel extends User
         return $this->passSimple($groups);
     }
 
-    private function setUserGroupChildrenIds()
-    {
-        $children = $this->getUserGroupChildrenIds($this->selection);
-
-        if ($this->params->inc_children == 2)
-        {
-            $this->selection = $children;
-
-            return;
-        }
-
-        $this->selection = array_merge($this->selection, $children);
-    }
-
     private function convertUsergroupNamesToIds($selection)
     {
         $names = [];
@@ -99,13 +85,6 @@ class UserGrouplevel extends User
         $group_ids = $db->loadColumn();
 
         return array_unique(array_merge($selection, $group_ids));
-    }
-
-    private function passMatchAll($groups)
-    {
-        $pass = ! array_diff($this->selection, $groups) && ! array_diff($groups, $this->selection);
-
-        return $this->_($pass);
     }
 
     private function getUserGroupChildrenIds($groups)
@@ -167,5 +146,26 @@ class UserGrouplevel extends User
         }
 
         return self::$user_group_children[$group] ?? [];
+    }
+
+    private function passMatchAll($groups)
+    {
+        $pass = ! array_diff($this->selection, $groups) && ! array_diff($groups, $this->selection);
+
+        return $this->_($pass);
+    }
+
+    private function setUserGroupChildrenIds()
+    {
+        $children = $this->getUserGroupChildrenIds($this->selection);
+
+        if ($this->params->inc_children == 2)
+        {
+            $this->selection = $children;
+
+            return;
+        }
+
+        $this->selection = array_merge($this->selection, $children);
     }
 }

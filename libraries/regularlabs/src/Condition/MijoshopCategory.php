@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -58,6 +58,11 @@ class MijoshopCategory extends Mijoshop
         return $this->passSimple($cats);
     }
 
+    private function getCatParentIds($id = 0)
+    {
+        return $this->getParentIds($id, 'mijoshop_category', 'parent_id', 'category_id');
+    }
+
     private function getCats()
     {
         if ($this->request->category_id)
@@ -78,10 +83,5 @@ class MijoshopCategory extends Mijoshop
         $cats = $this->db->loadColumn();
 
         return $this->makeArray($cats);
-    }
-
-    private function getCatParentIds($id = 0)
-    {
-        return $this->getParentIds($id, 'mijoshop_category', 'parent_id', 'category_id');
     }
 }

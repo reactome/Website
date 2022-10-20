@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -94,37 +94,6 @@ class HtmlTag
     }
 
     /**
-     * Extract all attributes from a html tag string
-     *
-     * @param string $string
-     *
-     * @return array
-     */
-    public static function getAttributes($string)
-    {
-        if (empty($string))
-        {
-            return [];
-        }
-
-        RegEx::matchAll('([a-z0-9-_]+)="([^"]*)"', $string, $matches);
-
-        if (empty($matches))
-        {
-            return [];
-        }
-
-        $attribs = [];
-
-        foreach ($matches as $match)
-        {
-            $attribs[$match[1]] = $match[2];
-        }
-
-        return $attribs;
-    }
-
-    /**
      * Convert array of attributes to a html style string
      *
      * @param array $attributes
@@ -183,6 +152,37 @@ class HtmlTag
         }
 
         return $match[1];
+    }
+
+    /**
+     * Extract all attributes from a html tag string
+     *
+     * @param string $string
+     *
+     * @return array
+     */
+    public static function getAttributes($string)
+    {
+        if (empty($string))
+        {
+            return [];
+        }
+
+        RegEx::matchAll('([a-z0-9-_]+)="([^"]*)"', $string, $matches);
+
+        if (empty($matches))
+        {
+            return [];
+        }
+
+        $attribs = [];
+
+        foreach ($matches as $match)
+        {
+            $attribs[$match[1]] = $match[2];
+        }
+
+        return $attribs;
     }
 
     /**

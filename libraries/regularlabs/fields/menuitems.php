@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -27,19 +27,6 @@ require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 class JFormFieldRL_MenuItems extends Field
 {
     public $type = 'MenuItems';
-
-    public function getAjaxRaw(Registry $attributes)
-    {
-        $name     = $attributes->get('name', $this->type);
-        $id       = $attributes->get('id', strtolower($name));
-        $value    = $attributes->get('value', []);
-        $size     = $attributes->get('size');
-        $multiple = $attributes->get('multiple');
-
-        $options = $this->getMenuItems();
-
-        return $this->selectList($options, $name, $value, $id, $size, $multiple);
-    }
 
     /**
      * Get a list of menu links for one or all menus.
@@ -97,6 +84,19 @@ class JFormFieldRL_MenuItems extends Field
         }
 
         return $menuTypes;
+    }
+
+    public function getAjaxRaw(Registry $attributes)
+    {
+        $name     = $attributes->get('name', $this->type);
+        $id       = $attributes->get('id', strtolower($name));
+        $value    = $attributes->get('value', []);
+        $size     = $attributes->get('size');
+        $multiple = $attributes->get('multiple');
+
+        $options = $this->getMenuItems();
+
+        return $this->selectList($options, $name, $value, $id, $size, $multiple);
     }
 
     protected function getInput()

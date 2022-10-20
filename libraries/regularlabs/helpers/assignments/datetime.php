@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -96,9 +96,57 @@ class RLAssignmentsDateTime extends RLAssignment
         return ($this->assignment == 'include');
     }
 
-    private function getNow()
+    public function passDays()
     {
-        return strtotime($this->date->format('Y-m-d H:i:s', true));
+        $day = $this->date->format('N', true); // 1 (for Monday) though 7 (for Sunday )
+
+        return $this->passSimple($day);
+    }
+
+    public function passMonths()
+    {
+        $month = $this->date->format('m', true); // 01 (for January) through 12 (for December)
+
+        return $this->passSimple((int) $month);
+    }
+
+    public function passSeasons()
+    {
+        $season = self::getSeason($this->date, $this->params->hemisphere);
+
+        return $this->passSimple($season);
+    }
+
+    public function passTime()
+    {
+        $now  = $this->getNow();
+        $up   = strtotime($this->date->format('Y-m-d ', true) . $this->params->publish_up);
+        $down = strtotime($this->date->format('Y-m-d ', true) . $this->params->publish_down);
+
+        if ($up > $down)
+        {
+            // publish up is after publish down (spans midnight)
+            // current time should be:
+            // - after publish up
+            // - OR before publish down
+            if ($now >= $up || $now < $down)
+            {
+                return $this->pass(true);
+            }
+
+            return $this->pass(false);
+        }
+
+        // publish down is after publish up (simple time span)
+        // current time should be:
+        // - after publish up
+        // - AND before publish down
+        if ($now >= $up && $now < $down)
+        {
+            return $this->pass(true);
+        }
+
+        return $this->pass(false);
     }
 
     private function getDate($date = '')
@@ -120,37 +168,9 @@ class RLAssignmentsDateTime extends RLAssignment
         return $this->dates[$id];
     }
 
-    private function getTimeZone()
+    private function getNow()
     {
-        if ( ! is_null($this->timezone))
-        {
-            return $this->timezone;
-        }
-
-        $this->timezone = new DateTimeZone(JFactory::getApplication()->getCfg('offset'));
-
-        return $this->timezone;
-    }
-
-    public function passDays()
-    {
-        $day = $this->date->format('N', true); // 1 (for Monday) though 7 (for Sunday )
-
-        return $this->passSimple($day);
-    }
-
-    public function passMonths()
-    {
-        $month = $this->date->format('m', true); // 01 (for January) through 12 (for December)
-
-        return $this->passSimple((int) $month);
-    }
-
-    public function passSeasons()
-    {
-        $season = self::getSeason($this->date, $this->params->hemisphere);
-
-        return $this->passSimple($season);
+        return strtotime($this->date->format('Y-m-d H:i:s', true));
     }
 
     private function getSeason(&$d, $hemisphere = 'northern')
@@ -244,35 +264,15 @@ class RLAssignmentsDateTime extends RLAssignment
         return 0;
     }
 
-    public function passTime()
+    private function getTimeZone()
     {
-        $now  = $this->getNow();
-        $up   = strtotime($this->date->format('Y-m-d ', true) . $this->params->publish_up);
-        $down = strtotime($this->date->format('Y-m-d ', true) . $this->params->publish_down);
-
-        if ($up > $down)
+        if ( ! is_null($this->timezone))
         {
-            // publish up is after publish down (spans midnight)
-            // current time should be:
-            // - after publish up
-            // - OR before publish down
-            if ($now >= $up || $now < $down)
-            {
-                return $this->pass(true);
-            }
-
-            return $this->pass(false);
+            return $this->timezone;
         }
 
-        // publish down is after publish up (simple time span)
-        // current time should be:
-        // - after publish up
-        // - AND before publish down
-        if ($now >= $up && $now < $down)
-        {
-            return $this->pass(true);
-        }
+        $this->timezone = new DateTimeZone(JFactory::getApplication()->getCfg('offset'));
 
-        return $this->pass(false);
+        return $this->timezone;
     }
 }

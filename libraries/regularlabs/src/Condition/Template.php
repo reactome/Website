@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -22,17 +22,6 @@ use RegularLabs\Library\Condition;
  */
 class Template extends Condition
 {
-    public function pass()
-    {
-        $template = $this->getTemplate();
-
-        // Put template name and name + style id into array
-        // The '::' separator was used in pre Joomla 3.3
-        $template = [$template->template, $template->template . '--' . $template->id, $template->template . '::' . $template->id];
-
-        return $this->passSimple($template, true);
-    }
-
     public function getTemplate()
     {
         $template = JFactory::getApplication()->getTemplate(true);
@@ -69,5 +58,16 @@ class Template extends Condition
         $template->id = $this->db->loadResult('id');
 
         return $template;
+    }
+
+    public function pass()
+    {
+        $template = $this->getTemplate();
+
+        // Put template name and name + style id into array
+        // The '::' separator was used in pre Joomla 3.3
+        $template = [$template->template, $template->template . '--' . $template->id, $template->template . '::' . $template->id];
+
+        return $this->passSimple($template, true);
     }
 }

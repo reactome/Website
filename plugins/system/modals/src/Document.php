@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.10.1
+ * @version         11.11.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -22,188 +22,188 @@ use RegularLabs\Library\RegEx as RL_RegEx;
 
 class Document
 {
-	public static function addPrint($url)
-	{
-		$url = explode('#', $url, 2);
+    public static function addPrint($url)
+    {
+        $url = explode('#', $url, 2);
 
-		$url[0] .= (strpos($url[0], '?') === false) ? '?print=1' : '&amp;print=1';
+        $url[0] .= (strpos($url[0], '?') === false) ? '?print=1' : '&amp;print=1';
 
-		$url = implode('#', $url);
+        $url = implode('#', $url);
 
-		return $url;
-	}
+        return $url;
+    }
 
-	public static function addUrlAttributes($url, $iframe = false, $fullpage = false, $print = false)
-	{
-		$url = explode('#', $url, 2);
+    public static function addUrlAttributes($url, $iframe = false, $fullpage = false, $print = false)
+    {
+        $url = explode('#', $url, 2);
 
-		if (substr($url[0], 0, 4) != 'http'
-			&& strpos($url[0], 'index.php') === 0
-			&& strpos($url[0], '/') === false
-		)
-		{
-			$url[0] = JRoute::_($url[0]);
-		}
+        if (substr($url[0], 0, 4) != 'http'
+            && strpos($url[0], 'index.php') === 0
+            && strpos($url[0], '/') === false
+        )
+        {
+            $url[0] = JRoute::_($url[0]);
+        }
 
-		$url[0] = self::setUrlAttribute($url[0], 'ml');
+        $url[0] = self::setUrlAttribute($url[0], 'ml');
 
-		if ($iframe)
-		{
-			$url[0] = self::setUrlAttribute($url[0], 'iframe');
-		}
+        if ($iframe)
+        {
+            $url[0] = self::setUrlAttribute($url[0], 'iframe');
+        }
 
-		if ($fullpage)
-		{
-			$url[0] = self::setUrlAttribute($url[0], 'fullpage');
-		}
+        if ($fullpage)
+        {
+            $url[0] = self::setUrlAttribute($url[0], 'fullpage');
+        }
 
-		if ($print)
-		{
-			$url[0] = self::setUrlAttribute($url[0], 'print');
-		}
+        if ($print)
+        {
+            $url[0] = self::setUrlAttribute($url[0], 'print');
+        }
 
-		$url = implode('#', $url);
+        $url = implode('#', $url);
 
-		return $url;
-	}
+        return $url;
+    }
 
-	public static function loadStylesAndScripts(&$buffer)
-	{
-		// do not load scripts/styles on feeds or print pages
-		if (RL_Document::isFeed() || JFactory::getApplication()->input->getInt('print', 0))
-		{
-			return;
-		}
+    public static function loadStylesAndScripts(&$buffer)
+    {
+        // do not load scripts/styles on feeds or print pages
+        if (RL_Document::isFeed() || JFactory::getApplication()->input->getInt('print', 0))
+        {
+            return;
+        }
 
-		$params = Params::get();
+        $params = Params::get();
 
-		if (JFactory::getApplication()->input->getInt('ml', 0) && $params->add_redirect)
-		{
-			self::addRedirectScript($buffer);
+        if (JFactory::getApplication()->input->getInt('ml', 0) && $params->add_redirect)
+        {
+            self::addRedirectScript($buffer);
 
-			return;
-		}
+            return;
+        }
 
-		if ($params->load_jquery)
-		{
-			JHtml::_('jquery.framework');
-		}
+        if ($params->load_jquery)
+        {
+            JHtml::_('jquery.framework');
+        }
 
-		$defaults             = self::getDefaults();
-		$defaults['current']  = JText::sprintf('MDL_MODALTXT_CURRENT', '{current}', '{total}');
-		$defaults['previous'] = JText::_('MDL_MODALTXT_PREVIOUS');
-		$defaults['next']     = JText::_('MDL_MODALTXT_NEXT');
-		$defaults['close']    = JText::_('MDL_MODALTXT_CLOSE');
-		$defaults['xhrError'] = JText::_('MDL_MODALTXT_XHRERROR');
-		$defaults['imgError'] = JText::_('MDL_MODALTXT_IMGERROR');
+        $defaults             = self::getDefaults();
+        $defaults['current']  = JText::sprintf('MDL_MODALTXT_CURRENT', '{current}', '{total}');
+        $defaults['previous'] = JText::_('MDL_MODALTXT_PREVIOUS');
+        $defaults['next']     = JText::_('MDL_MODALTXT_NEXT');
+        $defaults['close']    = JText::_('MDL_MODALTXT_CLOSE');
+        $defaults['xhrError'] = JText::_('MDL_MODALTXT_XHRERROR');
+        $defaults['imgError'] = JText::_('MDL_MODALTXT_IMGERROR');
 
-		$options = [
-			'class'                        => $params->class ?: 'modals',
-			'defaults'                     => $defaults,
-			'auto_correct_size'            => (int) $params->auto_correct_size,
-			'auto_correct_size_delay'      => (int) $params->auto_correct_size_delay,
-		];
+        $options = [
+            'class'                        => $params->class ?: 'modals',
+            'defaults'                     => $defaults,
+            'auto_correct_size'            => (int) $params->auto_correct_size,
+            'auto_correct_size_delay'      => (int) $params->auto_correct_size_delay,
+        ];
 
-		RL_Document::scriptOptions($options, 'Modals');
+        RL_Document::scriptOptions($options, 'Modals');
 
-		JHtml::script('modals/jquery.touchSwipe.min.js', false, true);
-		RL_Document::script('modals/jquery.modals.min.js', ($params->media_versioning ? '11.10.1' : ''), [], [], $params->load_jquery);
-		RL_Document::script('modals/script.min.js', ($params->media_versioning ? '11.10.1' : ''), [], [], $params->load_jquery);
+        JHtml::script('modals/jquery.touchSwipe.min.js', false, true);
+        RL_Document::script('modals/jquery.modals.min.js', ($params->media_versioning ? '11.11.0' : ''), [], [], $params->load_jquery);
+        RL_Document::script('modals/script.min.js', ($params->media_versioning ? '11.11.0' : ''), [], [], $params->load_jquery);
 
-		if ($params->load_stylesheet)
-		{
-			RL_Document::style('modals/' . $params->style . '.min.css', ($params->media_versioning ? '11.10.1' : ''));
-		}
-	}
+        if ($params->load_stylesheet)
+        {
+            RL_Document::style('modals/' . $params->style . '.min.css', ($params->media_versioning ? '11.11.0' : ''));
+        }
+    }
 
-	public static function removeHeadStuff(&$html)
-	{
-		// Don't remove if modals class is found
-		if (RL_RegEx::match('class="[^"]*modal_link', $html))
-		{
-			return;
-		}
+    public static function removeHeadStuff(&$html)
+    {
+        // Don't remove if modals class is found
+        if (RL_RegEx::match('class="[^"]*modal_link', $html))
+        {
+            return;
+        }
 
-		// remove style and script if no items are found
-		RL_Document::removeScriptsStyles($html, 'Modals');
-		RL_Document::removeScriptsOptions($html, 'Modals');
-	}
+        // remove style and script if no items are found
+        RL_Document::removeScriptsStyles($html, 'Modals');
+        RL_Document::removeScriptsOptions($html, 'Modals');
+    }
 
-	public static function setTemplate()
-	{
-		$params = Params::get();
+    public static function setTemplate()
+    {
+        $params = Params::get();
 
-		JFactory::getApplication()->input->set('tmpl', JFactory::getApplication()->input->getWord('tmpl', $params->tmpl));
-	}
+        JFactory::getApplication()->input->set('tmpl', JFactory::getApplication()->input->getWord('tmpl', $params->tmpl));
+    }
 
-	public static function setUrlAttribute($url, $key)
-	{
-		if (strpos($url, $key . '=1') !== false)
-		{
-			return $url;
-		}
+    public static function setUrlAttribute($url, $key)
+    {
+        if (strpos($url, $key . '=1') !== false)
+        {
+            return $url;
+        }
 
-		return $url
-			. (strpos($url, '?') === false ? '?' : '&amp;')
-			. $key . '=1';
-	}
+        return $url
+            . (strpos($url, '?') === false ? '?' : '&amp;')
+            . $key . '=1';
+    }
 
-	private static function addRedirectScript(&$buffer)
-	{
-		// Add redirect script
-		$script =
-			";if( parent.location.href === window.location.href ) {
-				loc = window.location.href.replace(/(\?|&)ml=1(&iframe=1(&fullpage=1)?)?(&|$)/, '$1');
-				loc = loc.replace(/(\?|&)$/, '');
-				if(parent.location.href !== loc) {
-					parent.location.href = loc;
-				}
-			}";
+    private static function addRedirectScript(&$buffer)
+    {
+        // Add redirect script
+        $script =
+            ";if( parent.location.href === window.location.href ) {
+                loc = window.location.href.replace(/(\?|&)ml=1(&iframe=1(&fullpage=1)?)?(&|$)/, '$1');
+                loc = loc.replace(/(\?|&)$/, '');
+                if(parent.location.href !== loc) {
+                    parent.location.href = loc;
+                }
+            }";
 
-		if (JFactory::getApplication()->input->get('iframe'))
-		{
-			RL_Document::scriptDeclaration($script);
+        if (JFactory::getApplication()->input->get('iframe'))
+        {
+            RL_Document::scriptDeclaration($script);
 
-			return;
-		}
+            return;
+        }
 
-		$buffer = '<script type="text/javascript">' . $script . '</script>'
-			. $buffer;
-	}
+        $buffer = '<script type="text/javascript">' . $script . '</script>'
+            . $buffer;
+    }
 
-	private static function getDefaults()
-	{
-		$params = Params::get();
+    private static function getDefaults()
+    {
+        $params = Params::get();
 
-		$keyvals = [
-			'opacity'        => 0.9,
-			'width'          => '',
-			'height'         => '',
-			'initialWidth'   => 600,
-			'initialHeight'  => 450,
-			'maxWidth'       => false,
-			'maxHeight'      => false,
-			'retinaImage'    => false,
-			'retinaUrl'      => false,
-			'retinaSuffix'   => '@2x.$1',
-		];
+        $keyvals = [
+            'opacity'        => 0.9,
+            'width'          => '',
+            'height'         => '',
+            'initialWidth'   => 600,
+            'initialHeight'  => 450,
+            'maxWidth'       => false,
+            'maxHeight'      => false,
+            'retinaImage'    => false,
+            'retinaUrl'      => false,
+            'retinaSuffix'   => '@2x.$1',
+        ];
 
-		$defaults = [];
+        $defaults = [];
 
-		foreach ($keyvals as $key => $default)
-		{
-			$param_key = strtolower($key);
+        foreach ($keyvals as $key => $default)
+        {
+            $param_key = strtolower($key);
 
-			if ( ! isset($params->{$param_key}) || $params->{$param_key} == $default)
-			{
-				continue;
-			}
+            if ( ! isset($params->{$param_key}) || $params->{$param_key} == $default)
+            {
+                continue;
+            }
 
-			$val = $params->{$param_key};
+            $val = $params->{$param_key};
 
-			$defaults[$key] = $val;
-		}
+            $defaults[$key] = $val;
+        }
 
-		return $defaults;
-	}
+        return $defaults;
+    }
 }

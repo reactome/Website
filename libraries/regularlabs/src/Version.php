@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -30,18 +30,6 @@ jimport('joomla.filesystem.file');
 class Version
 {
     /**
-     * Get the version of the given component
-     *
-     * @param $alias
-     *
-     * @return string
-     */
-    public static function getComponentVersion($alias)
-    {
-        return self::get($alias, 'component');
-    }
-
-    /**
      * Get the version of the given extension
      *
      * @param        $alias
@@ -53,6 +41,18 @@ class Version
     public static function get($alias, $type = 'component', $folder = 'system')
     {
         return trim(Extension::getXmlValue('version', $alias, $type, $folder));
+    }
+
+    /**
+     * Get the version of the given component
+     *
+     * @param $alias
+     *
+     * @return string
+     */
+    public static function getComponentVersion($alias)
+    {
+        return self::get($alias, 'component');
     }
 
     /**
@@ -79,6 +79,96 @@ class Version
         }
 
         return '<div class="rl_footer">' . implode('', $html) . '</div>';
+    }
+
+    /**
+     * Get the version message
+     *
+     * @param $alias
+     *
+     * @return string
+     */
+    public static function getMessage($alias)
+    {
+        if ( ! $alias)
+        {
+            return '';
+        }
+
+        $name  = Extension::getNameByAlias($alias);
+        $alias = Extension::getAliasByName($alias);
+
+        if ( ! $version = self::get($alias))
+        {
+            return '';
+        }
+
+        Document::loadMainDependencies();
+
+        $url    = 'download.regularlabs.com/extensions.xml?j=3&e=' . $alias;
+        $script = "
+            jQuery(document).ready(function() {
+                RegularLabsScripts.loadajax(
+                    '" . $url . "',
+                    'RegularLabsScripts.displayVersion( data, \"" . $alias . "\", \"" . str_replace(['FREE', 'PRO'], '', $version) . "\" )',
+                    'RegularLabsScripts.displayVersion( \"\" )',
+                    null, null, null, (60 * 60)
+                );
+            });
+        ";
+        JFactory::getDocument()->addScriptDeclaration($script);
+
+        return '<div class="alert alert-success" style="display:none;" id="regularlabs_version_' . $alias . '">' . self::getMessageText($alias, $name, $version) . '</div>';
+    }
+
+    /**
+     * Get the version of the given module
+     *
+     * @param $alias
+     *
+     * @return string
+     */
+    public static function getModuleVersion($alias)
+    {
+        return self::get($alias, 'module');
+    }
+
+    /**
+     * Get the version of the given plugin
+     *
+     * @param        $alias
+     * @param string $folder
+     *
+     * @return string
+     */
+    public static function getPluginVersion($alias, $folder = 'system')
+    {
+        return self::get($alias, 'plugin', $folder);
+    }
+
+    /**
+     * Get the copyright text for the footer
+     *
+     * @return string
+     */
+    private static function getFooterCopyright()
+    {
+        return JText::_('RL_COPYRIGHT') . ' &copy; ' . date('Y') . ' Regular Labs - ' . JText::_('RL_ALL_RIGHTS_RESERVED');
+    }
+
+    /**
+     * Get the Regular Labs logo for the footer
+     *
+     * @return string
+     */
+    private static function getFooterLogo()
+    {
+        return JText::sprintf(
+            'RL_POWERED_BY',
+            '<a href="https://regularlabs.com" target="_blank">'
+            . '<img src="' . JUri::root() . 'media/regularlabs/images/logo.svg" width="112" height="24" alt="Regular Labs">'
+            . '</a>'
+        );
     }
 
     /**
@@ -133,71 +223,6 @@ class Version
                 . '</a>'
             )
         );
-    }
-
-    /**
-     * Get the Regular Labs logo for the footer
-     *
-     * @return string
-     */
-    private static function getFooterLogo()
-    {
-        return JText::sprintf(
-            'RL_POWERED_BY',
-            '<a href="https://regularlabs.com" target="_blank">'
-            . '<img src="' . JUri::root() . 'media/regularlabs/images/logo.svg" width="112" height="24" alt="Regular Labs">'
-            . '</a>'
-        );
-    }
-
-    /**
-     * Get the copyright text for the footer
-     *
-     * @return string
-     */
-    private static function getFooterCopyright()
-    {
-        return JText::_('RL_COPYRIGHT') . ' &copy; ' . date('Y') . ' Regular Labs - ' . JText::_('RL_ALL_RIGHTS_RESERVED');
-    }
-
-    /**
-     * Get the version message
-     *
-     * @param $alias
-     *
-     * @return string
-     */
-    public static function getMessage($alias)
-    {
-        if ( ! $alias)
-        {
-            return '';
-        }
-
-        $name  = Extension::getNameByAlias($alias);
-        $alias = Extension::getAliasByName($alias);
-
-        if ( ! $version = self::get($alias))
-        {
-            return '';
-        }
-
-        Document::loadMainDependencies();
-
-        $url    = 'download.regularlabs.com/extensions.xml?j=3&e=' . $alias;
-        $script = "
-            jQuery(document).ready(function() {
-                RegularLabsScripts.loadajax(
-                    '" . $url . "',
-                    'RegularLabsScripts.displayVersion( data, \"" . $alias . "\", \"" . str_replace(['FREE', 'PRO'], '', $version) . "\" )',
-                    'RegularLabsScripts.displayVersion( \"\" )',
-                    null, null, null, (60 * 60)
-                );
-            });
-        ";
-        JFactory::getDocument()->addScriptDeclaration($script);
-
-        return '<div class="alert alert-success" style="display:none;" id="regularlabs_version_' . $alias . '">' . self::getMessageText($alias, $name, $version) . '</div>';
     }
 
     /**
@@ -300,7 +325,7 @@ class Version
             var RLEM_TOKEN = '" . JSession::getFormToken() . "';
         "
         );
-        Document::script('regularlabsmanager/script.min.js', '22.8.15401');
+        Document::script('regularlabsmanager/script.min.js', '22.10.10828');
 
         $url = 'https://download.regularlabs.com?ext=' . $alias . '&j=3';
 
@@ -310,30 +335,5 @@ class Version
         }
 
         return ['', 'RegularLabsManager.openModal(\'update\', [\'' . $alias . '\'], [\'' . $url . '\'], true);'];
-    }
-
-    /**
-     * Get the version of the given module
-     *
-     * @param $alias
-     *
-     * @return string
-     */
-    public static function getModuleVersion($alias)
-    {
-        return self::get($alias, 'module');
-    }
-
-    /**
-     * Get the version of the given plugin
-     *
-     * @param        $alias
-     * @param string $folder
-     *
-     * @return string
-     */
-    public static function getPluginVersion($alias, $folder = 'system')
-    {
-        return self::get($alias, 'plugin', $folder);
     }
 }

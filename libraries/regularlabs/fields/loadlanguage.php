@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -25,16 +25,6 @@ class JFormFieldRL_LoadLanguage extends Field
 {
     public $type = 'LoadLanguage';
 
-    protected function getInput()
-    {
-        $extension = $this->get('extension');
-        $admin     = $this->get('admin', 1);
-
-        self::loadLanguage($extension, $admin);
-
-        return '';
-    }
-
     public function loadLanguage($extension, $admin = 1)
     {
         if ( ! $extension)
@@ -43,6 +33,16 @@ class JFormFieldRL_LoadLanguage extends Field
         }
 
         RL_Language::load($extension, $admin ? JPATH_ADMINISTRATOR : JPATH_SITE);
+    }
+
+    protected function getInput()
+    {
+        $extension = $this->get('extension');
+        $admin     = $this->get('admin', 1);
+
+        self::loadLanguage($extension, $admin);
+
+        return '';
     }
 
     protected function getLabel()

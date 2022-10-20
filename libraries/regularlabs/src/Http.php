@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -42,66 +42,6 @@ class Http
 
         return @file_get_contents($url, false, stream_context_create(['http' => ['timeout' => $timeout]]))
             || self::getFromUrl($url, $timeout);
-    }
-
-    /**
-     * Get the contents of the given url
-     *
-     * @param string $url
-     * @param int    $timeout
-     *
-     * @return string
-     */
-    public static function getFromUrl($url, $timeout = 20)
-    {
-        $cache     = new Cache([__METHOD__, $url]);
-        $cache_ttl = JFactory::getApplication()->input->getInt('cache', 0);
-
-        if ($cache_ttl)
-        {
-            $cache->useFiles($cache_ttl > 1 ? $cache_ttl : null);
-        }
-
-        if ($cache->exists())
-        {
-            return $cache->get();
-        }
-
-        $content = self::getContents($url, $timeout);
-
-        if (empty($content))
-        {
-            return '';
-        }
-
-        return $cache->set($content);
-    }
-
-    /**
-     * Load the contents of the given url
-     *
-     * @param string $url
-     * @param int    $timeout
-     *
-     * @return string
-     */
-    private static function getContents($url, $timeout = 20)
-    {
-        try
-        {
-            // Adding a valid user agent string, otherwise some feed-servers returning an error
-            $options = new Registry([
-                'userAgent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0',
-            ]);
-
-            $content = JHttpFactory::getHttp($options)->get($url, null, $timeout)->body;
-        }
-        catch (RuntimeException $e)
-        {
-            return '';
-        }
-
-        return $content;
     }
 
     /**
@@ -179,6 +119,66 @@ class Http
         header("Content-type: " . $format);
 
         return $cache->set($content);
+    }
+
+    /**
+     * Get the contents of the given url
+     *
+     * @param string $url
+     * @param int    $timeout
+     *
+     * @return string
+     */
+    public static function getFromUrl($url, $timeout = 20)
+    {
+        $cache     = new Cache([__METHOD__, $url]);
+        $cache_ttl = JFactory::getApplication()->input->getInt('cache', 0);
+
+        if ($cache_ttl)
+        {
+            $cache->useFiles($cache_ttl > 1 ? $cache_ttl : null);
+        }
+
+        if ($cache->exists())
+        {
+            return $cache->get();
+        }
+
+        $content = self::getContents($url, $timeout);
+
+        if (empty($content))
+        {
+            return '';
+        }
+
+        return $cache->set($content);
+    }
+
+    /**
+     * Load the contents of the given url
+     *
+     * @param string $url
+     * @param int    $timeout
+     *
+     * @return string
+     */
+    private static function getContents($url, $timeout = 20)
+    {
+        try
+        {
+            // Adding a valid user agent string, otherwise some feed-servers returning an error
+            $options = new Registry([
+                'userAgent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0',
+            ]);
+
+            $content = JHttpFactory::getHttp($options)->get($url, null, $timeout)->body;
+        }
+        catch (RuntimeException $e)
+        {
+            return '';
+        }
+
+        return $content;
     }
 
 }

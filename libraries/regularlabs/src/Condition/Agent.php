@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -36,34 +36,11 @@ abstract class Agent extends Condition
     }
 
     /**
-     * setDevice
+     * isMobile
      */
-    private function getDevice()
+    public function isMobile()
     {
-        if ( ! is_null($this->device))
-        {
-            return $this->device;
-        }
-
-        $detect = new MobileDetect;
-
-        $this->is_mobile = $detect->isMobile();
-
-        switch (true)
-        {
-            case($detect->isTablet()):
-                $this->device = 'tablet';
-                break;
-
-            case ($detect->isMobile()):
-                $this->device = 'mobile';
-                break;
-
-            default:
-                $this->device = 'desktop';
-        }
-
-        return $this->device;
+        return $this->getDevice() == 'mobile';
     }
 
     /**
@@ -72,14 +49,6 @@ abstract class Agent extends Condition
     public function isPhone()
     {
         return $this->isMobile();
-    }
-
-    /**
-     * isMobile
-     */
-    public function isMobile()
-    {
-        return $this->getDevice() == 'mobile';
     }
 
     /**
@@ -147,5 +116,36 @@ abstract class Agent extends Condition
         $this->agent = $agent;
 
         return $this->agent;
+    }
+
+    /**
+     * setDevice
+     */
+    private function getDevice()
+    {
+        if ( ! is_null($this->device))
+        {
+            return $this->device;
+        }
+
+        $detect = new MobileDetect;
+
+        $this->is_mobile = $detect->isMobile();
+
+        switch (true)
+        {
+            case($detect->isTablet()):
+                $this->device = 'tablet';
+                break;
+
+            case ($detect->isMobile()):
+                $this->device = 'mobile';
+                break;
+
+            default:
+                $this->device = 'desktop';
+        }
+
+        return $this->device;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -44,9 +44,9 @@ class RLAssignmentsHomePage extends RLAssignment
             if ( ! $this->request->option)
             {
                 // set the view/task/layout in the menu item to empty if not set
-                $home->query['view']   = $home->query['view'] ?? '';
-                $home->query['task']   = $home->query['task'] ?? '';
-                $home->query['layout'] = $home->query['layout'] ?? '';
+                $home->query['view']   ??= '';
+                $home->query['task']   ??= '';
+                $home->query['layout'] ??= '';
             }
 
             // check set values against home menu query items

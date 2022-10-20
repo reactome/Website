@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -40,11 +40,6 @@ class JFormFieldRL_Toggler extends JFormField
 {
     public $type = 'Toggler';
 
-    protected function getLabel()
-    {
-        return '';
-    }
-
     protected function getInput()
     {
         if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
@@ -55,6 +50,11 @@ class JFormFieldRL_Toggler extends JFormField
         $field = new RLFieldToggler;
 
         return $field->getInput($this->element->attributes());
+    }
+
+    protected function getLabel()
+    {
+        return '';
     }
 }
 
@@ -113,7 +113,7 @@ class RLFieldToggler
             $html[] = '</div></div>';
         }
 
-        $html[] = '<div id="' . rand(1000000, 9999999) . '___' . implode('___', $ids) . '" class="rl_toggler';
+        $html[] = '<div id="' . rand(1_000_000, 9_999_999) . '___' . implode('___', $ids) . '" class="rl_toggler';
         if ($nofx)
         {
             $html[] = ' rl_toggler_nofx';

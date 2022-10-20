@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -62,6 +62,55 @@ class ZooCategory extends Zoo
         }
 
         return $this->passSimple($cats);
+    }
+
+    private function getCatParentIds($id = 0)
+    {
+        $parent_ids = [];
+
+        if ( ! $id)
+        {
+            return $parent_ids;
+        }
+
+        while ($id)
+        {
+            if (substr($id, 0, 3) == 'app')
+            {
+                $parent_ids[] = $id;
+                break;
+            }
+
+            $query = $this->db->getQuery(true)
+                ->select('c.parent')
+                ->from('#__zoo_category AS c')
+                ->where('c.id = ' . (int) $id);
+            $this->db->setQuery($query);
+            $pid = $this->db->loadResult();
+
+            if ( ! $pid)
+            {
+                $query = $this->db->getQuery(true)
+                    ->select('c.application_id')
+                    ->from('#__zoo_category AS c')
+                    ->where('c.id = ' . (int) $id);
+                $this->db->setQuery($query);
+                $app = $this->db->loadResult();
+
+                if ($app)
+                {
+                    $parent_ids[] = 'app' . $app;
+                }
+
+                break;
+            }
+
+            $parent_ids[] = $pid;
+
+            $id = $pid;
+        }
+
+        return $parent_ids;
     }
 
     private function getCategories()
@@ -147,54 +196,5 @@ class ZooCategory extends Zoo
             default:
                 return false;
         }
-    }
-
-    private function getCatParentIds($id = 0)
-    {
-        $parent_ids = [];
-
-        if ( ! $id)
-        {
-            return $parent_ids;
-        }
-
-        while ($id)
-        {
-            if (substr($id, 0, 3) == 'app')
-            {
-                $parent_ids[] = $id;
-                break;
-            }
-
-            $query = $this->db->getQuery(true)
-                ->select('c.parent')
-                ->from('#__zoo_category AS c')
-                ->where('c.id = ' . (int) $id);
-            $this->db->setQuery($query);
-            $pid = $this->db->loadResult();
-
-            if ( ! $pid)
-            {
-                $query = $this->db->getQuery(true)
-                    ->select('c.application_id')
-                    ->from('#__zoo_category AS c')
-                    ->where('c.id = ' . (int) $id);
-                $this->db->setQuery($query);
-                $app = $this->db->loadResult();
-
-                if ($app)
-                {
-                    $parent_ids[] = 'app' . $app;
-                }
-
-                break;
-            }
-
-            $parent_ids[] = $pid;
-
-            $id = $pid;
-        }
-
-        return $parent_ids;
     }
 }

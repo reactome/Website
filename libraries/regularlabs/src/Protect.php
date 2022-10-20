@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -103,6 +103,106 @@ class Protect
     }
 
     /**
+     * Get the html end comment tags
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public static function getCommentEndTag($name = '')
+    {
+        return '<!-- END: ' . $name . ' -->';
+    }
+
+    /**
+     * Get the html start comment tags
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public static function getCommentStartTag($name = '')
+    {
+        return '<!-- START: ' . $name . ' -->';
+    }
+
+    /**
+     * Get the html comment tags
+     *
+     * @param string $name
+     *
+     * @return array
+     */
+    public static function getCommentTags($name = '')
+    {
+        return [self::getCommentStartTag($name), self::getCommentEndTag($name)];
+    }
+
+    /**
+     * Return the Regular Expressions string to match:
+     * The edit form
+     *
+     * @param array $form_classes
+     *
+     * @return string
+     */
+    public static function getFormRegex($form_classes = [])
+    {
+        $form_classes = ArrayHelper::toArray($form_classes);
+
+        return '(<form\s[^>]*('
+            . '(id|name)="(adminForm|postform|submissionForm|default_action_user|seblod_form|spEntryForm)"'
+            . '|action="[^"]*option=com_myjspace&(amp;)?view=see"'
+            . (! empty($form_classes) ? '|class="([^"]* )?(' . implode('|', $form_classes) . ')( [^"]*)?"' : '')
+            . '))';
+    }
+
+    /**
+     * Get the start and end parts for the inline comment tags for scripts/styles
+     *
+     * @param string $name
+     * @param string $type
+     *
+     * @return array
+     */
+    public static function getInlineCommentTags($name = '', $type = '', $regex = false)
+    {
+        if ($regex)
+        {
+            return self::getInlineCommentTagsRegEx($name, $type);
+        }
+
+        if ($type)
+        {
+            $type = ': ' . $type;
+        }
+
+        $start = '/* START: ' . $name . $type . ' */';
+        $end   = '/* END: ' . $name . $type . ' */';
+
+        return [$start, $end];
+    }
+
+    /**
+     * Get the start and end parts for the inline comment tags for scripts/styles
+     *
+     * @param string $name
+     * @param string $type
+     *
+     * @return array
+     */
+    public static function getInlineCommentTagsRegEx($name = '', $type = '')
+    {
+        $name = str_replace(' ', ' ?', RegEx::quote($name));
+        $type = $type ? ':? ' . RegEx::quote($type) : '(:? [a-z0-9]*)?';
+
+        $start = '/\* START: ' . $name . $type . ' \*/';
+        $end   = '/\* END: ' . $name . $type . ' \*/';
+
+        return [$start, $end];
+    }
+
+    /**
      * Create a html comment from given comment string
      *
      * @param string $name
@@ -130,6 +230,26 @@ class Protect
     }
 
     /**
+     * Return the sourcerer tag name and characters
+     *
+     * @return array
+     */
+    public static function getSourcererTag()
+    {
+        if ( ! is_null(self::$sourcerer_tag))
+        {
+            return [self::$sourcerer_tag, self::$sourcerer_characters];
+        }
+
+        $parameters = Parameters::getPlugin('sourcerer');
+
+        self::$sourcerer_tag        = $parameters->syntax_word ?? '';
+        self::$sourcerer_characters = $parameters->tag_characters ?? '{.}';
+
+        return [self::$sourcerer_tag, self::$sourcerer_characters];
+    }
+
+    /**
      * Check if the component is installed
      *
      * @param string $extension_alias
@@ -139,6 +259,20 @@ class Protect
     public static function isComponentInstalled($extension_alias)
     {
         return file_exists(JPATH_ADMINISTRATOR . '/components/com_' . $extension_alias . '/' . $extension_alias . '.xml');
+    }
+
+    /**
+     * Check if page should be protected for given extension
+     *
+     * @param string $extension_alias
+     *
+     * @return bool
+     */
+    public static function isDisabledByUrl($extension_alias = '')
+    {
+        // return if disabled via url
+        return $extension_alias
+            && JFactory::getApplication()->input->get('disable_' . $extension_alias);
     }
 
     /**
@@ -155,17 +289,37 @@ class Protect
     }
 
     /**
-     * Check if page should be protected for given extension
+     * Check if the page is a restricted component
      *
-     * @param string $extension_alias
+     * @param array  $restricted_components
+     * @param string $area
      *
      * @return bool
      */
-    public static function isDisabledByUrl($extension_alias = '')
+    public static function isRestrictedComponent($restricted_components, $area = 'component')
     {
-        // return if disabled via url
-        return $extension_alias
-            && JFactory::getApplication()->input->get('disable_' . $extension_alias);
+        if ($area != 'component' && ! ($area == 'article' && JFactory::getApplication()->input->get('option') == 'com_content'))
+        {
+            return false;
+        }
+
+        $restricted_components = ArrayHelper::toArray(str_replace('|', ',', $restricted_components));
+        $restricted_components = ArrayHelper::clean($restricted_components);
+
+        if ( ! empty($restricted_components) && in_array(JFactory::getApplication()->input->get('option'), $restricted_components, true))
+        {
+            return true;
+        }
+
+        if (JFactory::getApplication()->input->get('option') == 'com_acymailing'
+            && ! in_array(JFactory::getApplication()->input->get('ctrl'), ['user', 'archive'], true)
+            && ! in_array(JFactory::getApplication()->input->get('view'), ['user', 'archive'], true)
+        )
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -206,40 +360,6 @@ class Protect
     }
 
     /**
-     * Check if the page is a restricted component
-     *
-     * @param array  $restricted_components
-     * @param string $area
-     *
-     * @return bool
-     */
-    public static function isRestrictedComponent($restricted_components, $area = 'component')
-    {
-        if ($area != 'component' && ! ($area == 'article' && JFactory::getApplication()->input->get('option') == 'com_content'))
-        {
-            return false;
-        }
-
-        $restricted_components = ArrayHelper::toArray(str_replace('|', ',', $restricted_components));
-        $restricted_components = ArrayHelper::clean($restricted_components);
-
-        if ( ! empty($restricted_components) && in_array(JFactory::getApplication()->input->get('option'), $restricted_components, true))
-        {
-            return true;
-        }
-
-        if (JFactory::getApplication()->input->get('option') == 'com_acymailing'
-            && ! in_array(JFactory::getApplication()->input->get('ctrl'), ['user', 'archive'], true)
-            && ! in_array(JFactory::getApplication()->input->get('view'), ['user', 'archive'], true)
-        )
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Check if the component is installed
      *
      * @param string $extension_alias
@@ -274,137 +394,21 @@ class Protect
     }
 
     /**
-     * Protect all text based form fields
+     * Encode array of strings
      *
-     * @param string $string
-     * @param array  $search_strings
+     * @param array $array
+     * @param int   $is_tag
+     *
+     * @return mixed
      */
-    public static function protectFields(&$string, $search_strings = [])
+    public static function protectArray($array, $is_tag = false)
     {
-        // No specified strings tags found in the string
-        if ( ! self::containsStringsToProtect($string, $search_strings))
+        foreach ($array as &$string)
         {
-            return;
+            $string = self::protectString($string, $is_tag);
         }
 
-        $parts = StringHelper::split($string, ['</label>', '</select>']);
-
-        foreach ($parts as &$part)
-        {
-            if ( ! self::containsStringsToProtect($part, $search_strings))
-            {
-                continue;
-            }
-
-            self::protectFieldsPart($part);
-        }
-
-        $string = implode('', $parts);
-    }
-
-    /**
-     * Check if the string contains certain substrings to protect
-     *
-     * @param string $string
-     * @param array  $search_strings
-     *
-     * @return bool
-     */
-    private static function containsStringsToProtect($string, $search_strings = [])
-    {
-        if (
-            empty($string)
-            || (
-                strpos($string, '<input') === false
-                && strpos($string, '<textarea') === false
-                && strpos($string, '<select') === false
-            )
-        )
-        {
-            return false;
-        }
-
-        // No specified strings tags found in the string
-        if ( ! empty($search_strings) && ! StringHelper::contains($string, $search_strings))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Protect the fields in the string
-     *
-     * @param string $string
-     */
-    private static function protectFieldsPart(&$string)
-    {
-        self::protectFieldsTextAreas($string);
-        self::protectFieldsInputFields($string);
-    }
-
-    /**
-     * Protect the textarea fields in the string
-     *
-     * @param string $string
-     */
-    private static function protectFieldsTextAreas(&$string)
-    {
-        if (strpos($string, '<textarea') === false)
-        {
-            return;
-        }
-
-        // Only replace non-empty textareas
-        // Todo: maybe also prevent empty textareas but with a non-empty placeholder attribute
-
-        // Temporarily replace empty textareas
-        $temp_tag = '___TEMP_TEXTAREA___';
-        $string   = RegEx::replace(
-            '<textarea((?:\s[^>]*)?)>(\s*)</textarea>',
-            '<' . $temp_tag . '\1>\2</' . $temp_tag . '>',
-            $string
-        );
-
-        self::protectByRegex(
-            $string,
-            '(?:'
-            . '<textarea.*?</textarea>'
-            . '\s*)+'
-        );
-
-        // Replace back the temporarily replaced empty textareas
-        $string = str_replace($temp_tag, 'textarea', $string);
-    }
-
-    /**
-     * Protect the input fields in the string
-     *
-     * @param string $string
-     */
-    private static function protectFieldsInputFields(&$string)
-    {
-        if (strpos($string, '<input') === false)
-        {
-            return;
-        }
-
-        $type_values = '(?:text|email|hidden)';
-        // must be of certain type
-        $param_type = '\s+type\s*=\s*(?:"' . $type_values . '"|\'' . $type_values . '\'])';
-        // must have a non-empty value or placeholder attribute
-        $param_value = '\s+(?:value|placeholder)\s*=\s*(?:"[^"]+"|\'[^\']+\'])';
-        // Regex to match any other parameter
-        $params = '(?:\s+[a-z][a-z0-9-_]*(?:\s*=\s*(?:"[^"]*"|\'[^\']*\'|[0-9]+))?)*';
-
-        self::protectByRegex(
-            $string,
-            '(?:(?:'
-            . '<input' . $params . $param_type . $params . $param_value . $params . '\s*/?>'
-            . '|<input' . $params . $param_value . $params . $param_type . $params . '\s*/?>'
-            . ')\s*)+'
-        );
+        return $array;
     }
 
     /**
@@ -434,21 +438,32 @@ class Protect
     }
 
     /**
-     * Encode string
+     * Protect all text based form fields
      *
      * @param string $string
-     * @param int    $is_tag
-     *
-     * @return string
+     * @param array  $search_strings
      */
-    public static function protectString($string, $is_tag = false)
+    public static function protectFields(&$string, $search_strings = [])
     {
-        if ($is_tag)
+        // No specified strings tags found in the string
+        if ( ! self::containsStringsToProtect($string, $search_strings))
         {
-            return self::$protect_tags_start . base64_encode($string) . self::$protect_tags_end;
+            return;
         }
 
-        return self::$protect_start . base64_encode($string) . self::$protect_end;
+        $parts = StringHelper::split($string, ['</label>', '</select>']);
+
+        foreach ($parts as &$part)
+        {
+            if ( ! self::containsStringsToProtect($part, $search_strings))
+            {
+                continue;
+            }
+
+            self::protectFieldsPart($part);
+        }
+
+        $string = implode('', $parts);
     }
 
     /**
@@ -484,154 +499,6 @@ class Protect
     }
 
     /**
-     * Prepare the tags and protected tags array
-     *
-     * @param array $tags
-     * @param bool  $include_closing_tags
-     *
-     * @return bool|mixed
-     */
-    private static function prepareTags($tags, $include_closing_tags = true)
-    {
-        if ( ! is_array($tags))
-        {
-            $tags = [$tags];
-        }
-
-        $cache = new Cache([__METHOD__, $tags, $include_closing_tags]);
-
-        if ($cache->exists())
-        {
-            return $cache->get();
-        }
-
-        foreach ($tags as $i => $tag)
-        {
-            if (StringHelper::is_alphanumeric($tag[0]))
-            {
-                $tag = '{' . $tag;
-            }
-
-            $tags[$i] = $tag;
-
-            if ($include_closing_tags)
-            {
-                $tags[] = RegEx::replace('^([^a-z0-9]+)', '\1/', $tag);
-            }
-        }
-
-        return $cache->set([$tags, self::protectArray($tags, 1)]);
-    }
-
-    /**
-     * Return the Regular Expressions string to match:
-     * The edit form
-     *
-     * @param array $form_classes
-     *
-     * @return string
-     */
-    public static function getFormRegex($form_classes = [])
-    {
-        $form_classes = ArrayHelper::toArray($form_classes);
-
-        return '(<form\s[^>]*('
-            . '(id|name)="(adminForm|postform|submissionForm|default_action_user|seblod_form|spEntryForm)"'
-            . '|action="[^"]*option=com_myjspace&(amp;)?view=see"'
-            . (! empty($form_classes) ? '|class="([^"]* )?(' . implode('|', $form_classes) . ')( [^"]*)?"' : '')
-            . '))';
-    }
-
-    /**
-     * Protect part of the AdminForm
-     *
-     * @param string $string
-     * @param array  $tags
-     * @param array  $protected_tags
-     */
-    private static function protectFormPart(&$string, $tags = [], $protected_tags = [])
-    {
-        if (strpos($string, '</form>') === false)
-        {
-            return;
-        }
-
-        // Protect entire form
-        if (empty($tags))
-        {
-            $form_parts    = explode('</form>', $string, 2);
-            $form_parts[0] = self::protectString($form_parts[0] . '</form>');
-            $string        = implode('', $form_parts);
-
-            return;
-        }
-
-        $regex_tags = RegEx::quote($tags);
-
-        if ( ! RegEx::match($regex_tags, $string))
-        {
-            return;
-        }
-
-        $form_parts = explode('</form>', $string, 2);
-        // protect tags only inside form fields
-        RegEx::matchAll(
-            '(?:<textarea[^>]*>.*?<\/textarea>|<input[^>]*>)',
-            $form_parts[0],
-            $matches,
-            null,
-            PREG_PATTERN_ORDER
-        );
-
-        if (empty($matches))
-        {
-            return;
-        }
-
-        $matches = array_unique($matches[0]);
-
-        foreach ($matches as $match)
-        {
-            $field         = str_replace($tags, $protected_tags, $match);
-            $form_parts[0] = str_replace($match, $field, $form_parts[0]);
-        }
-
-        $string = implode('</form>', $form_parts);
-    }
-
-    /**
-     * Encode array of strings
-     *
-     * @param array $array
-     * @param int   $is_tag
-     *
-     * @return mixed
-     */
-    public static function protectArray($array, $is_tag = false)
-    {
-        foreach ($array as &$string)
-        {
-            $string = self::protectString($string, $is_tag);
-        }
-
-        return $array;
-    }
-
-    /**
-     * Protect all html tags with some type of attributes/content
-     *
-     * @param string $string
-     */
-    public static function protectHtmlTags(&$string)
-    {
-        // protect comment tags
-        self::protectHtmlCommentTags($string);
-
-        // protect html tags
-        self::protectByRegex($string, '<[a-z][^>]*(?:="[^"]*"|=\'[^\']*\')+[^>]*>');
-    }
-
-    /**
      * Protect all html comment tags
      *
      * @param string $string
@@ -647,6 +514,20 @@ class Protect
         }
 
         self::protectByRegex($string, $regex);
+    }
+
+    /**
+     * Protect all html tags with some type of attributes/content
+     *
+     * @param string $string
+     */
+    public static function protectHtmlTags(&$string)
+    {
+        // protect comment tags
+        self::protectHtmlCommentTags($string);
+
+        // protect html tags
+        self::protectByRegex($string, '<[a-z][^>]*(?:="[^"]*"|=\'[^\']*\')+[^>]*>');
     }
 
     /**
@@ -722,23 +603,21 @@ class Protect
     }
 
     /**
-     * Return the sourcerer tag name and characters
+     * Encode string
      *
-     * @return array
+     * @param string $string
+     * @param int    $is_tag
+     *
+     * @return string
      */
-    public static function getSourcererTag()
+    public static function protectString($string, $is_tag = false)
     {
-        if ( ! is_null(self::$sourcerer_tag))
+        if ($is_tag)
         {
-            return [self::$sourcerer_tag, self::$sourcerer_characters];
+            return self::$protect_tags_start . base64_encode($string) . self::$protect_tags_end;
         }
 
-        $parameters = Parameters::getPlugin('sourcerer');
-
-        self::$sourcerer_tag        = $parameters->syntax_word ?? '';
-        self::$sourcerer_characters = $parameters->tag_characters ?? '{.}';
-
-        return [self::$sourcerer_tag, self::$sourcerer_characters];
+        return self::$protect_start . base64_encode($string) . self::$protect_end;
     }
 
     /**
@@ -816,42 +695,6 @@ class Protect
             '',
             $string
         );
-    }
-
-    /**
-     * Get the html comment tags
-     *
-     * @param string $name
-     *
-     * @return array
-     */
-    public static function getCommentTags($name = '')
-    {
-        return [self::getCommentStartTag($name), self::getCommentEndTag($name)];
-    }
-
-    /**
-     * Get the html start comment tags
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    public static function getCommentStartTag($name = '')
-    {
-        return '<!-- START: ' . $name . ' -->';
-    }
-
-    /**
-     * Get the html end comment tags
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    public static function getCommentEndTag($name = '')
-    {
-        return '<!-- END: ' . $name . ' -->';
     }
 
     /**
@@ -957,51 +800,6 @@ class Protect
     }
 
     /**
-     * Get the start and end parts for the inline comment tags for scripts/styles
-     *
-     * @param string $name
-     * @param string $type
-     *
-     * @return array
-     */
-    public static function getInlineCommentTags($name = '', $type = '', $regex = false)
-    {
-        if ($regex)
-        {
-            return self::getInlineCommentTagsRegEx($name, $type);
-        }
-
-        if ($type)
-        {
-            $type = ': ' . $type;
-        }
-
-        $start = '/* START: ' . $name . $type . ' */';
-        $end   = '/* END: ' . $name . $type . ' */';
-
-        return [$start, $end];
-    }
-
-    /**
-     * Get the start and end parts for the inline comment tags for scripts/styles
-     *
-     * @param string $name
-     * @param string $type
-     *
-     * @return array
-     */
-    public static function getInlineCommentTagsRegEx($name = '', $type = '')
-    {
-        $name = str_replace(' ', ' ?', RegEx::quote($name));
-        $type = $type ? ':? ' . RegEx::quote($type) : '(:? [a-z0-9]*)?';
-
-        $start = '/\* START: ' . $name . $type . ' \*/';
-        $end   = '/\* END: ' . $name . $type . ' \*/';
-
-        return [$start, $end];
-    }
-
-    /**
      * Remove left over plugin tags
      *
      * @param string $string
@@ -1065,61 +863,6 @@ class Protect
     }
 
     /**
-     * Decode array of strings
-     *
-     * @param array $array
-     * @param int   $is_tag
-     *
-     * @return mixed
-     */
-    public static function unprotectArray($array, $is_tag = false)
-    {
-        foreach ($array as &$string)
-        {
-            $string = self::unprotectString($string, $is_tag);
-        }
-
-        return $array;
-    }
-
-    /**
-     * Decode string
-     *
-     * @param string $string
-     * @param int    $is_tag
-     *
-     * @return string
-     */
-    public static function unprotectString($string, $is_tag = false)
-    {
-        if ($is_tag)
-        {
-            return self::$protect_tags_start . base64_decode($string) . self::$protect_tags_end;
-        }
-
-        return self::$protect_start . base64_decode($string) . self::$protect_end;
-    }
-
-    /**
-     * Replace any protected tags to original
-     *
-     * @param string $string
-     * @param array  $tags
-     */
-    public static function unprotectForm(&$string, $tags = [])
-    {
-        // Protect entire form
-        if (empty($tags))
-        {
-            self::unprotect($string);
-
-            return;
-        }
-
-        self::unprotectTags($string, $tags);
-    }
-
-    /**
      * Replace any protected text to original
      *
      * @param string|array $string
@@ -1153,45 +896,40 @@ class Protect
     }
 
     /**
+     * Decode array of strings
+     *
+     * @param array $array
+     * @param int   $is_tag
+     *
+     * @return mixed
+     */
+    public static function unprotectArray($array, $is_tag = false)
+    {
+        foreach ($array as &$string)
+        {
+            $string = self::unprotectString($string, $is_tag);
+        }
+
+        return $array;
+    }
+
+    /**
      * Replace any protected tags to original
      *
      * @param string $string
      * @param array  $tags
-     * @param bool   $include_closing_tags
      */
-    public static function unprotectTags(&$string, $tags = [], $include_closing_tags = true)
+    public static function unprotectForm(&$string, $tags = [])
     {
-        [$tags, $protected] = self::prepareTags($tags, $include_closing_tags);
-
-        $string = str_replace($protected, $tags, $string);
-    }
-
-    /**
-     * @param string $string
-     * @param array  $delimiters
-     */
-    private static function unprotectByDelimiters(&$string, $delimiters)
-    {
-        if ( ! StringHelper::contains($string, $delimiters))
+        // Protect entire form
+        if (empty($tags))
         {
+            self::unprotect($string);
+
             return;
         }
 
-        $regex = RegEx::preparePattern(RegEx::quote($delimiters), 's', $string);
-
-        $parts = preg_split($regex, $string);
-
-        foreach ($parts as $i => &$part)
-        {
-            if ($i % 2 == 0)
-            {
-                continue;
-            }
-
-            $part = base64_decode($part);
-        }
-
-        $string = implode('', $parts);
+        self::unprotectTags($string, $tags);
     }
 
     /**
@@ -1235,6 +973,60 @@ class Protect
     }
 
     /**
+     * Decode string
+     *
+     * @param string $string
+     * @param int    $is_tag
+     *
+     * @return string
+     */
+    public static function unprotectString($string, $is_tag = false)
+    {
+        if ($is_tag)
+        {
+            return self::$protect_tags_start . base64_decode($string) . self::$protect_tags_end;
+        }
+
+        return self::$protect_start . base64_decode($string) . self::$protect_end;
+    }
+
+    /**
+     * Replace any protected tags to original
+     *
+     * @param string $string
+     * @param array  $tags
+     * @param bool   $include_closing_tags
+     */
+    public static function unprotectTags(&$string, $tags = [], $include_closing_tags = true)
+    {
+        [$tags, $protected] = self::prepareTags($tags, $include_closing_tags);
+
+        $string = str_replace($protected, $tags, $string);
+    }
+
+    /**
+     * Wraps a style or javascript declaration with comment tags
+     *
+     * @param string $content
+     * @param string $name
+     * @param string $type
+     * @param bool   $minify
+     */
+    public static function wrapDeclaration($content = '', $name = '', $type = 'styles', $minify = true)
+    {
+        if (empty($name))
+        {
+            return $content;
+        }
+
+        [$start, $end] = self::getInlineCommentTags($name, $type);
+
+        $spacer = $minify ? ' ' : "\n";
+
+        return $start . $spacer . $content . $spacer . $end;
+    }
+
+    /**
      * Wrap string in comment tags
      *
      * @param string $name
@@ -1262,28 +1054,6 @@ class Protect
     }
 
     /**
-     * Wraps a style or javascript declaration with comment tags
-     *
-     * @param string $content
-     * @param string $name
-     * @param string $type
-     * @param bool   $minify
-     */
-    public static function wrapDeclaration($content = '', $name = '', $type = 'styles', $minify = true)
-    {
-        if (empty($name))
-        {
-            return $content;
-        }
-
-        [$start, $end] = self::getInlineCommentTags($name, $type);
-
-        $spacer = $minify ? ' ' : "\n";
-
-        return $start . $spacer . $content . $spacer . $end;
-    }
-
-    /**
      * Wraps a stylesheet declaration with comment tags
      *
      * @param string $content
@@ -1293,5 +1063,235 @@ class Protect
     public static function wrapStyleDeclaration($content = '', $name = '', $minify = true)
     {
         return self::wrapDeclaration($content, $name, 'styles', $minify);
+    }
+
+    /**
+     * Check if the string contains certain substrings to protect
+     *
+     * @param string $string
+     * @param array  $search_strings
+     *
+     * @return bool
+     */
+    private static function containsStringsToProtect($string, $search_strings = [])
+    {
+        if (
+            empty($string)
+            || (
+                strpos($string, '<input') === false
+                && strpos($string, '<textarea') === false
+                && strpos($string, '<select') === false
+            )
+        )
+        {
+            return false;
+        }
+
+        // No specified strings tags found in the string
+        if ( ! empty($search_strings) && ! StringHelper::contains($string, $search_strings))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Prepare the tags and protected tags array
+     *
+     * @param array $tags
+     * @param bool  $include_closing_tags
+     *
+     * @return bool|mixed
+     */
+    private static function prepareTags($tags, $include_closing_tags = true)
+    {
+        if ( ! is_array($tags))
+        {
+            $tags = [$tags];
+        }
+
+        $cache = new Cache([__METHOD__, $tags, $include_closing_tags]);
+
+        if ($cache->exists())
+        {
+            return $cache->get();
+        }
+
+        foreach ($tags as $i => $tag)
+        {
+            if (StringHelper::is_alphanumeric($tag[0]))
+            {
+                $tag = '{' . $tag;
+            }
+
+            $tags[$i] = $tag;
+
+            if ($include_closing_tags)
+            {
+                $tags[] = RegEx::replace('^([^a-z0-9]+)', '\1/', $tag);
+            }
+        }
+
+        return $cache->set([$tags, self::protectArray($tags, 1)]);
+    }
+
+    /**
+     * Protect the input fields in the string
+     *
+     * @param string $string
+     */
+    private static function protectFieldsInputFields(&$string)
+    {
+        if (strpos($string, '<input') === false)
+        {
+            return;
+        }
+
+        $type_values = '(?:text|email|hidden)';
+        // must be of certain type
+        $param_type = '\s+type\s*=\s*(?:"' . $type_values . '"|\'' . $type_values . '\'])';
+        // must have a non-empty value or placeholder attribute
+        $param_value = '\s+(?:value|placeholder)\s*=\s*(?:"[^"]+"|\'[^\']+\'])';
+        // Regex to match any other parameter
+        $params = '(?:\s+[a-z][a-z0-9-_]*(?:\s*=\s*(?:"[^"]*"|\'[^\']*\'|[0-9]+))?)*';
+
+        self::protectByRegex(
+            $string,
+            '(?:(?:'
+            . '<input' . $params . $param_type . $params . $param_value . $params . '\s*/?>'
+            . '|<input' . $params . $param_value . $params . $param_type . $params . '\s*/?>'
+            . ')\s*)+'
+        );
+    }
+
+    /**
+     * Protect the fields in the string
+     *
+     * @param string $string
+     */
+    private static function protectFieldsPart(&$string)
+    {
+        self::protectFieldsTextAreas($string);
+        self::protectFieldsInputFields($string);
+    }
+
+    /**
+     * Protect the textarea fields in the string
+     *
+     * @param string $string
+     */
+    private static function protectFieldsTextAreas(&$string)
+    {
+        if (strpos($string, '<textarea') === false)
+        {
+            return;
+        }
+
+        // Only replace non-empty textareas
+        // Todo: maybe also prevent empty textareas but with a non-empty placeholder attribute
+
+        // Temporarily replace empty textareas
+        $temp_tag = '___TEMP_TEXTAREA___';
+        $string   = RegEx::replace(
+            '<textarea((?:\s[^>]*)?)>(\s*)</textarea>',
+            '<' . $temp_tag . '\1>\2</' . $temp_tag . '>',
+            $string
+        );
+
+        self::protectByRegex(
+            $string,
+            '(?:'
+            . '<textarea.*?</textarea>'
+            . '\s*)+'
+        );
+
+        // Replace back the temporarily replaced empty textareas
+        $string = str_replace($temp_tag, 'textarea', $string);
+    }
+
+    /**
+     * Protect part of the AdminForm
+     *
+     * @param string $string
+     * @param array  $tags
+     * @param array  $protected_tags
+     */
+    private static function protectFormPart(&$string, $tags = [], $protected_tags = [])
+    {
+        if (strpos($string, '</form>') === false)
+        {
+            return;
+        }
+
+        // Protect entire form
+        if (empty($tags))
+        {
+            $form_parts    = explode('</form>', $string, 2);
+            $form_parts[0] = self::protectString($form_parts[0] . '</form>');
+            $string        = implode('', $form_parts);
+
+            return;
+        }
+
+        $regex_tags = RegEx::quote($tags);
+
+        if ( ! RegEx::match($regex_tags, $string))
+        {
+            return;
+        }
+
+        $form_parts = explode('</form>', $string, 2);
+        // protect tags only inside form fields
+        RegEx::matchAll(
+            '(?:<textarea[^>]*>.*?<\/textarea>|<input[^>]*>)',
+            $form_parts[0],
+            $matches,
+            null,
+            PREG_PATTERN_ORDER
+        );
+
+        if (empty($matches))
+        {
+            return;
+        }
+
+        $matches = array_unique($matches[0]);
+
+        foreach ($matches as $match)
+        {
+            $field         = str_replace($tags, $protected_tags, $match);
+            $form_parts[0] = str_replace($match, $field, $form_parts[0]);
+        }
+
+        $string = implode('</form>', $form_parts);
+    }
+
+    /**
+     * @param string $string
+     * @param array  $delimiters
+     */
+    private static function unprotectByDelimiters(&$string, $delimiters)
+    {
+        if ( ! StringHelper::contains($string, $delimiters))
+        {
+            return;
+        }
+
+        $regex = RegEx::preparePattern(RegEx::quote($delimiters), 's', $string);
+
+        $parts = preg_split($regex, $string);
+
+        foreach ($parts as $i => &$part)
+        {
+            if ($i % 2 == 0)
+            {
+                continue;
+            }
+
+            $part = base64_decode($part);
+        }
+
+        $string = implode('', $parts);
     }
 }

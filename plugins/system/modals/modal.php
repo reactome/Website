@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.10.1
+ * @version         11.11.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -19,42 +19,42 @@ require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
 ?>
 <?php if (JFactory::getApplication()->input->get('iframe')) : ?>
-	<?php
-	$this->language  = JFactory::getDocument()->language;
-	$this->direction = JFactory::getDocument()->direction;
-	?>
-	<!DOCTYPE html>
-	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>"
-	      dir="<?php echo $this->direction; ?>">
-	<head>
-		<jdoc:include type="head" />
-	</head>
-	<body class="contentpane modal">
-	<jdoc:include type="message" />
-	<jdoc:include type="component" />
-	</body>
-	</html>
+    <?php
+    $this->language  = JFactory::getDocument()->language;
+    $this->direction = JFactory::getDocument()->direction;
+    ?>
+    <!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>"
+          dir="<?php echo $this->direction; ?>">
+    <head>
+        <jdoc:include type="head" />
+    </head>
+    <body class="contentpane modal">
+    <jdoc:include type="message" />
+    <jdoc:include type="component" />
+    </body>
+    </html>
 <?php else: ?>
-	<?php
-	$config = RL_Parameters::getPlugin('modals');
-	?>
-	<?php if ($config->load_head) : ?>
-		<?php
-		// Remove the extra loading of another jQuery file (already loaded in parent page)
-		$headerdata = JFactory::getDocument()->getHeadData();
-		foreach ($headerdata['scripts'] as $file => $type)
-		{
-			if ( ! RL_RegEx::match('/jquery(-(noconflict|migrate))?(\.min)?\.js', $file))
-			{
-				continue;
-			}
+    <?php
+    $config = RL_Parameters::getPlugin('modals');
+    ?>
+    <?php if ($config->load_head) : ?>
+        <?php
+        // Remove the extra loading of another jQuery file (already loaded in parent page)
+        $headerdata = JFactory::getDocument()->getHeadData();
+        foreach ($headerdata['scripts'] as $file => $type)
+        {
+            if ( ! RL_RegEx::match('/jquery(-(noconflict|migrate))?(\.min)?\.js', $file))
+            {
+                continue;
+            }
 
-			unset($headerdata['scripts'][$file]);
-		}
-		$headerdata = JFactory::getDocument()->setHeadData($headerdata);
-		?>
-		<jdoc:include type="head" />
-	<?php endif; ?>
-	<jdoc:include type="message" />
-	<jdoc:include type="component" />
+            unset($headerdata['scripts'][$file]);
+        }
+        $headerdata = JFactory::getDocument()->setHeadData($headerdata);
+        ?>
+        <jdoc:include type="head" />
+    <?php endif; ?>
+    <jdoc:include type="message" />
+    <jdoc:include type="component" />
 <?php endif; ?>

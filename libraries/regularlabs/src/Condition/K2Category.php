@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -60,6 +60,13 @@ class K2Category extends K2
         return $this->passSimple($cats);
     }
 
+    private function getCatParentIds($id = 0)
+    {
+        $parent_field = RL_K2_VERSION == 3 ? 'parent_id' : 'parent';
+
+        return $this->getParentIds($id, 'k2_categories', $parent_field);
+    }
+
     private function getCategories()
     {
         switch ($this->request->view)
@@ -77,11 +84,9 @@ class K2Category extends K2
         }
     }
 
-    private function getCatParentIds($id = 0)
+    private function getCategoryID()
     {
-        $parent_field = RL_K2_VERSION == 3 ? 'parent_id' : 'parent';
-
-        return $this->getParentIds($id, 'k2_categories', $parent_field);
+        return $this->request->id ?: JFactory::getApplication()->getUserStateFromRequest('com_k2itemsfilter_category', 'catid', 0, 'int');
     }
 
     private function getCategoryIDFromItem()
@@ -103,10 +108,5 @@ class K2Category extends K2
         $this->db->setQuery($query);
 
         return $this->db->loadResult();
-    }
-
-    private function getCategoryID()
-    {
-        return $this->request->id ?: JFactory::getApplication()->getUserStateFromRequest('com_k2itemsfilter_category', 'catid', 0, 'int');
     }
 }

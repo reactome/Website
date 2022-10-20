@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -63,104 +63,144 @@ class Conditions
         return $cache->set($types);
     }
 
-    private static function renameParamKeys(&$params)
+    public static function getConditionsFromTagAttributes(&$attributes, $only_types = [])
     {
-        $params->conditions = $params->conditions ?? [];
+        $conditions = [];
 
-        foreach ($params as $key => $value)
+        PluginTag::replaceKeyAliases($attributes, self::getTypeAliases(), true);
+        $types = self::getTypes($only_types);
+
+        if (empty($types))
         {
-            if (strpos($key, 'condition_') === false && strpos($key, 'assignto_') === false)
+            return $conditions;
+        }
+
+        $type_params = [];
+
+        foreach ($attributes as $type_param => $value)
+        {
+            if (strpos($type_param, '_') === false)
             {
                 continue;
             }
 
-            $new_key                      = substr($key, strpos($key, '_') + 1);
-            $params->conditions[$new_key] = $value;
+            [$type, $param] = explode('_', $type_param, 2);
 
-            unset($params->{$key});
+            $condition_type = self::getType($type, $only_types);
+
+            if ( ! $condition_type)
+            {
+                continue;
+            }
+
+            $type_params[$type_param] = $value;
+            unset($attributes->{$type_param});
         }
+
+        foreach ($attributes as $type => $value)
+        {
+            if (empty($value))
+            {
+                continue;
+            }
+
+            $condition_type = self::getType($type, $only_types);
+
+            if ( ! $condition_type)
+            {
+                continue;
+            }
+
+            $value = html_entity_decode($value);
+
+            $params             = self::getDefaultParamsByType($condition_type, $type);
+            $params->conditions = $type_params;
+
+            $reverse = false;
+
+            $selection = self::getSelectionFromTagAttribute($condition_type, $value, $params, $reverse);
+
+            $condition = (object) [
+                'include_type' => $reverse ? 2 : 1,
+                'selection'    => $selection,
+                'params'       => (object) [],
+            ];
+
+            self::addParams($condition, $condition_type, $type, $params);
+
+            $conditions[$condition_type] = $condition;
+        }
+
+        return $conditions;
     }
 
-    private static function getTypes($only_types = [])
+    public static function getMatchAllTypes()
     {
-        $types = [
-            'menuitems'             => 'Menu',
-            'homepage'              => 'Homepage',
-            'date'                  => 'Date.Date',
-            'seasons'               => 'Date.Season',
-            'months'                => 'Date.Month',
-            'days'                  => 'Date.Day',
-            'time'                  => 'Date.Time',
-            'accesslevels'          => 'User.Accesslevel',
-            'usergrouplevels'       => 'User.Grouplevel',
-            'users'                 => 'User.User',
-            'languages'             => 'Language',
-            'ips'                   => 'Ip',
-            'geocontinents'         => 'Geo.Continent',
-            'geocountries'          => 'Geo.Country',
-            'georegions'            => 'Geo.Region',
-            'geopostalcodes'        => 'Geo.Postalcode',
-            'templates'             => 'Template',
-            'urls'                  => 'Url',
-            'devices'               => 'Agent.Device',
-            'os'                    => 'Agent.Os',
-            'browsers'              => 'Agent.Browser',
-            'components'            => 'Component',
-            'tags'                  => 'Tag',
-            'contentpagetypes'      => 'Content.Pagetype',
-            'cats'                  => 'Content.Category',
-            'articles'              => 'Content.Article',
-            'easyblogpagetypes'     => 'Easyblog.Pagetype',
-            'easyblogcats'          => 'Easyblog.Category',
-            'easyblogtags'          => 'Easyblog.Tag',
-            'easyblogitems'         => 'Easyblog.Item',
-            'flexicontentpagetypes' => 'Flexicontent.Pagetype',
-            'flexicontenttags'      => 'Flexicontent.Tag',
-            'flexicontenttypes'     => 'Flexicontent.Type',
-            'form2contentprojects'  => 'Form2content.Project',
-            'k2pagetypes'           => 'K2.Pagetype',
-            'k2cats'                => 'K2.Category',
-            'k2tags'                => 'K2.Tag',
-            'k2items'               => 'K2.Item',
-            'zoopagetypes'          => 'Zoo.Pagetype',
-            'zoocats'               => 'Zoo.Category',
-            'zooitems'              => 'Zoo.Item',
-            'akeebasubspagetypes'   => 'Akeebasubs.Pagetype',
-            'akeebasubslevels'      => 'Akeebasubs.Level',
-            'hikashoppagetypes'     => 'Hikashop.Pagetype',
-            'hikashopcats'          => 'Hikashop.Category',
-            'hikashopproducts'      => 'Hikashop.Product',
-            'mijoshoppagetypes'     => 'Mijoshop.Pagetype',
-            'mijoshopcats'          => 'Mijoshop.Category',
-            'mijoshopproducts'      => 'Mijoshop.Product',
-            'redshoppagetypes'      => 'Redshop.Pagetype',
-            'redshopcats'           => 'Redshop.Category',
-            'redshopproducts'       => 'Redshop.Product',
-            'virtuemartpagetypes'   => 'Virtuemart.Pagetype',
-            'virtuemartcats'        => 'Virtuemart.Category',
-            'virtuemartproducts'    => 'Virtuemart.Product',
-            'cookieconfirm'         => 'Cookieconfirm',
-            'php'                   => 'Php',
+        return [
+            'User.Grouplevel',
+            'Tag',
         ];
-
-        if (empty($only_types))
-        {
-            return $types;
-        }
-
-        return array_intersect_key($types, array_flip($only_types));
     }
 
-    private static function getSelection($selection, $type = '')
+    public static function hasConditions($conditions)
     {
-        if (in_array($type, self::getNotArrayTextAreaTypes()))
+        if (empty($conditions))
         {
-            return $selection;
+            return false;
         }
 
-        $delimiter = in_array($type, self::getTextAreaTypes()) ? "\n" : ',';
+        foreach (self::getTypes() as $type)
+        {
+            if (isset($conditions[$type]) && isset($conditions[$type]->include_type) && $conditions[$type]->include_type)
+            {
+                return true;
+            }
+        }
 
-        return self::makeArray($selection, $delimiter);
+        return false;
+    }
+
+    public static function pass($conditions, $matching_method = 'all', $article = null, $module = null)
+    {
+        if (empty($conditions))
+        {
+            return true;
+        }
+
+        $article_id      = $article->id ?? '';
+        $module_id       = $module->id ?? '';
+        $matching_method = in_array($matching_method, ['any', 'or']) ? 'any' : 'all';
+
+        $cache = new Cache([__METHOD__, $article_id, $module_id, $matching_method, $conditions]);
+
+        if ($cache->exists())
+        {
+            return $cache->get();
+        }
+
+        $pass = (bool) ($matching_method == 'all');
+
+        foreach (self::getTypes() as $type)
+        {
+            // Break if not passed and matching method is ALL
+            // Or if passed and matching method is ANY
+            if (
+                ( ! $pass && $matching_method == 'all')
+                || ($pass && $matching_method == 'any')
+            )
+            {
+                break;
+            }
+
+            if ( ! isset($conditions[$type]))
+            {
+                continue;
+            }
+
+            $pass = self::passByType($conditions[$type], $type, $article, $module);
+        }
+
+        return $cache->set($pass);
     }
 
     private static function addParams(&$object, $type, $id, &$params)
@@ -292,69 +332,6 @@ class Conditions
         self::addParamsByType($object, $id, $params, $extra_params, $array_params, $includes);
     }
 
-    private static function getNotArrayTextAreaTypes()
-    {
-        return [
-            'Php',
-        ];
-    }
-
-    private static function getTextAreaTypes()
-    {
-        return [
-            'Ip',
-            'Url',
-            'Php',
-        ];
-    }
-
-    private static function makeArray($array = '', $delimiter = ',', $trim = true)
-    {
-        if (empty($array))
-        {
-            return [];
-        }
-
-        $cache = new Cache([__METHOD__, $array, $delimiter, $trim]);
-
-        if ($cache->exists())
-        {
-            return $cache->get();
-        }
-
-        $array = self::mixedDataToArray($array, $delimiter);
-
-        if (empty($array))
-        {
-            return $array;
-        }
-
-        if ( ! $trim)
-        {
-            return $array;
-        }
-
-        foreach ($array as $k => $v)
-        {
-            if ( ! is_string($v))
-            {
-                continue;
-            }
-
-            $array[$k] = trim($v);
-        }
-
-        return $cache->set($array);
-    }
-
-    public static function getMatchAllTypes()
-    {
-        return [
-            'User.Grouplevel',
-            'Tag',
-        ];
-    }
-
     private static function addParamsByType(&$object, $id, $params, $extra_params = [], $array_params = [], $includes = [])
     {
         foreach ($extra_params as $key => $param)
@@ -390,187 +367,26 @@ class Conditions
         unset($object->params->inc);
     }
 
-    private static function mixedDataToArray($array = '', $delimiter = ',')
+    private static function getConditionState($include_type)
     {
-        if ( ! is_array($array))
+        switch ($include_type . '')
         {
-            return explode($delimiter, $array);
+            case 1:
+            case 'include':
+                return 'include';
+
+            case 2:
+            case 'exclude':
+                return 'exclude';
+
+            case 3:
+            case -1:
+            case 'none':
+                return 'none';
+
+            default:
+                return 'all';
         }
-
-        if (empty($array))
-        {
-            return $array;
-        }
-
-        if (isset($array[0]) && is_array($array[0]))
-        {
-            return $array[0];
-        }
-
-        if (count($array) === 1 && strpos($array[0], $delimiter) !== false)
-        {
-            return explode($delimiter, $array[0]);
-        }
-
-        return $array;
-    }
-
-    private static function getTypeParamValue($id, $params, $key, $is_array = false)
-    {
-        if (isset($params->conditions) && isset($params->conditions[$id . '_' . $key]))
-        {
-            return $params->conditions[$id . '_' . $key];
-        }
-
-        if (isset($params->{'assignto_' . $id . '_' . $key}))
-        {
-            return $params->{'assignto_' . $id . '_' . $key};
-        }
-
-        if (isset($params->{$key}))
-        {
-            return $params->{$key};
-        }
-
-        if ($is_array)
-        {
-            return [];
-        }
-
-        return '';
-    }
-
-    public static function getConditionsFromTagAttributes(&$attributes, $only_types = [])
-    {
-        $conditions = [];
-
-        PluginTag::replaceKeyAliases($attributes, self::getTypeAliases(), true);
-        $types = self::getTypes($only_types);
-
-        if (empty($types))
-        {
-            return $conditions;
-        }
-
-        $type_params = [];
-
-        foreach ($attributes as $type_param => $value)
-        {
-            if (strpos($type_param, '_') === false)
-            {
-                continue;
-            }
-
-            [$type, $param] = explode('_', $type_param, 2);
-
-            $condition_type = self::getType($type, $only_types);
-
-            if ( ! $condition_type)
-            {
-                continue;
-            }
-
-            $type_params[$type_param] = $value;
-            unset($attributes->{$type_param});
-        }
-
-        foreach ($attributes as $type => $value)
-        {
-            if (empty($value))
-            {
-                continue;
-            }
-
-            $condition_type = self::getType($type, $only_types);
-
-            if ( ! $condition_type)
-            {
-                continue;
-            }
-
-            $value = html_entity_decode($value);
-
-            $params             = self::getDefaultParamsByType($condition_type, $type);
-            $params->conditions = $type_params;
-
-            $reverse = false;
-
-            $selection = self::getSelectionFromTagAttribute($condition_type, $value, $params, $reverse);
-
-            $condition = (object) [
-                'include_type' => $reverse ? 2 : 1,
-                'selection'    => $selection,
-                'params'       => (object) [],
-            ];
-
-            self::addParams($condition, $condition_type, $type, $params);
-
-            $conditions[$condition_type] = $condition;
-        }
-
-        return $conditions;
-    }
-
-    private static function getTypeAliases()
-    {
-        return [
-            'matching_method'  => ['method'],
-            'menuitems'        => ['menu'],
-            'homepage'         => ['home'],
-            'date'             => ['daterange'],
-            'seasons'          => [''],
-            'months'           => [''],
-            'days'             => [''],
-            'time'             => [''],
-            'accesslevels'     => ['access'],
-            'usergrouplevels'  => ['usergroups', 'groups'],
-            'users'            => [''],
-            'languages'        => ['langs'],
-            'ips'              => ['ipaddress', 'ipaddresses'],
-            'geocontinents'    => ['continents'],
-            'geocountries'     => ['countries'],
-            'georegions'       => ['regions'],
-            'geopostalcodes'   => ['postalcodes', 'postcodes'],
-            'templates'        => [''],
-            'urls'             => [''],
-            'devices'          => [''],
-            'os'               => [''],
-            'browsers'         => [''],
-            'components'       => [''],
-            'tags'             => [''],
-            'contentpagetypes' => ['pagetypes'],
-            'cats'             => ['categories', 'category'],
-            'articles'         => [''],
-            'php'              => [''],
-        ];
-    }
-
-    private static function getType(&$type, $only_types = [])
-    {
-        $types = self::getTypes($only_types);
-
-        if (isset($types[$type]))
-        {
-            return $types[$type];
-        }
-
-        // Make it plural
-        $type = rtrim($type, 's') . 's';
-
-        if (isset($types[$type]))
-        {
-            return $types[$type];
-        }
-
-        // Replace incorrect plural endings
-        $type = str_replace('ys', 'ies', $type);
-
-        if (isset($types[$type]))
-        {
-            return $types[$type];
-        }
-
-        return false;
     }
 
     private static function getDefaultParamsByType($condition_type, $type)
@@ -602,6 +418,25 @@ class Conditions
             default:
                 return (object) [];
         }
+    }
+
+    private static function getNotArrayTextAreaTypes()
+    {
+        return [
+            'Php',
+        ];
+    }
+
+    private static function getSelection($selection, $type = '')
+    {
+        if (in_array($type, self::getNotArrayTextAreaTypes()))
+        {
+            return $selection;
+        }
+
+        $delimiter = in_array($type, self::getTextAreaTypes()) ? "\n" : ',';
+
+        return self::makeArray($selection, $delimiter);
     }
 
     private static function getSelectionFromTagAttribute($type, $value, &$params, &$reverse)
@@ -657,65 +492,241 @@ class Conditions
         return $value;
     }
 
-    public static function hasConditions($conditions)
+    private static function getTextAreaTypes()
     {
-        if (empty($conditions))
+        return [
+            'Ip',
+            'Url',
+            'Php',
+        ];
+    }
+
+    private static function getType(&$type, $only_types = [])
+    {
+        $types = self::getTypes($only_types);
+
+        if (isset($types[$type]))
         {
-            return false;
+            return $types[$type];
         }
 
-        foreach (self::getTypes() as $type)
+        // Make it plural
+        $type = rtrim($type, 's') . 's';
+
+        if (isset($types[$type]))
         {
-            if (isset($conditions[$type]) && isset($conditions[$type]->include_type) && $conditions[$type]->include_type)
-            {
-                return true;
-            }
+            return $types[$type];
+        }
+
+        // Replace incorrect plural endings
+        $type = str_replace('ys', 'ies', $type);
+
+        if (isset($types[$type]))
+        {
+            return $types[$type];
         }
 
         return false;
     }
 
-    public static function pass($conditions, $matching_method = 'all', $article = null, $module = null)
+    private static function getTypeAliases()
     {
-        if (empty($conditions))
+        return [
+            'matching_method'  => ['method'],
+            'menuitems'        => ['menu'],
+            'homepage'         => ['home'],
+            'date'             => ['daterange'],
+            'seasons'          => [''],
+            'months'           => [''],
+            'days'             => [''],
+            'time'             => [''],
+            'accesslevels'     => ['access'],
+            'usergrouplevels'  => ['usergroups', 'groups'],
+            'users'            => [''],
+            'languages'        => ['langs'],
+            'ips'              => ['ipaddress', 'ipaddresses'],
+            'geocontinents'    => ['continents'],
+            'geocountries'     => ['countries'],
+            'georegions'       => ['regions'],
+            'geopostalcodes'   => ['postalcodes', 'postcodes'],
+            'templates'        => [''],
+            'urls'             => [''],
+            'devices'          => [''],
+            'os'               => [''],
+            'browsers'         => [''],
+            'components'       => [''],
+            'tags'             => [''],
+            'contentpagetypes' => ['pagetypes'],
+            'cats'             => ['categories', 'category'],
+            'articles'         => [''],
+            'php'              => [''],
+        ];
+    }
+
+    private static function getTypeParamValue($id, $params, $key, $is_array = false)
+    {
+        if (isset($params->conditions) && isset($params->conditions[$id . '_' . $key]))
         {
-            return true;
+            return $params->conditions[$id . '_' . $key];
         }
 
-        $article_id      = $article->id ?? '';
-        $module_id       = $module->id ?? '';
-        $matching_method = in_array($matching_method, ['any', 'or']) ? 'any' : 'all';
+        if (isset($params->{'assignto_' . $id . '_' . $key}))
+        {
+            return $params->{'assignto_' . $id . '_' . $key};
+        }
 
-        $cache = new Cache([__METHOD__, $article_id, $module_id, $matching_method, $conditions]);
+        if (isset($params->{$key}))
+        {
+            return $params->{$key};
+        }
+
+        if ($is_array)
+        {
+            return [];
+        }
+
+        return '';
+    }
+
+    private static function getTypes($only_types = [])
+    {
+        $types = [
+            'menuitems'             => 'Menu',
+            'homepage'              => 'Homepage',
+            'date'                  => 'Date.Date',
+            'seasons'               => 'Date.Season',
+            'months'                => 'Date.Month',
+            'days'                  => 'Date.Day',
+            'time'                  => 'Date.Time',
+            'accesslevels'          => 'User.Accesslevel',
+            'usergrouplevels'       => 'User.Grouplevel',
+            'users'                 => 'User.User',
+            'languages'             => 'Language',
+            'ips'                   => 'Ip',
+            'geocontinents'         => 'Geo.Continent',
+            'geocountries'          => 'Geo.Country',
+            'georegions'            => 'Geo.Region',
+            'geopostalcodes'        => 'Geo.Postalcode',
+            'templates'             => 'Template',
+            'urls'                  => 'Url',
+            'devices'               => 'Agent.Device',
+            'os'                    => 'Agent.Os',
+            'browsers'              => 'Agent.Browser',
+            'components'            => 'Component',
+            'tags'                  => 'Tag',
+            'contentpagetypes'      => 'Content.Pagetype',
+            'cats'                  => 'Content.Category',
+            'articles'              => 'Content.Article',
+            'easyblogpagetypes'     => 'Easyblog.Pagetype',
+            'easyblogcats'          => 'Easyblog.Category',
+            'easyblogtags'          => 'Easyblog.Tag',
+            'easyblogitems'         => 'Easyblog.Item',
+            'flexicontentpagetypes' => 'Flexicontent.Pagetype',
+            'flexicontenttags'      => 'Flexicontent.Tag',
+            'flexicontenttypes'     => 'Flexicontent.Type',
+            'form2contentprojects'  => 'Form2content.Project',
+            'k2pagetypes'           => 'K2.Pagetype',
+            'k2cats'                => 'K2.Category',
+            'k2tags'                => 'K2.Tag',
+            'k2items'               => 'K2.Item',
+            'zoopagetypes'          => 'Zoo.Pagetype',
+            'zoocats'               => 'Zoo.Category',
+            'zooitems'              => 'Zoo.Item',
+            'akeebasubspagetypes'   => 'Akeebasubs.Pagetype',
+            'akeebasubslevels'      => 'Akeebasubs.Level',
+            'hikashoppagetypes'     => 'Hikashop.Pagetype',
+            'hikashopcats'          => 'Hikashop.Category',
+            'hikashopproducts'      => 'Hikashop.Product',
+            'mijoshoppagetypes'     => 'Mijoshop.Pagetype',
+            'mijoshopcats'          => 'Mijoshop.Category',
+            'mijoshopproducts'      => 'Mijoshop.Product',
+            'redshoppagetypes'      => 'Redshop.Pagetype',
+            'redshopcats'           => 'Redshop.Category',
+            'redshopproducts'       => 'Redshop.Product',
+            'virtuemartpagetypes'   => 'Virtuemart.Pagetype',
+            'virtuemartcats'        => 'Virtuemart.Category',
+            'virtuemartproducts'    => 'Virtuemart.Product',
+            'cookieconfirm'         => 'Cookieconfirm',
+            'php'                   => 'Php',
+        ];
+
+        if (empty($only_types))
+        {
+            return $types;
+        }
+
+        return array_intersect_key($types, array_flip($only_types));
+    }
+
+    private static function initParametersByType(&$params, $type = '')
+    {
+        $params->class_name = str_replace('.', '', $type);
+
+        $params->include_type = self::getConditionState($params->include_type);
+    }
+
+    private static function makeArray($array = '', $delimiter = ',', $trim = true)
+    {
+        if (empty($array))
+        {
+            return [];
+        }
+
+        $cache = new Cache([__METHOD__, $array, $delimiter, $trim]);
 
         if ($cache->exists())
         {
             return $cache->get();
         }
 
-        $pass = (bool) ($matching_method == 'all');
+        $array = self::mixedDataToArray($array, $delimiter);
 
-        foreach (self::getTypes() as $type)
+        if (empty($array))
         {
-            // Break if not passed and matching method is ALL
-            // Or if passed and matching method is ANY
-            if (
-                ( ! $pass && $matching_method == 'all')
-                || ($pass && $matching_method == 'any')
-            )
-            {
-                break;
-            }
+            return $array;
+        }
 
-            if ( ! isset($conditions[$type]))
+        if ( ! $trim)
+        {
+            return $array;
+        }
+
+        foreach ($array as $k => $v)
+        {
+            if ( ! is_string($v))
             {
                 continue;
             }
 
-            $pass = self::passByType($conditions[$type], $type, $article, $module);
+            $array[$k] = trim($v);
         }
 
-        return $cache->set($pass);
+        return $cache->set($array);
+    }
+
+    private static function mixedDataToArray($array = '', $delimiter = ',')
+    {
+        if ( ! is_array($array))
+        {
+            return explode($delimiter, $array);
+        }
+
+        if (empty($array))
+        {
+            return $array;
+        }
+
+        if (isset($array[0]) && is_array($array[0]))
+        {
+            return $array[0];
+        }
+
+        if (count($array) === 1 && strpos($array[0], $delimiter) !== false)
+        {
+            return explode($delimiter, $array[0]);
+        }
+
+        return $array;
     }
 
     private static function passByType($condition, $type, $article = null, $module = null)
@@ -771,32 +782,21 @@ class Conditions
         return $cache->set($pass);
     }
 
-    private static function initParametersByType(&$params, $type = '')
+    private static function renameParamKeys(&$params)
     {
-        $params->class_name = str_replace('.', '', $type);
+        $params->conditions ??= [];
 
-        $params->include_type = self::getConditionState($params->include_type);
-    }
-
-    private static function getConditionState($include_type)
-    {
-        switch ($include_type . '')
+        foreach ($params as $key => $value)
         {
-            case 1:
-            case 'include':
-                return 'include';
+            if (strpos($key, 'condition_') === false && strpos($key, 'assignto_') === false)
+            {
+                continue;
+            }
 
-            case 2:
-            case 'exclude':
-                return 'exclude';
+            $new_key                      = substr($key, strpos($key, '_') + 1);
+            $params->conditions[$new_key] = $value;
 
-            case 3:
-            case -1:
-            case 'none':
-                return 'none';
-
-            default:
-                return 'all';
+            unset($params->{$key});
         }
     }
 }

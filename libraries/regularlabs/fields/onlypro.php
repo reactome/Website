@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -24,41 +24,6 @@ require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 class JFormFieldRL_OnlyPro extends Field
 {
     public $type = 'OnlyPro';
-
-    protected function getInput()
-    {
-        $label   = $this->prepareText($this->get('label'));
-        $tooltip = $this->prepareText($this->get('description'));
-
-        if ( ! $label && ! $tooltip)
-        {
-            return '';
-        }
-
-        return $this->getText();
-    }
-
-    protected function getText()
-    {
-        $text = JText::_('RL_ONLY_AVAILABLE_IN_PRO');
-        $text = '<em>' . $text . '</em>';
-
-        $extension = $this->getExtensionName();
-
-        $alias = RL_Extension::getAliasByName($extension);
-
-        if ($alias)
-        {
-            $text = '<a href="https://regularlabs.com/' . $extension . '/features" target="_blank">'
-                . $text
-                . '</a>';
-        }
-
-        $class = $this->get('class');
-        $class = $class ? ' class="' . $class . '"' : '';
-
-        return '<div' . $class . '>' . $text . '</div>';
-    }
 
     protected function getExtensionName()
     {
@@ -85,6 +50,19 @@ class JFormFieldRL_OnlyPro extends Field
         return false;
     }
 
+    protected function getInput()
+    {
+        $label   = $this->prepareText($this->get('label'));
+        $tooltip = $this->prepareText($this->get('description'));
+
+        if ( ! $label && ! $tooltip)
+        {
+            return '';
+        }
+
+        return $this->getText();
+    }
+
     protected function getLabel()
     {
         $label   = $this->prepareText($this->get('label'));
@@ -108,5 +86,27 @@ class JFormFieldRL_OnlyPro extends Field
         return '<label class="hasPopover" title="' . $label . '" data-content="' . htmlentities($tooltip) . '">'
             . $label
             . '</label>';
+    }
+
+    protected function getText()
+    {
+        $text = JText::_('RL_ONLY_AVAILABLE_IN_PRO');
+        $text = '<em>' . $text . '</em>';
+
+        $extension = $this->getExtensionName();
+
+        $alias = RL_Extension::getAliasByName($extension);
+
+        if ($alias)
+        {
+            $text = '<a href="https://regularlabs.com/' . $extension . '/features" target="_blank">'
+                . $text
+                . '</a>';
+        }
+
+        $class = $this->get('class');
+        $class = $class ? ' class="' . $class . '"' : '';
+
+        return '<div' . $class . '>' . $text . '</div>';
     }
 }

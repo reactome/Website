@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -84,23 +84,33 @@ class Field extends JFormField
     }
 
     /**
-     * Return a array of options using the custom prepare methods
+     * Get a value from the field params
      *
-     * @param array $list
-     * @param array $extras
-     * @param int   $levelOffset
+     * @param string $key
+     * @param string $default
      *
-     * @return array
+     * @return bool|string
      */
-    public function getOptionsByList($list, $extras = [], $levelOffset = 0)
+    public function get($key, $default = '')
     {
-        $options = [];
-        foreach ($list as $id => $item)
+        $value = $default;
+
+        if (isset($this->params[$key]) && (string) $this->params[$key] != '')
         {
-            $options[$id] = $this->getOptionByListItem($item, $extras, $levelOffset);
+            $value = (string) $this->params[$key];
         }
 
-        return $options;
+        if ($value === 'true')
+        {
+            return true;
+        }
+
+        if ($value === 'false')
+        {
+            return false;
+        }
+
+        return $value;
     }
 
     /**
@@ -146,6 +156,26 @@ class Field extends JFormField
         }
 
         return $option;
+    }
+
+    /**
+     * Return a array of options using the custom prepare methods
+     *
+     * @param array $list
+     * @param array $extras
+     * @param int   $levelOffset
+     *
+     * @return array
+     */
+    public function getOptionsByList($list, $extras = [], $levelOffset = 0)
+    {
+        $options = [];
+        foreach ($list as $id => $item)
+        {
+            $options[$id] = $this->getOptionByListItem($item, $extras, $levelOffset);
+        }
+
+        return $options;
     }
 
     /**
@@ -200,36 +230,6 @@ class Field extends JFormField
     }
 
     /**
-     * Get a value from the field params
-     *
-     * @param string $key
-     * @param string $default
-     *
-     * @return bool|string
-     */
-    public function get($key, $default = '')
-    {
-        $value = $default;
-
-        if (isset($this->params[$key]) && (string) $this->params[$key] != '')
-        {
-            $value = (string) $this->params[$key];
-        }
-
-        if ($value === 'true')
-        {
-            return true;
-        }
-
-        if ($value === 'false')
-        {
-            return false;
-        }
-
-        return $value;
-    }
-
-    /**
      * Passes along to the JText method.
      * This is used for the array_walk in the sprintf method above.
      *
@@ -269,42 +269,6 @@ class Field extends JFormField
         }
 
         return $this->fixLanguageStringSyntax($string);
-    }
-
-    /**
-     * Replace language strings in an old syntax string
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    private function sprintf_old($string = '')
-    {
-        // variables
-        $var1 = JText::_($this->get('var1'));
-        $var2 = JText::_($this->get('var2'));
-        $var3 = JText::_($this->get('var3'));
-        $var4 = JText::_($this->get('var4'));
-        $var5 = JText::_($this->get('var5'));
-
-        return JText::sprintf(trim($string), $var1, $var2, $var3, $var4, $var5);
-    }
-
-    /**
-     * Fix some syntax/encoding issues in option text strings
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    private function fixLanguageStringSyntax($string = '')
-    {
-        $string = str_replace('[:COMMA:]', ',', $string);
-        $string = trim(StringHelper::html_entity_decoder($string));
-        $string = str_replace('&quot;', '"', $string);
-        $string = str_replace('span style="font-family:monospace;"', 'span class="rl_code"', $string);
-
-        return $string;
     }
 
     public function setup(SimpleXMLElement $element, $value, $group = null)
@@ -354,6 +318,23 @@ class Field extends JFormField
     }
 
     /**
+     * Fix some syntax/encoding issues in option text strings
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    private function fixLanguageStringSyntax($string = '')
+    {
+        $string = str_replace('[:COMMA:]', ',', $string);
+        $string = trim(StringHelper::html_entity_decoder($string));
+        $string = str_replace('&quot;', '"', $string);
+        $string = str_replace('span style="font-family:monospace;"', 'span class="rl_code"', $string);
+
+        return $string;
+    }
+
+    /**
      * Replace language strings in a string
      *
      * @param string $string
@@ -382,5 +363,24 @@ class Field extends JFormField
         array_walk($string_parts, '\RegularLabs\Library\Field::jText');
 
         return vsprintf($first_part, $string_parts);
+    }
+
+    /**
+     * Replace language strings in an old syntax string
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    private function sprintf_old($string = '')
+    {
+        // variables
+        $var1 = JText::_($this->get('var1'));
+        $var2 = JText::_($this->get('var2'));
+        $var3 = JText::_($this->get('var3'));
+        $var4 = JText::_($this->get('var4'));
+        $var5 = JText::_($this->get('var5'));
+
+        return JText::sprintf(trim($string), $var1, $var2, $var3, $var4, $var5);
     }
 }

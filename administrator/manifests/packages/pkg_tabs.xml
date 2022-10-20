@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="package" method="upgrade">
+  <packagename>tabs</packagename>
+  <name>PKG_TABS</name>
+  <version>8.3.0</version>
+  <creationDate>October 2022</creationDate>
+  <author>Regular Labs (Peter van Westen)</author>
+  <authorEmail>info@regularlabs.com</authorEmail>
+  <authorUrl>https://regularlabs.com</authorUrl>
+  <copyright>Copyright © 2022 Regular Labs - All Rights Reserved</copyright>
+  <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+  <scriptfile>script.install.php</scriptfile>
+  <blockChildUninstall>true</blockChildUninstall>
+  <files folder="packages/j3">
+    
+    <file type="plugin" group="system" id="tabs">plg_system_tabs</file>
+    <file type="plugin" group="editors-xtd" id="tabs">plg_editors-xtd_tabs</file>
+  </files>
+  
+  
+  <languages folder="language">
+    <language tag="en-GB">en-GB/en-GB.pkg_tabs.sys.ini</language>
+  </languages>
+  <updateservers>
+    <server type="extension" priority="1" name="Tabs">https://download.regularlabs.com/updates.xml?e=tabs&amp;type=.xml</server>
+  </updateservers>
+</extension>

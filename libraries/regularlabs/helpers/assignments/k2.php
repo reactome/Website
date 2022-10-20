@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -75,51 +75,6 @@ class RLAssignmentsK2 extends RLAssignment
         }
 
         return $this->passSimple($cats);
-    }
-
-    private function getCategories()
-    {
-        switch ($this->request->view)
-        {
-            case 'item' :
-                return $this->getCategoryIDFromItem();
-                break;
-
-            case 'itemlist' :
-                return $this->getCategoryID();
-                break;
-
-            default:
-                return '';
-        }
-    }
-
-    private function getCatParentIds($id = 0)
-    {
-        $parent_field = RL_K2_VERSION == 3 ? 'parent_id' : 'parent';
-
-        return $this->getParentIds($id, 'k2_categories', $parent_field);
-    }
-
-    private function getCategoryIDFromItem()
-    {
-        if ($this->article && isset($this->article->catid))
-        {
-            return $this->article->catid;
-        }
-
-        $query = $this->db->getQuery(true)
-            ->select('i.catid')
-            ->from('#__k2_items AS i')
-            ->where('i.id = ' . (int) $this->request->id);
-        $this->db->setQuery($query);
-
-        return $this->db->loadResult();
-    }
-
-    private function getCategoryID()
-    {
-        return $this->request->id ?: JFactory::getApplication()->getUserStateFromRequest('com_k2itemsfilter_category', 'catid', 0, 'int');
     }
 
     public function passItems()
@@ -198,5 +153,50 @@ class RLAssignmentsK2 extends RLAssignment
         $tags = $this->db->loadColumn();
 
         return $this->passSimple($tags, true);
+    }
+
+    private function getCatParentIds($id = 0)
+    {
+        $parent_field = RL_K2_VERSION == 3 ? 'parent_id' : 'parent';
+
+        return $this->getParentIds($id, 'k2_categories', $parent_field);
+    }
+
+    private function getCategories()
+    {
+        switch ($this->request->view)
+        {
+            case 'item' :
+                return $this->getCategoryIDFromItem();
+                break;
+
+            case 'itemlist' :
+                return $this->getCategoryID();
+                break;
+
+            default:
+                return '';
+        }
+    }
+
+    private function getCategoryID()
+    {
+        return $this->request->id ?: JFactory::getApplication()->getUserStateFromRequest('com_k2itemsfilter_category', 'catid', 0, 'int');
+    }
+
+    private function getCategoryIDFromItem()
+    {
+        if ($this->article && isset($this->article->catid))
+        {
+            return $this->article->catid;
+        }
+
+        $query = $this->db->getQuery(true)
+            ->select('i.catid')
+            ->from('#__k2_items AS i')
+            ->where('i.id = ' . (int) $this->request->id);
+        $this->db->setQuery($query);
+
+        return $this->db->loadResult();
     }
 }

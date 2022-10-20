@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -24,17 +24,6 @@ require_once dirname(__FILE__, 2) . '/assignment.php';
 
 class RLAssignmentsTemplates extends RLAssignment
 {
-    public function passTemplates()
-    {
-        $template = $this->getTemplate();
-
-        // Put template name and name + style id into array
-        // The '::' separator was used in pre Joomla 3.3
-        $template = [$template->template, $template->template . '--' . $template->id, $template->template . '::' . $template->id];
-
-        return $this->passSimple($template, true);
-    }
-
     public function getTemplate()
     {
         $template = JFactory::getApplication()->getTemplate(true);
@@ -71,5 +60,16 @@ class RLAssignmentsTemplates extends RLAssignment
         $template->id = $this->db->loadResult('id');
 
         return $template;
+    }
+
+    public function passTemplates()
+    {
+        $template = $this->getTemplate();
+
+        // Put template name and name + style id into array
+        // The '::' separator was used in pre Joomla 3.3
+        $template = [$template->template, $template->template . '--' . $template->id, $template->template . '::' . $template->id];
+
+        return $this->passSimple($template, true);
     }
 }

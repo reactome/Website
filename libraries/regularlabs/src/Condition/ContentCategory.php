@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -125,6 +125,11 @@ class ContentCategory extends Content
         return $this->_($pass);
     }
 
+    private function getCatParentIds($id = 0)
+    {
+        return $this->getParentIds($id, 'categories');
+    }
+
     private function getCategoryIds($is_category = false)
     {
         if ($is_category)
@@ -170,10 +175,5 @@ class ContentCategory extends Content
         }
 
         return (array) ($menuparams->catid ?? $catid);
-    }
-
-    private function getCatParentIds($id = 0)
-    {
-        return $this->getParentIds($id, 'categories');
     }
 }

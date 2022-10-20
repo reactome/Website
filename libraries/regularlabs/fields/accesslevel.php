@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -42,22 +42,6 @@ class JFormFieldRL_AccessLevel extends Field
         return $this->selectList($options, $name, $value, $id, $size, $multiple);
     }
 
-    protected function getOptions($show_all = false, $use_names = false)
-    {
-        $options = $this->getAccessLevels($use_names);
-
-        if ($show_all)
-        {
-            $option          = (object) [];
-            $option->value   = -1;
-            $option->text    = '- ' . JText::_('JALL') . ' -';
-            $option->disable = '';
-            array_unshift($options, $option);
-        }
-
-        return $options;
-    }
-
     protected function getAccessLevels($use_names = false)
     {
         $value = $use_names ? 'a.title' : 'a.id';
@@ -83,5 +67,21 @@ class JFormFieldRL_AccessLevel extends Field
             $this->type, $this->name, $this->value, $this->id,
             compact('size', 'multiple', 'show_all', 'use_names')
         );
+    }
+
+    protected function getOptions($show_all = false, $use_names = false)
+    {
+        $options = $this->getAccessLevels($use_names);
+
+        if ($show_all)
+        {
+            $option          = (object) [];
+            $option->value   = -1;
+            $option->text    = '- ' . JText::_('JALL') . ' -';
+            $option->disable = '';
+            array_unshift($options, $option);
+        }
+
+        return $options;
     }
 }

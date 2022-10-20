@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -39,6 +39,13 @@ class FieldGroup extends Field
         return $this->selectList($options, $name, $value, $id, $size, $multiple, $simple);
     }
 
+    public function getGroup()
+    {
+        $this->params = $this->element->attributes();
+
+        return $this->get('group', $this->default_group ?: $this->type);
+    }
+
     public function getOptions($group = false)
     {
         $group = $group ?: $this->getGroup();
@@ -50,20 +57,6 @@ class FieldGroup extends Field
         }
 
         return $data[$id];
-    }
-
-    protected function getInput()
-    {
-        $this->params = $this->element->attributes();
-
-        return $this->getSelectList();
-    }
-
-    public function getGroup()
-    {
-        $this->params = $this->element->attributes();
-
-        return $this->get('group', $this->default_group ?: $this->type);
     }
 
     public function getSelectList($group = '')
@@ -117,5 +110,12 @@ class FieldGroup extends Field
         }
 
         return '<fieldset class="alert alert-danger">' . JText::_('ERROR') . ': ' . JText::sprintf('RL_TABLE_NOT_FOUND', JText::_('RL_' . strtoupper($component))) . '</fieldset>';
+    }
+
+    protected function getInput()
+    {
+        $this->params = $this->element->attributes();
+
+        return $this->getSelectList();
     }
 }

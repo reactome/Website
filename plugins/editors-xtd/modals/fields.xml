@@ -1,74 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config addfieldpath="/libraries/regularlabs/fields">
-	<fieldset name="text">
-		<field name="text" type="text" class="input-xxlarge input-large-text"
-			   label="RL_TEXT"
-			   hint="MDL_LINK_TEXT_HINT" />
-	</fieldset>
-
-	<fieldset name="settings">
-		<field name="@settings" type="rl_header"
-			   label="MDL_SETTINGS_TITLE" />
-		<field name="title" type="text" class="input-xxlarge"
-			   label="JGLOBAL_TITLE"
-			   description="MDL_TITLE_DESC" />
-		<field name="class" type="text" class="input-large"
-			   label="MDL_CSS_CLASS_LINK"
-			   description="MDL_CSS_CLASS_LINK_DESC" />
-		<field name="classname" type="text" class="input-large"
-			   label="MDL_CSS_CLASS_MODAL"
-			   description="MDL_CSS_CLASS_MODAL_DESC" />
-		<field name="width" type="text" class="input-small"
-			   label="RL_WIDTH"
-			   description="MDL_DIMENSION_DESC" />
-		<field name="height" type="text" class="input-small"
-			   label="RL_HEIGHT"
-			   description="MDL_DIMENSION_DESC" />
-		<field name="iframe" type="radio" class="btn-group" default="0"
-			   label="MDL_IFRAME"
-			   description="MDL_IFRAME_DESC2"
-			   showon="type:url,article">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
-		<field name="@open" type="rl_onlypro"
-			   label="MDL_OPEN_ON_PAGELOAD"
-			   description="MDL_OPEN_ON_PAGELOAD_DESC" />
-		<field name="@autoclose" type="rl_onlypro"
-			   label="MDL_AUTOCLOSE"
-			   description="MDL_AUTOCLOSE_DESC" />
-	</fieldset>
-
-	<fieldset name="url">
-		<field name="@url" type="note" description="MDL_URL_DESC" />
-		<field name="url" type="text" label="" class="input-full" />
-	</fieldset>
-
-	<fieldset name="image">
-		<field name="@image_free1" type="rl_onlypro" class="alert alert-warning" />
-		<field name="@image_free2" type="note" class="alert alert-info"
-			   description="MDL_IMAGE_FREE_DESC" />
-	</fieldset>
-
-	<fieldset name="gallery">
-		<field name="@gallery_free1" type="rl_onlypro" class="alert alert-warning" />
-		<field name="@gallery_free2" type="note" class="alert alert-info"
-			   description="MDL_GALLERY_FREE_DESC" />
-	</fieldset>
-
-	<fieldset name="video">
-		<field name="@video_free1" type="rl_onlypro" class="alert alert-warning" />
-		<field name="@video_free2" type="note" class="alert alert-info"
-			   description="MDL_VIDEO_FREE_DESC" />
-	</fieldset>
-
-	<fieldset name="article" addfieldpath="plugins/editors-xtd/modals/fields">
-		<field name="@article_free1" type="rl_onlypro" class="alert alert-warning" />
-		<field name="@article_free2" type="note" class="alert alert-info"
-			   description="MDL_ARTICLE_FREE_DESC" />
-	</fieldset>
-
-	<fieldset name="content">
-		<field name="@contentx" type="rl_onlypro" class="alert alert-warning" />
-	</fieldset>
+  <fieldset name="text">
+    <field name="text" type="text" class="input-xxlarge input-large-text" label="RL_TEXT" hint="MDL_LINK_TEXT_HINT"/>
+  </fieldset>
+  <fieldset name="settings">
+    <field name="@settings" type="rl_header" label="MDL_SETTINGS_TITLE"/>
+    <field name="title" type="text" class="input-xxlarge" label="JGLOBAL_TITLE" description="MDL_TITLE_DESC"/>
+    <field name="class" type="text" class="input-large" label="MDL_CSS_CLASS_LINK" description="MDL_CSS_CLASS_LINK_DESC"/>
+    <field name="classname" type="text" class="input-large" label="MDL_CSS_CLASS_MODAL" description="MDL_CSS_CLASS_MODAL_DESC"/>
+    <field name="width" type="text" class="input-small" label="RL_WIDTH" description="MDL_DIMENSION_DESC"/>
+    <field name="height" type="text" class="input-small" label="RL_HEIGHT" description="MDL_DIMENSION_DESC"/>
+    <field name="iframe" type="radio" class="btn-group" default="0" label="MDL_IFRAME" description="MDL_IFRAME_DESC2" showon="type:url,article">
+      <option value="0">JNO</option>
+      <option value="1">JYES</option>
+    </field>
+    <field name="@open" type="rl_onlypro" label="MDL_OPEN_ON_PAGELOAD" description="MDL_OPEN_ON_PAGELOAD_DESC"/>
+    <field name="@autoclose" type="rl_onlypro" label="MDL_AUTOCLOSE" description="MDL_AUTOCLOSE_DESC"/>
+  </fieldset>
+  <fieldset name="url">
+    <field name="@url" type="note" description="MDL_URL_DESC"/>
+    <field name="url" type="text" label="" class="input-full"/>
+  </fieldset>
+  <fieldset name="image">
+    <field name="@image_free1" type="rl_onlypro" class="alert alert-warning"/>
+    <field name="@image_free2" type="note" class="alert alert-info" description="MDL_IMAGE_FREE_DESC"/>
+  </fieldset>
+  <fieldset name="gallery">
+    <field name="@gallery_free1" type="rl_onlypro" class="alert alert-warning"/>
+    <field name="@gallery_free2" type="note" class="alert alert-info" description="MDL_GALLERY_FREE_DESC"/>
+  </fieldset>
+  <fieldset name="video">
+    <field name="@video_free1" type="rl_onlypro" class="alert alert-warning"/>
+    <field name="@video_free2" type="note" class="alert alert-info" description="MDL_VIDEO_FREE_DESC"/>
+  </fieldset>
+  <fieldset name="article" addfieldpath="plugins/editors-xtd/modals/fields">
+    <field name="@article_free1" type="rl_onlypro" class="alert alert-warning"/>
+    <field name="@article_free2" type="note" class="alert alert-info" description="MDL_ARTICLE_FREE_DESC"/>
+  </fieldset>
+  <fieldset name="content">
+    <field name="@contentx" type="rl_onlypro" class="alert alert-warning"/>
+  </fieldset>
 </config>

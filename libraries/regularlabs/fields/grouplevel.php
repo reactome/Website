@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -42,6 +42,19 @@ class JFormFieldRL_GroupLevel extends Field
         return $this->selectList($options, $name, $value, $id, $size, $multiple);
     }
 
+    protected function getInput()
+    {
+        $size      = (int) $this->get('size');
+        $multiple  = $this->get('multiple');
+        $show_all  = $this->get('show_all');
+        $use_names = $this->get('use_names');
+
+        return $this->selectListAjax(
+            $this->type, $this->name, $this->value, $this->id,
+            compact('size', 'multiple', 'show_all', 'use_names')
+        );
+    }
+
     protected function getOptions($show_all = false, $use_names = false)
     {
         $options = $this->getUserGroups($use_names);
@@ -72,18 +85,5 @@ class JFormFieldRL_GroupLevel extends Field
         $this->db->setQuery($query);
 
         return $this->db->loadObjectList();
-    }
-
-    protected function getInput()
-    {
-        $size      = (int) $this->get('size');
-        $multiple  = $this->get('multiple');
-        $show_all  = $this->get('show_all');
-        $use_names = $this->get('use_names');
-
-        return $this->selectListAjax(
-            $this->type, $this->name, $this->value, $this->id,
-            compact('size', 'multiple', 'show_all', 'use_names')
-        );
     }
 }

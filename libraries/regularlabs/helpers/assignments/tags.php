@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -38,6 +38,38 @@ class RLAssignmentsTags extends RLAssignment
         }
 
         return $this->passTag($this->request->id);
+    }
+
+    private function getTagsParentIds($id = 0)
+    {
+        $parentids = $this->getParentIds($id, 'tags');
+        // Remove the root tag
+        $parentids = array_diff($parentids, [1]);
+
+        return $parentids;
+    }
+
+    private function passTag($tag)
+    {
+        $pass = in_array($tag, $this->selection);
+
+        if ($pass)
+        {
+            // If passed, return false if assigned to only children
+            // Else return true
+            return ($this->params->inc_children != 2);
+        }
+
+        if ( ! $this->params->inc_children)
+        {
+            return false;
+        }
+
+        // Return true if a parent id is present in the selection
+        return array_intersect(
+            $this->getTagsParentIds($tag),
+            $this->selection
+        );
     }
 
     private function passTagsContent()
@@ -89,37 +121,5 @@ class RLAssignmentsTags extends RLAssignment
         }
 
         return $this->pass(false);
-    }
-
-    private function passTag($tag)
-    {
-        $pass = in_array($tag, $this->selection);
-
-        if ($pass)
-        {
-            // If passed, return false if assigned to only children
-            // Else return true
-            return ($this->params->inc_children != 2);
-        }
-
-        if ( ! $this->params->inc_children)
-        {
-            return false;
-        }
-
-        // Return true if a parent id is present in the selection
-        return array_intersect(
-            $this->getTagsParentIds($tag),
-            $this->selection
-        );
-    }
-
-    private function getTagsParentIds($id = 0)
-    {
-        $parentids = $this->getParentIds($id, 'tags');
-        // Remove the root tag
-        $parentids = array_diff($parentids, [1]);
-
-        return $parentids;
     }
 }

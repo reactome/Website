@@ -1,0 +1,174 @@
+<?php
+/**
+ * @package         Regular Labs Library
+ * @version         22.10.10828
+ * 
+ * @author          Peter van Westen <info@regularlabs.com>
+ * @link            http://regularlabs.com
+ * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+ * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ */
+
+defined('_JEXEC') or die;
+
+use Joomla\CMS\Factory as JFactory;
+use Joomla\CMS\Installer\Manifest\PackageManifest as JPackageManifest;
+use Joomla\CMS\Language\Text as JText;
+
+if ( ! class_exists('pkg_regularlabsInstallerScript'))
+{
+    class pkg_regularlabsInstallerScript
+    {
+        static $current_version;
+        static $name;
+        static $package_name;
+        static $previous_version;
+
+        public function postflight($install_type, $adapter)
+        {
+            self::publishPlugin();
+            self::recreateNamespaceMap();
+            self::displayMessages();
+
+            return true;
+        }
+
+        public function preflight($install_type, $adapter)
+        {
+            $manifest = $adapter->getManifest();
+
+            static::$package_name     = trim($manifest->packagename);
+            static::$name             = trim($manifest->name);
+            static::$current_version  = trim($manifest->version);
+            static::$previous_version = self::getPreviousVersion();
+
+            return true;
+        }
+
+        private static function recreateNamespaceMap()
+        {
+            if (JVERSION < 4)
+            {
+                return;
+            }
+
+            // Remove the administrator/cache/autoload_psr4.php file
+            $filename = JPATH_ADMINISTRATOR . '/cache/autoload_psr4.php';
+
+            if (file_exists($filename))
+            {
+                self::clearFileInOPCache($filename);
+                clearstatcache(true, $filename);
+
+                @unlink($filename);
+            }
+
+            JFactory::getApplication()->createExtensionNamespaceMap();
+        }
+
+        private static function clearFileInOPCache($file)
+        {
+            $hasOpCache = ini_get('opcache.enable')
+                && function_exists('opcache_invalidate')
+                && (
+                    ! ini_get('opcache.restrict_api')
+                    || stripos(realpath($_SERVER['SCRIPT_FILENAME']), ini_get('opcache.restrict_api')) === 0
+                );
+
+            if ( ! $hasOpCache)
+            {
+                return false;
+            }
+
+            return opcache_invalidate($file, true);
+        }
+
+        private static function displayMessages()
+        {
+            $msg = self::getInstallationLanguageString();
+
+            JFactory::getApplication()->enqueueMessage(
+                JText::sprintf(
+                    $msg,
+                    '<strong>' . JText::_(static::$name . '_SHORT') . '</strong>',
+                    '<strong>' . static::$current_version . '</strong>'
+                ), 'success'
+            );
+        }
+
+        private static function getInstallationLanguageString()
+        {
+            if ( ! static::$previous_version)
+            {
+                return 'PKG_RL_EXTENSION_INSTALLED';
+            }
+
+            if (static::$previous_version == static::$current_version)
+            {
+                return 'PKG_RL_EXTENSION_REINSTALLED';
+            }
+
+            return 'PKG_RL_EXTENSION_UPDATED';
+        }
+
+        private static function getPreviousVersion()
+        {
+            $xml_file = self::getXmlFile();
+
+            if ( ! $xml_file)
+            {
+                return '';
+            }
+
+            $manifest = new JPackageManifest($xml_file);
+
+            return isset($manifest->version) ? trim($manifest->version) : '';
+        }
+
+        private static function getXmlFile()
+        {
+            $xml_file = JPATH_MANIFESTS . '/packages/pkg_' . static::$package_name . '.xml';
+
+            if (file_exists($xml_file))
+            {
+                return $xml_file;
+            }
+
+            $xml_file = JPATH_LIBRARIES . '/' . static::$package_name . '.xml';
+
+            if (file_exists($xml_file))
+            {
+                return $xml_file;
+            }
+
+            $xml_file = JPATH_ADMINISTRATOR . '/components/com_' . static::$package_name . '/' . static::$package_name . '.xml';
+
+            if (file_exists($xml_file))
+            {
+                return $xml_file;
+            }
+
+            return '';
+        }
+
+        private static function publishPlugin()
+        {
+            $db = JFactory::getDbo();
+
+            $query = $db->getQuery(true)
+                ->update('#__extensions')
+                ->set($db->quoteName('enabled') . ' = 1')
+                ->where($db->quoteName('type') . ' = ' . $db->quote('plugin'))
+                ->where($db->quoteName('element') . ' = ' . $db->quote(static::$package_name));
+
+            // If this is an update, only force-publish the system plugin
+            if (static::$previous_version)
+            {
+                $query->where($db->quoteName('folder') . ' = ' . $db->quote('system'));
+            }
+
+            $db->setQuery($query);
+            $db->execute();
+        }
+    }
+}

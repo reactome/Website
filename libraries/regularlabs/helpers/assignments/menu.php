@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -66,6 +66,11 @@ class RLAssignmentsMenu extends RLAssignment
         return $this->pass(false);
     }
 
+    private function getMenuParentIds($id = 0)
+    {
+        return $this->getParentIds($id, 'menu');
+    }
+
     private function getMenuType()
     {
         if (isset($this->request->menutype))
@@ -97,10 +102,5 @@ class RLAssignmentsMenu extends RLAssignment
         $this->request->menutype = $this->db->loadResult();
 
         return $this->request->menutype;
-    }
-
-    private function getMenuParentIds($id = 0)
-    {
-        return $this->getParentIds($id, 'menu');
     }
 }

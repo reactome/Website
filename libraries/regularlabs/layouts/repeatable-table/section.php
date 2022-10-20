@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.8.15401
+ * @version         22.10.10828
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -27,9 +27,9 @@ $fields = $form->getGroup('');
 ?>
 
 <tr
-    class="subform-repeatable-group subform-repeatable-group-<?php echo $unique_subform_id; ?>"
-    data-base-name="<?php echo $basegroup; ?>"
-    data-group="<?php echo $group; ?>"
+        class="subform-repeatable-group subform-repeatable-group-<?php echo $unique_subform_id; ?>"
+        data-base-name="<?php echo $basegroup; ?>"
+        data-group="<?php echo $group; ?>"
 >
     <td>
         <a class="sortable-handler group-move group-move-<?php echo $unique_subform_id; ?>" style="cursor: move;" aria-label="<?php echo JText::_('JGLOBAL_FIELD_MOVE'); ?>">
