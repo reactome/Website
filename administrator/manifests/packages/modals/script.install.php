@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         11.11.0
+ * @version         11.11.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -45,11 +45,106 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
 
             self::publishExtensions($install_type);
             self::updateUpdateSites();
+            self::removeUnusedLanguageFiles();
 
             self::clearCache();
             self::displayMessages();
 
             return true;
+        }
+
+        private function removeUnusedLanguageFiles()
+        {
+            $joomla_version  = self::getJoomlaVersion();
+            $packages_folder = __DIR__ . '/packages/j' . $joomla_version;
+
+            $installed_languages = array_unique(array_merge(
+                JFolder::folders(JPATH_SITE . '/language', '^[a-z]+-[A-Z]+$'),
+                JFolder::folders(JPATH_ADMINISTRATOR . '/language', '^[a-z]+-[A-Z]+$')
+            ));
+            $package_languages   = JFolder::folders($packages_folder, '^[a-z]+-[A-Z]+$', true, true);
+
+            $remove_folders = [];
+            foreach ($package_languages as $path)
+            {
+                $path = str_replace($packages_folder . '/', '', $path);
+
+                // remove leading package folders
+                $path = preg_replace('#^[^/]+/packages/#', '', $path);
+
+                // continue if there are not exactly 2 slashes in the path
+                if (substr_count($path, '/') !== 2)
+                {
+                    continue;
+                }
+
+                list($extension, $unused, $language) = explode('/', $path);
+
+                // skip if this is an installed language
+                if (in_array($language, $installed_languages))
+                {
+                    continue;
+                }
+
+                $folder = self::getFolderFromExtensionName($extension);
+
+                // skip if no extension folder was found
+                if ( ! $folder)
+                {
+                    continue;
+                }
+
+                $folder = self::getFolderFromExtensionName($extension) . '/language/' . $language;
+
+                // skip if folder doesn't exist
+                if ( ! is_dir($folder))
+                {
+                    continue;
+                }
+
+                $remove_folders[] = self::getFolderFromExtensionName($extension) . '/language/' . $language;
+            }
+
+            if (empty($remove_folders))
+            {
+                return;
+            }
+
+            self::delete($remove_folders);
+        }
+
+        private static function getFolderFromExtensionName($extension)
+        {
+            list($type, $name) = explode('_', $extension, 2);
+            switch ($type)
+            {
+                case 'com':
+                    return JPATH_ADMINISTRATOR . '/components/com_' . $name;
+                case 'mod':
+                    return JPATH_ADMINISTRATOR . '/modules/mod_' . $name;
+                case 'plg':
+                    list($folder, $name) = explode('_', $name, 2);
+
+                    return JPATH_SITE . '/plugins/' . $folder . '/' . $name;
+                default:
+                    return false;
+            }
+        }
+
+        private static function delete($files = [])
+        {
+            foreach ($files as $file)
+            {
+                if (is_dir($file))
+                {
+                    JFolder::delete($file);
+                }
+
+                if (is_file($file))
+                {
+                    JFile::delete($file);
+                }
+            }
         }
 
         public function preflight($install_type, $adapter)

@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         22.10.10828
+ * @version         22.11.18960
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -16,7 +16,7 @@
 
 if (typeof window.RegularLabsToggler === 'undefined'
     || typeof RegularLabsToggler.version === 'undefined'
-    || RegularLabsToggler.version < '22.10.10828') {
+    || RegularLabsToggler.version < '22.11.18960') {
 
     (function($) {
         $(document).ready(function() {
@@ -35,7 +35,7 @@ if (typeof window.RegularLabsToggler === 'undefined'
         });
 
         window.RegularLabsToggler = {
-            version: '22.10.10828',
+            version: '22.11.18960',
 
             togglers: {}, // holds all the toggle areas
             elements: {}, // holds all the elements and their values that affect toggle areas
