@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         11.11.1
+ * @version         12.0.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -319,6 +319,9 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
                     $changelog
                 ) . '</pre>';
 
+            $code_styling = $joomla_version == 3
+                ? 'white-space: pre-wrap;line-height: 1.6em;max-height: 120px;overflow: auto;'
+                : 'white-space: pre-wrap;line-height: 1.6em;';
             $changelog = str_replace(
                 [
                     '<pre>',
@@ -326,7 +329,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
                     '[PRO]',
                 ],
                 [
-                    '<pre class="border bg-light p-2" style="line-height: 1.6em;max-height: 120px;overflow: auto;white-space: pre-wrap;">',
+                    '<pre class="border bg-light p-2" style="' . $code_styling . '">',
                     '<span class="' . $badge_classes['success'] . '">FREE</span>',
                     '<span class="' . $badge_classes['info'] . '">PRO</span>',
                 ],

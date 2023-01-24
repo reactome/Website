@@ -77,15 +77,7 @@ $favcolumns = 6;
     <!-- Custom: rglyph fonts -->
     <link rel="stylesheet" href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template;?>/rglyph/rglyph.css" />
 
-    <!-- GOOGLE FONT -->
-    <!-- navigation -->
-    <link href='//fonts.googleapis.com/css?family=<?php echo str_replace(' ', '+',$this->params->get('nav_google_font'));?>:<?php echo ($this->params->get('nav_google_font_weight')); ?><?php echo str_replace('normal', '',$this->params->get('nav_google_font_style'));?>' rel='stylesheet' />
-    <!-- titles -->
-    <link href='//fonts.googleapis.com/css?family=<?php echo str_replace(' ', '+',$this->params->get('titles_google_font'));?>:<?php echo ($this->params->get('titles_google_font_weight')); ?><?php echo str_replace('normal', '',$this->params->get('titles_google_font_style'));?>' rel='stylesheet' />
-    <!-- text logo -->
-    <link href='//fonts.googleapis.com/css?family=<?php echo str_replace(' ', '+',$this->params->get('text_logo_google_font'));?>:<?php echo ($this->params->get('text_logo_google_font_weight')); ?><?php echo str_replace('normal', '',$this->params->get('text_logo_google_font_style'));?>' rel='stylesheet' />
-    <!-- default -->
-    <link href="//fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+ 
     <!-- custom: icon for phone app -->
     <link rel="apple-touch-icon" sizes="128x128" href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template;?>/images/logo/icon.png">
   

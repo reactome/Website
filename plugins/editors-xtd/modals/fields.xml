@@ -21,6 +21,14 @@
     <field name="@url" type="note" description="MDL_URL_DESC"/>
     <field name="url" type="text" label="" class="input-full"/>
   </fieldset>
+  <fieldset name="content">
+    <field name="@content_free1" type="rl_onlypro" class="alert alert-warning"/>
+    <field name="@content_free2" type="note" class="alert alert-info" description="MDL_CONTENT_FREE_DESC"/>
+  </fieldset>
+  <fieldset name="article" addfieldpath="plugins/editors-xtd/modals/fields">
+    <field name="@article_free1" type="rl_onlypro" class="alert alert-warning"/>
+    <field name="@article_free2" type="note" class="alert alert-info" description="MDL_ARTICLE_FREE_DESC"/>
+  </fieldset>
   <fieldset name="image">
     <field name="@image_free1" type="rl_onlypro" class="alert alert-warning"/>
     <field name="@image_free2" type="note" class="alert alert-info" description="MDL_IMAGE_FREE_DESC"/>
@@ -32,12 +40,5 @@
   <fieldset name="video">
     <field name="@video_free1" type="rl_onlypro" class="alert alert-warning"/>
     <field name="@video_free2" type="note" class="alert alert-info" description="MDL_VIDEO_FREE_DESC"/>
-  </fieldset>
-  <fieldset name="article" addfieldpath="plugins/editors-xtd/modals/fields">
-    <field name="@article_free1" type="rl_onlypro" class="alert alert-warning"/>
-    <field name="@article_free2" type="note" class="alert alert-info" description="MDL_ARTICLE_FREE_DESC"/>
-  </fieldset>
-  <fieldset name="content">
-    <field name="@contentx" type="rl_onlypro" class="alert alert-warning"/>
   </fieldset>
 </config>

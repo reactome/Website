@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.11.18960
+ * @version         23.1.16396
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -280,6 +280,8 @@ class Image
             return $source;
         }
 
+        self::fixRotation($image);
+
         if ( ! self::setNewDimensionsByImageObject($image, $width, $height))
         {
             return $source;
@@ -314,6 +316,56 @@ class Image
         catch (Exception $e)
         {
             return $source;
+        }
+    }
+
+    private static function fixRotation(&$image)
+    {
+        if ( ! function_exists('exif_read_data'))
+        {
+            return;
+        }
+
+        $exif = exif_read_data($image->getPath());
+
+        if (empty($exif['Orientation']))
+        {
+            return;
+        }
+
+        switch ($exif['Orientation'])
+        {
+
+            case 2:
+                $image->flip(IMG_FLIP_HORIZONTAL, false);
+                break;
+
+            case 3:
+                $image->rotate(180, -1, false);
+                break;
+
+            case 4:
+                $image->rotate(180, -1, false)->flip(IMG_FLIP_HORIZONTAL, false);
+                break;
+
+            case 5:
+                $image->rotate(270, -1, false)->flip(IMG_FLIP_HORIZONTAL, false);
+                break;
+
+            case 6:
+                $image->rotate(270, -1, false);
+                break;
+
+            case 7:
+                $image->rotate(90, -1, false)->flip(IMG_FLIP_HORIZONTAL, false);
+                break;
+
+            case 8:
+                $image->rotate(90, -1, false);
+                break;
+
+            default:
+                break;
         }
     }
 

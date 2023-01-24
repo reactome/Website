@@ -20,15 +20,23 @@ if (empty($field->value) || empty($field->value['media_src']))
 	return;
 }
 
-$data = array_merge(array(
+$data = array(
     'media_src'         => '',
-    'media_text'        => '',
+    'media_text'        => (string) $fieldParams->get('media_description', ''),
     'media_type'        => (string) $fieldParams->get('mediatype', 'embed'),
     'media_target'      => (string) $fieldParams->get('media_target', ''),
     'media_class'       => (string) $fieldParams->get('media_class', ''),
     'media_caption'     => '',
     'media_supported'   => array('img', 'video', 'audio', 'iframe', 'a')
-), $field->value);
+);
+
+foreach($field->value as $key => $value) {
+	if (empty($value)) {
+		continue;
+	}
+	
+	$data[$key] = $value;
+}
 
 // convert to object
 $data = (object) $data;
@@ -75,7 +83,7 @@ if ($data->media_type == 'link') {
 $attribs = array();
 
 if ($data->media_class) {
-    $data->media_class = preg_replace('/[^A-Z0-9_- ]/i', '', $data->media_class);
+    $data->media_class = preg_replace('#[^-\w ]#i', '', $data->media_class);
     $attribs['class'] = trim($data->media_class);
 }
 

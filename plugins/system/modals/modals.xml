@@ -2,12 +2,12 @@
 <extension version="3" type="plugin" group="system" method="upgrade">
   <name>PLG_SYSTEM_MODALS</name>
   <description>PLG_SYSTEM_MODALS_DESC</description>
-  <version>11.11.1</version>
-  <creationDate>November 2022</creationDate>
+  <version>12.0.3</version>
+  <creationDate>January 2023</creationDate>
   <author>Regular Labs (Peter van Westen)</author>
   <authorEmail>info@regularlabs.com</authorEmail>
   <authorUrl>https://regularlabs.com</authorUrl>
-  <copyright>Copyright © 2022 Regular Labs - All Rights Reserved</copyright>
+  <copyright>Copyright © 2023 Regular Labs - All Rights Reserved</copyright>
   <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
   <scriptfile>script.install.php</scriptfile>
   <files>
@@ -101,6 +101,9 @@
         <field name="@block__groups__a" type="rl_block" start="1" label="MDL_GROUPS"/>
         <field name="@groups" type="rl_onlypro"/>
         <field name="@block__groups__b" type="rl_block" end="1"/>
+        <field name="@block__slideshows__a" type="rl_block" start="1" label="MDL_SLIDESHOWS"/>
+        <field name="@slideshows" type="rl_onlypro"/>
+        <field name="@block__slideshows__b" type="rl_block" end="1"/>
       </fieldset>
       <fieldset name="MDL_AUTOCONVERT">
         <field name="@block__autoconvert__a" type="rl_block" start="1" label="MDL_LINKS"/>

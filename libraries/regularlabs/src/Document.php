@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.11.18960
+ * @version         23.1.16396
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -570,7 +570,7 @@ class Document
         {
             JHtml::_('behavior.core');
             JHtml::_('script', 'jui/cms.js', ['version' => 'auto', 'relative' => true]);
-            $version = '22.11.18960';
+            $version = '23.1.16396';
         }
 
         if ( ! empty($version))
@@ -648,7 +648,7 @@ class Document
     {
         if (strpos($file, 'regularlabs/') === 0)
         {
-            $version = '22.11.18960';
+            $version = '23.1.16396';
         }
 
         $file = File::getMediaFile('css', $file);

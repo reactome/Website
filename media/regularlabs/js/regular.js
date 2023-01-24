@@ -4,7 +4,7 @@
  *
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://github.com/regularlabs/regularjs
- * @copyright       Copyright © 2022 Regular Labs - All Rights Reserved
+ * @copyright       Copyright © 2023 Regular Labs - All Rights Reserved
  * @license         https://github.com/regularlabs/regularjs/blob/master/LICENCE MIT
  */
 

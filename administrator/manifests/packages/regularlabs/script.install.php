@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.11.18960
+ * @version         23.1.16396
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -26,7 +26,7 @@ if ( ! class_exists('pkg_regularlabsInstallerScript'))
 
         public function postflight($install_type, $adapter)
         {
-            self::publishPlugin();
+            self::publishExtensions();
             self::recreateNamespaceMap();
             self::displayMessages();
 
@@ -151,20 +151,23 @@ if ( ! class_exists('pkg_regularlabsInstallerScript'))
             return '';
         }
 
-        private static function publishPlugin()
+        private static function publishExtensions()
         {
             $db = JFactory::getDbo();
 
             $query = $db->getQuery(true)
                 ->update('#__extensions')
                 ->set($db->quoteName('enabled') . ' = 1')
-                ->where($db->quoteName('type') . ' = ' . $db->quote('plugin'))
-                ->where($db->quoteName('element') . ' = ' . $db->quote(static::$package_name));
+                ->where($db->quoteName('element') . ' IN ('
+                    . $db->quote(static::$package_name)
+                    . ', ' . $db->quote('com_' . static::$package_name)
+                    . ')'
+                );
 
-            // If this is an update, only force-publish the system plugin
-            if (static::$previous_version)
+            // If this is an update of Conditions, only force-publish the component
+            if (static::$package_name == 'conditions' && static::$previous_version)
             {
-                $query->where($db->quoteName('folder') . ' = ' . $db->quote('system'));
+                $query->where($db->quoteName('type') . ' = ' . $db->quote('component'));
             }
 
             $db->setQuery($query);

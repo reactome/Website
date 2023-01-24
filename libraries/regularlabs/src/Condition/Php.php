@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.11.18960
+ * @version         23.1.16396
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -33,7 +33,7 @@ class Php extends Condition
         $file_name = getmypid() . '_' . md5($string);
 
         $tmp_path  = JFactory::getConfig()->get('tmp_path', JPATH_ROOT . '/tmp');
-        $temp_file = $tmp_path . '/regularlabs' . '/' . $file_name;
+        $temp_file = $tmp_path . '/regularlabs/custom_php/' . $file_name;
 
         // Write file
         if ( ! file_exists($temp_file) || is_writable($temp_file))

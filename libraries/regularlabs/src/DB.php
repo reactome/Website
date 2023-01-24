@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         22.11.18960
+ * @version         23.1.16396
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -21,7 +21,8 @@ use Joomla\CMS\Factory as JFactory;
  */
 class DB
 {
-    static $tables = [];
+    static $tables           = [];
+    static $available_tables = null;
 
     /**
      * Concatenate conditions using AND or OR
@@ -227,12 +228,20 @@ class DB
             return self::$tables[$table];
         }
 
-        $query = 'SHOW TABLES LIKE ' . $db->quote($table);
-        $db->setQuery($query);
-        $result = $db->loadResult();
+        $all_tables = self::getTableList();
 
-        self::$tables[$table] = ! empty($result);
+        self::$tables[$table] = in_array($table, $all_tables);
 
         return self::$tables[$table];
+    }
+
+    public static function getTableList()
+    {
+        if ( ! is_null(self::$available_tables))
+        {
+            return self::$available_tables;
+        }
+
+        return JFactory::getDbo()->getTableList();
     }
 }

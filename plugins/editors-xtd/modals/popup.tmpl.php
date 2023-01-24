@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Modals
- * @version         11.11.1
+ * @version         12.0.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -40,11 +40,11 @@ $form->loadFile($xmlfile, 1, '//config');
                 <?php
                 $tabs = [
                     'url'     => ['RL_URL', 'link'],
+                    'content' => ['RL_CONTENT', 'paragraph-justify'],
+                    'article' => ['RL_ARTICLE', 'file-2'],
                     'image'   => ['RL_IMAGE', 'image'],
                     'gallery' => ['RL_GALLERY', 'images'],
                     'video'   => ['RL_VIDEO', 'video-2'],
-                    'article' => ['RL_ARTICLE', 'file-2'],
-                    'content' => ['RL_CONTENT', 'paragraph-justify'],
                 ];
 
                 echo JHtml::_('bootstrap.startTabSet', 'myTab', ['active' => 'tab-url']);

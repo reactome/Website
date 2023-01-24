@@ -79,7 +79,7 @@ if ($load_favthb) {
 JHTML::stylesheet('modules/mod_favpromote4col/theme/css/favpromote4col.css');
 JHTML::stylesheet('//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 // Google Font
-JHTML::stylesheet('//fonts.googleapis.com/css?family='.str_replace(" ","+",$title_google_font).':'.$title_font_weight.str_replace("normal","",$title_font_style));
+/*JHTML::stylesheet('//fonts.googleapis.com/css?family='.str_replace(" ","+",$title_google_font).':'.$title_font_weight.str_replace("normal","",$title_font_style));*/
 
 // Scripts
 JHTML::script('modules/mod_favpromote4col/theme/js/viewportchecker/viewportchecker.js');

@@ -85,7 +85,7 @@ if ($load_favthb) {
 JHTML::stylesheet('modules/mod_favglyph/theme/css/favglyph.css');
 JHTML::stylesheet('//use.fontawesome.com/releases/v5.1.0/css/all.css');
 // Google Font
-JHTML::stylesheet('//fonts.googleapis.com/css?family='.str_replace(" ","+",$title_google_font).':'.$title_font_weight.str_replace("normal","",$title_font_style));
+/*JHTML::stylesheet('//fonts.googleapis.com/css?family='.str_replace(" ","+",$title_google_font).':'.$title_font_weight.str_replace("normal","",$title_font_style));*/
 
 // Scripts
 if ($load_vwchk) {
