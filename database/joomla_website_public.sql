@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: website
 -- ------------------------------------------------------
--- Server version	8.0.32-0buntu0.20.04.1
+-- Server version	8.0.32-0ubuntu0.20.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
