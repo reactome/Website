@@ -84,6 +84,7 @@ $favcolumns = 6;
   <!-- PARAMETERS -->
   <?php require("admin/params.php"); ?>
 
+   <?php /* disable Google Analytics tracking code 03/02/23
    <!-- GOOGLE ANALYTICS TRACKING CODE -->
   <?php if($analytics_code) { echo '<script>'.$analytics_code.'</script>';}?>
 
@@ -96,6 +97,7 @@ $favcolumns = 6;
       gtag('config', '<?php echo $app->get('ga_tracking_code') ?>');
       gtag('config', '<?php echo $app->get('ga4_tracking_code') ?>');
   </script>
+  */ ?>  
 
   <!-- FAVTH SCRIPTS -->
   <script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/js/favth-scripts.js"></script>
