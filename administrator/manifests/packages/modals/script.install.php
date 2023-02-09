@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         12.0.3
+ * @version         12.1.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -30,10 +30,14 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
         static $package_name;
         static $previous_version;
         static $previous_joomla_version;
+        static $dependancies       = [
+            'regularlabs',
+            'conditions',
+        ];
 
         public function postflight($install_type, $adapter)
         {
-            self::$adapter = $adapter;
+            static::$adapter = $adapter;
 
             if ( ! in_array($install_type, ['install', 'update']))
             {
@@ -322,7 +326,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
             $code_styling = $joomla_version == 3
                 ? 'white-space: pre-wrap;line-height: 1.6em;max-height: 120px;overflow: auto;'
                 : 'white-space: pre-wrap;line-height: 1.6em;';
-            $changelog = str_replace(
+            $changelog    = str_replace(
                 [
                     '<pre>',
                     '[FREE]',
@@ -379,21 +383,6 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
                 . $changelog;
         }
 
-        private static function getCurrentLibraryVersion()
-        {
-            $joomla_version = self::getJoomlaVersion();
-            $manifest_file  = __DIR__ . '/packages/j' . $joomla_version . '/pkg_regularlabs/pkg_regularlabs.xml';
-
-            if ( ! file_exists($manifest_file))
-            {
-                return '';
-            }
-
-            $manifest = new JPackageManifest($manifest_file);
-
-            return isset($manifest->version) ? trim($manifest->version) : '';
-        }
-
         private static function getExtensions()
         {
             if ( ! empty(static::$extensions))
@@ -404,7 +393,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
             $manifest = self::getNewManifest();
             $xml      = $manifest->asXML();
 
-            $xml = self::removeLibraryFilesFromString($xml);
+            self::removeDependanciesFromString($xml);
 
             $file = __DIR__ . '/pkg_' . static::$package_name . '.xml';
 
@@ -440,12 +429,33 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
                 return '';
             }
 
-            if ( ! self::shouldUpdateLibrary())
-            {
-                $string = self::removeLibraryFilesFromString($string);
-            }
+            self::removeDependanciesIfOlder($string);
 
             return $string;
+        }
+
+        private static function removeDependanciesFromString(&$string)
+        {
+            foreach (static::$dependancies as $dependancy)
+            {
+                self::removePackageFilesFromString($string, $dependancy);
+            }
+        }
+
+        private static function removeDependanciesIfOlder(&$string)
+        {
+            foreach (static::$dependancies as $dependancy)
+            {
+                self::removeDependancyIfOlder($string, $dependancy);
+            }
+        }
+
+        private static function removeDependancyIfOlder(&$string, $dependancy)
+        {
+            if ( ! self::shouldUpdateDependancy($dependancy))
+            {
+                self::removePackageFilesFromString($string, $dependancy);
+            }
         }
 
         private static function getFirstExtension()
@@ -475,91 +485,55 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
             return (int) JVERSION;
         }
 
-        private static function getLibraryPackageId()
+        private static function getPackageId($package_name = '')
         {
-            $db = JFactory::getDbo();
+            $package_name = $package_name ?: static::$package_name;
+            $db           = JFactory::getDbo();
 
             $query = $db->getQuery(true)
                 ->select('extension_id')
                 ->from('#__extensions')
-                ->where($db->quoteName('element') . ' = ' . $db->quote('pkg_regularlabs'));
+                ->where($db->quoteName('element') . ' = ' . $db->quote('pkg_' . $package_name));
             $db->setQuery($query);
 
             return $db->loadResult();
         }
 
-        private static function getLibraryXmlFile()
+        private static function getMainXmlFile($package_name = '', $include_pkg = true)
         {
-            $xml_file = JPATH_MANIFESTS . '/packages/pkg_regularlabs.xml';
+            $package_name = $package_name ?: static::$package_name;
 
-            if (file_exists($xml_file))
+            $file_paths = [
+                self::getManifestFilePathPackage($package_name),
+                self::getManifestFilePathLibrary($package_name),
+                self::getManifestFilePathComponent($package_name),
+                self::getManifestFilePathSystemPlugin($package_name),
+                self::getManifestFilePathFieldsPlugin($package_name),
+                self::getManifestFilePathModule($package_name),
+            ];
+
+            if ( ! $include_pkg)
             {
-                return $xml_file;
+                unset($file_paths[0]);
             }
 
-            $xml_file = JPATH_LIBRARIES . '/regularlabs/regularlabs.xml';
-
-            if (file_exists($xml_file))
+            foreach ($file_paths as $file_path)
             {
-                return $xml_file;
+                if (file_exists($file_path))
+                {
+                    return $file_path;
+                }
             }
 
             return '';
         }
 
-        private static function getMainXmlFile($include_pkg = true)
-        {
-            if ($include_pkg)
-            {
-                $xml_file = self::getPackageManifestFilePath();
-
-                if (file_exists($xml_file))
-                {
-                    return $xml_file;
-                }
-            }
-
-            $extension = self::getFirstExtension();
-
-            if (empty($extension))
-            {
-                return '';
-            }
-
-            switch ($extension->type)
-            {
-                case 'plugin':
-                    $xml_file = JPATH_SITE . '/plugins/' . $extension->group . '/' . $extension->id . '/' . $extension->id . '.xml';
-                    break;
-
-                case 'component':
-                    $name     = str_replace('com_', '', $extension->id);
-                    $xml_file = JPATH_ADMINISTRATOR . '/components/com_' . $name . '/' . $name . '.xml';
-                    break;
-
-                case 'module':
-                    $name     = str_replace('mod_', '', $extension->id);
-                    $xml_file = JPATH_SITE . '/modules/mod_' . $name . '/mod_' . $name . '.xml';
-                    break;
-
-                default:
-                    return '';
-            }
-
-            if ( ! file_exists($xml_file))
-            {
-                return '';
-            }
-
-            return $xml_file;
-        }
-
-        private static function getManifestWithoutLibraries()
+        private static function getManifestWithoutDependancies()
         {
             $manifest = static::$adapter->getManifest();
 
             $xml = $manifest->asXML();
-            $xml = self::removeLibraryFilesFromString($xml);
+            self::removeDependanciesFromString($xml);
 
             return simplexml_load_string($xml);
         }
@@ -591,16 +565,51 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
             return static::$new_manifest;
         }
 
-        private static function getPackageManifestFilePath()
+        private static function getManifestFilePathPackage($package_name = '')
         {
-            return JPATH_MANIFESTS . '/packages/pkg_' . static::$package_name . '.xml';
+            $package_name = $package_name ?: static::$package_name;
+
+            return JPATH_MANIFESTS . '/packages/pkg_' . $package_name . '.xml';
         }
 
-        private static function getPreviousLibraryVersion()
+        private static function getManifestFilePathLibrary($package_name = '')
         {
-            $manifest_file = self::getLibraryXmlFile();
+            $package_name = $package_name ?: static::$package_name;
 
-            if ( ! $manifest_file)
+            return JPATH_LIBRARIES . '/' . $package_name . '/' . $package_name . '.xml';
+        }
+
+        private static function getManifestFilePathComponent($package_name = '')
+        {
+            $package_name = $package_name ?: static::$package_name;
+
+            return JPATH_ADMINISTRATOR . '/components/com_' . $package_name . '/com_' . $package_name . '.xml';
+        }
+
+        private static function getManifestFilePathModule($package_name = '')
+        {
+            $package_name = $package_name ?: static::$package_name;
+
+            return JPATH_SITE . '/modules/mod_' . $package_name . '/mod_' . $package_name . '.xml';
+        }
+
+        private static function getManifestFilePathFieldsPlugin($package_name = '')
+        {
+            $package_name = $package_name ?: static::$package_name;
+
+            return JPATH_PLUGINS . '/fields/' . $package_name . '/' . $package_name . '.xml';
+        }
+
+        private static function getManifestFilePathSystemPlugin($package_name = '')
+        {
+            $package_name = $package_name ?: static::$package_name;
+
+            return JPATH_PLUGINS . '/system/' . $package_name . '/' . $package_name . '.xml';
+        }
+
+        private static function getVersionFromManifest($manifest_file)
+        {
+            if ( ! $manifest_file || ! file_exists($manifest_file))
             {
                 return '';
             }
@@ -610,25 +619,30 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
             return isset($manifest->version) ? trim($manifest->version) : '';
         }
 
-        private static function getPreviousVersion()
+        private static function getCurrentVersion($package_name = '')
         {
-            $manifest_file = self::getMainXmlFile();
+            $package_name = $package_name ?: static::$package_name;
 
-            if ( ! $manifest_file)
-            {
-                return '';
-            }
+            $joomla_version = self::getJoomlaVersion();
+            $manifest_file  = __DIR__ . '/packages/j' . $joomla_version . '/pkg_' . $package_name . '/pkg_' . $package_name . '.xml';
 
-            $manifest = new JPackageManifest($manifest_file);
-
-            return isset($manifest->version) ? trim($manifest->version) : '';
+            return self::getVersionFromManifest($manifest_file);
         }
 
-        private static function getPreviousJoomlaVersion()
+        private static function getPreviousVersion($package_name = '')
         {
-            $manifest_file = self::getMainXmlFile(false);
+            $package_name  = $package_name ?: static::$package_name;
+            $manifest_file = self::getMainXmlFile($package_name);
 
-            if ( ! $manifest_file)
+            return self::getVersionFromManifest($manifest_file);
+        }
+
+        private static function getPreviousJoomlaVersion($package_name = '')
+        {
+            $package_name  = $package_name ?: static::$package_name;
+            $manifest_file = self::getMainXmlFile($package_name, false);
+
+            if ( ! $manifest_file || ! file_exists($manifest_file))
             {
                 return '';
             }
@@ -788,7 +802,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
             {
                 $is_admin_module = $extension->client == 'administrator' && $extension->type == 'module';
 
-                $force = $joomla_version > self::$previous_joomla_version
+                $force = $joomla_version > static::$previous_joomla_version
                     || $is_admin_module
                     || $extension->id == 'regularlabs';
 
@@ -921,7 +935,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
                 ->select($db->quoteName('update_site_id'))
                 ->from('#__update_sites')
                 ->where($db->quoteName('location') . ' LIKE ' . $db->quote('%download.regularlabs.com%'))
-                ->where($db->quoteName('location') . ' LIKE ' . $db->quote('%e=' . self::$package_name . '%'))
+                ->where($db->quoteName('location') . ' LIKE ' . $db->quote('%e=' . static::$package_name . '%'))
                 ->where($db->quoteName('location') . ' NOT LIKE ' . $db->quote('%pro=1%'))
                 ->setLimit(1);
             $db->setQuery($query);
@@ -934,7 +948,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
                     ->select($db->quoteName('update_site_id'))
                     ->from('#__update_sites')
                     ->where($db->quoteName('location') . ' LIKE ' . $db->quote('%download.regularlabs.com%'))
-                    ->where($db->quoteName('location') . ' LIKE ' . $db->quote('%e=' . self::$package_name . '%'));
+                    ->where($db->quoteName('location') . ' LIKE ' . $db->quote('%e=' . static::$package_name . '%'));
                 $db->setQuery($query, 0, 1);
                 $id = $db->loadResult();
 
@@ -957,7 +971,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
                 ->select($db->quoteName('update_site_id'))
                 ->from('#__update_sites')
                 ->where($db->quoteName('location') . ' LIKE ' . $db->quote('%download.regularlabs.com%'))
-                ->where($db->quoteName('location') . ' LIKE ' . $db->quote('%e=' . self::$package_name . '%'))
+                ->where($db->quoteName('location') . ' LIKE ' . $db->quote('%e=' . static::$package_name . '%'))
                 ->where($db->quoteName('update_site_id') . ' != ' . $id);
             $db->setQuery($query);
             $ids = $db->loadColumn();
@@ -980,9 +994,11 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
             $db->execute();
         }
 
-        private static function removeLibraryFilesFromString($string)
+        private static function removePackageFilesFromString(&$string, $package_name = '')
         {
-            return preg_replace('#<file [^>]*id="(regularlabs|conditions)">.*?</file>#s', '', $string);
+            $package_name = $package_name ?: static::$package_name;
+
+            $string = preg_replace('#<file [^>]*id="' . $package_name . '">.*?</file>#s', '', $string);
         }
 
         private static function removeOldUpdateSites()
@@ -1049,7 +1065,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
         private static function reorderMessageQueue()
         {
             $old_messages    = JFactory::getApplication()->getMessageQueue(true);
-            $library_version = self::getCurrentLibraryVersion();
+            $library_version = self::getCurrentVersion('regularlabs');
 
             $library_messages = [];
 
@@ -1115,25 +1131,16 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
             $db->execute();
         }
 
-        private static function shouldUpdateLibrary()
+        private static function shouldUpdateDependancy($package_name)
         {
-            $package_file = JPATH_MANIFESTS . '/packages/pkg_regularlabs.xml';
-            $library_file = JPATH_LIBRARIES . '/regularlabs/regularlabs.xml';
-            $plugin_file  = JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml';
-
-            if ( ! file_exists($package_file) || ! file_exists($library_file) || ! file_exists($plugin_file))
-            {
-                return true;
-            }
-
-            $previous_version = self::getPreviousLibraryVersion();
+            $previous_version = self::getPreviousVersion($package_name);
 
             if ( ! $previous_version)
             {
                 return true;
             }
 
-            $current_version = self::getCurrentLibraryVersion();
+            $current_version = self::getCurrentVersion($package_name);
 
             if ( ! $current_version)
             {
@@ -1221,9 +1228,9 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
 
         private static function updateManifestFile()
         {
-            $manifest = self::getManifestWithoutLibraries();
+            $manifest = self::getManifestWithoutDependancies();
 
-            file_put_contents(self::getPackageManifestFilePath(), $manifest->asXML());
+            file_put_contents(self::getManifestFilePathPackage(), $manifest->asXML());
         }
 
         private static function updateNamesInUpdateSites()
@@ -1243,7 +1250,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
 
         private static function updatePackageIds()
         {
-            $lib_package_id = self::getLibraryPackageId();
+            $lib_package_id = self::getPackageId('regularlabs');
 
             self::setPackageId('regularlabs', $lib_package_id);
             self::removePackageId($lib_package_id);
