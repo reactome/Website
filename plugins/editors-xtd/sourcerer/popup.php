@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         9.4.0
+ * @version         9.4.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -42,14 +42,14 @@ class Popup extends RL_EditorButtonPopup
         ";
         RL_Document::scriptDeclaration($script);
 
-        RL_Document::script('sourcerer/script.min.js', '9.4.0');
+        RL_Document::script('sourcerer/script.min.js', '9.4.1');
     }
 
     public function loadStyles()
     {
         JFactory::getDocument()->addStyleSheet('//code.jquery.com/ui/1.9.2/themes/smoothness/jquery-ui.css');
 
-        RL_Document::style('sourcerer/popup.min.css', '9.4.0');
+        RL_Document::style('sourcerer/popup.min.css', '9.4.1');
     }
 }
 

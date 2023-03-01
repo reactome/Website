@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Tabs
- * @version         8.3.0
+ * @version         8.3.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -49,11 +49,11 @@ class Document
 
         RL_Document::scriptOptions($options, 'Tabs');
 
-        RL_Document::script('tabs/script.min.js', ($params->media_versioning ? '8.3.0' : ''), [], [], $params->load_jquery);
+        RL_Document::script('tabs/script.min.js', ($params->media_versioning ? '8.3.1' : ''), [], [], $params->load_jquery);
 
         if ($params->load_stylesheet)
         {
-            RL_Document::stylesheet('tabs/style.min.css', ($params->media_versioning ? '8.3.0' : ''));
+            RL_Document::stylesheet('tabs/style.min.css', ($params->media_versioning ? '8.3.1' : ''));
         }
 
     }

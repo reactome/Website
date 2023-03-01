@@ -1,10 +1,10 @@
 /**
  * @package         Tabs
- * @version         8.3.0
+ * @version         8.3.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
- * @copyright       Copyright © 2022 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -99,8 +99,12 @@ var RegularLabsTabs = null;
             $el.closest('ul.nav-tabs').find('.rl_tabs-toggle').attr('aria-selected', false);
             $el.attr('aria-selected', true);
 
-            $el.closest('div.rl_tabs').find('.tab-content').first().children().attr('hidden', true);
-            $(`div#${id}`).removeAttr('hidden');
+            if ($(window).width() <= 767 && $el.closest('div.rl_tabs').hasClass('rl_tabs-responsive')) {
+                $el.closest('div.rl_tabs').find('.tab-content').first().children().removeAttr('hidden', true);
+            } else {
+                $el.closest('div.rl_tabs').find('.tab-content').first().children().attr('hidden', true);
+                $(`div#${id}`).removeAttr('hidden');
+            }
 
             $el.tab('show');
 
@@ -247,7 +251,7 @@ var RegularLabsTabs = null;
                 return;
             }
 
-            var $anchor = $(`[id="${id}"],a[name="${id}"],a#anchor-${id}`);
+            var $anchor = $(`[id="${id}"], a[name="${id}"], a#anchor-${id}`);
 
             if ( ! $anchor.length) {
                 return;
@@ -416,6 +420,12 @@ var RegularLabsTabs = null;
 
         initActiveClasses: function() {
             $('li.rl_tabs-tab-sm').removeClass('active');
+
+            if ($(window).width() <= 767) {
+                $('div.rl_tabs-responsive').each(function($i, el) {
+                    $(el).find('.tab-content').first().children().removeAttr('hidden', true);
+                });
+            }
         },
 
         updateActiveClassesOnTabLinks: function(active_el) {
@@ -499,7 +509,7 @@ var RegularLabsTabs = null;
             var $anchor = $(`a[data-toggle="tab"][data-id="${id}"]`);
 
             if ( ! $anchor.length) {
-                $anchor = $(`[id="${id}"],a[name="${id}"]`);
+                $anchor = $(`[id="${id}"], a[name="${id}"]`);
 
                 // No accompanying link found
                 if ( ! $anchor.length) {
