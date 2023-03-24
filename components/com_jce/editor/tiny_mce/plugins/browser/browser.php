@@ -19,6 +19,67 @@ class WFBrowserPlugin extends WFMediaManager
      */
     protected $_filetypes = 'doc,docx,dot,dotx,ppt,pps,pptx,ppsx,xls,xlsx,gif,jpeg,jpg,png,webp,apng,avif,pdf,zip,tar,gz,swf,rar,mov,mp4,m4a,flv,mkv,webm,ogg,ogv,qt,wmv,asx,asf,avi,wav,mp3,aiff,oga,odt,odg,odp,ods,odf,rtf,txt,csv';
 
+    private function isMediaField()
+    {
+        $app = JFactory::getApplication();
+        return $app->input->getInt('standalone') && $app->input->getString('mediatype') && $app->input->getCmd('fieldid');
+    }
+
+    /**
+     * Get a parameter by key.
+     *
+     * @param string $key        Parameter key eg: editor.width
+     * @param mixed  $fallback   Fallback value
+     * @param mixed  $default    Default value
+     * @param string $type       Variable type eg: string, boolean, integer, array
+     *
+     * @return mixed
+     */
+    public function getParam($key, $fallback = '', $default = '', $type = 'string')
+    {
+        $wf = WFApplication::getInstance();
+        
+        $value = parent::getParam($key, $fallback, $default, $type);
+
+        // get all keys
+        $keys = explode('.', $key);
+
+        // get caller if any
+        $caller = $this->get('caller');
+
+        // create new namespaced key
+        if ($caller && ($keys[0] === $caller || count($keys) == 1)) {
+            // create new key
+            $key = $caller . '.' . 'browser' . '.' . array_pop($keys);	
+            // get namespaced value, fallback to base parameter
+            $value = $wf->getParam($key, $value, $default, $type);
+        }
+
+        return $value;
+    }
+    
+    protected function getFileBrowserConfig($config = array())
+    {
+        $app = JFactory::getApplication();
+        
+        $config = parent::getFileBrowserConfig($config);
+
+        // update folder path if a value is passed from a mediafield url
+        if ($this->isMediaField()) {
+            $folder = $app->input->getString('mediafolder', '');
+
+            if ($folder) {
+                if (empty($config['dir'])) {
+                    $config['dir'] = 'images';
+                }
+                
+                $config['dir'] = WFUtility::makePath($config['dir'], trim(rawurldecode($folder)));
+            }
+        }
+
+        return $config;
+    }
+    
     public function __construct($config = array())
     {
         $app = JFactory::getApplication();
@@ -39,7 +100,7 @@ class WFBrowserPlugin extends WFMediaManager
             $mediatype = (string) preg_replace('/[^\w_,]/i', '', strtolower($mediatype));
 
             // get filetypes from params
-            $filetypes = $this->getParam('browser.extensions', $this->get('_filetypes'));
+            $filetypes = $this->getParam('extensions', $this->get('_filetypes'));
 
             // get file browser reference
             $browser = $this->getFileBrowser();

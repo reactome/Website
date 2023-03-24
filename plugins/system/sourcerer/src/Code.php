@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         9.4.1
+ * @version         9.5.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -14,6 +14,7 @@ namespace RegularLabs\Plugin\System\Sourcerer;
 defined('_JEXEC') or die;
 
 use RegularLabs\Library\Condition\Php as RL_Php;
+use RegularLabs\Library\RegEx as RL_RegEx;
 
 class Code
 {
@@ -64,8 +65,29 @@ class Code
         return $function_name($src_variables);
     }
 
+    private static function extractUseStatements(&$string)
+    {
+        $use_statements = [];
+
+        $string = trim($string);
+
+        RL_RegEx::matchAll('^use\s+[^\s;]+\s*;', $string, $matches, 'm');
+
+        foreach ($matches as $match)
+        {
+            $use_statements[] = $match[0];
+            $string           = str_replace($match[0], '', $string);
+        }
+
+        $string = trim($string);
+
+        return implode("\n", $use_statements);
+    }
+
     private static function generateFileContents($function_name = 'src_function', $string = '')
     {
+        $use_statements = self::extractUseStatements($string);
+
         $init = RL_Php::getVarInits();
 
         $init[] =
@@ -78,6 +100,7 @@ class Code
         $contents = [
             '<?php',
             'defined(\'_JEXEC\') or die;',
+            $use_statements,
             'function ' . $function_name . '($src_variables){',
             implode("\n", $init),
             $string . ';',

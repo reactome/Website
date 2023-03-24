@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.2.18739
+ * @version         23.3.19307
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -153,6 +153,12 @@ if ( ! class_exists('pkg_regularlabsInstallerScript'))
 
         private static function publishExtensions()
         {
+            // ignore if this is an update of Conditions
+            if (static::$package_name == 'conditions' && static::$previous_version)
+            {
+                return;
+            }
+
             $db = JFactory::getDbo();
 
             $query = $db->getQuery(true)
@@ -163,12 +169,6 @@ if ( ! class_exists('pkg_regularlabsInstallerScript'))
                     . ', ' . $db->quote('com_' . static::$package_name)
                     . ')'
                 );
-
-            // If this is an update of Conditions, only force-publish the component
-            if (static::$package_name == 'conditions' && static::$previous_version)
-            {
-                $query->where($db->quoteName('type') . ' = ' . $db->quote('component'));
-            }
 
             $db->setQuery($query);
             $db->execute();

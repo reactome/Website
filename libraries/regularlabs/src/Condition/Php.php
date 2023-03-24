@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.2.18739
+ * @version         23.3.19307
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -140,13 +140,35 @@ class Php extends Condition
         return $this->_($pass);
     }
 
+    private static function extractUseStatements(&$string)
+    {
+        $use_statements = [];
+
+        $string = trim($string);
+
+        RegEx::matchAll('^use\s+[^\s;]+\s*;', $string, $matches, 'm');
+
+        foreach ($matches as $match)
+        {
+            $use_statements[] = $match[0];
+            $string           = str_replace($match[0], '', $string);
+        }
+
+        $string = trim($string);
+
+        return implode("\n", $use_statements);
+    }
+
     private function generateFileContents($function_name = 'rl_function', $string = '')
     {
+        $use_statements = self::extractUseStatements($string);
+
         $init_variables = self::getVarInits();
 
         $contents = [
             '<?php',
             'defined(\'_JEXEC\') or die;',
+            $use_statements,
             'function ' . $function_name . '($article, $module){',
             implode("\n", $init_variables),
             $string,

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         12.1.0
+ * @version         12.3.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -107,12 +107,12 @@ class Document
         RL_Document::scriptOptions($options, 'Modals');
 
         JHtml::script('modals/jquery.touchSwipe.min.js', false, true);
-        RL_Document::script('modals/jquery.modals.min.js', ($params->media_versioning ? '12.1.0' : ''), [], [], $params->load_jquery);
-        RL_Document::script('modals/script.min.js', ($params->media_versioning ? '12.1.0' : ''), [], [], $params->load_jquery);
+        RL_Document::script('modals/jquery.modals.min.js', ($params->media_versioning ? '12.3.0' : ''), [], [], $params->load_jquery);
+        RL_Document::script('modals/script.min.js', ($params->media_versioning ? '12.3.0' : ''), [], [], $params->load_jquery);
 
         if ($params->load_stylesheet)
         {
-            RL_Document::style('modals/' . $params->style . '.min.css', ($params->media_versioning ? '12.1.0' : ''));
+            RL_Document::style('modals/' . $params->style . '.min.css', ($params->media_versioning ? '12.3.0' : ''));
         }
     }
 

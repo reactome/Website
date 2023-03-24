@@ -265,7 +265,7 @@ class WFEditor
         // Other - user specified
         $userParams = $wf->getParam('editor.custom_config', '');
 
-        if ($userParams) {
+        if ($userParams) {            
             // legacy format, eg: key:value;key:value
             if (!WFUtility::isJson($userParams)) {
                 $userParams = explode(';', $userParams);
@@ -274,11 +274,15 @@ class WFEditor
             }
 
             // Remove values with invalid key, must be indexed array
-            $userParams = array_filter($userParams, function ($key) {
-                return is_numeric($key);
-            }, ARRAY_FILTER_USE_KEY);
+            $userParams = array_filter($userParams, function ($value, $key) {
+                return is_numeric($key) && $value != "";
+            }, ARRAY_FILTER_USE_BOTH);
 
             foreach ($userParams as $userParam) {
+                if (empty($userParam)) {
+                    continue;
+                }
+                                
                 $name = '';
                 $value = '';
 
@@ -870,14 +874,16 @@ class WFEditor
         if (is_object($this->profile)) {
             if (!is_array($plugins)) {
                 // get plugin items from profile
-                $items = explode(',', $this->profile->plugins);
+                $profile_plugins = explode(',', $this->profile->plugins);
+
+				$items = array();
 
                 // get core and installed plugins list
                 $list = JcePluginsHelper::getPlugins();
-
+                
                 // check that the plugin is available
-                $items = array_filter($items, function ($item) use ($list) {
-                    return in_array($item, array_keys($list));
+                $items = array_filter(array_keys($list), function ($item) use ($profile_plugins) {
+                    return in_array($item, $profile_plugins);
                 });
 
                 // add advlists plugin if lists are loaded
@@ -1079,7 +1085,7 @@ class WFEditor
         }
 
         $query = $db->getQuery(true);
-        $query->select('id, template AS name, params, home')->from('#__template_styles')->where(array('client_id = 0'));
+        $query->select('*, template AS name')->from('#__template_styles')->where(array('client_id = 0'));
 
         $db->setQuery($query);
         $templates = $db->loadObjectList();

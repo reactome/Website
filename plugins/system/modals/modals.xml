@@ -2,8 +2,8 @@
 <extension version="3" type="plugin" group="system" method="upgrade">
   <name>PLG_SYSTEM_MODALS</name>
   <description>PLG_SYSTEM_MODALS_DESC</description>
-  <version>12.1.0</version>
-  <creationDate>February 2023</creationDate>
+  <version>12.3.0</version>
+  <creationDate>March 2023</creationDate>
   <author>Regular Labs (Peter van Westen)</author>
   <authorEmail>info@regularlabs.com</authorEmail>
   <authorUrl>https://regularlabs.com</authorUrl>
@@ -44,8 +44,8 @@
         </field>
         <field name="opacity" type="number" size="10" class="input-mini" default="0.8" min="0" max="1" label="MDL_OPACITY" description="MDL_OPACITY_DESC" showon="overlay:1"/>
         <field name="@block__dimensions__a" type="rl_block" start="1" label="MDL_DIMENSIONS"/>
-        <field name="width" type="text" size="10" class="input-mini" default="" label="RL_WIDTH" description="MDL_DIMENSION_DESC"/>
-        <field name="height" type="text" size="10" class="input-mini" default="" label="RL_HEIGHT" description="MDL_DIMENSION_DESC"/>
+        <field name="width" type="text" size="10" class="input-mini" default="" label="RL_WIDTH" description="%s&lt;br&gt;&lt;br&gt;%s,MDL_DIMENSION_DESC,RL_EMPTY_FOR_AUTO_SIZING"/>
+        <field name="height" type="text" size="10" class="input-mini" default="" label="RL_HEIGHT" description="%s&lt;br&gt;&lt;br&gt;%s,MDL_DIMENSION_DESC,RL_EMPTY_FOR_AUTO_SIZING"/>
         <field name="externalwidth" type="text" size="10" class="input-mini" default="95%" label="MDL_EXTERNAL_WIDTH" description="MDL_EXTERNAL_DIMENSION_DESC"/>
         <field name="externalheight" type="text" size="10" class="input-mini" default="95%" label="MDL_EXTERNAL_HEIGHT" description="MDL_EXTERNAL_DIMENSION_DESC"/>
         <field name="initialwidth" type="text" size="10" class="input-mini" default="600" label="MDL_INITIAL_WIDTH" description="MDL_INITIAL_DIMENSION_DESC"/>

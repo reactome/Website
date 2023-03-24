@@ -51,15 +51,17 @@ class JFormFieldContainer extends JFormField
     {
         $group = $this->group;
 
-        $children = $this->element->children();
-        $data = $this->form->getData()->toObject();
-
-        // extract relevant data level using group
-        foreach (explode('.', $group) as $key) {
-            if (isset($data->$key)) {
-                $data = $data->$key;
-            }
+        // expand group with container name
+        if ($this->element['name']) {
+            $group .= '.' . (string) $this->element['name'];
         }
+
+        $children = $this->element->children();
+
+        // extract group data
+        $data = $this->form->getData()->get($group);
+        // to array
+        $data = (array) $data;
 
         $count = 1;
 
@@ -70,8 +72,8 @@ class JFormFieldContainer extends JFormField
             foreach ($children as $child) {
                 $name = (string) $child->attributes()['name'];
 
-                if (isset($data->$name) && is_array($data->$name)) {
-                    $count = max(count($data->$name), $count);
+                if (isset($data[$name]) && is_array($data[$name])) {
+                    $count = max(count($data[$name]), $count);
                 }
             }
         }
@@ -127,8 +129,19 @@ class JFormFieldContainer extends JFormField
                 $name = (string) $field->element['name'];
                 $value = (string) $field->element['default'];
 
-                if (isset($data->$name)) {
-                    $value = $data->$name;
+                if (empty($name)) {
+                    continue;
+                }
+
+                if (is_array($data) && isset($data[$name])) {
+                    $value = $data[$name];
+                }
+
+                $type = (string) $field->element['type'];
+
+                // convert checkboxes value to string
+                if ($type == 'checkboxes') {
+                    $value = is_array($value) ? implode(',', $value) : $value;
                 }
 
                 if (is_array($value)) {
