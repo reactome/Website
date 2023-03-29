@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.3.19307
+ * @version         23.3.22766
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com

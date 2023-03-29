@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         9.5.0
+ * @version         9.5.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -582,7 +582,7 @@ class Replace
 
             $string_array[1] = RL_Document::isHtml()
                 ? Protect::getMessageCommentTag($comment)
-                : $string_array[1] = '';
+                : '';
 
             $string = implode('', $string_array);
 

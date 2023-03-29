@@ -8,6 +8,27 @@ defined('JPATH_BASE') or die;
 
 class WfTemplateCore extends JPlugin
 {
+    private function findFile($template, $name) 
+    {
+        // template.css
+        $file = JPath::find(array(
+            JPATH_SITE . '/templates/' . $template . '/css',
+            JPATH_SITE . '/media/templates/site/' . $template . '/css'
+        ), $name);
+
+        if ($file) {
+            // make relative
+            $file = str_replace(JPATH_SITE, '', $file);
+            
+            // remove leading slash
+            $file = trim($file, '/');
+
+            return $file;
+        }
+
+        return false;
+    }
+    
     public function onWfGetTemplateStylesheets(&$files, $template)
     {                        
         // already processed by a framework
@@ -15,40 +36,22 @@ class WfTemplateCore extends JPlugin
             return false;
         }
 
-        // search for parent template.css file using JPath
         if ($template->parent) {
-            $file = JPath::find(array(
-                JPATH_SITE . '/templates/' . $template->parent . '/css',
-                JPATH_SITE . '/media/templates/site/' . $template->parent . '/css'
-            ), 'template.css');
+            foreach(array('template.css', 'user.css') as $name) {
+                $file = $this->findFile($template->parent, $name);
 
-            if ($file) {
-                // make relative
-                $file = str_replace(JPATH_SITE, '', $file);
-                
-                // remove leading slash
-                $file = trim($file, '/');
-
-                $files[] = $file;
+                if ($file) {
+                    $files[] = $file;
+                }
             }
         }
 
-        // search for template.css file using JPath
-        $file = JPath::find(array(
-            JPATH_SITE . '/templates/' . $template->name . '/css',
-            JPATH_SITE . '/media/templates/site/' . $template->name . '/css'
-        ), 'template.css');
-                
-        if (!$file) {
-            return false;
+        foreach(array('template.css', 'user.css') as $name) {
+            $file = $this->findFile($template->name, $name);
+
+            if ($file) {
+                $files[] = $file;
+            }
         }
-
-        // make relative
-        $file = str_replace(JPATH_SITE, '', $file);
-        
-        // remove leading slash
-        $file = trim($file, '/');
-
-        $files[] = $file;
     }
 }
