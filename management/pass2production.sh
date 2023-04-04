@@ -99,6 +99,7 @@ for ARGUMENT in "$@"; do
         move_data_over)            MOVE_DATA="move-data" ;;
         help)                      HELP="help-me" ;;
         remove_proxy_pass)         REMOVE_PP="remove-pp" ;;
+	enable_proxy_pass)         ENABLE_PP="enable-pp" ;;
         *)
     esac
 done
@@ -722,7 +723,11 @@ elif [[ "${DO_RELEASE}" == "do-release" ]]; then
     ask_passphrase
     ask_extra_credentials
     do_release
-
+elif [[ "${ENABLE_PP}" == "enable-pp" ]]; then
+    ask_passphrase
+    proxy_pass_to_release
+    remove_notice_banner
+    reload_apache
 else
     echo "Crystal Ball is not implemented. You tell me what to do and I will do it :). Cheers."
 fi
