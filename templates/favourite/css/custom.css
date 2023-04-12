@@ -954,6 +954,44 @@ input.radio {
 /* ### CSS for Citation Project Ends Here ###*/
 
 
+/* ### CSS for Reactome FAQ ###*/
+.favth-side-faq li.active a {
+    color: #2F9EC2;
+    background-color: transparent;
+    border-left: 5px solid #2F9EC2;
+}
+
+.favth-side-faq li a:hover {
+    color: #2F9EC2;
+    background-color: transparent;
+      border-left: 5px solid #2F9EC2;
+}
+
+.favth-side-faq li a {
+    color: #111;
+    padding: 9px 14px !important;
+    display: block;
+    font-size: 14px;
+    font-weight: normal;
+    text-shadow: none;
+    border-left: 5px solid #e7e7e7;
+    -webkit-transition: all 0.3s ease-out 0s;
+    -moz-transition: all 0.3s ease-out 0s;
+    -o-transition: all 0.3s ease-out 0s;
+    transition: all 0.3s ease-out 0s;
+   
+}
+
+.favth-side-faq h5{
+  margin-top:0px;
+}
+
+.favth-side-faq h6{
+  margin-top:0px;
+}
+
+/* ### CSS for Reactome FAQ Ends ###*/
+
 @media only screen and (max-width: 1024px) {
     .fav2buttons div[id^="favglyph-box"] i,
     .fav2buttons div[id*=" favglyph-box"] i {
