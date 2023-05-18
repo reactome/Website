@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         12.3.2
+ * @version         12.3.5
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -179,7 +179,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
         }
 
         private static function canInstall()
-        {
+        {
             if ( ! self::passFreeOverProCheck())
             {
                 return false;
@@ -677,7 +677,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
         }
 
         private static function passFreeOverProCheck()
-        {
+        {
             // The pro version is installed.
             if (strpos(static::$previous_version, 'PRO') !== false)
             {

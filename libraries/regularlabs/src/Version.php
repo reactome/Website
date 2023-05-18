@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.3.25449
+ * @version         23.5.7450
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -70,6 +70,7 @@ class Version
         $html = [];
 
         $html[] = '<div class="rl_footer_extension">' . self::getFooterName($name) . '</div>';
+        $html[] = '<div class="rl_footer_documentation">' . self::getFooterDocumentationLink($name) . '</div>';
 
         if ($copyright)
         {
@@ -95,10 +96,11 @@ class Version
             return '';
         }
 
-        $name  = Extension::getNameByAlias($alias);
-        $alias = Extension::getAliasByName($alias);
+        $name    = Extension::getNameByAlias($alias);
+        $alias   = Extension::getAliasByName($alias);
+        $version = self::get($alias);
 
-        if ( ! $version = self::get($alias))
+        if ( ! $version)
         {
             return '';
         }
@@ -180,24 +182,54 @@ class Version
      */
     private static function getFooterName($name)
     {
-        $name = JText::_($name);
+        $name   = JText::_($name);
+        $alias  = Extension::getAliasByName($name);
+        $suffix = self::getVersionSuffix($alias);
 
-        if ( ! $version = self::get($name))
+        return '<a href="https://regularlabs.com/' . $alias . '" target="_blank">' . $name . '</a>' . $suffix;
+    }
+
+    /**
+     * Get the link to the documentation for the footer
+     *
+     * @param $name
+     *
+     * @return string
+     */
+    private static function getFooterDocumentationLink($name)
+    {
+        $alias = Extension::getAliasByName($name);
+
+        return JText::sprintf('RL_GO_TO_DOCUMENTATION', '<span class="icon-book" aria-hidden="true"></span>', '<a href="https://docs3.regularlabs.com/' . $alias . '" target="_blank">', '</a>');
+    }
+
+    /**
+     * Get the version for the footer name
+     *
+     * @param $alias
+     *
+     * @return string
+     */
+    private static function getVersionSuffix($alias)
+    {
+        $version = self::get($alias);
+
+        if ( ! $version)
         {
-            return $name;
+            return '';
         }
 
         if (strpos($version, 'PRO') !== false)
         {
-            return $name . ' v' . str_replace('PRO', '', $version) . ' <small>[PRO]</small>';
+            return ' v' . str_replace('PRO', '', $version) . ' <small>[PRO]</small>';
         }
 
         if (strpos($version, 'FREE') !== false)
         {
-            return $name . ' v' . str_replace('FREE', '', $version) . ' <small>[FREE]</small>';
+            return ' v' . str_replace('FREE', '', $version) . ' <small>[FREE]</small>';
         }
 
-        return $name . ' v' . $version;
+        return ' v' . $version;
     }
 
     /**
@@ -325,7 +357,7 @@ class Version
             var RLEM_TOKEN = '" . JSession::getFormToken() . "';
         "
         );
-        Document::script('regularlabsmanager/script.min.js', '23.3.25449');
+        Document::script('regularlabsmanager/script.min.js', '23.5.7450');
 
         $url = 'https://download.regularlabs.com?ext=' . $alias . '&j=3';
 

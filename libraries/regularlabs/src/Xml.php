@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.3.25449
+ * @version         23.5.7450
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://regularlabs.com
@@ -41,7 +41,7 @@ class Xml
             return $cache->get();
         }
 
-        if (file_exists($url))
+        if (strpos($url, '<') === false && file_exists($url))
         {
             $xml = @new SimpleXMLElement($url, LIBXML_NONET | LIBXML_NOCDATA, 1);
         }
