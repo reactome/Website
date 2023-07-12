@@ -21,12 +21,19 @@ use Joomla\CMS\Plugin\PluginHelper;
  */
 class PlgSystemJce extends CMSPlugin
 {
+    /**
+     * Flag to set / check if media assests have been loaded
+     *
+     * @var boolean
+     */
+    private $mediaLoaded = false;
+    
     public function onPlgSystemJceContentPrepareForm($form, $data)
     {
         return $this->onContentPrepareForm($form, $data);
     }
 
-    private function getMediaRedirectUrl()
+    private function getMediaRedirectOptions()
     {
         $app = Factory::getApplication();
 
@@ -49,15 +56,15 @@ class PlgSystemJce extends CMSPlugin
             return false;
         }
 
-        return $options['url'];
+        return $options;
     }
 
     private function redirectMedia()
     {
-        $url = $this->getMediaRedirectUrl();
+        $options = $this->getMediaRedirectOptions();
 
-        if ($url) {
-            Factory::getApplication()->redirect($url);
+        if ($options && isset($options['url'])) {
+            Factory::getApplication()->redirect($options['url']);
         }
     }
 
@@ -101,28 +108,6 @@ class PlgSystemJce extends CMSPlugin
             // redirect to file browser
             $this->redirectMedia();
         }
-
-        /*$app = Factory::getApplication();
-        $params = ComponentHelper::getParams('com_jce');
-
-        // flexi-content mediafield
-        if ($app->input->getCmd('option') == 'com_media') {
-            if ((bool) $params->get('replace_media_manager', 1) == true) {
-                $vars = $app->input->getArray();
-
-                $valid = true;
-
-                foreach($vars as $key => $value) {
-                    if ($key == 'task' || strpos('api', $key) !== false) {
-                        $valid = false;
-                    }
-                }
-
-                if ($valid) {
-                    Factory::getApplication()->redirect('index.php?option=com_jce&view=browser');
-                }
-            }
-        }*/
     }
 
     public function onAfterDispatch()
@@ -136,6 +121,11 @@ class PlgSystemJce extends CMSPlugin
 
         $document = Factory::getDocument();
 
+        // must be an html doctype
+        if($document->getType() !== 'html') {
+            return true;
+        }
+
         // only if enabled
         if ((int) $this->params->get('column_styles', 1)) {
             $hash = md5_file(__DIR__ . '/css/content.css');
@@ -146,6 +136,43 @@ class PlgSystemJce extends CMSPlugin
     public function onWfContentPreview($context, &$article, &$params, $page)
     {
         $article->text = '<style type="text/css">@import url("' . JURI::root(true) . '/plugins/system/jce/css/content.css");</style>' . $article->text;
+    }
+
+    private function loadMediaFiles($form, $replace_media_manager = true)
+    {
+        if ($this->mediaLoaded) {
+            return;
+        }
+        
+        $app = Factory::getApplication();
+
+        $option = $app->input->getCmd('option');
+        $component = ComponentHelper::getComponent($option);
+
+        $document = JFactory::getDocument();
+
+        $document->addScriptOptions('plg_system_jce', array(
+            'convert_mediafield' => $replace_media_manager,
+            'context' => $component->id,
+        ), true);
+
+        $form->addFieldPath(JPATH_PLUGINS . '/fields/mediajce/fields');
+
+        // Include jQuery
+        HTMLHelper::_('jquery.framework');
+
+        $document = JFactory::getDocument();
+        $document->addScript(JURI::root(true) . '/plugins/system/jce/js/media.js', array('version' => 'auto'));
+        $document->addStyleSheet(JURI::root(true) . '/plugins/system/jce/css/media.css', array('version' => 'auto'));
+
+        $this->mediaLoaded = true;
+    }
+
+    public function onCustomFieldsPrepareDom($field, $fieldset, $form)
+    {
+        if ($field->type == 'mediajce') {
+            $this->loadMediaFiles($form);
+        }
     }
 
     /**
@@ -161,6 +188,12 @@ class PlgSystemJce extends CMSPlugin
     public function onContentPrepareForm($form, $data)
     {
         $app = Factory::getApplication();
+        $docType = Factory::getDocument()->getType();
+
+        // must be an html doctype
+        if($docType !== 'html') {
+            return true;
+        }
 
         $version = new Joomla\CMS\Version();
 
@@ -179,8 +212,11 @@ class PlgSystemJce extends CMSPlugin
             return true;
         }
 
-        // File Browser not enabled
-        if (false == $this->getMediaRedirectUrl()) {
+        // Get File Browser options
+        $options = $this->getMediaRedirectOptions();
+
+        // not enabled
+        if (false == $options) {
             return true;
         }
 
@@ -190,7 +226,7 @@ class PlgSystemJce extends CMSPlugin
         $fields = $form->getFieldset();
 
         // should the Joomla Media field be converted?
-        $replace_media_manager = (bool) $params->get('replace_media_manager', 1);
+        $replace_media_manager = (bool) $params->get('replace_media_manager', 1) && $options['converted'];
 
         foreach ($fields as $field) {
             if (method_exists($field, 'getAttribute') === false) {
@@ -206,12 +242,12 @@ class PlgSystemJce extends CMSPlugin
 
             $type = $field->getAttribute('type');
 
-            if ($type) {                
+            if ($type) {
                 // jce media field
                 if (strtolower($type) == 'mediajce' || strtolower($type) == 'extendedmedia') {
                     $hasMedia = true;
                 }
-                
+
                 // joomla media field and flexi-content converted media field
                 if (strtolower($type) == 'media' || strtolower($type) == 'fcmedia') {
 
@@ -223,6 +259,10 @@ class PlgSystemJce extends CMSPlugin
                     $group = (string) $field->group;
                     $form->setFieldAttribute($name, 'type', 'mediajce', $group);
                     $form->setFieldAttribute($name, 'converted', '1', $group);
+
+                    // set converted attribute flag instead of class attribute (extension conflict?)
+                    $form->setFieldAttribute($name, 'data-wf-converted', '1', $group);
+
                     $hasMedia = true;
                 }
             }
@@ -230,22 +270,7 @@ class PlgSystemJce extends CMSPlugin
 
         // form has a media field
         if ($hasMedia) {
-            $option = $app->input->getCmd('option');
-            $component = ComponentHelper::getComponent($option);
-
-            Factory::getDocument()->addScriptOptions('plg_system_jce', array(
-                'replace_media' => $replace_media_manager,
-                'context' => $component->id,
-            ), true);
-
-            $form->addFieldPath(JPATH_PLUGINS . '/fields/mediajce/fields');
-
-            // Include jQuery
-            HTMLHelper::_('jquery.framework');
-
-            $document = JFactory::getDocument();
-            $document->addScript(JURI::root(true) . '/plugins/system/jce/js/media.js', array('version' => 'auto'));
-            $document->addStyleSheet(JURI::root(true) . '/plugins/system/jce/css/media.css', array('version' => 'auto'));
+            $this->loadMediaFiles($form, $replace_media_manager);
         }
 
         return true;

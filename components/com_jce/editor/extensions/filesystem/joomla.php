@@ -87,6 +87,9 @@ class WFJoomlaFileSystem extends WFFileSystem
                 self::$restricted = $restricted;
             }
 
+            // clean array
+            self::$restricted = array_filter(self::$restricted);
+
             // is root allowed?
             self::$allowroot = (bool) $wf->getParam('filesystem.joomla.allow_root', 0);
 
@@ -518,7 +521,7 @@ class WFJoomlaFileSystem extends WFFileSystem
 
         $data['preview'] = WFUtility::cleanPath($url, '/');
 
-        if (preg_match('#\.(jpg|jpeg|bmp|gif|tiff|png|svg)#i', $file)) {
+        if (preg_match('#\.(jpg|jpeg|bmp|gif|tiff|png|apng|webp|svg)#i', $file)) {
             $image = array();
 
             if ($count <= 100) {

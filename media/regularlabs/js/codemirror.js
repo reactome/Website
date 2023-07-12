@@ -1,22 +1,22 @@
 /**
  * @package         Regular Labs Library
- * @version         23.5.7450
+ * @version         23.7.2101
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://regularlabs.com
+ * @link            https://regularlabs.com
  * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
- * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @license         GNU General Public License version 2 or later
  */
 
 "use strict";
 
 if (typeof window.RegularLabsCodeMirror === 'undefined'
     || typeof RegularLabsCodeMirror.version === 'undefined'
-    || RegularLabsCodeMirror.version < '23.5.7450') {
+    || RegularLabsCodeMirror.version < '23.7.2101') {
 
     (function($) {
         window.RegularLabsCodeMirror = {
-            version: '23.5.7450',
+            version: '23.7.2101',
 
             init: function(id) {
                 if ( ! $(`#rl_codemirror_${id} .CodeMirror`).length) {
