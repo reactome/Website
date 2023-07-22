@@ -1263,3 +1263,24 @@ input.radio {
        url('../fonts/open-sans-v34-latin-regular.svg#OpenSans') format('svg'); /* Legacy iOS */
 }
 
+/*
+ * NOTE: remove below when place the twitter widget at prime2
+ *       
+ */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .latest-news {
+        height: 353px !important;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .latest-news {
+        height: 333px !important;
+    }
+}
+
+@media only screen and (min-width : 1200px) {
+   .latest-news {
+        height: 315px !important;
+    }
+}
