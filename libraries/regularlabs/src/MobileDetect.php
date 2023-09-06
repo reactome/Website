@@ -631,11 +631,13 @@ class MobileDetect
     ];
     /**
      * A cache for resolved matches
+     *
      * @var array
      */
     protected $cache = [];
     /**
      * CloudFront headers. E.g. CloudFront-Is-Desktop-Viewer, CloudFront-Is-Mobile-Viewer & CloudFront-Is-Tablet-Viewer.
+     *
      * @var array
      */
     protected $cloudfrontHeaders = [];
@@ -649,6 +651,7 @@ class MobileDetect
     protected $detectionType = self::DETECTION_TYPE_MOBILE;
     /**
      * HTTP headers in the PHP-flavor. So HTTP_USER_AGENT and SERVER_SOFTWARE.
+     *
      * @var array
      */
     protected $httpHeaders = [];
@@ -662,11 +665,13 @@ class MobileDetect
     /**
      * The matching Regex.
      * This is good for debug.
+     *
      * @var string
      */
     protected $matchingRegex = null;
     /**
      * The User-Agent HTTP header is stored in here.
+     *
      * @var string
      */
     protected $userAgent = null;
@@ -1045,6 +1050,7 @@ class MobileDetect
         else
         {
             $this->userAgent = null;
+
             foreach ($this->getUaHttpHeaders() as $altHeader)
             {
                 if (false === empty($this->httpHeaders[$altHeader]))
@@ -1123,6 +1129,7 @@ class MobileDetect
         if ($this->getUserAgent() === 'Amazon CloudFront')
         {
             $cfHeaders = $this->getCfHeaders();
+
             if (array_key_exists('HTTP_CLOUDFRONT_IS_MOBILE_VIEWER', $cfHeaders) && $cfHeaders['HTTP_CLOUDFRONT_IS_MOBILE_VIEWER'] === 'true')
             {
                 return true;
@@ -1156,6 +1163,7 @@ class MobileDetect
         if ($this->getUserAgent() === 'Amazon CloudFront')
         {
             $cfHeaders = $this->getCfHeaders();
+
             if (array_key_exists('HTTP_CLOUDFRONT_IS_TABLET_VIEWER', $cfHeaders) && $cfHeaders['HTTP_CLOUDFRONT_IS_TABLET_VIEWER'] === 'true')
             {
                 return true;
@@ -1211,6 +1219,7 @@ class MobileDetect
 
     /**
      * Retrieve the mobile grading, using self::MOBILE_GRADE_* constants.
+     *
      * @return string One of the self::MOBILE_GRADE_* constants.
      * @deprecated This is no longer being maintained, it was an experiment at the time.
      */
@@ -1386,6 +1395,7 @@ class MobileDetect
         // Only save CLOUDFRONT headers. In PHP land, that means only _SERVER vars that
         // start with cloudfront-.
         $response = false;
+
         foreach ($cfHeaders as $key => $value)
         {
             if (substr(strtolower($key), 0, 16) === 'http_cloudfront_')
@@ -1523,6 +1533,7 @@ class MobileDetect
     {
         // Make the keys lowercase so we can match: isIphone(), isiPhone(), isiphone(), etc.
         $key = strtolower($key);
+
         if (false === isset($this->cache[$key]))
         {
 

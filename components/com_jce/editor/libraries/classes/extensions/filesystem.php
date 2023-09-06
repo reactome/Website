@@ -98,6 +98,7 @@ class WFFileSystem extends WFExtension
         static $variables;
 
         if (!isset($variables)) {
+            $app = JFactory::getApplication();
             $user = JFactory::getUser();
             $wf = WFApplication::getInstance();
             $profile = $wf->getProfile();
@@ -122,6 +123,19 @@ class WFFileSystem extends WFExtension
                 $usertype = $group_id;
             }
 
+            $context = $app->input->getInt('context', null);
+
+            $contextName = '';
+
+            if (is_int($context)) {
+                foreach (JComponentHelper::getComponents() as $component) {
+                    if ($context == $component->id) {
+                        $contextName = $component->option;
+                        break;
+                    }
+                }
+            }
+
             // Replace any path variables
             $path_pattern = array(
                 '/\$id/', 
@@ -129,6 +143,7 @@ class WFFileSystem extends WFExtension
                 '/\$name/', 
                 '/\$user(group|type)/', 
                 '/\$(group|profile)/',
+                '/\$context/',
                 '/\$hour/',
                 '/\$day/', 
                 '/\$month/', 
@@ -141,6 +156,7 @@ class WFFileSystem extends WFExtension
                 $user->name, 
                 $usertype, 
                 $profile->name, 
+                $contextName,
                 date('H'), 
                 date('d'), 
                 date('m'), 

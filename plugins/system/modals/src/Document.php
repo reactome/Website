@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         12.3.6
+ * @version         12.6.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -37,7 +37,8 @@ class Document
     {
         $url = explode('#', $url, 2);
 
-        if (substr($url[0], 0, 4) != 'http'
+        if (
+            substr($url[0], 0, 4) != 'http'
             && strpos($url[0], 'index.php') === 0
             && strpos($url[0], '/') === false
         )
@@ -107,12 +108,12 @@ class Document
         RL_Document::scriptOptions($options, 'Modals');
 
         JHtml::script('modals/jquery.touchSwipe.min.js', false, true);
-        RL_Document::script('modals/jquery.modals.min.js', ($params->media_versioning ? '12.3.6' : ''), [], [], $params->load_jquery);
-        RL_Document::script('modals/script.min.js', ($params->media_versioning ? '12.3.6' : ''), [], [], $params->load_jquery);
+        RL_Document::script('modals/jquery.modals.min.js', ($params->media_versioning ? '12.6.1' : ''), [], [], $params->load_jquery);
+        RL_Document::script('modals/script.min.js', ($params->media_versioning ? '12.6.1' : ''), [], [], $params->load_jquery);
 
         if ($params->load_stylesheet)
         {
-            RL_Document::style('modals/' . $params->style . '.min.css', ($params->media_versioning ? '12.3.6' : ''));
+            RL_Document::style('modals/' . $params->style . '.min.css', ($params->media_versioning ? '12.6.1' : ''));
         }
     }
 

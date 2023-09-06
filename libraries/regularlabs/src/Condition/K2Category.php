@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -17,6 +17,7 @@ use Joomla\CMS\Factory as JFactory;
 
 /**
  * Class K2Category
+ *
  * @package RegularLabs\Library\Condition
  */
 class K2Category extends K2
@@ -49,7 +50,7 @@ class K2Category extends K2
         {
             return $this->_(false);
         }
-        else if ( ! $pass && $this->params->inc_children)
+        elseif ( ! $pass && $this->params->inc_children)
         {
             foreach ($cats as $cat)
             {

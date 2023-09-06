@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -17,6 +17,7 @@ use DOMDocument;
 
 /**
  * Class Html
+ *
  * @package RegularLabs\Library
  */
 class Html
@@ -463,6 +464,7 @@ class Html
         $regex = '<(' . implode('|', $elements) . ')(?: [^>]*)?>\s*(' . $breaks . ')<\/\1>\s*';
 
         Protect::protectHtmlCommentTags($string);
+
         while (RegEx::match($regex, $string, $match))
         {
             $string = str_replace($match[0], $match[2], $string);

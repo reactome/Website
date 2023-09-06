@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -19,6 +19,7 @@ use Joomla\CMS\Table\Table as JTable;
 
 /**
  * Class ContentCategory
+ *
  * @package RegularLabs\Library\Condition
  */
 class ContentCategory extends Content
@@ -59,6 +60,7 @@ class ContentCategory extends Content
         {
             // Content Submit
             $contentsubmit_params = new ContentsubmitModelArticle;
+
             if (in_array($contentsubmit_params->_id, $this->selection))
             {
                 return $this->_(true);
@@ -68,6 +70,7 @@ class ContentCategory extends Content
         }
 
         $pass = false;
+
         if (
             $this->params->inc_others
             && ! ($is_content && ($is_category || $is_item))
@@ -109,6 +112,7 @@ class ContentCategory extends Content
             {
                 $parent_ids = $this->getCatParentIds($catid);
                 $parent_ids = array_diff($parent_ids, [1]);
+
                 foreach ($parent_ids as $id)
                 {
                     if (in_array($id, $this->selection))

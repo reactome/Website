@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -15,6 +15,7 @@ defined('_JEXEC') or die;
 
 /**
  * Class ArrayHelper
+ *
  * @package RegularLabs\Library
  */
 class ArrayHelper
@@ -274,7 +275,8 @@ class ArrayHelper
             $pieces = self::toArray($pieces, $glue);
         }
 
-        if (is_null($last_glue)
+        if (
+            is_null($last_glue)
             || $last_glue == $glue
             || count($pieces) < 2
         )

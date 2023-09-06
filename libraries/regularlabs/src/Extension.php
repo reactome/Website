@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -26,6 +26,7 @@ jimport('joomla.filesystem.folder');
 
 /**
  * Class Extension
+ *
  * @package RegularLabs\Library
  */
 class Extension
@@ -483,7 +484,8 @@ class Extension
         switch ($type)
         {
             case 'component':
-                if (file_exists(JPATH_ADMINISTRATOR . '/components/com_' . $extension . '/' . $extension . '.php')
+                if (
+                    file_exists(JPATH_ADMINISTRATOR . '/components/com_' . $extension . '/' . $extension . '.php')
                     || file_exists(JPATH_ADMINISTRATOR . '/components/com_' . $extension . '/admin.' . $extension . '.php')
                     || file_exists(JPATH_SITE . '/components/com_' . $extension . '/' . $extension . '.php')
                 )

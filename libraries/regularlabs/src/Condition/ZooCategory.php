@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -15,6 +15,7 @@ defined('_JEXEC') or die;
 
 /**
  * Class ZooCategory
+ *
  * @package RegularLabs\Library\Condition
  */
 class ZooCategory extends Zoo
@@ -144,7 +145,7 @@ class ZooCategory extends Zoo
                 {
                     $cats[] = $this->request->id;
                 }
-                else if (isset($menuparams->category))
+                elseif (isset($menuparams->category))
                 {
                     $cats[] = $menuparams->category;
                 }

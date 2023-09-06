@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -84,6 +84,7 @@ class RLFieldToggler
         $param = RL_RegEx::replace('\s*\|\s*', '|', $param);
 
         $html = [];
+
         if ( ! $param)
         {
             return '</div>';
@@ -94,14 +95,18 @@ class RLFieldToggler
         $set_groups = explode('|', $param);
         $set_values = explode('|', $value);
         $ids        = [];
+
         foreach ($set_groups as $i => $group)
         {
             $count = $i;
+
             if ($count >= count($set_values))
             {
                 $count = 0;
             }
+
             $value = explode(',', $set_values[$count]);
+
             foreach ($value as $val)
             {
                 $ids[] = $group . '.' . $val;
@@ -114,14 +119,17 @@ class RLFieldToggler
         }
 
         $html[] = '<div id="' . rand(1_000_000, 9_999_999) . '___' . implode('___', $ids) . '" class="rl_toggler';
+
         if ($nofx)
         {
             $html[] = ' rl_toggler_nofx';
         }
+
         if ($method == 'and')
         {
             $html[] = ' rl_toggler_and';
         }
+
         $html[] = '">';
 
         if ( ! $div)

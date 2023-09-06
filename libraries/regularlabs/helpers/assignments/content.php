@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -94,6 +94,7 @@ class RLAssignmentsContent extends RLAssignment
     {
         // components that use the com_content secs/cats
         $components = ['com_content', 'com_flexicontent', 'com_contentsubmit'];
+
         if ( ! in_array($this->request->option, $components))
         {
             return $this->pass(false);
@@ -122,6 +123,7 @@ class RLAssignmentsContent extends RLAssignment
         {
             // Content Submit
             $contentsubmit_params = new ContentsubmitModelArticle;
+
             if (in_array($contentsubmit_params->_id, $this->selection))
             {
                 return $this->pass(true);
@@ -131,6 +133,7 @@ class RLAssignmentsContent extends RLAssignment
         }
 
         $pass = false;
+
         if (
             $this->params->inc_others
             && ! ($is_content && ($is_category || $is_item))
@@ -172,6 +175,7 @@ class RLAssignmentsContent extends RLAssignment
             {
                 $parent_ids = $this->getCatParentIds($catid);
                 $parent_ids = array_diff($parent_ids, [1]);
+
                 foreach ($parent_ids as $id)
                 {
                     if (in_array($id, $this->selection))
@@ -191,10 +195,12 @@ class RLAssignmentsContent extends RLAssignment
     public function passPageTypes()
     {
         $components = ['com_content', 'com_contentsubmit'];
+
         if ( ! in_array($this->request->option, $components))
         {
             return $this->pass(false);
         }
+
         if ($this->request->view == 'category' && $this->request->layout == 'blog')
         {
             $view = 'categoryblog';

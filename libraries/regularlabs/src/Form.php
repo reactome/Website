@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -72,6 +72,7 @@ class Form
         foreach ($options as $option)
         {
             $count++;
+
             if ( ! empty($option->links))
             {
                 $count += self::getOptionsCount($option->links);
@@ -177,15 +178,18 @@ class Form
         }
 
         $count = 0;
+
         if ($options != -1)
         {
             foreach ($options as $option)
             {
                 $count++;
+
                 if (isset($option->links))
                 {
                     $count += count($option->links);
                 }
+
                 if ( ! $ignore_max_count && $count > $params->max_list_count)
                 {
                     break;
@@ -199,6 +203,7 @@ class Form
             {
                 $value = implode(',', $value);
             }
+
             if ( ! $value)
             {
                 $input = '<textarea name="' . $name . '" id="' . $id . '" cols="40" rows="5">' . $value . '</textarea>';
@@ -236,13 +241,16 @@ class Form
         if ($simple)
         {
             $first_level = $options[0]->level ?? 0;
+
             foreach ($options as &$option)
             {
                 if ( ! isset($option->level))
                 {
                     continue;
                 }
+
                 $repeat = ($option->level - $first_level > 0) ? $option->level - $first_level : 0;
+
                 if ( ! $repeat)
                 {
                     continue;
@@ -255,6 +263,7 @@ class Form
         if ( ! $multiple)
         {
             $attr = 'class="inputbox"';
+
             if ($readonly)
             {
                 $attr .= ' readonly="readonly"';
@@ -283,6 +292,7 @@ class Form
         if ($simple)
         {
             $attr = 'style="width: ' . $size . 'px" multiple="multiple"';
+
             if ($readonly)
             {
                 $attr .= ' readonly="readonly"';
@@ -331,6 +341,7 @@ class Form
                     <a class="rl_multiselect-toggleall" href="javascript:;">' . JText::_('RL_TOGGLE') . '</a>
                 </span>';
         $html[] = '<span> | </span>';
+
         if ($has_nested)
         {
             $html[] = '<span class="small">' . JText::_('RL_EXPAND') . ':
@@ -339,6 +350,7 @@ class Form
                 </span>';
             $html[] = '<span> | </span>';
         }
+
         $html[] = '<span class="small">' . JText::_('JSHOW') . ':
                     <a class="rl_multiselect-showall" href="javascript:;">' . JText::_('JALL') . '</a>
                     <span class="ghosted">[' . $count_total . ']</span>,
@@ -359,10 +371,12 @@ class Form
         $html[] = '<hr class="hr-condensed">';
 
         $o = [];
+
         foreach ($options as $option)
         {
             $option->level ??= 0;
             $o[]           = $option;
+
             if (isset($option->links))
             {
                 foreach ($option->links as $link)
@@ -385,11 +399,11 @@ class Form
 
                 $html[] = '<ul class="rl_multiselect-sub">';
             }
-            else if ($prevlevel > $option->level)
+            elseif ($prevlevel > $option->level)
             {
                 $html[] = str_repeat('</li></ul>', $prevlevel - $option->level);
             }
-            else if ($i)
+            elseif ($i)
             {
                 $html[] = '</li>';
             }
@@ -399,6 +413,7 @@ class Form
             $html[] = '<li>';
 
             $item = '<div class="' . trim('rl_multiselect-item pull-left ' . ($option->class ?? '')) . '">';
+
             if (isset($option->title))
             {
                 $labelclass .= ' nav-header';
@@ -420,6 +435,7 @@ class Form
 
                 $item .= '<label for="' . $id . $option->value . '" class="' . $labelclass . '">' . $option->text . '</label>';
             }
+
             $item   .= '</div>';
             $html[] = $item;
 
@@ -427,8 +443,10 @@ class Form
             {
                 $html[] = str_repeat('</li></ul>', (int) $option->level);
             }
+
             $prevlevel = $option->level;
         }
+
         $html[] = '</ul>';
         $html[] = '
             <div style="display:none;" class="rl_multiselect-menu-block">

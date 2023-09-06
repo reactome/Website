@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -57,6 +57,7 @@ class JFormFieldRL_Header_Library extends JFormFieldRL_Header
         $attributes = $this->element->attributes();
 
         $warning = '';
+
         if (isset($attributes['warning']))
         {
             $warning = '<div class="alert alert-danger">' . JText::_($attributes['warning']) . '</div>';

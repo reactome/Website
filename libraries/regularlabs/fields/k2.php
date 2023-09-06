@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -49,10 +49,12 @@ class JFormFieldRL_K2 extends FieldGroup
 
         $query->clear('select')
             ->select('c.id, c.' . $parent_field . ' AS parent_id, c.' . $title_field . ' AS title, c.' . $state_field . ' AS published');
+
         if ( ! $this->get('getcategories', 1))
         {
             $query->where('c.' . $parent_field . ' = 0');
         }
+
         $query->order('c.' . $ordering_field . ', c.' . $title_field);
         $this->db->setQuery($query);
         $items = $this->db->loadObjectList();
@@ -109,6 +111,7 @@ class JFormFieldRL_K2 extends FieldGroup
     protected function getInput()
     {
         $error = $this->missingFilesOrTables(['categories', 'items', 'tags']);
+
         if ($error)
         {
             return $error;

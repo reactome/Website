@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -41,6 +41,7 @@ class JFormFieldRL_Checkbox extends Field
         }
 
         $options = [];
+
         foreach ($this->element->children() as $option)
         {
             if ($option->getName() != 'option')
@@ -60,14 +61,17 @@ class JFormFieldRL_Checkbox extends Field
             $disabled = (int) $option['disabled'];
 
             $option = '<input type="checkbox" class="rl_' . $this->id . '" id="' . $this->id . $val . '" name="' . $this->name . '[]" value="' . $val . '"';
+
             if ($checkall || in_array($val, $this->value))
             {
                 $option .= ' checked="checked"';
             }
+
             if ($disabled)
             {
                 $option .= ' disabled="disabled"';
             }
+
             $option .= '> <label for="' . $this->id . $val . '" class="checkboxes">' . JText::_($text) . '</label>';
 
             $options[] = $option;
@@ -88,6 +92,7 @@ class JFormFieldRL_Checkbox extends Field
 
             $options = $checker . '<br>' . $options;
         }
+
         $options .= '<input type="hidden" id="' . $this->id . 'x" name="' . $this->name . '' . '[]" value="x" checked="checked">';
 
         $html   = [];

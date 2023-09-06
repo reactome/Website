@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -18,6 +18,7 @@ defined('_JEXEC') or die;
 
 /**
  * Class Easyblog
+ *
  * @package RegularLabs\Library\Condition
  */
 abstract class Easyblog extends Condition

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -15,6 +15,7 @@ defined('_JEXEC') or die;
 
 /**
  * Class EasyblogCategory
+ *
  * @package RegularLabs\Library\Condition
  */
 class EasyblogCategory extends Easyblog
@@ -44,7 +45,7 @@ class EasyblogCategory extends Easyblog
         {
             return $this->_(false);
         }
-        else if ( ! $pass && $this->params->inc_children)
+        elseif ( ! $pass && $this->params->inc_children)
         {
             foreach ($cats as $cat)
             {

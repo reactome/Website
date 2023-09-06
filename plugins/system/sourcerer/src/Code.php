@@ -1,12 +1,12 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         9.5.2
+ * @version         9.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://regularlabs.com
+ * @link            https://regularlabs.com
  * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
- * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @license         GNU General Public License version 2 or later
  */
 
 namespace RegularLabs\Plugin\System\Sourcerer;
@@ -41,7 +41,8 @@ class Code
 
         foreach ($src_diff_variables as $src_diff_key)
         {
-            if (in_array($src_diff_key, ['Itemid', 'mainframe', 'app', 'document', 'doc', 'database', 'db', 'user'])
+            if (
+                in_array($src_diff_key, ['Itemid', 'mainframe', 'app', 'document', 'doc', 'database', 'db', 'user'])
                 || substr($src_diff_key, 0, 4) == 'src_'
             )
             {

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -18,6 +18,7 @@ use Normalizer;
 
 /**
  * Class StringHelper
+ *
  * @package RegularLabs\Library
  */
 class StringHelper extends \Joomla\String\StringHelper
@@ -382,7 +383,8 @@ class StringHelper extends \Joomla\String\StringHelper
         $prefix_length = strlen($prefix);
         $start         = 0;
 
-        if ($keep_leading_slash
+        if (
+            $keep_leading_slash
             && $prefix[0] !== '/'
             && $string[0] == '/'
         )
@@ -458,6 +460,7 @@ class StringHelper extends \Joomla\String\StringHelper
         }
 
         $new_array = [];
+
         foreach ($array as $i => $part)
         {
             // First element, add to new array

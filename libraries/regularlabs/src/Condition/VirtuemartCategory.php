@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -18,6 +18,7 @@ use RegularLabs\Library\RegEx;
 
 /**
  * Class VirtuemartCategory
+ *
  * @package RegularLabs\Library\Condition
  */
 class VirtuemartCategory extends Virtuemart
@@ -42,6 +43,7 @@ class VirtuemartCategory extends Virtuemart
         }
 
         $cats = [];
+
         if ($this->request->view == 'productdetails' && $this->request->item_id)
         {
             $query = $this->db->getQuery(true)
@@ -51,9 +53,10 @@ class VirtuemartCategory extends Virtuemart
             $this->db->setQuery($query);
             $cats = $this->db->loadColumn();
         }
-        else if ($this->request->category_id)
+        elseif ($this->request->category_id)
         {
             $cats = $this->request->category_id;
+
             if ( ! is_numeric($cats))
             {
                 $query = $this->db->getQuery(true)
@@ -64,6 +67,7 @@ class VirtuemartCategory extends Virtuemart
                 $config = $this->db->loadResult();
                 $lang   = substr($config, strpos($config, 'vmlang='));
                 $lang   = substr($lang, 0, strpos($lang, '|'));
+
                 if (RegEx::match('"([^"]*_[^"]*)"', $lang, $lang))
                 {
                     $lang = $lang[1];

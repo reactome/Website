@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         12.3.6
+ * @version         12.6.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -76,6 +76,7 @@ class Link
             {
                 $auto_titles = $data['auto_titles'] ?? $params->auto_titles;
                 $title_case  = $data['title_case'] ?? $params->title_case;
+
                 if ($auto_titles)
                 {
                     $data['title'] = File::getTitle($attributes->href, $title_case);
@@ -87,6 +88,7 @@ class Link
                 $data['retinaurl'] = 'false';
             }
         }
+
         unset($data['auto_titles']);
 
         // Force/overrule certain data values
@@ -218,12 +220,14 @@ class Link
         {
             $attributes->href = self::cleanUrl($tag->url);
         }
+
         unset($tag->url);
 
         if ( ! empty($tag->target))
         {
             $attributes->target = $tag->target;
         }
+
         unset($tag->target);
 
         $extra = '';
@@ -251,6 +255,7 @@ class Link
 
         // move onSomething params to attributes, except the modal callbacks
         $callbacks = ['onopen', 'onload', 'oncomplete', 'oncleanup', 'onclosed'];
+
         foreach ($tag as $key => $val)
         {
             if (

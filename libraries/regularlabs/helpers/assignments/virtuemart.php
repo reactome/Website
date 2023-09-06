@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -54,6 +54,7 @@ class RLAssignmentsVirtueMart extends RLAssignment
         }
 
         $cats = [];
+
         if ($this->request->view == 'productdetails' && $this->request->item_id)
         {
             $query = $this->db->getQuery(true)
@@ -63,9 +64,10 @@ class RLAssignmentsVirtueMart extends RLAssignment
             $this->db->setQuery($query);
             $cats = $this->db->loadColumn();
         }
-        else if ($this->request->category_id)
+        elseif ($this->request->category_id)
         {
             $cats = $this->request->category_id;
+
             if ( ! is_numeric($cats))
             {
                 $query = $this->db->getQuery(true)
@@ -76,6 +78,7 @@ class RLAssignmentsVirtueMart extends RLAssignment
                 $config = $this->db->loadResult();
                 $lang   = substr($config, strpos($config, 'vmlang='));
                 $lang   = substr($lang, 0, strpos($lang, '|'));
+
                 if (preg_match('#"([^"]*_[^"]*)"#', $lang, $lang))
                 {
                     $lang = $lang[1];

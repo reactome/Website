@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -24,6 +24,7 @@ use RegularLabs\Library\RegEx;
 
 /**
  * Class Php
+ *
  * @package RegularLabs\Library\Condition
  */
 class Php extends Condition
@@ -114,6 +115,7 @@ class Php extends Condition
         }
 
         $pass = false;
+
         foreach ($this->selection as $php)
         {
             // replace \n with newline and other fix stuff

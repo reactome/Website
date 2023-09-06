@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -239,8 +239,10 @@ class PlgSystemRegularLabs extends JPlugin
             return;
         }
 
-        if (strpos($html, '&amp;quot;rl-code&amp;quot;') === false
-            && strpos($html, '&amp;quot;rl_code&amp;quot;') === false)
+        if (
+            strpos($html, '&amp;quot;rl-code&amp;quot;') === false
+            && strpos($html, '&amp;quot;rl_code&amp;quot;') === false
+        )
         {
             return;
         }

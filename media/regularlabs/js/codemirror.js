@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -12,11 +12,11 @@
 
 if (typeof window.RegularLabsCodeMirror === 'undefined'
     || typeof RegularLabsCodeMirror.version === 'undefined'
-    || RegularLabsCodeMirror.version < '23.7.2101') {
+    || RegularLabsCodeMirror.version < '23.9.3039') {
 
     (function($) {
         window.RegularLabsCodeMirror = {
-            version: '23.7.2101',
+            version: '23.9.3039',
 
             init: function(id) {
                 if ( ! $(`#rl_codemirror_${id} .CodeMirror`).length) {
@@ -69,16 +69,22 @@ if (typeof window.RegularLabsCodeMirror === 'undefined'
         function dragTracker(options) {
 
             var ep = Element.prototype;
-            if ( ! ep.matches) ep.matches = ep.msMatchesSelector || ep.webkitMatchesSelector;
-            if ( ! ep.closest) ep.closest = function(s) {
-                var node = this;
-                do {
-                    if (node.matches(s)) return node;
-                    node = node.tagName === 'svg' ? node.parentNode : node.parentElement;
-                } while (node);
+            if ( ! ep.matches) {
+                ep.matches = ep.msMatchesSelector || ep.webkitMatchesSelector;
+            }
+            if ( ! ep.closest) {
+                ep.closest = function(s) {
+                    var node = this;
+                    do {
+                        if (node.matches(s)) {
+                            return node;
+                        }
+                        node = node.tagName === 'svg' ? node.parentNode : node.parentElement;
+                    } while (node);
 
-                return null;
-            };
+                    return null;
+                };
+            }
 
             options            = options || {};
             var container      = options.container || document.documentElement,

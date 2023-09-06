@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -21,6 +21,7 @@ jimport('joomla.filesystem.file');
 
 /**
  * Class Article
+ *
  * @package RegularLabs\Library
  */
 class Article
@@ -53,7 +54,9 @@ class Article
         $custom_selects = ! empty($selects);
 
         $query = $db->getQuery(true)
-            ->select($custom_selects ? $selects :
+            ->select($custom_selects
+                ? $selects
+                :
                 [
                     'a.id', 'a.asset_id', 'a.title', 'a.alias', 'a.introtext', 'a.fulltext',
                     'a.state', 'a.catid', 'a.created', 'a.created_by', 'a.created_by_alias',
@@ -90,6 +93,7 @@ class Article
                 $db->quoteName('c.lft', 'category_ordering'),
             ]);
         }
+
         $query->innerJoin($db->quoteName('#__categories', 'c') . ' ON ' . $db->quoteName('c.id') . ' = ' . $db->quoteName('a.catid'))
             ->where($db->quoteName('c.published') . ' > 0');
 
@@ -98,6 +102,7 @@ class Article
         {
             $query->select($db->quoteName('u.name', 'author'));
         }
+
         $query->join('LEFT', $db->quoteName('#__users', 'u') . ' ON ' . $db->quoteName('u.id') . ' = ' . $db->quoteName('a.created_by'));
 
         // Join over the categories to get parent category titles
@@ -110,6 +115,7 @@ class Article
                 $db->quoteName('parent.alias', 'parent_alias'),
             ]);
         }
+
         $query->join('LEFT', $db->quoteName('#__categories', 'parent') . ' ON ' . $db->quoteName('parent.id') . ' = ' . $db->quoteName('c.parent_id'));
 
         // Join on voting table
@@ -120,6 +126,7 @@ class Article
                 $db->quoteName('v.rating_count', 'rating_count'),
             ]);
         }
+
         $query->join('LEFT', $db->quoteName('#__content_rating', 'v') . ' ON ' . $db->quoteName('v.content_id') . ' = ' . $db->quoteName('a.id'));
 
         if ( ! $get_unpublished
@@ -279,8 +286,11 @@ class Article
         if ($has_article_texts && $text_same_as_article_text)
         {
             $splitter = '͞';
-            if (strpos($article->introtext, $splitter) !== false
-                || strpos($article->fulltext, $splitter) !== false)
+
+            if (
+                strpos($article->introtext, $splitter) !== false
+                || strpos($article->fulltext, $splitter) !== false
+            )
             {
                 $splitter = 'Ͽ';
             }

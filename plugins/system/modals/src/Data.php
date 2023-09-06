@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         12.3.6
+ * @version         12.6.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -25,6 +25,7 @@ class Data
         $params = Params::get();
 
         $string = '';
+
         foreach ($attributes as $key => $val)
         {
             $key = trim($key);
@@ -127,6 +128,7 @@ class Data
         }
 
         $data = [];
+
         foreach ($dat as $key => $val)
         {
             if ( ! $str = self::flattenDataAttribute($key, $val))

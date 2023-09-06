@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -17,6 +17,7 @@ if ( ! class_exists('RegularLabs\Library\SystemPlugin'))
 {
     /**
      * Class Plugin
+     *
      * @package    RegularLabs\Library
      * @deprecated Use SystemPlugin
      */
@@ -28,6 +29,7 @@ else
 {
     /**
      * Class Plugin
+     *
      * @package    RegularLabs\Library
      * @deprecated Use SystemPlugin
      */

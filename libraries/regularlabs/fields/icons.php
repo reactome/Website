@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -28,6 +28,7 @@ class JFormFieldRL_Icons extends Field
     protected function getInput()
     {
         $value = $this->value;
+
         if ( ! is_array($value))
         {
             $value = explode(',', $value);

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -17,6 +17,7 @@ use Joomla\CMS\Factory as JFactory;
 
 /**
  * Class DB
+ *
  * @package RegularLabs\Library
  */
 class DB
@@ -112,6 +113,16 @@ class DB
     public static function getOperators()
     {
         return ['!NOT!', '!=', '!', '<>', '<=', '<', '>=', '>', '=', '=='];
+    }
+
+    public static function getTableList()
+    {
+        if ( ! is_null(self::$available_tables))
+        {
+            return self::$available_tables;
+        }
+
+        return JFactory::getDbo()->getTableList();
     }
 
     /**
@@ -233,15 +244,5 @@ class DB
         self::$tables[$table] = in_array($table, $all_tables);
 
         return self::$tables[$table];
-    }
-
-    public static function getTableList()
-    {
-        if ( ! is_null(self::$available_tables))
-        {
-            return self::$available_tables;
-        }
-
-        return JFactory::getDbo()->getTableList();
     }
 }

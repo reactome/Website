@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -14,6 +14,7 @@ defined('JPATH_BASE') or die;
 /**
  * Layout variables
  * -----------------
+ *
  * @var array   $displayData
  * @var string  $field
  * @var string  $autocomplete   Autocomplete attribute for the field.
@@ -89,6 +90,7 @@ if ($prepend)
 {
     $classes[] = 'input-prepend';
 }
+
 if ($append)
 {
     $classes[] = 'input-append';

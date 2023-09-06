@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -58,20 +58,23 @@ class JFormFieldRL_AssignmentSelection extends Field
         $label = RL_String::html_entity_decoder(JText::_($label));
 
         $html[] = '</div>';
+
         if ($use_main_toggle)
         {
             $html[] = $toggler->getInput(['div' => 1, 'param' => 'show_assignments|' . $param_name, 'value' => '1|1,2']);
         }
 
         $class = 'well well-small rl_well';
+
         if ($this->value === 1)
         {
             $class .= ' alert-success';
         }
-        else if ($this->value === 2)
+        elseif ($this->value === 2)
         {
             $class .= ' alert-error';
         }
+
         $html[] = '<div class="' . $class . '">';
 
         $user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();

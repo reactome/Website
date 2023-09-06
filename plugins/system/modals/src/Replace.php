@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         12.3.6
+ * @version         12.6.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -154,7 +154,8 @@ class Replace
             }
 
             // ignore if link is external or an image
-            if (RL_File::isExternal($attributes->href)
+            if (
+                RL_File::isExternal($attributes->href)
                 || RL_File::isMedia($attributes->href, $params->mediafiles)
                 || RL_File::isVideo($attributes->href)
             )

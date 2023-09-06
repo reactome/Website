@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -197,6 +197,7 @@ class SearchModelSearch extends JModel
             /* >>> ADDED: Run content plugins over results */
             $params = JFactory::getApplication()->getParams('com_content');
             $params->set('rl_search', 1);
+
             foreach ($this->_data as $item)
             {
                 if (empty($item->text))

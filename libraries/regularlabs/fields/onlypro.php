@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -28,18 +28,21 @@ class JFormFieldRL_OnlyPro extends Field
     protected function getExtensionName()
     {
         $extension = $this->form->getValue('element');
+
         if ($extension)
         {
             return $extension;
         }
 
         $extension = JFactory::getApplication()->input->get('component');
+
         if ($extension)
         {
             return str_replace('com_', '', $extension);
         }
 
         $extension = JFactory::getApplication()->input->get('folder');
+
         if ($extension)
         {
             $extension = explode('.', $extension);

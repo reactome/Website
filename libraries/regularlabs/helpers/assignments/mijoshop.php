@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -29,6 +29,7 @@ class RLAssignmentsMijoShop extends RLAssignment
         $input = JFactory::getApplication()->input;
 
         $category_id = $input->getCmd('path', 0);
+
         if (strpos($category_id, '_'))
         {
             $category_id_parts = explode('_', $category_id);
@@ -40,9 +41,11 @@ class RLAssignmentsMijoShop extends RLAssignment
         $this->request->id          = ($this->request->item_id) ? $this->request->item_id : $this->request->category_id;
 
         $view = $input->getCmd('view', '');
+
         if (empty($view))
         {
             $mijoshop = JPATH_ROOT . '/components/com_mijoshop/mijoshop/mijoshop.php';
+
             if ( ! file_exists($mijoshop))
             {
                 return;
@@ -77,11 +80,12 @@ class RLAssignmentsMijoShop extends RLAssignment
         }
 
         $cats = [];
+
         if ($this->request->category_id)
         {
             $cats = $this->request->category_id;
         }
-        else if ($this->request->item_id)
+        elseif ($this->request->item_id)
         {
             $query = $this->db->getQuery(true)
                 ->select('c.category_id')
@@ -99,7 +103,7 @@ class RLAssignmentsMijoShop extends RLAssignment
         {
             return $this->pass(false);
         }
-        else if ( ! $pass && $this->params->inc_children)
+        elseif ( ! $pass && $this->params->inc_children)
         {
             foreach ($cats as $cat)
             {

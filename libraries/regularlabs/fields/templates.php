@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -66,6 +66,7 @@ class JFormFieldRL_Templates extends Field
         foreach ($templates as $styles)
         {
             $level = 0;
+
             foreach ($styles as $style)
             {
                 $style->level = $level;

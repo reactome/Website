@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -24,6 +24,7 @@ use Joomla\CMS\Uri\Uri as JUri;
 
 /**
  * Class File
+ *
  * @package RegularLabs\Library
  */
 class File
@@ -161,7 +162,8 @@ class File
 
         // Skip if folder is not empty yet
         if ( ! empty(JFolder::files($path, '.', false, true, [], []))
-            || ! empty(JFolder::folders($path, '.', false, true, [], [])))
+            || ! empty(JFolder::folders($path, '.', false, true, [], []))
+        )
         {
             return true;
         }
@@ -522,6 +524,7 @@ class File
 
         // If the file is in the template folder
         $file_found = self::getFileUrl('/templates/' . $template . '/' . $type . '/' . $file);
+
         if ($file_found)
         {
             return $file_found;

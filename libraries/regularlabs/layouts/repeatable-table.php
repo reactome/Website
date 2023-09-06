@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -14,6 +14,7 @@ defined('_JEXEC') or die;
 /**
  * Layout variables
  * -----------------
+ *
  * @var array  $displayData
  * @var JForm  $tmpl            The Empty form for template
  * @var array  $forms           Array of JForm instances for render the rows
@@ -49,6 +50,7 @@ if (isset($fields[$id . '__' . $fieldname . 'X__field_comparison']))
     $table_head[] = '<th style="width:10%;">' . strip_tags($fields[$id . '__' . $fieldname . 'X__field_comparison']->label) . '</th>';
     $column_count++;
 }
+
 $table_head[] = '<th>' . strip_tags($fields[$id . '__' . $fieldname . 'X__field_value']->label) . '</th>';
 
 $sublayout = 'section';
@@ -61,13 +63,13 @@ JFactory::getDocument()->addStyleDeclaration(
 <div class="row-fluid">
     <div class="subform-repeatable-wrapper subform-table-layout subform-table-sublayout-<?php echo $sublayout; ?> form-vertical">
         <div
-                class="subform-repeatable"
-                data-bt-add="a.group-add-<?php echo $unique_subform_id; ?>"
-                data-bt-remove="a.group-remove-<?php echo $unique_subform_id; ?>"
-                data-bt-move="a.group-move-<?php echo $unique_subform_id; ?>"
-                data-repeatable-element="tr.subform-repeatable-group-<?php echo $unique_subform_id; ?>"
-                data-rows-container="tbody.rows-container-<?php echo $unique_subform_id; ?>"
-                data-minimum="<?php echo $min; ?>" data-maximum="<?php echo $max; ?>"
+            class="subform-repeatable"
+            data-bt-add="a.group-add-<?php echo $unique_subform_id; ?>"
+            data-bt-remove="a.group-remove-<?php echo $unique_subform_id; ?>"
+            data-bt-move="a.group-move-<?php echo $unique_subform_id; ?>"
+            data-repeatable-element="tr.subform-repeatable-group-<?php echo $unique_subform_id; ?>"
+            data-rows-container="tbody.rows-container-<?php echo $unique_subform_id; ?>"
+            data-minimum="<?php echo $min; ?>" data-maximum="<?php echo $max; ?>"
         >
             <table class="adminlist table table-striped ">
                 <thead>
@@ -98,8 +100,8 @@ JFactory::getDocument()->addStyleDeclaration(
                         <th colspan="<?php echo $column_count; ?>">
                             <div class="btn-group btn-group-full">
                                 <a
-                                        class="btn btn-mini btn-full button btn-success group-add group-add-<?php echo $unique_subform_id; ?>"
-                                        aria-label="<?php echo JText::_('JGLOBAL_FIELD_ADD'); ?>"
+                                    class="btn btn-mini btn-full button btn-success group-add group-add-<?php echo $unique_subform_id; ?>"
+                                    aria-label="<?php echo JText::_('JGLOBAL_FIELD_ADD'); ?>"
                                 >
                                     <span class="icon-plus" aria-hidden="true"></span>
                                 </a>

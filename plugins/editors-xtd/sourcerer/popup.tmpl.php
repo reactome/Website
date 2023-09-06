@@ -1,12 +1,12 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         9.5.2
+ * @version         9.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://regularlabs.com
+ * @link            https://regularlabs.com
  * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
- * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @license         GNU General Public License version 2 or later
  */
 
 defined('_JEXEC') or die;
@@ -27,7 +27,7 @@ $editor_plugin = JPluginHelper::getPlugin('editors', 'codemirror');
 
 if (empty($editor_plugin))
 {
-    JFactory::getApplication()->enqueueMessage(JText::sprintf('SRC_ERROR_CODEMIRROR_DISABLED', '<a href="index.php?option=com_plugins&filter_folder=editors&filter_search=codemirror" target="_blank">', '</a>'), 'error');
+    JFactory::getApplication()->enqueueMessage(JText::sprintf('RL_ERROR_CODEMIRROR_DISABLED', JText::_('SOURCERER'), '<a href="index.php?option=com_plugins&filter_folder=editors&filter_search=codemirror" target="_blank">', '</a>'), 'error');
 
     return '';
 }

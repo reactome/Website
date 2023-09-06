@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -19,6 +19,7 @@ use RegularLabs\Library\Document as RL_Document;
 
 /**
  * Class Menu
+ *
  * @package RegularLabs\Library\Condition
  */
 class Menu extends Condition
@@ -52,6 +53,7 @@ class Menu extends Condition
 
         $parent_ids = $this->getMenuParentIds($this->request->Itemid);
         $parent_ids = array_diff($parent_ids, [1]);
+
         foreach ($parent_ids as $id)
         {
             if ( ! in_array($id, $this->selection))

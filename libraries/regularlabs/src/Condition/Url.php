@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -20,6 +20,7 @@ use RegularLabs\Library\StringHelper;
 
 /**
  * Class Url
+ *
  * @package RegularLabs\Library\Condition
  */
 class Url extends Condition
@@ -51,6 +52,7 @@ class Url extends Condition
         $urls = array_unique($urls);
 
         $pass = false;
+
         foreach ($urls as $url)
         {
             if ( ! $casesensitive)
@@ -61,6 +63,7 @@ class Url extends Condition
             foreach ($this->selection as $selection)
             {
                 $selection = trim($selection);
+
                 if ($selection == '')
                 {
                     continue;
@@ -69,6 +72,7 @@ class Url extends Condition
                 if ($regex)
                 {
                     $url_part = str_replace(['#', '&amp;'], ['\#', '(&amp;|&)'], $selection);
+
                     if (@RegEx::match($url_part, $url, $match, $casesensitive ? 's' : 'si'))
                     {
                         $pass = true;

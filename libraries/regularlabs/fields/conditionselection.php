@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -65,11 +65,12 @@ class JFormFieldRL_ConditionSelection extends Field
         }
 
         $class = 'well well-small rl_well';
+
         if ($this->value === 1)
         {
             $class .= ' alert-success';
         }
-        else if ($this->value === 2)
+        elseif ($this->value === 2)
         {
             $class .= ' alert-error';
         }

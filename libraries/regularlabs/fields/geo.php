@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -2602,6 +2602,7 @@ class JFormFieldRL_Geo extends Field
         // US,MD,Maryland,Maryland
         $regex = '(\n[^,]*),([^\n]*), name for ([^-]*)-([^,]*),([^\n]*\n)';
         RL_RegEx::match($regex, $regions, $match);
+
         while ($match)
         {
             $regions = RL_RegEx::replace($regex, '\1,\2,\5\3,\4,\5', $regions);
@@ -2647,6 +2648,7 @@ class JFormFieldRL_Geo extends Field
     public function getOptions($group = 'countries', $use_names = '')
     {
         $options = [];
+
         foreach ($this->{$group} as $key => $val)
         {
             if ( ! $val)

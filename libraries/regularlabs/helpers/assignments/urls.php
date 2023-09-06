@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -51,11 +51,13 @@ class RLAssignmentsURLs extends RLAssignment
         $urls = array_unique($urls);
 
         $pass = false;
+
         foreach ($urls as $url)
         {
             foreach ($this->selection as $s)
             {
                 $s = trim($s);
+
                 if ($s == '')
                 {
                     continue;
@@ -65,6 +67,7 @@ class RLAssignmentsURLs extends RLAssignment
                 {
                     $url_part = str_replace(['#', '&amp;'], ['\#', '(&amp;|&)'], $s);
                     $s        = '#' . $url_part . '#si';
+
                     if (@preg_match($s . 'u', $url) || @preg_match($s, $url))
                     {
                         $pass = true;

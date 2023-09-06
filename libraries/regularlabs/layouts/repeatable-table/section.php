@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -14,6 +14,7 @@ defined('_JEXEC') or die;
 /**
  * Layout variables
  * -----------------
+ *
  * @var array  $displayData
  * @var JForm  $form      The form instance for render the section
  * @var string $basegroup The base group name
@@ -27,9 +28,9 @@ $fields = $form->getGroup('');
 ?>
 
 <tr
-        class="subform-repeatable-group subform-repeatable-group-<?php echo $unique_subform_id; ?>"
-        data-base-name="<?php echo $basegroup; ?>"
-        data-group="<?php echo $group; ?>"
+    class="subform-repeatable-group subform-repeatable-group-<?php echo $unique_subform_id; ?>"
+    data-base-name="<?php echo $basegroup; ?>"
+    data-group="<?php echo $group; ?>"
 >
     <td>
         <a class="sortable-handler group-move group-move-<?php echo $unique_subform_id; ?>" style="cursor: move;" aria-label="<?php echo JText::_('JGLOBAL_FIELD_MOVE'); ?>">

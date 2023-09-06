@@ -1,12 +1,12 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         9.5.2
+ * @version         9.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://regularlabs.com
+ * @link            https://regularlabs.com
  * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
- * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @license         GNU General Public License version 2 or later
  */
 
 namespace RegularLabs\Plugin\System\Sourcerer;
@@ -96,6 +96,7 @@ class Replace
         }
 
         $components = Area::get($string, 'component');
+
         foreach ($components as $component)
         {
             self::replace($component[1], 'components', '');
@@ -291,6 +292,7 @@ class Replace
         $forbidden_tags_array = [...$forbidden_tags_array];
 
         $has_forbidden_tags = false;
+
         foreach ($forbidden_tags_array as $forbidden_tag)
         {
             if ( ! (strpos($string, '<' . $forbidden_tag) == false))
@@ -350,6 +352,7 @@ class Replace
         }
 
         $type_ext = '_' . $type;
+
         if ($type == 'all')
         {
             $type_ext = '';
@@ -529,6 +532,7 @@ class Replace
 
             return;
         }
+
         if ( ! $security_pass)
         {
             // replace source block content with HTML comment
@@ -573,6 +577,7 @@ class Replace
         if ( ! empty($functions))
         {
             $functionsArray = [];
+
             foreach ($functions as $function)
             {
                 $functionsArray[] = $function[1] . ')';

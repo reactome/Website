@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -15,6 +15,7 @@ defined('_JEXEC') or die;
 
 /**
  * Class PluginTag
+ *
  * @package RegularLabs\Library
  */
 class PluginTag
@@ -202,6 +203,7 @@ class PluginTag
         {
             // spit part into key and val by equal sign
             $keyval = explode($temp_equal, $keyval, 2);
+
             if (isset($keyval[1]))
             {
                 $keyval[1] = str_replace([$temp_separator, $temp_equal], [$separator, $equal], $keyval[1]);
@@ -336,6 +338,7 @@ class PluginTag
             {
                 $attribs->width .= 'px';
             }
+
             $style[] = 'width:' . $attribs->width;
         }
 
@@ -345,6 +348,7 @@ class PluginTag
             {
                 $attribs->height .= 'px';
             }
+
             $style[] = 'height:' . $attribs->height;
         }
 
@@ -528,6 +532,7 @@ class PluginTag
         $attributes = '(?:\s+[a-z0-9-_]+' . $value . ')+';
 
         $required_attributes = ArrayHelper::toArray($required_attributes);
+
         if ( ! empty($required_attributes))
         {
             $attributes = '(?:' . $attributes . ')?' . '(?:\s+' . implode('|', $required_attributes) . ')' . $value . '(?:' . $attributes . ')?';
@@ -661,6 +666,7 @@ class PluginTag
                 {
                     return;
                 }
+
                 $char = '\\' . $char;
             }, $keep_escaped_chars);
         }
@@ -688,7 +694,8 @@ class PluginTag
 
         self::unprotectSpecialChars($value, $keep_escaped_chars);
 
-        if (is_numeric($value)
+        if (
+            is_numeric($value)
             && (
                 in_array($match['key'], $known_boolean_keys)
                 || in_array(strtolower($match['key']), $known_boolean_keys)

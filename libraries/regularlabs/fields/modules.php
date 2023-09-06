@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -56,32 +56,40 @@ class JFormFieldRL_Modules extends Field
         $selected_title = '';
 
         $p = 0;
+
         foreach ($modules as $item)
         {
             if ($p !== $item->position)
             {
                 $pos = $item->position;
+
                 if ($pos == '')
                 {
                     $pos = ':: ' . JText::_('JNONE') . ' ::';
                 }
+
                 $options[] = JHtml::_('select.option', '-', '[ ' . $pos . ' ]', 'value', 'text', true);
             }
+
             $p = $item->position;
 
             $item->title = $item->title;
+
             if ($showtype)
             {
                 $item->title .= ' [' . $item->module . ']';
             }
+
             if ($showinput || $showid)
             {
                 $item->title .= ' [' . $item->id . ']';
             }
+
             if ($item->language && $item->language != '*')
             {
                 $item->title .= ' (' . $item->language . ')';
             }
+
             $item->title = RL_Form::prepareSelectItem($item->title, $item->published);
 
             $options[] = JHtml::_('select.option', $item->id, $item->title);
@@ -105,12 +113,15 @@ class JFormFieldRL_Modules extends Field
             {
                 $onchange = 'if ( this.value ) { ' . $this->id . '.value=this.value;' . $this->id . '_text.value=this.options[this.selectedIndex].innerHTML.replace( /^((&|&amp;|&#160;)nbsp;|-)*/gm, \'\' ).trim(); } this.value=\'\';';
             }
+
             $attribs = 'class="inputbox" onchange="' . $onchange . '"';
 
             $html = '<table cellpadding="0" cellspacing="0"><tr><td style="padding: 0px;">' . "\n";
+
             if ( ! $multiple)
             {
                 $val_name = $this->value;
+
                 if ($this->value)
                 {
                     foreach ($modules as $item)
@@ -118,15 +129,18 @@ class JFormFieldRL_Modules extends Field
                         if ($item->id == $this->value)
                         {
                             $val_name = $item->title;
+
                             if ($showtype)
                             {
                                 $val_name .= ' [' . $item->module . ']';
                             }
+
                             $val_name .= ' [' . $this->value . ']';
                             break;
                         }
                     }
                 }
+
                 $html .= '<input type="text" id="' . $this->id . '_text" value="' . $val_name . '" class="inputbox" ' . $size . ' disabled="disabled">';
                 $html .= '<input type="hidden" name="' . $this->name . '" id="' . $this->id . '" value="' . $this->value . '">';
             }
@@ -134,6 +148,7 @@ class JFormFieldRL_Modules extends Field
             {
                 $html .= '<input type="text" name="' . $this->name . '" id="' . $this->id . '" value="' . $this->value . '" class="inputbox" ' . $size . '>';
             }
+
             $html .= '</td><td style="padding: 0px;"padding-left: 5px;>' . "\n";
             $html .= JHtml::_('select.genericlist', $options, '', $attribs, 'value', 'text', '', '');
             $html .= '</td></tr></table>' . "\n";

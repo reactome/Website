@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -25,6 +25,7 @@ use RegularLabs\Library\ParametersNew as Parameters;
 
 /**
  * Class Plugin
+ *
  * @package RegularLabs\Library
  */
 class SystemPlugin extends JCMSPlugin
@@ -464,7 +465,8 @@ class SystemPlugin extends JCMSPlugin
 
         // allow in frontend?
         if ( ! $this->_enable_in_frontend
-            && ! $this->_is_admin)
+            && ! $this->_is_admin
+        )
         {
             return false;
         }
@@ -474,21 +476,26 @@ class SystemPlugin extends JCMSPlugin
         // allow in admin?
         if ( ! $this->_enable_in_admin
             && $this->_is_admin
-            && ( ! isset($params->enable_admin) || ! $params->enable_admin))
+            && ( ! isset($params->enable_admin) || ! $params->enable_admin)
+        )
         {
             return false;
         }
 
         // disabled by url?
-        if ($this->_can_disable_by_url
-            && Protect::isDisabledByUrl($this->_alias))
+        if (
+            $this->_can_disable_by_url
+            && Protect::isDisabledByUrl($this->_alias)
+        )
         {
             return false;
         }
 
         // disabled by component?
-        if ($this->_disable_on_components
-            && Protect::isRestrictedComponent($params->disabled_components ?? [], 'component'))
+        if (
+            $this->_disable_on_components
+            && Protect::isRestrictedComponent($params->disabled_components ?? [], 'component')
+        )
         {
             return false;
         }
@@ -570,6 +577,7 @@ class SystemPlugin extends JCMSPlugin
 
         // Check if message is not already in queue
         $messagequeue = JFactory::getApplication()->getMessageQueue();
+
         foreach ($messagequeue as $message)
         {
             if ($message['message'] == $text)

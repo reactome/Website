@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -22,6 +22,7 @@ jimport('joomla.filesystem.file');
 
 /**
  * Class ParametersNew
+ *
  * @package RegularLabs\Library
  */
 class ParametersNew
@@ -343,9 +344,11 @@ class ParametersNew
         xml_parser_free($xml_parser);
 
         $default = $default ? strtoupper($default) : 'DEFAULT';
+
         foreach ($fields as $field)
         {
-            if ($field['tag'] != 'FIELD'
+            if (
+                $field['tag'] != 'FIELD'
                 || ! isset($field['attributes'])
                 || ! isset($field['attributes']['NAME'])
                 || $field['attributes']['NAME'] == ''

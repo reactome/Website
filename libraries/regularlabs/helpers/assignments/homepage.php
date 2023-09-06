@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -52,7 +52,8 @@ class RLAssignmentsHomePage extends RLAssignment
             // check set values against home menu query items
             foreach ($home->query as $k => $v)
             {
-                if ((isset($this->request->{$k}) && $this->request->{$k} != $v)
+                if (
+                    (isset($this->request->{$k}) && $this->request->{$k} != $v)
                     || (
                         ( ! isset($this->request->{$k}) || in_array($v, ['virtuemart', 'mijoshop']))
                         && JFactory::getApplication()->input->get($k) != $v
@@ -66,7 +67,8 @@ class RLAssignmentsHomePage extends RLAssignment
             // check post values against home menu params
             foreach ($home->params->toObject() as $k => $v)
             {
-                if (($v && isset($_POST[$k]) && $_POST[$k] != $v)
+                if (
+                    ($v && isset($_POST[$k]) && $_POST[$k] != $v)
                     || ( ! $v && isset($_POST[$k]) && $_POST[$k])
                 )
                 {
@@ -92,6 +94,7 @@ class RLAssignmentsHomePage extends RLAssignment
         if ($addlang)
         {
             $sef = $uri->getVar('lang');
+
             if (empty($sef))
             {
                 $langs = array_keys(JLanguageHelper::getLanguages('sef'));
@@ -102,6 +105,7 @@ class RLAssignmentsHomePage extends RLAssignment
                 $path  = preg_replace('#^index\.php/?#', '', $path);
                 $parts = explode('/', $path);
                 $part  = reset($parts);
+
                 if (in_array($part, $langs))
                 {
                     $sef = $part;
@@ -115,6 +119,7 @@ class RLAssignmentsHomePage extends RLAssignment
         }
 
         $query = $uri->toString(['query']);
+
         if (strpos($query, 'option=') === false && strpos($query, 'Itemid=') === false)
         {
             $url = $uri->toString(['host', 'path']);

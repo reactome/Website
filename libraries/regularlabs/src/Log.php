@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -20,6 +20,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel as JModel;
 
 /**
  * Class Log
+ *
  * @package RegularLabs\Library
  */
 class Log
@@ -78,6 +79,7 @@ class Log
     public static function install($message, $context, $type = 'component')
     {
         $languageKey = 'PLG_ACTIONLOG_JOOMLA_' . strtoupper($type) . '_INSTALLED';
+
         if ( ! JFactory::getApplication()->getLanguage()->hasKey($languageKey))
         {
             $languageKey = 'PLG_ACTIONLOG_JOOMLA_EXTENSION_INSTALLED';

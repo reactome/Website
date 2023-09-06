@@ -1,12 +1,12 @@
 <?php
 /**
  * @package         Tabs
- * @version         8.3.1
+ * @version         8.4.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://regularlabs.com
+ * @link            https://regularlabs.com
  * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
- * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @license         GNU General Public License version 2 or later
  */
 
 namespace RegularLabs\Plugin\System\Tabs;
@@ -235,6 +235,7 @@ class Replace
         $id = $alias;
 
         $i = 1;
+
         while (in_array($id, self::$ids))
         {
             $id = $alias . '-' . ++$i;
@@ -364,6 +365,7 @@ class Replace
         $html[] = '<!--googleoff: index-->';
         $html[] = '<a id="rl_tabs-scrollto_' . $items[0]->set . '" class="anchor rl_tabs-scroll nn_tabs-scroll"></a>';
         $html[] = '<ul class="nav nav-tabs" id="set-rl_tabs-' . $items[0]->set . '" role="tablist"' . $ul_extra . '>';
+
         foreach ($items as $item)
         {
             $href            = '#' . $item->id;
@@ -437,7 +439,6 @@ class Replace
 
         return implode("\n", $html);
     }
-
     /* <<< [PRO] <<< */
 
     private static function getParent($set_id, $level)
@@ -630,6 +631,7 @@ class Replace
         self::initSets($sets);
 
         $prefix = '';
+
         foreach ($sets as $items)
         {
             foreach ($items as $item)
@@ -657,6 +659,7 @@ class Replace
         RL_RegEx::matchAll($regex, $string, $matches);
 
         $replace = '</div>';
+
         foreach ($matches as $match)
         {
             $string  = RL_String::replaceOnce($match[0], $replace, $string);
@@ -730,6 +733,7 @@ class Replace
                 $set_keys = [
                     'class', 'open', 'output_title_tag', 'title_tag', 'onclick',
                 ];
+
                 foreach ($set_keys as $key)
                 {
                     $item->{$key} = isset($item->{$key})
@@ -931,6 +935,7 @@ class Replace
             }
 
             $url = $match['url'];
+
             if (strpos($url, 'index.php/') === 0)
             {
                 $url = '/' . $url;
@@ -1010,10 +1015,12 @@ class Replace
 
         $body_attributes = 'role="tabpanel"'
             . ' aria-labelledby="tab-' . $item->id . '"';
+
         if ( ! $item->open)
         {
             $body_attributes .= ' hidden="hidden"';
         }
+
         if ( ! empty($item->body_attributes))
         {
             $body_attributes .= ' ' . $item->body_attributes;

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -76,10 +76,12 @@ class JFormFieldRL_Header extends Field
         {
             $xml     = JApplicationHelper::parseXMLInstallFile(JPATH_SITE . '/' . $xml);
             $version = 0;
+
             if ($xml && isset($xml['version']))
             {
                 $version = $xml['version'];
             }
+
             if ($version)
             {
                 if (strpos($version, 'PRO') !== false)
@@ -87,11 +89,12 @@ class JFormFieldRL_Header extends Field
                     $version = str_replace('PRO', '', $version);
                     $version .= ' <small style="color:green">[PRO]</small>';
                 }
-                else if (strpos($version, 'FREE') !== false)
+                elseif (strpos($version, 'FREE') !== false)
                 {
                     $version = str_replace('FREE', '', $version);
                     $version .= ' <small style="color:green">[FREE]</small>';
                 }
+
                 if ($title)
                 {
                     $title .= ' v';
@@ -100,9 +103,11 @@ class JFormFieldRL_Header extends Field
                 {
                     $title = JText::_('Version') . ' ';
                 }
+
                 $title .= $version;
             }
         }
+
         $html = [];
 
         if ($title)
@@ -112,6 +117,7 @@ class JFormFieldRL_Header extends Field
                 $title = '<a href="' . $url . '" target="_blank" title="'
                     . RL_RegEx::replace('<[^>]*>', '', $title) . '">' . $title . '</a>';
             }
+
             $html[] = '<h4>' . RL_String::html_entity_decoder($title) . '</h4>';
         }
 

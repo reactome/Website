@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         12.3.6
+ * @version         12.6.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -103,6 +103,7 @@ class Pass
         {
             $needles = explode(' ', trim($needles));
         }
+
         if ( ! is_array($haystack))
         {
             $haystack = explode(' ', trim($haystack));
@@ -115,12 +116,14 @@ class Pass
     private static function passURL($url, $param_url)
     {
         $url = trim($url);
+
         if (empty($url))
         {
             return false;
         }
 
         $param_url = trim($param_url);
+
         if (empty($param_url))
         {
             return false;

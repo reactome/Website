@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -51,11 +51,12 @@ class RLAssignmentsRedShop extends RLAssignment
         }
 
         $cats = [];
+
         if ($this->request->category_id)
         {
             $cats = $this->request->category_id;
         }
-        else if ($this->request->item_id)
+        elseif ($this->request->item_id)
         {
             $query = $this->db->getQuery(true)
                 ->select('x.category_id')
@@ -73,7 +74,7 @@ class RLAssignmentsRedShop extends RLAssignment
         {
             return $this->pass(false);
         }
-        else if ( ! $pass && $this->params->inc_children)
+        elseif ( ! $pass && $this->params->inc_children)
         {
             foreach ($cats as $cat)
             {

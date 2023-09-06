@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -22,6 +22,7 @@ jimport('joomla.filesystem.file');
 
 /**
  * Class Protect
+ *
  * @package RegularLabs\Library
  */
 class Protect
@@ -311,7 +312,8 @@ class Protect
             return true;
         }
 
-        if (JFactory::getApplication()->input->get('option') == 'com_acymailing'
+        if (
+            JFactory::getApplication()->input->get('option') == 'com_acymailing'
             && ! in_array(JFactory::getApplication()->input->get('ctrl'), ['user', 'archive'], true)
             && ! in_array(JFactory::getApplication()->input->get('view'), ['user', 'archive'], true)
         )
@@ -779,10 +781,12 @@ class Protect
         foreach ($matches as $match)
         {
             $content = $match[3];
+
             foreach ($tags as $tag)
             {
                 $content = RegEx::replace(RegEx::quote($tag) . '.*?\}', '', $content);
             }
+
             $string = str_replace($match[0], $match[1] . $content . $match[4], $string);
         }
     }

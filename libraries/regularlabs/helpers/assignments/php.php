@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -35,6 +35,7 @@ class RLAssignmentsPHP extends RLAssignment
         }
 
         $pass = false;
+
         foreach ($this->selection as $php)
         {
             // replace \n with newline and other fix stuff
@@ -51,43 +52,53 @@ class RLAssignmentsPHP extends RLAssignment
             if ( ! $article && strpos($php, '$article') !== false)
             {
                 $article = null;
+
                 if ($this->request->option == 'com_content' && $this->request->view == 'article')
                 {
                     $article = $this->getArticleById($this->request->id);
                 }
             }
+
             if ( ! isset($Itemid))
             {
                 $Itemid = JFactory::getApplication()->input->getInt('Itemid', 0);
             }
+
             if ( ! isset($mainframe))
             {
                 $mainframe = JFactory::getApplication();
             }
+
             if ( ! isset($app))
             {
                 $app = JFactory::getApplication();
             }
+
             if ( ! isset($document))
             {
                 $document = JFactory::getDocument();
             }
+
             if ( ! isset($doc))
             {
                 $doc = JFactory::getDocument();
             }
+
             if ( ! isset($database))
             {
                 $database = JFactory::getDbo();
             }
+
             if ( ! isset($db))
             {
                 $db = JFactory::getDbo();
             }
+
             if ( ! isset($user))
             {
                 $user = JFactory::getApplication()->getIdentity() ?: JFactory::getUser();
             }
+
             $php .= ';return true;';
 
             $temp_PHP_func = create_function('&$article, &$Itemid, &$mainframe, &$app, &$document, &$doc, &$database, &$db, &$user', $php);

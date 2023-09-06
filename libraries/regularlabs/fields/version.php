@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -41,6 +41,7 @@ class JFormFieldRL_Version extends Field
             {
                 $xml = 'administrator/modules/' . $this->form->getValue('element') . '/' . $this->form->getValue('element') . '.xml';
             }
+
             if ( ! file_exists(JPATH_SITE . '/' . $xml))
             {
                 return '';

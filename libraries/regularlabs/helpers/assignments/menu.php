@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -53,6 +53,7 @@ class RLAssignmentsMenu extends RLAssignment
 
         $parent_ids = $this->getMenuParentIds($this->request->Itemid);
         $parent_ids = array_diff($parent_ids, [1]);
+
         foreach ($parent_ids as $id)
         {
             if ( ! in_array($id, $this->selection))

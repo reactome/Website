@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -21,6 +21,7 @@ use RegularLabs\Library\ParametersNew as Parameters;
 
 /**
  * Class Condition
+ *
  * @package RegularLabs\Library
  */
 abstract class Condition
@@ -244,6 +245,7 @@ abstract class Condition
         $selections = $this->makeArray($selection ?: $this->selection);
 
         $pass = false;
+
         foreach ($selections as $selection)
         {
             if (empty($selection))
@@ -295,6 +297,7 @@ abstract class Condition
         $selection    = $selection ?: $this->selection;
 
         $pass = false;
+
         foreach ($values as $value)
         {
             if ($caseinsensitive)
@@ -416,7 +419,8 @@ abstract class Condition
         }
 
         // if no id is found, check if menuitem exists to get view and id
-        if (Document::isClient('site')
+        if (
+            Document::isClient('site')
             && ( ! self::$_request->option || ! self::$_request->id)
         )
         {

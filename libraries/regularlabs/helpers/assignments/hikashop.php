@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -49,7 +49,7 @@ class RLAssignmentsHikaShop extends RLAssignment
         {
             return $this->pass(false);
         }
-        else if ( ! $pass && $this->params->inc_children)
+        elseif ( ! $pass && $this->params->inc_children)
         {
             foreach ($cats as $cat)
             {
@@ -68,6 +68,7 @@ class RLAssignmentsHikaShop extends RLAssignment
         }
 
         $type = $this->request->view;
+
         if (
             ($type == 'product' && in_array($this->request->layout, ['contact', 'show']))
             || ($type == 'user' && in_array($this->request->layout, ['cpanel']))

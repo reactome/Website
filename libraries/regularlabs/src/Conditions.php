@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -19,6 +19,7 @@ jimport('joomla.filesystem.file');
 
 /**
  * Class Conditions
+ *
  * @package RegularLabs\Library
  */
 class Conditions
@@ -236,10 +237,12 @@ class Conditions
                 {
                     $object->selection = implode("\n", $object->selection);
                 }
+
                 if (isset($params->conditions['urls_selection_sef']))
                 {
                     $object->selection .= "\n" . $params->conditions['urls_selection_sef'];
                 }
+
                 $object->selection             = trim(str_replace("\r", '', $object->selection));
                 $object->selection             = explode("\n", $object->selection);
                 $object->params->casesensitive = $params->conditions['urls_casesensitive'] ?? false;
@@ -251,6 +254,7 @@ class Conditions
                 {
                     $object->selection = array_merge(self::makeArray($object->selection), self::makeArray($params->conditions['mobile_selection']));
                 }
+
                 if ( ! empty($params->conditions['searchbots_selection']))
                 {
                     $object->selection = array_merge($object->selection, self::makeArray($params->conditions['searchbots_selection']));

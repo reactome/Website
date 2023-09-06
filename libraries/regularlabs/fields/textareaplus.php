@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -46,7 +46,7 @@ class JFormFieldRL_TextAreaPlus extends Field
             // Convert <br> tags so they are not visible when editing
             $this->value = str_replace('<br>', "\n", $this->value);
         }
-        else if ($type == 'regex')
+        elseif ($type == 'regex')
         {
             // Protects the special characters
             $this->value = str_replace('[:REGEX_ENTER:]', '\n', $this->value);

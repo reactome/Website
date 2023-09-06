@@ -1,12 +1,12 @@
 <?php
 /**
  * @package         Sliders
- * @version         8.3.1
+ * @version         8.4.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://regularlabs.com
+ * @link            https://regularlabs.com
  * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
- * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @license         GNU General Public License version 2 or later
  */
 
 namespace RegularLabs\Plugin\System\Sliders;
@@ -214,6 +214,7 @@ class Replace
         $id = $alias;
 
         $i = 1;
+
         while (in_array($id, self::$ids))
         {
             $id = $alias . '-' . ++$i;
@@ -530,6 +531,7 @@ class Replace
         self::initSets($sets);
 
         $prefix = '';
+
         foreach ($sets as $items)
         {
             foreach ($items as $item)
@@ -557,6 +559,7 @@ class Replace
         RL_RegEx::matchAll($regex, $string, $matches);
 
         $replace = '</div>';
+
         foreach ($matches as $match)
         {
             $string  = RL_String::replaceOnce($match[0], $replace, $string);
@@ -630,6 +633,7 @@ class Replace
                 $set_keys = [
                     'class', 'output_title_tag', 'title_tag', 'onclick',
                 ];
+
                 foreach ($set_keys as $key)
                 {
                     $item->{$key} = isset($item->{$key})
@@ -831,6 +835,7 @@ class Replace
             }
 
             $url = $match['url'];
+
             if (strpos($url, 'index.php/') === 0)
             {
                 $url = '/' . $url;
@@ -919,6 +924,7 @@ class Replace
             $html[] = '</div>';
 
             $body_class = 'accordion-body rl_sliders-body nn_sliders-body collapse';
+
             if ($item->open)
             {
                 $body_class .= ' in';
@@ -929,10 +935,12 @@ class Replace
                 . ' aria-labelledby="slider-' . $item->id . '"'
                 . ' id="' . $item->id . '"';
             $panel_attributes = 'class="accordion-inner panel-body"';
+
             if ( ! $item->open)
             {
                 $panel_attributes .= ' hidden="hidden"';
             }
+
             if ( ! empty($item->body_attributes))
             {
                 $body_attributes .= ' ' . $item->body_attributes;

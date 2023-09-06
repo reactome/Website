@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -32,6 +32,7 @@ class JFormFieldRL_Range extends JFormFieldRange
         {
             $this->value = min($this->value, $this->max);
         }
+
         if ( ! empty($this->min))
         {
             $this->value = max($this->value, $this->min);

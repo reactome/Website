@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -25,6 +25,7 @@ JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/
 
 /**
  * Class ConditionContent
+ *
  * @package RegularLabs\Library
  */
 trait ConditionContent
@@ -422,10 +423,12 @@ trait ConditionContent
     {
         $value = trim($value);
 
-        if (in_array($value, [
-            'now()',
-            'JFactory::getDate()',
-        ]))
+        if (
+            in_array($value, [
+                'now()',
+                'JFactory::getDate()',
+            ])
+        )
         {
             if ( ! $apply_offset)
             {

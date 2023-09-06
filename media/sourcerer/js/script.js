@@ -1,11 +1,11 @@
 /**
  * @package         Sourcerer
- * @version         9.5.2
+ * @version         9.8.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
- * @link            http://regularlabs.com
+ * @link            https://regularlabs.com
  * @copyright       Copyright © 2023 Regular Labs All Rights Reserved
- * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @license         GNU General Public License version 2 or later
  */
 
 var RegularLabsSourcererPopup = null;

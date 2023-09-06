@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -47,12 +47,14 @@ class JFormFieldRL_Content extends FieldGroup
 
         // assemble items to the array
         $options = [];
+
         if ($this->get('show_ignore'))
         {
             if (in_array('-1', $this->value))
             {
                 $this->value = ['-1'];
             }
+
             $options[] = JHtml::_('select.option', '-1', '- ' . JText::_('RL_IGNORE') . ' -');
             $options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', true);
         }

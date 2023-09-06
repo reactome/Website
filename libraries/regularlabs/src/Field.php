@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -24,6 +24,7 @@ use SimpleXMLElement;
 
 /**
  * Class Field
+ *
  * @package RegularLabs\Library
  */
 class Field extends JFormField
@@ -170,6 +171,7 @@ class Field extends JFormField
     public function getOptionsByList($list, $extras = [], $levelOffset = 0)
     {
         $options = [];
+
         foreach ($list as $id => $item)
         {
             $options[$id] = $this->getOptionByListItem($item, $extras, $levelOffset);
@@ -209,12 +211,14 @@ class Field extends JFormField
 
         // assemble items to the array
         $options = [];
+
         if ($this->get('show_ignore'))
         {
             if (in_array('-1', $this->value))
             {
                 $this->value = ['-1'];
             }
+
             $options[] = JHtml::_('select.option', '-1', '- ' . JText::_('RL_IGNORE') . ' -', 'value', 'text', 0);
             $options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', 1);
         }

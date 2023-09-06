@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         12.3.6
+ * @version         12.6.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -24,7 +24,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
         static $extensions         = [];
         static $file_string;
         static $min_joomla_version = [3 => '3.9.0', 4 => '4.0'];
-        static $min_php_version    = [3 => '7.4', 4 => '7.4'];
+        static $min_php_version    = [3 => '7.4', 4 => '8.1'];
         static $name;
         static $new_manifest;
         static $package_name;
@@ -82,7 +82,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
                     continue;
                 }
 
-                list($extension, $unused, $language) = explode('/', $path);
+                [$extension, $unused, $language] = explode('/', $path);
 
                 // skip if this is an installed language
                 if (in_array($language, $installed_languages))
@@ -119,7 +119,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
 
         private static function getFolderFromExtensionName($extension)
         {
-            list($type, $name) = explode('_', $extension, 2);
+            [$type, $name] = explode('_', $extension, 2);
             switch ($type)
             {
                 case 'com':
@@ -127,7 +127,7 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
                 case 'mod':
                     return JPATH_ADMINISTRATOR . '/modules/mod_' . $name;
                 case 'plg':
-                    list($folder, $name) = explode('_', $name, 2);
+                    [$folder, $name] = explode('_', $name, 2);
 
                     return JPATH_SITE . '/plugins/' . $folder . '/' . $name;
                 default:
@@ -356,8 +356,10 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
 
             $title2 = JText::_('PKG_RL_LATEST_CHANGES');
 
-            if (static::$previous_version
-                && version_compare(static::$previous_version, static::$current_version, '<'))
+            if (
+                static::$previous_version
+                && version_compare(static::$previous_version, static::$current_version, '<')
+            )
             {
                 $title2 = JText::sprintf('PKG_RL_LATEST_CHANGES_SINCE', $previous_version_simple);
 
@@ -482,7 +484,14 @@ if ( ! class_exists('pkg_modalsInstallerScript'))
 
         private static function getJoomlaVersion()
         {
-            return (int) JVERSION;
+            $version = (int) JVERSION;
+
+            if ($version == 5)
+            {
+                return 4;
+            }
+
+            return $version;
         }
 
         private static function getPackageId($package_name = '')

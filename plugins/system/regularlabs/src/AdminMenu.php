@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -79,7 +79,8 @@ class AdminMenu
             return;
         }
 
-        if (strpos($html, '<ul id="menu"') === false
+        if (
+            strpos($html, '<ul id="menu"') === false
             || (strpos($html, '">Regular Labs ') === false
                 && strpos($html, '" >Regular Labs ') === false)
         )

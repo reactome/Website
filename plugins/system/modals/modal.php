@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modals
- * @version         12.3.6
+ * @version         12.6.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -42,6 +42,7 @@ require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
         <?php
         // Remove the extra loading of another jQuery file (already loaded in parent page)
         $headerdata = JFactory::getDocument()->getHeadData();
+
         foreach ($headerdata['scripts'] as $file => $type)
         {
             if ( ! RL_RegEx::match('/jquery(-(noconflict|migrate))?(\.min)?\.js', $file))
@@ -51,6 +52,7 @@ require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
 
             unset($headerdata['scripts'][$file]);
         }
+
         $headerdata = JFactory::getDocument()->setHeadData($headerdata);
         ?>
         <jdoc:include type="head" />

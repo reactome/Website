@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         23.7.2101
+ * @version         23.9.3039
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            https://regularlabs.com
@@ -30,6 +30,7 @@ class JFormFieldRL_Agents extends Field
     public function getAgents($group = 'os')
     {
         $agents = [];
+
         switch ($group)
         {
             /* Browsers */
@@ -85,6 +86,7 @@ class JFormFieldRL_Agents extends Field
         }
 
         $options = [];
+
         foreach ($agents as $agent)
         {
             $option    = JHtml::_('select.option', $agent[1], $agent[0]);
