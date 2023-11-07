@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2022 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009 - 2023 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -16,6 +16,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Uri\Uri;
 
 /**
  * JCE WYSIWYG Editor Plugin.
@@ -243,7 +244,7 @@ class plgEditorJCE extends CMSPlugin
                     $onclick = $button->get('onclick', '');
 
                     if ($button->get('link') !== '#') {
-                        $href = JUri::base() . $button->get('link');
+                        $href = Uri::base() . $button->get('link');
                     } else {
                         $href = '';
                     }

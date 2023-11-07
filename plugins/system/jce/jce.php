@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @copyright   Copyright (C) 2015 Ryan Demmer. All rights reserved
+ * @copyright   Copyright (C) 2015 - 2023 Ryan Demmer. All rights reserved
  * @copyright   Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved
  * @license     GNU General Public License version 2 or later
  */
+
 defined('JPATH_BASE') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
@@ -28,7 +29,7 @@ class PlgSystemJce extends CMSPlugin
      * @var boolean
      */
     private $mediaLoaded = false;
-    
+
     public function onPlgSystemJceContentPrepareForm($form, $data)
     {
         return $this->onContentPrepareForm($form, $data);
@@ -123,20 +124,24 @@ class PlgSystemJce extends CMSPlugin
         $document = Factory::getDocument();
 
         // must be an html doctype
-        if($document->getType() !== 'html') {
+        if ($document->getType() !== 'html') {
             return true;
         }
 
         // only if enabled
         if ((int) $this->params->get('column_styles', 1)) {
-            $hash = md5_file(__DIR__ . '/css/content.css');
-            $document->addStyleSheet(Uri::root(true) . '/plugins/system/jce/css/content.css?' . $hash);
+            $hash = md5_file(JPATH_SITE . '/media/com_jce/site/css/content.min.css');
+            $document->addStyleSheet(Uri::root(true) . '/media/com_jce/site/css/content.min.css?' . $hash);
         }
+
+        $this->bootEditorPlugins();
+
+        $app->triggerEvent('onWfPluginAfterDispatch');
     }
 
     public function onWfContentPreview($context, &$article, &$params, $page)
     {
-        $article->text = '<style type="text/css">@import url("' . Uri::root(true) . '/plugins/system/jce/css/content.css");</style>' . $article->text;
+        $article->text = '<style type="text/css">@import url("' . Uri::root(true) . '/media/com_jce/site/css/content.min.css");</style>' . $article->text;
     }
 
     private function loadMediaFiles($form, $replace_media_manager = true)
@@ -144,7 +149,7 @@ class PlgSystemJce extends CMSPlugin
         if ($this->mediaLoaded) {
             return;
         }
-        
+
         $app = Factory::getApplication();
 
         $option = $app->input->getCmd('option');
@@ -163,8 +168,8 @@ class PlgSystemJce extends CMSPlugin
         HTMLHelper::_('jquery.framework');
 
         $document = Factory::getDocument();
-        $document->addScript(Uri::root(true) . '/plugins/system/jce/js/media.js', array('version' => 'auto'));
-        $document->addStyleSheet(Uri::root(true) . '/plugins/system/jce/css/media.css', array('version' => 'auto'));
+        $document->addScript(Uri::root(true) . '/media/com_jce/site/js/media.min.js', array('version' => 'auto'));
+        $document->addStyleSheet(Uri::root(true) . '/media/com_jce/site/css/media.min.css', array('version' => 'auto'));
 
         $this->mediaLoaded = true;
     }
@@ -192,14 +197,7 @@ class PlgSystemJce extends CMSPlugin
         $docType = Factory::getDocument()->getType();
 
         // must be an html doctype
-        if($docType !== 'html') {
-            return true;
-        }
-
-        $version = new Joomla\CMS\Version();
-
-        // Joomla 3.10 or later...
-        if (!$version->isCompatible('3.9')) {
+        if ($docType !== 'html') {
             return true;
         }
 
@@ -277,10 +275,8 @@ class PlgSystemJce extends CMSPlugin
         return true;
     }
 
-    public function onBeforeWfEditorLoad()
+    private function getDummyDispatcher()
     {
-        $items = glob(__DIR__ . '/templates/*.php');
-
         $app = Factory::getApplication();
 
         if (method_exists($app, 'getDispatcher')) {
@@ -289,6 +285,62 @@ class PlgSystemJce extends CMSPlugin
             $dispatcher = JEventDispatcher::getInstance();
         }
 
+        return $dispatcher;
+    }
+
+    private function bootEditorPlugins()
+    {
+        $app = Factory::getApplication();
+
+        // only in "site"
+        if ($app->getClientId() !== 0) {
+            return;
+        }
+
+        // Joomla 4+ only
+        if (!method_exists($app, 'bootPlugin')) {
+            return;
+        }
+
+        $plugins = PluginHelper::getPlugin('jce');
+
+        foreach ($plugins as $plugin) {
+            if (!preg_match('/^editor[-_]/', $plugin->name)) {
+                continue;
+            }
+
+            $path = JPATH_PLUGINS . '/jce/' . $plugin->name;
+
+            // only modern plugins
+            if (!is_dir($path . '/src')) {
+                continue;
+            }
+
+            $plugin = $app->bootPlugin($plugin->name, $plugin->type);
+            $plugin->setDispatcher($app->getDispatcher());
+
+            $plugin->registerListeners();
+        }
+    }
+
+    private function bootCustomPlugin($className, $config = array())
+    {
+        if (class_exists($className)) {
+            $dispatcher = $this->getDummyDispatcher();
+
+            // Instantiate and register the event
+            $plugin = new $className($dispatcher, $config);
+
+            if ($plugin instanceof \Joomla\CMS\Extension\PluginInterface) {
+                $plugin->registerListeners();
+            }
+        }
+    }
+
+    public function onBeforeWfEditorLoad()
+    {
+        $items = glob(__DIR__ . '/templates/*.php');
+
         foreach ($items as $item) {
             $name = basename($item, '.php');
 
@@ -296,14 +348,7 @@ class PlgSystemJce extends CMSPlugin
 
             require_once $item;
 
-            if (class_exists($className)) {
-                // Instantiate and register the event
-                $plugin = new $className($dispatcher);
-
-                if ($plugin instanceof \Joomla\CMS\Extension\PluginInterface) {
-                    $plugin->registerListeners();
-                }
-            }
+            $this->bootCustomPlugin($className);
         }
     }
 

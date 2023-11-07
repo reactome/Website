@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title>Unit tests for the Textpattern plugin</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.14.0.css" type="text/css" />
+	<script src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>
+	<script src="../../../../../../../../tinymce-muon-retina/tests/qunit/connector.js"></script>
+	<script type="text/javascript" src="../../../../../../../../tinymce-muon-retina/tests/qunit/runner.js"></script>
+	<script type="text/javascript" src="../../../../../../../../tinymce-muon-retina/tests/js/utils.js"></script>
+	<script type="text/javascript" src="../../../tinymce.js"></script>
+	<script type="text/javascript" src="../plugin.js"></script>
+</head>
+
+<body>
+	<script type="text/javascript">
+		var editor;
+
+		QUnit.config.reorder = false;
+		QUnit.config.autostart = false;
+
+		module("Textpattern plugin", {
+			autostart: false
+		});
+
+		function trimContent(value) {
+			return value.trim();
+		}
+
+		function findContainer(selector) {
+			var container;
+			if (tinymce.is(selector, 'string')) {
+				container = editor.dom.select(selector)[0];
+			} else {
+				container = selector;
+			}
+			if (container.firstChild) {
+				container = container.firstChild;
+			}
+			return container;
+		}
+
+		var evt = function (keyCode) {
+			return { keyCode: keyCode, isDefaultPrevented: function () {return false;}, preventDefault : function () {} };
+		};
+
+		function setSelection(startSelector, startOffset, endSelector, endOffset) {
+			if (!endSelector) {
+				endSelector = startSelector;
+				endOffset = startOffset;
+			}
+			var startContainer = findContainer(startSelector);
+			var endContainer = findContainer(endSelector);
+			var rng = editor.dom.createRng();
+
+			function setRange(container, offset, start) {
+				offset = offset || 0;
+
+				if (offset === 'after') {
+					if (start) {
+						rng.setStartAfter(container);
+					} else {
+						rng.setEndAfter(container);
+					}
+					return;
+				} else if (offset === 'afterNextCharacter') {
+					container = container.nextSibling;
+					offset = 1;
+				}
+				if (start) {
+					rng.setStart(container, offset);
+				} else {
+					rng.setEnd(container, offset);
+				}
+			}
+
+			setRange(startContainer, startOffset, true);
+			setRange(endContainer, endOffset, false);
+			editor.selection.setRng(rng);
+		}
+
+		test('Italic format on single word using space', function () {
+			editor.setContent('<p>*abc*\u00a0</p>');
+			setSelection('p', 6);
+			editor.onKeyUp.dispatch(editor, evt(32));
+
+			equal(
+				editor.getContent().replace(/[\r\n]+/g, ''),
+				'<p><em>abc</em>&nbsp;</p>'
+			);
+		});
+
+		test('Bold format on single word using space', function () {
+			editor.setContent('<p>**abc**\u00a0</p>');
+			setSelection('p', 8);
+			editor.onKeyUp.dispatch(editor, evt(32));
+
+			equal(
+				editor.getContent().replace(/[\r\n]+/g, ''),
+				'<p><strong>abc</strong>&nbsp;</p>'
+			);
+		});
+
+		test('Bold format on multiple words using space', function () {
+			editor.setContent('<p>**abc 123**\u00a0</p>');
+			setSelection('p', 12);
+			editor.onKeyUp.dispatch(editor, evt(32));
+
+			equal(
+				editor.getContent().replace(/[\r\n]+/g, ''),
+				'<p><strong>abc 123</strong>&nbsp;</p>'
+			);
+		});
+
+		test('Bold format on single word using enter', function () {
+			editor.setContent('<p>**abc**</p>');
+			setSelection('p', 7);
+			editor.onKeyDown.dispatch(editor, evt(13));
+
+			equal(
+				editor.getContent().replace(/[\r\n]+/g, ''),
+				'<p><strong>abc</strong></p><p>&nbsp;</p>'
+			);
+		});
+
+		test('H1 format on single word node using enter', function () {
+			editor.setContent('<p># abc</p>');
+			setSelection('p', 5);
+			editor.onKeyDown.dispatch(editor, evt(13));
+
+			equal(
+				editor.getContent().replace(/[\r\n]+/g, ''),
+				'<h1>abc</h1><p>&nbsp;</p>'
+			);
+		});
+
+		test('OL format on single word node using enter', function () {
+			editor.setContent('<p>1. abc</p>');
+			setSelection('p', 6);
+			//editor.dom.fire('keydown', { keyCode: 13 });
+
+			equal(
+				editor.getContent().replace(/[\r\n]+/g, ''),
+				'<ol><li>abc</li><li></li></ol>'
+			);
+		});
+
+		test('UL format on single word node using enter', function () {
+			editor.setContent('<p>* abc</p>');
+			setSelection('p', 5);
+			editor.onKeyDown.dispatch(editor, evt(13));
+
+			equal(
+				editor.getContent().replace(/[\r\n]+/g, ''),
+				'<ul><li>abc</li><li></li></ul>'
+			);
+		});
+
+		test('getPatterns/setPatterns', function () {
+			editor.plugins.textpattern.setPatterns([
+				{ start: '#', format: 'h1' },
+				{ start: '##', format: 'h2' },
+				{ start: '###', format: 'h3' }
+			]);
+
+			deepEqual(
+				editor.plugins.textpattern.getPatterns(),
+				[
+					{
+						"format": "h1",
+						"start": "#"
+					},
+					{
+						"format": "h2",
+						"start": "##"
+					},
+					{
+						"format": "h3",
+						"start": "###"
+					}
+				]
+			);
+		});
+
+		tinymce.init({
+			mode: "exact",
+			elements: "elm1",
+			theme: "advanced",
+			add_unload_trigger: false,
+			language_load: false,
+			plugins: 'textpattern',
+			schema: 'mixed',
+			compress: {
+				'css': true,
+				'javascript': true
+			},
+			init_instance_callback: function (ed) {
+				editor = ed;
+				QUnit.start();
+			}
+		});
+	</script>
+
+	<h1 id="qunit-header">Unit tests for the Paste plugin</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+
+	<textarea id="elm1" name="elm1"></textarea>
+	<div>
+		<a href="javascript:alert(tinymce.EditorManager.get('elm1').getContent({format : 'raw'}));">[getRawContents]</a>
+		<a href="javascript:alert(tinymce.EditorManager.get('elm1').getContent());">[getContents]</a>
+	</div>
+</body>
+
+</html>
