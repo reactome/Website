@@ -1,4 +1,4 @@
-/* jce - 2.9.51 | 2023-10-18 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.52 | 2023-11-08 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     function isBr(node) {
@@ -44,13 +44,13 @@
         });
     }
     function getEndPointNode(editor, rng, start) {
-        var root = editor.getBody(), container = rng[start ? "startContainer" : "endContainer"], rng = rng[start ? "startOffset" : "endOffset"];
+        var root = getRoot(editor), container = rng[start ? "startContainer" : "endContainer"], rng = rng[start ? "startOffset" : "endOffset"];
         for (1 === container.nodeType && (container = container.childNodes[Math.min(rng, container.childNodes.length - 1)] || container); container.parentNode !== root; ) {
             if (NodeType.isTextBlock(editor, container)) return container;
             if (/^(TD|TH)$/.test(container.parentNode.nodeName)) return container;
             container = container.parentNode;
         }
-        return container;
+        return console.log(container), container;
     }
     function shouldMerge(dom, list1, list2) {
         return isValidLists(list1, list2) && hasSameListStyle(dom, list1, list2) && hasSameClasses(list1, list2);
@@ -251,7 +251,7 @@
     }, DOM = tinymce.DOM, Outdent_outdent = outdent, Outdent_outdentSelection = function(editor) {
         var listElements = Selection_getSelectedListItems(editor);
         if (listElements.length) {
-            for (var y, bookmark = Bookmark.createBookmark(editor.selection.getRng(!0)), root = editor.getBody(), i = listElements.length; i--; ) for (var node = listElements[i].parentNode; node && node !== root; ) {
+            for (var y, bookmark = Bookmark.createBookmark(editor.selection.getRng(!0)), root = editor.dom.getRoot(), i = listElements.length; i--; ) for (var node = listElements[i].parentNode; node && node !== root; ) {
                 for (y = listElements.length; y--; ) if (listElements[y] === node) {
                     listElements.splice(i, 1);
                     break;
@@ -262,7 +262,9 @@
             return editor.selection.setRng(Bookmark.resolveBookmark(bookmark)), 
             editor.nodeChanged(), !0;
         }
-    }, BookmarkManager = tinymce.dom.BookmarkManager, updateListWithDetails = function(dom, el, detail) {
+    }, BookmarkManager = tinymce.dom.BookmarkManager, getRoot = function(editor) {
+        return editor.dom.getRoot();
+    }, updateListWithDetails = function(dom, el, detail) {
         !function(dom, el, detail) {
             detail = detail["list-style-type"] || null;
             dom.setStyle(el, "list-style-type", detail);
@@ -275,7 +277,7 @@
         var bookmark, rng = editor.selection.getRng(!0), listItemName = "LI", dom = editor.dom;
         detail = detail || {}, "false" !== dom.getContentEditable(editor.selection.getNode()) && ("DL" === (listName = listName.toUpperCase()) && (listItemName = "DT"), 
         bookmark = Bookmark.createBookmark(rng), tinymce.each(function(editor, rng) {
-            for (var block, textBlocks = [], root = editor.getBody(), dom = editor.dom, startNode = getEndPointNode(editor, rng, !0), endNode = getEndPointNode(editor, rng, !1), siblings = [], node = startNode; node && (siblings.push(node), 
+            for (var block, textBlocks = [], root = getRoot(editor), dom = editor.dom, startNode = getEndPointNode(editor, rng, !0), endNode = getEndPointNode(editor, rng, !1), siblings = [], node = startNode; node && (siblings.push(node), 
             node !== endNode); node = node.nextSibling);
             return tinymce.each(siblings, function(node) {
                 var nextSibling;
@@ -295,7 +297,7 @@
             mergeWithAdjacentLists(editor.dom, listBlock);
         }), editor.selection.setRng(Bookmark.resolveBookmark(bookmark)));
     }, removeList = function(editor) {
-        var bookmark = Bookmark.createBookmark(editor.selection.getRng(!0)), root = editor.getBody(), listItems = Selection_getSelectedListItems(editor), emptyListItems = tinymce.grep(listItems, function(li) {
+        var bookmark = Bookmark.createBookmark(editor.selection.getRng(!0)), root = getRoot(editor), listItems = Selection_getSelectedListItems(editor), emptyListItems = tinymce.grep(listItems, function(li) {
             return editor.dom.isEmpty(li);
         }), listItems = tinymce.grep(listItems, function(li) {
             return !editor.dom.isEmpty(li);
@@ -339,7 +341,7 @@
             }), editor.selection.setRng(Bookmark.resolveBookmark(bookmark))) : removeList(editor);
         }(editor, parentList, selectedSubLists, listName, detail) : function(editor, parentList, listName, detail) {
             var bookmark;
-            parentList !== editor.getBody() && (parentList ? parentList.nodeName !== listName || hasListStyleDetail(detail) ? (bookmark = Bookmark.createBookmark(editor.selection.getRng(!0)), 
+            parentList !== getRoot(editor) && (parentList ? parentList.nodeName !== listName || hasListStyleDetail(detail) ? (bookmark = Bookmark.createBookmark(editor.selection.getRng(!0)), 
             updateListWithDetails(editor.dom, parentList, detail), mergeWithAdjacentLists(editor.dom, editor.dom.rename(parentList, listName)), 
             editor.selection.setRng(Bookmark.resolveBookmark(bookmark))) : removeList(editor) : applyList(editor, listName, detail));
         }(editor, parentList, listName, detail);

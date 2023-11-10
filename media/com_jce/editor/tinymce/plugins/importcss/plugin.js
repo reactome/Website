@@ -1,4 +1,4 @@
-/* jce - 2.9.51 | 2023-10-18 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.52 | 2023-11-08 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, DOM = tinymce.DOM, PreviewCss = tinymce.util.PreviewCss;
     var rgba = {}, luma = {};
@@ -56,7 +56,7 @@
                     control = blue[i];
                     break;
                 }
-                (guidelines || control) && (css = ":root{", guidelines && (css += "--mce-guidelines: " + guidelines + ";"), 
+                (guidelines || control) && (css = ":root{", guidelines && (css = css + "--mce-guidelines: " + guidelines + ";--mce-visualchars: #a8a8a8;"), 
                 css += "--mce-placeholder: #efefef;", control && (css = css + "--mce-control-selection: " + control + ";--mce-control-selection-bg: #b4d7ff;"), 
                 ed.dom.addStyle(css += "}"));
             }
@@ -86,7 +86,7 @@
                         }(stylesheet.href)) return !0;
                         r.selectorText && each(r.selectorText.split(","), function(v) {
                             var value;
-                            v = v.trim(), /\.mce[-A-Za-z0-9]/.test(v) || (value = v, 
+                            v = v.trim(), /\.mce[-A-Za-z0-9]/.test(v) || /\.wf[e]?-/.test(v) || (value = v, 
                             bodyRx && bodyRx.test(value)) || /\.[\w\-\:]+$/.test(v) && classes.push(v);
                         });
                         break;

@@ -81,10 +81,10 @@ class WFEditor
      */
     public $initialized = false;
 
-    private function addScript($url)
+    private function addScript($url, $type = 'text/javascript')
     {
         $url = $this->addAssetVersion($url);
-        $this->scripts[] = $url;
+        $this->scripts[$url] = $type;
     }
 
     private function addStyleSheet($url)
@@ -504,6 +504,10 @@ class WFEditor
             // Tinymce
             $this->addScript($this->getURL(true) . '/tinymce/tinymce.js');
 
+            if (version_compare(JVERSION, '5', 'ge')) {
+                $this->addScript($this->getURL(true) . '/js/editor.module.js', 'module');
+            }
+            
             // Editor
             $this->addScript($this->getURL(true) . '/js/editor.min.js');
         }
@@ -560,7 +564,7 @@ class WFEditor
         $wf = WFApplication::getInstance();
 
         // encode as json string
-        $tinymce = json_encode($settings, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+        $tinymce = json_encode($settings, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES);
 
         $this->addScriptDeclaration("try{WfEditor.init(" . $tinymce . ");}catch(e){console.debug(e);}");
 

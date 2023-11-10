@@ -1,14 +1,8 @@
-/**
- ** Copyright (c) Tiny Technologies, Inc. All rights reserved.
- ** Licensed under the LGPL License.
- **/
+/* jce - 2.9.52 | 2023-11-08 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     !function(win) {
         var whiteSpaceRe = /^\s*|\s*$/g, slice = [].slice, tinymce = {
-            majorVersion: "@@tinymce_major_version@@",
-            minorVersion: "@@tinymce_minor_version@@",
-            releaseDate: "@@tinymce_release_date@@",
             _init: function() {
                 var i, nl, base, p, v, self = this, doc = document, na = navigator, ua = na.userAgent, isIE = (self.isOpera = win.opera && win.opera.buildNumber || !1, 
                 self.isWebKit = /WebKit/.test(ua), !self.isWebKit && !self.isOpera && /MSIE/gi.test(ua) && /Explorer/gi.test(na.appName) && /MSIE (\w+)\./.exec(ua)[1]);
@@ -266,7 +260,7 @@
             http: 80,
             https: 443,
             mailto: 25
-        };
+        }, safeSvgDataUrlElements = [ "img", "video" ];
         tinymce.create("tinymce.util.URI", {
             URI: function(url, settings) {
                 var baseUri, base_url, isProtocolRelative, self = this;
@@ -353,6 +347,21 @@
             return loc = 0 !== loc.protocol.indexOf("http") && "file:" !== loc.protocol ? loc.href : loc.protocol + "//" + loc.host + loc.pathname, 
             /^[^:]+:\/\/\/?[^\/]+\//.test(loc) && (loc = loc.replace(/[\?#].*$/, "").replace(/[\/\\][^\/]+$/, ""), 
             /[\/\\]$/.test(loc) || (loc += "/")), loc;
+        }, tinymce.util.URI.isDomSafe = function(uri, context, options) {
+            if (options.allow_script_urls) return !0;
+            {
+                let decodedUri = tinymce.html.Entities.decode(uri).replace(/[\s\u0000-\u001F]+/g, "");
+                try {
+                    decodedUri = decodeURIComponent(decodedUri);
+                } catch (ex) {
+                    decodedUri = unescape(decodedUri);
+                }
+                return !/((java|vb)script|mhtml):/i.test(decodedUri) && !function(settings, uri, tagName) {
+                    return !settings.allow_html_data_urls && (/^data:image\//i.test(uri) ? function(allowSvgDataUrls, tagName) {
+                        return null != allowSvgDataUrls ? !allowSvgDataUrls : null == tagName || -1 == tinymce.inArray(safeSvgDataUrlElements, tagName);
+                    }(settings.allow_svg_data_urls, tagName) && /^data:image\/svg\+xml/i.test(uri) : /^data:/i.test(uri));
+                }(options, decodedUri, context);
+            }
         };
     }(tinymce), function(tinymce) {
         tinymce.create("static tinymce.util.Storage", {
@@ -1719,9 +1728,10 @@
             this.elements = elements;
         };
     }(tinymce), function(tinymce) {
-        var each = tinymce.each, Entities = tinymce.html.Entities;
+        var cachedDocument, each = tinymce.each, Entities = tinymce.html.Entities, filteredClobberElements = tinymce.makeMap("button,fieldset,form,iframe,img,image,input,object,output,select,textarea");
+        cachedDocument = null;
         tinymce.html.SaxParser = function(settings, schema) {
-            var self = this;
+            var self = this, doc = cachedDocument = cachedDocument || document.implementation.createHTMLDocument("parser"), form = doc.createElement("form");
             function noop() {}
             settings = settings || {}, self.schema = schema = schema || new tinymce.html.Schema(), 
             !1 !== settings.fix_self_closing && (settings.fix_self_closing = !0), 
@@ -1739,13 +1749,16 @@
                 }
                 return index;
             }, self.parse = function(html, format) {
-                var matches, value, attrList, i, text, name, isInternalElement, removeInternalElements, shortEndedElements, fillAttrsMap, isShortEnded, validate, elementRule, isValidElement, attr, attribsValue, validAttributesMap, validAttributePatterns, attributesRequired, attributesDefault, attributesForced, selfClosing, tokenRegExp, attrRegExp, specialElements, attrValue, fixSelfClosing, processHtml, self = this, index = 0, stack = [], idCount = 0, decode = Entities.decode, filteredUrlAttrs = tinymce.makeMap("src,href,data,background,formaction,poster,xlink:href"), scriptUriRegExp = /((java|vb)script|mhtml):/i;
+                var matches, value, attrList, i, text, name, isInternalElement, removeInternalElements, shortEndedElements, fillAttrsMap, isShortEnded, validate, elementRule, isValidElement, attr, attribsValue, validAttributesMap, validAttributePatterns, attributesRequired, attributesDefault, attributesForced, selfClosing, tokenRegExp, attrRegExp, specialElements, attrValue, fixSelfClosing, processHtml, self = this, index = 0, stack = [], idCount = 0, decode = Entities.decode, filteredUrlAttrs = tinymce.makeMap("src,href,data,background,formaction,poster,xlink:href");
                 function processEndTag(name) {
                     for (var i, pos = stack.length; pos-- && stack[pos].name !== name; );
                     if (0 <= pos) {
                         for (i = stack.length - 1; pos <= i; i--) (name = stack[i]).valid && self.end(name.name);
                         stack.length = pos;
                     }
+                }
+                function isFilterdUrlAttribute(name) {
+                    return name in filteredUrlAttrs;
                 }
                 function processComment(value) {
                     return "" === value || (">" === value.charAt(0) && (value = " " + value), 
@@ -1754,35 +1767,6 @@
                 function trimComments(text) {
                     for (var sanitizedText = text; /<!--|--!?>/g.test(sanitizedText); ) sanitizedText = sanitizedText.replace(/<!--|--!?>/g, "");
                     return sanitizedText;
-                }
-                function parseAttribute(match, name, value, val2, val3) {
-                    var attrRule, i;
-                    if (value = (name = name.toLowerCase()) in fillAttrsMap ? name : decode(value || val2 || val3 || ""), 
-                    validate && !isInternalElement && !(0 < name.indexOf("-"))) {
-                        if (!settings.allow_event_attributes && 0 == name.indexOf("on")) return;
-                        if (!(attrRule = validAttributesMap[name]) && validAttributePatterns) {
-                            for (i = validAttributePatterns.length; i-- && !(attrRule = validAttributePatterns[i]).pattern.test(name); );
-                            -1 === i && (attrRule = null);
-                        }
-                        if (!attrRule) return;
-                        if (attrRule.validValues && !(value in attrRule.validValues)) return;
-                    }
-                    if (filteredUrlAttrs[name] && !settings.allow_script_urls) {
-                        val2 = value.replace(/[\s\u0000-\u001F]+/g, "");
-                        try {
-                            val2 = decodeURIComponent(val2);
-                        } catch (ex) {
-                            val2 = unescape(val2);
-                        }
-                        if (scriptUriRegExp.test(val2)) return;
-                        if (function(settings, uri) {
-                            return !settings.allow_html_data_urls && (/^data:image\//i.test(uri) ? !1 === settings.allow_svg_data_urls && /^data:image\/svg\+xml/i.test(uri) : /^data:/i.test(uri));
-                        }(settings, val2)) return;
-                    }
-                    attrList.map[name] = value, attrList.push({
-                        name: name,
-                        value: value
-                    });
                 }
                 for (format = format || "html", tokenRegExp = new RegExp("<(?:(?:!--([\\w\\W]*?)--!?>)|(?:!\\[CDATA\\[([\\w\\W]*?)\\]\\]>)|(?:![Dd][Oo][Cc][Tt][Yy][Pp][Ee]([\\w\\W]*?)>)|(?:\\?([^\\s\\/<>]+) ?([\\w\\W]*?)[?/]>)|(?:\\/([A-Za-z][A-Za-z0-9\\-_\\:\\.]*)>)|(?:([A-Za-z][A-Za-z0-9\\-_\\:\\.]*)((?:\\s+[^\"'>]+(?:(?:\"[^\"]*\")|(?:'[^']*')|[^>]*))*|\\/|\\s+)>))", "g"), 
                 attrRegExp = /([\w:\-]+)(?:\s*=\s*(?:(?:\"((?:[^\"])*)\")|(?:\'((?:[^\'])*)\')|([^>\s]+)))?/g, 
@@ -1812,7 +1796,29 @@
                             if (isValidElement = !0, validate && (validAttributesMap = elementRule.attributes, 
                             validAttributePatterns = elementRule.attributePatterns), 
                             (attribsValue = matches[8]) ? ((isInternalElement = -1 !== attribsValue.indexOf("data-mce-type")) && removeInternalElements && (isValidElement = !1), 
-                            (attrList = []).map = {}, attribsValue.replace(attrRegExp, parseAttribute)) : (attrList = []).map = {}, 
+                            (attrList = []).map = {}, attribsValue.replace(attrRegExp, (match, name, val, val2, val3) => (function(tagName, name, value, val2, val3) {
+                                var attrRule, i;
+                                if (value = (name = name.toLowerCase()) in fillAttrsMap ? name : decode(value || val2 || val3 || ""), 
+                                validate && !isInternalElement && !(0 < name.indexOf("-"))) {
+                                    if (!settings.allow_event_attributes && 0 == name.indexOf("on")) return;
+                                    if (!(attrRule = validAttributesMap[name]) && validAttributePatterns) {
+                                        for (i = validAttributePatterns.length; i-- && !(attrRule = validAttributePatterns[i]).pattern.test(name); );
+                                        -1 === i && (attrRule = null);
+                                    }
+                                    if (!attrRule) return;
+                                    if (attrRule.validValues && !(value in attrRule.validValues)) return;
+                                }
+                                if (!(("name" === name || "id" === name) && tagName in filteredClobberElements && (value in doc || value in form)) && (!isFilterdUrlAttribute(name) || tinymce.util.URI.isDomSafe(value, tagName, settings))) {
+                                    if (isInternalElement) {
+                                        if (isFilterdUrlAttribute(name)) return;
+                                        if (0 == name.indexOf("on") && !settings.allow_event_attributes) return;
+                                    }
+                                    attrList.map[name] = value, attrList.push({
+                                        name: name,
+                                        value: value
+                                    });
+                                }
+                            }(value, name, val, val2, val3), ""))) : (attrList = []).map = {}, 
                             validate && !isInternalElement) {
                                 if (attributesRequired = elementRule.attributesRequired, 
                                 attributesDefault = elementRule.attributesDefault, 
@@ -1997,6 +2003,10 @@
                 for (var collection = [], node = this.firstChild; node; node = walk(node, this)) node.name === name && collection.push(node);
                 return collection;
             },
+            children: function() {
+                for (var collection = [], node = this.firstChild; node; node = node.next) collection.push(node);
+                return collection;
+            },
             empty: function() {
                 var nodes, i, node;
                 if (this.firstChild) {
@@ -2147,14 +2157,20 @@
                     }
                 }, schema), rootNode = node = new Node(args.context || settings.root_name, 11), 
                 parser.parse(html), validate && invalidChildren.length && (args.context ? args.invalid = !0 : function(nodes) {
-                    for (var node, parent, parents, newParent, currentNode, tempNode, childNode, i, sibling, nextNode, nonSplitableElements = makeMap("tr,td,th,tbody,thead,tfoot,table"), nonEmptyElements = schema.getNonEmptyElements(), textBlockElements = schema.getTextBlockElements(), specialElements = schema.getSpecialElements(), ni = 0; ni < nodes.length; ni++) if ((node = nodes[ni]).parent && !node.fixed) if (textBlockElements[node.name] && "li" == node.parent.name) {
+                    for (var node, parent, parents, newParent, currentNode, tempNode, childNode, i, sibling, nextNode, nonSplitableElements = makeMap("tr,td,th,tbody,thead,tfoot,table"), nonEmptyElements = schema.getNonEmptyElements(), textBlockElements = schema.getTextBlockElements(), specialElements = schema.getSpecialElements(), removeOrUnwrapInvalidNode = function(node, originalNodeParent) {
+                        if (specialElements[node.name]) node.empty().remove(); else {
+                            var childNode;
+                            for (childNode of node.children()) schema.isValidChild(originalNodeParent.name, childNode.name) || removeOrUnwrapInvalidNode(childNode, originalNodeParent);
+                            node.unwrap();
+                        }
+                    }, ni = 0; ni < nodes.length; ni++) if ((node = nodes[ni]).parent && !node.fixed) if (textBlockElements[node.name] && "li" == node.parent.name) {
                         for (sibling = node.next; sibling && textBlockElements[sibling.name]; ) sibling.name = "li", 
                         sibling.fixed = !0, node.parent.insert(sibling, node.parent), 
                         sibling = sibling.next;
                         node.unwrap(node);
                     } else {
                         for (parents = [ node ], parent = node.parent; parent && !schema.isValidChild(parent.name, node.name) && !nonSplitableElements[parent.name]; parent = parent.parent) parents.push(parent);
-                        if (parent && 1 < parents.length) {
+                        if (parent && 1 < parents.length) if (schema.isValidChild(parent.name, node.name)) {
                             for (parents.reverse(), newParent = currentNode = self.filterNode(parents[0].clone()), 
                             i = 0; i < parents.length - 1; i++) {
                                 for (schema.isValidChild(currentNode.name, parents[i].name) ? (tempNode = self.filterNode(parents[i].clone()), 
@@ -2165,7 +2181,7 @@
                             }
                             newParent.isEmpty(nonEmptyElements) ? parent.insert(node, parents[0], !0) : (parent.insert(newParent, parents[0], !0), 
                             parent.insert(node, newParent)), ((parent = parents[0]).isEmpty(nonEmptyElements) || parent.firstChild === parent.lastChild && "br" === parent.firstChild.name) && parent.empty().remove();
-                        } else node.parent && ("li" === node.name ? !(sibling = node.prev) || "ul" !== sibling.name && "ul" !== sibling.name ? !(sibling = node.next) || "ul" !== sibling.name && "ul" !== sibling.name ? node.wrap(self.filterNode(new Node("ul", 1))) : sibling.insert(node, sibling.firstChild, !0) : sibling.append(node) : schema.isValidChild(node.parent.name, "div") && schema.isValidChild("div", node.name) ? node.wrap(self.filterNode(new Node("div", 1))) : specialElements[node.name] ? node.empty().remove() : node.unwrap());
+                        } else removeOrUnwrapInvalidNode(node, node.parent); else node.parent && ("li" === node.name ? !(sibling = node.prev) || "ul" !== sibling.name && "ul" !== sibling.name ? !(sibling = node.next) || "ul" !== sibling.name && "ul" !== sibling.name ? node.wrap(self.filterNode(new Node("ul", 1))) : sibling.insert(node, sibling.firstChild, !0) : sibling.append(node) : schema.isValidChild(node.parent.name, "div") && schema.isValidChild("div", node.name) ? node.wrap(self.filterNode(new Node("div", 1))) : removeOrUnwrapInvalidNode(node, node.parent));
                     }
                 }(invalidChildren)), rootBlockName && ("body" == rootNode.name || args.isRootContent) && function() {
                     var next, rootBlockNode, node = rootNode.firstChild;
@@ -3343,6 +3359,51 @@
             container = container.childNodes[offset]), container;
         };
     }(tinymce), tinymce, function(tinymce) {
+        function getTemporaryNodeSelector(tempAttrs) {
+            return (0 === tempAttrs.length ? "" : tempAttrs.map(function(attr) {
+                return "[" + attr + "]";
+            }).join(",") + ",") + '[data-mce-bogus="all"]';
+        }
+        function createCommentWalker(body) {
+            return document.createTreeWalker(body, NodeFilter.SHOW_COMMENT, null, !1);
+        }
+        function hasComments(body) {
+            return null !== createCommentWalker(body).nextNode();
+        }
+        function hasTemporaryNodes(body, tempAttrs) {
+            return null !== body.querySelector(getTemporaryNodeSelector(tempAttrs));
+        }
+        function trimTemporaryNodes(body, tempAttrs) {
+            tinymce.each(function(body, tempAttrs) {
+                return body.querySelectorAll(getTemporaryNodeSelector(tempAttrs));
+            }(body, tempAttrs), function(elm) {
+                "all" === elm.getAttribute("data-mce-bogus") ? elm && elm.parentNode && elm.parentNode.removeChild(elm) : tinymce.each(tempAttrs, function(attr) {
+                    elm.hasAttribute(attr) && elm.removeAttribute(attr);
+                });
+            });
+        }
+        function removeCommentsContainingZwsp(body) {
+            for (var walker = createCommentWalker(body), nextNode = walker.nextNode(); null !== nextNode; ) {
+                var comment = walker.currentNode, nextNode = walker.nextNode();
+                "string" == typeof comment.nodeValue && -1 !== comment.nodeValue.indexOf("\ufeff") && comment && comment.parentNode && comment.parentNode.removeChild(comment);
+            }
+        }
+        function deepClone(body) {
+            return body.cloneNode(!0);
+        }
+        tinymce.dom.TrimBody = {
+            trim: function(body, tempAttrs) {
+                var trimmed = body;
+                return hasComments(body) ? (removeCommentsContainingZwsp(trimmed = deepClone(body)), 
+                hasTemporaryNodes(trimmed, tempAttrs) && trimTemporaryNodes(trimmed, tempAttrs)) : hasTemporaryNodes(body, tempAttrs) && trimTemporaryNodes(trimmed = deepClone(body), tempAttrs), 
+                trimmed;
+            },
+            hasComments: hasComments,
+            hasTemporaryNodes: hasTemporaryNodes,
+            trimTemporaryNodes: trimTemporaryNodes,
+            removeCommentsContainingZwsp: removeCommentsContainingZwsp
+        };
+    }(tinymce), function(tinymce) {
         var extendingChars = new RegExp("[\u0300-\u036f\u0483-\u0487\u0488-\u0489\u0591-\u05bd\u05bf\u05c1-\u05c2\u05c4-\u05c5\u05c7\u0610-\u061a\u064b-\u065f\u0670\u06d6-\u06dc\u06df-\u06e4\u06e7-\u06e8\u06ea-\u06ed\u0711\u0730-\u074a\u07a6-\u07b0\u07eb-\u07f3\u0816-\u0819\u081b-\u0823\u0825-\u0827\u0829-\u082d\u0859-\u085b\u08e3-\u0902\u093a\u093c\u0941-\u0948\u094d\u0951-\u0957\u0962-\u0963\u0981\u09bc\u09be\u09c1-\u09c4\u09cd\u09d7\u09e2-\u09e3\u0a01-\u0a02\u0a3c\u0a41-\u0a42\u0a47-\u0a48\u0a4b-\u0a4d\u0a51\u0a70-\u0a71\u0a75\u0a81-\u0a82\u0abc\u0ac1-\u0ac5\u0ac7-\u0ac8\u0acd\u0ae2-\u0ae3\u0b01\u0b3c\u0b3e\u0b3f\u0b41-\u0b44\u0b4d\u0b56\u0b57\u0b62-\u0b63\u0b82\u0bbe\u0bc0\u0bcd\u0bd7\u0c00\u0c3e-\u0c40\u0c46-\u0c48\u0c4a-\u0c4d\u0c55-\u0c56\u0c62-\u0c63\u0c81\u0cbc\u0cbf\u0cc2\u0cc6\u0ccc-\u0ccd\u0cd5-\u0cd6\u0ce2-\u0ce3\u0d01\u0d3e\u0d41-\u0d44\u0d4d\u0d57\u0d62-\u0d63\u0dca\u0dcf\u0dd2-\u0dd4\u0dd6\u0ddf\u0e31\u0e34-\u0e3a\u0e47-\u0e4e\u0eb1\u0eb4-\u0eb9\u0ebb-\u0ebc\u0ec8-\u0ecd\u0f18-\u0f19\u0f35\u0f37\u0f39\u0f71-\u0f7e\u0f80-\u0f84\u0f86-\u0f87\u0f8d-\u0f97\u0f99-\u0fbc\u0fc6\u102d-\u1030\u1032-\u1037\u1039-\u103a\u103d-\u103e\u1058-\u1059\u105e-\u1060\u1071-\u1074\u1082\u1085-\u1086\u108d\u109d\u135d-\u135f\u1712-\u1714\u1732-\u1734\u1752-\u1753\u1772-\u1773\u17b4-\u17b5\u17b7-\u17bd\u17c6\u17c9-\u17d3\u17dd\u180b-\u180d\u18a9\u1920-\u1922\u1927-\u1928\u1932\u1939-\u193b\u1a17-\u1a18\u1a1b\u1a56\u1a58-\u1a5e\u1a60\u1a62\u1a65-\u1a6c\u1a73-\u1a7c\u1a7f\u1ab0-\u1abd\u1abe\u1b00-\u1b03\u1b34\u1b36-\u1b3a\u1b3c\u1b42\u1b6b-\u1b73\u1b80-\u1b81\u1ba2-\u1ba5\u1ba8-\u1ba9\u1bab-\u1bad\u1be6\u1be8-\u1be9\u1bed\u1bef-\u1bf1\u1c2c-\u1c33\u1c36-\u1c37\u1cd0-\u1cd2\u1cd4-\u1ce0\u1ce2-\u1ce8\u1ced\u1cf4\u1cf8-\u1cf9\u1dc0-\u1df5\u1dfc-\u1dff\u200c-\u200d\u20d0-\u20dc\u20dd-\u20e0\u20e1\u20e2-\u20e4\u20e5-\u20f0\u2cef-\u2cf1\u2d7f\u2de0-\u2dff\u302a-\u302d\u302e-\u302f\u3099-\u309a\ua66f\ua670-\ua672\ua674-\ua67d\ua69e-\ua69f\ua6f0-\ua6f1\ua802\ua806\ua80b\ua825-\ua826\ua8c4\ua8e0-\ua8f1\ua926-\ua92d\ua947-\ua951\ua980-\ua982\ua9b3\ua9b6-\ua9b9\ua9bc\ua9e5\uaa29-\uaa2e\uaa31-\uaa32\uaa35-\uaa36\uaa43\uaa4c\uaa7c\uaab0\uaab2-\uaab4\uaab7-\uaab8\uaabe-\uaabf\uaac1\uaaec-\uaaed\uaaf6\uabe5\uabe8\uabed\ufb1e\ufe00-\ufe0f\ufe20-\ufe2f\uff9e-\uff9f]");
         tinymce.text.ExtendingChar = {
             isExtendingChar: function(ch) {
@@ -6280,12 +6341,11 @@
         };
     }(tinymce), function(tinymce) {
         tinymce.dom.Serializer = function(settings, dom, schema) {
-            var onPreProcess, onPostProcess, htmlParser, self = this, isIE = tinymce.isIE, each = tinymce.each;
-            return settings.apply_source_formatting || (settings.indent = !1), dom = dom || tinymce.DOM, 
-            schema = schema || new tinymce.html.Schema(settings), settings.entity_encoding = settings.entity_encoding || "named", 
-            settings.remove_trailing_brs = !("remove_trailing_brs" in settings) || settings.remove_trailing_brs, 
-            onPreProcess = new tinymce.util.Dispatcher(self), onPostProcess = new tinymce.util.Dispatcher(self), 
-            (htmlParser = new tinymce.html.DomParser(settings, schema)).addAttributeFilter("data-mce-tabindex", function(nodes, name) {
+            var htmlParser, self = this, isIE = tinymce.isIE, each = tinymce.each, tempAttrs = (settings.apply_source_formatting || (settings.indent = !1), 
+            dom = dom || tinymce.DOM, schema = schema || new tinymce.html.Schema(settings), 
+            settings.entity_encoding = settings.entity_encoding || "named", settings.remove_trailing_brs = !("remove_trailing_brs" in settings) || settings.remove_trailing_brs, 
+            [ "data-mce-selected" ]), onPreProcess = new tinymce.util.Dispatcher(self), onPostProcess = new tinymce.util.Dispatcher(self);
+            return (htmlParser = new tinymce.html.DomParser(settings, schema)).addAttributeFilter("data-mce-tabindex", function(nodes, name) {
                 for (var node, i = nodes.length; i--; ) (node = nodes[i]).attr("tabindex", node.attributes.map["data-mce-tabindex"]), 
                 node.attr(name, null);
             }), htmlParser.addAttributeFilter("src,href,style", function(nodes, name) {
@@ -6345,6 +6405,14 @@
                 },
                 setRules: function(rules) {
                     schema.setValidElements(rules);
+                },
+                addTempAttr: function(name) {
+                    -1 === tinymce.inArray(tempAttrs, name) && (htmlParser.addAttributeFilter(name, function(nodes, name) {
+                        for (var i = nodes.length; i--; ) nodes[i].attr(name, null);
+                    }), tempAttrs.push(name));
+                },
+                getTempAttrs: function() {
+                    return tempAttrs;
                 }
             };
         };
@@ -6846,8 +6914,8 @@
                 });
             },
             selectItem: function(item, state) {
-                return item.setSelected(state), state ? this.selected.push(item) : 0 <= (state = tinymce.inArray(this.selected, item)) && this.selected.splice(state, 1), 
-                item;
+                return !!item && (item.setSelected(state), state ? this.selected.push(item) : 0 <= (state = tinymce.inArray(this.selected, item)) && this.selected.splice(state, 1), 
+                item);
             },
             findItem: function(val) {
                 var found;
@@ -7206,8 +7274,8 @@
                 this.setAriaProperty("expanded", !1));
             },
             renderMenu: function() {
-                var self = this, menu = this.settings.control_manager.createDropMenu(this.id + "_menu", {
-                    class: this.classPrefix + "Menu",
+                var self = this, cls = this.classPrefix + "Menu" + (this.settings.menu_class ? " " + this.settings.menu_class : ""), menu = this.settings.control_manager.createDropMenu(this.id + "_menu", {
+                    class: cls,
                     max_width: this.settings.max_width || 250,
                     max_height: this.settings.max_height || "",
                     filter: !!this.settings.filter,
@@ -8376,7 +8444,7 @@
             }
         };
     }(tinymce), function(tinymce) {
-        var DOM = tinymce.DOM, Event = tinymce.dom.Event, extend = tinymce.extend, each = tinymce.each, isGecko = tinymce.isGecko, isIE = tinymce.isIE, is = tinymce.is, ThemeManager = tinymce.ThemeManager, PluginManager = tinymce.PluginManager, EditorFocus = tinymce.EditorFocus, explode = tinymce.explode;
+        var DOM = tinymce.DOM, Event = tinymce.dom.Event, extend = tinymce.extend, each = tinymce.each, isGecko = tinymce.isGecko, isIE = tinymce.isIE, is = tinymce.is, ThemeManager = tinymce.ThemeManager, PluginManager = tinymce.PluginManager, EditorFocus = tinymce.EditorFocus, explode = tinymce.explode, Zwsp = tinymce.text.Zwsp, TrimBody = tinymce.dom.TrimBody;
         tinymce.Editor = function(id, settings) {
             this.settings = settings = extend({
                 id: id,
@@ -8775,7 +8843,7 @@
                 var body = this.getBody();
                 return (args = args || {}).format = args.format || "html", args.get = !0, 
                 args.getInner = !0, args.no_events || this.onBeforeGetContent.dispatch(this, args), 
-                body = "raw" == args.format ? body.innerHTML : "text" == args.format ? body.innerText || body.textContent : this.serializer.serialize(body, args), 
+                body = "raw" == args.format ? tinymce.trim(Zwsp.trim(TrimBody.trim(body, this.serializer.getTempAttrs()).innerHTML)) : "text" == args.format ? body.innerText || body.textContent : this.serializer.serialize(body, args), 
                 "text" != args.format ? args.content = tinymce.trim(body) : args.content = body, 
                 args.no_events || this.onGetContent.dispatch(this, args), args.content;
             },
@@ -9419,8 +9487,7 @@
                         format: "raw",
                         no_events: 1,
                         undo: !0
-                    }).replace(/<span[^>]+data-mce-bogus[^>]+>[\u200B\uFEFF]+<\/span>/g, "")), 
-                    um.onBeforeAdd.dispatch(um, level), (lastLevel = data[index]) && lastLevel.content == level.content) return null;
+                    })), um.onBeforeAdd.dispatch(um, level), (lastLevel = data[index]) && lastLevel.content == level.content) return null;
                     if (data[index] && (data[index].beforeBookmark = beforeBookmark), 
                     settings.custom_undo_redo_levels && data.length > settings.custom_undo_redo_levels) {
                         for (i = 0; i < data.length - 1; i++) data[i] = data[i + 1];
@@ -9496,6 +9563,7 @@
         }
         settings.forced_root_block && (editor.onKeyUp.add(addRootBlocks), editor.onNodeChange.add(addRootBlocks));
     }, function(tinymce) {
+        tinymce.DOM;
         var Event = tinymce.dom.Event, each = tinymce.each, extend = tinymce.extend, PreviewCss = tinymce.util.PreviewCss;
         tinymce.ControlManager = function(ed, s) {
             var self = this;
@@ -9573,7 +9641,8 @@
                     max_height: 384,
                     combobox: !0,
                     multiple: !0,
-                    seperator: " "
+                    seperator: " ",
+                    menu_class: "mceStylesBoxMenu"
                 }, s || {}), (id = this.createListBox(id, s, cc)).onPostRender.add(function(c, n) {
                     var ctrl = c;
                     Array.isArray(ed.settings.importcss_classes) && !ctrl.hasClasses && (each(ed.settings.importcss_classes, function(item) {
@@ -9927,7 +9996,7 @@
                         classes: "primary",
                         autofocus: !0,
                         onsubmit: function() {
-                            var value = DOM.getValue(self.editor.id + "_prompt_input");
+                            var value = DOM.getValue(self.editor.id + "_prompt_input"), value = DOM.encode(value);
                             cb && cb.call(s || self, value);
                         }
                     } ],
@@ -12376,7 +12445,7 @@
                         control = blue[i];
                         break;
                     }
-                    (guidelines || control) && (css = ":root{", guidelines && (css += "--mce-guidelines: " + guidelines + ";"), 
+                    (guidelines || control) && (css = ":root{", guidelines && (css = css + "--mce-guidelines: " + guidelines + ";--mce-visualchars: #a8a8a8;"), 
                     css += "--mce-placeholder: #efefef;", control && (css = css + "--mce-control-selection: " + control + ";--mce-control-selection-bg: #b4d7ff;"), 
                     ed.dom.addStyle(css += "}"));
                 }
@@ -12409,7 +12478,7 @@
                                     }(stylesheet.href)) return !0;
                                     r.selectorText && each(r.selectorText.split(","), function(v) {
                                         var value;
-                                        v = v.trim(), /\.mce[-A-Za-z0-9]/.test(v) || (value = v, 
+                                        v = v.trim(), /\.mce[-A-Za-z0-9]/.test(v) || /\.wf[e]?-/.test(v) || (value = v, 
                                         bodyRx && bodyRx.test(value)) || /\.[\w\-\:]+$/.test(v) && classes.push(v);
                                     });
                                     break;

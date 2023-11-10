@@ -1,14 +1,16 @@
-/* jce - 2.9.51 | 2023-10-18 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.52 | 2023-11-08 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, DomParser = tinymce.html.DomParser, HtmlSerializer = tinymce.html.Serializer, XHR = tinymce.util.XHR, Uuid = tinymce.util.Uuid, fontIconRe = /<([a-z0-9]+)([^>]+)class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)"([^>]*)>(&nbsp;|\u00a0)?<\/\1>/gi;
-    function dataToHtml(data) {
+    function dataToHtml(editor, data) {
         data = new DomParser({
-            validate: !1,
-            root_name: "#document"
-        }).parse(data), data = data.getAll("body")[0] || data;
+            allow_event_attributes: !!editor.settings.allow_event_attributes
+        }, editor.schema).parse(data, {
+            forced_root_block: !1,
+            isRootContent: !0
+        }), data = data.getAll("body")[0] || data;
         return new HtmlSerializer({
-            validate: !1
-        }).serialize(data);
+            validate: editor.settings.validate
+        }, editor.schema).serialize(data);
     }
     function createClassSelector(values) {
         return values = values.trim(), tinymce.map(values.split(" "), function(cls) {
@@ -54,7 +56,7 @@
                 XHR.send({
                     url: ed.settings.document_base_url + "/" + content_url,
                     success: function(value) {
-                        value = dataToHtml(value);
+                        value = dataToHtml(ed, value);
                         value && ed.execCommand("mceInsertTemplate", !1, {
                             content: value
                         }), ed.setProgressState(!1), self.contentLoaded = !0;
@@ -68,8 +70,8 @@
         _processContent: function(html) {
             var self = this, ed = self.editor, dom = ed.dom, params = this.params, replace_values = params.replace_values || {}, cdate_classes = (each(replace_values, function(v, k) {
                 "function" != typeof v && (html = html.replace(new RegExp("\\{\\$" + k + "\\}", "g"), v));
-            }), replace_values = dom.create("div", null, html), dom.remove(dom.select("div.mceTmpl", replace_values), 1), 
-            params.cdate_classes || "cdate creationdate"), cdate_format = params.cdate_format || ed.getLang("templatemanager.cdate_format"), mdate_classes = params.mdate_classes || "mdate modifieddate", mdate_format = params.mdate_format || ed.getLang("templatemanager.mdate_format"), params = params.selected_content_classes || "selcontent", selection = ed.selection.getContent(), ed = createClassSelector(cdate_classes), cdate_classes = createClassSelector(mdate_classes), mdate_classes = createClassSelector(params);
+            }), html = dataToHtml(ed, html), replace_values = dom.create("div", null, html), 
+            dom.remove(dom.select("div.mceTmpl", replace_values), 1), params.cdate_classes || "cdate creationdate"), cdate_format = params.cdate_format || ed.getLang("templatemanager.cdate_format"), mdate_classes = params.mdate_classes || "mdate modifieddate", mdate_format = params.mdate_format || ed.getLang("templatemanager.mdate_format"), params = params.selected_content_classes || "selcontent", selection = ed.selection.getContent(), ed = createClassSelector(cdate_classes), cdate_classes = createClassSelector(mdate_classes), mdate_classes = createClassSelector(params);
             return each(dom.select(ed, replace_values), function(elm) {
                 elm.innerHTML = self._getDateTime(new Date(), cdate_format);
             }), each(dom.select(cdate_classes, replace_values), function(elm) {
@@ -186,7 +188,7 @@
                                     XHR.send({
                                         url: value,
                                         success: function(val) {
-                                            val = dataToHtml(val);
+                                            val = dataToHtml(ed, val);
                                             val && (ed.execCommand("mceInsertTemplate", !1, {
                                                 content: val
                                             }), ed.setProgressState(!1));
@@ -203,7 +205,7 @@
         },
         insertUploadedFile: function(o) {
             var ed = this.editor, data = this.getUploadConfig();
-            if (data && data.filetypes && new RegExp(".(" + data.filetypes.join("|") + ")$", "i").test(o.name)) return o.data && (data = dataToHtml(o.data)) && ed.execCommand("mceInsertTemplate", !1, {
+            if (data && data.filetypes && new RegExp(".(" + data.filetypes.join("|") + ")$", "i").test(o.name)) return o.data && (data = dataToHtml(ed, o.data)) && ed.execCommand("mceInsertTemplate", !1, {
                 content: data
             }), !0;
             return !1;

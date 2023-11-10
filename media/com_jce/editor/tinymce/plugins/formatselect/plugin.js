@@ -1,4 +1,4 @@
-/* jce - 2.9.51 | 2023-10-18 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.52 | 2023-11-08 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, fmts = {
         p: "advanced.paragraph",
@@ -50,7 +50,8 @@
                 max_height: 384,
                 onselect: function(v) {
                     ed.execCommand("FormatBlock", !1, v);
-                }
+                },
+                menu_class: "mceFormatListMenu"
             }), preview_styles = ed.getParam("formatselect_preview_styles", !0);
             return ctrl && (each(ed.getParam("formatselect_blockformats", fmts, "hash"), function(value, key) {
                 ctrl.add(ed.getLang(value, key), key, {
