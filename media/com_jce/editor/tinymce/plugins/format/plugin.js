@@ -1,4 +1,4 @@
-/* jce - 2.9.54 | 2023-11-12 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.57 | 2023-12-14 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var VK = tinymce.VK, each = tinymce.each, blocks = [];
     tinymce.create("tinymce.plugins.FormatPlugin", {
@@ -121,11 +121,11 @@
             });
         },
         _clearBlocks: function(ed, e) {
-            var tag, n = ed.selection.getNode(), n = ed.dom.getParents(n, blocks.join(","));
-            n && 1 < n.length && (tag = (tag = ed.getParam("forced_root_block", "p")) || (ed.getParam("force_block_newlines") ? "p" : "br"), 
-            e.preventDefault(), (n = n[n.length - 1]) !== ed.getBody()) && (tag = ed.dom.create(tag, {}, "\xa0"), 
-            e.keyCode === VK.ENTER || e.keyCode === VK.DOWN ? ed.dom.insertAfter(tag, n) : ed.dom.insertBefore(tag, n), 
-            ed.selection.select(tag), ed.selection.collapse(1));
+            var n = ed.selection.getNode(), tag = (tag = ed.getParam("forced_root_block", "p")) || (ed.getParam("force_block_newlines") ? "p" : "br"), p = ed.dom.getParents(n, blocks.join(","));
+            (p = ed.dom.getParent(n, "td,th") ? ed.dom.getParents(n, "td,th,tr,tfoot,thead,table") : p) && 1 < p.length && (e.preventDefault(), 
+            (n = p[p.length - 1]) !== ed.getBody()) && (p = ed.dom.create(tag, {}, "\xa0"), 
+            e.keyCode === VK.ENTER || e.keyCode === VK.DOWN ? ed.dom.insertAfter(p, n) : ed.dom.insertBefore(p, n), 
+            ed.selection.select(p), ed.selection.collapse(1));
         }
     }), tinymce.PluginManager.add("format", tinymce.plugins.FormatPlugin);
 }();

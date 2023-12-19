@@ -1,4 +1,4 @@
-/* jce - 2.9.54 | 2023-11-12 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.57 | 2023-12-14 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, Storage = tinymce.util.Storage;
     tinymce.create("tinymce.plugins.KitchenSink", {
@@ -10,12 +10,11 @@
                     for (var n = DOM.getNext(row[0], ".mceToolbarRow"); n; ) state ? DOM.setStyle(n, "display", "") : DOM.hide(n), 
                     n = DOM.getNext(n, ".mceToolbarRow");
                     (h = s.height || el.style.height || el.offsetHeight) && DOM.setStyle(ed.id + "_ifr", "height", h), 
-                    ed.getParam("use_state_cookies", !0) && Storage.set("wf_toggletoolbars_state", state), 
+                    ed.getParam("use_state_cookies", !0) && Storage.set("wf_toggletoolbars_state_" + ed.id, state), 
                     ed.controlManager.setActive("kitchensink", state);
                 }
             }
-            ed.getParam("use_state_cookies", !0) && (state = Storage.get("wf_toggletoolbars_state")), 
-            tinymce.is(state, "string") && (state = !!(state = "null" !== state && "false" !== state ? state : !1)), 
+            ed.getParam("use_state_cookies", !0) && (state = Storage.get("wf_toggletoolbars_state_" + ed.id, !1)), 
             ed.addCommand("mceKitchenSink", function() {
                 state = !state, toggle();
             }), ed.onSetContent.add(function() {

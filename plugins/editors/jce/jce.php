@@ -164,6 +164,9 @@ class plgEditorJCE extends CMSPlugin
             $id = $name;
         }
 
+        // Remove any non-alphanumeric characters from the id
+        $id = preg_replace('/(\s|[^A-Za-z0-9_])+/', '_', $id);
+
         // Data object for the layout
         $textarea = new stdClass;
         $textarea->name = $name;
@@ -203,7 +206,7 @@ class plgEditorJCE extends CMSPlugin
 
             if (!empty($list)) {
                 $options = array(
-                    'joomla_xtd_buttons' => array_values($list)
+                    'joomla_xtd_buttons' => $list
                 );
 
                 Factory::getDocument()->addScriptOptions('plg_editor_jce', $options, true);
@@ -222,9 +225,11 @@ class plgEditorJCE extends CMSPlugin
 
     private function getXtdButtonsList($name, $buttons, $asset, $author)
     {
-        $list = array();
+        $list = array(
+            $name => array()
+        );
 
-        $excluded = array('readmore', 'pagebreak', 'image');
+        $excluded = array('readmore', 'pagebreak');
 
         if (!is_array($buttons)) {
             $buttons = !$buttons ? false : $excluded;
@@ -238,30 +243,35 @@ class plgEditorJCE extends CMSPlugin
         if (!empty($buttons)) {
             foreach ($buttons as $i => $button) {
                 if ($button->get('name')) {
-                    // Set some vars
+                    $id = $name . '_' . $button->name;
+
+                    if (version_compare(JVERSION, '4', 'ge')) {
+                        $button->id =  $id . '_modal';
+                        echo LayoutHelper::render('joomla.editors.buttons.modal', $button);
+                    }
+                    
+                    // create icon class
                     $icon = 'none icon-' . $button->get('icon', $button->get('name'));
 
-                    $name = 'button-' . $i . '-' . str_replace(' ', '-', $button->get('text'));
-                    $title = $button->get('text');
-                    $onclick = $button->get('onclick', '');
-
+                    // set href value
                     if ($button->get('link') !== '#') {
                         $href = Uri::base() . $button->get('link');
                     } else {
                         $href = '';
                     }
 
-                    $id = $button->get('name');
-
-                    $list[$id] = array(
-                        'name' => $name,
-                        'title' => $title,
+                    $options = array(
+                        'name' => $button->get('text'),
+                        'id' => $id,
+                        'title' => $button->get('text'),
                         'icon' => $icon,
                         'href' => $href,
-                        'onclick' => $onclick,
+                        'onclick' => $button->get('onclick', ''),
                         'svg' => $button->get('iconSVG'),
                         'options' => $button->get('options', array())
                     );
+
+                    $list[$name][] = $options;
                 }
             }
         }

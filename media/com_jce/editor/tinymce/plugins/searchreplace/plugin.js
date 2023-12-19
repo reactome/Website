@@ -1,4 +1,4 @@
-/* jce - 2.9.54 | 2023-11-12 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.57 | 2023-12-14 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM;
     function findAndReplaceDOMText(regex, node, replacementNode, captureGroup, schema) {
@@ -92,7 +92,7 @@
         init: function(editor, url) {
             var last, self = this, currentIndex = -1;
             function notFoundAlert() {
-                editor.windowManager.alert(editor.getLang("searchreplace_dlg.notfound", "The search has been completed. The search string could not be found."));
+                editor.windowManager.alert(editor.getLang("searchreplace.notfound", "The search has been completed. The search string could not be found."));
             }
             function updateButtonStates() {
                 editor.updateSearchButtonStates.dispatch({

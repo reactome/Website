@@ -1,16 +1,15 @@
-/* jce - 2.9.54 | 2023-11-12 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.57 | 2023-12-14 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, DomParser = tinymce.html.DomParser, HtmlSerializer = tinymce.html.Serializer, XHR = tinymce.util.XHR, Uuid = tinymce.util.Uuid, fontIconRe = /<([a-z0-9]+)([^>]+)class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)"([^>]*)>(&nbsp;|\u00a0)?<\/\1>/gi;
     function dataToHtml(editor, data) {
-        data = new DomParser({
+        return data ? (data = (data = new DomParser({
             allow_event_attributes: !!editor.settings.allow_event_attributes
         }, editor.schema).parse(data, {
             forced_root_block: !1,
             isRootContent: !0
-        }), data = data.getAll("body")[0] || data;
-        return new HtmlSerializer({
+        })).getAll("body")[0] || data, new HtmlSerializer({
             validate: editor.settings.validate
-        }, editor.schema).serialize(data);
+        }, editor.schema).serialize(data)) : "";
     }
     function createClassSelector(values) {
         return values = values.trim(), tinymce.map(values.split(" "), function(cls) {

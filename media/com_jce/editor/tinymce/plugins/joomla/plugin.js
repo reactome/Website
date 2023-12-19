@@ -1,4 +1,4 @@
-/* jce - 2.9.54 | 2023-11-12 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.57 | 2023-12-14 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each;
     tinymce.create("tinymce.plugins.JoomlaPlugin", {
@@ -7,7 +7,7 @@
         },
         createControl: function(n, cm) {
             var plugins, ctrl, ed = this.editor;
-            return "joomla" === n && (plugins = ed.settings.joomla_xtd_buttons || []).length ? ((ctrl = cm.createSplitButton("joomla", {
+            return "joomla" === n && ((n = ed.settings.joomla_xtd_buttons || {})[ed.id] || n.__jce__) && (plugins = n[ed.id] || n.__jce__ || []).length ? ((ctrl = cm.createSplitButton("joomla", {
                 title: "joomla.buttons",
                 icon: "joomla"
             })).onRenderMenu.add(function(ctrl, menu) {
@@ -18,7 +18,7 @@
                         icon: plg.icon,
                         svg: plg.svg || "",
                         onclick: function(e) {
-                            var buttons = [ {
+                            var modal, buttons = [ {
                                 id: "cancel",
                                 title: ed.getLang("cancel", "Cancel")
                             } ];
@@ -30,7 +30,7 @@
                                 onsubmit: function(e) {
                                     new Function(plg.options.confirmCallback).apply();
                                 }
-                            }), ed.windowManager.open({
+                            }), (modal = tinymce.DOM.get(plg.id + "_modal")) ? modal.open() : (ed.windowManager.open({
                                 file: href,
                                 title: plg.title,
                                 width: Math.max(vp.w - 40, 896),
@@ -38,7 +38,7 @@
                                 size: "mce-modal-landscape-full",
                                 addver: !1,
                                 buttons: buttons
-                            }), window.Joomla) && window.Joomla.Modal && window.Joomla.Modal.setCurrent(ed.windowManager), 
+                            }), window.Joomla && window.Joomla.Modal && window.Joomla.Modal.setCurrent(ed.windowManager))), 
                             plg.onclick && new Function(plg.onclick).apply(), item.setSelected(!1), 
                             !1;
                         }

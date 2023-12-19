@@ -121,7 +121,12 @@ final class WFRequest extends CMSObject
                 return self::checkQuery($key);
             }
 
-            if (strpos($key, '\u0000') !== false || strpos($value, '\u0000') !== false) {
+            // Check if $key or $value is null before using strpos
+            if ($key !== null && strpos($key, '\u0000') !== false) {
+                throw new InvalidArgumentException('Invalid Data', 403);
+            }
+
+            if ($value !== null && strpos($value, '\u0000') !== false) {
                 throw new InvalidArgumentException('Invalid Data', 403);
             }
         }
@@ -151,9 +156,6 @@ final class WFRequest extends CMSObject
 
         // get and encode json data
         if ($json) {
-            // remove slashes
-            $json = stripslashes($json);
-
             // convert to JSON object
             $json = json_decode($json);
         }

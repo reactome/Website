@@ -1,4 +1,4 @@
-/* jce - 2.9.54 | 2023-11-12 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.57 | 2023-12-14 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     !function(win) {
@@ -3461,25 +3461,28 @@
                 wrappedTextNode && ((rng = editor.dom.createRng()).setStart(wrappedTextNode, wrappedTextNode.data.length), 
                 rng.setEnd(wrappedTextNode, wrappedTextNode.data.length), editor.selection.setRng(rng)), 
                 function(e) {
-                    var firstTextNode, node, walker, rng, offset, format, parent, textBlockElm, selection = editor.selection, dom = editor.dom;
-                    if (selection.isCollapsed() && "PRE" !== selection.getStart().nodeName && (textBlockElm = dom.getParent(selection.getStart(), "p"))) {
-                        for (walker = new tinymce.dom.TreeWalker(textBlockElm, textBlockElm); node = walker.next(); ) if (3 == node.nodeType) {
-                            firstTextNode = node;
-                            break;
+                    var firstTextNode, node, walker, rng, offset, selection = editor.selection, dom = editor.dom;
+                    if (selection.isCollapsed()) {
+                        var format, parent, startNode = selection.getStart();
+                        if ("PRE" !== startNode.nodeName && (startNode = dom.getParent(startNode, "p,div"))) {
+                            for (walker = new tinymce.dom.TreeWalker(startNode, startNode); node = walker.next(); ) if (3 == node.nodeType) {
+                                firstTextNode = node;
+                                break;
+                            }
+                            firstTextNode && (startNode = findPattern(firstTextNode.data)) && (startNode.remove && e.preventDefault(), 
+                            e = (rng = selection.getRng(!0)).startContainer, offset = rng.startOffset, 
+                            firstTextNode == e && (offset = Math.max(0, offset - startNode.start.length)), 
+                            tinymce.trim(firstTextNode.data).length != startNode.start.length) && (startNode.format ? (format = editor.formatter.get(startNode.format)) && format[0].block && (firstTextNode.deleteData(0, startNode.start.length), 
+                            editor.formatter.apply(startNode.format, {}, firstTextNode), 
+                            rng.setStart(e, offset), rng.collapse(!0), selection.setRng(rng)) : startNode.cmd && (editor.undoManager.add(), 
+                            format = startNode.start.length, e = firstTextNode.data, 
+                            startNode.remove && (format = firstTextNode.data.length), 
+                            firstTextNode.deleteData(0, format), parent = firstTextNode.parentNode, 
+                            dom.isEmpty(parent) && dom.isBlock(parent) && (parent.innerHTML = '<br data-mce-bogus="1">', 
+                            window.setTimeout(function() {
+                                rng.setStart(parent, 0), rng.collapse(!0), selection.setRng(rng);
+                            }, 0)), editor.execCommand(startNode.cmd, !1, e)));
                         }
-                        firstTextNode && (textBlockElm = findPattern(firstTextNode.data)) && (textBlockElm.remove && e.preventDefault(), 
-                        e = (rng = selection.getRng(!0)).startContainer, offset = rng.startOffset, 
-                        firstTextNode == e && (offset = Math.max(0, offset - textBlockElm.start.length)), 
-                        tinymce.trim(firstTextNode.data).length != textBlockElm.start.length) && (textBlockElm.format ? (format = editor.formatter.get(textBlockElm.format)) && format[0].block && (firstTextNode.deleteData(0, textBlockElm.start.length), 
-                        editor.formatter.apply(textBlockElm.format, {}, firstTextNode), 
-                        rng.setStart(e, offset), rng.collapse(!0), selection.setRng(rng)) : textBlockElm.cmd && (editor.undoManager.add(), 
-                        format = textBlockElm.start.length, e = firstTextNode.data, 
-                        textBlockElm.remove && (format = firstTextNode.data.length), 
-                        firstTextNode.deleteData(0, format), parent = firstTextNode.parentNode, 
-                        dom.isEmpty(parent) && dom.isBlock(parent) && (parent.innerHTML = '<br data-mce-bogus="1">', 
-                        window.setTimeout(function() {
-                            rng.setStart(parent, 0), rng.collapse(!0), selection.setRng(rng);
-                        }, 0)), editor.execCommand(textBlockElm.cmd, !1, e)));
                     }
                 }(e);
             }(e);
@@ -12382,11 +12385,11 @@
                 });
             },
             _clearBlocks: function(ed, e) {
-                var tag, n = ed.selection.getNode();
-                (n = ed.dom.getParents(n, blocks.join(","))) && 1 < n.length && (tag = (tag = ed.getParam("forced_root_block", "p")) || (ed.getParam("force_block_newlines") ? "p" : "br"), 
-                e.preventDefault(), (n = n[n.length - 1]) !== ed.getBody()) && (tag = ed.dom.create(tag, {}, "\xa0"), 
-                e.keyCode === VK.ENTER || e.keyCode === VK.DOWN ? ed.dom.insertAfter(tag, n) : ed.dom.insertBefore(tag, n), 
-                ed.selection.select(tag), ed.selection.collapse(1));
+                var n = ed.selection.getNode(), tag = ed.getParam("forced_root_block", "p") || (ed.getParam("force_block_newlines") ? "p" : "br"), p = ed.dom.getParents(n, blocks.join(","));
+                (p = ed.dom.getParent(n, "td,th") ? ed.dom.getParents(n, "td,th,tr,tfoot,thead,table") : p) && 1 < p.length && (e.preventDefault(), 
+                (n = p[p.length - 1]) !== ed.getBody()) && (p = ed.dom.create(tag, {}, "\xa0"), 
+                e.keyCode === VK.ENTER || e.keyCode === VK.DOWN ? ed.dom.insertAfter(p, n) : ed.dom.insertBefore(p, n), 
+                ed.selection.select(p), ed.selection.collapse(1));
             }
         }), tinymce.PluginManager.add("format", tinymce.plugins.FormatPlugin);
     }(), function() {

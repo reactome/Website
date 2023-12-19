@@ -1,4 +1,4 @@
-/* jce - 2.9.54 | 2023-11-12 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.57 | 2023-12-14 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     function isAnchor(elm) {
         return elm && "a" === elm.nodeName.toLowerCase();
@@ -6,7 +6,7 @@
     function hasFileSpan(elm) {
         return isAnchor(elm) && elm.querySelector("span.wf_file_text") && 1 === elm.childNodes.length;
     }
-    var DOM = tinymce.DOM, Event = tinymce.dom.Event;
+    var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each, extend = tinymce.extend;
     function collectNodesInRange(rng, predicate) {
         if (rng.collapsed) return [];
         for (var rng = rng.cloneContents(), walker = new tinymce.dom.TreeWalker(rng.firstChild, rng), elements = [], nodes = [], current = rng.firstChild; (predicate(current) ? elements : nodes).push(current), 
@@ -43,14 +43,16 @@
         } : data).url ? (text = getAnchorText(ed.selection, isAnchor(node) ? node : null) || "", 
         data.text = data.text || text || data.url, /^\s*www\./i.test(data.url) && (data.url = "https://" + data.url), 
         text = {
-            href: data.url
+            href: data.url,
+            title: data.title || "",
+            target: data.target || ""
         }, text = tinymce.extend(text, params.attributes || {}), ed.selection.isCollapsed() ? ed.execCommand("mceInsertContent", !1, ed.dom.createHTML("a", text, data.text)) : (ed.execCommand("mceInsertLink", !1, text), 
         isAnchor(anchor) && updateTextContent(node, data.text)), ed.undoManager.add(), 
         ed.nodeChanged()) : isAnchor(node) && ed.execCommand("unlink", !1);
     }
     tinymce.create("tinymce.plugins.LinkPlugin", {
         init: function(ed, url) {
-            var urlCtrl, textCtrl;
+            var urlCtrl, textCtrl, titleCtrl, targetCtrl;
             this.editor = ed, this.url = url, ed.addCommand("mceLink", function() {
                 var se = ed.selection, n = se.getNode();
                 "A" != n.nodeName || isAnchor(n) || se.select(n), ed.windowManager.open({
@@ -61,7 +63,9 @@
                 });
             }), ed.addShortcut("meta+k", "link.desc", "mceLink"), ed.onPreInit.add(function() {
                 var cm, form, args, params = ed.getParam("link", {});
-                !0 === params.basic_dialog && (cm = ed.controlManager, form = cm.createForm("link_form"), 
+                !0 === (params = extend({
+                    attributes: {}
+                }, params)).basic_dialog && (cm = ed.controlManager, form = cm.createForm("link_form"), 
                 args = {
                     label: ed.getLang("url", "URL"),
                     name: "url",
@@ -96,17 +100,35 @@
                     attributes: {
                         required: !0
                     }
-                }), form.add(textCtrl), ed.addCommand("mceLink", function() {
+                }), form.add(textCtrl), !1 !== params.title_ctrl && (titleCtrl = cm.createTextBox("link_title", {
+                    label: ed.getLang("link.title", "Title"),
+                    name: "title",
+                    clear: !0
+                }), form.add(titleCtrl)), !1 !== params.target_ctrl && (targetCtrl = cm.createListBox("link_target", {
+                    label: ed.getLang("link.target", "Taget"),
+                    name: "target",
+                    onselect: function(v) {}
+                }), args = {
+                    "": "--",
+                    _blank: ed.getLang("link.target_blank", "Open in new window"),
+                    _self: ed.getLang("link.target_self", "Open in same window"),
+                    _parent: ed.getLang("link.target_parent", "Open in parent window"),
+                    _top: ed.getLang("link.target_top", "Open in top window")
+                }, each(args, function(name, value) {
+                    targetCtrl.add(name, value);
+                }), form.add(targetCtrl)), ed.addCommand("mceLink", function() {
                     ed.windowManager.open({
                         title: ed.getLang("link.desc", "Link"),
                         items: [ form ],
                         size: "mce-modal-landscape-small",
                         open: function() {
-                            var label = ed.getLang("insert", "Insert"), node = ed.selection.getNode(), src = "", state = isOnlyTextSelected(ed), start = ((node = ed.dom.getParent(node, "a[href]")) && (ed.selection.select(node), 
+                            var label = ed.getLang("insert", "Insert"), node = ed.selection.getNode(), src = "", title = "", target = params.attributes.target || "", state = isOnlyTextSelected(ed), start = ((node = ed.dom.getParent(node, "a[href]")) && (ed.selection.select(node), 
                             (src = ed.dom.getAttrib(node, "href")) && (label = ed.getLang("update", "Update")), 
                             tinymce.isIE && (start = ed.selection.getStart()) === ed.selection.getEnd() && "A" === start.nodeName && (node = start), 
-                            hasFileSpan(node)) && (state = !0), getAnchorText(ed.selection, isAnchor(node) ? node : null) || "");
+                            hasFileSpan(node) && (state = !0), title = ed.dom.getAttrib(node, "title"), 
+                            target = ed.dom.getAttrib(node, "target")), getAnchorText(ed.selection, isAnchor(node) ? node : null) || "");
                             urlCtrl.value(src), textCtrl.value(start), textCtrl.setDisabled(!state), 
+                            titleCtrl && titleCtrl.value(title), targetCtrl && targetCtrl.value(target), 
                             window.setTimeout(function() {
                                 urlCtrl.focus();
                             }, 10), DOM.setHTML(this.id + "_insert", label);
