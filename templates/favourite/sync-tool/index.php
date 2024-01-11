@@ -49,7 +49,7 @@ if(isset($_POST["action"])) {
 		$mailer->setSender($sender);
 
 		# retrieve email address
-		$recipient_ids = array(183,181); # user id (in Joomla)
+		$recipient_ids = array(183,181,184); # user id (in Joomla)
 
 		$db     = JFactory::getDBO();
 		$query  = $db->getQuery(true);
