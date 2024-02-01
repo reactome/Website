@@ -1,4 +1,4 @@
-/* jce - 2.9.58 | 2023-12-20 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.61 | 2024-01-21 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function($) {
     var oldSetOption = $.ui.resizable.prototype._setOption;
     function getRatio(o) {
@@ -180,16 +180,21 @@
                     self._trigger("start", null);
                 },
                 resize: function(event, ui) {
-                    var ui = ui.element[0], w = Math.round(ui.clientWidth), h = Math.round(ui.clientHeight);
-                    $clone.css({
-                        top: -ui.offsetTop,
-                        left: -ui.offsetLeft
+                    var n = ui.element[0], w = Math.round(n.clientWidth), h = Math.round(n.clientHeight), n = ($clone.css({
+                        top: -n.offsetTop,
+                        left: -n.offsetLeft
                     }), $crop.css({
                         width: w,
                         height: h,
-                        top: ui.offsetTop,
-                        left: ui.offsetLeft
-                    }), self._trigger("change", null, self.getArea());
+                        top: n.offsetTop,
+                        left: n.offsetLeft
+                    }), self.getArea()), ui = ui.originalSize;
+                    self._trigger("change", null, {
+                        width: ui.width == w ? "" : n.width,
+                        height: ui.height == h ? "" : n.height,
+                        x: n.x,
+                        y: n.y
+                    });
                 },
                 stop: function() {
                     self._trigger("stop", null, self.getArea());
@@ -207,7 +212,7 @@
                     }), $clone.css({
                         top: -top,
                         left: -ui
-                    }), self._trigger("change", null, self.getArea());
+                    }), self._trigger("change", event, self.getArea());
                 },
                 stop: function() {
                     self._trigger("stop", null, self.getArea());
@@ -226,43 +231,41 @@
             var ratio = s;
             s && (ratio = getRatio(s), this.setArea(s)), this.setRatio(ratio);
         },
-        getRatio: function() {
-            return {
-                x: this.width / this.options.width,
-                y: this.height / this.options.height
-            };
+        getScaleRatio: function() {
+            return this.width / this.options.width;
         },
         setRatio: function(ratio) {
             $("#crop-widget").resizable("option", "aspectRatio", ratio);
         },
         setArea: function(o, update) {
-            var key, self = this, r = this.getRatio(), o = {
-                left: Math.round(o.x * r.x, 1),
-                top: Math.round(o.y * r.y, 1),
-                width: Math.round(o.width * r.x, 1),
-                height: Math.round(o.height * r.y, 1)
-            }, data = this._calculateSelection(o, {
+            var self = this, r = this.getScaleRatio();
+            for (key in o) o[key] = parseInt(o[key], 10), Number.isNaN(o[key]) && (o[key] = 0);
+            var key, values = {
+                left: o.x * r,
+                top: o.y * r,
+                width: o.width * r,
+                height: o.height * r
+            }, data = this._calculateSelection(values, {
                 width: this.width,
                 height: this.height
             });
             for (key in data) Number.isNaN(data[key]) && (data[key] = 0);
+            function getUpdatedProps(data) {
+                return {
+                    x: o.x || Math.round(data.left / r, 1),
+                    y: o.y || Math.round(data.top / r, 1),
+                    width: o.width || Math.round(data.width / r, 1),
+                    height: o.height || Math.round(data.height / r, 1)
+                };
+            }
             $("#crop-widget, #crop-window").animate(data, {
                 step: function(now, fx) {
                     "crop-window" != fx.elem.id || "left" != fx.prop && "top" != fx.prop || $(fx.elem).children("img, canvas").css(fx.prop, 0 - now), 
-                    update && self._trigger("change", null, {
-                        x: Math.round(data.left / r.x, 1),
-                        y: Math.round(data.top / r.y, 1),
-                        width: Math.round(data.width / r.x, 1),
-                        height: Math.round(data.height / r.y, 1)
-                    });
+                    update && (fx = getUpdatedProps(data), self._trigger("change", null, fx));
                 },
                 complete: function() {
-                    update && self._trigger("stop", null, {
-                        x: Math.round(data.left / r.x, 1),
-                        y: Math.round(data.top / r.y, 1),
-                        width: Math.round(data.width / r.x, 1),
-                        height: Math.round(data.height / r.y, 1)
-                    });
+                    var props;
+                    update && (props = getUpdatedProps(data), self._trigger("stop", null, props));
                 }
             });
         },
@@ -274,23 +277,23 @@
         },
         _calculateSelection: function(dim, img) {
             var x = parseInt(dim.left), y = parseInt(dim.top), w = parseInt(dim.width), dim = parseInt(dim.height), w = Math.min(w, this.options.width), dim = Math.min(dim, this.options.height);
-            return Number.isNaN(x) ? w <= img.width && (x = Math.floor((img.width - w) / 2)) : x + w > img.width && (w = img.width - x), 
-            Number.isNaN(y) ? dim <= img.height && (y = Math.floor((img.height - dim) / 2)) : y + dim > img.height && (dim = img.height - y), 
-            w = Math.min(w, Math.floor(img.width)), dim = Math.min(dim, Math.floor(img.height)), 
-            {
-                left: Math.max(0, x),
-                top: Math.max(0, y),
+            return Number.isNaN(x) ? w <= img.width && (x = (img.width - w) / 2) : x + w > img.width && (w = img.width - x), 
+            Number.isNaN(y) ? dim <= img.height && (y = (img.height - dim) / 2) : y + dim > img.height && (dim = img.height - y), 
+            w = Math.min(w, img.width), dim = Math.min(dim, img.height), w = Math.round(w), 
+            dim = Math.round(dim), {
+                left: x = Math.max(0, Math.round(x)),
+                top: y = Math.max(0, Math.round(y)),
                 width: w,
                 height: dim
             };
         },
         getArea: function() {
-            var n = $("#crop-window").get(0), r = this.getRatio();
+            var n = $("#crop-widget").get(0), r = this.getScaleRatio();
             return {
-                x: Math.round(n.offsetLeft / r.x, 1),
-                y: Math.round(n.offsetTop / r.y, 1),
-                width: Math.round(n.clientWidth / r.x, 1),
-                height: Math.round(n.clientHeight / r.y, 1)
+                x: Math.round(n.offsetLeft / r, 1),
+                y: Math.round(n.offsetTop / r, 1),
+                width: Math.round($(n).width() / r, 1),
+                height: Math.round($(n).height() / r, 1)
             };
         },
         reset: function() {

@@ -4,7 +4,7 @@
  * @subpackage  Admin
  *
  * @copyright   Copyright (C) 2005 - 2023 Open Source Matters, Inc. All rights reserved.
- * @copyright   Copyright (c) 2009-2023 Ryan Demmer. All rights reserved
+ * @copyright   Copyright (c) 2009-2024 Ryan Demmer. All rights reserved
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('JPATH_PLATFORM') or die('RESTRICTED');
@@ -535,6 +535,15 @@ class pkg_jceInstallerScript
             $media . '/js'
         );
 
+        // clean up editor folder
+        $folders['2.9.60'] = array(
+            JPATH_PLUGINS . '/editors/jce/src/Provider'
+        );
+        // remove old layout file
+        $files['2.9.60'] = array(
+            JPATH_PLUGINS . '/editors/jce/layouts/editor/textarea.php'
+        );
+
         $files['2.6.38'] = array(
             $admin . '/install.php',
             $admin . '/install.script.php',
@@ -590,7 +599,7 @@ class pkg_jceInstallerScript
 
         foreach ($folders as $version => $list) {
             // version check
-            if (version_compare($version, $current_version, 'lt')) {
+            if (version_compare($version, $current_version, 'gt')) {
                 continue;
             }
 

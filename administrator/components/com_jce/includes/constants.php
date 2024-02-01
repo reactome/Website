@@ -5,7 +5,7 @@
  * @subpackage  Admin
  *
  * @copyright   Copyright (C) 2005 - 2023 Open Source Matters, Inc. All rights reserved.
- * @copyright   Copyright (c) 2009-2023 Ryan Demmer. All rights reserved
+ * @copyright   Copyright (c) 2009-2024 Ryan Demmer. All rights reserved
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('JPATH_PLATFORM') or die;
@@ -13,7 +13,7 @@ defined('JPATH_PLATFORM') or die;
 use Joomla\CMS\Uri\Uri;
 
 // Some shortcuts to make life easier
-define('WF_VERSION', '2.9.58');
+define('WF_VERSION', '2.9.61');
 
 // JCE Administration Component
 define('WF_ADMINISTRATOR', JPATH_ADMINISTRATOR . '/components/com_jce');

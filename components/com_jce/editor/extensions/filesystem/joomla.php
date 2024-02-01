@@ -4,7 +4,7 @@
  * @subpackage  Editor
  *
  * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
- * @copyright   Copyright (c) 2009-2023 Ryan Demmer. All rights reserved
+ * @copyright   Copyright (c) 2009-2024 Ryan Demmer. All rights reserved
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -89,6 +89,18 @@ class WFJoomlaFileSystem extends WFFileSystem
             // list of restricted directories
             $restricted = $wf->getParam('filesystem.joomla.restrict_dir', self::$restricted);
 
+            // is root allowed?
+            $allowroot = (bool) $wf->getParam('filesystem.joomla.allow_root', 0);
+
+            $plg = $wf->getName();
+            $fs = $wf->getParam($plg . '.filesystem', '');
+
+            // if a filesystem is set, use allow root options
+            if ($fs) {
+                $restricted = $wf->getParam($plg . '.filesystem.joomla.restrict_dir');
+                $allowroot = $wf->getParam($plg . '.filesystem.joomla.allow_root', 0);
+            }
+
             // explode to array
             if (is_string($restricted)) {
                 self::$restricted = explode(',', $restricted);
@@ -99,8 +111,8 @@ class WFJoomlaFileSystem extends WFFileSystem
             // clean array
             self::$restricted = array_filter(self::$restricted);
 
-            // is root allowed?
-            self::$allowroot = (bool) $wf->getParam('filesystem.joomla.allow_root', 0);
+            // cast to bool
+            self::$allowroot = (bool) $allowroot;
 
             // set $root to empty if it is allowed
             if (self::$allowroot) {
@@ -110,6 +122,8 @@ class WFJoomlaFileSystem extends WFFileSystem
                 if (empty($root)) {
                     $root = 'images';
                 }
+
+                self::$restricted = array();
             }
 
             if (!empty($root)) {
@@ -842,7 +856,8 @@ class WFJoomlaFileSystem extends WFFileSystem
         return $data;
     }
 
-    protected function resolveFilenameConflict($destination, $name, $createCopy = false) {
+    protected function resolveFilenameConflict($destination, $name, $createCopy = false)
+    {
         // get overwrite state
         $conflict = $this->get('upload_conflict', 'overwrite');
 

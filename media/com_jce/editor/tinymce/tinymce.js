@@ -1,4 +1,4 @@
-/* jce - 2.9.58 | 2023-12-20 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.61 | 2024-01-21 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     !function(win) {
@@ -6158,6 +6158,7 @@
                 return rng;
             },
             setRng: function(rng, forward) {
+                var doc = this.win.document;
                 if (rng) if (rng.select) {
                     this.explicitRange = null;
                     try {
@@ -6171,7 +6172,7 @@
                     sel) {
                         this.explicitRange = rng;
                         try {
-                            sel.removeAllRanges(), sel.addRange(rng);
+                            sel.removeAllRanges(), doc.contains(rng.startContainer) && sel.addRange(rng);
                         } catch (ex) {}
                         !1 === forward && sel.extend && (sel.collapse(rng.endContainer, rng.endOffset), 
                         sel.extend(rng.startContainer, rng.startOffset)), this.selectedRange = 0 < sel.rangeCount ? sel.getRangeAt(0) : null;

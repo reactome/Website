@@ -1,8 +1,8 @@
-/* jce - 2.9.58 | 2023-12-20 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.61 | 2024-01-21 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, extend = tinymce.extend, Node = tinymce.html.Node, VK = tinymce.VK, Serializer = tinymce.html.Serializer, DomParser = tinymce.html.DomParser, SaxParser = tinymce.html.SaxParser, DOM = tinymce.DOM, htmlSchema = new tinymce.html.Schema({
         schema: "mixed"
-    });
+    }), transparentSrc = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     function isNonEditable(node) {
         var nonEditClass = tinymce.settings.noneditable_noneditable_class || "mceNonEditable";
         return node.attr ? node.hasClass(nonEditClass) : DOM.hasClass(node, nonEditClass);
@@ -190,7 +190,7 @@
         var placeHolder = new Node("img", 1);
         return placeHolder.shortEnded = !0, retainAttributesAndInnerHtml(editor, node, placeHolder), 
         placeHolder.attr({
-            src: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+            src: transparentSrc,
             "data-mce-object": node.name
         }), isNonEditable(node) && (placeHolder.attr("contenteditable", "false"), 
         placeHolder.attr("data-mce-resize", "false")), placeHolder;
@@ -270,22 +270,31 @@
     }
     function placeHolderConverter(editor) {
         return function(nodes) {
-            for (var node, i = nodes.length; i--; ) if ((node = nodes[i]).parent && !node.parent.attr("data-mce-object")) if ("iframe" === node.name && !1 === function(editor, node) {
-                var src = node.attr("src");
-                return !!isNonEditable(node) || isSupportedIframe(editor, src);
-            }(editor, node)) node.remove(); else if (isValidElement(editor, node.name) || isNonEditable(node)) {
-                if ("iframe" !== node.name) {
-                    var src = node.attr("src") || node.attr("data") || "";
-                    if (src && !isSupportedUrl(editor, node.name, src)) {
+            for (var node, i = nodes.length, media_live_embed = editor.settings.media_live_embed; i--; ) if ((node = nodes[i]).parent && !node.parent.attr("data-mce-object")) {
+                if ("iframe" === node.name) if (node.attr("src")) {
+                    if (!1 === function(editor, node) {
+                        var src = node.attr("src");
+                        return !!isNonEditable(node) || isSupportedIframe(editor, src);
+                    }(editor, node)) {
                         node.remove();
                         continue;
                     }
-                }
-                !editor.settings.media_live_embed || isObjectEmbed(node.name) || isResponsiveMedia(node) || isNonEditable(node) ? isWithinEmbed(node) || (isResponsiveMedia(node) && node.parent.attr({
-                    contentEditable: "false",
-                    "data-mce-contenteditable": "true"
-                }), node.replace(createPlaceholderNode(editor, node))) : isWithinEmbed(node) || node.replace(createPreviewNode(editor, node));
-            } else node.remove();
+                } else media_live_embed = !1;
+                if (isValidElement(editor, node.name) || isNonEditable(node)) {
+                    if ("iframe" !== node.name) {
+                        var src = node.attr("src") || node.attr("data") || "";
+                        if (src && !isSupportedUrl(editor, node.name, src)) {
+                            node.remove();
+                            continue;
+                        }
+                        src || (media_live_embed = !1);
+                    }
+                    !media_live_embed || isObjectEmbed(node.name) || isResponsiveMedia(node) || isNonEditable(node) ? isWithinEmbed(node) || (isResponsiveMedia(node) && node.parent.attr({
+                        contentEditable: "false",
+                        "data-mce-contenteditable": "true"
+                    }), node.replace(createPlaceholderNode(editor, node))) : isWithinEmbed(node) || node.replace(createPreviewNode(editor, node));
+                } else node.remove();
+            }
         };
     }
     var retainAttributesAndInnerHtml = function(editor, sourceNode, targetNode) {
@@ -614,7 +623,8 @@
                         }
                         var i, attribs, mediatype = node.getAttribute("data-mce-object") || node.nodeName.toLowerCase(), html = ed.dom.getAttrib(node, "data-mce-html");
                         for ((data = html ? extend(data, htmlToData(ed, 0, html)) : data).src = ed.dom.getAttrib(node, "data-mce-p-src") || ed.dom.getAttrib(node, "data-mce-p-data") || ed.dom.getAttrib(node, "src"), 
-                        data.src = ed.convertURL(data.src), i = (attribs = node.attributes).length - 1; 0 <= i; i--) {
+                        data.src = ed.convertURL(data.src), data.src == transparentSrc && (data.src = ""), 
+                        i = (attribs = node.attributes).length - 1; 0 <= i; i--) {
                             var value, name = attribs.item(i).name;
                             value = ed.dom.getAttrib(node, name), "data" !== (name = -1 !== name.indexOf("data-mce-p-") ? name.substr(11) : name) && "src" !== name && "type" !== name && "codebase" !== name && "classid" !== name && ("poster" === name && (value = ed.convertURL(value)), 
                             "flashvars" === name && (value = decodeURIComponent(value)), 

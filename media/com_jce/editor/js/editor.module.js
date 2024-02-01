@@ -1,4 +1,4 @@
-/* jce - 2.9.58 | 2023-12-20 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2023 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.61 | 2024-01-21 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 import {
     JoomlaEditor,
     JoomlaEditorDecorator
@@ -28,7 +28,15 @@ class JceDecorator extends JoomlaEditorDecorator {
 }
 
 tinyMCE.onAddEditor.add(function(mgr, editor) {
-    var elm = editor.getElement();
-    "advanced" === editor.settings.theme && (editor = new JceDecorator(editor, "jce", elm.id), 
-    JoomlaEditor.register(editor));
+    var elm = editor.getElement(), container = elm.parentNode;
+    if ("advanced" === editor.settings.theme) {
+        const JceEditor = new JceDecorator(editor, "jce", elm.id), editorButtons = (JoomlaEditor.register(JceEditor), 
+        mgr.editors[0] === editor && JoomlaEditor.setActive(JceEditor), container.parentNode.querySelector(".editor-xtd-buttons"));
+        editorButtons && (editorButtons.addEventListener("click", function(e) {
+            e.target.matches("button") && e.target.parentNode === editorButtons && (mgr.setActive(editor), 
+            JoomlaEditor.setActive(JceEditor));
+        }), editorButtons.querySelectorAll(".modal").forEach(function(modal) {
+            document.body.appendChild(modal);
+        }));
+    }
 }), window.JceDecorator = JceDecorator;
