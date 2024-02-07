@@ -124,7 +124,7 @@ var fivizCitation = [/reactome-fiviz/];
 var gsaCitation = [/reactome-gsa/, /gsa/];
 var graphDatabaseCitation = [/ContentService/, /graph-database/];
 var pathwayCitation = [/content\/detail\/R-/];
-var orcidCitation = [/orcid/];
+var orcidCitation = [/orcid/, /contributors/];
 
 // constants declaration end
 
