@@ -1,18 +1,11 @@
-/* jce - 2.9.61 | 2024-01-21 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     !function(win) {
         var whiteSpaceRe = /^\s*|\s*$/g, slice = [].slice, tinymce = {
             _init: function() {
-                var i, nl, base, p, v, self = this, doc = document, na = navigator, ua = na.userAgent, isIE = (self.isOpera = win.opera && win.opera.buildNumber || !1, 
-                self.isWebKit = /WebKit/.test(ua), !self.isWebKit && !self.isOpera && /MSIE/gi.test(ua) && /Explorer/gi.test(na.appName) && /MSIE (\w+)\./.exec(ua)[1]);
-                for (self.isIE11 = -1 != ua.indexOf("Trident/") && (-1 != ua.indexOf("rv:") || -1 != na.appName.indexOf("Netscape")) && 11, 
-                self.isIE = isIE || self.isIE11, self.isIE12 = -1 != ua.indexOf("Edge/") && !self.isIE && 12, 
-                self.isIE12 && (self.isWebKit = !1), self.isGecko = !self.isWebKit && !self.isIE11 && /Gecko/.test(ua), 
-                self.isMac = -1 != ua.indexOf("Mac"), self.isAir = /adobeair/i.test(ua), 
-                self.isIDevice = /(iPad|iPhone)/.test(ua), self.isIOS = self.isIDevice, 
-                self.isIOS5 = self.isIDevice && 534 <= ua.match(/AppleWebKit\/(\d*)/)[1], 
-                self.suffix = "", nl = doc.getElementsByTagName("base"), i = 0; i < nl.length; i++) (v = nl[i].href) && (/^https?:\/\/[^\/]+$/.test(v) && (v += "/"), 
+                var i, nl, base, p, v, self = this, doc = document;
+                for (self.suffix = "", nl = doc.getElementsByTagName("base"), i = 0; i < nl.length; i++) (v = nl[i].href) && (/^https?:\/\/[^\/]+$/.test(v) && (v += "/"), 
                 base = v ? v.match(/.*\//)[0] : "");
                 function getBase(n) {
                     return n.src && /tinymce(|_gzip|_jquery|_prototype|_full)(_dev|_src)?.js/.test(n.src) && (/_(src|dev)\.js/g.test(n.src) && (self.suffix = "_src"), 
@@ -21,7 +14,7 @@
                     self.baseURL);
                 }
                 for (nl = doc.getElementsByTagName("script"), i = 0; i < nl.length; i++) if (getBase(nl[i])) return;
-                if (na = doc.getElementsByTagName("head")[0]) for (nl = na.getElementsByTagName("script"), 
+                if (doc = doc.getElementsByTagName("head")[0]) for (nl = doc.getElementsByTagName("script"), 
                 i = 0; i < nl.length; i++) if (getBase(nl[i])) return;
             },
             is: function(o, t) {
@@ -162,7 +155,34 @@
         tinymce.text = {}, tinymce.caret = {}, tinymce.html = {}, tinymce.ui = {}, 
         tinymce.util = {}, tinymce.file = {};
     }(window);
-    var mouseEventRe, deprecated, count = 0, Arr = (tinymce.util.Uuid = {
+    var webkit, userAgent = (nav = navigator).userAgent;
+    function matchMediaQuery(query) {
+        return "matchMedia" in window && matchMedia(query).matches;
+    }
+    var mouseEventRe, deprecated, isTouchEnabled = 1 < navigator.maxTouchPoints, opera = window.opera && window.opera.buildNumber, android = /Android/.test(userAgent), nav = !(webkit = /WebKit/.test(userAgent)) && !opera && /MSIE/gi.test(userAgent) && /Explorer/gi.test(nav.appName) && /MSIE (\w+)\./.exec(userAgent)[1] && !webkit, gecko = !webkit && !nav && /Gecko/.test(userAgent), mac = -1 != userAgent.indexOf("Mac"), isIOS = /(iPad|iPhone)/.test(userAgent) || (isIOS = /iPad/.test(userAgent), 
+    hasMacLikeUserAgent = /Macintosh/.test(userAgent), isIOS) || isTouchEnabled && hasMacLikeUserAgent, hasMacLikeUserAgent = "FormData" in window && "FileReader" in window && "URL" in window && !!URL.createObjectURL, phone = matchMediaQuery("only screen and (max-device-width: 480px)") && (android || isIOS), tablet = matchMediaQuery("only screen and (min-width: 800px)") && (android || isIOS), windowsPhone = -1 != userAgent.indexOf("Windows Phone"), contentEditable = !isIOS || hasMacLikeUserAgent || 534 <= userAgent.match(/AppleWebKit\/(\d*)/)[1], count = (tinymce.util.Env = {
+        opera: opera,
+        webkit: webkit,
+        ie: nav,
+        gecko: gecko,
+        mac: mac,
+        ios: isIOS,
+        android: android,
+        contentEditable: contentEditable,
+        transparentSrc: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+        caretAfter: !0,
+        range: window.getSelection && "Range" in window,
+        fileApi: hasMacLikeUserAgent,
+        ceFalse: !0,
+        canHaveCSP: !0,
+        desktop: !phone && !tablet,
+        windowsPhone: windowsPhone,
+        touchEnabled: isTouchEnabled
+    }, tinymce.isOpera = opera, tinymce.isWebKit = webkit, tinymce.isIE = nav, tinymce.isIE11 = nav && /Trident\/7.0/.test(userAgent) && /rv:11.0/.test(userAgent), 
+    tinymce.isIE12 = -1 != userAgent.indexOf("Edge/") && !nav && 12, tinymce.isIE12 && (tinymce.isWebKit = !1), 
+    tinymce.isGecko = gecko, tinymce.isMac = mac, tinymce.isIDevice = isIOS, tinymce.isAndroid = android, 
+    tinymce.isIOS = isIOS, tinymce.isIOS5 = isIOS && 534 <= userAgent.match(/AppleWebKit\/(\d*)/)[1], 
+    tinymce.touchEnabled = isTouchEnabled, 0), Arr = (tinymce.util.Uuid = {
         uuid: function(prefix) {
             return prefix + count++ + ("s" + new Date().getTime().toString(36) + rnd() + rnd() + rnd());
             function rnd() {
@@ -1016,7 +1036,7 @@
             },
             noop: function() {}
         };
-    }(tinymce), tinymce.util.Arr), Fun = tinymce.util.Fun, Uuid = tinymce.util.Uuid, cache = [], constant = Fun.constant;
+    }(tinymce), tinymce.util.Arr), contentEditable = tinymce.util.Fun, Uuid = tinymce.util.Uuid, cache = [], constant = contentEditable.constant;
     function get(id) {
         return findFirst(function(cachedBlobInfo) {
             return cachedBlobInfo.id() === id;
@@ -1170,14 +1190,15 @@
         };
     }
     function cut(editor, evt) {
-        evt.isDefaultPrevented() || !1 === editor.selection.isCollapsed() && setClipboardData(evt, getData(editor), fallback(editor), function() {
+        !evt.isDefaultPrevented() && hasSelectedContent(editor) && setClipboardData(evt, getData(editor), fallback(editor), function() {
+            var rng = editor.selection.getRng();
             setTimeout(function() {
-                editor.execCommand("Delete");
+                editor.selection.setRng(rng), editor.execCommand("Delete");
             }, 0);
         });
     }
     function copy(editor, evt) {
-        evt.isDefaultPrevented() || !1 === editor.selection.isCollapsed() && setClipboardData(evt, getData(editor), fallback(editor), noop);
+        !evt.isDefaultPrevented() && hasSelectedContent(editor) && setClipboardData(evt, getData(editor), fallback(editor), noop);
     }
     function parseCssToRules(content) {
         var doc = document.implementation.createHTMLDocument(""), styleElement = document.createElement("style");
@@ -2435,7 +2456,7 @@
                 return create(clientRect.left, clientRect.top, clientRect.width, clientRect.height);
             }
         };
-    }(tinymce), tinymce.dom = {}, Fun = tinymce.dom, mouseEventRe = /^(?:mouse|contextmenu)|click/, 
+    }(tinymce), tinymce.dom = {}, phone = tinymce.dom, mouseEventRe = /^(?:mouse|contextmenu)|click/, 
     deprecated = {
         keyLocation: 1,
         layerX: 1,
@@ -2446,7 +2467,7 @@
         keyIdentifier: 1,
         mozPressure: 1,
         path: 1
-    }, Fun.EventUtils = EventUtils, Fun.Event = new EventUtils(), Fun.Event.bind(window, "ready", function() {}), 
+    }, phone.EventUtils = EventUtils, phone.Event = new EventUtils(), phone.Event.bind(window, "ready", function() {}), 
     tinymce.dom.TreeWalker = function(startNode, rootNode) {
         var node = startNode;
         function findSibling(node, startName, siblingName, shallow) {
@@ -3544,6 +3565,11 @@
                 format: "text"
             })
         };
+    }
+    function hasSelectedContent(editor) {
+        return !editor.selection.isCollapsed() || function(editor) {
+            return !!editor.dom.getParent(editor.selection.getStart(), "td.mceSelected,th.mceSelected", editor.getBody());
+        }(editor);
     }
     var internalMimeType = "x-tinymce/html", internalMark = "\x3c!-- " + internalMimeType + " --\x3e", unmark = function(html) {
         return html.replace(internalMark, "");
@@ -11034,10 +11060,10 @@
                     }
                     function createNewBlock(name) {
                         var block, clonedNode, caretNode, node = container, textInlineElements = schema.getTextInlineElements();
-                        if (name || "TABLE" == parentBlockName ? setForcedBlockAttrs(block = dom.create(name || newBlockName)) : block = settings.keep_attributes ? parentBlock.cloneNode(!1) : dom.create(parentBlock.nodeName), 
-                        caretNode = block, !1 !== settings.keep_styles) for (;textInlineElements[node.nodeName] && "_mce_caret" != node.id && (clonedNode = node.cloneNode(!1), 
+                        if (name || "TABLE" == parentBlockName ? setForcedBlockAttrs(block = dom.create(name || newBlockName)) : block = settings.enterkey_keep_attributes ? parentBlock.cloneNode(!1) : dom.create(parentBlock.nodeName), 
+                        caretNode = block, !0 === settings.enterkey_keep_styles) for (;textInlineElements[node.nodeName] && "_mce_caret" != node.id && (clonedNode = node.cloneNode(!1), 
                         dom.setAttrib(clonedNode, "id", ""), block.hasChildNodes() ? clonedNode.appendChild(block.firstChild) : caretNode = clonedNode, 
-                        block.appendChild(clonedNode)), node = node.parentNode; );
+                        block.appendChild(clonedNode)), (node = node.parentNode) && node != editableRoot; );
                         return isIE || (caretNode.innerHTML = '<br data-mce-bogus="1">'), 
                         block;
                     }

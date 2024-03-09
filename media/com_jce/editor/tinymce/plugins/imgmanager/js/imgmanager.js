@@ -1,4 +1,4 @@
-/* jce - 2.9.61 | 2024-01-21 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function($) {
     var ImageManagerDialog = {
         settings: {},
@@ -58,6 +58,8 @@
                 self.selectFile(file, data);
             }).on("filebrowser:onfileinsert", function(e, file, data) {
                 self.selectFile(file, data);
+            }).on("filebrowser:onfileinsert", function(e, file, data) {
+                self.insert();
             }), Wf.updateStyles(), $("#border").change(), $(".uk-constrain-checkbox").on("constrain:change", function(e, elms) {
                 $(elms).addClass("uk-isdirty");
             }).trigger("constrain:update"), $(".uk-equalize-checkbox").trigger("equalize:update"), 

@@ -1,4 +1,4 @@
-/* jce - 2.9.61 | 2024-01-21 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function($) {
     var each = tinymce.each, openwith = {
         googledocs: {
@@ -131,6 +131,8 @@
                 self.selectFile(file, data), file = data.url, (!1 !== new RegExp(".(" + embedInvalid.join("|") + ")$").test(file) ? $("#format").val("link").prop("disabled", !0) : $("#format").prop("disabled", !1)).trigger("change");
             }).on("filebrowser:onfileinsert", function(e, file, data) {
                 self.selectFile(file, data);
+            }).on("filebrowser:onfileinsert", function(e, file, data) {
+                self.insert();
             }), Wf.updateStyles(), $("#format").trigger("change"), $(".uk-form-controls select").datalist().trigger("datalist:update"), 
             $(".uk-datalist").trigger("datalist:update");
         },

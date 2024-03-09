@@ -1,4 +1,4 @@
-/* jce - 2.9.61 | 2024-01-21 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var Event = tinymce.dom.Event, DOM = tinymce.DOM;
     tinymce.create("tinymce.plugins.ContextMenu", {
@@ -8,12 +8,13 @@
             }
             var showMenu, contextmenuNeverUseNative, realCtrlKey, hideMenu, self = this;
             self.editor = ed, contextmenuNeverUseNative = ed.settings.contextmenu_never_use_native;
+            if (self.onContextMenu = new tinymce.util.Dispatcher(this), tinymce.isAndroid || tinymce.isIOS) return !1;
             function hide(ed, e) {
                 realCtrlKey = 0, e && 2 == e.button ? realCtrlKey = e.ctrlKey : self._menu && (self._menu.removeAll(), 
                 self._menu.destroy(), Event.remove(ed.getDoc(), "click", hideMenu), 
                 self._menu = null);
             }
-            self.onContextMenu = new tinymce.util.Dispatcher(this), hideMenu = function(e) {
+            hideMenu = function(e) {
                 hide(ed, e);
             }, showMenu = ed.onContextMenu.add(function(ed, e) {
                 var elm;

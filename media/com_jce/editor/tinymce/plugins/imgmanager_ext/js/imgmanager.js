@@ -1,4 +1,4 @@
-/* jce - 2.9.61 | 2024-01-21 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function($) {
     var useThumbnail = !1, ImageManagerDialog = {
         settings: {},
@@ -86,6 +86,8 @@
                 self.selectMultiple();
             }).on("filebrowser:onfiletoggle", function(e, file, data) {
                 self.selectOnToggle(data);
+            }).on("filebrowser:onfileinsert", function(e, file, data) {
+                self.insert();
             }), Wf.updateStyles(), $(".uk-repeatable").on("repeatable:create", function(e, ctrl, elm) {
                 $('input[name^="responsive_source"]', elm).focus();
             }), $(".uk-repeatable").on("repeatable:delete", function(e, ctrl, elm) {

@@ -1,20 +1,23 @@
-/* jce - 2.9.61 | 2024-01-21 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function($) {
+    function insert() {
+        var win = tinyMCEPopup.getWindowArg("window"), callback = tinyMCEPopup.getWindowArg("callback");
+        if (!callback) return tinyMCEPopup.close();
+        $("[data-filebrowser]").trigger("filebrowser:insert", function(selected, data) {
+            data.length || (data = [ {
+                title: "",
+                url: ""
+            } ]), "string" == typeof callback && (selectFile(data[0]), win.document.getElementById(callback).value = $("[data-filebrowser]").val()), 
+            "function" == typeof callback && callback(selected, data), tinyMCEPopup.close();
+        });
+    }
     function selectFile(file) {
         file = (file = file.url || "").replace(/^\//, "");
         $("[data-filebrowser]").val(file);
     }
     $(document).ready(function() {
         $("#insert").on("click", function(e) {
-            e.preventDefault();
-            var win = tinyMCEPopup.getWindowArg("window"), callback = tinyMCEPopup.getWindowArg("callback");
-            callback ? $("[data-filebrowser]").trigger("filebrowser:insert", function(selected, data) {
-                data.length || (data = [ {
-                    title: "",
-                    url: ""
-                } ]), "string" == typeof callback && (selectFile(data[0]), win.document.getElementById(callback).value = $("[data-filebrowser]").val()), 
-                "function" == typeof callback && callback(selected, data), tinyMCEPopup.close();
-            }) : tinyMCEPopup.close();
+            e.preventDefault(), insert();
         }), $("#cancel").on("click", function(e) {
             e.preventDefault(), tinyMCEPopup.close();
         });
@@ -24,6 +27,8 @@
         $(".uk-button-text", "#insert").text(tinyMCEPopup.getLang("update", "Update", !0))), 
         $("[data-filebrowser]").val(src).filebrowser().on("filebrowser:onfileclick", function(e, file, data) {
             selectFile(data);
+        }).on("filebrowser:onfileinsert", function(e, file, data) {
+            insert();
         });
     });
 }(jQuery);

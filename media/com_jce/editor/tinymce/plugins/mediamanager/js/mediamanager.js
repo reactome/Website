@@ -1,4 +1,4 @@
-/* jce - 2.9.61 | 2024-01-21 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function($) {
     var each = tinymce.each, htmlSchema = new tinymce.html.Schema({
         schema: "mixed"
@@ -174,6 +174,8 @@
                 data.width && !attribs.width && $("#width").val(data.width).data("tmp", data.width).trigger("change"), 
                 data.height && !attribs.height && $("#height").val(data.height).data("tmp", data.height).trigger("change"), 
                 attribs.width = attribs.height = null;
+            }).on("filebrowser:onfileinsert", function(e, file, data) {
+                self.insert();
             }), $("#src").on("change", function() {
                 this.value && self.selectType(this.value);
             }), $("#width, #height").on("change", function() {
