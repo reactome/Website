@@ -1,4 +1,4 @@
-/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     !function(win) {
@@ -1632,7 +1632,7 @@
             add("optgroup", "disabled label", "option"), add("option", "disabled label selected value"), 
             add("textarea", "cols dirname disabled form maxlength name readonly required rows wrap"), 
             add("menu", "type label", flowContent, "li"), add("noscript", "", flowContent), 
-            "html4" != type && (add("wbr"), add("ruby", "", phrasingContent, "rt rp"), 
+            add("code", "", phrasingContent), "html4" != type && (add("wbr"), add("ruby", "", phrasingContent, "rt rp"), 
             add("figcaption", "", flowContent), add("mark rt rp summary bdi", "", phrasingContent), 
             add("canvas", "width height", flowContent), add("video", "src crossorigin poster preload autoplay mediagroup loop muted controls width height buffered controlslist playsinline", flowContent, "track source"), 
             add("audio", "src crossorigin preload autoplay mediagroup loop muted controls buffered volume controlslist", flowContent, "track source"), 
@@ -1820,7 +1820,7 @@
                             (attrList = []).map = {}, attribsValue.replace(attrRegExp, (match, name, val, val2, val3) => (function(tagName, name, value, val2, val3) {
                                 var attrRule, i;
                                 if (value = (name = name.toLowerCase()) in fillAttrsMap ? name : decode(value || val2 || val3 || ""), 
-                                validate && !isInternalElement && !(0 < name.indexOf("-"))) {
+                                validate && !isInternalElement && !(0 < name.indexOf("-")) && 0 !== name.indexOf("aria-")) {
                                     if (!settings.allow_event_attributes && 0 == name.indexOf("on")) return;
                                     if (!(attrRule = validAttributesMap[name]) && validAttributePatterns) {
                                         for (i = validAttributePatterns.length; i-- && !(attrRule = validAttributePatterns[i]).pattern.test(name); );
@@ -2500,6 +2500,9 @@
         };
     }, function(tinymce) {
         var each = tinymce.each, is = tinymce.is, isWebKit = tinymce.isWebKit, isIE = tinymce.isIE, Entities = tinymce.html.Entities, simpleSelectorRe = /^([a-z0-9],?)+$/i, whiteSpaceRegExp = /^[ \t\r\n]*$/;
+        function stringToArray(value) {
+            return Array.isArray(value) ? value : "string" == typeof value ? value.split(" ") : [];
+        }
         tinymce.dom.DOMUtils = function(d, s) {
             var blockElementsMap;
             this.doc = d, this.win = window, this.files = {}, this.cssFlicker = !1, 
@@ -2875,19 +2878,23 @@
                 });
             },
             addClass: function(e, c) {
-                return c ? this.run(e, function(e) {
-                    var value = c, value = Array.isArray(value) ? value : "string" == typeof value ? value.split(" ") : [];
-                    return each(value, function(cls) {
+                var values;
+                return c ? (values = stringToArray(c), this.run(e, function(e) {
+                    return each(values, function(cls) {
                         if (cls.trim(), !cls) return !0;
                         e.classList.add(cls);
                     }), e.className;
-                }) : "";
+                })) : "";
             },
             removeClass: function(e, c) {
-                return this.run(e, function(e) {
-                    return e.classList.remove(c), e.className || (e.removeAttribute("class"), 
-                    e.removeAttribute("className")), e.className;
-                });
+                var values;
+                return c ? (values = stringToArray(c), this.run(e, function(e) {
+                    return each(values, function(cls) {
+                        if (cls.trim(), !cls) return !0;
+                        e.classList.remove(cls);
+                    }), e.className || (e.removeAttribute("class"), e.removeAttribute("className")), 
+                    e.className;
+                })) : "";
             },
             hasClass: function(n, c) {
                 return !(!(n = this.get(n)) || !c) && n.classList && n.classList.contains(c);
@@ -4078,7 +4085,7 @@
             stack = []), newlineFollows && i++;
             return 1 === blocks.length ? blocks[0] : rootAttrs + blocks.join(rootTag + rootAttrs) + rootTag;
         }(text, rootTag, rootAttrs) : text.replace(/\r?\n/g, "<br>");
-    }, each = tinymce.each, VK = tinymce.VK, DomParser = tinymce.html.DomParser, Serializer = tinymce.html.Serializer, BlobCache = tinymce.file.BlobCache, isIE = tinymce.isIE || tinymce.isIE12;
+    }, each = tinymce.each, VK = tinymce.VK, DomParser = tinymce.html.DomParser, Serializer = tinymce.html.Serializer, BlobCache = tinymce.file.BlobCache, Env = tinymce.util.Env, isIE = tinymce.isIE || tinymce.isIE12;
     function isKeyboardPasteEvent(e) {
         return VK.metaKeyPressed(e) && 86 == e.keyCode || e.shiftKey && 45 == e.keyCode;
     }
@@ -4169,7 +4176,7 @@
         each(content, function(s) {
             re = /^\/.*\/(g|i|m)*$/.test(s) ? new Function("return " + s)() : new RegExp(s), 
             o.content = o.content.replace(re, "");
-        }))), editor.onPasteBeforeInsert.dispatch(editor, o), function(editor, content) {
+        }))), editor.onPasteBeforeInsert.dispatch(editor, o), o.terminate || function(editor, content) {
             var validate = editor.settings.validate;
             editor.settings.validate = !0, editor.execCommand("mceInsertContent", !1, content), 
             editor.settings.validate = validate;
@@ -4223,7 +4230,7 @@
                         BlobCache.add(blobInfo)), '<img src="' + blobInfo.blobUri() + '" />') : '<img src="' + rng + '" />';
                     }(editor, lastRng, reader, blob);
                     pasteHtml(editor, html);
-                }, reader.readAsDataURL(blob)) : pasteHtml(editor, '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-mce-upload-marker="1" />', !0));
+                }, reader.readAsDataURL(blob)) : pasteHtml(editor, '<img src="' + Env.transparentSrc + '" data-mce-upload-marker="1" />', !0));
             }
             return hadImage;
         }
@@ -6712,7 +6719,7 @@
             },
             setAriaProperty: function(property, value) {
                 var element = DOM.get(this.id + "_aria") || DOM.get(this.id);
-                element && DOM.setAttrib(element, "aria-" + property, !!value);
+                element && element.setAttribute("aria-" + property, "" + !!value);
             },
             focus: function() {
                 DOM.get(this.id).focus();
@@ -6727,7 +6734,7 @@
             },
             setActive: function(s) {
                 s != this.active && (this.setState("Active", s), this.active = s, 
-                this.setAriaProperty("pressed", s));
+                this.setAriaProperty("current", s));
             },
             isActive: function() {
                 return this.active;
@@ -6748,8 +6755,7 @@
                 var state;
                 tinymce.is(this.disabled) && (state = this.disabled, this.disabled = -1, 
                 this.setDisabled(state)), tinymce.is(this.active) && (state = this.active, 
-                this.active = -1, this.setActive(state)), this._elm = DOM.get(this.id), 
-                this.onRender.dispatch();
+                this.active = -1, this.setActive(state)), this.onRender.dispatch();
             },
             parent: function(ctrl) {
                 if (!ctrl) return this._parent || null;
@@ -6840,14 +6846,17 @@
                 this._super(id, settings);
             },
             setSelected: function(state) {
-                this.setState("Selected", state), this.setAriaProperty("checked", !!state), 
+                this.setState("Selected", state), this.setAriaProperty("selected", !!state), 
                 this.selected = state;
             },
             isSelected: function() {
                 return this.selected;
             },
             postRender: function() {
-                this._super(), tinymce.is(this.selected) && this.setSelected(this.selected);
+                var state;
+                this._super(), tinymce.is(this.disabled) && (state = this.disabled, 
+                this.disabled = -1, this.setDisabled(state)), tinymce.is(this.active) && (state = this.active, 
+                this.active = -1, this.setActive(state)), tinymce.is(this.selected) && this.setSelected(this.selected);
             }
         });
     }(tinymce), function(tinymce) {
@@ -8626,8 +8635,7 @@
                 });
                 ifr.onload = function() {
                     ifr.onload = null, self.onLoad.dispatch();
-                }, DOM.setAttrib(ifr, "src", url || "about:blank"), self.contentAreaContainer = o.iframeContainer, 
-                o.editorContainer && (DOM.get(o.editorContainer).style.display = self.orgDisplay), 
+                }, self.contentAreaContainer = o.iframeContainer, o.editorContainer && (DOM.get(o.editorContainer).style.display = self.orgDisplay), 
                 e.style.visibility = self.orgVisibility, DOM.get(self.id).style.display = "none", 
                 DOM.setAttrib(self.id, "aria-hidden", !0), tinymce.relaxedDomain && url || self.initContentBody();
             },
@@ -9593,7 +9601,6 @@
         }
         settings.forced_root_block && (editor.onKeyUp.add(addRootBlocks), editor.onNodeChange.add(addRootBlocks));
     }, function(tinymce) {
-        tinymce.DOM;
         var Event = tinymce.dom.Event, each = tinymce.each, extend = tinymce.extend, PreviewCss = tinymce.util.PreviewCss;
         tinymce.ControlManager = function(ed, s) {
             var self = this;
@@ -9663,6 +9670,10 @@
                     }), Event.add(n, "focus", function() {
                         ed.selection.moveToBookmark(ed.bookmark), ed.bookmark = null;
                     });
+                }), Array.isArray(s.items) && c.onRenderMenu.add(function(c, m) {
+                    each(s.items, function(item) {
+                        m.add(item);
+                    });
                 }), c.hideMenu && ed.onMouseDown.add(c.hideMenu, c), this.add(c));
             },
             createStylesBox: function(id, s, cc) {
@@ -9722,7 +9733,9 @@
                 }, s), id = this.prefix + id, cc = cc || this._cls.splitbutton || tinymce.ui.SplitButton, 
                 cc = this.add(new cc(id, s, ed)), ed.onMouseDown.add(cc.hideMenu, cc), 
                 cc.onRenderMenu.add(function(e, m) {
-                    m.onHideMenu.add(function() {
+                    Array.isArray(s.items) && each(s.items, function(item) {
+                        m.add(item);
+                    }), m.onHideMenu.add(function() {
                         ed.nodeChanged(), ed.focus();
                     });
                 }), this.add(cc));
@@ -9965,9 +9978,9 @@
                 this.onClose.dispatch(this, win);
                 var f = win.features || {};
                 return f.close && "function" == typeof f.close && f.close.call(win || this, win), 
-                Event.clear(id), Event.clear(id + "_ifr"), DOM.setAttrib(id + "_ifr", "src", "about:blank"), 
-                DOM.remove(id + "_frame"), DOM.remove(id), delete this.windows[id], 
-                0 < this.count && (f = this._frontWindow()) && f.focus(), !0;
+                Event.clear(id), Event.clear(id + "_ifr"), DOM.remove(id + "_frame"), 
+                DOM.remove(id), delete this.windows[id], 0 < this.count && (f = this._frontWindow()) && f.focus(), 
+                !0;
             },
             setTitle: function(win, title) {
                 win = this._findId(win), (win = DOM.get(win + "_title")) && !win.innerHTML && (win.innerHTML = DOM.encode(title));
@@ -11449,7 +11462,7 @@
                     class: "mce-offscreen-selection",
                     id: realSelectionId
                 }), dom.add(editor.getBody(), startOffset)), range = dom.createRng(), 
-                dom.empty(startOffset), startOffset.appendChild(document.createTextNode("\xa0")), 
+                startOffset.innerHTML = "", startOffset.appendChild(document.createTextNode("\xa0")), 
                 startOffset.appendChild(endOffset), startOffset.appendChild(document.createTextNode("\xa0")), 
                 range.setStart(startOffset.firstChild, 1), range.setEnd(startOffset.lastChild, 0), 
                 dom.setStyle(startOffset, "top", dom.getPos(node, editor.getBody()).y), 
@@ -12397,6 +12410,7 @@
                             var name = ed.controlManager.get("formatselect");
                             name && name.select(p);
                         }
+                        "dl" === v && (ed.execCommand("InsertDefinitionList"), o.terminate = !0), 
                         "dt" !== v && "dd" !== v || (n && !ed.dom.getParent(n, "dl") && ed.execCommand("InsertDefinitionList"), 
                         "dt" === v && "DD" === n.nodeName && ed.dom.rename(n, "DT"), 
                         "dd" === v && "DT" === n.nodeName && ed.dom.rename(n, "DD"), 
@@ -12571,7 +12585,7 @@
             });
         }
     }), tinymce.PluginManager.add("colorpicker", tinymce.plugins.ColorPicker), function() {
-        var each = tinymce.each, JSON = tinymce.util.JSON, RangeUtils = tinymce.dom.RangeUtils, Uuid = tinymce.util.Uuid;
+        var each = tinymce.each, JSON = tinymce.util.JSON, RangeUtils = tinymce.dom.RangeUtils, Uuid = tinymce.util.Uuid, Env = tinymce.util.Env;
         tinymce.PluginManager.add("upload", function(ed, url) {
             var plugins = [], files = [], noop = (ed.onPreInit.add(function() {
                 function bindUploadEvents(ed) {
@@ -12603,7 +12617,7 @@
                         (cls = node.attr("class") ? node.attr("class").replace(/\s*upload-placeholder\s*/, "").split(" ") : cls).push("mce-item-upload"), 
                         cls.push("mce-item-upload-marker"), "media" === node.name && (node.name = "img", 
                         node.shortEnded = !0), node.attr({
-                            src: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+                            src: Env.transparentSrc,
                             class: tinymce.trim(cls.join(" "))
                         }), src = ed.dom.create("span", {
                             style: style
@@ -12618,7 +12632,8 @@
                         "data-mce-src": "",
                         src: "",
                         class: tinymce.trim(cls)
-                    }), node.name = "media", node.shortEnded = !1, node.attr("alt", null));
+                    }), node.name = "media", node.shortEnded = !1, node.attr("alt", null), 
+                    node.attr("data-mce-upload-marker", null));
                 }), ed.selection.onSetContent.add(function() {
                     bindUploadEvents(ed);
                 }), ed.onSetContent.add(function() {

@@ -1,6 +1,6 @@
-/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
-    var each = tinymce.each, JSON = tinymce.util.JSON, RangeUtils = tinymce.dom.RangeUtils, Uuid = tinymce.util.Uuid;
+    var each = tinymce.each, JSON = tinymce.util.JSON, RangeUtils = tinymce.dom.RangeUtils, Uuid = tinymce.util.Uuid, Env = tinymce.util.Env;
     tinymce.PluginManager.add("upload", function(ed, url) {
         var plugins = [], files = [];
         ed.onPreInit.add(function() {
@@ -40,7 +40,7 @@
                     cls.push("mce-item-upload"), cls.push("mce-item-upload-marker"), 
                     "media" === node.name && (node.name = "img", node.shortEnded = !0);
                     node.attr({
-                        src: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+                        src: Env.transparentSrc,
                         class: tinymce.trim(cls.join(" "))
                     });
                     src = ed.dom.create("span", {
@@ -57,7 +57,8 @@
                     "data-mce-src": "",
                     src: "",
                     class: tinymce.trim(cls)
-                }), node.name = "media", node.shortEnded = !1, node.attr("alt", null));
+                }), node.name = "media", node.shortEnded = !1, node.attr("alt", null), 
+                node.attr("data-mce-upload-marker", null));
             }), ed.selection.onSetContent.add(function() {
                 bindUploadEvents(ed);
             }), ed.onSetContent.add(function() {

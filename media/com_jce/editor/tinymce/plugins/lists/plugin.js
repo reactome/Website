@@ -1,4 +1,4 @@
-/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     function isBr(node) {
@@ -50,7 +50,7 @@
             if (/^(TD|TH)$/.test(container.parentNode.nodeName)) return container;
             container = container.parentNode;
         }
-        return console.log(container), container;
+        return container;
     }
     function shouldMerge(dom, list1, list2) {
         return isValidLists(list1, list2) && hasSameListStyle(dom, list1, list2) && hasSameClasses(list1, list2);
@@ -286,11 +286,11 @@
                 node.parentNode.insertBefore(block, node), textBlocks.push(block)), 
                 block.appendChild(node)));
             }), textBlocks;
-        }(editor, rng), function(block) {
-            var listBlock, sib, detailStyle, sibling = block.previousSibling;
-            sibling && NodeType.isListNode(sibling) && sibling.nodeName === listName && (sib = sibling, 
-            sib = dom.getStyle(sib, "list-style-type"), detailStyle = detail ? detail["list-style-type"] : "", 
-            sib === (null === detailStyle ? "" : detailStyle)) ? (listBlock = sibling, 
+        }(editor, rng), function(block, idx) {
+            var listBlock, detailStyle, sibling = block.previousSibling;
+            "DL" === listName && 0 < idx && (listItemName = "DD"), sibling && NodeType.isListNode(sibling) && sibling.nodeName === listName && (idx = sibling, 
+            idx = dom.getStyle(idx, "list-style-type"), detailStyle = detail ? detail["list-style-type"] : "", 
+            idx === (null === detailStyle ? "" : detailStyle)) ? (listBlock = sibling, 
             block = dom.rename(block, listItemName), sibling.appendChild(block)) : (listBlock = dom.create(listName), 
             block.parentNode.insertBefore(listBlock, block), listBlock.appendChild(block), 
             block = dom.rename(block, listItemName)), updateListWithDetails(dom, listBlock, detail), 

@@ -1,4 +1,4 @@
-/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, extend = tinymce.extend, Node = tinymce.html.Node, VK = tinymce.VK, Serializer = tinymce.html.Serializer, DomParser = tinymce.html.DomParser, SaxParser = tinymce.html.SaxParser, DOM = tinymce.DOM, htmlSchema = new tinymce.html.Schema({
         schema: "mixed"
@@ -231,7 +231,7 @@
         var key, params, attribs = {}, styles = {}, boolAttrs = editor.schema.getBoolAttrs();
         for (key in node.attributes.map) {
             var align, styleObject, value = node.attributes.map[key];
-            "src" === key && "img" === node.name || "draggable" === key || "contenteditable" === key || 0 === key.indexOf("on") || 0 === (key = "data-mce-width" !== (key = 0 === key.indexOf("data-mce-p-") ? key.substring(11) : key) && "data-mce-height" !== key ? key : key.substring(9)).indexOf("data-mce-") || node.attr("data-mce-object") && 0 == key.indexOf("aria-") || !editor.schema.isValid(tag, key) && -1 == key.indexOf("-") || ("class" === key && ((align = value.match(/mce-object-preview-(left|center|right)/)) && (styles = extend(styles, alignStylesMap[align[1]]), 
+            "src" === key && "img" === node.name || "draggable" === key || "contenteditable" === key || 0 === key.indexOf("on") || 0 === (key = "data-mce-width" !== (key = 0 === key.indexOf("data-mce-p-") ? key.substring(11) : key) && "data-mce-height" !== key ? key : key.substring(9)).indexOf("data-mce-") || "span" == node.name && node.attr("data-mce-object") || !editor.schema.isValid(tag, key) && -1 == key.indexOf("-") || ("class" === key && ((align = value.match(/mce-object-preview-(left|center|right)/)) && (styles = extend(styles, alignStylesMap[align[1]]), 
             node.attr("style") || node.attr("style", editor.dom.serializeStyle(styles)), 
             console.log(styles)), value = function(value) {
                 return value && (value = value.replace(/\s?mce-([\w-]+)/g, "").replace(/\s+/g, " "), 

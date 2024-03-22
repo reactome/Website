@@ -1,4 +1,4 @@
-/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var VK = tinymce.VK, each = tinymce.each, blocks = [];
     tinymce.create("tinymce.plugins.FormatPlugin", {
@@ -106,6 +106,7 @@
                         var name = ed.controlManager.get("formatselect");
                         name && name.select(p);
                     }
+                    "dl" === v && (ed.execCommand("InsertDefinitionList"), o.terminate = !0), 
                     "dt" !== v && "dd" !== v || (n && !ed.dom.getParent(n, "dl") && ed.execCommand("InsertDefinitionList"), 
                     "dt" === v && "DD" === n.nodeName && ed.dom.rename(n, "DT"), 
                     "dd" === v && "DT" === n.nodeName && ed.dom.rename(n, "DD"), 

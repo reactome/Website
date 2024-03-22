@@ -1,4 +1,4 @@
-/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     var Utils = {
@@ -36,9 +36,9 @@
         });
         return padColumn(editor, col), col;
     }
-    function addColumn(editor, node, parentCol) {
+    function addColumn(editor, node, parentCol, before) {
         var node = getColumnNode(editor, node), col = createColumn(editor);
-        node ? editor.dom.insertAfter(col, node) : (editor.formatter.apply("column"), 
+        node ? before ? editor.dom.insertBefore(col, node) : editor.dom.insertAfter(col, node) : (editor.formatter.apply("column"), 
         (col = editor.dom.get("__tmp")) && (col.parentNode.insertBefore(parentCol, col), 
         parentCol.appendChild(col), editor.dom.setAttrib(col, "id", ""))), col && col.childNodes.length && (editor.selection.select(col.firstChild), 
         editor.selection.collapse(1), editor.nodeChanged());
@@ -535,7 +535,7 @@
             });
         },
         createControl: function(n, cm) {
-            var form, columnsNum, layoutList, stackList, gapList, stylesList, ed = this.editor;
+            var form, columnsNum, layoutList, stackList, gapList, stylesList, ctrl, ed = this.editor;
             function menuGridMouseOver(e) {
                 var e = e.target, tbody = ("TD" !== e.nodeName && (e = e.parentNode), 
                 DOM.getParent(e, "tbody"));
@@ -550,7 +550,7 @@
                 val && -1 !== val.indexOf("-") && (layoutNum = val.split("-").length), 
                 columnsNum.value(num = layoutNum < num ? num : layoutNum);
             }
-            if ("columns" == n) return form = cm.createForm("columns_form"), columnsNum = cm.createTextBox("columns_num", {
+            return "columns" == n ? (form = cm.createForm("columns_form"), columnsNum = cm.createTextBox("columns_num", {
                 label: ed.getLang("columns.columns", "Columns"),
                 name: "columns",
                 subtype: "number",
@@ -595,7 +595,7 @@
                 onselect: function(v) {},
                 name: "classes"
             }), form.add(stackList), form.add(gapList), form.add(layoutList), form.add(stylesList), 
-            (cm = cm.createSplitButton("columns", {
+            (ctrl = cm.createSplitButton("columns", {
                 title: "columns.desc",
                 onclick: function() {
                     ed.windowManager.open({
@@ -658,7 +658,28 @@
                 m.onShowMenu.add(function() {
                     (n = DOM.get(sb.id)) && DOM.removeClass(DOM.select(".mceTableSplitMenu td", n), "selected");
                 });
-            }), cm;
+            }), ctrl) : "columns_add" == n ? cm.createSplitButton(n, {
+                title: "columns.add",
+                onclick: function() {
+                    var node = ed.selection.getNode();
+                    Columns.addColumn(ed, node), ed.undoManager.add();
+                },
+                items: [ {
+                    title: "columns.add_before",
+                    icon: "columns_add_before",
+                    onclick: function() {
+                        var node = ed.selection.getNode(), parent = ed.dom.getParent(node, "div[data-wf-columns]");
+                        Columns.addColumn(ed, node, parent, !0), ed.undoManager.add();
+                    }
+                }, {
+                    title: "columns.add_after",
+                    icon: "columns_add",
+                    onclick: function() {
+                        var node = ed.selection.getNode();
+                        Columns.addColumn(ed, node), ed.undoManager.add();
+                    }
+                } ]
+            }) : void 0;
         }
     }), tinymce.PluginManager.add("columns", tinymce.plugins.Columns);
 }();

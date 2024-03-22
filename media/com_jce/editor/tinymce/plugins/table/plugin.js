@@ -1,4 +1,4 @@
-/* jce - 2.9.62 | 2024-02-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function(tinymce) {
     var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each, VK = tinymce.VK, TreeWalker = tinymce.dom.TreeWalker, Delay = tinymce.util.Delay;
     function getSpanVal(td, name) {
@@ -297,6 +297,20 @@
                         dom.setStyle(elm, "vertical-align", elm.getAttribute("valign")), 
                         elm.removeAttribute("valign");
                     });
+                }), !1 !== ed.settings.table_merge_content_on_paste && ed.onPasteBeforeInsert.add(function(ed, o) {
+                    var table, dom = ed.dom, elm = o.node;
+                    elm && (table = elm.firstChild) && "TABLE" === table.nodeName && 1 === elm.childNodes.length && (elm = ed.selection.getNode(), 
+                    dom = dom.getParent(elm, "td,th")) && function(ed, startCell, table) {
+                        for (var existingTable = ed.dom.getParent(startCell, "table"), startRowIndex = startCell.parentNode.rowIndex, startColIndex = Array.prototype.indexOf.call(startCell.parentNode.cells, startCell), maxCellsInNewContent = 0, i = 0; i < table.rows.length; i++) maxCellsInNewContent = Math.max(maxCellsInNewContent, table.rows[i].cells.length);
+                        for (i = 0; i <= startRowIndex; i++) for (var currentRow = existingTable.rows[i], requiredCellCount = startColIndex + maxCellsInNewContent; currentRow.cells.length < requiredCellCount; ) currentRow.insertCell(-1);
+                        for (i = 0; i < table.rows.length; i++) for (var currentRow = existingTable.rows[startRowIndex + i] || existingTable.insertRow(startRowIndex + i), j = 0; j < table.rows[i].cells.length; j++) {
+                            for (var targetCellIndex = startColIndex + j; currentRow.cells.length <= targetCellIndex; ) currentRow.insertCell(-1);
+                            var cell = table.rows[i].cells[j];
+                            "" === cell.innerHTML.trim() && (cell.innerHTML = '<br data-mce-bogus="1" />'), 
+                            currentRow.cells[targetCellIndex].innerHTML = cell.innerHTML;
+                        }
+                        return 1;
+                    }(ed, dom, table) && (o.terminate = !0, ed.undoManager.add());
                 });
             }), ed.onPreProcess.add(function(ed, args) {
                 var nodes, i, node, value, dom = ed.dom;
