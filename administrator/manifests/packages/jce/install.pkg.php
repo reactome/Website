@@ -66,23 +66,22 @@ class pkg_jceInstallerScript
         $plugin = Table::getInstance('extension');
 
         $plugins = array(
-            'content' => 'jce',
-            'extension' => 'jce',
-            'installer' => 'jce',
-            'quickicon' => 'jce',
-            'system' => 'jce',
-            'fields' => 'mediajce',
+            'jce' => array('content', 'system', 'quickicon', 'extension', 'installer'),
+            'jcepro' => array('system'),
+            'mediajce' => array('fields')
         );
 
         $parent = $installer->getParent();
 
-        foreach ($plugins as $folder => $element) {
-            $id = $plugin->find(array('type' => 'plugin', 'folder' => $folder, 'element' => $element));
+        foreach ($plugins as $element => $folders) {
+            foreach ($folders as $folder) {
+                $id = $plugin->find(array('type' => 'plugin', 'folder' => $folder, 'element' => $element));
 
-            if ($id) {
-                $plugin->load($id);
-                $plugin->enabled = 1;
-                $plugin->store();
+                if ($id) {
+                    $plugin->load($id);
+                    $plugin->enabled = 1;
+                    $plugin->store();
+                }
             }
         }
 
@@ -305,6 +304,12 @@ class pkg_jceInstallerScript
 
     public function postflight($route, $installer)
     {
+        // Do not run on uninstallation.
+		if ($route === 'uninstall')
+		{
+			return true;
+		}
+        
         $app = Factory::getApplication();
         $extension = Table::getInstance('extension');
         $parent = $installer->getParent();
@@ -449,20 +454,54 @@ class pkg_jceInstallerScript
                 $db->execute();
             }
 
-            /*try {
-            $query = "SELECT DEFAULT (" . $db->qn('checked_out_time') . ") FROM #__wf_profiles";
-            $db->setQuery($query);
-            $db->execute();
-            } catch (Exception $e) {
-
-            }*/
-
-            self::cleanupInstall($installer);
+            $this->cleanupInstall($installer);
         }
+
+        // Borrowed from the script.ats.php file from Akeeba Ticket System
+		// Forcibly create the autoload_psr4.php file afresh.
+		if (class_exists(JNamespacePsr4Map::class))
+		{
+			try
+			{
+				$nsMap = new JNamespacePsr4Map();
+
+				@clearstatcache(JPATH_CACHE . '/autoload_psr4.php');
+
+				if (function_exists('opcache_invalidate'))
+				{
+					@opcache_invalidate(JPATH_CACHE . '/autoload_psr4.php');
+				}
+
+				@clearstatcache(JPATH_CACHE . '/autoload_psr4.php');
+				$nsMap->create();
+
+				if (function_exists('opcache_invalidate'))
+				{
+					@opcache_invalidate(JPATH_CACHE . '/autoload_psr4.php');
+				}
+
+				$nsMap->load();
+			}
+			catch (\Throwable $e)
+			{
+				// In case of failure, just try to delete the old autoload_psr4.php file
+				if (function_exists('opcache_invalidate'))
+				{
+					@opcache_invalidate(JPATH_CACHE . '/autoload_psr4.php');
+				}
+
+				@unlink(JPATH_CACHE . '/autoload_psr4.php');
+				@clearstatcache(JPATH_CACHE . '/autoload_psr4.php');
+
+                Factory::getApplication()->createExtensionNamespaceMap();
+			}
+		}
     }
 
     protected static function cleanupInstall($installer)
     {
+        $app = Factory::getApplication();
+        
         $parent = $installer->getParent();
         $current_version = self::$current_version; //$parent->get('current_version');
 
@@ -489,12 +528,12 @@ class pkg_jceInstallerScript
 
         // remove flexicontent
         if (!ComponentHelper::isInstalled('com_flexicontent')) {
-            $files['2.7'] = array(
+            $files['2.7.0'] = array(
                 $site . '/editor/extensions/links/flexicontentlinks.php',
                 $site . '/editor/extensions/links/flexicontentlinks.xml',
             );
 
-            $folders['2.7'] = array(
+            $folders['2.7.0'] = array(
                 $site . '/editor/extensions/links/flexicontentlinks',
             );
         }
@@ -539,9 +578,31 @@ class pkg_jceInstallerScript
         $folders['2.9.60'] = array(
             JPATH_PLUGINS . '/editors/jce/src/Provider'
         );
+
         // remove old layout file
         $files['2.9.60'] = array(
             JPATH_PLUGINS . '/editors/jce/layouts/editor/textarea.php'
+        );
+
+        // remove pro plugins
+        $folders['2.9.70'] = array(
+            $site . '/editor/plugins/caption',
+            $site . '/editor/plugins/columns',
+            $site . '/editor/plugins/iframe',
+            $site . '/editor/plugins/imgmanager_ext',
+            $site . '/editor/plugins/mediamanager',
+            $site . '/editor/plugins/microdata',
+            $site . '/editor/plugins/source/tmpl',
+            $site . '/editor/plugins/templatemanager',
+            $site . '/editor/plugins/textpattern'
+        );
+
+        // remove pro source plugin
+        $files['2.9.70'] = array(
+            $site . '/editor/plugins/source/config.php',
+            $site . '/editor/plugins/source/source.php',
+            // mediafield files
+            JPATH_PLUGINS . '/fields/mediajce/fields/extendedmedia.php'
         );
 
         $files['2.6.38'] = array(
@@ -599,7 +660,7 @@ class pkg_jceInstallerScript
 
         foreach ($folders as $version => $list) {
             // version check
-            if (version_compare($version, $current_version, 'gt')) {
+            if (version_compare($version, $current_version, 'lt')) {
                 continue;
             }
 
@@ -638,7 +699,7 @@ class pkg_jceInstallerScript
 
         foreach ($files as $version => $list) {
             // version check
-            if (version_compare($version, $current_version, 'gt')) {
+            if (version_compare($version, $current_version, 'lt')) {
                 continue;
             }
 

@@ -1,4 +1,4 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, BlobCache = tinymce.file.BlobCache, Conversions = tinymce.file.Conversions, Uuid = tinymce.util.Uuid, DOM = tinymce.DOM, count = 0, uniqueId = function(prefix) {
         return (prefix || "blobid") + count++;
@@ -86,8 +86,10 @@
                         onclick: function(e) {
                             var url, uploader, quality, value, images, filename = DOM.getValue(ed.id + "_blob_input");
                             return filename ? (filename = filename.replace(/[\+\\\/\?\#%&<>"\'=\[\]\{\},;@\^\(\)\xa3\u20ac$~]/g, ""), 
-                            /\.(php([0-9]*)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b/i.test(filename) ? (ed.windowManager.alert(ed.getLang("upload.file_extension_error", "File type not supported")), 
-                            removeMarker(marker), resolve()) : (each(uploaders, function(instance) {
+                            /\.(php([0-9]*)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b/i.test(filename) ? (ed.windowManager.alert({
+                                text: ed.getLang("upload.file_extension_error", "File type not supported"),
+                                title: ed.getLang("upload.error", "Upload Error")
+                            }), removeMarker(marker), resolve()) : (each(uploaders, function(instance) {
                                 if (!url && (url = instance.getUploadURL({
                                     name: blobInfo.filename()
                                 }))) return uploader = instance, !1;
@@ -125,8 +127,10 @@
                                 ed.selection.select(data)), ed.setProgressState(!1), 
                                 win.close(), resolve();
                             }, function(error) {
-                                ed.windowManager.alert(error), ed.setProgressState(!1), 
-                                resolve();
+                                ed.windowManager.alert({
+                                    text: error,
+                                    title: ed.getLang("upload.error", "Upload Error")
+                                }), ed.setProgressState(!1), resolve();
                             }, function() {})) : (removeMarker(marker), resolve()))) : (removeMarker(marker), 
                             resolve());
                         },

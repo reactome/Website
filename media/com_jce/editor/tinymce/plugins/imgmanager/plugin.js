@@ -1,4 +1,4 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, Event = tinymce.dom.Event, extend = tinymce.extend;
     function isMediaObject(node) {
@@ -65,7 +65,7 @@
                 n = isImage(n);
                 cm.setDisabled("imgmanager", !n && !collapsed), cm.setActive("imgmanager", n);
             }), ed.onPreInit.add(function() {
-                var cm, form, urlCtrl, descriptionCtrl, args, params = ed.getParam("imgmanager", {});
+                var cm, form, urlCtrl, descriptionCtrl, args, stylesListCtrl, params = ed.getParam("imgmanager", {});
                 !0 === params.basic_dialog && (cm = ed.controlManager, form = cm.createForm("image_form"), 
                 args = {
                     label: ed.getLang("dlg.url", "URL"),
@@ -96,8 +96,10 @@
                     upload: function(e, file) {
                         if (file && file.name) {
                             var url = self.getUploadURL(file);
-                            if (!url) return ed.windowManager.alert(ed.getLang("upload.file_extension_error", "File type not supported")), 
-                            !1;
+                            if (!url) return ed.windowManager.alert({
+                                text: ed.getLang("upload.file_extension_error", "File type not supported"),
+                                title: ed.getLang("upload.error", "Upload Error")
+                            }), !1;
                             urlCtrl.setLoading(!0), extend(file, {
                                 filename: file.name.replace(/[\+\\\/\?\#%&<>"\'=\[\]\{\},;@\^\(\)\xa3\u20ac$~]/g, ""),
                                 upload_url: url
@@ -106,9 +108,15 @@
                                 response = response.files || [], response = response.length ? response[0] : {};
                                 if (response.file) return urlCtrl.value(response.file), 
                                 !0;
-                                ed.windowManager.alert("Unable to upload file!");
+                                ed.windowManager.alert({
+                                    text: "Unable to upload file!",
+                                    title: ed.getLang("upload.error", "Upload Error")
+                                });
                             }, function(message) {
-                                ed.windowManager.alert(message), urlCtrl.setLoading(!1);
+                                ed.windowManager.alert({
+                                    text: message,
+                                    title: ed.getLang("upload.error", "Upload Error")
+                                }), urlCtrl.setLoading(!1);
                             });
                         }
                     }
@@ -117,7 +125,11 @@
                     label: ed.getLang("dlg.description", "Description"),
                     name: "alt",
                     clear: !0
-                }), form.add(descriptionCtrl), ed.addCommand("mceImage", function() {
+                }), form.add(descriptionCtrl), stylesListCtrl = cm.createStylesBox("image_class", {
+                    label: ed.getLang("image.class", "Classes"),
+                    onselect: function() {},
+                    name: "classes"
+                }), form.add(stylesListCtrl), ed.addCommand("mceImage", function() {
                     isMediaObject(ed.selection.getNode()) || ed.windowManager.open({
                         title: ed.getLang("imgmanager.desc", "Image"),
                         items: [ form ],
@@ -125,7 +137,8 @@
                         open: function() {
                             var label = ed.getLang("insert", "Insert"), node = ed.selection.getNode(), src = "", alt = "";
                             isImage(node) && ((src = ed.dom.getAttrib(node, "src")) && (label = ed.getLang("update", "Update")), 
-                            alt = ed.dom.getAttrib(node, "alt"), ed.dom.getNext(node, "figcaption")), 
+                            alt = ed.dom.getAttrib(node, "alt"), ed.dom.getNext(node, "figcaption"), 
+                            node = ed.dom.getAttrib(node, "class"), stylesListCtrl.value(node)), 
                             urlCtrl.value(src), descriptionCtrl.value(alt), window.setTimeout(function() {
                                 urlCtrl.focus();
                             }, 10), DOM.setHTML(this.id + "_insert", label);
@@ -142,7 +155,8 @@
                                 !1;
                                 e = {
                                     src: data.url,
-                                    alt: data.alt
+                                    alt: data.alt,
+                                    class: data.classes
                                 };
                                 getDataAndInsert(extend(e, self.getAttributes(params))).then(function() {
                                     node = ed.selection.getNode();

@@ -70,8 +70,10 @@ abstract class WfBrowserHelper
         // get editor instance
         $wf = WFApplication::getInstance();
 
+        $profile = $wf->getProfile('browser');
+
         // check the current user is in a profile
-        if ($wf->getProfile('browser')) {
+        if ($profile) {
             // is conversion enabled?
             if ($options['converted']) {
                 $data['converted'] = (bool) $wf->getParam('browser.mediafield_conversion', 1);
@@ -99,11 +101,15 @@ abstract class WfBrowserHelper
 
             // filter options values
             $options = array_filter($options, function ($value) {
+                if (is_array($value)) {
+                    return !empty($value);
+                }
+
                 return $value !== '' && $value !== null;
             });
 
             $data['url'] .= '&' . http_build_query($options);
- 
+
             // get allowed extensions
             $accept = $wf->getParam('browser.extensions', 'jpg,jpeg,png,gif,mp3,m4a,mp4a,ogg,mp4,mp4v,mpeg,mov,webm,doc,docx,odg,odp,ods,odt,pdf,ppt,pptx,txt,xcf,xls,xlsx,csv,zip,tar,gz');
 
@@ -114,10 +120,9 @@ abstract class WfBrowserHelper
             }, explode(',', $accept));
 
             $data['accept'] = implode(',', array_filter($data['accept']));
-
             $data['upload'] = (bool) $wf->getParam('browser.mediafield_upload', 1);
 
-            $app->triggerEvent('onWfMediaFieldGetOptions', array(&$data));
+            $app->triggerEvent('onWfMediaFieldGetOptions', array(&$data, $profile));
         }
 
         return $data;

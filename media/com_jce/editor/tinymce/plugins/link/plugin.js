@@ -1,4 +1,4 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     function isAnchor(elm) {
         return elm && "a" === elm.nodeName.toLowerCase();
@@ -41,6 +41,7 @@
             url: data,
             text: data
         } : data).url ? (text = getAnchorText(ed.selection, isAnchor(node) ? node : null) || "", 
+        node && node.hasAttribute("data-mce-item") && (text = "", ed.selection.select(node)), 
         data.text = data.text || text || data.url, /^\s*www\./i.test(data.url) && (data.url = "https://" + data.url), 
         text = {
             href: data.url,
@@ -122,11 +123,12 @@
                         items: [ form ],
                         size: "mce-modal-landscape-small",
                         open: function() {
-                            var label = ed.getLang("insert", "Insert"), node = ed.selection.getNode(), src = "", title = "", target = params.attributes.target || "", state = isOnlyTextSelected(ed), start = ((node = ed.dom.getParent(node, "a[href]")) && (ed.selection.select(node), 
-                            (src = ed.dom.getAttrib(node, "href")) && (label = ed.getLang("update", "Update")), 
-                            tinymce.isIE && (start = ed.selection.getStart()) === ed.selection.getEnd() && "A" === start.nodeName && (node = start), 
-                            hasFileSpan(node) && (state = !0), title = ed.dom.getAttrib(node, "title"), 
-                            target = ed.dom.getAttrib(node, "target")), getAnchorText(ed.selection, isAnchor(node) ? node : null) || "");
+                            var label = ed.getLang("insert", "Insert"), node = ed.selection.getNode(), src = "", title = "", target = params.attributes.target || "", state = isOnlyTextSelected(ed), anchorNode = ed.dom.getParent(node, "a[href]"), start = (anchorNode && (ed.selection.select(anchorNode), 
+                            (src = ed.dom.getAttrib(anchorNode, "href")) && (label = ed.getLang("update", "Update")), 
+                            tinymce.isIE && (start = ed.selection.getStart()) === ed.selection.getEnd() && "A" === start.nodeName && (anchorNode = start), 
+                            hasFileSpan(anchorNode) && (state = !0), title = ed.dom.getAttrib(anchorNode, "title"), 
+                            target = ed.dom.getAttrib(anchorNode, "target")), getAnchorText(ed.selection, isAnchor(node) ? node : null) || "");
+                            node && node.hasAttribute("data-mce-item") && (state = !1), 
                             urlCtrl.value(src), textCtrl.value(start), textCtrl.setDisabled(!state), 
                             titleCtrl && titleCtrl.value(title), targetCtrl && targetCtrl.value(target), 
                             window.setTimeout(function() {

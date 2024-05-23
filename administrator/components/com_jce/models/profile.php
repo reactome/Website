@@ -19,8 +19,8 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Table\Table;
-use Joomla\String\StringHelper;
 use Joomla\Registry\Registry;
+use Joomla\String\StringHelper;
 
 require JPATH_SITE . '/components/com_jce/editor/libraries/classes/editor.php';
 
@@ -154,23 +154,6 @@ class JceModelProfile extends AdminModel
             }
         }
 
-        // allow plugins to process form, eg: MediaField etc.
-        parent::preprocessForm($form, $data);
-    }
-
-    public function getForm($data = array(), $loadData = true)
-    {
-        FormHelper::addFieldPath('JPATH_ADMINISTRATOR/components/com_jce/models/fields');
-
-        // Get the setup form.
-        $form = $this->loadForm('com_jce.profile', 'profile', array('control' => 'jform', 'load_data' => false));
-
-        if (!$form) {
-            return false;
-        }
-
-        Factory::getLanguage()->load('com_jce_pro', JPATH_SITE);
-
         // editor manifest
         $manifest = __DIR__ . '/forms/editor.xml';
 
@@ -181,26 +164,20 @@ class JceModelProfile extends AdminModel
             }
         }
 
-        // pro manifest
-        $manifest = WF_EDITOR_LIBRARIES . '/pro/xml/pro.xml';
-
-        // load pro manifest
-        if (is_file($manifest)) {
-            if ($pro_xml = simplexml_load_file($manifest)) {
-                $form->setField($pro_xml, 'config');
-            }
-        }
-
-        $data = $this->loadFormData();
-
         // Allow for additional modification of the form, and events to be triggered.
         // We pass the data because plugins may require it.
-        $this->preprocessForm($form, $data);
+        parent::preprocessForm($form, $data);
 
         // Load the data into the form after the plugins have operated.
         $form->bind($data);
+    }
 
-        return $form;
+    public function getForm($data = array(), $loadData = true)
+    {
+        FormHelper::addFieldPath('JPATH_ADMINISTRATOR/components/com_jce/models/fields');
+
+        // Get the setup form.
+        return $this->loadForm('com_jce.profile', 'profile', array('control' => 'jform', 'load_data' => true));
     }
 
     /**
@@ -291,7 +268,7 @@ class JceModelProfile extends AdminModel
 
             ++$i;
         }
-        
+
         // allow for empty toolbar row when creating a new profile
         if (empty($array)) {
             $array[$i] = array();
@@ -565,6 +542,8 @@ class JceModelProfile extends AdminModel
                     }
 
                     break;
+                case 'params':
+                    break;
                 case 'types':
                 case 'users':
 
@@ -632,6 +611,10 @@ class JceModelProfile extends AdminModel
 
         if (empty($data['types'])) {
             $data['types'] = '';
+        }
+
+        if (empty($data['custom'])) {
+            $data['custom'] = '';
         }
 
         return $data;
@@ -719,8 +702,11 @@ class JceModelProfile extends AdminModel
             // get plugins
             $items = explode(',', $plugins);
 
-            // add "editor"
+            // add "editor" for editor parameters
             $items[] = 'editor';
+
+            // add "setup" for setup parameters (via plugins, eg: jcepro)
+            $items[] = 'setup';
 
             // make sure we have a value
             if (empty($data['params'])) {
@@ -797,7 +783,7 @@ class JceModelProfile extends AdminModel
         $buffer .= "\n" . '<export type="profiles">';
         $buffer .= "\n\t" . '<profiles>';
 
-        $validFields = array('name', 'description', 'users', 'types', 'components', 'area', 'device', 'rows', 'plugins', 'published', 'ordering', 'params');
+        $validFields = array('name', 'description', 'users', 'types', 'components', 'custom', 'area', 'device', 'rows', 'plugins', 'published', 'ordering', 'params');
 
         foreach ($ids as $id) {
             $table = $this->getTable();

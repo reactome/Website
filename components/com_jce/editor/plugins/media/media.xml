@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <extension version="3.4" type="plugin" group="jce" method="upgrade">
     <name>WF_MEDIA_TITLE</name>
-    <version>2.9.63</version>
-    <creationDate>11-03-2024</creationDate>
+    <version>2.9.72</version>
+    <creationDate>22-05-2024</creationDate>
     <author>Ryan Demmer</author>
     <authorEmail>info@joomlacontenteditor.net</authorEmail>
     <authorUrl>https://www.joomlacontenteditor.net</authorUrl>
@@ -39,6 +39,15 @@
 
             </field>
 
+            <field name="iframes_sandbox" type="list" default="1" label="WF_MEDIA_IFRAMES_SANDBOX" description="WF_MEDIA_IFRAMES_SANDBOX_DESC" showon="iframes:1">
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
+
+            <field type="repeatable" name="iframes_sandbox_exclusions" default="" label="WF_MEDIA_IFRAMES_SANDBOX_EXCLUSIONS" description="WF_MEDIA_IFRAMES_SANDBOX_EXCLUSIONS_DESC" showon="iframes:1[AND]iframes_sandbox:1">
+                <field type="text" hiddenLabel="true" size="100" />
+            </field>
+
             <field name="audio" type="list" default="1" label="WF_MEDIA_PARAM_AUDIO" description="WF_MEDIA_PARAM_AUDIO_DESC">
                 <option value="1">JYES</option>
                 <option value="0">JNO</option>
@@ -51,13 +60,13 @@
                 <option value="2">WF_MEDIA_PARAM_LOCAL_ONLY</option>
             </field>
 
-            <field name="object" type="list" default="1" label="WF_MEDIA_PARAM_OBJECT" description="WF_MEDIA_PARAM_OBJECT_DESC">
+            <field name="object" type="list" default="0" label="WF_MEDIA_PARAM_OBJECT" description="WF_MEDIA_PARAM_OBJECT_DESC">
                 <option value="1">JYES</option>
                 <option value="0">JNO</option>
                 <option value="2">WF_MEDIA_PARAM_LOCAL_ONLY</option>
             </field>
 
-            <field name="embed" type="list" default="1" label="WF_MEDIA_PARAM_EMBED" description="WF_MEDIA_PARAM_EMBED_DESC">
+            <field name="embed" type="list" default="0" label="WF_MEDIA_PARAM_EMBED" description="WF_MEDIA_PARAM_EMBED_DESC">
                 <option value="1">JYES</option>
                 <option value="0">JNO</option>
                 <option value="2">WF_MEDIA_PARAM_LOCAL_ONLY</option>

@@ -1,4 +1,4 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function(tinymce, tinyMCEPopup, $) {
     function selectByValue(field_name, value, add_custom, ignore_case) {
         value = value || "";
@@ -263,7 +263,6 @@
         },
         generateCSS: function() {
             var s, t, ce = document.getElementById("container");
-            new RegExp("[0-9]+", "g");
             ce.style.cssText = "", ce.style.fontFamily = $("#text_font").val(), 
             ce.style.fontSize = $("#text_size").val() + (this.isNum($("#text_size").val()) ? $("#text_size_measurement").val() || "px" : ""), 
             ce.style.fontStyle = $("#text_style").val(), ce.style.lineHeight = $("#text_lineheight").val() + (this.isNum($("#text_lineheight").val()) ? $("#text_lineheight_measurement").val() : ""), 
@@ -310,8 +309,7 @@
             ce.style.bottom = $("#positioning_placement_bottom").val() + (this.isNum($("#positioning_placement_bottom").val()) ? $("#positioning_placement_bottom_measurement").val() : ""), 
             ce.style.left = $("#positioning_placement_left").val() + (this.isNum($("#positioning_placement_left").val()) ? $("#positioning_placement_left_measurement").val() : "")), 
             $("#positioning_clip_same").prop("checked") ? "rect(auto auto auto auto)" != (s = (s = (s = "rect(") + ((t = this.isNum($("#positioning_clip_top").val()) ? $("#positioning_clip_top").val() + $("#positioning_clip_top_measurement").val() : "auto") + " ") + (t + " ")) + (t + " ") + (t + ")")) && (ce.style.clip = s) : (s = "rect(", 
-            "rect(auto auto auto auto)" != (s = (s = (s = (s += (this.isNum($("#positioning_clip_top").val()) ? $("#positioning_clip_top").val() + $("#positioning_clip_top_measurement").val() : "auto") + " ") + ((this.isNum($("#positioning_clip_right").val()) ? $("#positioning_clip_right").val() + $("#positioning_clip_right_measurement").val() : "auto") + " ")) + ((this.isNum($("#positioning_clip_bottom").val()) ? $("#positioning_clip_bottom").val() + $("#positioning_clip_bottom_measurement").val() : "auto") + " ")) + (this.isNum($("#positioning_clip_left").val()) ? $("#positioning_clip_left").val() + $("#positioning_clip_left_measurement").val() : "auto") + ")") && (ce.style.clip = s)), 
-            ce.style.cssText = ce.style.cssText;
+            "rect(auto auto auto auto)" != (s = (s = (s = (s += (this.isNum($("#positioning_clip_top").val()) ? $("#positioning_clip_top").val() + $("#positioning_clip_top_measurement").val() : "auto") + " ") + ((this.isNum($("#positioning_clip_right").val()) ? $("#positioning_clip_right").val() + $("#positioning_clip_right_measurement").val() : "auto") + " ")) + ((this.isNum($("#positioning_clip_bottom").val()) ? $("#positioning_clip_bottom").val() + $("#positioning_clip_bottom_measurement").val() : "auto") + " ")) + (this.isNum($("#positioning_clip_left").val()) ? $("#positioning_clip_left").val() + $("#positioning_clip_left_measurement").val() : "auto") + ")") && (ce.style.clip = s));
         },
         isNum: function(s) {
             return new RegExp("[0-9]+", "g").test(s);
@@ -327,7 +325,7 @@
         toggleSame: function(ce, pre) {
             ce = ce.checked;
             $("#" + pre + "_right, #" + pre + "_bottom, #" + pre + "_left").attr("disabled", ce).toggleClass("disabled", ce).trigger("change"), 
-            $("#" + pre + "_right_measurement, #" + pre + "_bottom_measurement, #" + pre + "_left_measurement").attr("disabled", ce).toggleClass("disabled", ce);
+            $("#" + pre + "_right_measurement, #" + pre + "_bottom_measurement, #" + pre + "_left_measurement").attr("disabled", ce).toggleClass("disabled", ce).trigger("change");
         },
         synch: function(fr, to) {
             $("#" + to).val($("#" + fr).val()), document.getElementById[fr + "_measurement"] && selectByValue(to + "_measurement", $("#" + fr + "_measurement").val());

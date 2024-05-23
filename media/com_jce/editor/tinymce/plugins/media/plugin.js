@@ -1,4 +1,4 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, extend = tinymce.extend, Node = tinymce.html.Node, VK = tinymce.VK, Serializer = tinymce.html.Serializer, DomParser = tinymce.html.DomParser, SaxParser = tinymce.html.SaxParser, DOM = tinymce.DOM, htmlSchema = new tinymce.html.Schema({
         schema: "mixed"
@@ -54,6 +54,114 @@
         ted: /ted\.com\/talks\/(.+)/,
         twitch: /twitch\.tv\/(.+)/
     };
+    function getMediaProps(ed, data, provider) {
+        var src, id, matches, defaultValues = {
+            youtube: {
+                src: data = data.src || "",
+                width: 560,
+                height: 315,
+                frameborder: 0,
+                allowfullscreen: "allowfullscreen",
+                allow: "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture",
+                sandbox: !1
+            },
+            vimeo: {
+                src: data,
+                width: 560,
+                height: 315,
+                frameborder: 0,
+                allowfullscreen: "allowfullscreen",
+                allow: "autoplay; fullscreen",
+                sandbox: !1
+            },
+            dailymotion: {
+                src: data,
+                width: 640,
+                height: 360,
+                frameborder: 0,
+                allowfullscreen: "allowfullscreen",
+                allow: "autoplay; fullscreen",
+                sandbox: !1
+            },
+            video: {
+                src: data,
+                width: 560,
+                height: 315,
+                controls: !0,
+                type: "video/mpeg"
+            },
+            slideshare: {
+                src: "",
+                width: 427,
+                height: 356,
+                frameborder: 0,
+                allowfullscreen: "allowfullscreen",
+                allow: "fullscreen",
+                sandbox: !1
+            },
+            soundcloud: {
+                src: "",
+                width: "100%",
+                height: 400,
+                frameborder: 0,
+                scrolling: "no",
+                allow: "autoplay; fullscreen",
+                sandbox: !1
+            },
+            spotify: {
+                src: data,
+                width: 300,
+                height: 380,
+                frameborder: 0,
+                allowtransparency: !0,
+                allow: "encrypted-media",
+                sandbox: !1
+            },
+            ted: {
+                src: "",
+                width: 560,
+                height: 316,
+                frameborder: 0,
+                allowfullscreen: "allowfullscreen",
+                allow: "fullscreen",
+                sandbox: !1
+            },
+            twitch: {
+                src: "",
+                width: 500,
+                height: 281,
+                frameborder: 0,
+                allowfullscreen: "allowfullscreen",
+                allow: "autoplay; fullscreen",
+                sandbox: !1
+            }
+        }, data = data.replace(/[^a-z0-9-_:&;=%\?\[\]\/\.]/gi, "");
+        return defaultValues[provider] || (defaultValues[provider] = {}), defaultValues[provider].src = data, 
+        "youtube" === provider && (src = data.replace(/youtu(\.)?be([^\/]+)?\/(.+)/, function(a, b, c, d) {
+            return d = d.replace(/(watch\?v=|v\/|embed\/)/, ""), b && !c && (c = ".com"), 
+            id = d.replace(/([^\?&#]+)/, function($0, $1) {
+                return $1;
+            }), "youtube" + c + "/embed/" + d;
+        }), defaultValues[provider].src = src), "vimeo" === provider && (-1 == data.indexOf("player.vimeo.com/video/") && (src = id = "", 
+        matches = /vimeo\.com\/(?:\w+\/){0,3}((?:[0-9]+\b)(?:\/[a-z0-9]+)?)/.exec(data)) && tinymce.is(matches, "array") && (matches = matches[1].split("/"), 
+        id = matches[0], 2 == matches.length && (src = matches[1]), data = "https://player.vimeo.com/video/" + id + (src ? "?h=" + src : "")), 
+        defaultValues[provider].src = data), "dailymotion" === provider && (id = "", 
+        (matches = /dai\.?ly(motion)?(.+)?\/(swf|video)?\/?([a-z0-9]+)_?/.exec(data)) && tinymce.is(matches, "array") && (id = matches.pop()), 
+        defaultValues[provider].src = "https://dailymotion.com/embed/video/" + id), 
+        "spotify" === provider && (defaultValues[provider].src = data.replace(/open\.spotify\.com\/track\//, "open.spotify.com/embed/track/")), 
+        "ted" === provider && (defaultValues[provider].src = data.replace(/www\.ted.com\/talks\//, "embed.ted.com/talks/")), 
+        defaultValues[provider];
+    }
+    function updateSandbox(editor, node) {
+        var provider, src = node.attr("src");
+        node.attr("sandbox") || (provider = isSupportedMedia(editor, src), !1 === (provider = getMediaProps(0, {
+            src: src
+        }, provider)).sandbox ? node.attr("sandbox", null) : node.attr("sandbox", provider.sandbox || ""), 
+        isLocalUrl(editor, src) && node.attr("sandbox", null), provider = editor.getParam("media_iframes_sandbox_exclusions", []), 
+        each(provider, function(value) {
+            -1 !== src.indexOf(value) && node.attr("sandbox", null);
+        }), !1 === editor.getParam("media_iframes_sandbox", !0) && node.attr("sandbox", null));
+    }
     function isSupportedIframe(editor, url) {
         var value;
         return !!isValidElement(editor, "iframe") && !!url && (editor.settings.media_iframes_allow_local ? isLocalUrl(editor, url) : (value = function(editor, url) {
@@ -76,13 +184,11 @@
         return !editor.settings["media_" + tag + "_allow_local"] || isLocalUrl(editor, url);
     }
     function isSupportedMedia(editor, url) {
-        var value = isSupportedIframe(editor, url);
-        return value ? "string" == typeof value ? value : "iframe" : /\.(mp4|ogv|ogg|webm)$/.test(url) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) ? "video" : /\.(mp3|ogg|webm|wav|m4a|aiff)$/.test(url) && isValidElement(editor, "audio") && isSupportedUrl(editor, "audio", url) ? "audio" : /\.(mov|qt|mpg|mpeg|m4a|aiff)$/.test(url) && isValidElement(editor, "object") && isSupportedUrl(editor, "object", url) ? "quicktime" : /\.swf$/.test(url) && isValidElement(editor, "object") && isSupportedUrl(editor, "object", url) ? "flash" : !!(/\.(avi|wmv|wm|asf|asx|wmx|wvx)$/.test(url) && isValidElement(editor, "object") && isSupportedUrl(editor, "object", url)) && "windowsmedia";
+        return /\.(mp4|ogv|ogg|webm)$/.test(url) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) ? "video" : /\.(mp3|ogg|webm|wav|m4a|aiff)$/.test(url) && isValidElement(editor, "audio") && isSupportedUrl(editor, "audio", url) ? "audio" : /\.(mov|qt|mpg|mpeg)$/.test(url) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) || /\.(divx)$/.test(url) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) ? "video" : /\.swf$/.test(url) && isValidElement(editor, "object") && isSupportedUrl(editor, "object", url) || /\.pdf$/.test(url) && isValidElement(editor, "object") && isSupportedUrl(editor, "object", url) ? "object" : !!(editor = isSupportedIframe(editor, url)) && ("string" == typeof editor ? editor : "iframe");
     }
-    function isAbsoluteUrl(url) {
+    var isAbsoluteUrl = function(url) {
         return !!url && (0 === url.indexOf("//") || 0 < url.indexOf("://"));
-    }
-    var isLocalUrl = function(editor, url) {
+    }, isLocalUrl = function(editor, url) {
         return !isAbsoluteUrl(url) || (editor = editor.documentBaseURI.toRelative(url), 
         !1 === isAbsoluteUrl(editor));
     }, sanitize = function(editor, html) {
@@ -134,46 +240,17 @@
             value: settings
         }), nodes;
     }
-    for (var y, ext, lookup = {}, items = "application/x-director,dcr,video/divx,divx,application/pdf,pdf,application/x-shockwave-flash,swf swfl,audio/mpeg,mpga mpega mp2 mp3,audio/ogg,ogg spx oga,audio/x-wav,wav,video/mpeg,mpeg mpg mpe,video/mp4,mp4 m4v,video/ogg,ogg ogv,video/webm,webm,video/quicktime,qt mov,video/x-flv,flv,video/vnd.rn-realvideo,rv,video/3gpp,3gp,video/x-matroska,mkv".split(/,/), i = 0; i < items.length; i += 2) for (ext = items[i + 1].split(/ /), 
+    for (var y, ext, lookup = {}, items = "video/divx,divx,application/pdf,pdf,application/x-shockwave-flash,swf swfl,audio/mpeg,mpga mpega mp2 mp3,audio/ogg,ogg spx oga,audio/x-wav,wav,video/mpeg,mpeg mpg mpe,video/mp4,mp4 m4v,video/ogg,ogg ogv,video/webm,webm,video/quicktime,qt mov,video/x-flv,flv,video/3gpp,3gp,video/x-matroska,mkv".split(/,/), i = 0; i < items.length; i += 2) for (ext = items[i + 1].split(/ /), 
     y = 0; y < ext.length; y++) ext[y], items[i];
     each({
         flash: {
-            classid: "CLSID:D27CDB6E-AE6D-11CF-96B8-444553540000",
-            type: "application/x-shockwave-flash",
-            codebase: "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,1,53,64"
-        },
-        shockwave: {
-            classid: "CLSID:166B1BCA-3F9C-11CF-8075-444553540000",
-            type: "application/x-director",
-            codebase: "http://download.macromedia.com/pub/shockwave/cabs/director/sw.cab#version=10,2,0,023"
-        },
-        windowsmedia: {
-            classid: "CLSID:6BF52A52-394A-11D3-B153-00C04F79FAA6",
-            type: "application/x-mplayer2",
-            codebase: "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=10,00,00,3646"
+            type: "application/x-shockwave-flash"
         },
         quicktime: {
-            classid: "CLSID:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B",
-            type: "video/quicktime",
-            codebase: "http://www.apple.com/qtactivex/qtplugin.cab#version=7,3,0,0"
+            type: "video/quicktime"
         },
         divx: {
-            classid: "CLSID:67DABFBF-D0AB-41FA-9C46-CC0F21721616",
-            type: "video/divx",
-            codebase: "http://go.divx.com/plugin/DivXBrowserPlugin.cab"
-        },
-        realmedia: {
-            classid: "CLSID:CFCDAA03-8BE4-11CF-B84B-0020AFBBCCFA",
-            type: "audio/x-pn-realaudio-plugin"
-        },
-        java: {
-            classid: "CLSID:8AD9C840-044E-11D1-B3E9-00805F499D93",
-            type: "application/x-java-applet",
-            codebase: "http://java.sun.com/products/plugin/autodl/jinstall-1_5_0-windows-i586.cab#Version=1,5,0,0"
-        },
-        silverlight: {
-            classid: "CLSID:DFEAF541-F3E1-4C24-ACAC-99C30715084A",
-            type: "application/x-silverlight-2"
+            type: "video/divx"
         },
         video: {
             type: "video/mpeg"
@@ -232,8 +309,8 @@
         for (key in node.attributes.map) {
             var align, styleObject, value = node.attributes.map[key];
             "src" === key && "img" === node.name || "draggable" === key || "contenteditable" === key || 0 === key.indexOf("on") || 0 === (key = "data-mce-width" !== (key = 0 === key.indexOf("data-mce-p-") ? key.substring(11) : key) && "data-mce-height" !== key ? key : key.substring(9)).indexOf("data-mce-") || "span" == node.name && node.attr("data-mce-object") || !editor.schema.isValid(tag, key) && -1 == key.indexOf("-") || ("class" === key && ((align = value.match(/mce-object-preview-(left|center|right)/)) && (styles = extend(styles, alignStylesMap[align[1]]), 
-            node.attr("style") || node.attr("style", editor.dom.serializeStyle(styles)), 
-            console.log(styles)), value = function(value) {
+            node.attr("style") || node.attr("style", editor.dom.serializeStyle(styles))), 
+            value = function(value) {
                 return value && (value = value.replace(/\s?mce-([\w-]+)/g, "").replace(/\s+/g, " "), 
                 value = 0 < (value = tinymce.trim(value)).length ? value : null), 
                 value || null;
@@ -260,10 +337,11 @@
             each(child.value, function(val, key) {
                 htmlSchema.isValid(inner.name, key) && inner.attr(key, val);
             }), elm.append(inner), "source" == inner.name && inner.attr("src") == elm.attr("src") && elm.attr("src", null));
-        })), elm.attr("data-mce-html", null), "object" === tag && 0 === elm.getAll("embed").length && "application/x-shockwave-flash" !== elm.attr("type") && ((embed = new Node("embed", 1)).shortEnded = !0, 
+        })), elm.attr("data-mce-html", null), "object" === tag && 0 === elm.getAll("embed").length && "application/x-shockwave-flash" != (node = elm.attr("type")) && "application/pdf" != node && ((embed = new Node("embed", 1)).shortEnded = !0, 
         each(attribs, function(value, name) {
             "data" === name && embed.attr("src", value), htmlSchema.isValid("embed", name) && embed.attr(name, value);
-        }), elm.append(embed)), elm;
+        }), elm.append(embed)), "iframe" === tag && updateSandbox(editor, elm), 
+        elm;
     }
     function isWithinEmbed(node) {
         for (;node = node.parent; ) if (node.attr("data-mce-object")) return 1;
@@ -282,12 +360,19 @@
                 } else media_live_embed = !1;
                 if (isValidElement(editor, node.name) || isNonEditable(node)) {
                     if ("iframe" !== node.name) {
-                        var src = node.attr("src") || node.attr("data") || "";
-                        if (src && !isSupportedUrl(editor, node.name, src)) {
+                        var sources, src = node.attr("src") || node.attr("data") || "";
+                        if (src || "video" !== node.name && "audio" !== node.name || (sources = node.getAll("source")).length && (src = sources[0].attr("src")), 
+                        src && !isSupportedUrl(editor, node.name, src)) {
                             node.remove();
                             continue;
                         }
-                        src || (media_live_embed = !1);
+                        if (src || (media_live_embed = !1), !1 !== editor.settings.strict_media_embeds) {
+                            if (node.name = isSupportedMedia(editor, src), !node.name) {
+                                node.remove();
+                                continue;
+                            }
+                            node.attr("src", src);
+                        }
                     }
                     !media_live_embed || isObjectEmbed(node.name) || isResponsiveMedia(node) || isNonEditable(node) ? isWithinEmbed(node) || (isResponsiveMedia(node) && node.parent.attr({
                         contentEditable: "false",
@@ -298,96 +383,11 @@
         };
     }
     var retainAttributesAndInnerHtml = function(editor, sourceNode, targetNode) {
-        var attrName, attrValue, attribs, ai, innerHtml, boolAttrs = editor.schema.getBoolAttrs(), src = sourceNode.attr("src"), style = (src && (defaultAttributes = function(data, provider) {
-            var src, id, matches, defaultValues = {
-                youtube: {
-                    src: data = data.src || "",
-                    width: 560,
-                    height: 315,
-                    frameborder: 0,
-                    allowfullscreen: "allowfullscreen",
-                    allow: "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                },
-                vimeo: {
-                    src: data,
-                    width: 560,
-                    height: 315,
-                    frameborder: 0,
-                    allowfullscreen: "allowfullscreen",
-                    allow: "autoplay; fullscreen"
-                },
-                dailymotion: {
-                    src: data,
-                    width: 640,
-                    height: 360,
-                    frameborder: 0,
-                    allowfullscreen: "allowfullscreen",
-                    allow: "autoplay; fullscreen"
-                },
-                video: {
-                    src: data,
-                    width: 560,
-                    height: 315,
-                    controls: !0,
-                    type: "video/mpeg"
-                },
-                slideshare: {
-                    src: "",
-                    width: 427,
-                    height: 356,
-                    frameborder: 0,
-                    allowfullscreen: "allowfullscreen",
-                    allow: "fullscreen"
-                },
-                soundcloud: {
-                    src: "",
-                    width: "100%",
-                    height: 400,
-                    frameborder: 0
-                },
-                spotify: {
-                    src: data,
-                    width: 300,
-                    height: 380,
-                    frameborder: 0,
-                    allowtransparency: !0,
-                    allow: "encrypted-media"
-                },
-                ted: {
-                    src: "",
-                    width: 560,
-                    height: 316,
-                    frameborder: 0,
-                    allowfullscreen: "allowfullscreen"
-                },
-                twitch: {
-                    src: "",
-                    width: 500,
-                    height: 281,
-                    frameborder: 0,
-                    allowfullscreen: "allowfullscreen"
-                }
-            }, data = data.replace(/[^a-z0-9-_:&;=%\?\[\]\/\.]/gi, "");
-            return defaultValues[provider] || (defaultValues[provider] = {}), defaultValues[provider].src = data, 
-            "youtube" === provider && (src = data.replace(/youtu(\.)?be([^\/]+)?\/(.+)/, function(a, b, c, d) {
-                return d = d.replace(/(watch\?v=|v\/|embed\/)/, ""), b && !c && (c = ".com"), 
-                id = d.replace(/([^\?&#]+)/, function($0, $1) {
-                    return $1;
-                }), "youtube" + c + "/embed/" + d;
-            }), defaultValues[provider].src = src), "vimeo" === provider && (-1 == data.indexOf("player.vimeo.com/video/") && (src = id = "", 
-            matches = /vimeo\.com\/(?:\w+\/){0,3}((?:[0-9]+\b)(?:\/[a-z0-9]+)?)/.exec(data)) && tinymce.is(matches, "array") && (matches = matches[1].split("/"), 
-            id = matches[0], 2 == matches.length && (src = matches[1]), data = "https://player.vimeo.com/video/" + id + (src ? "?h=" + src : "")), 
-            defaultValues[provider].src = data), "dailymotion" === provider && (id = "", 
-            (matches = /dai\.?ly(motion)?(.+)?\/(swf|video)?\/?([a-z0-9]+)_?/.exec(data)) && tinymce.is(matches, "array") && (id = matches.pop()), 
-            defaultValues[provider].src = "https://dailymotion.com/embed/video/" + id), 
-            "spotify" === provider && (defaultValues[provider].src = data.replace(/open\.spotify\.com\/track\//, "open.spotify.com/embed/track/")), 
-            "ted" === provider && (defaultValues[provider].src = data.replace(/www\.ted.com\/talks\//, "embed.ted.com/talks/")), 
-            defaultValues[provider];
-        }({
+        var attrName, attrValue, attribs, ai, innerHtml, boolAttrs = editor.schema.getBoolAttrs(), src = sourceNode.attr("src"), style = (src && (defaultAttributes = getMediaProps(0, {
             src: src
         }, isSupportedMedia(editor, src)), each(defaultAttributes, function(val, name) {
             tinymce.is(sourceNode.attr(name)) || name in boolAttrs || sourceNode.attr(name, val);
-        })), editor.dom.parseStyle(sourceNode.attr("style"))), defaultAttributes = sourceNode.attr("width") || style.width || "", height = sourceNode.attr("height") || style.height || "", style = editor.dom.parseStyle(sourceNode.attr("style"));
+        }), updateSandbox(editor, sourceNode)), editor.dom.parseStyle(sourceNode.attr("style"))), defaultAttributes = sourceNode.attr("width") || style.width || "", height = sourceNode.attr("height") || style.height || "", style = editor.dom.parseStyle(sourceNode.attr("style"));
         for (each([ "bgcolor", "align", "border", "vspace", "hspace" ], function(na) {
             var v = sourceNode.attr(na);
             if (v) {
@@ -415,7 +415,8 @@
             }
         }), ai = (attribs = sourceNode.attributes).length; ai--; ) attrName = attribs[ai].name, 
         attrValue = attribs[ai].value, "data-mce-html" === attrName || "data-mce-clipboard-media" === attrName ? targetNode.attr(attrName, attrValue) : -1 !== attrName.indexOf("data-mce") && -1 === attrName.indexOf("data-mce-p-") || (-1 !== (attrName = 0 === (attrName = "img" !== targetNode.name || htmlSchema.isValid("img", attrName) && "src" != attrName ? attrName : "data-mce-p-" + attrName).indexOf("on") && editor.settings.allow_event_attributes ? "data-mce-p-" + attrName : attrName).indexOf("-") ? targetNode.attr(attrName, attrValue) : (htmlSchema.isValid(targetNode.name, attrName) && targetNode.attr(attrName, attrValue), 
-        tinymce.is(boolAttrs[attrName]) && !boolAttrs[attrName] && targetNode.attr(attrName, null)));
+        tinymce.is(boolAttrs[attrName]) && "false" == attrValue && targetNode.attr(attrName, null), 
+        "sandbox" == attrName && !1 === attrValue && targetNode.attr(attrName, null)));
         defaultAttributes && !style.width && (style.width = /^[0-9.]+$/.test(defaultAttributes) ? defaultAttributes + "px" : defaultAttributes), 
         height && !style.height && (style.height = /^[0-9.]+$/.test(height) ? height + "px" : height);
         var agent, defaultAttributes = [], height = (sourceNode.attr("class") && (defaultAttributes = sourceNode.attr("class").replace(/mce-(\S+)/g, "").replace(/\s+/g, " ").trim().split(" ")), 
@@ -486,7 +487,7 @@
         function objectActivate(ed, e) {
             var node = isMediaObject(e.target);
             node && !isNonEditable(node) && (ed.selection.select(node), ed.dom.getAttrib(node, "data-mce-selected") && node.setAttribute("data-mce-selected", "2"), 
-            "mousedown" === e.type && e.altKey && (e.target = function(editor, node) {
+            "mousedown" === e.type && e.altKey && "IMG" !== node.nodeName && (e.target = function(editor, node) {
                 var ifr = new tinymce.html.DomParser({}, editor.schema).parse(node.innerHTML).firstChild, ifr = createReplacementNode(editor, createPlaceholderNode(editor, ifr));
                 return editor.dom.replace(ifr, node), ifr;
             }(ed, node)), e.stopImmediatePropagation(), e.preventDefault());
@@ -557,8 +558,7 @@
                 node && (name = node.getAttribute("data-mce-object"), o.node !== node ? o.name = "" : ("IMG" !== node.nodeName && (node = ed.dom.select("iframe,audio,video", node), 
                 node = ed.dom.getAttrib(node, "src") || ed.dom.getAttrib(node, "data-mce-p-src") || "") && (node = isSupportedMedia(ed, node) || "") && (name = node[0].toUpperCase() + node.slice(1)), 
                 o.name = name = "object" === name ? "media" : name));
-            }), ed.settings.compress.css || ed.dom.loadCSS(url + "/css/content.css"), 
-            ed.onObjectResized.add(function(ed, elm, width, height) {
+            }), ed.onObjectResized.add(function(ed, elm, width, height) {
                 isMediaNode(elm) && (ed.dom.hasClass(elm, "mce-object-preview") && (ed.dom.setStyles(elm, {
                     width: "",
                     height: ""
@@ -615,7 +615,7 @@
         }), {
             getMediaData: function() {
                 return function(ed) {
-                    var data = {}, node = ed.dom.getParent(ed.selection.getNode(), "[data-mce-object]");
+                    var data = {}, node = ed.dom.getParent(ed.selection.getNode(), "[data-mce-object]"), boolAttrs = ed.schema.getBoolAttrs();
                     if (node && 1 == node.nodeType) {
                         if (-1 !== node.className.indexOf("mce-object-preview")) {
                             for (i = (attribs = node.attributes).length - 1; 0 <= i; i--) "contenteditable" != (name = attribs.item(i).name) && -1 == name.indexOf("data-mce-") && -1 == name.indexOf("aria-") && (data[name] = ed.dom.getAttrib(node, name));
@@ -628,7 +628,8 @@
                             var value, name = attribs.item(i).name;
                             value = ed.dom.getAttrib(node, name), "data" !== (name = -1 !== name.indexOf("data-mce-p-") ? name.substr(11) : name) && "src" !== name && "type" !== name && "codebase" !== name && "classid" !== name && ("poster" === name && (value = ed.convertURL(value)), 
                             "flashvars" === name && (value = decodeURIComponent(value)), 
-                            -1 === name.indexOf("data-mce-")) && (data[name] = value);
+                            -1 === name.indexOf("data-mce-")) && (boolAttrs[name] && (value = !0), 
+                            data[name] = value);
                         }
                         data.mediatype = mediatype;
                     }
@@ -654,7 +655,8 @@
                         if ("" == val && !boolAttrs[name]) return !0;
                         value.innerHTML && (innerHTML = value.innerHTML), !ed.schema.isValid(nodeName, name) && -1 === name.indexOf("-") || ("class" == name && (val = val.replace(/mce-(\S+)/g, "").replace(/\s+/g, " ").trim()), 
                         attribs[name] = val);
-                    }), ed.dom.createHTML(nodeName, attribs, innerHTML);
+                    }), "iframe" != nodeName || attribs.sandbox || (attribs.sandbox = ""), 
+                    ed.dom.createHTML(nodeName, attribs, innerHTML);
                 }(ed, data);
             },
             isMediaHtml: function(html) {

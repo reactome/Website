@@ -1,5 +1,5 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
-var WFLinkSearch = WFExtensions.add("LinkSearch", {
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+WFExtensions.add("LinkSearch", {
     options: {
         element: "#search-input",
         button: "#search-button",
@@ -30,16 +30,18 @@ var WFLinkSearch = WFExtensions.add("LinkSearch", {
         });
     },
     search: function() {
-        var self = this, s = this.options, el = s.element, $p = (s.button, $("#search-result").parent()), query = $(el).val();
+        var self = this, s = this.options, el = s.element, $p = $("#search-result").parent(), query = $(el).val();
         query && !$(el).hasClass("placeholder") && ($("#search-clear").removeClass("uk-active"), 
         $("#search-browser").addClass("loading"), query = $.trim(query.replace(/[\///<>#]/g, "")), 
         Wf.JSON.request("doSearch", {
             json: [ query ]
         }, function(results) {
             if (results) {
-                if (results.error) return void Wf.Dialog.alert(results.error);
+                if (results.error) return void Wf.Dialog.alert(results.error, {
+                    title: Wf.translate("link.search_error", "Search Error")
+                });
                 $("#search-result").empty(), results.length ? ($.each(results, function(i, values) {
-                    console.log(values), $.each(values, function(name, items) {
+                    $.each(values, function(name, items) {
                         $("<h3>" + name + "</h3>").appendTo("#search-result"), $.each(items, function(i, item) {
                             var $dl = $('<dl class="uk-margin-small" />').appendTo("#search-result");
                             $('<dt class="link uk-margin-small" />').text(item.title).on("click", function() {

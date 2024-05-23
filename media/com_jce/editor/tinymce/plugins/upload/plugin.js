@@ -1,4 +1,4 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, JSON = tinymce.util.JSON, RangeUtils = tinymce.dom.RangeUtils, Uuid = tinymce.util.Uuid, Env = tinymce.util.Env;
     tinymce.PluginManager.add("upload", function(ed, url) {
@@ -17,7 +17,6 @@
             }), ed.onPostProcess.add(function(ed, o) {
                 o.content = o.content.replace(/(&nbsp;|\u00a0)<\/media>/g, "</media>");
             }), ed.schema.addValidElements("+media[type|width|height|class|style|title|*]"), 
-            ed.settings.compress.css || ed.dom.loadCSS(url + "/css/content.css"), 
             ed.serializer.addAttributeFilter("data-mce-marker", function(nodes, name, args) {
                 for (var i = nodes.length; i--; ) nodes[i].remove();
             }), ed.parser.addNodeFilter("img,media", function(nodes) {
@@ -124,10 +123,16 @@
                 if (tinymce.is(file.uploader.getUploadConfig, "function")) {
                     var config = file.uploader.getUploadConfig(), name = file.target_name || file.name;
                     if (file.filename = name.replace(/[\+\\\/\?\#%&<>"\'=\[\]\{\},;@\^\(\)\xa3\u20ac$~]/g, ""), 
-                    !new RegExp(".(" + config.filetypes.join("|") + ")$", "i").test(file.name)) return void ed.windowManager.alert(ed.getLang("upload.file_extension_error", "File type not supported"));
+                    !new RegExp(".(" + config.filetypes.join("|") + ")$", "i").test(file.name)) return void ed.windowManager.alert({
+                        text: ed.getLang("upload.file_extension_error", "File type not supported"),
+                        title: ed.getLang("upload.error", "Upload Error")
+                    });
                     if (file.size) {
                         name = parseInt(config.max_size, 10) || 1024;
-                        if (file.size > 1024 * name) return void ed.windowManager.alert(ed.getLang("upload.file_size_error", "File size exceeds maximum allowed size"));
+                        if (file.size > 1024 * name) return void ed.windowManager.alert({
+                            text: ed.getLang("upload.file_size_error", "File size exceeds maximum allowed size"),
+                            title: ed.getLang("upload.error", "Upload Error")
+                        });
                     }
                 }
                 var w;
@@ -141,7 +146,10 @@
                 }), ed.dom.addClass(name, "mce-item-upload")) : ed.setProgressState(!0), 
                 file.marker = name), files.push(file), 1;
             }
-            ed.windowManager.alert(ed.getLang("upload.file_extension_error", "File type not supported"));
+            ed.windowManager.alert({
+                text: ed.getLang("upload.file_extension_error", "File type not supported"),
+                title: ed.getLang("upload.error", "Upload Error")
+            });
         }
         function bindUploadMarkerEvents(marker) {
             var dom = tinymce.DOM;
@@ -214,7 +222,10 @@
                 }(file, response)), removeFile(file), file.marker && ed.dom.remove(file.marker), 
                 ed.setProgressState(!1);
             }, function(message) {
-                ed.windowManager.alert(message), removeFile(file), file.marker && ed.dom.remove(file.marker), 
+                ed.windowManager.alert({
+                    text: message,
+                    title: ed.getLang("upload.error", "Upload Error")
+                }), removeFile(file), file.marker && ed.dom.remove(file.marker), 
                 ed.setProgressState(!1);
             }, function(value) {
                 file.marker && ed.dom.setAttrib(file.marker, "data-progress", value);

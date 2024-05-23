@@ -1,4 +1,4 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     var DOM = tinymce.DOM, each$1 = tinymce.each;
@@ -41,7 +41,6 @@
                     }
                 })).contentCSS = ed.contentCSS, pasteEd.onPreInit.add(function() {
                     var dom = pasteEd.dom;
-                    dom.loadCSS(ed.plugins.clipboard.url + "/css/content.css"), 
                     this.serializer.addAttributeFilter("data-mce-fragment", function(nodes, name) {
                         for (var i = nodes.length; i--; ) nodes[i].attr("data-mce-fragment", null);
                     }), pasteEd.onPastePostProcess.add(function(ed, o) {

@@ -1,4 +1,4 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, counter = 0;
     tinymce.create("tinymce.plugins.PreviewPlugin", {
@@ -29,21 +29,18 @@
             })), ed.settings.container_height || sessionStorage.getItem("wf-editor-container-height") || ifrHeight), ifrHeight = (DOM.hasClass(container, "mce-fullscreen") && (o = DOM.getViewPort().h - element.offsetHeight), 
             DOM.setStyle(preview, "height", o), DOM.setStyle(preview, "max-width", "100%"), 
             ed.settings.container_width || sessionStorage.getItem("wf-editor-container-width")), query = (ifrHeight && !DOM.hasClass(container, "mce-fullscreen") && DOM.setStyle(preview, "max-width", ifrHeight), 
-            DOM.show(preview), ""), args = {};
+            DOM.show(preview), ""), args = {}, content = ed.getContent();
             for (k in tinymce.extend(args, {
-                data: ed.getContent(),
+                data: content,
                 id: function() {
                     for (var guid = new Date().getTime().toString(32), i = 0; i < 5; i++) guid += Math.floor(65535 * Math.random()).toString(32);
                     return "wf_" + guid + (counter++).toString(32);
                 }()
             }), args) query += "&" + k + "=" + encodeURIComponent(args[k]);
             function update(text) {
-                var doc = iframe.contentWindow.document, css = [], scripts = /<script[^>]+>[\s\S]*<\/script>/.exec(text), html = (text = text.replace(/<script[^>]+>[\s\S]*<\/script>/gi, ""), 
-                "<!DOCTYPE html>"), html = (html = (html += '<head xmlns="http://www.w3.org/1999/xhtml">') + ('<base href="' + s.document_base_url + '" />')) + '<meta http-equiv="X-UA-Compatible" content="IE=7" />' + '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />', css = s.compress.css ? [ s.site_url + "index.php?option=com_jce&task=editor.pack&type=css&slot=preview&" + s.query ] : ed.contentCSS;
+                var doc = iframe.contentWindow.document, css = [], html = "<!DOCTYPE html>", html = (html = (html += '<head xmlns="http://www.w3.org/1999/xhtml">') + ('<base href="' + s.document_base_url + '" />')) + '<meta http-equiv="X-UA-Compatible" content="IE=7" />' + '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />', css = s.compress.css ? [ s.site_url + "index.php?option=com_jce&task=editor.pack&type=css&slot=preview&" + s.query ] : ed.contentCSS;
                 tinymce.each(css, function(url) {
                     html += '<link href="' + url + '" rel="stylesheet" type="text/css" />';
-                }), scripts && tinymce.each(scripts, function(script) {
-                    html += "" + script;
                 }), html = (html += '</head><body style="margin:5px;">') + text + "</body></html>", 
                 doc.open(), doc.write(html), doc.close(), DOM.removeClass(container, "mce-loading");
             }
@@ -61,10 +58,10 @@
                         o.error = /[{}]/.test(o) ? "The server returned an invalid JSON response" : x;
                     }
                     var r = o.result;
-                    update(r = x && !o.error ? r : ed.getContent());
+                    update(r = x && !o.error ? r : content);
                 },
                 error: function(e, x) {
-                    update(ed.getContent());
+                    update(content);
                 }
             });
         }

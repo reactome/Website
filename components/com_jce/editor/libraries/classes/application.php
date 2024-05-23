@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     JCE
  * @subpackage  Editor
@@ -48,6 +49,8 @@ class WFApplication extends CMSObject
 
         // store a reference to the Joomla Application input
         $this->input = Factory::getApplication()->input;
+
+        Factory::getApplication()->triggerEvent('onWfApplicationInit', array($this));
     }
 
     /**
@@ -108,7 +111,7 @@ class WFApplication extends CMSObject
     {
         $app = Factory::getApplication();
         $user = Factory::getUser();
-        $option = $this->getComponentOption();
+        $option = $app->input->getCmd('option', '');
 
         $settings = array(
             'option' => $option,
@@ -169,7 +172,7 @@ class WFApplication extends CMSObject
         if (!isset($plugins[$name])) {
             return false;
         }
-        
+
         $plugin = $plugins[$name];
 
         if (isset($plugin->checksum) && strlen($plugin->checksum) == 64) {
@@ -179,7 +182,7 @@ class WFApplication extends CMSObject
                 return false;
             }
 
-            return  $plugin->checksum === hash_file('sha256', $path);
+            return $plugin->checksum === hash_file('sha256', $path);
         }
 
         return true;
@@ -216,38 +219,48 @@ class WFApplication extends CMSObject
             $id = (int) $options['profile_id'];
         }
 
-        // create a signature to store
+        $db = Factory::getDBO();
+        $user = Factory::getUser();
+        $app = Factory::getApplication();
+
+        $query = $db->getQuery(true);
+        $query->select('*')->from('#__wf_profiles')->where('published = 1')->order('ordering ASC');
+
+        if ($id) {
+            $query->where('id = ' . (int) $id);
+        }
+
+        $db->setQuery($query);
+        $profiles = $db->loadObjectList();
+
+        // nothing found...
+        if (empty($profiles)) {
+            return null;
+        }
+
+        // select and return a specific profile by id
+        if ($id) {
+            // return
+            return (object) $profiles[0];
+        }
+
+        $app->triggerEvent('onWfEditorProfileOptions', array(&$options));
+
+        // create a unique signature to store
         $signature = md5(serialize($options));
 
         if (!isset(self::$profile[$signature])) {
-            $db = Factory::getDBO();
-            $user = Factory::getUser();
-            $app = Factory::getApplication();
-
-            $query = $db->getQuery(true);
-            $query->select('*')->from('#__wf_profiles')->where('published = 1')->order('ordering ASC');
-
-            if ($id) {
-                $query->where('id = ' . (int) $id);
-            }
-
-            $db->setQuery($query);
-            $profiles = $db->loadObjectList();
-
-            // nothing found...
-            if (empty($profiles)) {
-                return null;
-            }
-
-            // select and return a specific profile by id
-            if ($id) {
-                // return
-                return (object) $profiles[0];
-            }
 
             foreach ($profiles as $item) {
                 // at least one user group or user must be set
                 if (empty($item->types) && empty($item->users)) {
+                    continue;
+                }
+
+                $app->triggerEvent('onWfBeforeEditorProfileItem', array(&$item));
+
+                // event can "cancel" this profile item
+                if ($item === false) {
                     continue;
                 }
 
@@ -302,6 +315,13 @@ class WFApplication extends CMSObject
                     $item->params = JceEncryptHelper::decrypt($item->params);
                 }
 
+                $app->triggerEvent('onWfAfterEditorProfileItem', array(&$item));
+
+                // event can "cancel" this profile item
+                if ($item === false) {
+                    continue;
+                }
+
                 // assign item to profile
                 self::$profile[$signature] = (object) $item;
 
@@ -313,34 +333,6 @@ class WFApplication extends CMSObject
         }
 
         return self::$profile[$signature];
-    }
-
-    /**
-     * Get the component option.
-     *
-     * @return string
-     */
-    public function getComponentOption()
-    {
-        $app = Factory::getApplication();
-
-        $option = $app->input->getCmd('option', '');
-
-        switch ($option) {
-            case 'com_section':
-                $option = 'com_content';
-                break;
-            case 'com_categories':
-                $section = $app->input->getCmd('section');
-
-                if ($section) {
-                    $option = $section;
-                }
-
-                break;
-        }
-
-        return $option;
     }
 
     /**

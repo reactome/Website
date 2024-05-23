@@ -1,7 +1,8 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 import {
     JoomlaEditor,
-    JoomlaEditorDecorator
+    JoomlaEditorDecorator,
+    JoomlaEditorButton
 } from "editor-api";
 
 class JceDecorator extends JoomlaEditorDecorator {
@@ -25,6 +26,9 @@ class JceDecorator extends JoomlaEditorDecorator {
     toggle(show) {
         return WfEditor.toggleEditor(this.instance.getElement()), !1;
     }
+    editorButton(button) {
+        JoomlaEditorButton.runAction(button.action, button.options || {});
+    }
 }
 
 tinyMCE.onAddEditor.add(function(mgr, editor) {
@@ -37,6 +41,8 @@ tinyMCE.onAddEditor.add(function(mgr, editor) {
             JoomlaEditor.setActive(JceEditor));
         }), editorButtons.querySelectorAll(".modal").forEach(function(modal) {
             document.body.appendChild(modal);
-        }));
+        })), editor.editorXtdButtons = function(button) {
+            JceEditor.editorButton(button);
+        };
     }
 }), window.JceDecorator = JceDecorator;

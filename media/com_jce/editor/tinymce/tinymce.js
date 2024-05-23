@@ -1,4 +1,4 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     !function(win) {
@@ -572,7 +572,7 @@
                 (rng = dom.createRng()).setStart(marker, 0), rng.setEnd(marker, 0), 
                 rng.collapse(), selection.setRng(rng);
             }
-            node && node != editor.dom.getRoot() && (node = dom.getParent(node, "a")) && (isLastChild(node) || function(node) {
+            node && node != editor.dom.getRoot() && (node = dom.getParent(node, 'a,span[data-mce-item="font"]')) && (isLastChild(node) || function(node) {
                 return isBr(node) || node && 3 == node.nodeType && /^[ \t\r\n]*$/.test(node.nodeValue);
             }(node.nextSibling)) && 3 == container.nodeType && function(container, node) {
                 return node.lastChild && 1 == node.lastChild.nodeType && (node = node.lastChild), 
@@ -2273,9 +2273,9 @@
         };
     }(tinymce), function(tinymce) {
         tinymce.html.Serializer = function(settings, schema) {
-            var writer = new tinymce.html.Writer(settings, schema);
-            (settings = settings || {}).validate = !("validate" in settings) || settings.validate, 
+            var writer = new tinymce.html.Writer(settings, schema), boolAttrMap = ((settings = settings || {}).validate = !("validate" in settings) || settings.validate, 
             this.schema = schema = schema || new tinymce.html.Schema(), this.writer = writer, 
+            schema.getBoolAttrs());
             this.serialize = function(node) {
                 var handlers, validate;
                 function walk(node) {
@@ -2287,12 +2287,14 @@
                             for (i = 0, l = elementRule.attributesOrder.length; i < l; i++) (attrName = elementRule.attributesOrder[i]) in attrs.map && (attrValue = attrs.map[attrName], 
                             sortedAttrs.map[attrName] = attrValue, sortedAttrs.push({
                                 name: attrName,
-                                value: attrValue
+                                value: attrValue,
+                                boolean: !!boolAttrMap[attrName]
                             }));
                             for (i = 0, l = attrs.length; i < l; i++) (attrName = attrs[i].name) in sortedAttrs.map || (attrValue = attrs.map[attrName], 
                             sortedAttrs.map[attrName] = attrValue, sortedAttrs.push({
                                 name: attrName,
-                                value: attrValue
+                                value: attrValue,
+                                boolean: !!boolAttrMap[attrName]
                             }));
                             attrs = sortedAttrs;
                         }
@@ -8573,7 +8575,7 @@
                         suffix: "/plugin" + tinymce.suffix + ".js"
                     }));
                 }), each(s.external_plugins, function(url, name) {
-                    PluginManager.load(name, url), s.plugins += "," + name;
+                    url && (PluginManager.load(name, url), s.plugins += "," + name);
                 }), sl.loadQueue(function() {
                     self.removed || self.init();
                 }))) : Event.add(window, "ready", function() {
@@ -9985,10 +9987,14 @@
             setTitle: function(win, title) {
                 win = this._findId(win), (win = DOM.get(win + "_title")) && !win.innerHTML && (win.innerHTML = DOM.encode(title));
             },
-            confirm: function(txt, cb, s) {
+            confirm: function(options, cb, s) {
                 var self = this;
-                self.open({
-                    title: "",
+                tinymce.is(options, "string") && (options = {
+                    text: options
+                }), options = tinymce.extend({
+                    title: ""
+                }, options), self.open({
+                    title: self.editor.getLang(options.title, options.title),
                     type: "confirm",
                     buttons: [ {
                         title: self.editor.getLang("no", "No"),
@@ -10002,13 +10008,17 @@
                             cb && cb.call(s || self, s);
                         }
                     } ],
-                    content: "<p>" + DOM.encode(self.editor.getLang(txt, txt)) + "</p>"
+                    content: "<p>" + DOM.encode(self.editor.getLang(options.text, options.text)) + "</p>"
                 });
             },
-            alert: function(txt, cb, s) {
+            alert: function(options, cb, s) {
                 var self = this;
-                self.open({
-                    title: "",
+                tinymce.is(options, "string") && (options = {
+                    text: options
+                }), options = tinymce.extend({
+                    title: ""
+                }, options), self.open({
+                    title: self.editor.getLang(options.title, options.title),
                     type: "alert",
                     buttons: [ {
                         title: self.editor.getLang("cancel", "Cancel"),
@@ -10022,13 +10032,17 @@
                             cb && cb.call(s || self, s);
                         }
                     } ],
-                    content: "<p>" + DOM.encode(self.editor.getLang(txt, txt)) + "</p>"
+                    content: "<p>" + DOM.encode(self.editor.getLang(options.text, options.text)) + "</p>"
                 });
             },
-            prompt: function(txt, cb, s) {
-                var self = this, html = '<div class="mceModalRow">   <div class="mceModalControl">       <input type="text" id="' + self.editor.id + '_prompt_input" autofocus />   </div></div>';
+            prompt: function(options, cb, s) {
+                var self = this, html = (tinymce.is(options, "string") && (options = {
+                    text: options
+                }), options = tinymce.extend({
+                    title: ""
+                }, options), '<div class="mceModalRow">   <div class="mceModalControl">       <input type="text" id="' + self.editor.id + '_prompt_input" autofocus />   </div></div>');
                 self.open({
-                    title: "",
+                    title: self.editor.getLang(options.title, options.title),
                     type: "prompt",
                     buttons: [ {
                         title: self.editor.getLang("cancel", "Cancel"),
@@ -12067,7 +12081,6 @@
                     function isCodePlaceholder(node) {
                         return "SPAN" === node.nodeName && node.getAttribute("data-mce-code") && "placeholder" == node.getAttribute("data-mce-type");
                     }
-                    !1 !== ed.settings.content_css && ed.dom.loadCSS(url + "/css/content.css"), 
                     ed.dom.bind(ed.getDoc(), "keyup click", function(e) {
                         var node = e.target, sel = ed.selection.getNode();
                         ed.dom.removeClass(ed.dom.select(".mce-item-selected"), "mce-item-selected"), 
@@ -12601,7 +12614,6 @@
                 }), ed.onPostProcess.add(function(ed, o) {
                     o.content = o.content.replace(/(&nbsp;|\u00a0)<\/media>/g, "</media>");
                 }), ed.schema.addValidElements("+media[type|width|height|class|style|title|*]"), 
-                ed.settings.compress.css || ed.dom.loadCSS(url + "/css/content.css"), 
                 ed.serializer.addAttributeFilter("data-mce-marker", function(nodes, name, args) {
                     for (var i = nodes.length; i--; ) nodes[i].remove();
                 }), ed.parser.addNodeFilter("img,media", function(nodes) {
@@ -12698,11 +12710,15 @@
                     if (tinymce.is(file.uploader.getUploadConfig, "function")) {
                         var config = file.uploader.getUploadConfig(), name = file.target_name || file.name;
                         if (file.filename = name.replace(/[\+\\\/\?\#%&<>"\'=\[\]\{\},;@\^\(\)\xa3\u20ac$~]/g, ""), 
-                        !new RegExp(".(" + config.filetypes.join("|") + ")$", "i").test(file.name)) return ed.windowManager.alert(ed.getLang("upload.file_extension_error", "File type not supported")), 
-                        0;
+                        !new RegExp(".(" + config.filetypes.join("|") + ")$", "i").test(file.name)) return ed.windowManager.alert({
+                            text: ed.getLang("upload.file_extension_error", "File type not supported"),
+                            title: ed.getLang("upload.error", "Upload Error")
+                        }), 0;
                         if (file.size && (name = parseInt(config.max_size, 10) || 1024, 
-                        file.size > 1024 * name)) return ed.windowManager.alert(ed.getLang("upload.file_size_error", "File size exceeds maximum allowed size")), 
-                        0;
+                        file.size > 1024 * name)) return ed.windowManager.alert({
+                            text: ed.getLang("upload.file_size_error", "File size exceeds maximum allowed size"),
+                            title: ed.getLang("upload.error", "Upload Error")
+                        }), 0;
                     }
                     var w;
                     return file.marker || !1 === ed.settings.upload_use_placeholder || (config = Uuid.uuid("wf-tmp-"), 
@@ -12715,7 +12731,10 @@
                     }), ed.dom.addClass(name, "mce-item-upload")) : ed.setProgressState(!0), 
                     file.marker = name), files.push(file), 1;
                 }
-                ed.windowManager.alert(ed.getLang("upload.file_extension_error", "File type not supported"));
+                ed.windowManager.alert({
+                    text: ed.getLang("upload.file_extension_error", "File type not supported"),
+                    title: ed.getLang("upload.error", "Upload Error")
+                });
             }
             function bindUploadMarkerEvents(marker) {
                 var dom = tinymce.DOM;
@@ -12788,7 +12807,10 @@
                     }(file, response)), removeFile(file), file.marker && ed.dom.remove(file.marker), 
                     ed.setProgressState(!1);
                 }, function(message) {
-                    ed.windowManager.alert(message), removeFile(file), file.marker && ed.dom.remove(file.marker), 
+                    ed.windowManager.alert({
+                        text: message,
+                        title: ed.getLang("upload.error", "Upload Error")
+                    }), removeFile(file), file.marker && ed.dom.remove(file.marker), 
                     ed.setProgressState(!1);
                 }, function(value) {
                     file.marker && ed.dom.setAttrib(file.marker, "data-progress", value);
@@ -12978,8 +13000,10 @@
                             onclick: function(e) {
                                 var url, uploader, quality, value, images, filename = DOM.getValue(ed.id + "_blob_input");
                                 return filename ? (filename = filename.replace(/[\+\\\/\?\#%&<>"\'=\[\]\{\},;@\^\(\)\xa3\u20ac$~]/g, ""), 
-                                /\.(php([0-9]*)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b/i.test(filename) ? (ed.windowManager.alert(ed.getLang("upload.file_extension_error", "File type not supported")), 
-                                removeMarker(marker), resolve()) : (each(uploaders, function(instance) {
+                                /\.(php([0-9]*)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b/i.test(filename) ? (ed.windowManager.alert({
+                                    text: ed.getLang("upload.file_extension_error", "File type not supported"),
+                                    title: ed.getLang("upload.error", "Upload Error")
+                                }), removeMarker(marker), resolve()) : (each(uploaders, function(instance) {
                                     if (!url && (url = instance.getUploadURL({
                                         name: blobInfo.filename()
                                     }))) return uploader = instance, !1;
@@ -13014,8 +13038,10 @@
                                         formData.append(name, value);
                                     }), xhr.send(formData);
                                 }(filename, blobInfo, function(error) {
-                                    ed.windowManager.alert(error), ed.setProgressState(!1), 
-                                    resolve();
+                                    ed.windowManager.alert({
+                                        text: error,
+                                        title: ed.getLang("upload.error", "Upload Error")
+                                    }), ed.setProgressState(!1), resolve();
                                 })) : (removeMarker(marker), resolve()))) : (removeMarker(marker), 
                                 resolve());
                             },

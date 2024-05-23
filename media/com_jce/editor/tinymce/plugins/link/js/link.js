@@ -1,10 +1,10 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function($, tinyMCEPopup) {
     var anchorElm, currNode, emailRex = /(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})/;
     var LinkDialog = {
         settings: {},
         init: function() {
-            var data, x, start, self = this, ed = tinyMCEPopup.editor, se = ed.selection, api = ed.plugins.link, state = (tinyMCEPopup.restoreSelection(), 
+            var data, x, self = this, ed = tinyMCEPopup.editor, se = ed.selection, api = ed.plugins.link, state = (tinyMCEPopup.restoreSelection(), 
             $("button#insert").on("click", function(e) {
                 self.insert(), e.preventDefault();
             }), this.settings.file_browser || $("#href").removeClass("browser"), 
@@ -93,10 +93,12 @@
                 var repeatable = $(".uk-repeatable").eq(0), repeatable = (0 < x && $(repeatable).clone(!0).appendTo($(repeatable).parent()), 
                 $(".uk-repeatable").eq(x).find("input, select"));
                 $(repeatable).eq(0).val(key), $(repeatable).eq(1).val(val), x++;
-            })) : Wf.setDefaults(this.settings.defaults), function(state, txt) {
+            })) : Wf.setDefaults(this.settings.defaults);
+            var start = api.getAnchorText(se, api.isAnchor(anchorElm) ? anchorElm : null) || "";
+            currNode && currNode.hasAttribute("data-mce-item") && (state = !1, ed.selection.select(currNode)), 
+            function(state, txt) {
                 (state ? $("#text").val(txt).attr("disabled", !1) : $("#text").val("").attr("disabled", !0)).trigger("change");
-            }(state, api.getAnchorText(se, api.isAnchor(anchorElm) ? anchorElm : null) || ""), 
-            $.each(this.settings.attributes, function(k, v) {
+            }(state, start), $.each(this.settings.attributes, function(k, v) {
                 0 === parseInt(v, 10) && $("#attributes-" + k).hide();
             }), "html5" == ed.settings.schema && ed.settings.validate && $("#rev").parent().parent().hide(), 
             $("select").datalist().trigger("datalist:update"), $(".uk-datalist").trigger("datalist:update"), 

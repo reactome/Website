@@ -1,4 +1,4 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var Joomla = window.Joomla || null, each = tinymce.each, DOM = tinymce.DOM;
     tinymce.create("tinymce.plugins.JoomlaPlugin", {
@@ -30,29 +30,37 @@
                         icon: plg.icon,
                         svg: plg.svg || "",
                         onclick: function(e) {
-                            var modal, buttons = [ {
+                            var buttons = [ {
                                 id: "cancel",
                                 title: ed.getLang("cancel", "Cancel")
                             } ];
-                            return ed.lastSelectionBookmark = ed.selection.getBookmark(1), 
-                            href && (plg.options && plg.options.confirmCallback && buttons.unshift({
-                                id: "confirm",
-                                title: plg.options.confirmText || ed.getLang("insert", "Insert"),
-                                classes: "primary",
-                                onsubmit: function(e) {
-                                    new Function(plg.options.confirmCallback).apply();
-                                }
-                            }), (modal = DOM.get(plg.id + "_modal")) ? modal.open() : (ed.windowManager.open({
-                                file: href,
-                                title: plg.title,
-                                width: Math.max(vp.w - 40, 896),
-                                height: Math.max(vp.h - 40, 707),
-                                size: "mce-modal-landscape-full",
-                                addver: !1,
-                                buttons: buttons
-                            }), Joomla && Joomla.Modal && Joomla.Modal.setCurrent(ed.windowManager))), 
-                            plg.onclick && new Function(plg.onclick).apply(), item.setSelected(!1), 
-                            !1;
+                            if (ed.lastSelectionBookmark = ed.selection.getBookmark(1), 
+                            href) {
+                                plg.options && plg.options.confirmCallback && buttons.unshift({
+                                    id: "confirm",
+                                    title: plg.options.confirmText || ed.getLang("insert", "Insert"),
+                                    classes: "primary",
+                                    onsubmit: function(e) {
+                                        new Function(plg.options.confirmCallback).apply();
+                                    }
+                                });
+                                var modal = DOM.get(plg.id + "_modal");
+                                if (modal) modal.open(); else if (plg.action) try {
+                                    ed.editorXtdButtons(plg);
+                                } catch (e) {
+                                    console.log("This option is not supported");
+                                } else ed.windowManager.open({
+                                    file: href,
+                                    title: plg.title,
+                                    width: Math.max(vp.w - 40, 896),
+                                    height: Math.max(vp.h - 40, 707),
+                                    size: "mce-modal-landscape-full",
+                                    addver: !1,
+                                    buttons: buttons
+                                }), Joomla && Joomla.Modal && Joomla.Modal.setCurrent(ed.windowManager);
+                            }
+                            return plg.onclick && new Function(plg.onclick).apply(), 
+                            item.setSelected(!1), !1;
                         }
                     }));
                 }), function() {}), SBoxClose = (window.jModalClose && (jModalCloseCore = window.jModalClose), 

@@ -1,4 +1,4 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, each = tinymce.each, VK = tinymce.VK, BACKSPACE = VK.BACKSPACE, DELETE = VK.DELETE;
     tinymce.create("tinymce.plugins.ArticlePlugin", {
@@ -55,7 +55,6 @@
                 ed.dom.is(n, "hr.mce-item-pagebreak, hr.mce-item-readmore") && (ed.dom.remove(n), 
                 e.preventDefault()));
             }), ed.onPreInit.add(function() {
-                ed.settings.compress.css || ed.dom.loadCSS(url + "/css/content.css"), 
                 ed.selection.onBeforeSetContent.addToTop(function(ed, o) {
                     o.content = o.content.replace(/<hr(.*?) alt="([^"]+)"([^>]*?)>/gi, '<hr$1 data-alt="$2"$3>');
                 }), ed.parser.addNodeFilter("hr", function(nodes) {

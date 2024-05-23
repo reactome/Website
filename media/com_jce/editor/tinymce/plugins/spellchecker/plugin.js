@@ -1,4 +1,4 @@
-/* jce - 2.9.63 | 2024-03-11 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, DOM = tinymce.DOM, counter = 0;
     tinymce.create("tinymce.plugins.SpellcheckerPlugin", {
@@ -17,9 +17,7 @@
             }), ed.onNodeChange.add(function(ed, cm) {
                 cm.setActive("spellchecker", !!self.active);
             }), self.native_spellchecker || (ed.getParam("spellchecker_suggestions", !0) && (ed.onClick.add(self._showMenu, self), 
-            ed.onContextMenu.add(self._showMenu, self)), ed.onPreInit.add(function() {
-                !1 !== ed.settings.content_css && ed.dom.loadCSS(url + "/css/content.css");
-            }), ed.onBeforeGetContent.add(function() {
+            ed.onContextMenu.add(self._showMenu, self)), ed.onBeforeGetContent.add(function() {
                 self.active && self._removeWords();
             }), ed.onNodeChange.add(function(ed, cm) {
                 cm.setActive("spellchecker", !!self.active);
