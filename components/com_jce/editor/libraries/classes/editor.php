@@ -68,6 +68,13 @@ class WFEditor
     private $javascript = array();
 
     /**
+     * Array of script options.
+     *
+     * @var array
+     */
+    private $scriptOptions = array();
+
+    /**
      * Array of core plugins
      *
      * @var array
@@ -98,6 +105,11 @@ class WFEditor
         $this->javascript[] = $text;
     }
 
+    private function addScriptOptions($text)
+    {
+        $this->scriptOptions[] = $text;
+    }
+
     private function addStyleDeclaration($text)
     {
         $this->styles[] = $text;
@@ -116,6 +128,11 @@ class WFEditor
     public function getScriptDeclaration()
     {
         return $this->javascript;
+    }
+
+    public function getScriptOptions()
+    {
+        return $this->scriptOptions;
     }
 
     public function __construct($config = array())
@@ -173,7 +190,14 @@ class WFEditor
         return $url;
     }
 
-    public function init()
+    /**
+     * Setup the editor
+     * This will create the settings array and render the editor
+     *
+     * @param boolean $autoInit Automatically initialize the editor
+     * @return WFEditor
+     */
+    public function setup($autoInit = true)
     {
         if ($this->initialized) {
             return $this;
@@ -185,7 +209,7 @@ class WFEditor
 
         Factory::getApplication()->triggerEvent('onBeforeWfEditorRender', array(&$settings));
 
-        $this->render($settings);
+        $this->render($settings, $autoInit);
 
         return $this;
     }
@@ -197,7 +221,7 @@ class WFEditor
      */
     public function buildEditor()
     {
-        $this->init()->getOutput();
+        $this->setup()->getOutput();
     }
 
     /**
@@ -493,6 +517,10 @@ class WFEditor
         // set javascript compression script
         if ($settings['compress']['javascript']) {
             $this->addScript(Uri::base(true) . '/index.php?option=com_jce&task=editor.pack&' . http_build_query((array) $settings['query']));
+
+            if (version_compare(JVERSION, '5', 'ge')) {
+                $this->addScript($this->getURL(true) . '/js/editor.module.js', 'module');
+            }
         } else {
             // Tinymce
             $this->addScript($this->getURL(true) . '/tinymce/tinymce.js');
@@ -551,15 +579,19 @@ class WFEditor
         return $settings;
     }
 
-    public function render($settings)
+    public function render($settings, $autoInit = true)
     {
         // get an editor instance
         $wf = WFApplication::getInstance();
 
-        // encode as json string
-        $tinymce = json_encode($settings, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-
-        $this->addScriptDeclaration("try{WfEditor.init(" . $tinymce . ");}catch(e){console.debug(e);}");
+        if ($autoInit) {
+            // encode as json string
+            $tinymce = json_encode($settings, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+            
+            $this->addScriptDeclaration("try{WfEditor.init(" . $tinymce . ");}catch(e){console.debug(e);}");
+        } else {
+            $this->addScriptOptions($settings);
+        }
 
         if (is_object($this->profile)) {
             if ($wf->getParam('editor.callback_file')) {
@@ -1385,9 +1417,24 @@ class WFEditor
                     $files[] = WF_EDITOR_MEDIA . '/tinymce/plugins/' . $plugin . '/plugin' . $suffix . '.js';
                 }
 
-                // add external plugins
+                // add external and pro plugins
                 foreach ($plugins['external'] as $plugin => $path) {
-                    $files[] = JPATH_SITE . '/plugins/jce/editor-' . $plugin . '/editor_plugin' . $suffix . '.js';
+                    // get base path from plugin path
+                    $basepath = dirname($path);
+                        
+                    // trim slashes
+                    $basepath = trim($basepath, '/');
+                    
+                    $file = Path::find(
+                        array(
+                            JPATH_SITE . '/' . $basepath
+                        ),
+                        'plugin' . $suffix . '.js'
+                    );
+
+                    if ($file) {
+                        $files[] = $file;
+                    }
                 }
 
                 // add Editor file
@@ -1420,11 +1467,22 @@ class WFEditor
                         }
                     }
 
-                    // add external plugins
+                    // add external and pro plugins
                     foreach ($plugins['external'] as $plugin => $path) {
-                        $content = JPATH_SITE . '/plugins/jce/editor-' . $plugin . '/css/content.css';
+                        // get base path from plugin path
+                        $basepath = dirname($path);
 
-                        if (File::exists($content)) {
+                        // trim slashes
+                        $basepath = trim($basepath, '/');
+                        
+                        $content = Path::find(
+                            array(
+                                JPATH_SITE . '/' . $basepath . '/css'
+                            ),
+                            'content.css'
+                        );
+
+                        if ($content) {
                             $files[] = $content;
                         }
                     }

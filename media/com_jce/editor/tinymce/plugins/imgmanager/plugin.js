@@ -1,4 +1,4 @@
-/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, Event = tinymce.dom.Event, extend = tinymce.extend;
     function isMediaObject(node) {
@@ -12,7 +12,8 @@
             this.editor = ed;
             var self = this;
             function openDialog() {
-                isMediaObject(ed.selection.getNode()) || ed.windowManager.open({
+                var node = ed.selection.getNode();
+                "IMG" == node.nodeName && isMediaObject(node) || ed.windowManager.open({
                     file: ed.getParam("site_url") + "index.php?option=com_jce&task=plugin.display&plugin=image",
                     size: "mce-modal-portrait-full"
                 }, {
@@ -130,7 +131,8 @@
                     onselect: function() {},
                     name: "classes"
                 }), form.add(stylesListCtrl), ed.addCommand("mceImage", function() {
-                    isMediaObject(ed.selection.getNode()) || ed.windowManager.open({
+                    var node = ed.selection.getNode();
+                    "IMG" == node.nodeName && isMediaObject(node) || ed.windowManager.open({
                         title: ed.getLang("imgmanager.desc", "Image"),
                         items: [ form ],
                         size: "mce-modal-landscape-small",

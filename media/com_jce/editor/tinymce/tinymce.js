@@ -1,4 +1,4 @@
-/* jce - 2.9.72 | 2024-05-22 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     !function(win) {
@@ -1160,9 +1160,11 @@
             return self;
         }, self.fire = function(target, name, args) {
             var id;
-            if (target && 3 !== target.nodeType && 8 !== target.nodeType) for ((args = fix(null, args)).type = name, 
-            args.target = target; (id = target[expando]) && executeHandlers(args, id), 
-            (target = target.parentNode || target.ownerDocument || target.defaultView || target.parentWindow) && !args.isPropagationStopped(); );
+            if (target && 3 !== target.nodeType && 8 !== target.nodeType) {
+                for ((args = fix(null, args)).type = name, args.target = target; (id = target[expando]) && executeHandlers(args, id), 
+                (target = target.parentNode || target.ownerDocument || target.defaultView || target.parentWindow) && !args.isPropagationStopped(); );
+                self.args = args;
+            }
             return self;
         }, self.clean = function(target) {
             var i, children, unbind = self.unbind;
@@ -1187,6 +1189,10 @@
         }, self.clear = function(target) {
             return "string" == typeof target && (target = document.getElementById(target)), 
             self.clean(target);
+        }, self.preventDefault = function(e) {
+            e && e.preventDefault();
+        }, self.isDefaultPrevented = function(e) {
+            return e.isDefaultPrevented();
         };
     }
     function cut(editor, evt) {
@@ -2331,9 +2337,12 @@
         var html = [], makeMap = tinymce.makeMap, Entities = tinymce.html.Entities, indent = (settings = settings || {}).indent, indentBefore = makeMap(settings.indent_before || ""), indentAfter = makeMap(settings.indent_after || ""), encode = Entities.getEncodeFunc(settings.entity_encoding || "raw", settings.entities), htmlOutput = "html" == settings.element_format;
         return {
             start: function(name, attrs, empty) {
-                var i, l, attr, value;
+                var attr, value;
                 if (indent && indentBefore[name] && 0 < html.length && 0 < (value = html[html.length - 1]).length && "\n" !== value && html.push("\n"), 
-                html.push("<", name), attrs) for (i = 0, l = attrs.length; i < l; i++) (attr = attrs[i]).boolean ? html.push(" ", attr.name) : html.push(" ", attr.name, '="', encode("" + attr.value, !0), '"');
+                html.push("<", name), attrs) {
+                    for (var bool = [], i = 0, l = attrs.length; i < l; i++) (attr = attrs[i]).boolean ? bool.push(" ", attr.name) : html.push(" ", attr.name, '="', encode("" + attr.value, !0), '"');
+                    html = html.concat(bool);
+                }
                 !empty || htmlOutput || "html5-strict" == settings.schema ? html[html.length] = ">" : html[html.length] = " />", 
                 empty && indent && indentAfter[name] && 0 < html.length && 0 < (value = html[html.length - 1]).length && "\n" !== value && html.push("\n");
             },
@@ -3388,7 +3397,57 @@
             return 1 == container.nodeType && container.hasChildNodes() && (offset >= container.childNodes.length && (offset = container.childNodes.length - 1), 
             container = container.childNodes[offset]), container;
         };
-    }(tinymce), tinymce, function(tinymce) {
+    }(tinymce), function(tinymce) {
+        function getAbsolutePosition(elm) {
+            var clientRect = elm.getBoundingClientRect(), docElem = (elm = elm.ownerDocument).documentElement, elm = elm.defaultView;
+            return {
+                top: clientRect.top + elm.pageYOffset - docElem.clientTop,
+                left: clientRect.left + elm.pageXOffset - docElem.clientLeft
+            };
+        }
+        tinymce.dom.MousePosition = {
+            calc: function(editor, event) {
+                return bodyPosition = function(editor) {
+                    return editor.inline ? getAbsolutePosition(editor.getBody()) : {
+                        left: 0,
+                        top: 0
+                    };
+                }(editor), scrollPosition = function(editor) {
+                    var body = editor.getBody();
+                    return editor.inline ? {
+                        left: body.scrollLeft,
+                        top: body.scrollTop
+                    } : {
+                        left: 0,
+                        top: 0
+                    };
+                }(editor), {
+                    pageX: (editor = function(editor, event) {
+                        var iframePosition;
+                        return event.target.ownerDocument !== editor.getDoc() ? (iframePosition = getAbsolutePosition(editor.getContentAreaContainer()), 
+                        editor = function(editor) {
+                            var body = editor.getBody(), docElm = editor.getDoc().documentElement, inlineScroll = {
+                                left: body.scrollLeft,
+                                top: body.scrollTop
+                            }, body = {
+                                left: body.scrollLeft || docElm.scrollLeft,
+                                top: body.scrollTop || docElm.scrollTop
+                            };
+                            return editor.inline ? inlineScroll : body;
+                        }(editor), {
+                            left: event.pageX - iframePosition.left + editor.left,
+                            top: event.pageY - iframePosition.top + editor.top
+                        }) : {
+                            left: event.pageX,
+                            top: event.pageY
+                        };
+                    }(editor, event)).left - bodyPosition.left + scrollPosition.left,
+                    pageY: editor.top - bodyPosition.top + scrollPosition.top
+                };
+                var bodyPosition, scrollPosition;
+            }
+        };
+    }(tinymce), function(tinymce) {
         function getTemporaryNodeSelector(tempAttrs) {
             return (0 === tempAttrs.length ? "" : tempAttrs.map(function(attr) {
                 return "[" + attr + "]";
@@ -8876,6 +8935,9 @@
                 args.content = tinymce.trim(content), this.dom.setHTML(body, args.content), 
                 args.no_events || this.onSetContent.dispatch(this, args)), args.content;
             },
+            insertContent: function(value) {
+                this.execCommand("mceInsertContent", !1, value);
+            },
             getSelection: function() {
                 return this.selection.getContent();
             },
@@ -9207,7 +9269,7 @@
                     }
                 }(editor, (value = function(value) {
                     var details;
-                    return "string" != typeof value ? (details = tinymce.extend({
+                    return value && "string" != typeof value ? (details = tinymce.extend({
                         paste: value.paste,
                         data: {
                             paste: value.paste
@@ -11264,7 +11326,7 @@
                     if (state.element && !state.dragging && 10 < movement) {
                         if (editor.dom.fire(editor.getBody(), "dragstart", {
                             target: state.element
-                        }).isDefaultPrevented()) return;
+                        }).preventDefault(e)) return;
                         state.dragging = !0, editor.focus();
                     }
                     state.dragging && (movement = function(state, position) {
@@ -11285,18 +11347,17 @@
                 };
             }(state, editor), dropHandler = function(state, editor) {
                 return function(e) {
-                    var targetClone, selection;
+                    var evt, selection;
                     state.dragging && function(editor, targetElement, dragElement) {
                         return targetElement !== dragElement && !editor.dom.isChildOf(targetElement, dragElement) && !isContentEditableFalse(targetElement);
                     }(editor, 3 === (selection = (selection = editor.selection).getSel().getRangeAt(0).startContainer).nodeType ? selection.parentNode : selection, state.element) && ((selection = (selection = state.element).cloneNode(!0)).removeAttribute("data-mce-selected"), 
-                    targetClone = selection, (e = editor.dom.fire(editor.getBody(), "drop", {
-                        targetClone: targetClone,
+                    selection = selection, (evt = editor.dom.fire(editor.getBody(), "drop", {
+                        targetClone: selection,
                         clientX: e.clientX,
                         clientY: e.clientY
-                    })).isDefaultPrevented() || (targetClone = e.targetClone, editor.undoManager.transact(function() {
-                        removeElement(state.element), editor.insertContent(editor.dom.getOuterHTML(targetClone)), 
-                        editor._selectionOverrides.hideFakeCaret();
-                    }))), removeDragState(state);
+                    })).isDefaultPrevented(e) || (selection = evt.args.targetClone, 
+                    editor.undoManager.add(), removeElement(state.element), editor.insertContent(editor.dom.getOuterHTML(selection)), 
+                    editor._selectionOverrides.hideFakeCaret())), removeDragState(state);
                 };
             }(state, editor), dragEndHandler = function(state, editor) {
                 return function() {
@@ -11458,7 +11519,7 @@
                 if (range.collapsed) {
                     if (!isRangeInCaretContainer(range)) {
                         if (caretPosition = getNormalizedRangeEndPoint(1, range), 
-                        isContentEditableFalse(caretPosition.getNode())) return showCaret(1, caretPosition.getNode(), !caretPosition.isAtEnd());
+                        isContentEditableFalse(caretPosition.getNode())) return showCaret(1, caretPosition.getNode(), !1);
                         if (isContentEditableFalse(caretPosition.getNode(!0))) return showCaret(1, caretPosition.getNode(!0), !1);
                     }
                     return null;
