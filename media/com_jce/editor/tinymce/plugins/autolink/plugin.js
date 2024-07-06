@@ -1,28 +1,8 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var AutoLinkPattern = /^(https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.|(?:mailto:)?[A-Z0-9._%+\-]+@)(.+)$/i;
-    tinymce.create("tinymce.plugins.AutolinkPlugin", {
-        init: function(ed, url) {
-            var self = this;
-            (ed.getParam("autolink_url", !0) || ed.getParam("autolink_email", !0)) && (ed.settings.autolink_pattern && (AutoLinkPattern = ed.settings.autolink_pattern), 
-            ed.onAutoLink = new tinymce.util.Dispatcher(this), ed.onKeyDown.addToTop(function(ed, e) {
-                if (13 == e.keyCode) return self.handleEnter(ed);
-            }), tinymce.isIE || (ed.onKeyPress.add(function(ed, e) {
-                if (41 == e.which) return self.handleEclipse(ed);
-            }), ed.onKeyUp.add(function(ed, e) {
-                if (32 == e.keyCode) return self.handleSpacebar(ed);
-            })));
-        },
-        handleEclipse: function(ed) {
-            this.parseCurrentLine(ed, -1, "(", !0);
-        },
-        handleSpacebar: function(ed) {
-            this.parseCurrentLine(ed, 0, "", !0);
-        },
-        handleEnter: function(ed) {
-            this.parseCurrentLine(ed, -1, "", !1);
-        },
-        parseCurrentLine: function(editor, endOffset, delimiter) {
+    tinymce.PluginManager.add("autolink", function(ed, url) {
+        function parseCurrentLine(editor, endOffset, delimiter) {
             var rng, end, endContainer, len, rngText, prev;
             function scopeIndex(container, index) {
                 return index < 0 && (index = 0), index = 3 == container.nodeType && (container = container.data.length) < index ? container : index;
@@ -63,5 +43,19 @@
                 }), editor.selection.moveToBookmark(len), editor.nodeChanged()));
             }
         }
-    }), tinymce.PluginManager.add("autolink", tinymce.plugins.AutolinkPlugin);
+        (ed.getParam("autolink_url", !0) || ed.getParam("autolink_email", !0)) && (ed.settings.autolink_pattern && (AutoLinkPattern = ed.settings.autolink_pattern), 
+        ed.onAutoLink = new tinymce.util.Dispatcher(this), ed.onKeyDown.addToTop(function(ed, e) {
+            if (13 == e.keyCode) return function(ed) {
+                parseCurrentLine(ed, -1, "");
+            }(ed);
+        }), tinymce.isIE || (ed.onKeyPress.add(function(ed, e) {
+            if (41 == e.which) return function(ed) {
+                parseCurrentLine(ed, -1, "(");
+            }(ed);
+        }), ed.onKeyUp.add(function(ed, e) {
+            if (32 == e.keyCode) return function(ed) {
+                parseCurrentLine(ed, 0, "");
+            }(ed);
+        })));
+    });
 }();

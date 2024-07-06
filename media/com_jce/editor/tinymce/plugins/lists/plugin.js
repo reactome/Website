@@ -1,4 +1,4 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     function isBr(node) {
@@ -368,47 +368,42 @@
             e.keyCode === VK$1.BACKSPACE ? backspaceDelete(editor, !1) && e.preventDefault() : e.keyCode === VK$1.DELETE && backspaceDelete(editor, !0) && e.preventDefault();
         });
     }, Delete_backspaceDelete = backspaceDelete, VK = tinymce.VK;
-    tinymce.create("tinymce.plugins.Lists", {
-        init: function(editor) {
-            Delete_setup(editor), editor.onInit.add(function() {
-                !function(editor) {
-                    editor.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
-                        var isHandled;
-                        if ("indent" === cmd ? Indent_indentSelection(editor) && (isHandled = !0) : "outdent" === cmd && Outdent_outdentSelection(editor) && (isHandled = !0), 
-                        isHandled) return editor.execCommand(cmd), o.terminate = !0;
-                    }), editor.addCommand("InsertUnorderedList", function(ui, detail) {
-                        ToggleList_toggleList(editor, "UL", detail);
-                    }), editor.addCommand("InsertOrderedList", function(ui, detail) {
-                        ToggleList_toggleList(editor, "OL", detail);
-                    }), editor.addCommand("InsertDefinitionList", function(ui, detail) {
-                        ToggleList_toggleList(editor, "DL", detail);
-                    });
-                }(editor), function(editor) {
-                    editor.addQueryStateHandler("InsertUnorderedList", queryListCommandState(editor, "UL")), 
-                    editor.addQueryStateHandler("InsertOrderedList", queryListCommandState(editor, "OL")), 
-                    editor.addQueryStateHandler("InsertDefinitionList", queryListCommandState(editor, "DL"));
-                }(editor), editor.getParam("lists_indent_on_tab", !0) && function(editor) {
-                    editor.onKeyDown.add(function(ed, e) {
-                        9 !== e.keyCode || VK.metaKeyPressed(e) || editor.dom.getParent(editor.selection.getStart(), "LI,DT,DD") && (e.preventDefault(), 
-                        (e.shiftKey ? Outdent_outdentSelection : Indent_indentSelection)(editor));
-                    });
-                }(editor);
-            });
-            var iconMap = {
-                numlist: "OL",
-                bullist: "UL"
-            };
-            editor.onNodeChange.add(function(ed, cm, n, collapsed, args) {
-                var lists = tinymce.grep(args.parents, NodeType.isListNode);
-                tinymce.each(iconMap, function(listName, btnName) {
-                    cm.setActive(btnName, 0 < lists.length && lists[0].nodeName === listName);
+    tinymce.PluginManager.add("lists", function(editor) {
+        Delete_setup(editor), editor.onInit.add(function() {
+            !function(editor) {
+                editor.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
+                    var isHandled;
+                    if ("indent" === cmd ? Indent_indentSelection(editor) && (isHandled = !0) : "outdent" === cmd && Outdent_outdentSelection(editor) && (isHandled = !0), 
+                    isHandled) return editor.execCommand(cmd), o.terminate = !0;
+                }), editor.addCommand("InsertUnorderedList", function(ui, detail) {
+                    ToggleList_toggleList(editor, "UL", detail);
+                }), editor.addCommand("InsertOrderedList", function(ui, detail) {
+                    ToggleList_toggleList(editor, "OL", detail);
+                }), editor.addCommand("InsertDefinitionList", function(ui, detail) {
+                    ToggleList_toggleList(editor, "DL", detail);
                 });
-            }), this.backspaceDelete = function(isForward) {
-                return Delete_backspaceDelete(editor, isForward);
-            };
-        },
-        backspaceDelete: function(isForward) {
-            return this.backspaceDelete(isForward);
-        }
-    }), tinymce.PluginManager.add("lists", tinymce.plugins.Lists);
+            }(editor), function(editor) {
+                editor.addQueryStateHandler("InsertUnorderedList", queryListCommandState(editor, "UL")), 
+                editor.addQueryStateHandler("InsertOrderedList", queryListCommandState(editor, "OL")), 
+                editor.addQueryStateHandler("InsertDefinitionList", queryListCommandState(editor, "DL"));
+            }(editor), editor.getParam("lists_indent_on_tab", !0) && function(editor) {
+                editor.onKeyDown.add(function(ed, e) {
+                    9 !== e.keyCode || VK.metaKeyPressed(e) || editor.dom.getParent(editor.selection.getStart(), "LI,DT,DD") && (e.preventDefault(), 
+                    (e.shiftKey ? Outdent_outdentSelection : Indent_indentSelection)(editor));
+                });
+            }(editor);
+        });
+        var iconMap = {
+            numlist: "OL",
+            bullist: "UL"
+        };
+        editor.onNodeChange.add(function(ed, cm, n, collapsed, args) {
+            var lists = tinymce.grep(args.parents, NodeType.isListNode);
+            tinymce.each(iconMap, function(listName, btnName) {
+                cm.setActive(btnName, 0 < lists.length && lists[0].nodeName === listName);
+            });
+        }), this.backspaceDelete = function(isForward) {
+            return Delete_backspaceDelete(editor, isForward);
+        };
+    });
 }();

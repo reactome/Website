@@ -1,26 +1,23 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, DOM = tinymce.DOM, Event = tinymce.dom.Event;
-    tinymce.create("tinymce.plugins.AdvListPlugin", {
-        init: function(ed, url) {
-            function buildFormats(str) {
-                var formats = [];
-                return each(str.split(/,/), function(type) {
-                    var title = type.replace(/-/g, "_");
-                    formats.push({
-                        title: "advlist." + (title = "default" === type ? "def" : title),
-                        styles: {
-                            listStyleType: "default" === type ? "" : type
-                        }
-                    });
-                }), formats;
-            }
-            var numlist = (this.editor = ed).getParam("advlist_number_styles", "default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman"), numlist = (numlist && (this.numlist = buildFormats(numlist)), 
-            ed.getParam("advlist_bullet_styles", "default,circle,disc,square"));
-            numlist && (this.bullist = buildFormats(numlist));
-        },
-        createControl: function(name, cm) {
-            var btn, format, self = this, editor = self.editor;
+    tinymce.PluginManager.add("advlist", function(editor, url) {
+        function buildFormats(str) {
+            var formats = [];
+            return each(str.split(/,/), function(type) {
+                var title = type.replace(/-/g, "_");
+                formats.push({
+                    title: "advlist." + (title = "default" === type ? "def" : title),
+                    styles: {
+                        listStyleType: "default" === type ? "" : type
+                    }
+                });
+            }), formats;
+        }
+        var numlist = editor.getParam("advlist_number_styles", "default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman"), numlist = (numlist && (this.numlist = buildFormats(numlist)), 
+        editor.getParam("advlist_bullet_styles", "default,circle,disc,square"));
+        numlist && (this.bullist = buildFormats(numlist)), this.createControl = function(name, cm) {
+            var btn, format, self = this;
             function hasFormat(node, format) {
                 var state = !0;
                 return each(format.styles, function(value, name) {
@@ -117,6 +114,6 @@
                     applyListFormat();
                 }
             });
-        }
-    }), tinymce.PluginManager.add("advlist", tinymce.plugins.AdvListPlugin);
+        };
+    });
 }();

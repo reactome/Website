@@ -1,4 +1,4 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, JSON = tinymce.util.JSON, RangeUtils = tinymce.dom.RangeUtils, Uuid = tinymce.util.Uuid, Env = tinymce.util.Env;
     tinymce.PluginManager.add("upload", function(ed, url) {
@@ -231,9 +231,6 @@
                 file.marker && ed.dom.setAttrib(file.marker, "data-progress", value);
             });
         }
-        return {
-            plugins: plugins,
-            upload: uploadHandler
-        };
+        this.plugins = plugins, this.upload = uploadHandler;
     });
 }();

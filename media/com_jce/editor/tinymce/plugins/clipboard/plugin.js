@@ -1,4 +1,4 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     var DOM = tinymce.DOM, each$1 = tinymce.each;
@@ -93,58 +93,56 @@
         });
     }
     var each = tinymce.each;
-    tinymce.create("tinymce.plugins.ClipboardPlugin", {
-        init: function(ed, url) {
-            var pasteText = ed.getParam("clipboard_paste_text", 1), pasteHtml = ed.getParam("clipboard_paste_html", 1);
-            this.url = url, ed.onInit.add(function() {
-                ed.plugins.contextmenu && ed.plugins.contextmenu.onContextMenu.add(function(th, m, e) {
-                    var c = ed.selection.isCollapsed();
-                    ed.getParam("clipboard_cut", 1) && m.add({
-                        title: "advanced.cut_desc",
-                        icon: "cut",
-                        cmd: "Cut"
-                    }).setDisabled(c), ed.getParam("clipboard_copy", 1) && m.add({
-                        title: "advanced.copy_desc",
-                        icon: "copy",
-                        cmd: "Copy"
-                    }).setDisabled(c), pasteHtml && m.add({
-                        title: "clipboard.paste_desc",
-                        icon: "paste",
-                        cmd: "mcePaste"
-                    }), pasteText && m.add({
-                        title: "clipboard.paste_text_desc",
-                        icon: "pastetext",
-                        cmd: "mcePasteText"
-                    });
+    tinymce.PluginManager.add("clipboard", function(ed, url) {
+        var pasteText = ed.getParam("clipboard_paste_text", 1), pasteHtml = ed.getParam("clipboard_paste_html", 1);
+        ed.onInit.add(function() {
+            ed.plugins.contextmenu && ed.plugins.contextmenu.onContextMenu.add(function(th, m, e) {
+                var c = ed.selection.isCollapsed();
+                ed.getParam("clipboard_cut", 1) && m.add({
+                    title: "advanced.cut_desc",
+                    icon: "cut",
+                    cmd: "Cut"
+                }).setDisabled(c), ed.getParam("clipboard_copy", 1) && m.add({
+                    title: "advanced.copy_desc",
+                    icon: "copy",
+                    cmd: "Copy"
+                }).setDisabled(c), pasteHtml && m.add({
+                    title: "clipboard.paste_desc",
+                    icon: "paste",
+                    cmd: "mcePaste"
+                }), pasteText && m.add({
+                    title: "clipboard.paste_text_desc",
+                    icon: "pastetext",
+                    cmd: "mcePasteText"
                 });
-            }), each([ "mcePasteText", "mcePaste" ], function(cmd) {
-                ed.addCommand(cmd, function() {
-                    var doc = ed.getDoc(), failed = !1;
-                    if (ed.getParam("clipboard_paste_use_dialog")) return openWin(ed, cmd);
-                    try {
-                        doc.execCommand("Paste", !1, null);
-                    } catch (e) {
-                        failed = !0;
-                    }
-                    return (failed = !doc.queryCommandEnabled("Paste") || failed) ? openWin(ed, cmd) : void 0;
-                });
-            }), pasteHtml && ed.addButton("paste", {
-                title: "clipboard.paste_desc",
-                cmd: "mcePaste",
-                ui: !0
-            }), pasteText && ed.addButton("pastetext", {
-                title: "clipboard.paste_text_desc",
-                cmd: "mcePasteText",
-                ui: !0
-            }), ed.getParam("clipboard_cut", 1) && ed.addButton("cut", {
-                title: "advanced.cut_desc",
-                cmd: "Cut",
-                icon: "cut"
-            }), ed.getParam("clipboard_copy", 1) && ed.addButton("copy", {
-                title: "advanced.copy_desc",
-                cmd: "Copy",
-                icon: "copy"
             });
-        }
-    }), tinymce.PluginManager.add("clipboard", tinymce.plugins.ClipboardPlugin);
+        }), each([ "mcePasteText", "mcePaste" ], function(cmd) {
+            ed.addCommand(cmd, function() {
+                var doc = ed.getDoc(), failed = !1;
+                if (ed.getParam("clipboard_paste_use_dialog")) return openWin(ed, cmd);
+                try {
+                    doc.execCommand("Paste", !1, null);
+                } catch (e) {
+                    failed = !0;
+                }
+                return (failed = !doc.queryCommandEnabled("Paste") || failed) ? openWin(ed, cmd) : void 0;
+            });
+        }), pasteHtml && ed.addButton("paste", {
+            title: "clipboard.paste_desc",
+            cmd: "mcePaste",
+            ui: !0
+        }), pasteText && ed.addButton("pastetext", {
+            title: "clipboard.paste_text_desc",
+            cmd: "mcePasteText",
+            ui: !0
+        }), ed.getParam("clipboard_cut", 1) && ed.addButton("cut", {
+            title: "advanced.cut_desc",
+            cmd: "Cut",
+            icon: "cut"
+        }), ed.getParam("clipboard_copy", 1) && ed.addButton("copy", {
+            title: "advanced.copy_desc",
+            cmd: "Copy",
+            icon: "copy"
+        });
+    });
 }();

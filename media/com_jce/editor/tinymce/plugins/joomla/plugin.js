@@ -1,12 +1,9 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var Joomla = window.Joomla || null, each = tinymce.each, DOM = tinymce.DOM;
-    tinymce.create("tinymce.plugins.JoomlaPlugin", {
-        init: function(ed, url) {
-            this.editor = ed;
-        },
-        createControl: function(n, cm) {
-            var plugins, ctrl, ed = this.editor;
+    tinymce.PluginManager.add("joomla", function(ed, url) {
+        this.createControl = function(n, cm) {
+            var plugins, ctrl;
             return "joomla" === n && ((n = ed.settings.joomla_xtd_buttons || {})[ed.id] || n.__jce__ || n.ckeditor) && (plugins = n[ed.id] || n.__jce__ || n.ckeditor || []).length ? (ctrl = cm.createSplitButton("joomla", {
                 title: "joomla.buttons",
                 icon: "joomla"
@@ -76,6 +73,6 @@
             }), ed.onRemove.add(function() {
                 ctrl.destroy();
             }), ctrl) : null;
-        }
-    }), tinymce.PluginManager.add("joomla", tinymce.plugins.JoomlaPlugin);
+        };
+    });
 }();

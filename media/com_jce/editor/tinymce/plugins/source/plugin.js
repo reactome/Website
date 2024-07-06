@@ -1,53 +1,43 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, Event = tinymce.dom.Event;
-    tinymce.create("tinymce.plugins.SourcePlugin", {
-        init: function(ed, url) {
-            var self = this;
-            function isEditorActive() {
-                return 0 == DOM.hasClass(ed.getElement(), "wf-no-editor");
-            }
-            (self.editor = ed).onSetContent.add(function(ed, o) {
-                self.setContent(ed.getContent(), !0);
-            }), ed.onInit.add(function(ed) {
-                0 != isEditorActive() && "wf-editor-source" === (ed.settings.active_tab || "") && (DOM.hide(ed.getContainer()), 
-                DOM.hide(ed.getElement()), window.setTimeout(function() {
-                    self.toggle();
-                }, 10));
-            }), this.ControlManager = new tinymce.ControlManager(ed);
-        },
-        getSourceEditor: function() {
-            var ed = this.editor;
+    tinymce.PluginManager.add("source", function(ed, url) {
+        var self = this;
+        function isEditorActive() {
+            return 0 == DOM.hasClass(ed.getElement(), "wf-no-editor");
+        }
+        function getSourceEditor() {
             return DOM.get(ed.id + "_editor_source_textarea") || null;
-        },
-        setContent: function(v) {
-            var editor = this.getSourceEditor();
+        }
+        ed.onSetContent.add(function(ed, o) {
+            self.setContent(ed.getContent(), !0);
+        }), ed.onInit.add(function(ed) {
+            0 != isEditorActive() && "wf-editor-source" === (ed.settings.active_tab || "") && (DOM.hide(ed.getContainer()), 
+            DOM.hide(ed.getElement()), window.setTimeout(function() {
+                self.toggle();
+            }, 10));
+        }), this.ControlManager = new tinymce.ControlManager(ed), this.setContent = function(v) {
+            var editor = getSourceEditor();
             return !!editor && (editor.value = v);
-        },
-        insertContent: function(v) {
-            var editor = this.getSourceEditor();
+        }, this.insertContent = function(v) {
+            var editor = getSourceEditor();
             return editor && (editor.focus(), document.selection ? document.selection.createRange().text = v : editor.setRangeText(v, editor.selectionStart, editor.selectionEnd, "end")), 
             !1;
-        },
-        getContent: function() {
-            var editor = this.getSourceEditor();
+        }, this.getContent = function() {
+            var editor = getSourceEditor();
             return editor ? editor.value : null;
-        },
-        hide: function() {
-            var ed = this.editor;
+        }, this.hide = function() {
             DOM.hide(ed.id + "_editor_source");
-        },
-        save: function(content, debounced) {
-            var args, ed = this.editor, el = ed.getElement();
+        }, this.save = function(content, debounced) {
+            var args, el = ed.getElement();
             return el ? (args = {
                 content: content = tinymce.is(content) ? content : this.getContent(),
                 no_events: !0,
                 format: "raw"
             }, ed.onWfEditorSave.dispatch(ed, args), /TEXTAREA|INPUT/i.test(el.nodeName) ? el.value = args.content : el.innerHTML = args.content, 
             debounced && ed.onWfEditorChange.dispatch(ed, args), args.content) : content;
-        },
-        toggle: function() {
-            var ed = this.editor, self = this, s = ed.settings, element = ed.getElement(), container = element.parentNode, header = DOM.getPrev(element, ".wf-editor-header"), div = DOM.get(ed.id + "_editor_source"), textarea = DOM.get(ed.id + "_editor_source_textarea"), ifrHeight = parseInt(DOM.get(ed.id + "_ifr").style.height, 10) || s.height, o = tinymce.util.Storage.getHash("TinyMCE_" + ed.id + "_size");
+        }, this.toggle = function() {
+            var self = this, s = ed.settings, element = ed.getElement(), container = element.parentNode, header = DOM.getPrev(element, ".wf-editor-header"), div = DOM.get(ed.id + "_editor_source"), textarea = DOM.get(ed.id + "_editor_source_textarea"), ifrHeight = parseInt(DOM.get(ed.id + "_ifr").style.height, 10) || s.height, o = tinymce.util.Storage.getHash("TinyMCE_" + ed.id + "_size");
             o && o.height && (ifrHeight = o.height);
             var statusbar, resize, keyup, callback, time, timer, o = (tinymce.is(element.value) ? element.value : element.innerHTML).replace(/<br data-mce-bogus="1"([^>]+)>/gi, ""), element = (div ? (DOM.show(div), 
             textarea.value = o) : (div = DOM.add(container, "div", {
@@ -102,12 +92,10 @@
             DOM.setStyles(textarea, {
                 height: element
             });
-        },
-        getSelection: function() {
+        }, this.getSelection = function() {
             return document.getSelection().toString();
-        },
-        getCursorPos: function() {
+        }, this.getCursorPos = function() {
             return 0;
-        }
-    }), tinymce.PluginManager.add("source", tinymce.plugins.SourcePlugin);
+        };
+    });
 }();

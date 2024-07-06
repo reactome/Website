@@ -1,4 +1,4 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var languageValues = {
         Afrikaans: "af",
@@ -127,64 +127,62 @@
         Yiddish: "ji",
         Zulu: "zu"
     }, DOM = tinymce.DOM;
-    tinymce.create("tinymce.plugins.LanguageCodePlugin", {
-        init: function(ed, url) {
-            this.editor = ed, this.url = url, ed.onPreInit.add(function() {
-                ed.formatter.register({
-                    langcode: {
-                        inline: "span",
-                        remove: "all",
-                        attributes: {
-                            lang: "%value"
-                        }
+    tinymce.PluginManager.add("langcode", function(ed, url) {
+        ed.onPreInit.add(function() {
+            ed.formatter.register({
+                langcode: {
+                    inline: "span",
+                    remove: "all",
+                    attributes: {
+                        lang: "%value"
                     }
-                });
-            }), ed.addButton("langcode", {
-                title: "langcode.desc",
-                onclick: function() {
-                    var cm = ed.controlManager, form = cm.createForm("language_form"), langList = cm.createListBox("language_lang", {
-                        label: ed.getLang("langcode.label", "Language"),
-                        onselect: function(v) {},
-                        name: "language",
-                        filter: !0
-                    });
-                    langList.add("--", ""), tinymce.each(languageValues, function(value, name) {
-                        langList.add(name, value);
-                    }), form.add(langList), ed.windowManager.open({
-                        title: ed.getLang("langcode.title", "Language Code"),
-                        items: [ form ],
-                        size: "mce-modal-landscape-small",
-                        open: function() {
-                            var node = ed.selection.getNode(), value = ed.settings.language;
-                            node.hasAttribute("lang") && (value = node.getAttribute("lang"), 
-                            DOM.setHTML(this.id + "_insert", ed.getLang("update", "Update"))), 
-                            langList.value(value);
-                        },
-                        buttons: [ {
-                            title: ed.getLang("common.cancel", "Cancel"),
-                            id: "cancel"
-                        }, {
-                            title: ed.getLang("common.insert", "Insert"),
-                            id: "insert",
-                            onsubmit: function(e) {
-                                var node = ed.selection.getNode(), selection = ed.selection, data = form.submit();
-                                !selection.isCollapsed() && selection.getContent() == selection.getContent({
-                                    format: "text"
-                                }) ? 1 < (selection = selection.getSelectedBlocks()).length ? tinymce.each(selection, function(elm) {
-                                    ed.dom.setAttrib(elm, "lang", data.language);
-                                }) : data.language ? ed.formatter.apply("langcode", {
-                                    value: data.language
-                                }) : ed.formatter.remove("langcode") : node && !function(node) {
-                                    return node == ed.dom.getRoot();
-                                }(node) && ed.dom.setAttrib(node, "lang", data.language), 
-                                tinymce.dom.Event.cancel(e);
-                            },
-                            classes: "primary",
-                            autofocus: !0
-                        } ]
-                    });
                 }
             });
-        }
-    }), tinymce.PluginManager.add("langcode", tinymce.plugins.LanguageCodePlugin);
+        }), ed.addButton("langcode", {
+            title: "langcode.desc",
+            onclick: function() {
+                var cm = ed.controlManager, form = cm.createForm("language_form"), langList = cm.createListBox("language_lang", {
+                    label: ed.getLang("langcode.label", "Language"),
+                    onselect: function(v) {},
+                    name: "language",
+                    filter: !0
+                });
+                langList.add("--", ""), tinymce.each(languageValues, function(value, name) {
+                    langList.add(name, value);
+                }), form.add(langList), ed.windowManager.open({
+                    title: ed.getLang("langcode.title", "Language Code"),
+                    items: [ form ],
+                    size: "mce-modal-landscape-small",
+                    open: function() {
+                        var node = ed.selection.getNode(), value = ed.settings.language;
+                        node.hasAttribute("lang") && (value = node.getAttribute("lang"), 
+                        DOM.setHTML(this.id + "_insert", ed.getLang("update", "Update"))), 
+                        langList.value(value);
+                    },
+                    buttons: [ {
+                        title: ed.getLang("common.cancel", "Cancel"),
+                        id: "cancel"
+                    }, {
+                        title: ed.getLang("common.insert", "Insert"),
+                        id: "insert",
+                        onsubmit: function(e) {
+                            var node = ed.selection.getNode(), selection = ed.selection, data = form.submit();
+                            !selection.isCollapsed() && selection.getContent() == selection.getContent({
+                                format: "text"
+                            }) ? 1 < (selection = selection.getSelectedBlocks()).length ? tinymce.each(selection, function(elm) {
+                                ed.dom.setAttrib(elm, "lang", data.language);
+                            }) : data.language ? ed.formatter.apply("langcode", {
+                                value: data.language
+                            }) : ed.formatter.remove("langcode") : node && !function(node) {
+                                return node == ed.dom.getRoot();
+                            }(node) && ed.dom.setAttrib(node, "lang", data.language), 
+                            tinymce.dom.Event.cancel(e);
+                        },
+                        classes: "primary",
+                        autofocus: !0
+                    } ]
+                });
+            }
+        });
+    });
 }();

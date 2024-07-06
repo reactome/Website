@@ -1,4 +1,4 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, extend = tinymce.extend, Node = tinymce.html.Node, VK = tinymce.VK, Serializer = tinymce.html.Serializer, DomParser = tinymce.html.DomParser, SaxParser = tinymce.html.SaxParser, DOM = tinymce.DOM, htmlSchema = new tinymce.html.Schema({
         schema: "mixed"
@@ -43,7 +43,7 @@
     function isCenterAligned(style) {
         return "block" == style.display && "auto" == style["margin-left"] && "auto" == style["margin-right"];
     }
-    var mediaProviders = {
+    var sandbox_iframes_exclusions = [ "youtube.com", "youtu.be", "vimeo.com", "player.vimeo.com", "dailymotion.com", "embed.music.apple.com", "open.spotify.com", "giphy.com", "dai.ly", "codepen.io", "maps.google.com", "google.com/maps" ], mediaProviders = {
         youtube: /youtu(\.)?be(.+)?\/(.+)/,
         vimeo: /vimeo(.+)?\/(.+)/,
         dailymotion: /dai\.?ly(motion)?(\.com)?/,
@@ -153,14 +153,20 @@
         defaultValues[provider];
     }
     function updateSandbox(editor, node) {
-        var provider, src = node.attr("src");
-        node.attr("sandbox") || (provider = isSupportedMedia(editor, src), !1 === (provider = getMediaProps(0, {
-            src: src
-        }, provider)).sandbox ? node.attr("sandbox", null) : node.attr("sandbox", provider.sandbox || ""), 
-        isLocalUrl(editor, src) && node.attr("sandbox", null), provider = editor.getParam("media_iframes_sandbox_exclusions", []), 
-        each(provider, function(value) {
-            -1 !== src.indexOf(value) && node.attr("sandbox", null);
-        }), !1 === editor.getParam("media_iframes_sandbox", !0) && node.attr("sandbox", null));
+        var src = node.attr("src");
+        if (!node.attr("sandbox")) {
+            var defaultAttributes = getMediaProps(0, {
+                src: src
+            }, isSupportedMedia(editor, src));
+            if (!1 === defaultAttributes.sandbox ? node.attr("sandbox", null) : node.attr("sandbox", defaultAttributes.sandbox || ""), 
+            isLocalUrl(editor, src)) node.attr("sandbox", null); else if (!1 === editor.getParam("media_iframes_sandbox", !0)) node.attr("sandbox", null); else try {
+                var url = new URL(src), host = url.host.toLowerCase(), path = url.pathname.toLowerCase(), site = (host.startsWith("www.") ? host.slice(4) : host) + path;
+                sandbox_iframes_exclusions.some(function(value) {
+                    value = value.toLowerCase();
+                    return 0 === site.indexOf(value) || 0 === host.indexOf(value);
+                }) && node.attr("sandbox", null);
+            } catch (e) {}
+        }
     }
     function isSupportedIframe(editor, url) {
         var value;
@@ -474,6 +480,7 @@
         });
     }
     tinymce.PluginManager.add("media", function(ed, url) {
+        var custom_sandbox_iframes_exclusions = ed.getParam("media_iframes_sandbox_exclusions", []);
         function isMediaObject(node) {
             return node = node || ed.selection.getNode(), ed.dom.getParent(node, "[data-mce-object]");
         }
@@ -509,8 +516,8 @@
                 }), node);
             });
         }
-        return ed.onMouseDown.add(objectActivate), ed.onKeyDown.add(objectActivate), 
-        ed.onNodeChange.addToTop(function(ed, cm, n, collapsed, o) {
+        sandbox_iframes_exclusions = sandbox_iframes_exclusions.concat(custom_sandbox_iframes_exclusions), 
+        ed.onMouseDown.add(objectActivate), ed.onKeyDown.add(objectActivate), ed.onNodeChange.addToTop(function(ed, cm, n, collapsed, o) {
             !isMediaNode(n) || isNonEditable(n) || o.contenteditable || (o.contenteditable = !0);
         }), ed.onPreInit.add(function() {
             ed.onUpdateMedia.add(function(ed, o) {
@@ -612,7 +619,7 @@
             ed.execCommand("mceInsertContent", !1, value, {
                 skip_undo: 1
             }), updatePreviewSelection(ed), ed.undoManager.add();
-        }), {
+        }), extend(this, {
             getMediaData: function() {
                 return function(ed) {
                     var data = {}, node = ed.dom.getParent(ed.selection.getNode(), "[data-mce-object]"), boolAttrs = ed.schema.getBoolAttrs();
@@ -662,6 +669,6 @@
             isMediaHtml: function(html) {
                 return !!(html = html.trim().match(/^<([a-zA-Z0-9]+)\b/)) && isPreviewMedia(html[1].toLowerCase());
             }
-        };
+        });
     });
 }();

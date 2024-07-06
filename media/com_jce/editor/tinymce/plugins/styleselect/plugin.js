@@ -1,4 +1,4 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, PreviewCss = tinymce.util.PreviewCss, NodeType = tinymce.dom.NodeType, DOM = tinymce.DOM, Event = tinymce.dom.Event;
     function compileFilter(filter) {
@@ -13,82 +13,26 @@
             return filter.test(value);
         } : filter;
     }
-    tinymce.create("tinymce.plugins.StyleSelectPlugin", {
-        init: function(ed, url) {
-            this.editor = ed;
-        },
-        createControl: function(n, cf) {
-            var ed = this.editor;
-            if ("styleselect" === n) if (!1 !== ed.getParam("styleselect_stylesheets") || ed.getParam("style_formats") || ed.getParam("styleselect_custom_classes")) return this._createStyleSelect();
-        },
-        convertSelectorToFormat: function(selectorText) {
-            var format, ed = this.editor;
-            if (selectorText) {
-                if (ed.settings.styleselect_selector_filter) if (compileFilter(ed.settings.styleselect_selector_filter)(selectorText)) return;
-                var selector = /^(?:([a-z0-9\-_]+))?(\.[a-z0-9_\-\.]+)$/i.exec(selectorText);
-                if (selector) {
-                    var classes, inlineSelectorElements, elementName = selector[1];
-                    if ("body" !== elementName) return classes = selector[2].substr(1).split(".").join(" "), 
-                    inlineSelectorElements = tinymce.makeMap("a,img"), elementName ? (format = {
-                        title: selectorText
-                    }, ed.schema.getTextBlockElements()[elementName] ? format.block = elementName : ed.schema.getBlockElements()[elementName] || inlineSelectorElements[elementName.toLowerCase()] ? format.selector = elementName : format.inline = elementName) : selector[2] && (format = {
-                        inline: "span",
-                        selector: "*",
-                        title: selectorText.substr(1),
-                        split: !1,
-                        expand: !1,
-                        deep: !0
-                    }), !1 !== ed.settings.importcss_merge_classes ? format.classes = classes : format.attributes = {
-                        class: classes
-                    }, format.ceFalseOverride = !0, format;
-                }
-            }
-        },
-        _createStyleSelect: function(n) {
-            var ctrl, self = this, ed = this.editor;
-            function removeFilterTags() {
-                var filter = DOM.get("menu_" + ctrl.id + "_menu_filter");
-                filter && DOM.remove(DOM.select("button.mceButton", filter));
-            }
-            function removeFilterTag(tag, item) {
-                DOM.remove(tag), item || each(ctrl.items, function(n) {
-                    if (n.value == tag.value) return item = n, !1;
-                }), item && item.onAction && item.onAction();
-            }
-            function addFilterTag(item) {
-                var filter, btn;
-                ctrl.menu && (filter = DOM.get("menu_" + ctrl.id + "_menu_filter"), 
-                btn = DOM.create("button", {
-                    class: "mceButton",
-                    value: item.value
-                }, "<label>" + item.title + "</label>"), filter) && (DOM.insertBefore(btn, filter.lastChild), 
-                Event.add(btn, "click", function(evt) {
-                    evt.preventDefault(), "LABEL" !== evt.target.nodeName && removeFilterTag(btn, item);
-                }));
-            }
-            (ctrl = ed.controlManager.createListBox("styleselect", {
+    tinymce.PluginManager.add("styleselect", function(ed, url) {
+        this.createControl = function(n, cf) {
+            return "styleselect" !== n ? null : !1 !== ed.getParam("styleselect_stylesheets") || ed.getParam("style_formats") || ed.getParam("styleselect_custom_classes") ? ((ctrl = ed.controlManager.createListBox("styleselect", {
                 title: "advanced.style_select",
                 max_height: 384,
                 filter: !0,
                 keepopen: !0,
                 menu_class: "mceStylesListMenu",
                 onselect: function(name) {
-                    function isElement(elm) {
-                        return NodeType.isElement(elm) && !NodeType.isInternal(elm) && !inlineTextElements[elm.nodeName.toLowerCase()];
-                    }
-                    function isOnlyTextSelected() {
-                        return 0 === function(rng, predicate) {
-                            if (rng.collapsed) return [];
-                            for (var rng = rng.cloneContents(), walker = new tinymce.dom.TreeWalker(rng.firstChild, rng), elements = [], current = rng.firstChild; predicate(current) && elements.push(current), 
-                            current = walker.next(); );
-                            return elements;
-                        }(ed.selection.getRng(), isElement).length;
-                    }
                     function isRoot(node) {
                         return node === ed.dom.getRoot();
                     }
-                    var fmt, removedFormat, matches = [], selection = ed.selection, node = selection.getNode(), inlineTextElements = ed.schema.getTextInlineElements(), nodes = (ed.focus(), 
-                    ed.undoManager.add(), [ node ]), isCollapsed = selection.isCollapsed();
+                    var fmt, removedFormat, matches = [], selection = ed.selection, node = selection.getNode(), collectNodesInRange = function(rng, predicate) {
+                        if (rng.collapsed) return [];
+                        for (var rng = rng.cloneContents(), walker = new tinymce.dom.TreeWalker(rng.firstChild, rng), elements = [], current = rng.firstChild; predicate(current) && elements.push(current), 
+                        current = walker.next(); );
+                        return elements;
+                    }, inlineTextElements = ed.schema.getTextInlineElements(), isElement = function(elm) {
+                        return NodeType.isElement(elm) && !NodeType.isInternal(elm) && !inlineTextElements[elm.nodeName.toLowerCase()];
+                    }, nodes = (ed.focus(), ed.undoManager.add(), [ node ]), isCollapsed = selection.isCollapsed();
                     if (isRoot(node)) {
                         if (isCollapsed) return !1;
                         node = selection.getSelectedBlocks();
@@ -98,7 +42,7 @@
                         var sel, bookmark = selection.getBookmark();
                         each(ctrl.items, function(item) {
                             (fmt = ed.formatter.matchNode(node, item.value)) && matches.push(fmt);
-                        }), !isCollapsed && isOnlyTextSelected() && (node = null), 
+                        }), isCollapsed || 0 !== collectNodesInRange(ed.selection.getRng(), isElement).length || (node = null), 
                         isRoot(node) && (node = null), selection.moveToBookmark(bookmark), 
                         !node && isCollapsed && (sel = selection.getSel()).anchorNode && NodeType.isElement(sel.anchorNode) && !ed.dom.isBlock(sel.anchorNode) && !isRoot(sel.anchorNode) && (node = sel.anchorNode), 
                         each(matches, function(match) {
@@ -131,25 +75,8 @@
                     removeFilterTag(tags), evt.preventDefault(), elm.value = val, 
                     elm.focus());
                 });
-            }), !1 === ed.settings.styleselect_stylesheets && (ctrl.hasClasses = !0);
-            var counter = 0;
-            function loadClasses() {
-                var preview_styles;
-                ed.settings.importcss_classes || ed.onImportCSS.dispatch(), Array.isArray(ed.settings.importcss_classes) && !ctrl.hasClasses && (preview_styles = ed.getParam("styleselect_preview_styles", !0), 
-                each(ed.settings.importcss_classes, function(item, idx) {
-                    var idx = "style_" + (counter + idx), fmt = ("string" == typeof item && (item = {
-                        selector: item,
-                        class: "",
-                        style: ""
-                    }), self.convertSelectorToFormat(item.selector));
-                    fmt && (ed.formatter.register(idx, fmt), ctrl.add(fmt.title, idx, {
-                        style: function() {
-                            return preview_styles && item.style || "";
-                        }
-                    }));
-                }), Array.isArray(ed.settings.importcss_classes)) && (ctrl.hasClasses = !0);
-            }
-            return ed.onNodeChange.add(function(ed, cm, node) {
+            }), !1 === ed.settings.styleselect_stylesheets && (ctrl.hasClasses = !0), 
+            counter = 0, ed.onNodeChange.add(function(ed, cm, node) {
                 var matches, cm = cm.get("styleselect");
                 cm && (loadClasses(), matches = [], removeFilterTags(), each(cm.items, function(item) {
                     ed.formatter.matchNode(node, item.value) && (matches.push(item.value), 
@@ -209,7 +136,67 @@
                         }
                     }));
                 });
-            }), ctrl;
-        }
-    }), tinymce.PluginManager.add("styleselect", tinymce.plugins.StyleSelectPlugin);
+            }), ctrl) : void 0;
+            function removeFilterTags() {
+                var filter = DOM.get("menu_" + ctrl.id + "_menu_filter");
+                filter && DOM.remove(DOM.select("button.mceButton", filter));
+            }
+            function removeFilterTag(tag, item) {
+                DOM.remove(tag), item || each(ctrl.items, function(n) {
+                    if (n.value == tag.value) return item = n, !1;
+                }), item && item.onAction && item.onAction();
+            }
+            function addFilterTag(item) {
+                var filter, btn;
+                ctrl.menu && (filter = DOM.get("menu_" + ctrl.id + "_menu_filter"), 
+                btn = DOM.create("button", {
+                    class: "mceButton",
+                    value: item.value
+                }, "<label>" + item.title + "</label>"), filter) && (DOM.insertBefore(btn, filter.lastChild), 
+                Event.add(btn, "click", function(evt) {
+                    evt.preventDefault(), "LABEL" !== evt.target.nodeName && removeFilterTag(btn, item);
+                }));
+            }
+            function loadClasses() {
+                var preview_styles;
+                ed.settings.importcss_classes || ed.onImportCSS.dispatch(), Array.isArray(ed.settings.importcss_classes) && !ctrl.hasClasses && (preview_styles = ed.getParam("styleselect_preview_styles", !0), 
+                each(ed.settings.importcss_classes, function(item, idx) {
+                    var idx = "style_" + (counter + idx), fmt = function(selectorText) {
+                        var format;
+                        if (selectorText) {
+                            if (ed.settings.styleselect_selector_filter) if (compileFilter(ed.settings.styleselect_selector_filter)(selectorText)) return;
+                            var selector = /^(?:([a-z0-9\-_]+))?(\.[a-z0-9_\-\.]+)$/i.exec(selectorText);
+                            if (selector) {
+                                var classes, inlineSelectorElements, elementName = selector[1];
+                                if ("body" !== elementName) return classes = selector[2].substr(1).split(".").join(" "), 
+                                inlineSelectorElements = tinymce.makeMap("a,img"), 
+                                elementName ? (format = {
+                                    title: selectorText
+                                }, ed.schema.getTextBlockElements()[elementName] ? format.block = elementName : ed.schema.getBlockElements()[elementName] || inlineSelectorElements[elementName.toLowerCase()] ? format.selector = elementName : format.inline = elementName) : selector[2] && (format = {
+                                    inline: "span",
+                                    selector: "*",
+                                    title: selectorText.substr(1),
+                                    split: !1,
+                                    expand: !1,
+                                    deep: !0
+                                }), !1 !== ed.settings.importcss_merge_classes ? format.classes = classes : format.attributes = {
+                                    class: classes
+                                }, format.ceFalseOverride = !0, format;
+                            }
+                        }
+                    }((item = "string" == typeof item ? {
+                        selector: item,
+                        class: "",
+                        style: ""
+                    } : item).selector);
+                    fmt && (ed.formatter.register(idx, fmt), ctrl.add(fmt.title, idx, {
+                        style: function() {
+                            return preview_styles && item.style || "";
+                        }
+                    }));
+                }), Array.isArray(ed.settings.importcss_classes)) && (ctrl.hasClasses = !0);
+            }
+            var ctrl, counter;
+        };
+    });
 }();

@@ -1,4 +1,4 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     !function(win) {
@@ -153,7 +153,7 @@
         };
         tinymce._init(), (win.tinymce = win.tinyMCE = tinymce).dom = {}, tinymce.geom = {}, 
         tinymce.text = {}, tinymce.caret = {}, tinymce.html = {}, tinymce.ui = {}, 
-        tinymce.util = {}, tinymce.file = {};
+        tinymce.util = {}, tinymce.file = {}, tinymce.plugins = {};
     }(window);
     var webkit, userAgent = (nav = navigator).userAgent;
     function matchMediaQuery(query) {
@@ -242,13 +242,9 @@
                 return clearTimeout(id);
             }
         };
-    }(tinymce), tinymce.create("tinymce.util.Dispatcher", {
-        scope: null,
-        listeners: null,
-        inDispatch: !1,
-        Dispatcher: function(scope) {
-            this.scope = scope || this, this.listeners = [];
-        },
+    }(tinymce), tinymce.util.Dispatcher = function(scope) {
+        this.scope = scope || this, this.listeners = [], this.inDispatch = !1;
+    }, tinymce.util.Dispatcher.prototype = {
         add: function(callback, scope) {
             return this.listeners.push({
                 cb: callback,
@@ -274,30 +270,29 @@
             for (this.inDispatch = !0, i = 0; i < listeners.length && !1 !== (returnValue = (listener = listeners[i]).cb.apply(listener.scope, 0 < args.length ? args : [ listener.scope ])); i++);
             return this.inDispatch = !1, returnValue;
         }
-    }), function(tinymce) {
+    }, function(tinymce) {
         var each = tinymce.each, trim = tinymce.trim, queryParts = "source protocol authority userInfo user password host port relative path directory file query anchor".split(" "), DEFAULT_PORTS = {
             ftp: 21,
             http: 80,
             https: 443,
             mailto: 25
         }, safeSvgDataUrlElements = [ "img", "video" ];
-        tinymce.create("tinymce.util.URI", {
-            URI: function(url, settings) {
-                var baseUri, base_url, isProtocolRelative, self = this;
-                url = trim(url), baseUri = (settings = self.settings = settings || {}).base_uri, 
-                /^([\w\-]+):([^\/]{2})/i.test(url) || /^\s*#/.test(url) ? self.source = url : (isProtocolRelative = 0 === url.indexOf("//"), 
-                0 !== url.indexOf("/") || isProtocolRelative || (url = (baseUri && baseUri.protocol || "http") + "://mce_host" + url), 
-                /^[\w\-]*:?\/\//.test(url) || (base_url = settings.base_uri ? settings.base_uri.path : new tinymce.util.URI(location.href).directory, 
-                url = "" === settings.base_uri.protocol ? "//mce_host" + self.toAbsPath(base_url, url) : (url = /([^#?]*)([#?]?.*)/.exec(url), 
-                (baseUri && baseUri.protocol || "http") + "://mce_host" + self.toAbsPath(base_url, url[1]) + url[2])), 
-                url = url.replace(/@@/g, "(mce_at)"), url = /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@\/]*):?([^:@\/]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/.exec(url), 
-                each(queryParts, function(v, i) {
-                    i = (i = url[i]) && i.replace(/\(mce_at\)/g, "@@"), self[v] = i;
-                }), baseUri && (self.protocol || (self.protocol = baseUri.protocol), 
-                self.userInfo || (self.userInfo = baseUri.userInfo), self.port || "mce_host" !== self.host || (self.port = baseUri.port), 
-                self.host && "mce_host" !== self.host || (self.host = baseUri.host), 
-                self.source = ""), isProtocolRelative && (self.protocol = ""));
-            },
+        tinymce.util.URI = function(url, settings) {
+            var baseUri, base_url, isProtocolRelative, self = this;
+            url = trim(url), baseUri = (settings = self.settings = settings || {}).base_uri, 
+            /^([\w\-]+):([^\/]{2})/i.test(url) || /^\s*#/.test(url) ? self.source = url : (isProtocolRelative = 0 === url.indexOf("//"), 
+            0 !== url.indexOf("/") || isProtocolRelative || (url = (baseUri && baseUri.protocol || "http") + "://mce_host" + url), 
+            /^[\w\-]*:?\/\//.test(url) || (base_url = settings.base_uri ? settings.base_uri.path : new tinymce.util.URI(location.href).directory, 
+            url = "" === settings.base_uri.protocol ? "//mce_host" + self.toAbsPath(base_url, url) : (url = /([^#?]*)([#?]?.*)/.exec(url), 
+            (baseUri && baseUri.protocol || "http") + "://mce_host" + self.toAbsPath(base_url, url[1]) + url[2])), 
+            url = url.replace(/@@/g, "(mce_at)"), url = /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@\/]*):?([^:@\/]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/.exec(url), 
+            each(queryParts, function(v, i) {
+                i = (i = url[i]) && i.replace(/\(mce_at\)/g, "@@"), self[v] = i;
+            }), baseUri && (self.protocol || (self.protocol = baseUri.protocol), 
+            self.userInfo || (self.userInfo = baseUri.userInfo), self.port || "mce_host" !== self.host || (self.port = baseUri.port), 
+            self.host && "mce_host" !== self.host || (self.host = baseUri.host), 
+            self.source = ""), isProtocolRelative && (self.protocol = ""));
+        }, tinymce.util.URI.prototype = {
             setPath: function(path) {
                 path = /^(.*?)\/?(\w+)?$/.exec(path), this.path = path[0], this.directory = path[1], 
                 this.file = path[2], this.source = "", this.getURI();
@@ -357,7 +352,7 @@
                 this.query && (s += "?" + this.query), this.anchor && (s += "#" + this.anchor), 
                 this.source = s), this.source;
             }
-        }), tinymce.util.URI.parseDataUri = function(uri) {
+        }, tinymce.util.URI.parseDataUri = function(uri) {
             var type, matches;
             return uri = decodeURIComponent(uri).split(","), {
                 type: type = (matches = /data:([^;]+)/.exec(uri[0])) ? matches[1] : type,
@@ -384,7 +379,7 @@
             }
         };
     }(tinymce), function(tinymce) {
-        tinymce.create("static tinymce.util.Storage", {
+        tinymce.util.Storage = {
             getHash: function(n) {
                 var h;
                 if (n = this.get(n)) try {
@@ -401,7 +396,7 @@
             set: function(n, v) {
                 window.sessionStorage && sessionStorage.setItem(n, v);
             }
-        }), tinymce.create("static tinymce.util.Cookie", {
+        }, tinymce.util.Cookie = {
             getHash: function(n) {
                 return tinymce.util.Storage.getHash(n);
             },
@@ -414,7 +409,7 @@
             set: function(n, v) {
                 return tinymce.util.Storage.set(n, v);
             }
-        });
+        };
     }(tinymce), function(tinymce) {
         tinymce.util.JSON = {
             serialize: function(obj) {
@@ -428,7 +423,7 @@
                 } catch (ex) {}
             }
         };
-    }(tinymce), tinymce.create("static tinymce.util.JSONP", {
+    }(tinymce), tinymce.util.JSOP = {
         callbacks: {},
         count: 0,
         send: function(o) {
@@ -441,7 +436,7 @@
                 type: "text/javascript"
             }), this.count++;
         }
-    }), tinymce.create("static tinymce.util.XHR", {
+    }, tinymce.util.XHR = {
         send: function(o) {
             var xhr, c = 0;
             function ready() {
@@ -458,12 +453,11 @@
                 window.setTimeout(ready, 10);
             }
         }
-    }), function(tinymce) {
+    }, function(tinymce) {
         var extend = tinymce.extend, JSON = tinymce.util.JSON, XHR = tinymce.util.XHR;
-        tinymce.create("tinymce.util.JSONRequest", {
-            JSONRequest: function(s) {
-                this.settings = extend({}, s), this.count = 0;
-            },
+        tinymce.util.JSONRequest = function(settings) {
+            this.settings = extend({}, settings), this.count = 0;
+        }, tinymce.util.JSONRequest.prototype = {
             send: function(o) {
                 var ecb = o.error, scb = o.success;
                 (o = extend(this.settings, o)).success = function(c, x) {
@@ -477,13 +471,10 @@
                     method: o.method,
                     params: o.params
                 }), o.content_type = "application/json", XHR.send(o);
-            },
-            static: {
-                sendRPC: function(o) {
-                    return new tinymce.util.JSONRequest().send(o);
-                }
             }
-        });
+        }, tinymce.util.JSONRequest.sendRPC = function(o) {
+            return new tinymce.util.JSONRequest().send(o);
+        };
     }(tinymce), function(tinymce) {
         tinymce.VK = {
             BACKSPACE: 8,
@@ -8298,10 +8289,7 @@
                 var result;
                 return (this.lookup[n] ? this.lookup[n].dependencies : result) || [];
             },
-            requireLangPack: function(n) {
-                var s = tinymce.settings;
-                s && s.language && !1 !== s.language_load && tinymce.ScriptLoader.add(this.urls[n] + "/langs/" + s.language + ".js");
-            },
+            requireLangPack: function(n) {},
             add: function(id, o, dependencies) {
                 return this.items.push(o), this.lookup[id] = {
                     instance: o,
@@ -8616,8 +8604,7 @@
                     n.submit = function() {
                         return tinymce.triggerSave(), self.isNotDirty = 1, self.formElement._mceOldSubmit(self.formElement);
                     });
-                }), s.language && !1 !== s.language_load && sl.add(tinymce.baseURL + "/langs/" + s.language + ".js"), 
-                s.theme && "function" != typeof s.theme && "-" != s.theme.charAt(0) && !ThemeManager.urls[s.theme] && ThemeManager.load(s.theme, "themes/" + s.theme + "/theme" + tinymce.suffix + ".js"), 
+                }), s.theme && "function" != typeof s.theme && "-" != s.theme.charAt(0) && !ThemeManager.urls[s.theme] && ThemeManager.load(s.theme, "themes/" + s.theme + "/theme" + tinymce.suffix + ".js"), 
                 each(explode(s.plugins), function(p) {
                     var dependencies;
                     p && !PluginManager.urls[p] && ("-" == p.charAt(0) ? (p = p.substr(1, p.length), 
@@ -8650,7 +8637,7 @@
                     var c = PluginManager.get(p), u = PluginManager.urls[p] || tinymce.documentBaseURL.replace(/\/$/, "");
                     c && -1 === tinymce.inArray(initializedPlugins, p) && (each(PluginManager.dependencies(p), function(dep) {
                         initPlugin(dep);
-                    }), c = new c(self, u), (self.plugins[p] = c).init) && (c.init(self, u), 
+                    }), c = new c(self, u), (self.plugins[p] = c).init && c.init(self, u), 
                     initializedPlugins.push(p));
                 }), self.controlManager = new tinymce.ControlManager(self), self.onBeforeRenderUI.dispatch(self, self.controlManager), 
                 s.render_ui && self.theme && (self.orgDisplay = e.style.display, 
@@ -9928,7 +9915,7 @@
                 (f = f || {}).type || (self.bookmark = ed.selection.getBookmark(1)), 
                 id = DOM.uniqueId("mce_window_"), f.width = parseInt(f.width || 0, 10), 
                 f.height = parseInt(f.height || 0, 10), p.mce_window_id = id, self.features = f, 
-                self.params = p, self.onOpen.dispatch(self, f, p), '<div class="mceModalBody" id="' + id + '" dir="' + ed.settings.skin_directionality + '">   <div class="mceModalContainer">       <div class="mceModalHeader" id="' + id + '_header">           <h5 class="mceModalTitle" id="' + id + '_title">' + (f.title || "") + '</h5>           <button class="mceModalClose" type="button" title="' + ed.getLang("close", "Close") + '"></button>       </div>       <div class="mceModalContent" id="' + id + '_content"></div>   </div></div>'), modal = DOM.select(".mceModal");
+                self.params = p, self.onOpen.dispatch(self, f, p), '<div class="mceModalBody" id="' + id + '" dir="' + ed.settings.skin_directionality + '">   <div class="mceModalContainer">       <div class="mceModalHeader" id="' + id + '_header">           <h5 class="mceModalTitle" id="' + id + '_title">' + (f.title || "") + '</h5>           <button class="mceModalClose" type="button" title="' + ed.getLang("close", "Close") + '" aria-label="' + ed.getLang("close", "Close") + '"></button>       </div>       <div class="mceModalContent" id="' + id + '_content"></div>   </div></div>'), modal = DOM.select(".mceModal");
                 return modal.length || (modal = DOM.add(DOM.doc.body, "div", {
                     class: ed.settings.skin_class + " mceModal",
                     role: "dialog",
@@ -11203,7 +11190,7 @@
                                     !parentBlock.hasChildNodes()) return setForcedBlockAttrs(newBlock = dom.create(blockName)), 
                                     parentBlock.appendChild(newBlock), rng.setStart(newBlock, 0), 
                                     rng.setEnd(newBlock, 0), newBlock;
-                                    for (node = container; node.parentNode != parentBlock; ) node = node.parentNode;
+                                    for (node = container; node && node.parentNode != parentBlock; ) node = node.parentNode;
                                     for (;node && !dom.isBlock(node); ) node = (startNode = node).previousSibling;
                                     if (startNode && schema.isValidChild(rootBlockName, blockName.toLowerCase())) {
                                         for (setForcedBlockAttrs(newBlock = dom.create(blockName)), 
@@ -11793,42 +11780,20 @@
                 });
             }));
         });
-    }(), tinymce.create("tinymce.plugins.HelpPlugin", {
-        init: function(ed, url) {
-            (this.editor = ed).addCommand("mceHelp", function() {
-                ed.windowManager.open({
-                    title: ed.getLang("dlg.help", "Help"),
-                    url: ed.getParam("site_url") + "index.php?option=com_jce&task=plugin.display&plugin=help&lang=" + ed.getParam("language") + "&section=editor&category=editor&article=about",
-                    size: "mce-modal-landscape-full"
-                });
-            }), ed.addButton("help", {
-                title: "dlg.help",
-                cmd: "mceHelp"
+    }(), tinymce.PluginManager.add("help", function(ed, url) {
+        ed.addCommand("mceHelp", function() {
+            ed.windowManager.open({
+                title: ed.getLang("dlg.help", "Help"),
+                url: ed.getParam("site_url") + "index.php?option=com_jce&task=plugin.display&plugin=help&lang=" + ed.getParam("language") + "&section=editor&category=editor&article=about",
+                size: "mce-modal-landscape-full"
             });
-        }
-    }), tinymce.PluginManager.add("help", tinymce.plugins.HelpPlugin), AutoLinkPattern = /^(https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.|(?:mailto:)?[A-Z0-9._%+\-]+@)(.+)$/i, 
-    tinymce.create("tinymce.plugins.AutolinkPlugin", {
-        init: function(ed, url) {
-            var self = this;
-            (ed.getParam("autolink_url", !0) || ed.getParam("autolink_email", !0)) && (ed.settings.autolink_pattern && (AutoLinkPattern = ed.settings.autolink_pattern), 
-            ed.onAutoLink = new tinymce.util.Dispatcher(this), ed.onKeyDown.addToTop(function(ed, e) {
-                if (13 == e.keyCode) return self.handleEnter(ed);
-            }), tinymce.isIE || (ed.onKeyPress.add(function(ed, e) {
-                if (41 == e.which) return self.handleEclipse(ed);
-            }), ed.onKeyUp.add(function(ed, e) {
-                if (32 == e.keyCode) return self.handleSpacebar(ed);
-            })));
-        },
-        handleEclipse: function(ed) {
-            this.parseCurrentLine(ed, -1, "(", !0);
-        },
-        handleSpacebar: function(ed) {
-            this.parseCurrentLine(ed, 0, "", !0);
-        },
-        handleEnter: function(ed) {
-            this.parseCurrentLine(ed, -1, "", !1);
-        },
-        parseCurrentLine: function(editor, endOffset, delimiter) {
+        }), ed.addButton("help", {
+            title: "dlg.help",
+            cmd: "mceHelp"
+        });
+    }), AutoLinkPattern = /^(https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.|(?:mailto:)?[A-Z0-9._%+\-]+@)(.+)$/i, 
+    tinymce.PluginManager.add("autolink", function(ed, url) {
+        function parseCurrentLine(editor, endOffset, delimiter) {
             var rng, end, endContainer, len, rngText, prev;
             function scopeIndex(container, index) {
                 return index < 0 && (index = 0), 3 == container.nodeType && (container = container.data.length) < index ? container : index;
@@ -11869,454 +11834,454 @@
                 }), editor.selection.moveToBookmark(len), editor.nodeChanged()));
             }
         }
-    }), tinymce.PluginManager.add("autolink", tinymce.plugins.AutolinkPlugin), function() {
+        (ed.getParam("autolink_url", !0) || ed.getParam("autolink_email", !0)) && (ed.settings.autolink_pattern && (AutoLinkPattern = ed.settings.autolink_pattern), 
+        ed.onAutoLink = new tinymce.util.Dispatcher(this), ed.onKeyDown.addToTop(function(ed, e) {
+            if (13 == e.keyCode) return function(ed) {
+                parseCurrentLine(ed, -1, "");
+            }(ed);
+        }), tinymce.isIE || (ed.onKeyPress.add(function(ed, e) {
+            if (41 == e.which) return function(ed) {
+                parseCurrentLine(ed, -1, "(");
+            }(ed);
+        }), ed.onKeyUp.add(function(ed, e) {
+            if (32 == e.keyCode) return function(ed) {
+                parseCurrentLine(ed, 0, "");
+            }(ed);
+        })));
+    }), function() {
         var each = tinymce.each, Node = tinymce.html.Node, tags = [ "a", "abbr", "acronym", "address", "applet", "area", "article", "aside", "audio", "b", "base", "basefont", "bdi", "bdo", "bgsound", "big", "blink", "blockquote", "body", "br", "button", "canvas", "caption", "center", "cite", "code", "col", "colgroup", "command", "content", "data", "datalist", "dd", "del", "details", "dfn", "dialog", "dir", "div", "dl", "dt", "element", "em", "embed", "fieldset", "figcaption", "figure", "font", "footer", "form", "frame", "frameset", "h1", "h2", "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "image", "img", "input", "ins", "isindex", "kbd", "keygen", "label", "legend", "li", "link", "listing", "main", "map", "mark", "marquee", "menu", "menuitem", "meta", "meter", "multicol", "nav", "nobr", "noembed", "noframes", "noscript", "object", "ol", "optgroup", "option", "output", "p", "param", "picture", "plaintext", "pre", "progress", "q", "rp", "rt", "rtc", "ruby", "s", "samp", "script", "section", "select", "shadow", "slot", "small", "source", "spacer", "span", "strike", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "template", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track", "tt", "u", "ul", "var", "video", "wbr", "xmp" ], fontIconRe = /<([a-z0-9]+)([^>]+)class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)"([^>]*)><\/\1>/gi, paddedRx = /<(p|h1|h2|h3|h4|h5|h6|pre|div|address|caption)\b([^>]+)>(&nbsp;|\u00a0)<\/\1>/gi;
-        tinymce.create("tinymce.plugins.CleanupPlugin", {
-            init: function(ed, url) {
-                var self = this;
-                !1 === (this.editor = ed).settings.verify_html && (ed.settings.validate = !1), 
-                ed.onPreInit.add(function() {
-                    var elements, invalidAttribValue;
-                    function replaceAttributeValue(nodes, name, expr, check) {
-                        for (var i = nodes.length; i--; ) {
-                            var node, value = (node = nodes[i]).attr(name);
-                            !value || expr && !function(value, expr, check) {
-                                return expr ? "=" === expr ? value === check : "*=" === expr ? 0 <= value.indexOf(check) : "~=" === expr ? 0 <= (" " + value + " ").indexOf(" " + check + " ") : "!=" === expr ? value != check : "^=" === expr ? 0 === value.indexOf(check) : "$=" === expr && value.substr(value.length - check.length) === check : check;
-                            }(value, expr, check) || (node.attr(name, null), "src" !== name && "href" !== name && "style" !== name || node.attr("data-mce-" + name, null), 
-                            "a" !== node.name) || node.attributes.length || node.unwrap();
-                        }
-                    }
-                    ed.serializer.addAttributeFilter("data-mce-caret", function(nodes, name, args) {
-                        for (var i = nodes.length; i--; ) nodes[i].remove();
-                    }), !1 === ed.settings.remove_trailing_brs && ed.serializer.addAttributeFilter("data-mce-bogus", function(nodes, name, args) {
-                        for (var node, textNode, i = nodes.length; i--; ) "br" === (node = nodes[i]).name && (node.prev || node.next ? node.remove() : ((textNode = new Node("#text", 3)).value = "\xa0", 
-                        node.replace(textNode)));
-                    }), ed.serializer.addAttributeFilter("data-mce-tmp", function(nodes, name) {
-                        for (var i = nodes.length; i--; ) nodes[i].attr("data-mce-tmp", null);
-                    }), ed.parser.addAttributeFilter("data-mce-tmp", function(nodes, name) {
-                        for (var i = nodes.length; i--; ) nodes[i].attr("data-mce-tmp", null);
-                    }), !1 !== ed.settings.verify_html && (ed.settings.allow_event_attributes || each(ed.schema.elements, function(elm) {
-                        if (!elm.attributesOrder || 0 === elm.attributesOrder.length) return !0;
-                        each(elm.attributes, function(obj, name) {
-                            0 === name.indexOf("on") && (delete elm.attributes[name], 
-                            elm.attributesOrder.splice(tinymce.inArray(elm, elm.attributesOrder, name), 1));
-                        });
-                    }), elements = ed.schema.elements, each("ol ul sub sup blockquote font table tbody tr strong b".split(","), function(name) {
-                        elements[name] && (elements[name].removeEmpty = !1);
-                    }), ed.getParam("pad_empty_tags", !0) || each(elements, function(v, k) {
-                        v.paddEmpty && (v.paddEmpty = !1);
-                    }), ed.getParam("table_pad_empty_cells", !0) || (elements.th.paddEmpty = !1, 
-                    elements.td.paddEmpty = !1), each(elements, function(v, k) {
-                        if (0 == k.indexOf("mce:")) return !0;
-                        -1 === tinymce.inArray(tags, k) && ed.schema.addCustomElements(k);
-                    })), !1 !== ed.settings.verify_html && (invalidAttribValue = ed.getParam("invalid_attribute_values", "")) && each(tinymce.explode(invalidAttribValue), function(item) {
-                        var tag, attrib, expr, value;
-                        (item = /([a-z0-9\*]+)\[([a-z0-9-]+)([\^\$\!~\*]?=)?["']?([^"']+)?["']?\]/i.exec(item)) && 5 == item.length && (tag = item[1], 
-                        attrib = item[2], expr = item[3], value = item[4], void 0 !== (expr = !attrib || expr || value ? expr : "")) && ("*" == tag ? (ed.parser.addAttributeFilter(attrib, function(nodes, name) {
-                            replaceAttributeValue(nodes, name, expr, value);
-                        }), ed.serializer.addAttributeFilter(attrib, function(nodes, name) {
-                            replaceAttributeValue(nodes, name, expr, value);
-                        })) : (ed.parser.addNodeFilter(tag, function(nodes, name) {
-                            replaceAttributeValue(nodes, attrib, expr, value);
-                        }), ed.serializer.addNodeFilter(tag, function(nodes, name) {
-                            replaceAttributeValue(nodes, attrib, expr, value);
-                        })));
-                    }), ed.serializer.addNodeFilter(ed.settings.invalid_elements, function(nodes, name) {
-                        var i = nodes.length;
-                        if (ed.schema.isValidChild("body", name)) for (;i--; ) nodes[i].remove();
-                    }), ed.parser.addNodeFilter(ed.settings.invalid_elements, function(nodes, name) {
-                        var node, i = nodes.length;
-                        if (ed.schema.isValidChild("body", name)) for (;i--; ) node = nodes[i], 
-                        "span" === name && node.attr("data-mce-type") || node.unwrap();
-                    }), ed.parser.addNodeFilter("a,i,span,li", function(nodes, name) {
-                        for (var node, i = nodes.length; i--; ) !(node = nodes[i]).attr("class") && "li" !== name || node.firstChild || (node.attr("data-mce-empty", "1"), 
-                        node.append(new Node("#text", "3")).value = "\xa0");
-                    }), ed.serializer.addAttributeFilter("data-mce-empty", function(nodes, name) {
-                        for (var node, fc, i = nodes.length; i--; ) fc = (node = nodes[i]).firstChild, 
-                        node.attr("data-mce-empty", null), !fc || "\xa0" !== fc.value && "&nbsp;" !== fc.value || fc.remove();
-                    }), ed.parser.addAttributeFilter("onclick,ondblclick,onmousedown,onmouseup", function(nodes, name) {
-                        for (var node, i = nodes.length; i--; ) (node = nodes[i]).attr("data-mce-" + name, node.attr(name)), 
-                        node.attr(name, "return false;");
-                    }), ed.serializer.addAttributeFilter("data-mce-onclick,data-mce-ondblclick,data-mce-onmousedown,data-mce-onmouseup", function(nodes, name) {
-                        for (var node, k, i = nodes.length; i--; ) node = nodes[i], 
-                        k = name.replace("data-mce-", ""), node.attr(k, node.attr(name)), 
-                        node.attr(name, null);
-                    }), ed.serializer.addNodeFilter("br", function(nodes, name) {
-                        var node, i = nodes.length;
-                        if (i) for (;i--; ) (node = nodes[i]).parent && "body" === node.parent.name && !node.prev && node.remove();
-                    }), ed.parser.addNodeFilter("br", function(nodes, name) {
-                        var node, i = nodes.length;
-                        if (i) for (;i--; ) (node = nodes[i]).parent && "body" === node.parent.name && !node.prev && node.remove();
-                    });
-                }), !1 === ed.settings.verify_html && ed.addCommand("mceCleanup", function() {
-                    var s = ed.settings, se = ed.selection, bm = se.getBookmark(), content = ed.getContent({
-                        cleanup: !0
-                    }), s = (s.verify_html = !0, new tinymce.html.Schema(s)), content = new tinymce.html.Serializer({
-                        validate: !0
-                    }, s).serialize(new tinymce.html.DomParser({
-                        validate: !0,
-                        allow_event_attributes: !!ed.settings.allow_event_attributes
-                    }, s).parse(content));
-                    ed.setContent(content, {
-                        cleanup: !0
-                    }), se.moveToBookmark(bm);
-                }), ed.onBeforeSetContent.add(function(ed, o) {
-                    o.content = o.content.replace(/^<br>/, ""), o.content = self.convertFromGeshi(o.content), 
-                    ed.settings.validate && ed.getParam("invalid_attributes") && (ed = ed.getParam("invalid_attributes", ""), 
-                    o.content = o.content.replace(new RegExp("<([^>]+)(" + ed.replace(/,/g, "|") + ')="([^"]+)"([^>]*)>', "gi"), function() {
-                        var args = arguments;
-                        return "<" + args[1] + (args[args.length - 3] || "") + ">";
-                    })), o.content = o.content.replace(fontIconRe, '<$1$2class="$3$4$5-$6$7"$8 data-mce-empty="1">&nbsp;</$1>'), 
-                    o.content = o.content.replace(/<(a|i|span)\b([^>]+)><\/\1>/gi, '<$1$2 data-mce-empty="1">&nbsp;</$1>'), 
-                    o.content = o.content.replace(/<li><\/li>/, '<li data-mce-empty="1">&nbsp;</li>');
-                }), ed.onPostProcess.add(function(ed, o) {
-                    o.set && (o.content = self.convertFromGeshi(o.content)), o.get && (o.content = self.convertToGeshi(o.content), 
-                    o.content = o.content.replace(/<a([^>]*)class="jce(box|popup|lightbox|tooltip|_tooltip)"([^>]*)><\/a>/gi, ""), 
-                    o.content = o.content.replace(/<span class="jce(box|popup|lightbox|tooltip|_tooltip)">(.*?)<\/span>/gi, "$2"), 
-                    o.content = o.content.replace(/_mce_(src|href|style|coords|shape)="([^"]+)"\s*?/gi, ""), 
-                    !1 === ed.settings.validate && (o.content = o.content.replace(/<body([^>]*)>([\s\S]*)<\/body>/, "$2"), 
-                    ed.getParam("remove_tag_padding") || (o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)\b([^>]*)><\/\1>/gi, "<$1$2>&nbsp;</$1>"))), 
-                    ed.getParam("table_pad_empty_cells", !0) || (o.content = o.content.replace(/<(th|td)([^>]*)>(&nbsp;|\u00a0)<\/\1>/gi, "<$1$2></$1>")), 
-                    o.content = o.content.replace(/<(a|i|span)([^>]+)>(&nbsp;|\u00a0)<\/\1>/gi, function(match, tag, attribs) {
-                        return attribs = attribs.replace('data-mce-empty="1"', ""), 
-                        "<" + tag + " " + tinymce.trim(attribs) + "></" + tag + ">";
-                    }), o.content = o.content.replace(/<li data-mce-empty="1">(&nbsp;|\u00a0)<\/li>/gi, "<li></li>"), 
-                    ed.getParam("remove_div_padding") && (o.content = o.content.replace(/<div([^>]*)>(&nbsp;|\u00a0)<\/div>/g, "<div$1></div>")), 
-                    !1 === ed.getParam("pad_empty_tags", !0) && (o.content = o.content.replace(paddedRx, "<$1$2></$1>")), 
-                    ed.getParam("keep_nbsp", !0) && "raw" === ed.settings.entity_encoding && (o.content = o.content.replace(/\u00a0/g, "&nbsp;")), 
-                    o.content = o.content.replace(/(uk|v|ng|data)-([\w-]+)=""(\s|>)/gi, "$1-$2$3"), 
-                    ed.settings.padd_empty_editor && (o.content = o.content.replace(/^(<div>(&nbsp;|&#160;|\s|\u00a0|)<\/div>[\r\n]*|<br(\s*\/)?>[\r\n]*)$/, "")), 
-                    o.content = o.content.replace(/<hr(.*)class="system-pagebreak"(.*?)\/?>/gi, '<hr$1class="system-pagebreak"$2/>'), 
-                    o.content = o.content.replace(/<hr id="system-readmore"(.*?)>/gi, '<hr id="system-readmore" />'));
-                }), ed.onSaveContent.add(function(ed, o) {
-                    var entities;
-                    ed.getParam("cleanup_pluginmode") && (entities = {
-                        "&#39;": "'",
-                        "&amp;": "&",
-                        "&quot;": '"',
-                        "&apos;": "'"
-                    }, o.content = o.content.replace(/&(#39|apos|amp|quot);/gi, function(a) {
-                        return entities[a];
-                    }));
-                }), ed.addButton("cleanup", {
-                    title: "advanced.cleanup_desc",
-                    cmd: "mceCleanup"
-                });
-            },
-            convertFromGeshi: function(h) {
+        tinymce.PluginManager.add("cleanup", function(ed, url) {
+            function convertFromGeshi(h) {
                 return h.replace(/<pre xml:lang="([^"]+)"([^>]*)>(.*?)<\/pre>/g, function(a, b, c, d) {
                     return '<pre data-geshi-lang="' + b + '"' + (c && /\w/.test(c) ? c.split(" ").join(" data-geshi-") : "") + ">" + d + "</pre>";
                 });
-            },
-            convertToGeshi: function(h) {
-                return h.replace(/<pre([^>]+)data-geshi-lang="([^"]+)"([^>]*)>(.*?)<\/pre>/g, function(a, b, c, d, e) {
-                    return '<pre xml:lang="' + c + '"' + (b + d).replace(/data-geshi-/gi, "").replace(/\s+/g, " ").replace(/\s$/, "") + ">" + e + "</pre>";
-                });
             }
-        }), tinymce.PluginManager.add("cleanup", tinymce.plugins.CleanupPlugin);
+            !1 === ed.settings.verify_html && (ed.settings.validate = !1), ed.onPreInit.add(function() {
+                var elements, invalidAttribValue;
+                function replaceAttributeValue(nodes, name, expr, check) {
+                    for (var i = nodes.length; i--; ) {
+                        var node, value = (node = nodes[i]).attr(name);
+                        !value || expr && !function(value, expr, check) {
+                            return expr ? "=" === expr ? value === check : "*=" === expr ? 0 <= value.indexOf(check) : "~=" === expr ? 0 <= (" " + value + " ").indexOf(" " + check + " ") : "!=" === expr ? value != check : "^=" === expr ? 0 === value.indexOf(check) : "$=" === expr && value.substr(value.length - check.length) === check : check;
+                        }(value, expr, check) || (node.attr(name, null), "src" !== name && "href" !== name && "style" !== name || node.attr("data-mce-" + name, null), 
+                        "a" !== node.name) || node.attributes.length || node.unwrap();
+                    }
+                }
+                ed.serializer.addAttributeFilter("data-mce-caret", function(nodes, name, args) {
+                    for (var i = nodes.length; i--; ) nodes[i].remove();
+                }), !1 === ed.settings.remove_trailing_brs && ed.serializer.addAttributeFilter("data-mce-bogus", function(nodes, name, args) {
+                    for (var node, textNode, i = nodes.length; i--; ) "br" === (node = nodes[i]).name && (node.prev || node.next ? node.remove() : ((textNode = new Node("#text", 3)).value = "\xa0", 
+                    node.replace(textNode)));
+                }), ed.serializer.addAttributeFilter("data-mce-tmp", function(nodes, name) {
+                    for (var i = nodes.length; i--; ) nodes[i].attr("data-mce-tmp", null);
+                }), ed.parser.addAttributeFilter("data-mce-tmp", function(nodes, name) {
+                    for (var i = nodes.length; i--; ) nodes[i].attr("data-mce-tmp", null);
+                }), !1 !== ed.settings.verify_html && (ed.settings.allow_event_attributes || each(ed.schema.elements, function(elm) {
+                    if (!elm.attributesOrder || 0 === elm.attributesOrder.length) return !0;
+                    each(elm.attributes, function(obj, name) {
+                        0 === name.indexOf("on") && (delete elm.attributes[name], 
+                        elm.attributesOrder.splice(tinymce.inArray(elm, elm.attributesOrder, name), 1));
+                    });
+                }), elements = ed.schema.elements, each("ol ul sub sup blockquote font table tbody tr strong b".split(","), function(name) {
+                    elements[name] && (elements[name].removeEmpty = !1);
+                }), ed.getParam("pad_empty_tags", !0) || each(elements, function(v, k) {
+                    v.paddEmpty && (v.paddEmpty = !1);
+                }), ed.getParam("table_pad_empty_cells", !0) || (elements.th.paddEmpty = !1, 
+                elements.td.paddEmpty = !1), each(elements, function(v, k) {
+                    if (0 == k.indexOf("mce:")) return !0;
+                    -1 === tinymce.inArray(tags, k) && ed.schema.addCustomElements(k);
+                })), !1 !== ed.settings.verify_html && (invalidAttribValue = ed.getParam("invalid_attribute_values", "")) && each(tinymce.explode(invalidAttribValue), function(item) {
+                    var tag, attrib, expr, value;
+                    (item = /([a-z0-9\*]+)\[([a-z0-9-]+)([\^\$\!~\*]?=)?["']?([^"']+)?["']?\]/i.exec(item)) && 5 == item.length && (tag = item[1], 
+                    attrib = item[2], expr = item[3], value = item[4], void 0 !== (expr = !attrib || expr || value ? expr : "")) && ("*" == tag ? (ed.parser.addAttributeFilter(attrib, function(nodes, name) {
+                        replaceAttributeValue(nodes, name, expr, value);
+                    }), ed.serializer.addAttributeFilter(attrib, function(nodes, name) {
+                        replaceAttributeValue(nodes, name, expr, value);
+                    })) : (ed.parser.addNodeFilter(tag, function(nodes, name) {
+                        replaceAttributeValue(nodes, attrib, expr, value);
+                    }), ed.serializer.addNodeFilter(tag, function(nodes, name) {
+                        replaceAttributeValue(nodes, attrib, expr, value);
+                    })));
+                }), ed.serializer.addNodeFilter(ed.settings.invalid_elements, function(nodes, name) {
+                    var i = nodes.length;
+                    if (ed.schema.isValidChild("body", name)) for (;i--; ) nodes[i].remove();
+                }), ed.parser.addNodeFilter(ed.settings.invalid_elements, function(nodes, name) {
+                    var node, i = nodes.length;
+                    if (ed.schema.isValidChild("body", name)) for (;i--; ) node = nodes[i], 
+                    "span" === name && node.attr("data-mce-type") || node.unwrap();
+                }), ed.parser.addNodeFilter("a,i,span,li", function(nodes, name) {
+                    for (var node, i = nodes.length; i--; ) !(node = nodes[i]).attr("class") && "li" !== name || node.firstChild || (node.attr("data-mce-empty", "1"), 
+                    node.append(new Node("#text", "3")).value = "\xa0");
+                }), ed.serializer.addAttributeFilter("data-mce-empty", function(nodes, name) {
+                    for (var node, fc, i = nodes.length; i--; ) fc = (node = nodes[i]).firstChild, 
+                    node.attr("data-mce-empty", null), !fc || "\xa0" !== fc.value && "&nbsp;" !== fc.value || fc.remove();
+                }), ed.parser.addAttributeFilter("onclick,ondblclick,onmousedown,onmouseup", function(nodes, name) {
+                    for (var node, i = nodes.length; i--; ) (node = nodes[i]).attr("data-mce-" + name, node.attr(name)), 
+                    node.attr(name, "return false;");
+                }), ed.serializer.addAttributeFilter("data-mce-onclick,data-mce-ondblclick,data-mce-onmousedown,data-mce-onmouseup", function(nodes, name) {
+                    for (var node, k, i = nodes.length; i--; ) node = nodes[i], 
+                    k = name.replace("data-mce-", ""), node.attr(k, node.attr(name)), 
+                    node.attr(name, null);
+                }), ed.serializer.addNodeFilter("br", function(nodes, name) {
+                    var node, i = nodes.length;
+                    if (i) for (;i--; ) (node = nodes[i]).parent && "body" === node.parent.name && !node.prev && node.remove();
+                }), ed.parser.addNodeFilter("br", function(nodes, name) {
+                    var node, i = nodes.length;
+                    if (i) for (;i--; ) (node = nodes[i]).parent && "body" === node.parent.name && !node.prev && node.remove();
+                });
+            }), !1 === ed.settings.verify_html && ed.addCommand("mceCleanup", function() {
+                var s = ed.settings, se = ed.selection, bm = se.getBookmark(), content = ed.getContent({
+                    cleanup: !0
+                }), s = (s.verify_html = !0, new tinymce.html.Schema(s)), content = new tinymce.html.Serializer({
+                    validate: !0
+                }, s).serialize(new tinymce.html.DomParser({
+                    validate: !0,
+                    allow_event_attributes: !!ed.settings.allow_event_attributes
+                }, s).parse(content));
+                ed.setContent(content, {
+                    cleanup: !0
+                }), se.moveToBookmark(bm);
+            }), ed.onBeforeSetContent.add(function(ed, o) {
+                o.content = o.content.replace(/^<br>/, ""), o.content = convertFromGeshi(o.content), 
+                ed.settings.validate && ed.getParam("invalid_attributes") && (ed = ed.getParam("invalid_attributes", ""), 
+                o.content = o.content.replace(new RegExp("<([^>]+)(" + ed.replace(/,/g, "|") + ')="([^"]+)"([^>]*)>', "gi"), function() {
+                    var args = arguments;
+                    return "<" + args[1] + (args[args.length - 3] || "") + ">";
+                })), o.content = o.content.replace(fontIconRe, '<$1$2class="$3$4$5-$6$7"$8 data-mce-empty="1">&nbsp;</$1>'), 
+                o.content = o.content.replace(/<(a|i|span)\b([^>]+)><\/\1>/gi, '<$1$2 data-mce-empty="1">&nbsp;</$1>'), 
+                o.content = o.content.replace(/<li><\/li>/, '<li data-mce-empty="1">&nbsp;</li>');
+            }), ed.onPostProcess.add(function(ed, o) {
+                o.set && (o.content = convertFromGeshi(o.content)), o.get && (o.content = o.content.replace(/<pre([^>]+)data-geshi-lang="([^"]+)"([^>]*)>(.*?)<\/pre>/g, function(a, b, c, d, e) {
+                    return '<pre xml:lang="' + c + '"' + (b + d).replace(/data-geshi-/gi, "").replace(/\s+/g, " ").replace(/\s$/, "") + ">" + e + "</pre>";
+                }), o.content = o.content.replace(/<a([^>]*)class="jce(box|popup|lightbox|tooltip|_tooltip)"([^>]*)><\/a>/gi, ""), 
+                o.content = o.content.replace(/<span class="jce(box|popup|lightbox|tooltip|_tooltip)">(.*?)<\/span>/gi, "$2"), 
+                o.content = o.content.replace(/_mce_(src|href|style|coords|shape)="([^"]+)"\s*?/gi, ""), 
+                !1 === ed.settings.validate && (o.content = o.content.replace(/<body([^>]*)>([\s\S]*)<\/body>/, "$2"), 
+                ed.getParam("remove_tag_padding") || (o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)\b([^>]*)><\/\1>/gi, "<$1$2>&nbsp;</$1>"))), 
+                ed.getParam("table_pad_empty_cells", !0) || (o.content = o.content.replace(/<(th|td)([^>]*)>(&nbsp;|\u00a0)<\/\1>/gi, "<$1$2></$1>")), 
+                o.content = o.content.replace(/<(a|i|span)([^>]+)>(&nbsp;|\u00a0)<\/\1>/gi, function(match, tag, attribs) {
+                    return attribs = attribs.replace('data-mce-empty="1"', ""), 
+                    "<" + tag + " " + tinymce.trim(attribs) + "></" + tag + ">";
+                }), o.content = o.content.replace(/<li data-mce-empty="1">(&nbsp;|\u00a0)<\/li>/gi, "<li></li>"), 
+                ed.getParam("remove_div_padding") && (o.content = o.content.replace(/<div([^>]*)>(&nbsp;|\u00a0)<\/div>/g, "<div$1></div>")), 
+                !1 === ed.getParam("pad_empty_tags", !0) && (o.content = o.content.replace(paddedRx, "<$1$2></$1>")), 
+                ed.getParam("keep_nbsp", !0) && "raw" === ed.settings.entity_encoding && (o.content = o.content.replace(/\u00a0/g, "&nbsp;")), 
+                o.content = o.content.replace(/(uk|v|ng|data)-([\w-]+)=""(\s|>)/gi, "$1-$2$3"), 
+                ed.settings.padd_empty_editor && (o.content = o.content.replace(/^(<div>(&nbsp;|&#160;|\s|\u00a0|)<\/div>[\r\n]*|<br(\s*\/)?>[\r\n]*)$/, "")), 
+                o.content = o.content.replace(/<hr(.*)class="system-pagebreak"(.*?)\/?>/gi, '<hr$1class="system-pagebreak"$2/>'), 
+                o.content = o.content.replace(/<hr id="system-readmore"(.*?)>/gi, '<hr id="system-readmore" />'));
+            }), ed.onSaveContent.add(function(ed, o) {
+                var entities;
+                ed.getParam("cleanup_pluginmode") && (entities = {
+                    "&#39;": "'",
+                    "&amp;": "&",
+                    "&quot;": '"',
+                    "&apos;": "'"
+                }, o.content = o.content.replace(/&(#39|apos|amp|quot);/gi, function(a) {
+                    return entities[a];
+                }));
+            }), ed.addButton("cleanup", {
+                title: "advanced.cleanup_desc",
+                cmd: "mceCleanup"
+            });
+        });
     }(), function() {
         var each = tinymce.each, Node = tinymce.html.Node, VK = tinymce.VK, DomParser = tinymce.html.DomParser, Serializer = tinymce.html.Serializer, SaxParser = tinymce.html.SaxParser;
         function createTextNode(value, raw) {
             var text = new Node("#text", 3);
             return text.raw = !1 !== raw, text.value = value, text;
         }
-        tinymce.create("tinymce.plugins.CodePlugin", {
-            init: function(ed, url) {
-                this.editor = ed, this.url = url;
-                var blockElements = [], htmlSchema = new tinymce.html.Schema({
-                    schema: "mixed",
-                    invalid_elements: ed.settings.invalid_elements
-                }), xmlSchema = new tinymce.html.Schema({
-                    verify_html: !1
-                }), code_blocks = !1 !== ed.settings.code_use_blocks;
-                function processOnInsert(value) {
-                    return /\{.+\}/gi.test(value) && ed.settings.code_protect_shortcode && (value = processShortcode(value, void 0)), 
-                    ed.settings.code_allow_custom_xml && (value = processXML(value)), 
-                    /<(\?|script|style)/.test(value) ? processPhp(value = value.replace(/<(script|style)([^>]*?)>([\s\S]*?)<\/\1>/gi, function(match, type) {
-                        return ed.getParam("code_allow_" + type) ? createCodePre(match = match.replace(/<br[^>]*?>/gi, "\n"), type) : "";
-                    })) : value;
-                }
-                function processShortcode(html, tagName) {
-                    return -1 === html.indexOf("{") || "{" == html.charAt(0) && html.length < 3 ? html : (-1 != html.indexOf("{/source}") && (html = function(html) {
-                        return -1 !== html.indexOf("{/source}") ? html.replace(/(?:(<(code|pre|samp|span)[^>]*(data-mce-type="code")?>|")?)\{source(.*?)\}([\s\S]+?)\{\/source\}/g, function(match) {
-                            return "<" === match.charAt(0) || '"' === match.charAt(0) ? match : (match = ed.dom.decode(match), 
-                            '<pre data-mce-code="shortcode" data-mce-label="sourcerer">' + ed.dom.encode(match) + "</pre>");
-                        }) : html;
-                    }(html)), tagName = tagName || "span", html.replace(/(?:(<(code|pre|samp|span)[^>]*(data-mce-type="code")?>)?)(?:\{)([\w-]+)(.*?)(?:\/?\})(?:([\s\S]+?)\{\/\4\})?/g, function(match) {
-                        return "<" === match.charAt(0) ? match : (tag = tagName, 
-                        match = (match = ed.dom.decode(match)).replace(/[\n\r]/gi, "<br />"), 
-                        ed.dom.createHTML(tag || "pre", {
-                            "data-mce-code": "shortcode",
-                            "data-mce-type": "code"
-                        }, ed.dom.encode(match)));
-                        var tag;
-                    }));
-                }
-                function processPhp(content) {
-                    return ed.settings.code_allow_php ? (content = content.replace(/\="([^"]+?)"/g, function(a, b) {
-                        return '="' + b.replace(/<\?(php)?(.+?)\?>/gi, function(x, y, z) {
-                            return "[php:start]" + ed.dom.encode(z) + "[php:end]";
-                        }) + '"';
-                    }), (content = (content = /<textarea/.test(content) ? content.replace(/<textarea([^>]*)>([\s\S]*?)<\/textarea>/gi, function(a, b, c) {
-                        return "<textarea" + b + ">" + c.replace(/<\?(php)?(.+?)\?>/gi, function(x, y, z) {
-                            return "[php:start]" + ed.dom.encode(z) + "[php:end]";
-                        }) + "</textarea>";
-                    }) : content).replace(/<([^>]+)<\?(php)?(.+?)\?>([^>]*?)>/gi, function(a, b, c, d, e) {
-                        return " " !== b.charAt(b.length) && (b += " "), "<" + b + 'data-mce-php="' + d + '" ' + e + ">";
-                    })).replace(/<\?(php)?([\s\S]+?)\?>/gi, function(match) {
-                        return createCodePre(match = match.replace(/\n/g, "<br />"), "php", "span");
-                    })) : content.replace(/<\?(php)?([\s\S]*?)\?>/gi, "");
-                }
-                function isXmlElement(name) {
-                    return !htmlSchema.isValid(name) && !function(name) {
-                        var invalid_elements = ed.settings.invalid_elements.split(",");
-                        return -1 !== tinymce.inArray(invalid_elements, name);
-                    }(name);
-                }
-                function processXML(content) {
-                    return content.replace(/<([a-z0-9\-_\:\.]+)(?:[^>]*?)\/?>((?:[\s\S]*?)<\/\1>)?/gi, function(match, tag) {
-                        var html;
-                        return "svg" === tag && !1 === ed.settings.code_allow_svg_in_xml || "math" === tag && !1 === ed.settings.code_allow_mathml_in_xml || !isXmlElement(tag) ? match : (!1 !== ed.settings.code_validate_xml && (tag = match, 
-                        html = [], new SaxParser({
-                            start: function(name, attrs, empty) {
-                                if (isValid(name)) {
-                                    var attr;
-                                    if (html.push("<", name), attrs) for (var i = 0, len = attrs.length; i < len; i++) !isValid(name, (attr = attrs[i]).name) || !0 !== ed.settings.allow_event_attributes && 0 === attr.name.indexOf("on") || html.push(" ", attr.name, '="', ed.dom.encode("" + attr.value, !0), '"');
-                                    html[html.length] = empty ? " />" : ">";
-                                }
-                            },
-                            text: function(value) {
-                                0 < value.length && (html[html.length] = value);
-                            },
-                            end: function(name) {
-                                isValid(name) && html.push("</", name, ">");
-                            },
-                            cdata: function(text) {
-                                html.push("<![CDATA[", text, "]]>");
-                            },
-                            comment: function(text) {
-                                html.push("\x3c!--", text, "--\x3e");
-                            }
-                        }, xmlSchema).parse(tag), match = html.join("")), createCodePre(match, "xml"));
-                        function isValid(tag, attr) {
-                            return isXmlElement(tag) || ed.schema.isValid(tag, attr);
-                        }
-                    });
-                }
-                function createCodePre(data, type, tag) {
-                    return !1 === code_blocks ? (data = data.replace(/<br[^>]*?>/gi, "\n"), 
-                    ed.dom.createHTML("img", {
-                        src: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
-                        "data-mce-resize": "false",
-                        "data-mce-code": type || "script",
-                        "data-mce-type": "placeholder",
-                        "data-mce-value": escape(data)
-                    })) : ed.dom.createHTML(tag || "pre", {
-                        "data-mce-code": type || "script",
+        tinymce.PluginManager.add("code", function(ed, url) {
+            var blockElements = [], htmlSchema = new tinymce.html.Schema({
+                schema: "mixed",
+                invalid_elements: ed.settings.invalid_elements
+            }), xmlSchema = new tinymce.html.Schema({
+                verify_html: !1
+            }), code_blocks = !1 !== ed.settings.code_use_blocks;
+            function processOnInsert(value) {
+                return /\{.+\}/gi.test(value) && ed.settings.code_protect_shortcode && (value = processShortcode(value, void 0)), 
+                ed.settings.code_allow_custom_xml && (value = processXML(value)), 
+                /<(\?|script|style)/.test(value) ? processPhp(value = value.replace(/<(script|style)([^>]*?)>([\s\S]*?)<\/\1>/gi, function(match, type) {
+                    return ed.getParam("code_allow_" + type) ? createCodePre(match = match.replace(/<br[^>]*?>/gi, "\n"), type) : "";
+                })) : value;
+            }
+            function processShortcode(html, tagName) {
+                return -1 === html.indexOf("{") || "{" == html.charAt(0) && html.length < 3 ? html : (-1 != html.indexOf("{/source}") && (html = function(html) {
+                    return -1 !== html.indexOf("{/source}") ? html.replace(/(?:(<(code|pre|samp|span)[^>]*(data-mce-type="code")?>|")?)\{source(.*?)\}([\s\S]+?)\{\/source\}/g, function(match) {
+                        return "<" === match.charAt(0) || '"' === match.charAt(0) ? match : (match = ed.dom.decode(match), 
+                        '<pre data-mce-code="shortcode" data-mce-label="sourcerer">' + ed.dom.encode(match) + "</pre>");
+                    }) : html;
+                }(html)), tagName = tagName || "span", html.replace(/(?:(<(code|pre|samp|span)[^>]*(data-mce-type="code")?>)?)(?:\{)([\w-]+)(.*?)(?:\/?\})(?:([\s\S]+?)\{\/\4\})?/g, function(match) {
+                    return "<" === match.charAt(0) ? match : (tag = tagName, match = (match = ed.dom.decode(match)).replace(/[\n\r]/gi, "<br />"), 
+                    ed.dom.createHTML(tag || "pre", {
+                        "data-mce-code": "shortcode",
                         "data-mce-type": "code"
-                    }, ed.dom.encode(data));
-                }
-                function handleEnterInPre(ed, node, before) {
-                    var node = ed.dom.getParents(node, blockElements.join(",")), newBlockName = ed.settings.forced_root_block || "p";
-                    !1 === ed.settings.force_block_newlines && (newBlockName = "br"), 
-                    (node = node.shift()) !== ed.getBody() && (newBlockName = ed.dom.create(newBlockName, {}, "\xa0"), 
-                    before ? node.parentNode.insertBefore(newBlockName, node) : ed.dom.insertAfter(newBlockName, node), 
-                    (before = ed.selection.getRng()).setStart(newBlockName, 0), 
-                    before.setEnd(newBlockName, 0), ed.selection.setRng(before), 
-                    ed.selection.scrollIntoView(newBlockName));
-                }
-                ed.settings.code_allow_script && (ed.settings.allow_script_urls = !0), 
-                ed.addCommand("InsertShortCode", function(ui, html) {
-                    return ed.settings.code_protect_shortcode && (html = processShortcode(html, "pre"), 
-                    tinymce.is(html)) && ed.execCommand("mceReplaceContent", !1, html), 
-                    !1;
-                }), ed.onKeyDown.add(function(ed, e) {
-                    var node;
-                    e.keyCode == VK.ENTER && "SPAN" === (node = ed.selection.getNode()).nodeName && node.getAttribute("data-mce-code") && (handleEnterInPre(ed, node), 
-                    e.preventDefault()), e.keyCode == VK.UP && e.altKey && "PRE" == (node = ed.selection.getNode()).nodeName && (handleEnterInPre(ed, node, !0), 
-                    e.preventDefault()), 9 != e.keyCode || VK.metaKeyPressed(e) || "PRE" === (node = ed.selection.getNode()).nodeName && node.getAttribute("data-mce-code") && (ed.selection.setContent("\t", {
-                        no_events: !0
-                    }), e.preventDefault()), e.keyCode !== VK.BACKSPACE && e.keyCode !== VK.DELETE || "SPAN" === (node = ed.selection.getNode()).nodeName && node.getAttribute("data-mce-code") && "placeholder" === node.getAttribute("data-mce-type") && (ed.undoManager.add(), 
-                    ed.dom.remove(node), e.preventDefault());
-                }), ed.onPreInit.add(function() {
-                    function isCodePlaceholder(node) {
-                        return "SPAN" === node.nodeName && node.getAttribute("data-mce-code") && "placeholder" == node.getAttribute("data-mce-type");
+                    }, ed.dom.encode(match)));
+                    var tag;
+                }));
+            }
+            function processPhp(content) {
+                return ed.settings.code_allow_php ? (content = content.replace(/\="([^"]+?)"/g, function(a, b) {
+                    return '="' + b.replace(/<\?(php)?(.+?)\?>/gi, function(x, y, z) {
+                        return "[php:start]" + ed.dom.encode(z) + "[php:end]";
+                    }) + '"';
+                }), (content = (content = /<textarea/.test(content) ? content.replace(/<textarea([^>]*)>([\s\S]*?)<\/textarea>/gi, function(a, b, c) {
+                    return "<textarea" + b + ">" + c.replace(/<\?(php)?(.+?)\?>/gi, function(x, y, z) {
+                        return "[php:start]" + ed.dom.encode(z) + "[php:end]";
+                    }) + "</textarea>";
+                }) : content).replace(/<([^>]+)<\?(php)?(.+?)\?>([^>]*?)>/gi, function(a, b, c, d, e) {
+                    return " " !== b.charAt(b.length) && (b += " "), "<" + b + 'data-mce-php="' + d + '" ' + e + ">";
+                })).replace(/<\?(php)?([\s\S]+?)\?>/gi, function(match) {
+                    return createCodePre(match = match.replace(/\n/g, "<br />"), "php", "span");
+                })) : content.replace(/<\?(php)?([\s\S]*?)\?>/gi, "");
+            }
+            function isXmlElement(name) {
+                return !htmlSchema.isValid(name) && !function(name) {
+                    var invalid_elements = ed.settings.invalid_elements.split(",");
+                    return -1 !== tinymce.inArray(invalid_elements, name);
+                }(name);
+            }
+            function processXML(content) {
+                return content.replace(/<([a-z0-9\-_\:\.]+)(?:[^>]*?)\/?>((?:[\s\S]*?)<\/\1>)?/gi, function(match, tag) {
+                    var html;
+                    return "svg" === tag && !1 === ed.settings.code_allow_svg_in_xml || "math" === tag && !1 === ed.settings.code_allow_mathml_in_xml || !isXmlElement(tag) ? match : (!1 !== ed.settings.code_validate_xml && (tag = match, 
+                    html = [], new SaxParser({
+                        start: function(name, attrs, empty) {
+                            if (isValid(name)) {
+                                var attr;
+                                if (html.push("<", name), attrs) for (var i = 0, len = attrs.length; i < len; i++) !isValid(name, (attr = attrs[i]).name) || !0 !== ed.settings.allow_event_attributes && 0 === attr.name.indexOf("on") || html.push(" ", attr.name, '="', ed.dom.encode("" + attr.value, !0), '"');
+                                html[html.length] = empty ? " />" : ">";
+                            }
+                        },
+                        text: function(value) {
+                            0 < value.length && (html[html.length] = value);
+                        },
+                        end: function(name) {
+                            isValid(name) && html.push("</", name, ">");
+                        },
+                        cdata: function(text) {
+                            html.push("<![CDATA[", text, "]]>");
+                        },
+                        comment: function(text) {
+                            html.push("\x3c!--", text, "--\x3e");
+                        }
+                    }, xmlSchema).parse(tag), match = html.join("")), createCodePre(match, "xml"));
+                    function isValid(tag, attr) {
+                        return isXmlElement(tag) || ed.schema.isValid(tag, attr);
                     }
-                    ed.dom.bind(ed.getDoc(), "keyup click", function(e) {
-                        var node = e.target, sel = ed.selection.getNode();
-                        ed.dom.removeClass(ed.dom.select(".mce-item-selected"), "mce-item-selected"), 
-                        node === ed.getBody() && isCodePlaceholder(sel) ? sel.parentNode !== node || sel.nextSibling || ed.dom.insertAfter(ed.dom.create("br", {
-                            "data-mce-bogus": 1
-                        }), sel) : isCodePlaceholder(node) && (e.preventDefault(), 
-                        e.stopImmediatePropagation(), ed.selection.select(node), 
-                        window.setTimeout(function() {
-                            ed.dom.addClass(node, "mce-item-selected");
-                        }, 10), e.preventDefault());
-                    });
-                    var ctrl = ed.controlManager.get("formatselect");
-                    ctrl && each([ "script", "style", "php", "shortcode", "xml" ], function(key) {
-                        var title = ed.getLang("code." + key, key);
-                        if ("shortcode" === key && ed.settings.code_protect_shortcode) return ctrl.add(title, key, {
-                            class: "mce-code-" + key
-                        }), ed.formatter.register("shortcode", {
-                            block: "pre",
-                            attributes: {
-                                "data-mce-code": "shortcode"
-                            }
-                        }), !0;
-                        "xml" === key && (ed.settings.code_allow_xml = !!ed.settings.code_allow_custom_xml), 
-                        ed.getParam("code_allow_" + key) && code_blocks && (ctrl.add(title, key, {
-                            class: "mce-code-" + key
-                        }), ed.formatter.register(key, {
-                            block: "pre",
-                            attributes: {
-                                "data-mce-code": key
-                            },
-                            onformat: function(elm, fmt, vars) {
-                                each(ed.dom.select("br", elm), function(br) {
-                                    ed.dom.replace(ed.dom.doc.createTextNode("\n"), br);
-                                });
-                            }
-                        }));
-                    }), each(ed.schema.getBlockElements(), function(block, blockName) {
-                        blockElements.push(blockName);
-                    }), ed.settings.code_protect_shortcode && (ed.textpattern.addPattern({
-                        start: "{",
-                        end: "}",
-                        cmd: "InsertShortCode",
-                        remove: !0
-                    }), ed.textpattern.addPattern({
-                        start: " {",
-                        end: "}",
-                        format: "inline-shortcode",
-                        remove: !1
-                    })), ed.formatter.register("inline-shortcode", {
-                        inline: "span",
+                });
+            }
+            function createCodePre(data, type, tag) {
+                return !1 === code_blocks ? (data = data.replace(/<br[^>]*?>/gi, "\n"), 
+                ed.dom.createHTML("img", {
+                    src: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+                    "data-mce-resize": "false",
+                    "data-mce-code": type || "script",
+                    "data-mce-type": "placeholder",
+                    "data-mce-value": escape(data)
+                })) : ed.dom.createHTML(tag || "pre", {
+                    "data-mce-code": type || "script",
+                    "data-mce-type": "code"
+                }, ed.dom.encode(data));
+            }
+            function handleEnterInPre(ed, node, before) {
+                var node = ed.dom.getParents(node, blockElements.join(",")), newBlockName = ed.settings.forced_root_block || "p";
+                !1 === ed.settings.force_block_newlines && (newBlockName = "br"), 
+                (node = node.shift()) !== ed.getBody() && (newBlockName = ed.dom.create(newBlockName, {}, "\xa0"), 
+                before ? node.parentNode.insertBefore(newBlockName, node) : ed.dom.insertAfter(newBlockName, node), 
+                (before = ed.selection.getRng()).setStart(newBlockName, 0), before.setEnd(newBlockName, 0), 
+                ed.selection.setRng(before), ed.selection.scrollIntoView(newBlockName));
+            }
+            ed.settings.code_allow_script && (ed.settings.allow_script_urls = !0), 
+            ed.addCommand("InsertShortCode", function(ui, html) {
+                return ed.settings.code_protect_shortcode && (html = processShortcode(html, "pre"), 
+                tinymce.is(html)) && ed.execCommand("mceReplaceContent", !1, html), 
+                !1;
+            }), ed.onKeyDown.add(function(ed, e) {
+                var node;
+                e.keyCode == VK.ENTER && "SPAN" === (node = ed.selection.getNode()).nodeName && node.getAttribute("data-mce-code") && (handleEnterInPre(ed, node), 
+                e.preventDefault()), e.keyCode == VK.UP && e.altKey && "PRE" == (node = ed.selection.getNode()).nodeName && (handleEnterInPre(ed, node, !0), 
+                e.preventDefault()), 9 != e.keyCode || VK.metaKeyPressed(e) || "PRE" === (node = ed.selection.getNode()).nodeName && node.getAttribute("data-mce-code") && (ed.selection.setContent("\t", {
+                    no_events: !0
+                }), e.preventDefault()), e.keyCode !== VK.BACKSPACE && e.keyCode !== VK.DELETE || "SPAN" === (node = ed.selection.getNode()).nodeName && node.getAttribute("data-mce-code") && "placeholder" === node.getAttribute("data-mce-type") && (ed.undoManager.add(), 
+                ed.dom.remove(node), e.preventDefault());
+            }), ed.onPreInit.add(function() {
+                function isCodePlaceholder(node) {
+                    return "SPAN" === node.nodeName && node.getAttribute("data-mce-code") && "placeholder" == node.getAttribute("data-mce-type");
+                }
+                ed.dom.bind(ed.getDoc(), "keyup click", function(e) {
+                    var node = e.target, sel = ed.selection.getNode();
+                    ed.dom.removeClass(ed.dom.select(".mce-item-selected"), "mce-item-selected"), 
+                    node === ed.getBody() && isCodePlaceholder(sel) ? sel.parentNode !== node || sel.nextSibling || ed.dom.insertAfter(ed.dom.create("br", {
+                        "data-mce-bogus": 1
+                    }), sel) : isCodePlaceholder(node) && (e.preventDefault(), e.stopImmediatePropagation(), 
+                    ed.selection.select(node), window.setTimeout(function() {
+                        ed.dom.addClass(node, "mce-item-selected");
+                    }, 10), e.preventDefault());
+                });
+                var ctrl = ed.controlManager.get("formatselect");
+                ctrl && each([ "script", "style", "php", "shortcode", "xml" ], function(key) {
+                    var title = ed.getLang("code." + key, key);
+                    if ("shortcode" === key && ed.settings.code_protect_shortcode) return ctrl.add(title, key, {
+                        class: "mce-code-" + key
+                    }), ed.formatter.register("shortcode", {
+                        block: "pre",
                         attributes: {
                             "data-mce-code": "shortcode"
                         }
-                    }), ed.selection.onSetContent.add(function(sel, o) {
-                        each(ed.dom.select("pre[data-mce-code]", ed.getBody()), function(elm) {
-                            (elm = ed.dom.getParent(elm, "p")) && 1 === elm.childNodes.length && ed.dom.remove(elm, 1);
-                        });
-                    }), ed.parser.addNodeFilter("script,style,noscript", function(nodes) {
-                        for (var node, pre, text, value, placeholder, i = nodes.length; i--; ) (node = nodes[i]).firstChild && (node.firstChild.value = node.firstChild.value.replace(/<span([^>]+)>([\s\S]+?)<\/span>/gi, function(match, attr, content) {
-                            return -1 === attr.indexOf("data-mce-code") ? match : ed.dom.decode(content);
-                        })), code_blocks ? (value = new Serializer({
-                            validate: !1
-                        }).serialize(node), value = tinymce.trim(value), (pre = new Node("pre", 1)).attr({
-                            "data-mce-code": node.name
-                        }), text = createTextNode(value, !1), pre.append(text), 
-                        node.replace(pre)) : (value = "", node.firstChild && (value = tinymce.trim(node.firstChild.value)), 
-                        placeholder = Node.create("img", {
-                            src: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
-                            "data-mce-code": node.name,
-                            "data-mce-type": "placeholder",
-                            "data-mce-resize": "false",
-                            title: ed.dom.encode(value)
-                        }), each(node.attributes, function(attr) {
-                            placeholder.attr("data-mce-p-" + attr.name, attr.value);
-                        }), value && placeholder.attr("data-mce-value", escape(value)), 
-                        node.replace(placeholder));
-                    }), ed.parser.addAttributeFilter("data-mce-code", function(nodes, name) {
-                        var node, i = nodes.length;
-                        function isBlockNode(node) {
-                            return -1 != tinymce.inArray(blockElements, node.name);
+                    }), !0;
+                    "xml" === key && (ed.settings.code_allow_xml = !!ed.settings.code_allow_custom_xml), 
+                    ed.getParam("code_allow_" + key) && code_blocks && (ctrl.add(title, key, {
+                        class: "mce-code-" + key
+                    }), ed.formatter.register(key, {
+                        block: "pre",
+                        attributes: {
+                            "data-mce-code": key
+                        },
+                        onformat: function(elm, fmt, vars) {
+                            each(ed.dom.select("br", elm), function(br) {
+                                ed.dom.replace(ed.dom.doc.createTextNode("\n"), br);
+                            });
                         }
-                        for (;i--; ) {
-                            var type, parent = (node = nodes[i]).parent;
-                            "placeholder" == node.attr("data-mce-type") || "shortcode" !== (type = node.attr(name)) && "php" !== type || ((type = node.firstChild.value) && (node.firstChild.value = type.replace(/<br[\s\/]*>/g, "\n")), 
-                            parent && (parent.attr(name) ? node.unwrap() : "body" === parent.name || function(node) {
-                                var child = node.parent.firstChild, count = 0;
-                                if (child) do {
-                                    if (1 === child.type) {
-                                        if (child.attributes.map["data-mce-type"] || child.attributes.map["data-mce-bogus"]) continue;
-                                        if (child === node) continue;
-                                        count++;
-                                    }
-                                    8 === child.type && count++, 3 !== child.type || /^[ \t\r\n]*$/.test(child.value) || count++;
-                                } while (child = child.next);
-                                return 0 === count;
-                            }(node) || !function(node) {
-                                return "span" == node.name && (node.next && ("#text" == node.next.type || !isBlockNode(node.next)) || node.prev && ("#text" == node.prev.type || !isBlockNode(node.prev)));
-                            }(node) ? node.name = "pre" : "span" == node.name && node === parent.lastChild && (type = createTextNode("\xa0"), 
-                            parent.append(type))));
-                        }
-                    }), ed.serializer.addAttributeFilter("data-mce-code", function(nodes, name) {
-                        for (var i = nodes.length; i--; ) {
-                            var node, root_block = !1, type = (node = nodes[i]).attr(name);
-                            if ("img" === node.name) {
-                                var key, elm = new Node(type, 1);
-                                for (key in node.attributes.map) {
-                                    var val = node.attributes.map[key];
-                                    -1 !== key.indexOf("data-mce-p-") ? key = key.substr(11) : val = null, 
-                                    elm.attr(key, val);
-                                }
-                                (value = node.attr("data-mce-value")) && (text = createTextNode(unescape(value)), 
-                                "php" == type || "shortcode" == type ? elm = text : elm.append(text)), 
-                                node.replace(elm);
-                            } else if (node.isEmpty() && node.remove(), "xml" !== type) {
-                                "script" !== type && "style" !== type || (root_block = type);
-                                var value, parser, child = node.firstChild, newNode = node.clone(!0), text = "";
-                                if (child) for (;/(shortcode|php)/.test(node.attr("data-mce-code")) || (value = "br" == child.name ? "\n" : child.value) && (text += value), 
-                                child = child.next; );
-                                text && (newNode.empty(), parser = new DomParser({
-                                    validate: !1
-                                }), "script" !== type && "style" !== type || parser.addNodeFilter(type, function(items, name) {
-                                    for (var n = items.length; n--; ) {
-                                        var item = items[n];
-                                        each(item.attributes, function(attr) {
-                                            if (!attr) return !0;
-                                            !1 === ed.schema.isValid(name, attr.name) && item.attr(attr.name, null);
-                                        });
-                                    }
-                                }), parser = parser.parse(text, {
-                                    forced_root_block: root_block
-                                }), newNode.append(parser)), node.replace(newNode), 
-                                "shortcode" === type && "pre" === newNode.name && (root_block = createTextNode("\n"), 
-                                newNode.append(root_block), newNode.unwrap());
-                            }
-                        }
-                    }), ed.onGetClipboardContent.add(function(ed, content) {
-                        var text = content["text/plain"] || "";
-                        !(text = tinymce.trim(text)) || (ed = ed.selection.getNode()) && "PRE" === ed.nodeName || (ed = processOnInsert(text)) !== text && (content["text/plain"] = "", 
-                        content["text/html"] = content["x-tinymce/html"] = ed);
-                    });
-                }), ed.onInit.add(function() {
-                    ed.theme && ed.theme.onResolveName && ed.theme.onResolveName.add(function(theme, o) {
-                        var node = o.node;
-                        node.getAttribute("data-mce-code") && (o.name = node.getAttribute("data-mce-code"));
-                    });
-                }), ed.onBeforeSetContent.addToTop(function(ed, o) {
-                    ed.settings.code_protect_shortcode && -1 === o.content.indexOf('data-mce-code="shortcode"') && (o.content = processShortcode(o.content)), 
-                    ed.settings.code_allow_custom_xml && o.content && o.load && (o.content = processXML(o.content)), 
-                    /<(\?|script|style)/.test(o.content) && (ed.settings.code_allow_script || (o.content = o.content.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, "")), 
-                    ed.settings.code_allow_style || (o.content = o.content.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, "")), 
-                    o.content = processPhp(o.content));
-                }), ed.onPostProcess.add(function(ed, o) {
-                    o.get && (/(data-mce-php|\[php:start\])/.test(o.content) && (o.content = o.content.replace(/({source})?\[php:\s?start\](.*?)\[php:\s?end\]/g, function(match, pre, code) {
-                        return (pre || "") + "<?php" + ed.dom.decode(code) + "?>";
-                    }), o.content = o.content.replace(/<textarea([^>]*)>([\s\S]*?)<\/textarea>/gi, function(a, b, c) {
-                        return "<textarea" + b + ">" + (/&lt;\?php/.test(c) ? ed.dom.decode(c) : c) + "</textarea>";
-                    }), o.content = o.content.replace(/data-mce-php="([^"]+?)"/g, function(a, b) {
-                        return "<?php" + ed.dom.decode(b) + "?>";
-                    })), ed.settings.code_protect_shortcode && (o.content = o.content.replace(/\{([\s\S]+?)\}/gi, function(match, content) {
-                        return "{" + ed.dom.decode(content) + "}";
-                    }), o.content = o.content.replace(/\{source([^\}]*?)\}([\s\S]+?)\{\/source\}/gi, function(match, start, content) {
-                        return "{source" + start + "}" + ed.dom.decode(content) + "{/source}";
-                    }), o.content = o.content.replace(/\{([\w-]+)(.*?)\}([\s\S]+)\{\/\1\}/gi, function(match, start, attr, content) {
-                        return "{" + start + attr + "}" + ed.dom.decode(content) + "{/" + start + "}";
-                    })), o.content = o.content.replace(/<(pre|span)([^>]+?)>([\s\S]*?)<\/\1>/gi, function(match, tag, attr, content) {
-                        return -1 === attr.indexOf("data-mce-code") ? match : (content = tinymce.trim(content), 
-                        content = ed.dom.decode(content), "script" != (attr = ed.dom.create("div", {}, match).firstChild.getAttribute("data-mce-code")) && (content = content.replace(/<br[^>]*?>/gi, "\n")), 
-                        "php" == attr && (content = content.replace(/<\?(php)?/gi, "").replace(/\?>/g, ""), 
-                        content = "<?php\n" + tinymce.trim(content) + "\n?>"), content);
-                    }), o.content = o.content.replace(/<!--mce:protected ([\s\S]+?)-->/gi, function(match, content) {
-                        return unescape(content);
                     }));
+                }), each(ed.schema.getBlockElements(), function(block, blockName) {
+                    blockElements.push(blockName);
+                }), ed.settings.code_protect_shortcode && (ed.textpattern.addPattern({
+                    start: "{",
+                    end: "}",
+                    cmd: "InsertShortCode",
+                    remove: !0
+                }), ed.textpattern.addPattern({
+                    start: " {",
+                    end: "}",
+                    format: "inline-shortcode",
+                    remove: !1
+                })), ed.formatter.register("inline-shortcode", {
+                    inline: "span",
+                    attributes: {
+                        "data-mce-code": "shortcode"
+                    }
+                }), ed.selection.onSetContent.add(function(sel, o) {
+                    each(ed.dom.select("pre[data-mce-code]", ed.getBody()), function(elm) {
+                        (elm = ed.dom.getParent(elm, "p")) && 1 === elm.childNodes.length && ed.dom.remove(elm, 1);
+                    });
+                }), ed.parser.addNodeFilter("script,style,noscript", function(nodes) {
+                    for (var node, pre, text, value, placeholder, i = nodes.length; i--; ) (node = nodes[i]).firstChild && (node.firstChild.value = node.firstChild.value.replace(/<span([^>]+)>([\s\S]+?)<\/span>/gi, function(match, attr, content) {
+                        return -1 === attr.indexOf("data-mce-code") ? match : ed.dom.decode(content);
+                    })), code_blocks ? (value = new Serializer({
+                        validate: !1
+                    }).serialize(node), value = tinymce.trim(value), (pre = new Node("pre", 1)).attr({
+                        "data-mce-code": node.name
+                    }), text = createTextNode(value, !1), pre.append(text), node.replace(pre)) : (value = "", 
+                    node.firstChild && (value = tinymce.trim(node.firstChild.value)), 
+                    placeholder = Node.create("img", {
+                        src: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+                        "data-mce-code": node.name,
+                        "data-mce-type": "placeholder",
+                        "data-mce-resize": "false",
+                        title: ed.dom.encode(value)
+                    }), each(node.attributes, function(attr) {
+                        placeholder.attr("data-mce-p-" + attr.name, attr.value);
+                    }), value && placeholder.attr("data-mce-value", escape(value)), 
+                    node.replace(placeholder));
+                }), ed.parser.addAttributeFilter("data-mce-code", function(nodes, name) {
+                    var node, i = nodes.length;
+                    function isBlockNode(node) {
+                        return -1 != tinymce.inArray(blockElements, node.name);
+                    }
+                    for (;i--; ) {
+                        var type, parent = (node = nodes[i]).parent;
+                        "placeholder" == node.attr("data-mce-type") || "shortcode" !== (type = node.attr(name)) && "php" !== type || ((type = node.firstChild.value) && (node.firstChild.value = type.replace(/<br[\s\/]*>/g, "\n")), 
+                        parent && (parent.attr(name) ? node.unwrap() : "body" === parent.name || function(node) {
+                            var child = node.parent.firstChild, count = 0;
+                            if (child) do {
+                                if (1 === child.type) {
+                                    if (child.attributes.map["data-mce-type"] || child.attributes.map["data-mce-bogus"]) continue;
+                                    if (child === node) continue;
+                                    count++;
+                                }
+                                8 === child.type && count++, 3 !== child.type || /^[ \t\r\n]*$/.test(child.value) || count++;
+                            } while (child = child.next);
+                            return 0 === count;
+                        }(node) || !function(node) {
+                            return "span" == node.name && (node.next && ("#text" == node.next.type || !isBlockNode(node.next)) || node.prev && ("#text" == node.prev.type || !isBlockNode(node.prev)));
+                        }(node) ? node.name = "pre" : "span" == node.name && node === parent.lastChild && (type = createTextNode("\xa0"), 
+                        parent.append(type))));
+                    }
+                }), ed.serializer.addAttributeFilter("data-mce-code", function(nodes, name) {
+                    for (var i = nodes.length; i--; ) {
+                        var node, root_block = !1, type = (node = nodes[i]).attr(name);
+                        if ("img" === node.name) {
+                            var key, elm = new Node(type, 1);
+                            for (key in node.attributes.map) {
+                                var val = node.attributes.map[key];
+                                -1 !== key.indexOf("data-mce-p-") ? key = key.substr(11) : val = null, 
+                                elm.attr(key, val);
+                            }
+                            (value = node.attr("data-mce-value")) && (text = createTextNode(unescape(value)), 
+                            "php" == type || "shortcode" == type ? elm = text : elm.append(text)), 
+                            node.replace(elm);
+                        } else if (node.isEmpty() && node.remove(), "xml" !== type) {
+                            "script" !== type && "style" !== type || (root_block = type);
+                            var value, parser, child = node.firstChild, newNode = node.clone(!0), text = "";
+                            if (child) for (;/(shortcode|php)/.test(node.attr("data-mce-code")) || (value = "br" == child.name ? "\n" : child.value) && (text += value), 
+                            child = child.next; );
+                            text && (newNode.empty(), parser = new DomParser({
+                                validate: !1
+                            }), "script" !== type && "style" !== type || parser.addNodeFilter(type, function(items, name) {
+                                for (var n = items.length; n--; ) {
+                                    var item = items[n];
+                                    each(item.attributes, function(attr) {
+                                        if (!attr) return !0;
+                                        !1 === ed.schema.isValid(name, attr.name) && item.attr(attr.name, null);
+                                    });
+                                }
+                            }), parser = parser.parse(text, {
+                                forced_root_block: root_block
+                            }), newNode.append(parser)), node.replace(newNode), 
+                            "shortcode" === type && "pre" === newNode.name && (root_block = createTextNode("\n"), 
+                            newNode.append(root_block), newNode.unwrap());
+                        }
+                    }
+                }), ed.onGetClipboardContent.add(function(ed, content) {
+                    var text = content["text/plain"] || "";
+                    !(text = tinymce.trim(text)) || (ed = ed.selection.getNode()) && "PRE" === ed.nodeName || (ed = processOnInsert(text)) !== text && (content["text/plain"] = "", 
+                    content["text/html"] = content["x-tinymce/html"] = ed);
                 });
-            }
-        }), tinymce.PluginManager.add("code", tinymce.plugins.CodePlugin);
+            }), ed.onInit.add(function() {
+                ed.theme && ed.theme.onResolveName && ed.theme.onResolveName.add(function(theme, o) {
+                    var node = o.node;
+                    node.getAttribute("data-mce-code") && (o.name = node.getAttribute("data-mce-code"));
+                });
+            }), ed.onBeforeSetContent.addToTop(function(ed, o) {
+                ed.settings.code_protect_shortcode && -1 === o.content.indexOf('data-mce-code="shortcode"') && (o.content = processShortcode(o.content)), 
+                ed.settings.code_allow_custom_xml && o.content && o.load && (o.content = processXML(o.content)), 
+                /<(\?|script|style)/.test(o.content) && (ed.settings.code_allow_script || (o.content = o.content.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, "")), 
+                ed.settings.code_allow_style || (o.content = o.content.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, "")), 
+                o.content = processPhp(o.content));
+            }), ed.onPostProcess.add(function(ed, o) {
+                o.get && (/(data-mce-php|\[php:start\])/.test(o.content) && (o.content = o.content.replace(/({source})?\[php:\s?start\](.*?)\[php:\s?end\]/g, function(match, pre, code) {
+                    return (pre || "") + "<?php" + ed.dom.decode(code) + "?>";
+                }), o.content = o.content.replace(/<textarea([^>]*)>([\s\S]*?)<\/textarea>/gi, function(a, b, c) {
+                    return "<textarea" + b + ">" + (/&lt;\?php/.test(c) ? ed.dom.decode(c) : c) + "</textarea>";
+                }), o.content = o.content.replace(/data-mce-php="([^"]+?)"/g, function(a, b) {
+                    return "<?php" + ed.dom.decode(b) + "?>";
+                })), ed.settings.code_protect_shortcode && (o.content = o.content.replace(/\{([\s\S]+?)\}/gi, function(match, content) {
+                    return "{" + ed.dom.decode(content) + "}";
+                }), o.content = o.content.replace(/\{source([^\}]*?)\}([\s\S]+?)\{\/source\}/gi, function(match, start, content) {
+                    return "{source" + start + "}" + ed.dom.decode(content) + "{/source}";
+                }), o.content = o.content.replace(/\{([\w-]+)(.*?)\}([\s\S]+)\{\/\1\}/gi, function(match, start, attr, content) {
+                    return "{" + start + attr + "}" + ed.dom.decode(content) + "{/" + start + "}";
+                })), o.content = o.content.replace(/<(pre|span)([^>]+?)>([\s\S]*?)<\/\1>/gi, function(match, tag, attr, content) {
+                    return -1 === attr.indexOf("data-mce-code") ? match : (content = tinymce.trim(content), 
+                    content = ed.dom.decode(content), "script" != (attr = ed.dom.create("div", {}, match).firstChild.getAttribute("data-mce-code")) && (content = content.replace(/<br[^>]*?>/gi, "\n")), 
+                    "php" == attr && (content = content.replace(/<\?(php)?/gi, "").replace(/\?>/g, ""), 
+                    content = "<?php\n" + tinymce.trim(content) + "\n?>"), content);
+                }), o.content = o.content.replace(/<!--mce:protected ([\s\S]+?)-->/gi, function(match, content) {
+                    return unescape(content);
+                }));
+            });
+        });
     }(), function() {
         var each = tinymce.each;
         tinymce.PluginManager.add("effects", function(ed, url) {
@@ -12379,134 +12344,132 @@
         });
     }(), function() {
         var VK = tinymce.VK, each = tinymce.each, blocks = [];
-        tinymce.create("tinymce.plugins.FormatPlugin", {
-            init: function(ed, url) {
-                var keyCode, self = this;
-                (this.editor = ed).addButton("italic", {
-                    title: "advanced.italic_desc",
-                    onclick: function(e) {
-                        e.preventDefault(), ed.focus(), e.shiftKey ? ed.formatter.toggle("italic-i") : ed.formatter.toggle("italic"), 
-                        ed.undoManager.add();
-                    }
-                }), ed.addShortcut("meta+shift+i", "italic.desc", function() {
-                    ed.formatter.apply("italic-i");
-                }), ed.addCommand("mceSoftHyphen", function() {
-                    ed.execCommand("mceInsertContent", !1, ed.plugins.visualchars && ed.plugins.visualchars.state ? '<span data-mce-bogus="1" class="mce-item-hidden mce-item-shy">&shy;</span>' : "&shy;");
-                }), keyCode = 189, tinymce.isGecko && (keyCode = 173), ed.addShortcut("ctrl+shift+" + keyCode, "softhyphen.desc", "mceSoftHyphen"), 
-                ed.onPreInit.add(function(ed) {
-                    each(ed.schema.getBlockElements(), function(v, k) {
-                        if (/\W/.test(k)) return !0;
-                        blocks.push(k.toLowerCase());
-                    }), ed.formatter.register("aside", {
-                        block: "aside",
-                        remove: "all",
-                        wrapper: !0
-                    }), ed.formatter.register("p", {
-                        block: "p",
-                        remove: "all"
-                    }), ed.formatter.register("div", {
-                        block: "div",
-                        onmatch: !!ed.settings.forced_root_block && function() {
-                            return !1;
-                        }
-                    }), ed.formatter.register("div_container", {
-                        block: "div",
-                        wrapper: !0,
-                        onmatch: !!ed.settings.forced_root_block && function() {
-                            return !1;
-                        }
-                    }), ed.formatter.register("span", {
-                        inline: "span",
-                        remove: "all",
-                        onmatch: function() {
-                            return !1;
-                        }
-                    }), ed.formatter.register("section", {
-                        block: "section",
-                        remove: "all",
-                        wrapper: !0,
-                        merge_siblings: !1
-                    }), ed.formatter.register("article", {
-                        block: "article",
-                        remove: "all",
-                        wrapper: !0,
-                        merge_siblings: !1
-                    }), ed.formatter.register("footer", {
-                        block: "footer",
-                        remove: "all",
-                        wrapper: !0,
-                        merge_siblings: !1
-                    }), ed.formatter.register("header", {
-                        block: "header",
-                        remove: "all",
-                        wrapper: !0,
-                        merge_siblings: !1
-                    }), ed.formatter.register("nav", {
-                        block: "nav",
-                        remove: "all",
-                        wrapper: !0,
-                        merge_siblings: !1
-                    }), ed.formatter.register("code", {
-                        inline: "code",
-                        remove: "all"
-                    }), ed.formatter.register("samp", {
-                        inline: "samp",
-                        remove: "all"
-                    }), ed.formatter.register("blockquote", {
-                        block: "blockquote",
-                        wrapper: 1,
-                        remove: "all",
-                        merge_siblings: !1
-                    }), ed.formatter.register("italic-i", {
-                        inline: "i",
-                        remove: "all"
-                    });
-                }), ed.settings.removeformat = [ {
-                    selector: "b,strong,em,i,font,u,strike,sub,sup,dfn,code,samp,kbd,var,cite,mark,q,footer",
-                    remove: "all",
-                    split: !0,
-                    expand: !1,
-                    block_expand: !0,
-                    deep: !0
-                } ], ed.onKeyDown.add(function(ed, e) {
-                    e.keyCode !== VK.ENTER && e.keyCode !== VK.UP && e.keyCode !== VK.DOWN || !e.altKey || self._clearBlocks(ed, e);
-                }), ed.onKeyUp.addToTop(function(ed, e) {
-                    e.keyCode === VK.ENTER && "DIV" === (e = ed.selection.getNode()).nodeName && ed.settings.force_block_newlines && (!1 === ed.settings.keep_styles && ed.dom.removeAllAttribs(e), 
-                    ed.formatter.apply("p"));
-                }), ed.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
-                    var p, n = ed.selection.getNode();
-                    switch (cmd) {
-                      case "FormatBlock":
-                        if (!v) {
-                            if (o.terminate = !0, n === ed.getBody()) return;
-                            ed.undoManager.add(), (p = ed.dom.getParent(n, blocks.join(",")) || "") && (name = p.nodeName.toLowerCase(), 
-                            ed.formatter.get(name)) && ed.formatter.remove(name);
-                            var name = ed.controlManager.get("formatselect");
-                            name && name.select(p);
-                        }
-                        "dl" === v && (ed.execCommand("InsertDefinitionList"), o.terminate = !0), 
-                        "dt" !== v && "dd" !== v || (n && !ed.dom.getParent(n, "dl") && ed.execCommand("InsertDefinitionList"), 
-                        "dt" === v && "DD" === n.nodeName && ed.dom.rename(n, "DT"), 
-                        "dd" === v && "DT" === n.nodeName && ed.dom.rename(n, "DD"), 
-                        o.terminate = !0);
-                        break;
-
-                      case "RemoveFormat":
-                        v || ed.dom.isBlock(n) || (name = ed.controlManager.get("styleselect")) && name.selectedValue && ed.execCommand("mceToggleFormat", !1, name.selectedValue);
-                    }
-                }), ed.onExecCommand.add(function(ed, cmd, ui, v, o) {
-                    var n = ed.selection.getNode();
-                    "mceToggleFormat" !== cmd || "dt" !== v && "dd" !== v || "DL" === n.nodeName && 0 === ed.dom.select("dt,dd", n).length && ed.formatter.remove("dl");
-                });
-            },
-            _clearBlocks: function(ed, e) {
+        tinymce.PluginManager.add("format", function(ed, url) {
+            var keyCode;
+            function clearBlocks(e) {
                 var n = ed.selection.getNode(), tag = ed.getParam("forced_root_block", "p") || (ed.getParam("force_block_newlines") ? "p" : "br"), p = ed.dom.getParents(n, blocks.join(","));
                 (p = ed.dom.getParent(n, "td,th") ? ed.dom.getParents(n, "td,th,tr,tfoot,thead,table") : p) && 1 < p.length && (e.preventDefault(), 
                 (n = p[p.length - 1]) !== ed.getBody()) && (p = ed.dom.create(tag, {}, "\xa0"), 
                 e.keyCode === VK.ENTER || e.keyCode === VK.DOWN ? ed.dom.insertAfter(p, n) : ed.dom.insertBefore(p, n), 
                 ed.selection.select(p), ed.selection.collapse(1));
             }
-        }), tinymce.PluginManager.add("format", tinymce.plugins.FormatPlugin);
+            ed.addButton("italic", {
+                title: "advanced.italic_desc",
+                onclick: function(e) {
+                    e.preventDefault(), ed.focus(), e.shiftKey ? ed.formatter.toggle("italic-i") : ed.formatter.toggle("italic"), 
+                    ed.undoManager.add();
+                }
+            }), ed.addShortcut("meta+shift+i", "italic.desc", function() {
+                ed.formatter.apply("italic-i");
+            }), ed.addCommand("mceSoftHyphen", function() {
+                ed.execCommand("mceInsertContent", !1, ed.plugins.visualchars && ed.plugins.visualchars.state ? '<span data-mce-bogus="1" class="mce-item-hidden mce-item-shy">&shy;</span>' : "&shy;");
+            }), keyCode = 189, tinymce.isGecko && (keyCode = 173), ed.addShortcut("ctrl+shift+" + keyCode, "softhyphen.desc", "mceSoftHyphen"), 
+            ed.onPreInit.add(function(ed) {
+                each(ed.schema.getBlockElements(), function(v, k) {
+                    if (/\W/.test(k)) return !0;
+                    blocks.push(k.toLowerCase());
+                }), ed.formatter.register("aside", {
+                    block: "aside",
+                    remove: "all",
+                    wrapper: !0
+                }), ed.formatter.register("p", {
+                    block: "p",
+                    remove: "all"
+                }), ed.formatter.register("div", {
+                    block: "div",
+                    onmatch: !!ed.settings.forced_root_block && function() {
+                        return !1;
+                    }
+                }), ed.formatter.register("div_container", {
+                    block: "div",
+                    wrapper: !0,
+                    onmatch: !!ed.settings.forced_root_block && function() {
+                        return !1;
+                    }
+                }), ed.formatter.register("span", {
+                    inline: "span",
+                    remove: "all",
+                    onmatch: function() {
+                        return !1;
+                    }
+                }), ed.formatter.register("section", {
+                    block: "section",
+                    remove: "all",
+                    wrapper: !0,
+                    merge_siblings: !1
+                }), ed.formatter.register("article", {
+                    block: "article",
+                    remove: "all",
+                    wrapper: !0,
+                    merge_siblings: !1
+                }), ed.formatter.register("footer", {
+                    block: "footer",
+                    remove: "all",
+                    wrapper: !0,
+                    merge_siblings: !1
+                }), ed.formatter.register("header", {
+                    block: "header",
+                    remove: "all",
+                    wrapper: !0,
+                    merge_siblings: !1
+                }), ed.formatter.register("nav", {
+                    block: "nav",
+                    remove: "all",
+                    wrapper: !0,
+                    merge_siblings: !1
+                }), ed.formatter.register("code", {
+                    inline: "code",
+                    remove: "all"
+                }), ed.formatter.register("samp", {
+                    inline: "samp",
+                    remove: "all"
+                }), ed.formatter.register("blockquote", {
+                    block: "blockquote",
+                    wrapper: 1,
+                    remove: "all",
+                    merge_siblings: !1
+                }), ed.formatter.register("italic-i", {
+                    inline: "i",
+                    remove: "all"
+                });
+            }), ed.settings.removeformat = [ {
+                selector: "b,strong,em,i,font,u,strike,sub,sup,dfn,code,samp,kbd,var,cite,mark,q,footer",
+                remove: "all",
+                split: !0,
+                expand: !1,
+                block_expand: !0,
+                deep: !0
+            } ], ed.onKeyDown.add(function(ed, e) {
+                e.keyCode !== VK.ENTER && e.keyCode !== VK.UP && e.keyCode !== VK.DOWN || !e.altKey || clearBlocks(e);
+            }), ed.onKeyUp.addToTop(function(ed, e) {
+                e.keyCode === VK.ENTER && "DIV" === (e = ed.selection.getNode()).nodeName && ed.settings.force_block_newlines && (!1 === ed.settings.keep_styles && ed.dom.removeAllAttribs(e), 
+                ed.formatter.apply("p"));
+            }), ed.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
+                var p, n = ed.selection.getNode();
+                switch (cmd) {
+                  case "FormatBlock":
+                    if (!v) {
+                        if (o.terminate = !0, n === ed.getBody()) return;
+                        ed.undoManager.add(), (p = ed.dom.getParent(n, blocks.join(",")) || "") && (name = p.nodeName.toLowerCase(), 
+                        ed.formatter.get(name)) && ed.formatter.remove(name);
+                        var name = ed.controlManager.get("formatselect");
+                        name && name.select(p);
+                    }
+                    "dl" === v && (ed.execCommand("InsertDefinitionList"), o.terminate = !0), 
+                    "dt" !== v && "dd" !== v || (n && !ed.dom.getParent(n, "dl") && ed.execCommand("InsertDefinitionList"), 
+                    "dt" === v && "DD" === n.nodeName && ed.dom.rename(n, "DT"), 
+                    "dd" === v && "DT" === n.nodeName && ed.dom.rename(n, "DD"), 
+                    o.terminate = !0);
+                    break;
+
+                  case "RemoveFormat":
+                    v || ed.dom.isBlock(n) || (name = ed.controlManager.get("styleselect")) && name.selectedValue && ed.execCommand("mceToggleFormat", !1, name.selectedValue);
+                }
+            }), ed.onExecCommand.add(function(ed, cmd, ui, v, o) {
+                var n = ed.selection.getNode();
+                "mceToggleFormat" !== cmd || "dt" !== v && "dd" !== v || "DL" === n.nodeName && 0 === ed.dom.select("dt,dd", n).length && ed.formatter.remove("dl");
+            });
+        });
     }(), function() {
         var each = tinymce.each, DOM = tinymce.DOM, PreviewCss = tinymce.util.PreviewCss, rgba = {}, luma = {};
         function getLuminance(val) {
@@ -12534,25 +12497,10 @@
             return color1 = getLuminance(color1), color2 = getLuminance(color2), 
             wcag2 = wcag2 || 4.5, limit = limit || 21, (color1 = (Math.max(color1, color2) + .05) / (Math.min(color1, color2) + .05)) >= parseFloat(wcag2) && color1 < parseFloat(limit);
         }
-        tinymce.create("tinymce.plugins.ImportCSS", {
-            init: function(ed, url) {
-                this.editor = ed;
-                var self = this;
-                ed.onImportCSS = new tinymce.util.Dispatcher(), ed.onImportCSS.add(function() {
-                    tinymce.is(ed.settings.importcss_classes) || self.get();
-                }), ed.onInit.add(function() {
-                    ed.onImportCSS.dispatch(), "auto" !== ed.settings.content_style_reset || ed.dom.hasClass(ed.getBody(), "mceContentReset") || self._setHighContrastMode(), 
-                    self._setGuideLinesColor();
-                }), ed.onFocus.add(function(ed) {
-                    ed._hasGuidelines || self._setGuideLinesColor();
-                });
-            },
-            _setHighContrastMode: function() {
-                var hex, ed = this.editor, bodybg = ed.dom.getStyle(ed.getBody(), "background-color", !0), color = ed.dom.getStyle(ed.getBody(), "color", !0);
-                bodybg && color && ((hex = ed.dom.toHex(bodybg)) == ed.dom.toHex(color) && "#000000" === hex || isReadable(color, bodybg, 3) || ed.dom.addClass(ed.getBody(), "mceContentReset"));
-            },
-            _setGuideLinesColor: function() {
-                var ed = this.editor, gray = [ "#000000", "#080808", "#101010", "#181818", "#202020", "#282828", "#303030", "#383838", "#404040", "#484848", "#505050", "#585858", "#606060", "#686868", "#696969", "#707070", "#787878", "#808080", "#888888", "#909090", "#989898", "#a0a0a0", "#a8a8a8", "#a9a9a9", "#b0b0b0", "#b8b8b8", "#bebebe", "#c0c0c0", "#c8c8c8", "#d0d0d0", "#d3d3d3", "#d8d8d8", "#dcdcdc", "#e0e0e0", "#e8e8e8", "#f0f0f0", "#f5f5f5", "#f8f8f8", "#ffffff" ], blue = [ "#0d47a1", "#1565c0", "#1976d2", "#1e88e5", "#2196f3", "#42a5f5", "#64b5f6", "#90caf9", "#bbdefb", "#e3f2fd" ], guidelines = "#787878", control = "#1e88e5", bodybg = ed.dom.getStyle(ed.getBody(), "background-color", !0), color = ed.dom.getStyle(ed.getBody(), "color", !0);
+        tinymce.PluginManager.add("importcss", function(ed, url) {
+            var self = this;
+            function setGuideLinesColor() {
+                var gray = [ "#000000", "#080808", "#101010", "#181818", "#202020", "#282828", "#303030", "#383838", "#404040", "#484848", "#505050", "#585858", "#606060", "#686868", "#696969", "#707070", "#787878", "#808080", "#888888", "#909090", "#989898", "#a0a0a0", "#a8a8a8", "#a9a9a9", "#b0b0b0", "#b8b8b8", "#bebebe", "#c0c0c0", "#c8c8c8", "#d0d0d0", "#d3d3d3", "#d8d8d8", "#dcdcdc", "#e0e0e0", "#e8e8e8", "#f0f0f0", "#f5f5f5", "#f8f8f8", "#ffffff" ], blue = [ "#0d47a1", "#1565c0", "#1976d2", "#1e88e5", "#2196f3", "#42a5f5", "#64b5f6", "#90caf9", "#bbdefb", "#e3f2fd" ], guidelines = "#787878", control = "#1e88e5", bodybg = ed.dom.getStyle(ed.getBody(), "background-color", !0), color = ed.dom.getStyle(ed.getBody(), "color", !0);
                 if (bodybg) {
                     ed._hasGuidelines = !0;
                     for (var i = 0; i < gray.length; i++) if (isReadable(gray[i], bodybg, 4.5, 5) && ed.dom.toHex(color) !== ed.dom.toHex(gray[i])) {
@@ -12567,9 +12515,18 @@
                     css += "--mce-placeholder: #efefef;", control && (css = css + "--mce-control-selection: " + control + ";--mce-control-selection-bg: #b4d7ff;"), 
                     ed.dom.addStyle(css += "}"));
                 }
-            },
-            get: function() {
-                var self = this, ed = this.editor, doc = ed.getDoc(), href = "", rules = [], fontface = [], filtered = {}, classes = [], bodyRx = !!ed.settings.body_class && new RegExp(".(" + ed.settings.body_class.split(" ").join("|") + ")");
+            }
+            ed.onImportCSS = new tinymce.util.Dispatcher(), ed.onImportCSS.add(function() {
+                tinymce.is(ed.settings.importcss_classes) || self.get();
+            }), ed.onInit.add(function() {
+                var hex, bodybg, color;
+                ed.onImportCSS.dispatch(), "auto" !== ed.settings.content_style_reset || ed.dom.hasClass(ed.getBody(), "mceContentReset") || (bodybg = ed.dom.getStyle(ed.getBody(), "background-color", !0), 
+                color = ed.dom.getStyle(ed.getBody(), "color", !0), bodybg && color && ((hex = ed.dom.toHex(bodybg)) == ed.dom.toHex(color) && "#000000" === hex || isReadable(color, bodybg, 3) || ed.dom.addClass(ed.getBody(), "mceContentReset"))), 
+                setGuideLinesColor();
+            }), ed.onFocus.add(function(ed) {
+                ed._hasGuidelines || setGuideLinesColor();
+            }), this.get = function() {
+                var self = this, doc = ed.getDoc(), href = "", rules = [], fontface = [], filtered = {}, classes = [], bodyRx = !!ed.settings.body_class && new RegExp(".(" + ed.settings.body_class.split(" ").join("|") + ")");
                 if (!classes.length) try {
                     each(doc.styleSheets, function(styleSheet) {
                         !function parseCSS(stylesheet) {
@@ -12642,23 +12599,21 @@
                         style: style
                     };
                 }), PreviewCss.reset(), ed.settings.importcss_classes;
-            }
-        }), tinymce.PluginManager.add("importcss", tinymce.plugins.ImportCSS);
-    }(), tinymce.create("tinymce.plugins.ColorPicker", {
-        init: function(ed, url) {
-            (this.editor = ed).addCommand("mceColorPicker", function(ui, v) {
-                ed.windowManager.open({
-                    url: ed.getParam("site_url") + "index.php?option=com_jce&task=plugin.display&plugin=colorpicker",
-                    width: 365,
-                    height: 320,
-                    close_previous: !1
-                }, {
-                    input_color: v.color,
-                    func: v.func
-                });
+            };
+        });
+    }(), tinymce.PluginManager.add("colorpicker", function(ed, url) {
+        ed.addCommand("mceColorPicker", function(ui, v) {
+            ed.windowManager.open({
+                url: ed.getParam("site_url") + "index.php?option=com_jce&task=plugin.display&plugin=colorpicker",
+                width: 365,
+                height: 320,
+                close_previous: !1
+            }, {
+                input_color: v.color,
+                func: v.func
             });
-        }
-    }), tinymce.PluginManager.add("colorpicker", tinymce.plugins.ColorPicker), function() {
+        });
+    }), function() {
         var each = tinymce.each, JSON = tinymce.util.JSON, RangeUtils = tinymce.dom.RangeUtils, Uuid = tinymce.util.Uuid, Env = tinymce.util.Env;
         tinymce.PluginManager.add("upload", function(ed, url) {
             var plugins = [], files = [], noop = (ed.onPreInit.add(function() {
@@ -12884,83 +12839,79 @@
         });
     }(), function() {
         var VK = tinymce.VK, Node = tinymce.html.Node, each = tinymce.each, blocks = [];
-        tinymce.create("tinymce.plugins.Figure", {
-            init: function(ed, url) {
-                (this.editor = ed).onPreInit.add(function(ed) {
-                    ed.parser.addNodeFilter("figure", function(nodes, name) {
-                        for (var figcaption, node, i = nodes.length; i--; ) 0 === (node = nodes[i]).getAll("figcaption").length && ((figcaption = new Node("figcaption", 1)).attr("data-mce-empty", ed.getLang("figcaption.default", "Write a caption...")), 
-                        figcaption.attr("contenteditable", !0), node.append(figcaption)), 
-                        node.attr("data-mce-image", "1"), node.attr("contenteditable", "false"), 
-                        each(node.getAll("img"), function(img) {
-                            img.attr("data-mce-contenteditable", "true");
-                        }), !1 !== ed.settings.figure_data_attribute && node.attr("data-wf-figure", "1");
-                    }), ed.parser.addNodeFilter("figcaption", function(nodes, name) {
-                        for (var node, i = nodes.length; i--; ) (node = nodes[i]).firstChild || node.attr("data-mce-empty", ed.getLang("figcaption.default", "Write a caption...")), 
-                        node.attr("contenteditable", "true");
-                    }), ed.serializer.addNodeFilter("figure", function(nodes, name) {
-                        for (var node, i = nodes.length; i--; ) (node = nodes[i]).attr("contenteditable", null), 
-                        each(node.getAll("img"), function(img) {
-                            img.attr("data-mce-contenteditable", null);
+        tinymce.PluginManager.add("figure", function(ed, url) {
+            ed.onPreInit.add(function(ed) {
+                ed.parser.addNodeFilter("figure", function(nodes, name) {
+                    for (var figcaption, node, i = nodes.length; i--; ) 0 === (node = nodes[i]).getAll("figcaption").length && ((figcaption = new Node("figcaption", 1)).attr("data-mce-empty", ed.getLang("figcaption.default", "Write a caption...")), 
+                    figcaption.attr("contenteditable", !0), node.append(figcaption)), 
+                    node.attr("data-mce-image", "1"), node.attr("contenteditable", "false"), 
+                    each(node.getAll("img"), function(img) {
+                        img.attr("data-mce-contenteditable", "true");
+                    }), !1 !== ed.settings.figure_data_attribute && node.attr("data-wf-figure", "1");
+                }), ed.parser.addNodeFilter("figcaption", function(nodes, name) {
+                    for (var node, i = nodes.length; i--; ) (node = nodes[i]).firstChild || node.attr("data-mce-empty", ed.getLang("figcaption.default", "Write a caption...")), 
+                    node.attr("contenteditable", "true");
+                }), ed.serializer.addNodeFilter("figure", function(nodes, name) {
+                    for (var node, i = nodes.length; i--; ) (node = nodes[i]).attr("contenteditable", null), 
+                    each(node.getAll("img"), function(img) {
+                        img.attr("data-mce-contenteditable", null);
+                    });
+                }), ed.serializer.addNodeFilter("figcaption", function(nodes, name) {
+                    for (var node, i = nodes.length; i--; ) (node = nodes[i]).firstChild ? node.attr("contenteditable", null) : node.remove();
+                }), ed.serializer.addAttributeFilter("data-mce-image", function(nodes, name) {
+                    for (var i = nodes.length; i--; ) nodes[i].attr(name, null);
+                }), each(ed.schema.getBlockElements(), function(v, k) {
+                    if (/\W/.test(k)) return !0;
+                    blocks.push(k.toLowerCase());
+                }), ed.formatter.register("figure", {
+                    block: "figure",
+                    remove: "all",
+                    ceFalseOverride: !0,
+                    deep: !1,
+                    onformat: function(elm, fmt, vars, node) {
+                        vars = vars || {}, ed.dom.select("img,video,iframe", elm) && (ed.dom.setAttribs(elm, {
+                            "data-mce-image": 1,
+                            contenteditable: !1
+                        }), ed.dom.setAttrib(ed.dom.select("img", elm), "data-mce-contenteditable", "true"), 
+                        ed.dom.add(elm, "figcaption", {
+                            "data-mce-empty": ed.getLang("figcaption.default", "Write a caption..."),
+                            contenteditable: !0
+                        }, vars.caption || ""), !1 !== ed.settings.figure_data_attribute) && ed.dom.setAttribs(elm, {
+                            "data-wf-figure": "1"
                         });
-                    }), ed.serializer.addNodeFilter("figcaption", function(nodes, name) {
-                        for (var node, i = nodes.length; i--; ) (node = nodes[i]).firstChild ? node.attr("contenteditable", null) : node.remove();
-                    }), ed.serializer.addAttributeFilter("data-mce-image", function(nodes, name) {
-                        for (var i = nodes.length; i--; ) nodes[i].attr(name, null);
-                    }), each(ed.schema.getBlockElements(), function(v, k) {
-                        if (/\W/.test(k)) return !0;
-                        blocks.push(k.toLowerCase());
-                    }), ed.formatter.register("figure", {
-                        block: "figure",
-                        remove: "all",
-                        ceFalseOverride: !0,
-                        deep: !1,
-                        onformat: function(elm, fmt, vars, node) {
-                            vars = vars || {}, ed.dom.select("img,video,iframe", elm) && (ed.dom.setAttribs(elm, {
-                                "data-mce-image": 1,
-                                contenteditable: !1
-                            }), ed.dom.setAttrib(ed.dom.select("img", elm), "data-mce-contenteditable", "true"), 
-                            ed.dom.add(elm, "figcaption", {
-                                "data-mce-empty": ed.getLang("figcaption.default", "Write a caption..."),
-                                contenteditable: !0
-                            }, vars.caption || ""), !1 !== ed.settings.figure_data_attribute) && ed.dom.setAttribs(elm, {
-                                "data-wf-figure": "1"
-                            });
-                        },
-                        onremove: function(node) {
-                            ed.dom.remove(ed.dom.select("figcaption", node)), ed.dom.remove(ed.dom.getParent("figure", node), 1);
-                        }
-                    }), ed.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
-                        var parent, se = ed.selection, n = se.getNode();
-                        switch (cmd) {
-                          case "JustifyRight":
-                          case "JustifyLeft":
-                          case "JustifyCenter":
-                            n && ed.dom.is(n, "img,span[data-mce-object]") && (parent = ed.dom.getParent(n, "FIGURE")) && (se.select(parent), 
-                            ed.execCommand(cmd, !1), o.terminate = !0);
-                        }
-                    }), ed.onKeyDown.add(function(ed, e) {
-                        var container, offset, isDelete = e.keyCode == VK.DELETE;
-                        if (!e.isDefaultPrevented() && (isDelete || e.keyCode == VK.BACKSPACE) && !VK.modifierPressed(e) && (container = (isDelete = ed.selection.getRng()).startContainer, 
-                        offset = isDelete.startOffset, isDelete = isDelete.collapsed, 
-                        container = ed.dom.getParent(container, "FIGURE"))) {
-                            var node = ed.selection.getNode();
-                            if ("IMG" === node.nodeName) ed.dom.remove(container), 
-                            ed.nodeChanged(), e.preventDefault(); else if ("FIGCAPTION" != node.nodeName || node.nodeValue && 0 !== node.nodeValue.length || 0 !== node.childNodes.length || e.preventDefault(), 
-                            3 === node.nodeType && !isDelete && !offset) {
-                                var figcaption = ed.dom.getParent(node, "FIGCAPTION");
-                                if (figcaption) {
-                                    for (;figcaption.firstChild; ) figcaption.removeChild(figcaption.firstChild);
-                                    e.preventDefault();
-                                }
+                    },
+                    onremove: function(node) {
+                        ed.dom.remove(ed.dom.select("figcaption", node)), ed.dom.remove(ed.dom.getParent("figure", node), 1);
+                    }
+                }), ed.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
+                    var parent, se = ed.selection, n = se.getNode();
+                    switch (cmd) {
+                      case "JustifyRight":
+                      case "JustifyLeft":
+                      case "JustifyCenter":
+                        n && ed.dom.is(n, "img,span[data-mce-object]") && (parent = ed.dom.getParent(n, "FIGURE")) && (se.select(parent), 
+                        ed.execCommand(cmd, !1), o.terminate = !0);
+                    }
+                }), ed.onKeyDown.add(function(ed, e) {
+                    var container, offset, isDelete = e.keyCode == VK.DELETE;
+                    if (!e.isDefaultPrevented() && (isDelete || e.keyCode == VK.BACKSPACE) && !VK.modifierPressed(e) && (container = (isDelete = ed.selection.getRng()).startContainer, 
+                    offset = isDelete.startOffset, isDelete = isDelete.collapsed, 
+                    container = ed.dom.getParent(container, "FIGURE"))) {
+                        var node = ed.selection.getNode();
+                        if ("IMG" === node.nodeName) ed.dom.remove(container), ed.nodeChanged(), 
+                        e.preventDefault(); else if ("FIGCAPTION" != node.nodeName || node.nodeValue && 0 !== node.nodeValue.length || 0 !== node.childNodes.length || e.preventDefault(), 
+                        3 === node.nodeType && !isDelete && !offset) {
+                            var figcaption = ed.dom.getParent(node, "FIGCAPTION");
+                            if (figcaption) {
+                                for (;figcaption.firstChild; ) figcaption.removeChild(figcaption.firstChild);
+                                e.preventDefault();
                             }
                         }
-                    });
+                    }
                 });
-            }
-        }), tinymce.PluginManager.add("figure", tinymce.plugins.Figure);
-    }(), tinymce.create("tinymce.plugins.UiPlugin", {
-        init: function(ed, url) {}
-    }), tinymce.PluginManager.add("ui", tinymce.plugins.UiPlugin), function() {
+            });
+        });
+    }(), function() {
         var DOM = tinymce.DOM;
         tinymce.PluginManager.add("noneditable", function(editor) {
             var editClass = tinymce.trim(editor.getParam("noneditable_editable_class", "mceEditable")), nonEditClass = tinymce.trim(editor.getParam("noneditable_noneditable_class", "mceNonEditable"));
@@ -13009,21 +12960,19 @@
         });
     }(), function() {
         var DOM = tinymce.DOM;
-        tinymce.create("tinymce.plugins.BrandingPlugin", {
-            init: function(ed, url) {
-                !1 !== ed.settings.branding && (ed.onPostRender.add(function() {
-                    var container = ed.getContentAreaContainer();
-                    DOM.insertAfter(DOM.create("div", {
-                        class: "mceBranding"
-                    }, 'Powered by JCE Core. <span id="mceBrandingMessage"></span><a href="https://www.joomlacontenteditor.net/purchase" target="_blank" title="Get JCE Pro">JCE Pro</a>'), container);
-                }), ed.onNodeChange.add(function(ed, cm, n, co) {
-                    var container = ed.getContentAreaContainer(), msg = "Get more features with ";
-                    "IMG" === n.nodeName && (msg = "Image resizing, thumbnails and editing in "), 
-                    ed.dom.is(n, ".mce-item-media") && (msg = "Upload and manage audio and video with "), 
-                    DOM.setHTML(DOM.get("mceBrandingMessage", container), msg);
-                }));
-            }
-        }), tinymce.PluginManager.add("branding", tinymce.plugins.BrandingPlugin);
+        tinymce.PluginManager.add("branding", function(ed, url) {
+            !1 !== ed.settings.branding && (ed.onPostRender.add(function() {
+                var container = ed.getContentAreaContainer();
+                DOM.insertAfter(DOM.create("div", {
+                    class: "mceBranding"
+                }, 'Powered by JCE Core. <span id="mceBrandingMessage"></span><a href="https://www.joomlacontenteditor.net/buy" target="_blank" title="Get JCE Pro">JCE Pro</a>'), container);
+            }), ed.onNodeChange.add(function(ed, cm, n, co) {
+                var container = ed.getContentAreaContainer(), msg = "Get more features with ";
+                "IMG" === n.nodeName && (msg = "Image resizing, thumbnails and editing in "), 
+                ed.dom.is(n, ".mce-item-media") && (msg = "Upload and manage audio and video with "), 
+                DOM.setHTML(DOM.get("mceBrandingMessage", container), msg);
+            }));
+        });
     }(), function() {
         function uniqueId(prefix) {
             return (prefix || "blobid") + count++;

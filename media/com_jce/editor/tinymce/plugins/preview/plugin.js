@@ -1,23 +1,18 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, counter = 0;
-    tinymce.create("tinymce.plugins.PreviewPlugin", {
-        init: function(ed, url) {
-            this.editor = ed;
-            var self = this;
-            function isEditorActive() {
-                return 0 == DOM.hasClass(ed.getElement(), "wf-no-editor");
-            }
-            ed.onInit.add(function(ed) {
-                0 != isEditorActive() && "wf-editor-preview" === (ed.settings.active_tab || "") && (ed.hide(), 
-                DOM.hide(ed.getElement()), self.toggle());
-            });
-        },
-        hide: function() {
-            DOM.hide(this.editor.id + "_editor_preview");
-        },
-        toggle: function() {
-            var k, ed = this.editor, s = ed.settings, element = ed.getElement(), container = element.parentNode, element = DOM.getPrev(element, ".wf-editor-header"), ifrHeight = parseInt(DOM.get(ed.id + "_ifr").style.height, 10) || s.height, preview = DOM.get(ed.id + "_editor_preview"), iframe = DOM.get(ed.id + "_editor_preview_iframe"), o = tinymce.util.Storage.getHash("TinyMCE_" + ed.id + "_size"), o = (o && o.height && (ifrHeight = o.height), 
+    tinymce.PluginManager.add("preview", function(ed, url) {
+        var self = this;
+        function isEditorActive() {
+            return 0 == DOM.hasClass(ed.getElement(), "wf-no-editor");
+        }
+        ed.onInit.add(function(ed) {
+            0 != isEditorActive() && "wf-editor-preview" === (ed.settings.active_tab || "") && (ed.hide(), 
+            DOM.hide(ed.getElement()), self.toggle());
+        }), this.hide = function() {
+            DOM.hide(ed.id + "_editor_preview");
+        }, this.toggle = function() {
+            var k, s = ed.settings, element = ed.getElement(), container = element.parentNode, element = DOM.getPrev(element, ".wf-editor-header"), ifrHeight = parseInt(DOM.get(ed.id + "_ifr").style.height, 10) || s.height, preview = DOM.get(ed.id + "_editor_preview"), iframe = DOM.get(ed.id + "_editor_preview_iframe"), o = tinymce.util.Storage.getHash("TinyMCE_" + ed.id + "_size"), o = (o && o.height && (ifrHeight = o.height), 
             preview || (preview = DOM.add(container, "div", {
                 role: "textbox",
                 id: ed.id + "_editor_preview",
@@ -64,6 +59,6 @@
                     update(content);
                 }
             });
-        }
-    }), tinymce.PluginManager.add("preview", tinymce.plugins.PreviewPlugin);
+        };
+    });
 }();

@@ -1,4 +1,4 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, each = tinymce.each, emoji = [ {
         "\ud83d\ude00": "grinning_face"
@@ -161,46 +161,43 @@
     }, {
         "\ud83d\ude4f": "person_with_folded_hands"
     } ];
-    tinymce.create("tinymce.plugins.EmotionsPlugin", {
-        init: function(ed, url) {
-            var self = this;
-            function createEmojiContent(icons, path) {
-                var content = document.createElement("div");
-                return path && -1 === path.indexOf("://") && (path = ed.documentBaseURI.toAbsolute(path, !0)), 
-                each(icons, function(data) {
-                    var label, src, item;
-                    "string" == typeof data && (label = "", src = data, item = {}, 
-                    path && (src = path + "/" + data), /\.(png|jpg|jpeg|gif)$/i.test(data) && (label = data.replace(/\.[^.]+$/i, ""), 
-                    data = '<img src="' + src + '" alt="' + ed.getLang("emotions." + label, label) + '" />'), 
-                    item[data] = label, data = item), each(data, function(label, key) {
-                        var src;
-                        /\.(png|jpg|jpeg|gif)$/i.test(key) && (src = key, path && (src = path + "/" + src), 
-                        key = '<img src="' + (src = ed.documentBaseURI.toAbsolute(src, !0)) + '" alt="' + ed.getLang("emotions." + label, label) + '" />'), 
-                        DOM.add(content, "button", {
-                            class: "mce_emotions_icon",
-                            title: ed.getLang("emotions." + label, label)
-                        }, key);
-                    });
-                }), content.innerHTML;
+    tinymce.PluginManager.add("emotions", function(ed, url) {
+        var self = this;
+        function createEmojiContent(icons, path) {
+            var content = document.createElement("div");
+            return path && -1 === path.indexOf("://") && (path = ed.documentBaseURI.toAbsolute(path, !0)), 
+            each(icons, function(data) {
+                var label, src, item;
+                "string" == typeof data && (label = "", src = data, item = {}, path && (src = path + "/" + data), 
+                /\.(png|jpg|jpeg|gif)$/i.test(data) && (label = data.replace(/\.[^.]+$/i, ""), 
+                data = '<img src="' + src + '" alt="' + ed.getLang("emotions." + label, label) + '" />'), 
+                item[data] = label, data = item), each(data, function(label, key) {
+                    var src;
+                    /\.(png|jpg|jpeg|gif)$/i.test(key) && (src = key, path && (src = path + "/" + src), 
+                    key = '<img src="' + (src = ed.documentBaseURI.toAbsolute(src, !0)) + '" alt="' + ed.getLang("emotions." + label, label) + '" />'), 
+                    DOM.add(content, "button", {
+                        class: "mce_emotions_icon",
+                        title: ed.getLang("emotions." + label, label)
+                    }, key);
+                });
+            }), content.innerHTML;
+        }
+        ed.addButton("emotions", {
+            title: "emotions.desc",
+            cmd: "mceEmotion"
+        }), self.content = "";
+        var path = ed.getParam("emotions_url", url + "/img"), icons = ed.getParam("emotions_smilies", emoji, "hash");
+        this.content = createEmojiContent(icons, path), this.loaded = !1, path && /\.(json|txt)$/.test(path) && !this.loaded && (-1 === path.indexOf("://") && (path = ed.documentBaseURI.toAbsolute(path, !0)), 
+        this.loaded = !0, tinymce.util.XHR.send({
+            url: path,
+            success: function(text) {
+                try {
+                    icons = JSON.parse(text);
+                } catch (e) {}
+                path = path.substring(0, path.lastIndexOf("/")), self.content = createEmojiContent(icons, path);
             }
-            this.editor = ed, this.url = url, ed.addButton("emotions", {
-                title: "emotions.desc",
-                cmd: "mceEmotion"
-            }), self.content = "";
-            var path = ed.getParam("emotions_url", url + "/img"), icons = ed.getParam("emotions_smilies", emoji, "hash");
-            this.content = createEmojiContent(icons, path), this.loaded = !1, path && /\.(json|txt)$/.test(path) && !this.loaded && (-1 === path.indexOf("://") && (path = ed.documentBaseURI.toAbsolute(path, !0)), 
-            this.loaded = !0, tinymce.util.XHR.send({
-                url: path,
-                success: function(text) {
-                    try {
-                        icons = JSON.parse(text);
-                    } catch (e) {}
-                    path = path.substring(0, path.lastIndexOf("/")), self.content = createEmojiContent(icons, path);
-                }
-            }));
-        },
-        createControl: function(n, cm) {
-            var ctrl, self = this, ed = this.editor;
+        })), this.createControl = function(n, cm) {
+            var ctrl, self = this;
             return "emotions" !== n ? null : ((ctrl = cm.createSplitButton("emotions", {
                 title: "emotions.desc",
                 onselect: function(elm) {
@@ -225,6 +222,6 @@
                 p && (html = p.innerText, "IMG" === n.nodeName && (n.setAttribute("src", ed.documentBaseURI.toRelative(n.src)), 
                 html = p.innerHTML), ed.execCommand("mceInsertContent", !1, html));
             }
-        }
-    }), tinymce.PluginManager.add("emotions", tinymce.plugins.EmotionsPlugin);
+        };
+    });
 }();

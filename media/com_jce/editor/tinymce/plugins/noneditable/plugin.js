@@ -1,4 +1,4 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM;
     tinymce.PluginManager.add("noneditable", function(editor) {
@@ -9,7 +9,7 @@
             };
         }
         var nonEditableRegExps, hasEditClass = hasClass(editClass), hasNonEditClass = hasClass(nonEditClass);
-        return (nonEditableRegExps = editor.getParam("noneditable_regexp")) && !nonEditableRegExps.length && (nonEditableRegExps = [ nonEditableRegExps ]), 
+        (nonEditableRegExps = editor.getParam("noneditable_regexp")) && !nonEditableRegExps.length && (nonEditableRegExps = [ nonEditableRegExps ]), 
         editor.onPreInit.add(function() {
             editor.formatter.register("noneditable", {
                 block: "div",
@@ -42,13 +42,10 @@
                 for (var node, i = nodes.length; i--; ) node = nodes[i], (hasEditClass(node) || hasNonEditClass(node)) && (nonEditableRegExps && node.attr("data-mce-content") ? (node.name = "#text", 
                 node.type = 3, node.raw = !0, node.value = node.attr("data-mce-content")) : node.attr("contenteditable", null));
             });
-        }), {
-            isNonEditable: function(node) {
-                return node.attr ? node.hasClass(nonEditClass) : DOM.hasClass(node, nonEditClass);
-            },
-            isEditable: function(node) {
-                return node.attr ? node.hasClass(editClass) : DOM.hasClass(node, editClass);
-            }
+        }), this.isEditable = function(node) {
+            return node.attr ? node.hasClass(editClass) : DOM.hasClass(node, editClass);
+        }, this.isNonEditable = function(node) {
+            return node.attr ? node.hasClass(nonEditClass) : DOM.hasClass(node, nonEditClass);
         };
     });
 }();

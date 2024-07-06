@@ -1,4 +1,4 @@
-/* jce - 2.9.75 | 2024-06-13 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, Event = tinymce.dom.Event, extend = tinymce.extend, each = tinymce.each, Storage = tinymce.util.Storage, Delay = tinymce.util.Delay, explode = tinymce.explode;
     tinymce.create("tinymce.themes.AdvancedTheme", {
@@ -64,7 +64,7 @@
                 var el = ed.getElement(), e = (DOM.setStyle(ed.id + "_tbl", "width", ""), 
                 DOM.get(ed.id + "_parent")), ifr = DOM.get(ed.id + "_ifr"), width = s.width || el.style.width;
                 (el = s.height || el.style.height) && DOM.setStyle(ifr, "height", el), 
-                width && (DOM.setStyle(e.parentNode, "max-width", width), DOM.setStyle(ifr, "max-width", width));
+                width && (DOM.setStyle(e.parentNode, "max-width", width), /%/.test(width) || DOM.setStyle(ifr, "max-width", width));
             }), ed.onSetProgressState.add(function(ed, b, ti) {
                 var co, tb, id = ed.id;
                 b ? self.progressTimer = setTimeout(function() {

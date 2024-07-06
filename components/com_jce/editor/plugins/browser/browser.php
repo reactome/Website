@@ -94,6 +94,8 @@ class WFBrowserPlugin extends WFMediaManager
 
         parent::__construct($config);
 
+        $browser = $this->getFileBrowser();
+
         // get mediatype from xml
         $mediatype = $app->input->getString('mediatype', $app->input->getString('filter', 'files'));
 
@@ -103,9 +105,6 @@ class WFBrowserPlugin extends WFMediaManager
 
             // get filetypes from params
             $filetypes = $this->getParam('extensions', $this->get('_filetypes'));
-
-            // get file browser reference
-            $browser = $this->getFileBrowser();
 
             // add upload event
             $browser->addEvent('onUpload', array($this, 'onUpload'));
@@ -144,6 +143,39 @@ class WFBrowserPlugin extends WFMediaManager
 
             // set updated filetypes
             $this->setFileTypes($filetypes);
+        }
+
+        $folder = $app->input->getPath('folder', '');
+
+        if ($folder) {
+            // clean
+            $folder = WFUtility::cleanPath($folder);
+
+            // split by / and each part "safe"
+            $parts = explode('/', $folder);
+
+            foreach ($parts as $key => $part) {
+                $parts[$key] = WFUtility::makeSafe($part);
+            }
+
+            // rejoin parts
+            $folder = implode('/', $parts);
+            
+            // still intact after clean?
+            if ($folder) {
+                $filesystem = $browser->getFileSystem();
+
+                // check path exists
+                if ($filesystem->is_dir($folder)) {
+                    // process any variables in the path
+                    $path = $filesystem->toRelative($folder, false);
+
+                    if ($browser->checkPathAccess($path)) {
+                        // set new path for browser
+                        $browser->set('source', $folder);
+                    }
+                }
+            }
         }
     }
 
