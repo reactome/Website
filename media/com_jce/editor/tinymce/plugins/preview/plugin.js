@@ -1,4 +1,4 @@
-/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.78 | 2024-07-19 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, counter = 0;
     tinymce.PluginManager.add("preview", function(ed, url) {
@@ -11,6 +11,8 @@
             DOM.hide(ed.getElement()), self.toggle());
         }), this.hide = function() {
             DOM.hide(ed.id + "_editor_preview");
+        }, this.isHidden = function() {
+            return DOM.isHidden(ed.id + "_editor_preview");
         }, this.toggle = function() {
             var k, s = ed.settings, element = ed.getElement(), container = element.parentNode, element = DOM.getPrev(element, ".wf-editor-header"), ifrHeight = parseInt(DOM.get(ed.id + "_ifr").style.height, 10) || s.height, preview = DOM.get(ed.id + "_editor_preview"), iframe = DOM.get(ed.id + "_editor_preview_iframe"), o = tinymce.util.Storage.getHash("TinyMCE_" + ed.id + "_size"), o = (o && o.height && (ifrHeight = o.height), 
             preview || (preview = DOM.add(container, "div", {

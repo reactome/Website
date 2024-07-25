@@ -1,4 +1,4 @@
-/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.78 | 2024-07-19 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     !function(win) {
@@ -2331,7 +2331,7 @@
                 var attr, value;
                 if (indent && indentBefore[name] && 0 < html.length && 0 < (value = html[html.length - 1]).length && "\n" !== value && html.push("\n"), 
                 html.push("<", name), attrs) {
-                    for (var bool = [], i = 0, l = attrs.length; i < l; i++) (attr = attrs[i]).boolean ? bool.push(" ", attr.name) : html.push(" ", attr.name, '="', encode("" + attr.value, !0), '"');
+                    for (var bool = [], i = 0, l = attrs.length; i < l; i++) (attr = attrs[i]).boolean ? "html5-strict" == settings.schema ? bool.push(" ", attr.name) : bool.push(" ", attr.name, '="', encode("" + attr.name, !0), '"') : html.push(" ", attr.name, '="', encode("" + attr.value, !0), '"');
                     html = html.concat(bool);
                 }
                 !empty || htmlOutput || "html5-strict" == settings.schema ? html[html.length] = ">" : html[html.length] = " />", 
@@ -7539,7 +7539,7 @@
                     tabindex: 0,
                     autofocus: !0
                 }, prefix = tinymce.extend(prefix, s.attributes || {});
-                return s.multiline ? html += DOM.createHTML("textarea", prefix) : html += DOM.createHTML("input", prefix), 
+                return s.multiline ? html += DOM.createHTML("textarea", prefix, "") : html += DOM.createHTML("input", prefix), 
                 s.button && (html += DOM.createHTML("button", {
                     id: this.id + "_button",
                     class: "mceButton",
@@ -9944,11 +9944,11 @@
                     onclick: function(e) {
                         Event.cancel(e), self.close(null, id);
                     }
-                }), f.content && ("string" == typeof f.content && DOM.setHTML(id + "_content", "<form>" + f.content.replace("\n", "") + "</form>"), 
-                f.content.nodeType) && DOM.add(id + "_content", DOM.create("form", {}, f.content)), 
+                }), f.content && ("string" == typeof f.content && DOM.setHTML(id + "_content", "<div>" + f.content.replace("\n", "") + "</div>"), 
+                f.content.nodeType) && DOM.add(id + "_content", DOM.create("div", {}, f.content)), 
                 f.items && (tinymce.is(f.items, "array") || (f.items = [ f.items ]), 
                 each(f.items, function(ctrl) {
-                    var form = DOM.add(id + "_content", "form");
+                    var form = DOM.add(id + "_content", "div");
                     ctrl.renderTo(form), self.onClose.add(function(e, win) {
                         win.id == id && ctrl.destroy();
                     });
@@ -12165,7 +12165,7 @@
                     each(ed.dom.select("pre[data-mce-code]", ed.getBody()), function(elm) {
                         (elm = ed.dom.getParent(elm, "p")) && 1 === elm.childNodes.length && ed.dom.remove(elm, 1);
                     });
-                }), ed.parser.addNodeFilter("script,style,noscript", function(nodes) {
+                }), ed.parser.addNodeFilter("script,style", function(nodes) {
                     for (var node, pre, text, value, placeholder, i = nodes.length; i--; ) (node = nodes[i]).firstChild && (node.firstChild.value = node.firstChild.value.replace(/<span([^>]+)>([\s\S]+?)<\/span>/gi, function(match, attr, content) {
                         return -1 === attr.indexOf("data-mce-code") ? match : ed.dom.decode(content);
                     })), code_blocks ? (value = new Serializer({
@@ -12274,7 +12274,8 @@
                     return "{" + start + attr + "}" + ed.dom.decode(content) + "{/" + start + "}";
                 })), o.content = o.content.replace(/<(pre|span)([^>]+?)>([\s\S]*?)<\/\1>/gi, function(match, tag, attr, content) {
                     return -1 === attr.indexOf("data-mce-code") ? match : (content = tinymce.trim(content), 
-                    content = ed.dom.decode(content), "script" != (attr = ed.dom.create("div", {}, match).firstChild.getAttribute("data-mce-code")) && (content = content.replace(/<br[^>]*?>/gi, "\n")), 
+                    attr = ed.dom.create("div", {}, match).firstChild.getAttribute("data-mce-code"), 
+                    content = ed.dom.decode(content), "script" != attr && (content = content.replace(/<br[^>]*?>/gi, "\n")), 
                     "php" == attr && (content = content.replace(/<\?(php)?/gi, "").replace(/\?>/g, ""), 
                     content = "<?php\n" + tinymce.trim(content) + "\n?>"), content);
                 }), o.content = o.content.replace(/<!--mce:protected ([\s\S]+?)-->/gi, function(match, content) {
@@ -12832,10 +12833,7 @@
                     file.marker && ed.dom.setAttrib(file.marker, "data-progress", value);
                 });
             }
-            return {
-                plugins: plugins,
-                upload: uploadHandler
-            };
+            this.plugins = plugins, this.upload = uploadHandler;
         });
     }(), function() {
         var VK = tinymce.VK, Node = tinymce.html.Node, each = tinymce.each, blocks = [];
@@ -12921,7 +12919,7 @@
                 };
             }
             var nonEditableRegExps, hasEditClass = hasClass(editClass), hasNonEditClass = hasClass(nonEditClass);
-            return (nonEditableRegExps = editor.getParam("noneditable_regexp")) && !nonEditableRegExps.length && (nonEditableRegExps = [ nonEditableRegExps ]), 
+            (nonEditableRegExps = editor.getParam("noneditable_regexp")) && !nonEditableRegExps.length && (nonEditableRegExps = [ nonEditableRegExps ]), 
             editor.onPreInit.add(function() {
                 editor.formatter.register("noneditable", {
                     block: "div",
@@ -12949,13 +12947,10 @@
                     for (var node, i = nodes.length; i--; ) node = nodes[i], (hasEditClass(node) || hasNonEditClass(node)) && (nonEditableRegExps && node.attr("data-mce-content") ? (node.name = "#text", 
                     node.type = 3, node.raw = !0, node.value = node.attr("data-mce-content")) : node.attr("contenteditable", null));
                 });
-            }), {
-                isNonEditable: function(node) {
-                    return node.attr ? node.hasClass(nonEditClass) : DOM.hasClass(node, nonEditClass);
-                },
-                isEditable: function(node) {
-                    return node.attr ? node.hasClass(editClass) : DOM.hasClass(node, editClass);
-                }
+            }), this.isEditable = function(node) {
+                return node.attr ? node.hasClass(editClass) : DOM.hasClass(node, editClass);
+            }, this.isNonEditable = function(node) {
+                return node.attr ? node.hasClass(nonEditClass) : DOM.hasClass(node, nonEditClass);
             };
         });
     }(), function() {

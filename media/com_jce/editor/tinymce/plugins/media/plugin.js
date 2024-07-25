@@ -1,11 +1,11 @@
-/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.78 | 2024-07-19 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, extend = tinymce.extend, Node = tinymce.html.Node, VK = tinymce.VK, Serializer = tinymce.html.Serializer, DomParser = tinymce.html.DomParser, SaxParser = tinymce.html.SaxParser, DOM = tinymce.DOM, htmlSchema = new tinymce.html.Schema({
         schema: "mixed"
     }), transparentSrc = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-    function isNonEditable(node) {
-        var nonEditClass = tinymce.settings.noneditable_noneditable_class || "mceNonEditable";
-        return node.attr ? node.hasClass(nonEditClass) : DOM.hasClass(node, nonEditClass);
+    function isNonEditable(ed, node) {
+        ed = ed.settings.noneditable_noneditable_class || "mceNonEditable";
+        return node.attr ? node.hasClass(ed) : DOM.hasClass(node, ed);
     }
     var alignStylesMap = {
         left: {
@@ -43,7 +43,7 @@
     function isCenterAligned(style) {
         return "block" == style.display && "auto" == style["margin-left"] && "auto" == style["margin-right"];
     }
-    var sandbox_iframes_exclusions = [ "youtube.com", "youtu.be", "vimeo.com", "player.vimeo.com", "dailymotion.com", "embed.music.apple.com", "open.spotify.com", "giphy.com", "dai.ly", "codepen.io", "maps.google.com", "google.com/maps" ], mediaProviders = {
+    var sandbox_iframes_exclusions = [ "youtube.com", "youtu.be", "vimeo.com", "player.vimeo.com", "dailymotion.com", "embed.music.apple.com", "open.spotify.com", "giphy.com", "dai.ly", "codepen.io", "maps.google.com", "google.com/maps", "docs.google.com" ], mediaProviders = {
         youtube: /youtu(\.)?be(.+)?\/(.+)/,
         vimeo: /vimeo(.+)?\/(.+)/,
         dailymotion: /dai\.?ly(motion)?(\.com)?/,
@@ -275,7 +275,7 @@
         placeHolder.attr({
             src: transparentSrc,
             "data-mce-object": node.name
-        }), isNonEditable(node) && (placeHolder.attr("contenteditable", "false"), 
+        }), isNonEditable(editor, node) && (placeHolder.attr("contenteditable", "false"), 
         placeHolder.attr("data-mce-resize", "false")), placeHolder;
     };
     function createReplacementNode(editor, node) {
@@ -358,13 +358,13 @@
                 if ("iframe" === node.name) if (node.attr("src")) {
                     if (!1 === function(editor, node) {
                         var src = node.attr("src");
-                        return !!isNonEditable(node) || isSupportedIframe(editor, src);
+                        return !!isNonEditable(editor, node) || isSupportedIframe(editor, src);
                     }(editor, node)) {
                         node.remove();
                         continue;
                     }
                 } else media_live_embed = !1;
-                if (isValidElement(editor, node.name) || isNonEditable(node)) {
+                if (isValidElement(editor, node.name) || isNonEditable(editor, node)) {
                     if ("iframe" !== node.name) {
                         var sources, src = node.attr("src") || node.attr("data") || "";
                         if (src || "video" !== node.name && "audio" !== node.name || (sources = node.getAll("source")).length && (src = sources[0].attr("src")), 
@@ -380,7 +380,7 @@
                             node.attr("src", src);
                         }
                     }
-                    !media_live_embed || isObjectEmbed(node.name) || isResponsiveMedia(node) || isNonEditable(node) ? isWithinEmbed(node) || (isResponsiveMedia(node) && node.parent.attr({
+                    !media_live_embed || isObjectEmbed(node.name) || isResponsiveMedia(node) || isNonEditable(editor, node) ? isWithinEmbed(node) || (isResponsiveMedia(node) && node.parent.attr({
                         contentEditable: "false",
                         "data-mce-contenteditable": "true"
                     }), node.replace(createPlaceholderNode(editor, node))) : isWithinEmbed(node) || node.replace(createPreviewNode(editor, node));
@@ -493,7 +493,7 @@
         }
         function objectActivate(ed, e) {
             var node = isMediaObject(e.target);
-            node && !isNonEditable(node) && (ed.selection.select(node), ed.dom.getAttrib(node, "data-mce-selected") && node.setAttribute("data-mce-selected", "2"), 
+            node && !isNonEditable(ed, node) && (ed.selection.select(node), ed.dom.getAttrib(node, "data-mce-selected") && node.setAttribute("data-mce-selected", "2"), 
             "mousedown" === e.type && e.altKey && "IMG" !== node.nodeName && (e.target = function(editor, node) {
                 var ifr = new tinymce.html.DomParser({}, editor.schema).parse(node.innerHTML).firstChild, ifr = createReplacementNode(editor, createPlaceholderNode(editor, ifr));
                 return editor.dom.replace(ifr, node), ifr;
@@ -501,7 +501,7 @@
         }
         function setClipboardData(ed, e) {
             var node, e = e.clipboardData;
-            e && (node = isMediaObject()) && (isNonEditable(node) ? e.clearData() : (ed.selection.select(node), 
+            e && (node = isMediaObject()) && (isNonEditable(ed, node) ? e.clearData() : (ed.selection.select(node), 
             ed = {
                 html: node = ed.selection.getContent({
                     contextual: !0
@@ -518,7 +518,7 @@
         }
         sandbox_iframes_exclusions = sandbox_iframes_exclusions.concat(custom_sandbox_iframes_exclusions), 
         ed.onMouseDown.add(objectActivate), ed.onKeyDown.add(objectActivate), ed.onNodeChange.addToTop(function(ed, cm, n, collapsed, o) {
-            !isMediaNode(n) || isNonEditable(n) || o.contenteditable || (o.contenteditable = !0);
+            !isMediaNode(n) || isNonEditable(ed, n) || o.contenteditable || (o.contenteditable = !0);
         }), ed.onPreInit.add(function() {
             ed.onUpdateMedia.add(function(ed, o) {
                 o.before && o.after && isSupportedMedia(ed, o.before) && each(ed.dom.select("video.mce-object, audio.mce-object, iframe.mce-object, img.mce-object"), function(elm) {
@@ -579,7 +579,7 @@
                 var node = ed.selection.getNode();
                 node.hasAttribute("data-mce-object") && (each(ed.dom.select(".mce-object-preview video, .mce-object-preview audio"), function(elm) {
                     elm.pause();
-                }), node) && "IMG" === node.nodeName && "object" !== node.getAttribute("data-mce-object") && !isNonEditable(node) && "click" === e.type && e.altKey && (e.target = function(editor, node) {
+                }), node) && "IMG" === node.nodeName && "object" !== node.getAttribute("data-mce-object") && !isNonEditable(ed, node) && "click" === e.type && e.altKey && (e.target = function(editor, node) {
                     for (var name, placeholder = new Node("img", 1), attributes = (placeholder.shortEnded = !0, 
                     node.attributes), i = attributes.length; i--; ) name = attributes[i].nodeName, 
                     placeholder.attr(name, "" + node.getAttribute(name));
@@ -598,7 +598,7 @@
             });
         }), ed.onKeyDown.add(function(ed, e) {
             var node = ed.selection.getNode();
-            e.keyCode !== VK.BACKSPACE && e.keyCode !== VK.DELETE || node && isMediaNode(node = node === ed.getBody() ? e.target : node) && (isNonEditable(node) ? e.preventDefault() : (node = ed.dom.getParent(node, "[data-mce-object]") || node, 
+            e.keyCode !== VK.BACKSPACE && e.keyCode !== VK.DELETE || node && isMediaNode(node = node === ed.getBody() ? e.target : node) && (isNonEditable(ed, node) ? e.preventDefault() : (node = ed.dom.getParent(node, "[data-mce-object]") || node, 
             ed.dom.remove(node), ed.nodeChanged()));
         }), ed.onCopy.add(setClipboardData), ed.onCut.add(setClipboardData), ed.onSetContent.add(function(ed, o) {
             updatePreviewSelection(ed);
@@ -606,7 +606,7 @@
             var body = DOM.create("div", {}, o.content);
             each(DOM.select("audio,video,object,iframe,embed", body), function(tag) {
                 var name = tag.nodeName.toLowerCase();
-                isValidElement(ed, name) || isNonEditable(tag) || DOM.remove(tag);
+                isValidElement(ed, name) || isNonEditable(ed, tag) || DOM.remove(tag);
             }), o.content = body.innerHTML;
         }), tinymce.util.MediaEmbed = {
             dataToHtml: function(name, data, innerHtml) {

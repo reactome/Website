@@ -151,8 +151,11 @@ class WFEditor
         // trigger event
         $app->triggerEvent('onBeforeWfEditorLoad', array(&$config));
 
-        // set profile
-        $this->profile = $wf->getProfile($config['plugin'], $config['profile_id']);
+        // get all profiles
+        $profiles = $wf->getProfiles($config);
+
+        // set profile from "default"
+        $this->profile = $profiles['default'];
 
         // set context
         $this->context = $wf->getContext();
@@ -513,6 +516,8 @@ class WFEditor
         if ($this->isSkinRtl()) {
             $settings['skin_directionality'] = 'rtl';
         }
+        
+        $app->triggerEvent('onBeforeWfEditorSettings', array(&$settings));
 
         // set javascript compression script
         if ($settings['compress']['javascript']) {

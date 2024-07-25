@@ -140,7 +140,12 @@ class WFEditorPlugin extends CMSObject
     {
         $wf = WFApplication::getInstance();
 
-        return $wf->getProfile($plugin);
+        $options = array(
+            'plugin' => $plugin
+        );
+
+        // get all profiles
+        return $wf->getActiveProfile($options);
     }
 
     protected function getPluginVersion()
@@ -227,10 +232,15 @@ class WFEditorPlugin extends CMSObject
 
         $document = WFDocument::getInstance();
 
+        $query = array(
+            'task' => 'plugin.loadlanguages', 
+            'lang' => WFLanguage::getCode()
+        );
+
         // ini language
-        $document->addScript(array(Uri::base(true) . '/index.php?option=com_jce&' . $document->getQueryString(
-            array('task' => 'plugin.loadlanguages', 'lang' => WFLanguage::getCode())
-        )), 'joomla');
+        $document->addScript(
+            Uri::base(true) . '/index.php?option=com_jce&' . $document->getQueryString($query), 'joomla'
+        );
 
         // pack assets if required
         $document->pack(true, $this->getParam('editor.compress_gzip', 0));

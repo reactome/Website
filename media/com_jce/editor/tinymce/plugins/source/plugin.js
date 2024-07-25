@@ -1,4 +1,4 @@
-/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.78 | 2024-07-19 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, Event = tinymce.dom.Event;
     tinymce.PluginManager.add("source", function(ed, url) {
@@ -28,6 +28,8 @@
             return editor ? editor.value : null;
         }, this.hide = function() {
             DOM.hide(ed.id + "_editor_source");
+        }, this.isHidden = function() {
+            return DOM.isHidden(ed.id + "_editor_source");
         }, this.save = function(content, debounced) {
             var args, el = ed.getElement();
             return el ? (args = {

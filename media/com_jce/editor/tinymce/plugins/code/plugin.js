@@ -1,4 +1,4 @@
-/* jce - 2.9.76 | 2024-07-03 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.78 | 2024-07-19 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, Node = tinymce.html.Node, VK = tinymce.VK, DomParser = tinymce.html.DomParser, Serializer = tinymce.html.Serializer, SaxParser = tinymce.html.SaxParser;
     function createTextNode(value, raw) {
@@ -179,7 +179,7 @@
                     elm = ed.dom.getParent(elm, "p");
                     elm && 1 === elm.childNodes.length && ed.dom.remove(elm, 1);
                 });
-            }), ed.parser.addNodeFilter("script,style,noscript", function(nodes) {
+            }), ed.parser.addNodeFilter("script,style", function(nodes) {
                 for (var node, pre, text, value, placeholder, i = nodes.length; i--; ) (node = nodes[i]).firstChild && (node.firstChild.value = node.firstChild.value.replace(/<span([^>]+)>([\s\S]+?)<\/span>/gi, function(match, attr, content) {
                     return -1 === attr.indexOf("data-mce-code") ? match : ed.dom.decode(content);
                 })), code_blocks ? (value = new Serializer({
@@ -288,9 +288,9 @@
                 return "{" + start + attr + "}" + ed.dom.decode(content) + "{/" + start + "}";
             })), o.content = o.content.replace(/<(pre|span)([^>]+?)>([\s\S]*?)<\/\1>/gi, function(match, tag, attr, content) {
                 if (-1 === attr.indexOf("data-mce-code")) return match;
-                content = tinymce.trim(content), content = ed.dom.decode(content);
+                content = tinymce.trim(content);
                 attr = ed.dom.create("div", {}, match).firstChild.getAttribute("data-mce-code");
-                return "script" != attr && (content = content.replace(/<br[^>]*?>/gi, "\n")), 
+                return content = ed.dom.decode(content), "script" != attr && (content = content.replace(/<br[^>]*?>/gi, "\n")), 
                 "php" == attr && (content = content.replace(/<\?(php)?/gi, "").replace(/\?>/g, ""), 
                 content = "<?php\n" + tinymce.trim(content) + "\n?>"), content;
             }), o.content = o.content.replace(/<!--mce:protected ([\s\S]+?)-->/gi, function(match, content) {
