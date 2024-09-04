@@ -1,4 +1,4 @@
-/* jce - 2.9.78 | 2024-07-19 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.80 | 2024-08-15 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 import {
     JoomlaEditor,
     JoomlaEditorDecorator,
@@ -34,8 +34,9 @@ class JceDecorator extends JoomlaEditorDecorator {
 tinyMCE.onAddEditor.add(function(mgr, editor) {
     var elm = editor.getElement(), container = elm.parentNode;
     if ("advanced" === editor.settings.theme) {
-        const JceEditor = new JceDecorator(editor, "jce", elm.id), editorButtons = (JoomlaEditor.register(JceEditor), 
-        mgr.editors[0] === editor && JoomlaEditor.setActive(JceEditor), container.parentNode.querySelector(".editor-xtd-buttons"));
+        const JceEditor = new JceDecorator(editor, "jce", elm.id);
+        JoomlaEditor.register(JceEditor), mgr.editors[0] === editor && JoomlaEditor.setActive(JceEditor);
+        var editorButtons = container.parentNode.querySelector(".editor-xtd-buttons");
         editorButtons && (editorButtons.addEventListener("click", function(e) {
             e.target.matches("button") && e.target.parentNode === editorButtons && (mgr.setActive(editor), 
             JoomlaEditor.setActive(JceEditor));
@@ -45,4 +46,4 @@ tinyMCE.onAddEditor.add(function(mgr, editor) {
             JceEditor.editorButton(button);
         };
     }
-}), window.JceDecorator = JceDecorator;
+}), window.JceDecorator = JceDecorator, window.JoomlaEditor = JoomlaEditor;

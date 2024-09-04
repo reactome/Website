@@ -1,4 +1,4 @@
-/* jce - 2.9.78 | 2024-07-19 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.80 | 2024-08-15 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, PreviewCss = tinymce.util.PreviewCss, NodeType = tinymce.dom.NodeType, DOM = tinymce.DOM, Event = tinymce.dom.Event;
     function compileFilter(filter) {
@@ -123,14 +123,18 @@
                     });
                 }
                 styles && each(styles, function(val, key) {
-                    var name, fmt;
-                    val && (val = val.replace(/^\./, ""), name = "style_" + counter++, 
-                    ed.formatter.register(name, fmt = {
-                        inline: "span",
-                        classes: val,
-                        selector: "*",
+                    var name, fmt, element;
+                    val && (val = 1 < (val = (val = (val = val).replace(/^\./, "")).split(".")).length ? (element = val[0] || "*", 
+                    val.slice(1).join(".")) : (element = "*", val[0]), name = "style_" + counter++, 
+                    fmt = {
+                        classes: (val = {
+                            element: element,
+                            className: val
+                        }).className,
+                        selector: val.element,
                         ceFalseOverride: !0
-                    }), key = key && key.replace(/^\./, ""), ctrl.add(ed.translate(key), name, {
+                    }, "*" == val.element && (fmt.inline = "span"), ed.formatter.register(name, fmt), 
+                    key = key && key.replace(/^\./, ""), ctrl.add(ed.translate(key), name, {
                         style: function() {
                             return preview_styles ? PreviewCss.getCssText(ed, fmt, !0) : "";
                         }

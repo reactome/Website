@@ -1,4 +1,4 @@
-/* jce - 2.9.78 | 2024-07-19 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.80 | 2024-08-15 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, Node = tinymce.html.Node, VK = tinymce.VK, DomParser = tinymce.html.DomParser, Serializer = tinymce.html.Serializer, SaxParser = tinymce.html.SaxParser;
     function createTextNode(value, raw) {
@@ -86,17 +86,17 @@
             });
         }
         function createCodePre(data, type, tag) {
-            return !1 === code_blocks ? (data = data.replace(/<br[^>]*?>/gi, "\n"), 
+            return code_blocks ? ed.dom.createHTML(tag || "pre", {
+                "data-mce-code": type || "script",
+                "data-mce-type": "code"
+            }, ed.dom.encode(data)) : (data = data.replace(/<br[^>]*?>/gi, "\n"), 
             ed.dom.createHTML("img", {
                 src: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
                 "data-mce-resize": "false",
                 "data-mce-code": type || "script",
                 "data-mce-type": "placeholder",
                 "data-mce-value": escape(data)
-            })) : ed.dom.createHTML(tag || "pre", {
-                "data-mce-code": type || "script",
-                "data-mce-type": "code"
-            }, ed.dom.encode(data));
+            }));
         }
         function handleEnterInPre(ed, node, before) {
             var node = ed.dom.getParents(node, blockElements.join(",")), newBlockName = ed.settings.forced_root_block || "p", node = (!1 === ed.settings.force_block_newlines && (newBlockName = "br"), 
@@ -247,8 +247,7 @@
                             for (var n = items.length; n--; ) {
                                 var item = items[n];
                                 each(item.attributes, function(attr) {
-                                    if (!attr) return !0;
-                                    !1 === ed.schema.isValid(name, attr.name) && item.attr(attr.name, null);
+                                    return !attr || 0 === attr.name.indexOf("data-") && -1 === attr.name.indexOf("data-mce-") || void (!1 === ed.schema.isValid(name, attr.name) && item.attr(attr.name, null));
                                 });
                             }
                         }), parser = parser.parse(text, {

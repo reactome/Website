@@ -13,6 +13,8 @@ namespace Joomla\Plugin\Editors\Jce\Extension;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Plugin\Editors\Jce\PluginTraits\DisplayTrait;
 use Joomla\Plugin\Editors\Jce\PluginTraits\XTDButtonsTrait;
+use Joomla\CMS\Event\Editor\EditorSetupEvent;
+use Joomla\CMS\Uri\Uri;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;

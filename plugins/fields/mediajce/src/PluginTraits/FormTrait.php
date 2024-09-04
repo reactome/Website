@@ -12,6 +12,7 @@ namespace Joomla\Plugin\Fields\MediaJce\PluginTraits;
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Form\FormHelper;
@@ -26,6 +27,8 @@ use Joomla\CMS\Uri\Uri;
  */
 trait FormTrait
 {
+    private $mediaLoaded = false;
+    
     /**
      * Transforms the field into a DOM XML element and appends it as a child on the given parent.
      *
@@ -49,39 +52,15 @@ trait FormTrait
             return $fieldNode;
         }
 
+        // override "Edit Custom Field Value" permission if set
+        $fieldNode->setAttribute('disabled', 'false');
+
         $fieldParams = clone $this->params;
-        $fieldParams->merge($field->fieldparams);
+        $field->fieldparams->merge($fieldParams);
 
         $form->addFieldPath(JPATH_PLUGINS . '/fields/mediajce/fields');
 
-        // find a better way to do this....
-        if (PluginHelper::isEnabled('system', 'jcepro')) {
-
-            $form->addFieldPath(JPATH_PLUGINS . '/system/jcepro/fields');
-            // Joomla 3 requires the fieldtype to be loaded
-            FormHelper::loadFieldType('extendedmedia', false);
-
-            $fieldNode->setAttribute('type', 'extendedmedia');
-
-            // set extendedmedia flag
-            if ((int) $fieldParams->get('extendedmedia', 0) == 1) {
-                $fieldNode->setAttribute('data-extendedmedia', '1');
-            }
-
-            // allow for legacy media support
-            if ((int) $this->params->get('legacymedia', 0) == 1) {
-                $fieldNode->setAttribute('type', 'mediajce');
-            }
-
-            return $fieldNode;
-        }
-
-        // load scripts and styles for media field
-        HTMLHelper::_('jquery.framework');
-
-        $document = Factory::getDocument();
-        $document->addScript(Uri::root(true) . '/media/com_jce/site/js/media.min.js', array('version' => 'auto'));
-        $document->addStyleSheet(Uri::root(true) . '/media/com_jce/site/css/media.min.css', array('version' => 'auto'));
+        Factory::getApplication()->triggerEvent('onWfCustomFieldsPrepareDom', array($field, $fieldNode, $form));
 
         return $fieldNode;
     }

@@ -1,4 +1,4 @@
-/* jce - 2.9.78 | 2024-07-19 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.80 | 2024-08-15 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, Event = tinymce.dom.Event, extend = tinymce.extend, each = tinymce.each, Storage = tinymce.util.Storage, Delay = tinymce.util.Delay, explode = tinymce.explode;
     tinymce.create("tinymce.themes.AdvancedTheme", {
@@ -87,7 +87,7 @@
                     });
                 }, ti || 0) : (DOM.remove(id + "_blocker"), DOM.remove(id + "_progress"), 
                 clearTimeout(self.progressTimer));
-            }), ed.settings.compress.css || !1 === ed.settings.content_css || ed.contentCSS.push(ed.baseURI.toAbsolute(url + "/skins/" + ed.settings.skin + "/content.css"));
+            }), !1 !== ed.settings.content_css && ed.contentCSS.push(ed.baseURI.toAbsolute(url + "/skins/" + ed.settings.skin + "/content.css"));
         },
         createControl: function(n, cf) {
             var c;
