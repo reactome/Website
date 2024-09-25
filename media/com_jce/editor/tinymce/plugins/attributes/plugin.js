@@ -1,4 +1,4 @@
-/* jce - 2.9.80 | 2024-08-15 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.81 | 2024-09-24 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var languageValues = {
         Afrikaans: "af",
@@ -153,7 +153,9 @@
                         "_" !== name.charAt(0) && -1 === name.indexOf("-mce-") && (attribs[name] = node.getAttribute(name));
                     }
                     return attribs;
-                }(node = isRootNode(node) ? null : node), attribsMap = {
+                }(node = isRootNode(node = ed.dom.getParent(node, function(n) {
+                    return "false" != n.getAttribute("contenteditable");
+                }, ed.getBody())) ? null : node), attribsMap = {
                     id: "",
                     title: "",
                     class: "",
@@ -161,10 +163,13 @@
                     dir: ""
                 }, custom = [], form = ((mediaApi = ed.plugins.media ? ed.plugins.media : mediaApi) && mediaApi.isMediaObject(node) && (nodeAttribs = mediaApi.getMediaData()), 
                 each(nodeAttribs, function(value, name) {
-                    var attr;
-                    name in attribsMap ? attribsMap[name] = value : (attr = {}, 
-                    value && (0 == name.indexOf("on") && (value = ed.dom.getAttrib(node, "data-mce-" + name) || value), 
-                    attr[name] = value, custom.push(attr)));
+                    if (name in attribsMap) "class" == name && (value = value.replace(/\bmce-\S+\s*/g, "").replace(/\s+$/, " ").trim()), 
+                    attribsMap[name] = value; else {
+                        var attr = {};
+                        if ("_" === name.charAt(0) || -1 !== name.indexOf("-mce-")) return !0;
+                        value && (0 == name.indexOf("on") && (value = ed.dom.getAttrib(node, "data-mce-" + name) || value), 
+                        attr[name] = value, custom.push(attr));
+                    }
                 }), cm.createForm("attributes_form")), stylesList = (each([ "title", "id" ], function(name) {
                     form.add(cm.createTextBox("attributes_" + name, {
                         label: ed.getLang("attributes.label_" + name, name),

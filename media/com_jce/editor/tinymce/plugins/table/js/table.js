@@ -1,4 +1,4 @@
-/* jce - 2.9.80 | 2024-08-15 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.81 | 2024-09-24 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function(tinymce, tinyMCEPopup, $) {
     function trimSize(size) {
         return (size = size.replace(/([0-9\.]+)(px|%|in|cm|mm|em|ex|pt|pc)/i, "$1$2")) ? size.replace(/px$/, "") : "";
@@ -289,6 +289,10 @@
                 null == newParent && (newParent = doc.createElement(dest), "thead" == dest ? "CAPTION" == theTable.firstChild.nodeName ? ed.dom.insertAfter(newParent, theTable.firstChild) : theTable.insertBefore(newParent, theTable.firstChild) : theTable.appendChild(newParent)), 
                 newParent.appendChild(curRowType), tr.parentNode.removeChild(tr), 
                 tr = curRowType;
+                skip_parent = ed.dom.select("td", tr);
+                tinymce.each(skip_parent, function(cell) {
+                    ed.dom.rename(cell, "th");
+                });
             }
         },
         updateRows: function() {

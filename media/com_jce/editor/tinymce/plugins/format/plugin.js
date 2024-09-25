@@ -1,4 +1,4 @@
-/* jce - 2.9.80 | 2024-08-15 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.81 | 2024-09-24 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var VK = tinymce.VK, each = tinymce.each, blocks = [];
     tinymce.PluginManager.add("format", function(ed, url) {
@@ -89,6 +89,14 @@
                 inline: "i",
                 remove: "all"
             });
+            var doc, head, values, custom_css = ed.getParam("custom_css", "");
+            custom_css && (head = (doc = ed.getDoc()).getElementsByTagName("head")[0], 
+            ed = ed.dom.create("style", {
+                type: "text/css",
+                id: "mceCustomStyles"
+            }), values = [], each(custom_css.split(";"), function(value) {
+                values.push(".mceContentBody " + value);
+            }), ed.appendChild(doc.createTextNode(values.join(";"))), head.appendChild(ed));
         }), ed.settings.removeformat = [ {
             selector: "b,strong,em,i,font,u,strike,sub,sup,dfn,code,samp,kbd,var,cite,mark,q,footer",
             remove: "all",

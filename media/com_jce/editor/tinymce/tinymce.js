@@ -1,4 +1,4 @@
-/* jce - 2.9.80 | 2024-08-15 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.81 | 2024-09-24 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     !function(win) {
@@ -11992,7 +11992,7 @@
             return text.raw = !1 !== raw, text.value = value, text;
         }
         tinymce.PluginManager.add("code", function(ed, url) {
-            var blockElements = [], htmlSchema = new tinymce.html.Schema({
+            var blockElements = [], inlineElements = [], htmlSchema = new tinymce.html.Schema({
                 schema: "mixed",
                 invalid_elements: ed.settings.invalid_elements
             }), xmlSchema = new tinymce.html.Schema({
@@ -12146,6 +12146,8 @@
                     }));
                 }), each(ed.schema.getBlockElements(), function(block, blockName) {
                     blockElements.push(blockName);
+                }), each(ed.schema.getTextInlineElements(), function(inline, name) {
+                    inlineElements.push(name);
                 }), ed.settings.code_protect_shortcode && (ed.textpattern.addPattern({
                     start: "{",
                     end: "}",
@@ -12192,7 +12194,7 @@
                     for (;i--; ) {
                         var type, parent = (node = nodes[i]).parent;
                         "placeholder" == node.attr("data-mce-type") || "shortcode" !== (type = node.attr(name)) && "php" !== type || ((type = node.firstChild.value) && (node.firstChild.value = type.replace(/<br[\s\/]*>/g, "\n")), 
-                        parent && (parent.attr(name) ? node.unwrap() : "body" === parent.name || function(node) {
+                        parent && (parent.attr(name) ? node.unwrap() : ("body" !== parent.name && !function(node) {
                             var child = node.parent.firstChild, count = 0;
                             if (child) do {
                                 if (1 === child.type) {
@@ -12203,10 +12205,12 @@
                                 8 === child.type && count++, 3 !== child.type || /^[ \t\r\n]*$/.test(child.value) || count++;
                             } while (child = child.next);
                             return 0 === count;
-                        }(node) || !function(node) {
-                            return "span" == node.name && (node.next && ("#text" == node.next.type || !isBlockNode(node.next)) || node.prev && ("#text" == node.prev.type || !isBlockNode(node.prev)));
-                        }(node) ? node.name = "pre" : "span" == node.name && node === parent.lastChild && (type = createTextNode("\xa0"), 
-                        parent.append(type))));
+                        }(node) && function(node) {
+                            return "span" == node.name && (node.next && ("#text" == node.next.type || !isBlockNode(node.next)) || node.prev && ("#text" == node.prev.type || !isBlockNode(node.prev)) || node.parent && !isBlockNode(node.parent));
+                        }(node) || (node.name = "pre", node.parent && function(node) {
+                            return -1 != tinymce.inArray(inlineElements, node.name);
+                        }(node.parent) && (node.name = "span")), "span" == node.name && node === parent.lastChild && (type = createTextNode("\xa0"), 
+                        parent.append(type)))));
                     }
                 }), ed.serializer.addAttributeFilter("data-mce-code", function(nodes, name) {
                     for (var i = nodes.length; i--; ) {
@@ -12432,6 +12436,14 @@
                     inline: "i",
                     remove: "all"
                 });
+                var doc, head, values, custom_css = ed.getParam("custom_css", "");
+                custom_css && (head = (doc = ed.getDoc()).getElementsByTagName("head")[0], 
+                ed = ed.dom.create("style", {
+                    type: "text/css",
+                    id: "mceCustomStyles"
+                }), values = [], each(custom_css.split(";"), function(value) {
+                    values.push(".mceContentBody " + value);
+                }), ed.appendChild(doc.createTextNode(values.join(";"))), head.appendChild(ed));
             }), ed.settings.removeformat = [ {
                 selector: "b,strong,em,i,font,u,strike,sub,sup,dfn,code,samp,kbd,var,cite,mark,q,footer",
                 remove: "all",

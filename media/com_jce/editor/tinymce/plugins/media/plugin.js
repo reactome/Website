@@ -1,4 +1,4 @@
-/* jce - 2.9.80 | 2024-08-15 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.81 | 2024-09-24 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, extend = tinymce.extend, Node = tinymce.html.Node, VK = tinymce.VK, Serializer = tinymce.html.Serializer, DomParser = tinymce.html.DomParser, SaxParser = tinymce.html.SaxParser, DOM = tinymce.DOM, htmlSchema = new tinymce.html.Schema({
         schema: "mixed"
@@ -43,7 +43,7 @@
     function isCenterAligned(style) {
         return "block" == style.display && "auto" == style["margin-left"] && "auto" == style["margin-right"];
     }
-    var sandbox_iframes_exclusions = [ "youtube.com", "youtu.be", "vimeo.com", "player.vimeo.com", "dailymotion.com", "embed.music.apple.com", "open.spotify.com", "giphy.com", "dai.ly", "codepen.io", "maps.google.com", "google.com/maps", "docs.google.com" ], mediaProviders = {
+    var sandbox_iframes_exclusions = [ "youtube.com", "youtu.be", "vimeo.com", "player.vimeo.com", "dailymotion.com", "embed.music.apple.com", "open.spotify.com", "giphy.com", "dai.ly", "codepen.io", "maps.google.com", "google.com/maps", "docs.google.com", "google.com/docs", "sheets.google.com", "google.com/sheets", "slides.google.com", "google.com/slides", "forms.google.com", "google.com/forms", "canva.com", "slideshare.net", "slides.com", "facebook.com", "instagram.com" ], mediaProviders = {
         youtube: /youtu(\.)?be(.+)?\/(.+)/,
         vimeo: /vimeo(.+)?\/(.+)/,
         dailymotion: /dai\.?ly(motion)?(\.com)?/,
@@ -52,10 +52,12 @@
         soundcloud: /soundcloud\.com\/(.+)/,
         spotify: /spotify\.com\/(.+)/,
         ted: /ted\.com\/talks\/(.+)/,
-        twitch: /twitch\.tv\/(.+)/
+        twitch: /twitch\.tv\/(.+)/,
+        facebook: /facebook\.com\/(.+)/,
+        instagram: /instagram\.com\/(.+)/
     };
     function getMediaProps(ed, data, provider) {
-        var src, id, matches, defaultValues = {
+        var id, matches, src, defaultValues = {
             youtube: {
                 src: data = data.src || "",
                 width: 560,
@@ -63,7 +65,8 @@
                 frameborder: 0,
                 allowfullscreen: "allowfullscreen",
                 allow: "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture",
-                sandbox: !1
+                sandbox: !1,
+                oembed: !0
             },
             vimeo: {
                 src: data,
@@ -72,7 +75,8 @@
                 frameborder: 0,
                 allowfullscreen: "allowfullscreen",
                 allow: "autoplay; fullscreen",
-                sandbox: !1
+                sandbox: !1,
+                oembed: !0
             },
             dailymotion: {
                 src: data,
@@ -81,7 +85,8 @@
                 frameborder: 0,
                 allowfullscreen: "allowfullscreen",
                 allow: "autoplay; fullscreen",
-                sandbox: !1
+                sandbox: !1,
+                oembed: !0
             },
             video: {
                 src: data,
@@ -97,7 +102,8 @@
                 frameborder: 0,
                 allowfullscreen: "allowfullscreen",
                 allow: "fullscreen",
-                sandbox: !1
+                sandbox: !1,
+                oembed: !0
             },
             soundcloud: {
                 src: "",
@@ -106,7 +112,8 @@
                 frameborder: 0,
                 scrolling: "no",
                 allow: "autoplay; fullscreen",
-                sandbox: !1
+                sandbox: !1,
+                oembed: !0
             },
             spotify: {
                 src: data,
@@ -115,7 +122,8 @@
                 frameborder: 0,
                 allowtransparency: !0,
                 allow: "encrypted-media",
-                sandbox: !1
+                sandbox: !1,
+                oembed: !0
             },
             ted: {
                 src: "",
@@ -124,7 +132,8 @@
                 frameborder: 0,
                 allowfullscreen: "allowfullscreen",
                 allow: "fullscreen",
-                sandbox: !1
+                sandbox: !1,
+                oembed: !0
             },
             twitch: {
                 src: "",
@@ -133,7 +142,29 @@
                 frameborder: 0,
                 allowfullscreen: "allowfullscreen",
                 allow: "autoplay; fullscreen",
-                sandbox: !1
+                sandbox: !1,
+                oembed: !0
+            },
+            instagram: {
+                src: "",
+                width: 400,
+                height: 480,
+                frameborder: 0,
+                allowfullscreen: "allowfullscreen",
+                sandbox: !1,
+                oembed: !1
+            },
+            facebook: {
+                src: "",
+                frameborder: 0,
+                width: 500,
+                height: 280,
+                allowtransparency: "allowtransparency",
+                allowfullscreen: "allowfullscreen",
+                scrolling: "no",
+                allow: "encrypted-media;fullscreen",
+                sandbox: !1,
+                oembed: !1
             }
         }, data = data.replace(/[^a-z0-9-_:&;=%\?\[\]\/\.]/gi, "");
         return defaultValues[provider] || (defaultValues[provider] = {}), defaultValues[provider].src = data, 
@@ -150,7 +181,12 @@
         defaultValues[provider].src = "https://dailymotion.com/embed/video/" + id), 
         "spotify" === provider && (defaultValues[provider].src = data.replace(/open\.spotify\.com\/track\//, "open.spotify.com/embed/track/")), 
         "ted" === provider && (defaultValues[provider].src = data.replace(/www\.ted.com\/talks\//, "embed.ted.com/talks/")), 
-        defaultValues[provider];
+        "twitch" === provider && (defaultValues[provider].src = data.replace(/twitch\.tv\//, "player.twitch.tv/?channel=")), 
+        "instagram" === provider && (data = (data = data.replace(/\/\?.+$/gi, "")).replace(/\/$/, ""), 
+        defaultValues[provider].src = data + "/embed/captioned"), "facebook" === provider && (src = "https://www.facebook.com/plugins/", 
+        -1 !== data.indexOf("/videos/") && (src += "video.php?href="), -1 !== data.indexOf("/posts/") && (src += "post.php?href=", 
+        defaultValues[provider].height = 247, data = data.replace(/\?.+$/, "")), 
+        defaultValues[provider].src = src + encodeURIComponent(data)), defaultValues[provider];
     }
     function updateSandbox(editor, node) {
         var src = node.attr("src");
@@ -470,7 +506,7 @@
             !0) : "img" !== nodeName && !htmlSchema.isValid(nodeName, name) || (tinymce.is(boolAttrs[name]) && !value && (value = null, 
             "autoplay" == name) && (attribs["data-mce-p-" + name] = null), "img" !== nodeName || htmlSchema.isValid(nodeName, name) && "src" !== name || null === value ? ("iframe" == nodeName && "src" == name && (value = (attribs["data-mce-p-" + name] = value).replace("autoplay=1", "autoplay=1")), 
             "class" == name && value ? (ed.dom.addClass(node, value), !0) : "style" == name && value ? (ed.dom.setStyles(node, ed.dom.parseStyle(value)), 
-            !0) : void (attribs[name] = value)) : (attribs["data-mce-p-" + name] = value, 
+            !0) : void (attribs[name] = value = "sandbox" == name && !1 === value ? null : value)) : (attribs["data-mce-p-" + name] = value, 
             !0));
         }), ed.dom.setAttribs(node, attribs), ed.dom.parseStyle(node.getAttribute("style")));
         preview && (isCenterAligned(elm) && ed.dom.addClass(preview, "mce-object-preview-center"), 
@@ -642,6 +678,9 @@
                     }
                     return data;
                 }(ed);
+            },
+            getMediaProps: function(data, provider) {
+                return getMediaProps(0, data, provider);
             },
             updateMedia: function(data) {
                 return updateMedia(ed, data);

@@ -1,4 +1,4 @@
-/* jce - 2.9.80 | 2024-08-15 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.81 | 2024-09-24 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function(tinymce) {
     var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each, VK = tinymce.VK, TreeWalker = tinymce.dom.TreeWalker, Delay = tinymce.util.Delay;
     function getSpanVal(td, name) {
@@ -297,7 +297,7 @@
                 });
             }), !1 !== ed.settings.table_merge_content_on_paste && ed.onPasteBeforeInsert.add(function(ed, o) {
                 var table, dom = ed.dom, elm = o.node;
-                elm && (table = elm.firstChild) && "TABLE" === table.nodeName && 1 === elm.childNodes.length && (elm = ed.selection.getNode(), 
+                (elm = o.internal && !elm ? ed.dom.create("div", {}, o.content) : elm) && (table = elm.firstChild) && "TABLE" === table.nodeName && 1 === elm.childNodes.length && (elm = ed.selection.getNode(), 
                 dom = dom.getParent(elm, "td,th")) && function(ed, startCell, table) {
                     for (var existingTable = ed.dom.getParent(startCell, "table"), startRowIndex = startCell.parentNode.rowIndex, startColIndex = Array.prototype.indexOf.call(startCell.parentNode.cells, startCell), maxCellsInNewContent = 0, i = 0; i < table.rows.length; i++) maxCellsInNewContent = Math.max(maxCellsInNewContent, table.rows[i].cells.length);
                     for (i = 0; i <= startRowIndex; i++) for (var currentRow = existingTable.rows[i], requiredCellCount = startColIndex + maxCellsInNewContent; currentRow.cells.length < requiredCellCount; ) currentRow.insertCell(-1);
@@ -309,6 +309,22 @@
                     }
                     return 1;
                 }(ed, dom, table) && (o.terminate = !0, ed.undoManager.add());
+            }), ed.selection.onGetContent.add(function(sel, o) {
+                var rows;
+                o.contextual && (sel = ed.dom.getParent(sel.getStart(), "table")) && (rows = [], 
+                each(sel.rows, function(row) {
+                    var cells = [];
+                    each(row.cells, function(cell) {
+                        ed.dom.hasClass(cell, "mceSelected") && cells.push(cell);
+                    }), cells.length && (cells.length === row.cells.length ? rows.push(row) : rows.push(cells));
+                }), rows.length) && (rows.length === sel.rows.length ? (sel = sel.cloneNode(!0), 
+                ed.dom.removeClass(ed.dom.select("td.mceSelected,th.mceSelected", sel), "mceSelected"), 
+                o.content = sel.outerHTML) : (sel = rows.map(function(row) {
+                    return "<tr>" + row.map(function(cell) {
+                        cell = cell.cloneNode(!0);
+                        return ed.dom.removeClass(cell, "mceSelected"), cell.outerHTML;
+                    }).join("") + "</tr>";
+                }), o.content = "<table>" + sel.join("") + "</table>"));
             });
         }), ed.onPreProcess.add(function(ed, args) {
             var nodes, i, node, value, dom = ed.dom;
