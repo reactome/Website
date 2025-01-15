@@ -1,4 +1,4 @@
-/* jce - 2.9.81 | 2024-09-24 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     !function(win) {
@@ -152,8 +152,8 @@
             }
         };
         tinymce._init(), (win.tinymce = win.tinyMCE = tinymce).dom = {}, tinymce.geom = {}, 
-        tinymce.text = {}, tinymce.caret = {}, tinymce.html = {}, tinymce.ui = {}, 
-        tinymce.util = {}, tinymce.file = {}, tinymce.plugins = {};
+        tinymce.text = {}, tinymce.caret = {}, tinymce.clipboard = {}, tinymce.html = {}, 
+        tinymce.ui = {}, tinymce.util = {}, tinymce.file = {}, tinymce.plugins = {};
     }(window);
     var webkit, userAgent = (nav = navigator).userAgent;
     function matchMediaQuery(query) {
@@ -1185,22 +1185,6 @@
         }, self.isDefaultPrevented = function(e) {
             return e.isDefaultPrevented();
         };
-    }
-    function cut(editor, evt) {
-        !evt.isDefaultPrevented() && hasSelectedContent(editor) && setClipboardData(evt, getData(editor), fallback(editor), function() {
-            var rng = editor.selection.getRng();
-            setTimeout(function() {
-                editor.selection.setRng(rng), editor.execCommand("Delete");
-            }, 0);
-        });
-    }
-    function copy(editor, evt) {
-        !evt.isDefaultPrevented() && hasSelectedContent(editor) && setClipboardData(evt, getData(editor), fallback(editor), noop);
-    }
-    function parseCssToRules(content) {
-        var doc = document.implementation.createHTMLDocument(""), styleElement = document.createElement("style");
-        return styleElement.textContent = content, doc.body.appendChild(styleElement), 
-        styleElement.sheet.cssRules;
     }
     tinymce.file.BlobCache = {
         create: function(o, blob, base64, filename) {
@@ -3580,14 +3564,57 @@
             }
         };
     };
+    var internalMark = "\x3c!-- x-tinymce/html --\x3e", unmark = function(html) {
+        return html.replace(internalMark, "");
+    }, isMarked = function(html) {
+        return -1 !== html.indexOf(internalMark);
+    };
+    var clipboardData = {
+        "text/html": "",
+        "text/plain": ""
+    };
+    function hasData() {
+        return !!clipboardData["text/html"] || !!clipboardData["text/plain"] || !!clipboardData["x-tinymce/html"];
+    }
+    function getData$1(mimetype) {
+        return mimetype ? clipboardData[mimetype] || "" : clipboardData;
+    }
+    function setData(mimetype, content) {
+        clipboardData[mimetype] = content;
+    }
+    function clearData() {
+        clipboardData = {
+            "text/html": "",
+            "text/plain": "",
+            "x-tinymce/html": ""
+        };
+    }
+    function cut(editor, evt) {
+        !evt.isDefaultPrevented() && hasSelectedContent(editor) && setClipboardData(evt, getData(editor), fallback(editor), function() {
+            var rng = editor.selection.getRng();
+            setTimeout(function() {
+                editor.selection.setRng(rng), editor.execCommand("Delete");
+            }, 0);
+        });
+    }
+    function copy(editor, evt) {
+        !evt.isDefaultPrevented() && hasSelectedContent(editor) && setClipboardData(evt, getData(editor), fallback(editor), noop);
+    }
+    function parseCssToRules(content) {
+        var doc = document.implementation.createHTMLDocument(""), styleElement = document.createElement("style");
+        return styleElement.textContent = content, doc.body.appendChild(styleElement), 
+        styleElement.sheet.cssRules;
+    }
+    clipboardData["x-tinymce/html"] = "";
     function noop() {}
     function setClipboardData(evt, data, fallback, done) {
         !function(clipboardData, html, text) {
-            if (function(clipboardData) {
+            if (clearData(), setData("text/html", html), setData("text/plain", text), 
+            setData("x-tinymce/html", html), function(clipboardData) {
                 return !1 === tinymce.isIOS && void 0 !== clipboardData && "function" == typeof clipboardData.setData;
             }(clipboardData)) try {
                 return clipboardData.clearData(), clipboardData.setData("text/html", html), 
-                clipboardData.setData("text/plain", text), clipboardData.setData(internalMimeType, html), 
+                clipboardData.setData("text/plain", text), clipboardData.setData("x-tinymce/html", html), 
                 1;
             } catch (e) {}
         }(evt.clipboardData, data.html, data.text) ? fallback(data.html, done) : (evt.preventDefault(), 
@@ -3630,11 +3657,7 @@
             return !!editor.dom.getParent(editor.selection.getStart(), "td.mceSelected,th.mceSelected", editor.getBody());
         }(editor);
     }
-    var internalMimeType = "x-tinymce/html", internalMark = "\x3c!-- " + internalMimeType + " --\x3e", unmark = function(html) {
-        return html.replace(internalMark, "");
-    }, isMarked = function(html) {
-        return -1 !== html.indexOf(internalMark);
-    }, DomParser$2 = tinymce.html.DomParser, Schema$1 = tinymce.html.Schema, each$4 = tinymce.each, DOM = tinymce.DOM, mceInternalUrlPrefix = "data:text/mce-internal,";
+    var DomParser$2 = tinymce.html.DomParser, Schema$1 = tinymce.html.Schema, each$4 = tinymce.each, DOM = tinymce.DOM, mceInternalUrlPrefix = "data:text/mce-internal,";
     function hasContentType(clipboardContent, mimeType) {
         return mimeType in clipboardContent && 0 < clipboardContent[mimeType].length;
     }
@@ -4293,12 +4316,14 @@
         var keyboardPastePlainTextState, keyboardPasteTimeStamp = 0;
         function getContentAndInsert(e) {
             var clipboardTimer = new Date().getTime(), clipboardContent = function(editor) {
-                return getDataTransferItems(e.clipboardData || e.dataTransfer || editor.getDoc().dataTransfer);
+                var content;
+                return hasData() ? (content = getData$1(), clearData()) : content = getDataTransferItems(e.clipboardData || e.dataTransfer || editor.getDoc().dataTransfer), 
+                content;
             }(editor), clipboardDelay = new Date().getTime() - clipboardTimer;
             function isKeyBoardPaste() {
                 return "drop" != e.type && new Date().getTime() - keyboardPasteTimeStamp - clipboardDelay < 1e3;
             }
-            var content, internal = hasContentType(clipboardContent, internalMimeType), pasteAsPlainText = keyboardPastePlainTextState;
+            var content, internal = hasContentType(clipboardContent, "x-tinymce/html"), pasteAsPlainText = keyboardPastePlainTextState;
             keyboardPastePlainTextState = !1, e.isDefaultPrevented() || isBrokenAndroidClipboardEvent(e) || (isKeyBoardPaste() || e.preventDefault(), 
             !isIE || isKeyBoardPaste() && !e.ieFake || hasContentType(clipboardContent, "text/html") || (pasteBin.create(), 
             editor.dom.bind(editor.dom.get("mcepastebin"), "paste", function(e) {
@@ -4325,7 +4350,7 @@
         editor.addCommand("mceInsertClipboardContent", function(u, data) {
             data.text && pasteText(editor, data.text), data.content && pasteHtml(editor, data.content, data.internal || !1);
         }), editor.onPaste.add(function(editor, e) {
-            if (e.isDefaultPrevented() || isBrokenAndroidClipboardEvent(e)) return pasteBin.remove(), 
+            if (e.isDefaultPrevented() || isBrokenAndroidClipboardEvent(e) && !hasData()) return pasteBin.remove(), 
             !1;
             getContentAndInsert(e), e.preventDefault();
         }), editor.onKeyDown.add(function(editor, e) {
@@ -4336,6 +4361,9 @@
             }), editor.dom.bind(editor.getBody(), "paste", function handler(e) {
                 removePasteBinOnKeyUp(e), editor.dom.unbind(editor.getBody(), "paste", handler);
             }));
+        }), editor.addCommand("mcePasteFakeClipboard", function(ui, e) {
+            var content = getData$1();
+            insertClipboardContent(editor, content, !0, !0 === e.isPlainText), clearData();
         });
     }
     function getCaretRangeFromEvent(editor, e) {
@@ -4409,6 +4437,13 @@
             }
         };
     }
+    tinymce.clipboard.FakeClipboard = Object.freeze({
+        __proto__: null,
+        clearData: clearData,
+        getData: getData$1,
+        hasData: hasData,
+        setData: setData
+    });
     function getEl(editor) {
         return editor.dom.get("mcepastebin");
     }
@@ -4455,10 +4490,10 @@
                     dataTransfer && dataTransfer.files && 0 < dataTransfer.files.length && e.preventDefault();
                 }), editor.dom.bind(editor.getBody(), "drop", function(e) {
                     var dropContent, internal, content, rng = getCaretRangeFromEvent(editor, e);
-                    e.isDefaultPrevented() || (internal = hasContentType(dropContent = getDataTransferItems(e.dataTransfer), internalMimeType) || draggingInternallyState, 
+                    e.isDefaultPrevented() || (internal = hasContentType(dropContent = getDataTransferItems(e.dataTransfer), "x-tinymce/html") || draggingInternallyState, 
                     (hasHtmlOrText(dropContent) && !function(content) {
                         return (content = content["text/plain"]) && 0 === content.indexOf("file://");
-                    }(dropContent) || !pasteImageData(e, rng)) && rng && !1 !== editor.settings.paste_filter_drop && (content = dropContent[internalMimeType] || dropContent["text/html"] || dropContent["text/plain"]) && (e.preventDefault(), 
+                    }(dropContent) || !pasteImageData(e, rng)) && rng && !1 !== editor.settings.paste_filter_drop && (content = dropContent["x-tinymce/html"] || dropContent["text/html"] || dropContent["text/plain"]) && (e.preventDefault(), 
                     Delay.setEditorTimeout(editor, function() {
                         editor.undoManager.add(), internal && (editor.execCommand("Delete", !1, null, {
                             skip_undo: !0
@@ -6846,8 +6881,9 @@
             renderHTML: function() {
                 for (var html = "", settings = this.settings, i = 0; i < this.controls.length; i++) {
                     var ctrl = this.controls[i], s = ctrl.settings;
-                    html += '<div class="mceFormRow">', s.label && (html += '<label for="' + ctrl.id + '">' + s.label + "</label>"), 
-                    html = (html += '\t<div class="mceFormControl">') + ctrl.renderHTML() + "\t</div></div>";
+                    s.subtype && "hidden" == s.subtype ? html += ctrl.renderHTML() : (html += '<div class="mceFormRow">', 
+                    s.label && (html += '<label for="' + ctrl.id + '">' + s.label + "</label>"), 
+                    html = (html += '\t<div class="mceFormControl">') + ctrl.renderHTML() + "\t</div></div>");
                 }
                 return dom.createHTML("div", {
                     id: this.id,
@@ -7557,7 +7593,9 @@
                 }), this.onPostRender.dispatch(this, DOM.get(this.id));
             },
             setDisabled: function(state) {
-                this._super(state), DOM.get(this.id).disabled = state;
+                this._super(state);
+                var elm = DOM.get(this.id);
+                elm && (elm.disabled = state);
             },
             destroy: function() {
                 this._super(), Event.clear(this.id);
@@ -12014,8 +12052,7 @@
                 }(html)), tagName = tagName || "span", html.replace(/(?:(<(code|pre|samp|span)[^>]*(data-mce-type="code")?>)?)(?:\{)([\w-]+)(.*?)(?:\/?\})(?:([\s\S]+?)\{\/\4\})?/g, function(match) {
                     return "<" === match.charAt(0) ? match : (tag = tagName, match = (match = ed.dom.decode(match)).replace(/[\n\r]/gi, "<br />"), 
                     ed.dom.createHTML(tag || "pre", {
-                        "data-mce-code": "shortcode",
-                        "data-mce-type": "code"
+                        "data-mce-code": "shortcode"
                     }, ed.dom.encode(match)));
                     var tag;
                 }));
@@ -12073,8 +12110,7 @@
             }
             function createCodePre(data, type, tag) {
                 return code_blocks ? ed.dom.createHTML(tag || "pre", {
-                    "data-mce-code": type || "script",
-                    "data-mce-type": "code"
+                    "data-mce-code": type || "script"
                 }, ed.dom.encode(data)) : (data = data.replace(/<br[^>]*?>/gi, "\n"), 
                 ed.dom.createHTML("img", {
                     src: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
@@ -12246,10 +12282,13 @@
                             newNode.append(root_block), newNode.unwrap());
                         }
                     }
-                }), ed.onGetClipboardContent.add(function(ed, content) {
-                    var text = content["text/plain"] || "";
-                    !(text = tinymce.trim(text)) || (ed = ed.selection.getNode()) && "PRE" === ed.nodeName || (ed = processOnInsert(text)) !== text && (content["text/plain"] = "", 
-                    content["text/html"] = content["x-tinymce/html"] = ed);
+                }), ed.onPaste.addToTop(function(ed, e) {
+                    var node, clipboardData = e.clipboardData || window.clipboardData || null;
+                    clipboardData && (clipboardData = clipboardData.getData("text/plain") || clipboardData.getData("Text") || clipboardData.getData("text") || "", 
+                    !(clipboardData = tinymce.trim(clipboardData)) || (node = ed.selection.getNode()) && "PRE" === node.nodeName || (node = processOnInsert(clipboardData)) !== clipboardData && (e.preventDefault(), 
+                    ed.execCommand("mceInsertContent", !1, node)));
+                }), ed.onContextMenu.addToTop(function(ed, e) {
+                    if ((ed = ed.selection.getNode()) && ed.hasAttribute("data-mce-code")) return !1;
                 });
             }), ed.onInit.add(function() {
                 ed.theme && ed.theme.onResolveName && ed.theme.onResolveName.add(function(theme, o) {
@@ -12277,9 +12316,8 @@
                     return "{" + start + attr + "}" + ed.dom.decode(content) + "{/" + start + "}";
                 })), o.content = o.content.replace(/<(pre|span)([^>]+?)>([\s\S]*?)<\/\1>/gi, function(match, tag, attr, content) {
                     return -1 === attr.indexOf("data-mce-code") ? match : (content = tinymce.trim(content), 
-                    attr = ed.dom.create("div", {}, match).firstChild.getAttribute("data-mce-code"), 
-                    content = ed.dom.decode(content), "script" != attr && (content = content.replace(/<br[^>]*?>/gi, "\n")), 
-                    "php" == attr && (content = content.replace(/<\?(php)?/gi, "").replace(/\?>/g, ""), 
+                    "script" != (attr = ed.dom.create("div", {}, match).firstChild.getAttribute("data-mce-code")) && (content = content.replace(/<br[^>]*?>/gi, "\n")), 
+                    content = ed.dom.decode(content), "php" == attr && (content = content.replace(/<\?(php)?/gi, "").replace(/\?>/g, ""), 
                     content = "<?php\n" + tinymce.trim(content) + "\n?>"), content);
                 }), o.content = o.content.replace(/<!--mce:protected ([\s\S]+?)-->/gi, function(match, content) {
                     return unescape(content);

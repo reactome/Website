@@ -1,4 +1,4 @@
-/* jce - 2.9.81 | 2024-09-24 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     var DOM = tinymce.DOM, each$1 = tinymce.each;
@@ -94,8 +94,7 @@
     }
     var each = tinymce.each;
     tinymce.PluginManager.add("clipboard", function(ed, url) {
-        var pasteText = ed.getParam("clipboard_paste_text", 1), pasteHtml = ed.getParam("clipboard_paste_html", 1);
-        ed.onInit.add(function() {
+        var pasteText = ed.getParam("clipboard_paste_text", 1), pasteHtml = ed.getParam("clipboard_paste_html", 1), FakeClipboard = (ed.onInit.add(function() {
             ed.plugins.contextmenu && ed.plugins.contextmenu.onContextMenu.add(function(th, m, e) {
                 var c = ed.selection.isCollapsed();
                 ed.getParam("clipboard_cut", 1) && m.add({
@@ -116,16 +115,21 @@
                     cmd: "mcePasteText"
                 });
             });
-        }), each([ "mcePasteText", "mcePaste" ], function(cmd) {
-            ed.addCommand(cmd, function() {
+        }), tinymce.clipboard.FakeClipboard);
+        each([ "mcePasteText", "mcePaste" ], function(cmd) {
+            ed.addCommand(cmd, function(ui) {
                 var doc = ed.getDoc(), failed = !1;
-                if (ed.getParam("clipboard_paste_use_dialog")) return openWin(ed, cmd);
-                try {
-                    doc.execCommand("Paste", !1, null);
-                } catch (e) {
-                    failed = !0;
+                if (!ui || !FakeClipboard.hasData()) {
+                    try {
+                        doc.execCommand("Paste", !1, null);
+                    } catch (e) {
+                        failed = !0;
+                    }
+                    return (failed = doc.queryCommandEnabled("Paste") ? failed : !0) ? openWin(ed, cmd) : void 0;
                 }
-                return (failed = !doc.queryCommandEnabled("Paste") || failed) ? openWin(ed, cmd) : void 0;
+                ed.execCommand("mcePasteFakeClipboard", !1, {
+                    isPlainText: "mcePasteText" === cmd
+                });
             });
         }), pasteHtml && ed.addButton("paste", {
             title: "clipboard.paste_desc",

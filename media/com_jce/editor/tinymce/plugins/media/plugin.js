@@ -1,4 +1,4 @@
-/* jce - 2.9.81 | 2024-09-24 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, extend = tinymce.extend, Node = tinymce.html.Node, VK = tinymce.VK, Serializer = tinymce.html.Serializer, DomParser = tinymce.html.DomParser, SaxParser = tinymce.html.SaxParser, DOM = tinymce.DOM, htmlSchema = new tinymce.html.Schema({
         schema: "mixed"
@@ -226,7 +226,7 @@
         return !editor.settings["media_" + tag + "_allow_local"] || isLocalUrl(editor, url);
     }
     function isSupportedMedia(editor, url) {
-        return /\.(mp4|ogv|ogg|webm)$/.test(url) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) ? "video" : /\.(mp3|ogg|webm|wav|m4a|aiff)$/.test(url) && isValidElement(editor, "audio") && isSupportedUrl(editor, "audio", url) ? "audio" : /\.(mov|qt|mpg|mpeg)$/.test(url) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) || /\.(divx)$/.test(url) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) ? "video" : /\.swf$/.test(url) && isValidElement(editor, "object") && isSupportedUrl(editor, "object", url) || /\.pdf$/.test(url) && isValidElement(editor, "object") && isSupportedUrl(editor, "object", url) ? "object" : !!(editor = isSupportedIframe(editor, url)) && ("string" == typeof editor ? editor : "iframe");
+        return url = stripQuery(url), /\.(mp4|ogv|ogg|webm)$/.test(url) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) ? "video" : /\.(mp3|ogg|webm|wav|m4a|aiff)$/.test(url) && isValidElement(editor, "audio") && isSupportedUrl(editor, "audio", url) ? "audio" : /\.(mov|qt|mpg|mpeg)$/.test(url) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) || /\.(divx)$/.test(url) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) ? "video" : /\.swf$/.test(url) && isValidElement(editor, "object") && isSupportedUrl(editor, "object", url) || /\.pdf$/.test(url) && isValidElement(editor, "object") && isSupportedUrl(editor, "object", url) ? "object" : !!(editor = isSupportedIframe(editor, url)) && ("string" == typeof editor ? editor : "iframe");
     }
     var isAbsoluteUrl = function(url) {
         return !!url && (0 === url.indexOf("//") || 0 < url.indexOf("://"));
@@ -281,6 +281,9 @@
             name: "html",
             value: settings
         }), nodes;
+    }
+    function stripQuery(value) {
+        return value = value && -1 !== value.indexOf("?") ? value.substring(0, value.indexOf("?")) : value;
     }
     for (var y, ext, lookup = {}, items = "video/divx,divx,application/pdf,pdf,application/x-shockwave-flash,swf swfl,audio/mpeg,mpga mpega mp2 mp3,audio/ogg,ogg spx oga,audio/x-wav,wav,video/mpeg,mpeg mpg mpe,video/mp4,mp4 m4v,video/ogg,ogg ogv,video/webm,webm,video/quicktime,qt mov,video/x-flv,flv,video/3gpp,3gp,video/x-matroska,mkv".split(/,/), i = 0; i < items.length; i += 2) for (ext = items[i + 1].split(/ /), 
     y = 0; y < ext.length; y++) ext[y], items[i];
@@ -691,9 +694,7 @@
             },
             getMediaHtml: function(data) {
                 return function(ed, value) {
-                    var nodeName = "iframe", attribs = {}, innerHTML = "", src = function(value) {
-                        return value = value && -1 !== value.indexOf("?") ? value.substring(0, value.indexOf("?")) : value;
-                    }((value = "string" == typeof value ? {
+                    var nodeName = "iframe", attribs = {}, innerHTML = "", src = stripQuery((value = "string" == typeof value ? {
                         src: value
                     } : value).src), boolAttrs = (/\.(mp4|m4v|ogg|webm|ogv)$/.test(src) ? nodeName = "video" : /\.(mp3|m4a|oga)$/.test(src) && (nodeName = "audio"), 
                     nodeName = value.mediatype || nodeName, ed.schema.getBoolAttrs());

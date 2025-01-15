@@ -1,4 +1,4 @@
-/* jce - 2.9.81 | 2024-09-24 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, Event = tinymce.dom.Event, extend = tinymce.extend, each = tinymce.each, Storage = tinymce.util.Storage, Delay = tinymce.util.Delay, explode = tinymce.explode;
     tinymce.create("tinymce.themes.AdvancedTheme", {
@@ -166,15 +166,16 @@
             });
         },
         _addToolbars: function(c, o) {
-            var i, tb, v, ed = this.editor, s = this.settings, cf = ed.controlManager, h = [], toolbarsExist = !1, toolbarGroup = cf.createToolbarGroup("toolbargroup", {
+            var i, tb, v, a, ed = this.editor, s = this.settings, cf = ed.controlManager, h = [], toolbarsExist = !1, toolbarGroup = cf.createToolbarGroup("toolbargroup", {
                 name: ed.getLang("advanced.toolbar"),
                 tab_focus_toolbar: ed.getParam("theme_tab_focus_toolbar"),
                 class: "ToolbarGroup"
             });
-            for (this.toolbarGroup = toolbarGroup, ed = s.theme_toolbar_align.toLowerCase(), 
-            ed = cf.classPrefix + this._ufirst(ed), c = DOM.add(c, "div", {
-                class: cf.classPrefix + "Toolbar " + ed,
-                role: "toolbar"
+            for (this.toolbarGroup = toolbarGroup, a = s.theme_toolbar_align.toLowerCase(), 
+            a = cf.classPrefix + this._ufirst(a), c = DOM.add(c, "div", {
+                class: cf.classPrefix + "Toolbar " + a,
+                role: "toolbar",
+                id: ed.id + "_toolbar"
             }), i = 1; v = s["theme_buttons" + i]; i++) toolbarsExist = !0, tb = cf.createToolbar("toolbar" + i, {
                 class: "mceToolbarRow" + i,
                 "aria-label": "Toolbar Row " + i

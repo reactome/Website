@@ -1,4 +1,4 @@
-/* jce - 2.9.81 | 2024-09-24 | https://www.joomlacontenteditor.net | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, Node = tinymce.html.Node, VK = tinymce.VK, DomParser = tinymce.html.DomParser, Serializer = tinymce.html.Serializer, SaxParser = tinymce.html.SaxParser;
     function createTextNode(value, raw) {
@@ -28,8 +28,7 @@
                 return "<" === match.charAt(0) ? match : (match = match, tag = tagName, 
                 match = (match = ed.dom.decode(match)).replace(/[\n\r]/gi, "<br />"), 
                 ed.dom.createHTML(tag || "pre", {
-                    "data-mce-code": "shortcode",
-                    "data-mce-type": "code"
+                    "data-mce-code": "shortcode"
                 }, ed.dom.encode(match)));
                 var tag;
             }));
@@ -87,8 +86,7 @@
         }
         function createCodePre(data, type, tag) {
             return code_blocks ? ed.dom.createHTML(tag || "pre", {
-                "data-mce-code": type || "script",
-                "data-mce-type": "code"
+                "data-mce-code": type || "script"
             }, ed.dom.encode(data)) : (data = data.replace(/<br[^>]*?>/gi, "\n"), 
             ed.dom.createHTML("img", {
                 src: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
@@ -260,10 +258,14 @@
                         newNode.append(root_block), newNode.unwrap());
                     }
                 }
-            }), ed.onGetClipboardContent.add(function(ed, content) {
-                var text = content["text/plain"] || "";
-                !(text = tinymce.trim(text)) || (ed = ed.selection.getNode()) && "PRE" === ed.nodeName || (ed = processOnInsert(text)) !== text && (content["text/plain"] = "", 
-                content["text/html"] = content["x-tinymce/html"] = ed);
+            }), ed.onPaste.addToTop(function(ed, e) {
+                var value, node, clipboardData = e.clipboardData || window.clipboardData || null;
+                clipboardData && (clipboardData = clipboardData.getData("text/plain") || clipboardData.getData("Text") || clipboardData.getData("text") || "", 
+                value = "", !(clipboardData = tinymce.trim(clipboardData)) || (node = ed.selection.getNode()) && "PRE" === node.nodeName || (value = processOnInsert(clipboardData)) !== clipboardData && (e.preventDefault(), 
+                ed.execCommand("mceInsertContent", !1, value)));
+            }), ed.onContextMenu.addToTop(function(ed, e) {
+                ed = ed.selection.getNode();
+                if (ed && ed.hasAttribute("data-mce-code")) return !1;
             });
         }), ed.onInit.add(function() {
             ed.theme && ed.theme.onResolveName && ed.theme.onResolveName.add(function(theme, o) {
@@ -293,8 +295,8 @@
                 if (-1 === attr.indexOf("data-mce-code")) return match;
                 content = tinymce.trim(content);
                 attr = ed.dom.create("div", {}, match).firstChild.getAttribute("data-mce-code");
-                return content = ed.dom.decode(content), "script" != attr && (content = content.replace(/<br[^>]*?>/gi, "\n")), 
-                "php" == attr && (content = content.replace(/<\?(php)?/gi, "").replace(/\?>/g, ""), 
+                return "script" != attr && (content = content.replace(/<br[^>]*?>/gi, "\n")), 
+                content = ed.dom.decode(content), "php" == attr && (content = content.replace(/<\?(php)?/gi, "").replace(/\?>/g, ""), 
                 content = "<?php\n" + tinymce.trim(content) + "\n?>"), content;
             }), o.content = o.content.replace(/<!--mce:protected ([\s\S]+?)-->/gi, function(match, content) {
                 return unescape(content);

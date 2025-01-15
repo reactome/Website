@@ -56,7 +56,9 @@ trait FormTrait
         $fieldNode->setAttribute('disabled', 'false');
 
         $fieldParams = clone $this->params;
-        $field->fieldparams->merge($fieldParams);
+        $fieldParams->merge($field->fieldparams);
+
+        $field->fieldparams = clone $fieldParams;
 
         $form->addFieldPath(JPATH_PLUGINS . '/fields/mediajce/fields');
 
@@ -90,6 +92,8 @@ trait FormTrait
 
         $fieldParams = clone $this->params;
         $fieldParams->merge($field->fieldparams);
+
+        $field->fieldparams = clone $fieldParams;
 
         // if extendedmedia is disabled, use restricted media support
         if ((int) $fieldParams->get('extendedmedia', 0) == 0 && is_array($field->value)) {
