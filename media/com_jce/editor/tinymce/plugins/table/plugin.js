@@ -1,6 +1,6 @@
-/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function(tinymce) {
-    var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each, VK = tinymce.VK, TreeWalker = tinymce.dom.TreeWalker, Delay = tinymce.util.Delay;
+    var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each, extend = tinymce.extend, VK = tinymce.VK, TreeWalker = tinymce.dom.TreeWalker, Delay = tinymce.util.Delay;
     function getSpanVal(td, name) {
         return parseInt(td.getAttribute(name) || 1, 10);
     }
@@ -269,6 +269,51 @@
             refresh: buildGrid
         });
     }
+    function updateCells(ed, data) {
+        var elm = ed.selection.getStart(), tdElm = ed.dom.getParent(elm, "td,th"), elm = ed.dom.getParent(elm, "table"), elm = ed.dom.select("td.mceSelected,th.mceSelected", elm);
+        elm.length || elm.push(tdElm), each(elm, function(td) {
+            !function(ed, td, data) {
+                var doc = ed.getDoc(), curCellType = td.nodeName.toLowerCase();
+                if (ed.dom.setAttrib(td, "style", data.style), ed.dom.setAttrib(td, "class", data.class), 
+                curCellType != data.celltype) {
+                    for (var newCell = doc.createElement(data.celltype), c = 0; c < td.childNodes.length; c++) newCell.appendChild(td.childNodes[c].cloneNode(1));
+                    for (var a = 0; a < td.attributes.length; a++) ed.dom.setAttrib(newCell, td.attributes[a].name, ed.dom.getAttrib(td, td.attributes[a].name));
+                    td.parentNode.replaceChild(newCell, td), td = newCell;
+                }
+            }(ed, td, data);
+        }), ed.addVisual(), ed.nodeChanged(), ed.undoManager.add();
+    }
+    function updateRows(ed, data) {
+        var dom = ed.dom, trElm = dom.getParent(ed.selection.getStart(), "tr"), tableElm = dom.getParent(ed.selection.getStart(), "table"), rows = [];
+        dom.select("td.mceSelected,th.mceSelected", trElm).length ? (data.skip_parent = !0, 
+        each(tableElm.rows, function(tr) {
+            for (var i = 0; i < tr.cells.length; i++) if (dom.hasClass(tr.cells[i], "mceSelected")) return void rows.push(tr);
+        })) : rows.push(trElm), each(rows, function(tr) {
+            !function(ed, tr, data) {
+                var dom = ed.dom, doc = ed.getDoc(), curRowType = tr.parentNode.nodeName.toLowerCase(), rowtype = data.rowtype;
+                if ((rows = dom.getParent(ed.selection.getStart(), "table").rows).length || rows.push(tr), 
+                dom.setAttrib(tr, "style", data.style), dom.setAttrib(tr, "class", data.class), 
+                curRowType != rowtype && !data.skip_parent) {
+                    for (var rows = tr.cloneNode(1), theTable = dom.getParent(tr, "table"), dest = rowtype, newParent = null, i = 0; i < theTable.childNodes.length; i++) theTable.childNodes[i].nodeName.toLowerCase() == dest && (newParent = theTable.childNodes[i]);
+                    null == newParent && (newParent = doc.createElement(dest), "thead" == dest ? "CAPTION" == theTable.firstChild.nodeName ? ed.dom.insertAfter(newParent, theTable.firstChild) : theTable.insertBefore(newParent, theTable.firstChild) : theTable.appendChild(newParent)), 
+                    newParent.appendChild(rows), tr.parentNode.removeChild(tr);
+                    curRowType = ed.dom.select("td", tr = rows);
+                    each(curRowType, function(cell) {
+                        ed.dom.rename(cell, "th");
+                    });
+                }
+            }(ed, tr, data);
+        }), ed.addVisual(), ed.nodeChanged(), ed.undoManager.add();
+    }
+    function insertTableHtml(ed, tableHtml) {
+        var patt;
+        ed.settings.fix_table_elements ? (patt = "", ed.focus(), ed.selection.setContent('<br class="_mce_marker" />'), 
+        tinymce.each("h1,h2,h3,h4,h5,h6,p".split(","), function(n) {
+            patt && (patt += ","), patt += n + " ._mce_marker";
+        }), each(ed.dom.select(patt), function(n) {
+            ed.dom.split(ed.dom.getParent(n, "h1,h2,h3,h4,h5,h6,p"), n);
+        }), ed.dom.setOuterHTML(ed.dom.select("br._mce_marker")[0], tableHtml)) : ed.execCommand("mceInsertContent", !1, tableHtml);
+    }
     tinymce.PluginManager.add("table", function(ed, url) {
         var winMan, clipboardRows, hasCellSelection = !0;
         function createTableGrid(node) {
@@ -286,6 +331,7 @@
                 ui: c[3]
             });
         }), ed.onPreInit.add(function() {
+            var basic_dialog, isMobile;
             ed.onSetContent.add(function(ed, e) {
                 cleanup(!0), ed.dom.addClass(ed.dom.select("table"), "mce-item-table");
             }), ed.onPastePostProcess.add(function(ed, args) {
@@ -299,10 +345,23 @@
                 var table, dom = ed.dom, elm = o.node;
                 (elm = o.internal && !elm ? ed.dom.create("div", {}, o.content) : elm) && (table = elm.firstChild) && "TABLE" === table.nodeName && 1 === elm.childNodes.length && (elm = ed.selection.getNode(), 
                 dom = dom.getParent(elm, "td,th")) && function(ed, startCell, table) {
-                    for (var existingTable = ed.dom.getParent(startCell, "table"), startRowIndex = startCell.parentNode.rowIndex, startColIndex = Array.prototype.indexOf.call(startCell.parentNode.cells, startCell), maxCellsInNewContent = 0, i = 0; i < table.rows.length; i++) maxCellsInNewContent = Math.max(maxCellsInNewContent, table.rows[i].cells.length);
-                    for (i = 0; i <= startRowIndex; i++) for (var currentRow = existingTable.rows[i], requiredCellCount = startColIndex + maxCellsInNewContent; currentRow.cells.length < requiredCellCount; ) currentRow.insertCell(-1);
-                    for (i = 0; i < table.rows.length; i++) for (var currentRow = existingTable.rows[startRowIndex + i] || existingTable.insertRow(startRowIndex + i), j = 0; j < table.rows[i].cells.length; j++) {
-                        for (var targetCellIndex = startColIndex + j; currentRow.cells.length <= targetCellIndex; ) currentRow.insertCell(-1);
+                    for (var dom = ed.dom, existingTable = dom.getParent(startCell, "table"), startRowIndex = startCell.parentNode.rowIndex, startColIndex = Array.prototype.indexOf.call(startCell.parentNode.cells, startCell), maxCellsInNewContent = 0, i = 0; i < table.rows.length; i++) maxCellsInNewContent = Math.max(maxCellsInNewContent, table.rows[i].cells.length);
+                    var requiredCellCount = startColIndex + maxCellsInNewContent, extraCellsNeeded = 0;
+                    for ((ed = existingTable.rows[startRowIndex]) && (extraCellsNeeded = Math.max(0, requiredCellCount - ed.cells.length)), 
+                    i = 0; i < existingTable.rows.length; i++) {
+                        var currentRow = existingTable.rows[i];
+                        if ("THEAD" !== currentRow.parentNode.tagName && "TH" !== currentRow.cells[0].tagName) for (var j = 0; j < extraCellsNeeded; j++) currentRow.insertCell(-1).innerHTML = '<br data-mce-bogus="1" />';
+                    }
+                    0 < extraCellsNeeded && existingTable.querySelectorAll("thead > tr").forEach(function(headerRow) {
+                        for (var i = 0; i < extraCellsNeeded; i++) {
+                            var newCell = dom.create("th");
+                            newCell.innerHTML = '<br data-mce-bogus="1" />', headerRow.appendChild(newCell);
+                        }
+                    });
+                    for (var totalRowsNeeded = startRowIndex + table.rows.length; existingTable.rows.length < totalRowsNeeded; ) for (var newRow = existingTable.insertRow(-1), i = 0; i < requiredCellCount; i++) newRow.insertCell(-1).innerHTML = '<br data-mce-bogus="1" />';
+                    for (i = 0; i < table.rows.length; i++) for (currentRow = existingTable.rows[startRowIndex + i] || existingTable.insertRow(startRowIndex + i), 
+                    j = 0; j < table.rows[i].cells.length; j++) {
+                        for (var targetCellIndex = startColIndex + j; currentRow.cells.length <= targetCellIndex; ) currentRow.insertCell(-1).innerHTML = '<br data-mce-bogus="1" />';
                         var cell = table.rows[i].cells[j];
                         "" === cell.innerHTML.trim() && (cell.innerHTML = '<br data-mce-bogus="1" />'), 
                         currentRow.cells[targetCellIndex].innerHTML = cell.innerHTML;
@@ -325,7 +384,290 @@
                         return ed.dom.removeClass(cell, "mceSelected"), cell.outerHTML;
                     }).join("") + "</tr>";
                 }), o.content = "<table>" + sel.join("") + "</table>"));
-            });
+            }), basic_dialog = ed.getParam("table_basic_dialog"), isMobile = window.matchMedia("(max-width: 600px)").matches, 
+            (basic_dialog || isMobile) && (function(ed) {
+                var cm = ed.controlManager, form = cm.createForm("table_form"), colsCtrl = cm.createTextBox("table_cols", {
+                    label: ed.getLang("table.cols", "Columns"),
+                    name: "cols",
+                    subtype: "number",
+                    attributes: {
+                        step: 1,
+                        min: 1
+                    },
+                    value: ed.getParam("table_default_cols", 2)
+                }), rowCtrl = (form.add(colsCtrl), cm.createTextBox("table_rows", {
+                    label: ed.getLang("table.rows", "Rows"),
+                    name: "rows",
+                    subtype: "number",
+                    attributes: {
+                        step: 1,
+                        min: 1
+                    },
+                    value: ed.getParam("table_default_rows", 2)
+                })), cellspacingCtrl = (form.add(rowCtrl), cm.createTextBox("table_cellspacing", {
+                    label: ed.getLang("table.cellspacing", "Cell Spacing"),
+                    name: "cellspacing",
+                    subtype: "number",
+                    attributes: {
+                        step: 1,
+                        min: 1
+                    },
+                    value: ed.getParam("table_default_cellspacing", "")
+                })), cellspacingCtrl = (form.add(cellspacingCtrl), cm.createTextBox("table_cellpadding", {
+                    label: ed.getLang("table.cellpadding", "Cell Padding"),
+                    name: "cellpadding",
+                    subtype: "number",
+                    attributes: {
+                        step: 1,
+                        min: 1
+                    },
+                    value: ed.getParam("table_default_cellpadding", "")
+                })), cellspacingCtrl = (form.add(cellspacingCtrl), cm.createTextBox("table_width", {
+                    label: ed.getLang("table.width", "Width"),
+                    name: "width",
+                    value: ed.getParam("table_default_width", "")
+                })), cellspacingCtrl = (form.add(cellspacingCtrl), cm.createTextBox("table_height", {
+                    label: ed.getLang("table.height", "Height"),
+                    name: "height",
+                    value: ed.getParam("table_default_height", "")
+                })), cellspacingCtrl = (form.add(cellspacingCtrl), cm.createStylesBox("table_classes", {
+                    label: ed.getLang("table.classes", "Classes"),
+                    onselect: function(v) {},
+                    name: "classes"
+                })), cellspacingCtrl = (form.add(cellspacingCtrl), cm.createCheckBox("table_caption", {
+                    label: ed.getLang("table.caption", "Caption"),
+                    name: "caption"
+                }));
+                function setValue(key, value) {
+                    key = cm.get(ed.id + "_table_" + key);
+                    key && key.value(value);
+                }
+                form.add(cellspacingCtrl), ed.addCommand("mceInsertTable", function() {
+                    ed.windowManager.open({
+                        title: ed.getLang("table.desc", "Table"),
+                        items: [ form ],
+                        size: "mce-modal-landscape-small",
+                        open: function() {
+                            var label = ed.getLang("insert", "Insert"), elm = ed.dom.getParent(ed.selection.getNode(), "table");
+                            if (elm) {
+                                for (var label = ed.getLang("update", "Update"), rowsAr = elm.rows, rows = rowsAr.length, cols = 0, i = 0; i < rows; i++) rowsAr[i].cells.length > cols && (cols = rowsAr[i].cells.length);
+                                setValue("caption", 0 < elm.getElementsByTagName("caption").length), 
+                                rowCtrl.setDisabled(!0), colsCtrl.setDisabled(!0), 
+                                setValue("cellspacing", elm.cellSpacing || ""), 
+                                setValue("cellpadding", elm.cellPadding || "");
+                                var styles = ed.dom.parseStyle(ed.dom.getAttrib(elm, "style")), width = styles.width || elm.width || "", styles = styles.height || elm.height || "", width = (width = width.replace("px", ""), 
+                                styles = styles.replace("px", ""), setValue("width", width), 
+                                setValue("height", styles), ed.dom.getAttrib(elm, "class"));
+                                setValue("classes", width = (width = width.replace(/mce-[\w\-]+/g, "")).replace(/^\s+|\s+$/g, ""));
+                            }
+                            DOM.setHTML(this.id + "_insert", label);
+                        },
+                        buttons: [ {
+                            title: ed.getLang("common.cancel", "Cancel"),
+                            id: "cancel"
+                        }, {
+                            title: ed.getLang("insert", "Insert"),
+                            id: "insert",
+                            onsubmit: function(e) {
+                                var data = form.submit(), args = (data.width && !isNaN(data.width) && (data.width += "px"), 
+                                data.height && !isNaN(data.height) && (data.height += "px"), 
+                                {
+                                    cellspacing: data.cellspacing,
+                                    cellpadding: data.cellpadding,
+                                    style: {
+                                        width: data.width,
+                                        height: data.height
+                                    },
+                                    class: data.classes
+                                }), elm = ed.dom.getParent(ed.selection.getNode(), "table");
+                                if (elm) {
+                                    var styles = ed.dom.parseStyle(ed.dom.getAttrib(elm, "style"));
+                                    extend(styles, args.style), args.style = ed.dom.serializeStyle(styles), 
+                                    ed.dom.setAttribs(elm, args), data.caption ? elm.getElementsByTagName("caption").length || ((styles = elm.ownerDocument.createElement("caption")).innerHTML = '<br data-mce-bogus="1"/>', 
+                                    elm.insertBefore(styles, elm.firstChild)) : (styles = elm.getElementsByTagName("caption")).length && elm.removeChild(styles[0]);
+                                } else {
+                                    var html = "";
+                                    data.caption && (html += '<caption><br data-mce-bogus="1" /></caption>');
+                                    for (var y = 0; y < data.rows; y++) {
+                                        html += "<tr>";
+                                        for (var x = 0; x < data.cols; x++) html += "<td>&nbsp;</td>";
+                                        html += "</tr>";
+                                    }
+                                    args.style = ed.dom.serializeStyle(args.style);
+                                    elm = ed.dom.createHTML("table", args, html);
+                                    insertTableHtml(ed, elm);
+                                }
+                                ed.addVisual(), Event.cancel(e);
+                            },
+                            classes: "primary",
+                            scope: self
+                        } ]
+                    });
+                });
+            }(ed), function(ed) {
+                var cm = ed.controlManager, form = cm.createForm("table_row_form"), rowtypeCtrl = cm.createListBox("table_row_type", {
+                    label: ed.getLang("table.rowtype", "Row Type"),
+                    name: "rowtype",
+                    onselect: function() {}
+                }), items = [ {
+                    title: ed.getLang("table.thead", "Header"),
+                    value: "thead"
+                }, {
+                    title: ed.getLang("table.tbody", "Body"),
+                    value: "tbody"
+                }, {
+                    title: ed.getLang("table.tfoot", "Footer"),
+                    value: "tfoot"
+                } ], heightCtrl = (each(items, function(item) {
+                    rowtypeCtrl.add(item.title, item.value);
+                }), form.add(rowtypeCtrl), cm.createTextBox("table_row_height", {
+                    label: ed.getLang("table.height", "Height"),
+                    name: "height"
+                })), stylesList = (form.add(heightCtrl), cm.createStylesBox("table_row_classes", {
+                    label: ed.getLang("table.classes", "Classes"),
+                    onselect: function(v) {},
+                    name: "classes"
+                }));
+                form.add(stylesList), ed.addCommand("mceTableRowProps", function() {
+                    ed.windowManager.open({
+                        title: ed.getLang("table.row_desc", "Table Rows"),
+                        items: [ form ],
+                        size: "mce-modal-landscape-small",
+                        open: function() {
+                            var label = ed.getLang("insert", "Insert"), elm = ed.dom.getParent(ed.selection.getStart(), "tr"), rowtype = elm.parentNode.nodeName.toLowerCase(), height = "", height = (elm && (label = ed.getLang("update", "Update"), 
+                            height = elm.style.height || elm.height || ""), -1 !== height.indexOf("px") && (height = height.replace("px", "")), 
+                            heightCtrl.value(height), rowtypeCtrl.value(rowtype), 
+                            ed.dom.getAttrib(elm, "class"));
+                            height = (height = height.replace(/mce-[\w\-]+/g, "")).replace(/^\s+|\s+$/g, ""), 
+                            stylesList.value(height), DOM.setHTML(this.id + "_insert", label);
+                        },
+                        buttons: [ {
+                            title: ed.getLang("common.cancel", "Cancel"),
+                            id: "cancel"
+                        }, {
+                            title: ed.getLang("insert", "Insert"),
+                            id: "insert",
+                            onsubmit: function(e) {
+                                var data = form.submit(), elm = ed.dom.getParent(ed.selection.getStart(), "tr"), selected = ed.dom.select("td.mceSelected,th.mceSelected", elm), selected = (data.action = selected.length ? "all" : "insert", 
+                                data.style = ed.dom.parseStyle(ed.dom.getAttrib(elm, "style")), 
+                                data.height && !isNaN(data.height) && (data.height += "px"), 
+                                data.style.height = data.height, {
+                                    style: ed.dom.serializeStyle(data.style),
+                                    rowtype: data.rowtype,
+                                    action: data.action,
+                                    class: data.classes
+                                });
+                                updateRows(ed, selected), Event.cancel(e);
+                            },
+                            classes: "primary",
+                            scope: self
+                        } ]
+                    });
+                });
+            }(ed), function(ed) {
+                var cm = ed.controlManager, form = cm.createForm("table_cell_form"), celltypeCtrl = cm.createListBox("table_cell_type", {
+                    label: ed.getLang("table.celltype", "Cell Type"),
+                    name: "celltype",
+                    onselect: function() {}
+                }), items = [ {
+                    title: ed.getLang("table.th", "Header"),
+                    value: "th"
+                }, {
+                    title: ed.getLang("table.td", "Data"),
+                    value: "td"
+                } ], widthCtrl = (each(items, function(item) {
+                    celltypeCtrl.add(item.title, item.value);
+                }), form.add(celltypeCtrl), cm.createTextBox("table_cell_width", {
+                    label: ed.getLang("table.width", "Width"),
+                    name: "width"
+                })), heightCtrl = (form.add(widthCtrl), cm.createTextBox("table_cell_height", {
+                    label: ed.getLang("table.height", "Height"),
+                    name: "height"
+                })), stylesList = (form.add(heightCtrl), cm.createStylesBox("table_cell_classes", {
+                    label: ed.getLang("table.classes", "Classes"),
+                    onselect: function(v) {},
+                    name: "classes"
+                }));
+                form.add(stylesList), ed.addCommand("mceTableCellProps", function() {
+                    ed.windowManager.open({
+                        title: ed.getLang("table.row_desc", "Table Cells"),
+                        items: [ form ],
+                        size: "mce-modal-landscape-small",
+                        open: function() {
+                            var label = ed.getLang("insert", "Insert"), elm = ed.dom.getParent(ed.selection.getStart(), "td,th"), celltype = elm.nodeName.toLowerCase(), width = "", height = "", styles = (elm && (label = ed.getLang("update", "Update"), 
+                            width = elm.width || "", height = elm.height || "", 
+                            width = (styles = ed.dom.parseStyle(ed.dom.getAttrib(elm, "style"))).width || "", 
+                            height = styles.height || ""), width = width.replace("px", ""), 
+                            height = height.replace("px", ""), widthCtrl.value(width), 
+                            heightCtrl.value(height), celltypeCtrl.value(celltype), 
+                            ed.dom.getAttrib(elm, "class"));
+                            styles = (styles = styles.replace(/mce-[\w\-]+/g, "")).replace(/^\s+|\s+$/g, ""), 
+                            stylesList.value(styles), DOM.setHTML(this.id + "_insert", label);
+                        },
+                        buttons: [ {
+                            title: ed.getLang("common.cancel", "Cancel"),
+                            id: "cancel"
+                        }, {
+                            title: ed.getLang("insert", "Insert"),
+                            id: "insert",
+                            onsubmit: function(e) {
+                                var data = form.submit(), elm = ed.dom.getParent(ed.selection.getStart(), "tr"), elm = (data.style = ed.dom.parseStyle(ed.dom.getAttrib(elm, "style")), 
+                                data.width && !isNaN(data.width) && (data.width += "px"), 
+                                data.height && !isNaN(data.height) && (data.height += "px"), 
+                                data.style.width = data.width, data.style.height = data.height, 
+                                {
+                                    style: ed.dom.serializeStyle(data.style),
+                                    celltype: data.celltype,
+                                    class: data.classes
+                                });
+                                updateCells(ed, elm), Event.cancel(e);
+                            },
+                            classes: "primary",
+                            scope: self
+                        } ]
+                    });
+                });
+            }(ed)), function(ed) {
+                var cm = ed.controlManager, form = cm.createForm("table_merge_form"), colsCtrl = cm.createTextBox("table_merge_cols", {
+                    label: ed.getLang("table.cols", "Columns"),
+                    name: "cols",
+                    subtype: "number",
+                    value: 1
+                }), rowsCtrl = (form.add(colsCtrl), cm.createTextBox("table_merge_rows", {
+                    label: ed.getLang("table.rows", "Rows"),
+                    name: "rows",
+                    subtype: "number",
+                    value: 1
+                }));
+                form.add(rowsCtrl), ed.addCommand("mceTableMergeCells", function() {
+                    var grid = createTableGrid();
+                    ed.dom.select("td.mceSelected,th.mceSelected").length ? (grid.merge(), 
+                    ed.execCommand("mceRepaint"), cleanup()) : ed.windowManager.open({
+                        title: ed.getLang("table.merge_cells_desc", "Merge Cells"),
+                        items: [ form ],
+                        size: "mce-modal-landscape-small",
+                        open: function() {
+                            var cell = ed.dom.getParent(ed.selection.getNode(), "th,td"), rowSpan = 1, colSpan = 1;
+                            cell && (rowSpan = cell.rowSpan, colSpan = cell.colSpan), 
+                            colsCtrl.value(colSpan), rowsCtrl.value(rowSpan);
+                        },
+                        buttons: [ {
+                            title: ed.getLang("common.cancel", "Cancel"),
+                            id: "cancel"
+                        }, {
+                            title: ed.getLang("update", "Update"),
+                            id: "insert",
+                            onsubmit: function(e) {
+                                var data = form.submit(), grid = createTableGrid(), node = ed.selection.getNode(), node = ed.dom.getParent(node, "th,td");
+                                grid.merge(node, data.cols, data.rows), ed.execCommand("mceRepaint"), 
+                                cleanup(), Event.cancel(e);
+                            },
+                            classes: "primary",
+                            scope: self
+                        } ]
+                    });
+                });
+            }(ed);
         }), ed.onPreProcess.add(function(ed, args) {
             var nodes, i, node, value, dom = ed.dom;
             if ("html4" === ed.settings.schema) for (i = (nodes = dom.select("table,td,th,tr", args.node)).length; i--; ) {
@@ -666,25 +1008,6 @@
             mceTableSplitCells: function(grid) {
                 grid.split();
             },
-            mceTableMergeCells: function(grid) {
-                var rowSpan, colSpan, cell = ed.dom.getParent(ed.selection.getNode(), "th,td");
-                cell && (rowSpan = cell.rowSpan, colSpan = cell.colSpan), ed.dom.select("td.mceSelected,th.mceSelected").length ? grid.merge() : winMan.open({
-                    url: url + "&slot=merge",
-                    width: 240 + parseInt(ed.getLang("table.merge_cells_delta_width", 0), 10),
-                    height: 170 + parseInt(ed.getLang("table.merge_cells_delta_height", 0), 10),
-                    inline: 1,
-                    size: "mce-modal-landscape-small"
-                }, {
-                    rows: rowSpan,
-                    cols: colSpan,
-                    onaction: function(data) {
-                        grid.merge(cell, data.cols, data.rows);
-                    },
-                    plugin_url: url,
-                    layout: "merge",
-                    size: "mce-modal-landscape-small"
-                });
-            },
             mceTableInsertRowBefore: function(grid) {
                 grid.insertRow(!0);
             },
@@ -798,7 +1121,7 @@
                     for (var cols = DOM.select("td.selected", rows[y]).length, x = 0; x < cols; x++) html += "<td>" + (ed.settings.validate ? '<br data-mce-bogus="1"/>' : "&nbsp;") + "</td>";
                     html += "</tr>";
                 }
-                return ed.execCommand("mceInsertContent", !1, html += "</table>"), 
+                return insertTableHtml(ed, html += "</table>"), ed.addVisual(), 
                 Event.cancel(e);
             }
             return "table_insert" === n ? ((cm = cm.createSplitButton("table_insert", {

@@ -1,8 +1,19 @@
-/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var VK = tinymce.VK, Node = tinymce.html.Node, each = tinymce.each, blocks = [];
     tinymce.PluginManager.add("figure", function(ed, url) {
         ed.onPreInit.add(function(ed) {
+            function setClipboardData(ed, e) {
+                var node, content, clipboardData = e.clipboardData;
+                clipboardData && (node = ed.dom.getParent(ed.selection.getNode(), "figure")) && (ed.selection.select(node), 
+                content = {
+                    html: content = ed.selection.getContent({
+                        contextual: !0
+                    }),
+                    text: content.toString()
+                }, clipboardData.clearData(), clipboardData.setData("text/html", content.html), 
+                clipboardData.setData("text/plain", content.text), "cut" == e.type) && ed.dom.remove(node);
+            }
             ed.parser.addNodeFilter("figure", function(nodes, name) {
                 for (var figcaption, node, i = nodes.length; i--; ) 0 === (node = nodes[i]).getAll("figcaption").length && ((figcaption = new Node("figcaption", 1)).attr("data-mce-empty", ed.getLang("figcaption.default", "Write a caption...")), 
                 figcaption.attr("contenteditable", !0), node.append(figcaption)), 
@@ -54,7 +65,13 @@
                     n && ed.dom.is(n, "img,span[data-mce-object]") && (parent = ed.dom.getParent(n, "FIGURE")) && (se.select(parent), 
                     ed.execCommand(cmd, !1), o.terminate = !0);
                 }
-            }), ed.onKeyDown.add(function(ed, e) {
+            }), ed.onClick.add(function(ed, e) {
+                "IMG" === e.target.nodeName && VK.metaKeyPressed(e) && (e = ed.dom.getParent(e.target, "figure")) && (ed.selection.select(e), 
+                ed.nodeChanged());
+            }), ed.onNodeChange.add(function(ed, cm, n) {
+                "FIGURE" !== n.nodeName && ed.dom.removeAttrib(ed.dom.select("figure"), "data-mce-selected");
+            }), ed.onCopy.add(setClipboardData), ed.onCut.add(setClipboardData), 
+            ed.onKeyDown.add(function(ed, e) {
                 var container, offset, isDelete = e.keyCode == VK.DELETE;
                 if (!e.isDefaultPrevented() && (isDelete || e.keyCode == VK.BACKSPACE) && !VK.modifierPressed(e) && (container = (isDelete = ed.selection.getRng()).startContainer, 
                 offset = isDelete.startOffset, isDelete = isDelete.collapsed, container = ed.dom.getParent(container, "FIGURE"))) {

@@ -1,4 +1,4 @@
-/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 WFAggregator.add("youtube", {
     params: {
         width: 560,
@@ -32,11 +32,11 @@ WFAggregator.add("youtube", {
         return $("#youtube_embed:visible").is(":checked") ? "flash" : "iframe";
     },
     isSupported: function(v) {
-        return "object" == typeof v && (v = v.src || v.data || ""), !!/youtu(\.)?be(.+)?\/(.+)/.test(v) && "youtube";
+        return !!v && !!/youtu(\.)?be(.+)?\/(.+)/.test(v) && "youtube";
     },
     getValues: function(src) {
-        var id, self = this, data = {}, args = {}, type = this.getType(), query = {}, u = this.parseURL(src), u = (u.query && (query = Wf.String.query(u.query)), 
-        $.extend(args, query), src = src.replace(/^(http:)?\/\//, "https://"), $(":input", "#youtube_options").not("#youtube_embed, #youtube_https, #youtube_privacy").each(function() {
+        var id, self = this, data = {}, args = {}, type = this.getType(), u = this.parseURL(src), u = ($.extend(args, u.query), 
+        src = src.replace(/^(http:)?\/\//, "https://"), $(":input", "#youtube_options").not("#youtube_embed, #youtube_https, #youtube_privacy").each(function() {
             var k = $(this).attr("id"), v = $(this).val();
             if (!k) return !0;
             k = k.substr(k.indexOf("_") + 1), $(this).is(":checkbox") && (v = $(this).is(":checked") ? 1 : 0), 
@@ -64,18 +64,22 @@ WFAggregator.add("youtube", {
     },
     parseURL: function(url) {
         var o = {};
-        return url = /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@\/]*):?([^:@\/]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/.exec(url), 
-        $.each([ "source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor" ], function(i, v) {
-            i = url[i];
-            i && (o[v] = i);
-        }), o;
+        try {
+            var urlObj = new URL(url);
+            o.host = urlObj.hostname, o.path = urlObj.pathname, o.query = {}, urlObj.searchParams.forEach(function(value, key) {
+                o.query[key] = value;
+            }), o.anchor = urlObj.hash ? urlObj.hash.substring(1) : null;
+        } catch (e) {
+            console.error("Invalid URL:", url);
+        }
+        return o;
     },
     setValues: function(data) {
-        var u, s, self = this, id = "", src = data.src || data.data || "", query = {};
-        return src && ((u = this.parseURL(src)).query && (query = Wf.String.query(u.query)), 
-        -1 !== (src = "https://" + u.host + u.path).indexOf("youtube-nocookie") && (data.youtube_privacy = 1), 
-        query.v ? (id = query.v, delete query.v) : (s = /\/?(embed|live|v)?\/([\w-]+)\b/.exec(u.path)) && "array" === $.type(s) && (id = s.pop()), 
-        $.each(query, function(key, val) {
+        var u, s, self = this, id = "", src = data.src || data.data || "";
+        return src && (-1 !== (src = "https://" + (u = this.parseURL(src)).host + u.path).indexOf("youtube-nocookie") && (data.youtube_privacy = 1), 
+        u.query.v ? id = u.query.v : (s = /\/?(embed|live|v)?\/([\w-]+)\b/.exec(u.path)) && "array" === $.type(s) && (id = s.pop()), 
+        $.each(u.query, function(key, val) {
+            if ("v" == key) return !0;
             try {
                 val = decodeURIComponent(val);
             } catch (e) {}
@@ -84,7 +88,7 @@ WFAggregator.add("youtube", {
             void delete data[key]);
         }), src = src.replace(/youtu(\.)?be([^\/]+)?\/(.+)/, function(a, b, c, d) {
             var args = "youtube";
-            return b && (args += ".com"), c && (args += c), args = args + "/embed" + ("/" + id), 
+            return b && (args += ".com"), c && (args += c), args += "/embed/" + id, 
             u.anchor && (args += "#" + u.anchor.replace(/(\?|&)(.+)/, "")), args;
         }).replace(/\/\/youtube/i, "//www.youtube"), $.each(data, function(key, val) {
             /^iframe_(allow|frameborder|allowfullscreen)/.test(key) && delete data[key];

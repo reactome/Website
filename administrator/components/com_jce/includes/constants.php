@@ -13,7 +13,7 @@ defined('JPATH_PLATFORM') or die;
 use Joomla\CMS\Uri\Uri;
 
 // Some shortcuts to make life easier
-define('WF_VERSION', '2.9.82');
+define('WF_VERSION', '2.9.84');
 
 // JCE Administration Component
 define('WF_ADMINISTRATOR', JPATH_ADMINISTRATOR . '/components/com_jce');

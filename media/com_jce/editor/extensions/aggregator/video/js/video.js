@@ -1,6 +1,9 @@
-/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 WFAggregator.add("video", {
-    params: {},
+    params: {
+        width: "",
+        height: ""
+    },
     props: {
         autoplay: 0,
         loop: 0,
@@ -19,6 +22,15 @@ WFAggregator.add("video", {
         return "video";
     },
     isSupported: function(v) {
-        return !1;
+        return !!v && (v = v.split("?")[0], !!/\.(mp4|m4v|ogv|ogg|webm)$/.test(v)) && "video";
+    },
+    setValues: function(attr, type) {
+        return attr;
+    },
+    getAttributes: function(src) {
+        return {
+            width: this.params.width,
+            height: this.params.height
+        };
     }
 });

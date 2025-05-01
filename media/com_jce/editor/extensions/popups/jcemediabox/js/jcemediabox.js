@@ -1,4 +1,4 @@
-/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 var JCEMediaBox = {
     Popup: {
         addons: {},
@@ -149,7 +149,7 @@ WFPopups.addPopup("jcemediabox", {
             data[name] = val);
         }), data = callback(data), 0);
         return $.each(data, function(k, v) {
-            if ("src" == k) return !0;
+            if ("src" == k || "width" == k || "height" == k) return !0;
             if ("" !== v) {
                 try {
                     v = decodeURIComponent(v);
@@ -165,15 +165,15 @@ WFPopups.addPopup("jcemediabox", {
         var ed = tinyMCEPopup.editor, auto = (index = index || 0, this.remove(n), 
         index = index || 0, ed.dom.addClass(n, "jcepopup"), ed.dom.setAttrib(n, "data-mediabox", 1), 
         $("#jcemediabox_popup_autopopup").val()), data = (auto && ed.dom.addClass(n, auto), 
-        {}), auto = (args.title && (ed.dom.setAttrib(n, "title", args.title), delete args.title), 
-        $.each([ "group", "width", "height", "title", "caption" ], function(i, k) {
+        args.data || {}), auto = (args.title && (ed.dom.setAttrib(n, "title", args.title), 
+        delete args.title), $.each([ "group", "width", "height", "title", "caption" ], function(i, k) {
             var mv, v = $("#jcemediabox_popup_" + k).val() || args[k] || "";
             "title" != k && "caption" != k || void 0 !== (mv = $('input[name^="jcemediabox_popup_' + k + '"]').eq(index).val()) && (v = mv), 
             data[k] = v;
         }), $(".uk-repeatable", "#jcemediabox_popup_params").each(function() {
             var k = $('input[name^="jcemediabox_popup_params_name"]', this).val(), v = $('input[name^="jcemediabox_popup_params_value"]', this).val();
             "" !== k && "" !== v && (data[k] = v);
-        }), data = $.extend(data, args.data || {}), $("#jcemediabox_popup_mediatype").val() || n.type || args.type || "");
+        }), $("#jcemediabox_popup_mediatype").val() || n.type || args.type || "");
         "image" == auto && (auto = this.getImageType(n.href)), ed.dom.setAttrib(n, "type", auto), 
         data.type && delete data.type;
         auto = (auto = ed.dom.getAttrib(n, "rel", "")) && auto.replace(/([a-z0-9]+)(\[([^\]]+)\]);?/gi, "");

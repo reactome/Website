@@ -1,4 +1,4 @@
-/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     function isAnchor(elm) {
         return elm && "a" === elm.nodeName.toLowerCase();
@@ -47,9 +47,11 @@
             href: data.url,
             title: data.title || "",
             target: data.target || ""
-        }, text = tinymce.extend(text, params.attributes || {}), ed.selection.isCollapsed() ? ed.execCommand("mceInsertContent", !1, ed.dom.createHTML("a", text, data.text)) : (ed.execCommand("mceInsertLink", !1, text), 
-        isAnchor(anchor) && updateTextContent(node, data.text)), ed.undoManager.add(), 
-        ed.nodeChanged()) : isAnchor(node) && ed.execCommand("unlink", !1);
+        }, text = tinymce.extend(text, params.attributes || {}), ed.selection.isCollapsed() ? ed.execCommand("mceInsertContent", !1, ed.dom.createHTML("a", text, data.text)) : (text["data-mce-tmp"] = "1", 
+        ed.execCommand("mceInsertLink", !1, text), isAnchor(anchor) && updateTextContent(node, data.text), 
+        params = ed.dom.select('[data-mce-tmp="1"]'), each(params, function(elm) {
+            elm.removeAttribute("data-mce-tmp"), updateTextContent(elm, data.text);
+        })), ed.undoManager.add(), ed.nodeChanged()) : isAnchor(node) && ed.execCommand("unlink", !1);
     }
     tinymce.PluginManager.add("link", function(ed, url) {
         var urlCtrl, textCtrl, titleCtrl, targetCtrl;
@@ -62,11 +64,11 @@
                 plugin_url: url
             });
         }), ed.addShortcut("meta+k", "link.desc", "mceLink"), ed.onPreInit.add(function() {
-            var cm, form, args, params = ed.getParam("link", {});
-            !0 === (params = extend({
+            var form, args, params = ed.getParam("link", {}), params = extend({
                 attributes: {}
-            }, params)).basic_dialog && (cm = ed.controlManager, form = cm.createForm("link_form"), 
-            args = {
+            }, params), isMobile = window.matchMedia("(max-width: 600px)").matches;
+            !0 !== params.basic_dialog && !isMobile || (isMobile = ed.controlManager, 
+            form = isMobile.createForm("link_form"), args = {
                 label: ed.getLang("url", "URL"),
                 name: "url",
                 clear: !0,
@@ -92,19 +94,19 @@
                         value: urlCtrl.value()
                     });
                 }
-            }), urlCtrl = cm.createUrlBox("link_url", args), form.add(urlCtrl), 
-            textCtrl = cm.createTextBox("link_text", {
+            }), urlCtrl = isMobile.createUrlBox("link_url", args), form.add(urlCtrl), 
+            textCtrl = isMobile.createTextBox("link_text", {
                 label: ed.getLang("link.text", "Text"),
                 name: "text",
                 clear: !0,
                 attributes: {
                     required: !0
                 }
-            }), form.add(textCtrl), !1 !== params.title_ctrl && (titleCtrl = cm.createTextBox("link_title", {
+            }), form.add(textCtrl), !1 !== params.title_ctrl && (titleCtrl = isMobile.createTextBox("link_title", {
                 label: ed.getLang("link.title", "Title"),
                 name: "title",
                 clear: !0
-            }), form.add(titleCtrl)), !1 !== params.target_ctrl && (targetCtrl = cm.createListBox("link_target", {
+            }), form.add(titleCtrl)), !1 !== params.target_ctrl && (targetCtrl = isMobile.createListBox("link_target", {
                 label: ed.getLang("link.target", "Taget"),
                 name: "target",
                 onselect: function(v) {}

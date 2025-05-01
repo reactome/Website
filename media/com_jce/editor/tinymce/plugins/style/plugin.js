@@ -1,9 +1,9 @@
-/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 tinymce.PluginManager.add("style", function(ed, url) {
     function isRootNode(node) {
         return node == ed.dom.getRoot();
     }
-    ed.addCommand("mceStyleProps", function() {
+    window.matchMedia("(max-width: 600px)").matches || (ed.addCommand("mceStyleProps", function() {
         var applyStyleToBlocks = !1, blocks = ed.selection.getSelectedBlocks(), styles = [];
         1 === blocks.length ? styles.push(ed.selection.getNode().style.cssText) : (tinymce.each(blocks, function(block) {
             styles.push(ed.dom.getAttrib(block, "style"));
@@ -23,5 +23,5 @@ tinymce.PluginManager.add("style", function(ed, url) {
     }), ed.addButton("style", {
         title: "style.desc",
         cmd: "mceStyleProps"
-    });
+    }));
 });

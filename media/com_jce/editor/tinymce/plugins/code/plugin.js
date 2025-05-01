@@ -1,4 +1,4 @@
-/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, Node = tinymce.html.Node, VK = tinymce.VK, DomParser = tinymce.html.DomParser, Serializer = tinymce.html.Serializer, SaxParser = tinymce.html.SaxParser;
     function createTextNode(value, raw) {
@@ -28,7 +28,8 @@
                 return "<" === match.charAt(0) ? match : (match = match, tag = tagName, 
                 match = (match = ed.dom.decode(match)).replace(/[\n\r]/gi, "<br />"), 
                 ed.dom.createHTML(tag || "pre", {
-                    "data-mce-code": "shortcode"
+                    "data-mce-code": "shortcode",
+                    "data-mce-type": "shortcode"
                 }, ed.dom.encode(match)));
                 var tag;
             }));
@@ -110,8 +111,13 @@
             !1;
         }), ed.onKeyDown.add(function(ed, e) {
             var node;
-            e.keyCode == VK.ENTER && "SPAN" === (node = ed.selection.getNode()).nodeName && node.getAttribute("data-mce-code") && (handleEnterInPre(ed, node), 
-            e.preventDefault()), e.keyCode == VK.UP && e.altKey && "PRE" == (node = ed.selection.getNode()).nodeName && (handleEnterInPre(ed, node, !0), 
+            if (e.keyCode == VK.ENTER) {
+                if ("PRE" === (node = ed.selection.getNode()).nodeName && "shortcode" === node.getAttribute("data-mce-code")) return void (e.shiftKey || (ed.execCommand("InsertLineBreak", !1, e), 
+                e.preventDefault()));
+                "SPAN" === node.nodeName && node.getAttribute("data-mce-code") && (handleEnterInPre(ed, node), 
+                e.preventDefault());
+            }
+            e.keyCode == VK.UP && e.altKey && "PRE" == (node = ed.selection.getNode()).nodeName && (handleEnterInPre(ed, node, !0), 
             e.preventDefault()), 9 != e.keyCode || VK.metaKeyPressed(e) || "PRE" === (node = ed.selection.getNode()).nodeName && node.getAttribute("data-mce-code") && (ed.selection.setContent("\t", {
                 no_events: !0
             }), e.preventDefault()), e.keyCode !== VK.BACKSPACE && e.keyCode !== VK.DELETE || "SPAN" === (node = ed.selection.getNode()).nodeName && node.getAttribute("data-mce-code") && "placeholder" === node.getAttribute("data-mce-type") && (ed.undoManager.add(), 

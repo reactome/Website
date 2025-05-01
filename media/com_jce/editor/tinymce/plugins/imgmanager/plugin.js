@@ -1,4 +1,4 @@
-/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, Event = tinymce.dom.Event, extend = tinymce.extend;
     function isMediaObject(node) {
@@ -22,7 +22,8 @@
             var node = ed.selection.getNode();
             isImage(node) ? ed.dom.setAttribs(node, {
                 src: args.src,
-                alt: args.alt || ""
+                alt: args.alt || "",
+                class: args.class || ""
             }) : (ed.execCommand("mceInsertContent", !1, '<img id="__mce_tmp" src="" />', {
                 skip_undo: 1
             }), node = ed.dom.get("__mce_tmp"), ed.dom.setAttribs(node, args), ed.dom.setAttrib(node, "id", "")), 
@@ -62,13 +63,13 @@
             n = isImage(n);
             cm.setDisabled("imgmanager", !n && !collapsed), cm.setActive("imgmanager", n);
         }), ed.onPreInit.add(function() {
-            var cm, form, urlCtrl, descriptionCtrl, args, stylesListCtrl, params = ed.getParam("imgmanager", {});
-            !0 === params.basic_dialog && (cm = ed.controlManager, form = cm.createForm("image_form"), 
-            args = {
+            var cm, form, urlCtrl, descriptionCtrl, args, stylesListCtrl, params = ed.getParam("imgmanager", {}), isMobile = window.matchMedia("(max-width: 600px)").matches;
+            !0 === (!0 === params.basic_dialog || isMobile) && (cm = ed.controlManager, 
+            form = cm.createForm("image_form"), !(args = {
                 label: ed.getLang("dlg.url", "URL"),
                 name: "url",
                 clear: !0
-            }, params.basic_dialog_filebrowser && tinymce.extend(args, {
+            }) !== params.basic_dialog_filebrowser && (params.basic_dialog_filebrowser || isMobile) && extend(args, {
                 picker: !0,
                 picker_label: "browse",
                 picker_icon: "image",
@@ -86,36 +87,6 @@
                         filter: params.filetypes || "images",
                         value: urlCtrl.value()
                     });
-                }
-            }), params.upload && extend(args, {
-                upload_label: "upload.label",
-                upload_accept: params.upload.filetypes,
-                upload: function(e, file) {
-                    if (file && file.name) {
-                        var url = self.getUploadURL(file);
-                        if (!url) return ed.windowManager.alert({
-                            text: ed.getLang("upload.file_extension_error", "File type not supported"),
-                            title: ed.getLang("upload.error", "Upload Error")
-                        }), !1;
-                        urlCtrl.setLoading(!0), extend(file, {
-                            filename: file.name.replace(/[\+\\\/\?\#%&<>"\'=\[\]\{\},;@\^\(\)\xa3\u20ac$~]/g, ""),
-                            upload_url: url
-                        }), ed.plugins.upload.upload(file, function(response) {
-                            urlCtrl.setLoading(!1);
-                            response = response.files || [], response = response.length ? response[0] : {};
-                            if (response.file) return urlCtrl.value(response.file), 
-                            !0;
-                            ed.windowManager.alert({
-                                text: "Unable to upload file!",
-                                title: ed.getLang("upload.error", "Upload Error")
-                            });
-                        }, function(message) {
-                            ed.windowManager.alert({
-                                text: message,
-                                title: ed.getLang("upload.error", "Upload Error")
-                            }), urlCtrl.setLoading(!1);
-                        });
-                    }
                 }
             }), urlCtrl = cm.createUrlBox("image_url", args), form.add(urlCtrl), 
             descriptionCtrl = cm.createTextBox("image_description", {
@@ -135,9 +106,9 @@
                     open: function() {
                         var label = ed.getLang("insert", "Insert"), node = ed.selection.getNode(), src = "", alt = "";
                         isImage(node) && ((src = ed.dom.getAttrib(node, "src")) && (label = ed.getLang("update", "Update")), 
-                        alt = ed.dom.getAttrib(node, "alt"), ed.dom.getNext(node, "figcaption"), 
-                        node = ed.dom.getAttrib(node, "class"), stylesListCtrl.value(node)), 
-                        urlCtrl.value(src), descriptionCtrl.value(alt), window.setTimeout(function() {
+                        alt = ed.dom.getAttrib(node, "alt"), node = ed.dom.getAttrib(node, "class"), 
+                        stylesListCtrl.value(node)), urlCtrl.value(src), descriptionCtrl.value(alt), 
+                        window.setTimeout(function() {
                             urlCtrl.focus();
                         }, 10), DOM.setHTML(this.id + "_insert", label);
                     },
@@ -156,9 +127,7 @@
                                 alt: data.alt,
                                 class: data.classes
                             };
-                            getDataAndInsert(extend(e, self.getAttributes(params))).then(function() {
-                                node = ed.selection.getNode();
-                            });
+                            getDataAndInsert(extend(e, self.getAttributes(params))).then();
                         },
                         classes: "primary",
                         scope: self

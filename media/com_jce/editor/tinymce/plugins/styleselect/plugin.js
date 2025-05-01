@@ -1,4 +1,4 @@
-/* jce - 2.9.82 | 2024-11-20 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2024 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, PreviewCss = tinymce.util.PreviewCss, NodeType = tinymce.dom.NodeType, DOM = tinymce.DOM, Event = tinymce.dom.Event;
     function compileFilter(filter) {
@@ -100,7 +100,7 @@
                         var frag, name, keys = 0;
                         each(fmt, function() {
                             keys++;
-                        }), 1 < keys ? (name = fmt.name = fmt.name || "style_" + counter++, 
+                        }), 1 < keys ? (name = fmt.name = fmt.name || "style_format_" + counter++, 
                         tinymce.is(fmt.attributes, "string") && (fmt.attributes = ed.dom.decode(fmt.attributes), 
                         frag = ed.dom.createFragment("<div " + tinymce.trim(fmt.attributes) + "></div>"), 
                         frag = ed.dom.getAttribs(frag.firstChild), fmt.attributes = {}, 
@@ -125,7 +125,7 @@
                 styles && each(styles, function(val, key) {
                     var name, fmt, element;
                     val && (val = 1 < (val = (val = (val = val).replace(/^\./, "")).split(".")).length ? (element = val[0] || "*", 
-                    val.slice(1).join(".")) : (element = "*", val[0]), name = "style_" + counter++, 
+                    val.slice(1).join(".")) : (element = "*", val[0]), name = "style_custom_" + counter++, 
                     fmt = {
                         classes: (val = {
                             element: element,
@@ -165,7 +165,7 @@
                 var preview_styles;
                 ed.settings.importcss_classes || ed.onImportCSS.dispatch(), Array.isArray(ed.settings.importcss_classes) && !ctrl.hasClasses && (preview_styles = ed.getParam("styleselect_preview_styles", !0), 
                 each(ed.settings.importcss_classes, function(item, idx) {
-                    var idx = "style_" + (counter + idx), fmt = function(selectorText) {
+                    var idx = "style_import_" + (counter + idx), fmt = function(selectorText) {
                         var format;
                         if (selectorText) {
                             if (ed.settings.styleselect_selector_filter) if (compileFilter(ed.settings.styleselect_selector_filter)(selectorText)) return;
