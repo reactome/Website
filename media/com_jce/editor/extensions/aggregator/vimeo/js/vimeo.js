@@ -1,4 +1,4 @@
-/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 WFAggregator.add("vimeo", {
     params: {
         width: 480,
@@ -14,6 +14,12 @@ WFAggregator.add("vimeo", {
     },
     setup: function() {
         $("#vimeo_embed").toggle(this.params.embed), $.each(this.params, function(k, v) {
+            var x;
+            if ("attributes" == k) return x = 0, $.each(v, function(key, value) {
+                var $repeatable = $(".media_option.vimeo .uk-repeatable"), $repeatable = (0 < x && ($repeatable.eq(0).clone(!0).appendTo($repeatable.parent()), 
+                $repeatable = $(".media_option.vimeo .uk-repeatable")), $repeatable.eq(x).find("input, select"));
+                $repeatable.eq(0).val(key), $repeatable.eq(1).val(value), x++;
+            }), !0;
             $("#vimeo_" + k).val(v).filter(":checkbox, :radio").prop("checked", !!v);
         });
     },
@@ -26,11 +32,13 @@ WFAggregator.add("vimeo", {
     isSupported: function(v) {
         return !!v && !!/vimeo(.+)?\/(.+)/.test(v) && !/\/external\//.test(v) && "vimeo";
     },
-    getValues: function(src) {
-        var hash, self = this, data = {}, args = {}, id = "", matches = (-1 !== src.indexOf("=") && $.extend(args, Wf.String.query(src)), 
+    getValues: function(data) {
+        var hash, self = this, args = {}, id = "", src = data.src, matches = (-1 !== src.indexOf("=") && $.extend(args, Wf.String.query(src)), 
         $("input, select", "#vimeo_options").not("#vimeo_embed").each(function() {
-            var k = $(this).attr("id"), v = $(this).val(), k = k.substr(k.indexOf("_") + 1);
-            $(this).is(":checkbox") && (v = $(this).is(":checked") ? 1 : 0), self.props[k] != v && "" !== v && ("color" === k && "#" === v.charAt(0) && (v = v.substr(1)), 
+            var k = $(this).attr("id"), v = $(this).val();
+            if (!k) return !0;
+            k = k.substr(k.indexOf("_") + 1), $(this).is(":checkbox") && (v = $(this).is(":checked") ? 1 : 0), 
+            self.props[k] != v && "" !== v && ("color" === k && "#" === v.charAt(0) && (v = v.substr(1)), 
             args[k] = v);
         }), args.clip_id ? id = args.clip_id : (hash = id = "", (matches = /vimeo\.com\/([0-9]+)\/?([a-z0-9]+)?/.exec(src)) && tinymce.is(matches, "array") && (id = matches[1], 
         2 < matches.length) && (hash = matches[2]), id += hash ? "?h=" + hash : ""), 
@@ -40,6 +48,9 @@ WFAggregator.add("vimeo", {
             frameborder: 0
         }), 0 !== args.fullscreen && $.extend(data, {
             allowfullscreen: !0
+        }), $(".uk-repeatable", "#vimeo_attributes").each(function() {
+            var elements = $("input, select", this), key = $(elements).eq(0).val(), elements = $(elements).eq(1).val();
+            key && (data["vimeo_" + key] = elements);
         }), data;
     },
     setValues: function(data) {

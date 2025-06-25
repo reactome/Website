@@ -1,10 +1,10 @@
-/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function($) {
     var ImageManagerDialog = {
         settings: {},
         init: function() {
             tinyMCEPopup.restoreSelection();
-            var br, w, h, ed = tinyMCEPopup.editor, n = ed.selection.getNode(), self = this, src = ($("#insert").on("click", function(e) {
+            var w, h, x, ed = tinyMCEPopup.editor, n = ed.selection.getNode(), self = this, params = ed.getParam("imgmanager", {}), src = ($("#insert").on("click", function(e) {
                 self.insert(), e.preventDefault();
             }), decodeURIComponent(ed.dom.getAttrib(n, "src"))), src = ed.convertURL(src);
             $.each(this.settings.attributes, function(k, v) {
@@ -13,7 +13,9 @@
                 $("#onmouseover, #onmouseout").removeClass("uk-active"), $(this).addClass("uk-active");
             }), $("body").on("click.persistent-focus", function(e) {
                 $(e.target).is(".uk-persistent-focus, li.file") || $(e.target).parents("li.file").length || $(".uk-persistent-focus").removeClass("uk-active");
-            }), Wf.init(), $("#alt").on("change", function() {
+            }), Wf.init({
+                classes: params.custom_classes || []
+            }), $("#alt").on("change", function() {
                 "" === this.value ? $(this).removeClass("uk-edited") : $(this).addClass("uk-edited");
             }), n && "IMG" == n.nodeName ? ($(".uk-button-text", "#insert").text(tinyMCEPopup.getLang("update", "Update", !0)), 
             $("#src").val(src), $("#sample").attr({
@@ -50,8 +52,23 @@
                 val = (val = $.trim(val)).replace(/^\s*this.src\s*=\s*\'([^\']+)\';?\s*$/, "$1").replace(/^\s*|\s*$/g, ""), 
                 val = ed.convertURL(val), "mouseout" == key && (val = val || src), 
                 $("#on" + key).val(val);
-            }), (br = n.nextSibling) && "BR" == br.nodeName && br.style.clear && $("#clear").val(br.style.clear)) : Wf.setDefaults(this.settings.defaults), 
-            "external" === ed.settings.filebrowser_position ? Wf.createBrowsers($("#src"), function(files) {
+            }), (params = n.nextSibling) && "BR" == params.nodeName && params.style.clear && $("#clear").val(params.style.clear), 
+            x = 0, params = function(ed, node) {
+                for (var attrs = node.attributes, attribs = {}, i = attrs.length - 1; 0 <= i; i--) {
+                    var name = attrs[i].name, value = ed.dom.getAttrib(node, name);
+                    "_" !== name.charAt(0) && -1 === name.indexOf("-mce-") && (attribs[name] = value);
+                }
+                return attribs;
+            }(ed, n), $.each(params, function(key, val) {
+                if ("data-mouseover" === key || "data-mouseout" === key || 0 === key.indexOf("on")) return !0;
+                if (document.getElementById(key) || "class" == key) return !0;
+                try {
+                    val = decodeURIComponent(val);
+                } catch (e) {}
+                var repeatable = $(".uk-repeatable").eq(0), repeatable = (0 < x && $(repeatable).clone(!0).appendTo($(repeatable).parent()), 
+                $(".uk-repeatable").eq(x).find("input, select"));
+                $(repeatable).eq(0).val(key), $(repeatable).eq(1).val(val), x++;
+            })) : Wf.setDefaults(this.settings.defaults), "external" === ed.settings.filebrowser_position ? Wf.createBrowsers($("#src"), function(files) {
                 files = files.shift();
                 self.selectFile(files);
             }, "images") : $("#src").filebrowser().on("filebrowser:onfileclick", function(e, file, data) {
@@ -94,7 +111,10 @@
             over || (out = ""), args = $.extend(args, {
                 "data-mouseover": over ? ed.convertURL(over) : "",
                 "data-mouseout": out ? ed.convertURL(out) : ""
-            }), br = (over = ed.selection.getNode()).nextSibling, over && "IMG" == over.nodeName ? (ed.dom.setAttribs(over, args), 
+            }), br = (over = ed.selection.getNode()).nextSibling, $(".uk-repeatable").each(function() {
+                var elements = $("input, select", this), key = $(elements).eq(0).val(), elements = $(elements).eq(1).val();
+                key && (args[key] = elements);
+            }), over && "IMG" == over.nodeName ? (ed.dom.setAttribs(over, args), 
             br && "BR" == br.nodeName ? (!$("#clear").is(":disabled") && "" !== $("#clear").val() || ed.dom.remove(br), 
             $("#clear").is(":disabled") || "" === $("#clear").val() || ed.dom.setStyle(br, "clear", $("#clear").val())) : $("#clear").is(":disabled") || "" === $("#clear").val() || (br = ed.dom.create("br"), 
             ed.dom.setStyle(br, "clear", $("#clear").val()), ed.dom.insertAfter(br, over)), 

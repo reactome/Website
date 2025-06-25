@@ -37,12 +37,20 @@ class WFAggregatorExtension_Audio extends WFAggregatorExtension
     {
         $plugin = WFEditorPlugin::getInstance();
 
-        return array(
+        $defaults = array(
             'controls' => (int) $plugin->getParam('aggregator.audio.controls', 1),
             'loop' => (int) $plugin->getParam('aggregator.audio.loop', 0),
             'autoplay' => (int) $plugin->getParam('aggregator.audio.autoplay', 0),
             'muted' => (int) $plugin->getParam('aggregator.audio.mute', 0),
         );
+
+        $attributes = $plugin->getParam('aggregator.audio.attributes', '');
+
+        if ($attributes) {            
+            $defaults['attributes'] = $this->getCustomDefaultAttributes($attributes);
+        }
+
+        return $defaults;
     }
 
     public function getEmbedData($data, $url)
@@ -58,6 +66,11 @@ class WFAggregatorExtension_Audio extends WFAggregatorExtension
 
         foreach ($params as $name => $value) {
             if ($default[$name] === $value) {
+                continue;
+            }
+
+            if ($name == 'attributes') {
+                $data[$name] = $value;
                 continue;
             }
 

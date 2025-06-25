@@ -1,4 +1,4 @@
-/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 WFAggregator.add("video", {
     params: {
         width: "",
@@ -8,11 +8,16 @@ WFAggregator.add("video", {
         autoplay: 0,
         loop: 0,
         controls: 1,
-        mute: 0
+        muted: 0
     },
     setup: function() {
+        var x = 0;
         $.each(this.params, function(k, v) {
-            $("#video_" + k).val(v).filter(":checkbox, :radio").prop("checked", !!v);
+            "attributes" == k ? $.each(v, function(key, value) {
+                var $repeatable = $(".media_option.video .uk-repeatable"), $repeatable = (0 < x && ($repeatable.eq(0).clone(!0).appendTo($repeatable.parent()), 
+                $repeatable = $(".media_option.video .uk-repeatable")), $repeatable.eq(x).find("input, select"));
+                $repeatable.eq(0).val(key), $repeatable.eq(1).val(value), x++;
+            }) : $("#video_" + k).val(v).filter(":checkbox, :radio").prop("checked", !!v);
         });
     },
     getTitle: function() {
@@ -24,8 +29,26 @@ WFAggregator.add("video", {
     isSupported: function(v) {
         return !!v && (v = v.split("?")[0], !!/\.(mp4|m4v|ogv|ogg|webm)$/.test(v)) && "video";
     },
-    setValues: function(attr, type) {
-        return attr;
+    getValues: function(data) {
+        var sources = [];
+        return $('input[name="video_source[]"]').each(function() {
+            var val = $(this).val();
+            val !== data.src && sources.push(val);
+        }), sources.length && (data.video_source = sources), $(".uk-repeatable", "#video_attributes").each(function() {
+            var elements = $("input, select", this), key = $(elements).eq(0).val(), elements = $(elements).eq(1).val();
+            key && (data["video_" + key] = elements);
+        }), data;
+    },
+    setValues: function(data) {
+        var x = 0, self = this;
+        return $.each(data, function(key, val) {
+            if (-1 === key.indexOf("video_")) return !0;
+            if (delete data[key], (key = key.substr(key.indexOf("_") + 1)) in self.props) return !0;
+            "" != val && 1 != val || (val = key);
+            var $repeatable = $(".uk-repeatable", "#video_attributes"), $repeatable = (0 < x && ($repeatable.eq(0).clone(!0).appendTo($repeatable.parent()), 
+            $repeatable = $(".uk-repeatable", "#video_attributes")), $repeatable.eq(x).find("input, select"));
+            $repeatable.eq(0).val(key), $repeatable.eq(1).val(val), x++;
+        }), data;
     },
     getAttributes: function(src) {
         return {

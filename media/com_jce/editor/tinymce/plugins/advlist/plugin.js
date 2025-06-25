@@ -1,4 +1,4 @@
-/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, DOM = tinymce.DOM, Event = tinymce.dom.Event;
     tinymce.PluginManager.add("advlist", function(editor, url) {
@@ -15,7 +15,7 @@
             }), formats;
         }
         var numlist = editor.getParam("advlist_number_styles", "default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman"), numlist = (numlist && (this.numlist = buildFormats(numlist)), 
-        editor.getParam("advlist_bullet_styles", "default,circle,disc,square"));
+        editor.getParam("advlist_bullist_styles", "default,circle,disc,square"));
         numlist && (this.bullist = buildFormats(numlist)), this.createControl = function(name, cm) {
             var btn, format, self = this;
             function hasFormat(node, format) {
@@ -25,10 +25,12 @@
                 }), state;
             }
             function applyListFormat() {
-                var dom = editor.dom, sel = editor.selection, list = dom.getParent(sel.getNode(), "ol,ul");
-                list && list.nodeName != ("bullist" == name ? "OL" : "UL") && format && !hasFormat(list, format) || editor.execCommand("bullist" == name ? "InsertUnorderedList" : "InsertOrderedList"), 
+                var list, dom = editor.dom, sel = editor.selection;
+                (list = dom.getParent(sel.getNode(), "ol,ul")) && list.nodeName != ("bullist" == name ? "OL" : "UL") && format && !hasFormat(list, format) || editor.execCommand("bullist" == name ? "InsertUnorderedList" : "InsertOrderedList"), 
                 format && (list = dom.getParent(sel.getNode(), "ol,ul")) && (dom.setStyles(list, format.styles), 
-                list.removeAttribute("data-mce-style")), editor.focus();
+                list.removeAttribute("data-mce-style"), sel = editor.getParam("advlist_" + name + "_classes", "")) && (sel = sel.trim()).split(/\s+/).forEach(function(cls) {
+                    cls && editor.dom.addClass(list, cls);
+                }), editor.focus();
             }
             if ("numlist" == name || "bullist" == name) return self[name] && "advlist.def" === self[name][0].title && (format = self[name][0]), 
             self[name] ? ((btn = cm.createSplitButton(name, {
@@ -56,21 +58,28 @@
                     }), form.add(start_ctrl), reversed_ctrl = cm.createCheckBox("numlist_reversed_ctrl", {
                         label: editor.getLang("advlist.reversed", "Reversed"),
                         name: "reversed"
-                    }), form.add(reversed_ctrl)), styles_ctrl = cm.createStylesBox(name + "_class", {
+                    }), form.add(reversed_ctrl)), e = editor.getParam("advlist_" + name + "_custom_classes", "").trim().split(",").filter(function(cls) {
+                        return "" !== cls.trim();
+                    }), styles_ctrl = cm.createStylesBox(name + "_class", {
                         label: editor.getLang("adlist.class", "Classes"),
                         onselect: function() {},
-                        name: "classes"
+                        name: "classes",
+                        styles: e
                     }), form.add(styles_ctrl), void editor.windowManager.open({
                         title: editor.getLang("advanced." + name + "_desc", "List"),
                         items: [ form ],
                         size: "mce-modal-landscape-small",
                         open: function() {
-                            var classes, label = editor.getLang("update", "Update"), node = editor.selection.getNode(), node = editor.dom.getParent(node, "bullist" == name ? "ul" : "ol");
+                            var label = editor.getLang("update", "Update"), node = editor.selection.getNode(), node = editor.dom.getParent(node, "bullist" == name ? "ul" : "ol"), classes = editor.getParam("advlist_" + name + "_classes", "").trim().split(" ").filter(function(cls) {
+                                return "" !== cls.trim();
+                            });
                             node && ("numlist" == name && (start_ctrl.value(editor.dom.getAttrib(node, "start") || 1), 
                             reversed_ctrl.checked(!!editor.dom.getAttrib(node, "reversed"))), 
-                            classes = (classes = editor.dom.getAttrib(node, "class")).replace(/mce-[\w\-]+/g, "").replace(/\s+/g, " ").trim(), 
-                            styles_ctrl.value(classes), classes = editor.dom.getStyle(node, "list-style-type") || "default", 
-                            type_ctrl.value(classes)), DOM.setHTML(this.id + "_insert", label);
+                            classes = (classes = editor.dom.getAttrib(node, "class")).replace(/mce-[\w\-]+/g, "").replace(/\s+/g, " ").trim().split(" ").filter(function(cls) {
+                                return "" !== cls.trim();
+                            }), node = editor.dom.getStyle(node, "list-style-type") || "default", 
+                            type_ctrl.value(node)), styles_ctrl.value(classes), 
+                            DOM.setHTML(this.id + "_insert", label);
                         },
                         buttons: [ {
                             title: editor.getLang("remove", "Remove"),

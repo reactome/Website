@@ -1,6 +1,14 @@
-/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
-    var each = tinymce.each, extend = tinymce.extend, Node = tinymce.html.Node, VK = tinymce.VK, Serializer = tinymce.html.Serializer, DomParser = tinymce.html.DomParser, SaxParser = tinymce.html.SaxParser, DOM = tinymce.DOM, htmlSchema = new tinymce.html.Schema({
+    var each = tinymce.each, extend = tinymce.extend, Node = tinymce.html.Node, VK = tinymce.VK, Serializer = tinymce.html.Serializer, DomParser = tinymce.html.DomParser, SaxParser = tinymce.html.SaxParser, DOM = tinymce.DOM;
+    function indexOf(array, item) {
+        for (var i = 0; i < array.length; i++) if (array[i] === item) return i;
+        return -1;
+    }
+    String.prototype.startsWith || (String.prototype.startsWith = function(search, pos) {
+        return this.substring(pos = pos || 0, pos + search.length) === search;
+    });
+    var htmlSchema = new tinymce.html.Schema({
         schema: "mixed"
     }), transparentSrc = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     function isNonEditable(ed, node) {
@@ -201,20 +209,22 @@
             } catch (e) {}
         }
     }
+    function isSupportedProvider(editor, url) {
+        var providers = editor.settings.media_iframes_supported_media || Object.keys(mediaProviders), supported = !1;
+        "string" == typeof providers && (providers = providers.split(","));
+        for (var i = 0; i < providers.length; i++) if (value = providers[i]) {
+            var value = value.replace(/\/$/, "");
+            if ((mediaProviders[value] || new RegExp(value + "/(.+)/")).test(url)) {
+                supported = mediaProviders[value] ? value : "iframe";
+                break;
+            }
+        }
+        return supported;
+    }
     function isSupportedIframe(editor, url) {
         var value;
-        return !!isValidElement(editor, "iframe") && !!url && (editor.settings.media_iframes_allow_local ? isLocalUrl(editor, url) : (value = function(editor, url) {
-            var providers = editor.settings.media_iframes_supported_media || Object.keys(mediaProviders), supported = !1;
-            "string" == typeof providers && (providers = providers.split(","));
-            for (var i = 0; i < providers.length; i++) if (value = providers[i]) {
-                var value = value.replace(/\/$/, "");
-                if ((mediaProviders[value] || new RegExp(value + "/(.+)/")).test(url)) {
-                    supported = mediaProviders[value] ? value : "iframe";
-                    break;
-                }
-            }
-            return supported;
-        }(editor, url), editor.settings.media_iframes_allow_supported ? !!isLocalUrl(editor, url) || value : value || !0));
+        return !!isValidElement(editor, "iframe") && !!url && (editor.settings.media_iframes_allow_local ? isLocalUrl(editor, url) : (value = isSupportedProvider(editor, url), 
+        editor.settings.media_iframes_allow_supported ? !!isLocalUrl(editor, url) || value : value || !0));
     }
     function isValidElement(editor, value) {
         return editor.getParam("media_valid_elements", "", "hash")[value];
@@ -222,8 +232,17 @@
     function isSupportedUrl(editor, tag, url) {
         return !editor.settings["media_" + tag + "_allow_local"] || isLocalUrl(editor, url);
     }
-    function isSupportedMedia(editor, url) {
-        return url = stripQuery(url), /\.(mp4|ogv|ogg|webm)$/.test(url) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) ? "video" : /\.(mp3|ogg|webm|wav|m4a|aiff)$/.test(url) && isValidElement(editor, "audio") && isSupportedUrl(editor, "audio", url) ? "audio" : /\.(mov|qt|mpg|mpeg)$/.test(url) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) || /\.(divx)$/.test(url) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) ? "video" : /\.swf$/.test(url) && isValidElement(editor, "object") && isSupportedUrl(editor, "object", url) || /\.pdf$/.test(url) && isValidElement(editor, "object") && isSupportedUrl(editor, "object", url) ? "object" : !!isSupportedIframe(editor, url) && "iframe";
+    function isSupportedMedia(editor, url, type) {
+        var ext = (url = stripQuery(url)).split(".").pop().toLowerCase(), audioExts = [ "mp3", "ogg", "webm", "wav", "m4a", "aiff" ], videoExts = [ "mp4", "ogv", "ogg", "webm", "mov", "qt", "mpg", "mpeg", "divx" ];
+        if ((type = (type || "").toLowerCase()).startsWith("audio/")) {
+            if (-1 === indexOf(audioExts, ext)) return !1;
+            if (isValidElement(editor, "audio") && isSupportedUrl(editor, "audio", url)) return "audio";
+        }
+        if (type.startsWith("video/")) {
+            if (-1 === indexOf(videoExts, ext)) return !1;
+            if (isValidElement(editor, "video") && isSupportedUrl(editor, "video", url)) return "video";
+        }
+        return -1 !== indexOf(videoExts, ext) && isValidElement(editor, "video") && isSupportedUrl(editor, "video", url) ? "video" : -1 !== indexOf(audioExts, ext) && isValidElement(editor, "audio") && isSupportedUrl(editor, "audio", url) ? "audio" : -1 !== indexOf([ "swf", "pdf" ], ext) && isValidElement(editor, "object") && isSupportedUrl(editor, "object", url) ? "object" : !!isSupportedIframe(editor, url) && "iframe";
     }
     var isAbsoluteUrl = function(url) {
         return !!url && (0 === url.indexOf("//") || 0 < url.indexOf("://"));
@@ -246,7 +265,7 @@
                 writer.text(text, raw);
             },
             start: function(name, attrs, empty) {
-                if (blocked = !0, "script" !== name && "noscript" !== name && "svg" !== name) {
+                if (blocked = !0, "script" !== name && "noscript" !== name && "svg" !== name && !(attrs.map && "bookmark" == attrs.map["data-mce-type"] || attrs.map["data-mce-bogus"])) {
                     for (var i = attrs.length - 1; 0 <= i; i--) {
                         var attrName = attrs[i].name;
                         0 === attrName.indexOf("on") && (delete attrs.map[attrName], 
@@ -280,10 +299,11 @@
         }), nodes;
     }
     function stripQuery(value) {
-        return value = value && -1 !== value.indexOf("?") ? value.substring(0, value.indexOf("?")) : value;
+        var match;
+        return !!value && ((match = value.match(/^(.*?\.[a-z0-9]{2,10})(?:[?#&].*|$)/i)) ? match[1] : value);
     }
-    for (var y, ext, lookup = {}, items = "video/divx,divx,application/pdf,pdf,application/x-shockwave-flash,swf swfl,audio/mpeg,mpga mpega mp2 mp3,audio/ogg,ogg spx oga,audio/x-wav,wav,video/mpeg,mpeg mpg mpe,video/mp4,mp4 m4v,video/ogg,ogg ogv,video/webm,webm,video/quicktime,qt mov,video/x-flv,flv,video/3gpp,3gp,video/x-matroska,mkv".split(/,/), i = 0; i < items.length; i += 2) for (ext = items[i + 1].split(/ /), 
-    y = 0; y < ext.length; y++) ext[y], items[i];
+    for (var y, ext, lookup = {}, mimes = {}, items = "video/divx,divx,application/pdf,pdf,application/x-shockwave-flash,swf swfl,audio/mpeg,mpga mpega mp2 mp3,audio/ogg,ogg spx oga,audio/x-wav,wav,video/mpeg,mpeg mpg mpe,video/mp4,mp4 m4v,video/ogg,ogg ogv,video/webm,webm,video/quicktime,qt mov,video/x-flv,flv,video/3gpp,3gp,video/x-matroska,mkv".split(/,/), i = 0; i < items.length; i += 2) for (ext = items[i + 1].split(/ /), 
+    y = 0; y < ext.length; y++) mimes[ext[y]] = items[i];
     each({
         flash: {
             type: "application/x-shockwave-flash"
@@ -300,7 +320,10 @@
         audio: {
             type: "audio/mpeg"
         },
-        iframe: {}
+        iframe: {},
+        pdf: {
+            type: "application/pdf"
+        }
     }, function(value, key) {
         value.name = key, value.classid && (lookup[value.classid] = value), value.type && (lookup[value.type] = value), 
         lookup[key.toLowerCase()] = value;
@@ -390,8 +413,9 @@
     }
     function placeHolderConverter(editor) {
         return function(nodes) {
-            for (var node, i = nodes.length, media_live_embed = editor.settings.media_live_embed; i--; ) if ((node = nodes[i]).parent && !node.parent.attr("data-mce-object")) {
-                if ("iframe" === node.name) if (node.attr("src")) {
+            for (var node, i = nodes.length, media_live_embed = editor.settings.media_live_embed, strict_embed = !1 !== editor.settings.media_strict_embed; i--; ) if ((node = nodes[i]).parent && !node.parent.attr("data-mce-object")) {
+                if (node.firstChild && "bookmark" == node.firstChild.attr("data-mce-type") && node.firstChild.remove(), 
+                "iframe" === node.name) if (node.attr("src")) {
                     if (!1 === function(editor, node) {
                         var src = node.attr("src");
                         return !!isNonEditable(editor, node) || isSupportedIframe(editor, src);
@@ -402,24 +426,50 @@
                 } else media_live_embed = !1;
                 if (isValidElement(editor, node.name) || isNonEditable(editor, node)) {
                     if ("iframe" !== node.name) {
-                        var sources, embed, src = node.attr("src") || node.attr("data") || "";
-                        if (src || ("video" !== node.name && "audio" !== node.name || (sources = node.getAll("source")).length && (src = sources[0].attr("src")), 
-                        "object" === node.name && ((sources = node.getAll("param")).length && each(sources, function(param) {
-                            param.attr("movie") && (src = param.attr("value"));
-                        }), src || (embed = node.getAll("embed")).length && (src = embed[0].attr("src")))), 
-                        src && !isSupportedUrl(editor, node.name, src)) {
+                        var src = node.attr("src") || node.attr("data") || "", type = node.attr("type") || node.attr("data-mce-p-type") || "";
+                        if (!src) {
+                            if ("video" === node.name || "audio" === node.name) {
+                                for (var sources = node.getAll("source"), j = 0; j < sources.length; j++) {
+                                    var source = sources[j];
+                                    !source.attr("src") || isSupportedUrl(editor, node.name, source.attr("src")) || (source.remove(), 
+                                    sources.splice(j, 1));
+                                }
+                                sources.length && (src = sources[0].attr("src"), 
+                                type = sources[0].attr("type") || type);
+                            }
+                            if ("object" === node.name) {
+                                var params = node.getAll("param");
+                                if (params.length) for (j = 0; j < params.length; j++) {
+                                    var param = params[j];
+                                    param.attr("movie") && (src = param.attr("value"));
+                                }
+                                src || (embed = node.getAll("embed")).length && (src = embed[0].attr("src"), 
+                                type = embed[0].attr("type") || type);
+                            }
+                        }
+                        if (!src) {
+                            media_live_embed = !1;
+                            continue;
+                        }
+                        if (!isSupportedUrl(editor, node.name, src)) {
                             node.remove();
                             continue;
                         }
-                        if (src || (media_live_embed = !1), !1 !== editor.settings.strict_media_embeds) {
-                            var newName = isSupportedMedia(editor, src);
+                        if (strict_embed) {
+                            var embed, newName = isSupportedMedia(editor, src, type);
                             if (!newName) {
+                                node.remove();
+                                continue;
+                            }
+                            if ("iframe" == newName && !isSupportedProvider(editor, src)) {
                                 node.remove();
                                 continue;
                             }
                             newName !== node.name && each(node.children(), function(elm) {
                                 editor.schema.isValidChild(newName, elm.name) || elm.remove();
-                            }), node.name = newName, node.attr("src", src);
+                            }), node.name = newName, node.attr("src", src), "object" == newName && (node.attr("data", src), 
+                            node.attr("src", null), embed = stripQuery(src).split(".").pop(), 
+                            node.attr("type", mimes[embed] || "application/octet-stream"));
                         }
                     }
                     !media_live_embed || isObjectEmbed(node.name) || isResponsiveMedia(node) || isNonEditable(editor, node) ? isWithinEmbed(node) || (isResponsiveMedia(node) && node.parent.attr({
@@ -509,7 +559,7 @@
         node = ed.dom.select(nodeName, node)[0]), preview && preview.removeAttribute("style"), 
         each(data, function(value, name) {
             return "innerHTML" === name && value ? (attribs["data-mce-html"] = escape(value), 
-            !0) : "img" !== nodeName && !htmlSchema.isValid(nodeName, name) || (tinymce.is(boolAttrs[name]) && !value && (value = null, 
+            !0) : "img" !== nodeName && !htmlSchema.isValid(nodeName, name) && -1 == name.indexOf("-") || (tinymce.is(boolAttrs[name]) && !value && (value = null, 
             "autoplay" == name) && (attribs["data-mce-p-" + name] = null), "img" !== nodeName || htmlSchema.isValid(nodeName, name) && "src" !== name || null === value ? ("iframe" == nodeName && "src" == name && (value = (attribs["data-mce-p-" + name] = value).replace("autoplay=1", "autoplay=1")), 
             "class" == name && value ? (ed.dom.addClass(node, value), !0) : "style" == name && value ? (ed.dom.setStyles(node, ed.dom.parseStyle(value)), 
             !0) : void (attribs[name] = value = "sandbox" == name && !1 === value ? null : value)) : (attribs["data-mce-p-" + name] = value, 

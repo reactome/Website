@@ -1,4 +1,4 @@
-/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function(tinymce) {
     var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each, extend = tinymce.extend, VK = tinymce.VK, TreeWalker = tinymce.dom.TreeWalker, Delay = tinymce.util.Delay;
     function getSpanVal(td, name) {
@@ -433,7 +433,8 @@
                 })), cellspacingCtrl = (form.add(cellspacingCtrl), cm.createStylesBox("table_classes", {
                     label: ed.getLang("table.classes", "Classes"),
                     onselect: function(v) {},
-                    name: "classes"
+                    name: "classes",
+                    styles: ed.getParam("table_classes_custom", [])
                 })), cellspacingCtrl = (form.add(cellspacingCtrl), cm.createCheckBox("table_caption", {
                     label: ed.getLang("table.caption", "Caption"),
                     name: "caption"
@@ -448,19 +449,23 @@
                         items: [ form ],
                         size: "mce-modal-landscape-small",
                         open: function() {
-                            var label = ed.getLang("insert", "Insert"), elm = ed.dom.getParent(ed.selection.getNode(), "table");
-                            if (elm) {
+                            var label = ed.getLang("insert", "Insert"), elm = ed.dom.getParent(ed.selection.getNode(), "table"), classes = ed.getParam("table_classes", "");
+                            if (classes.trim().split(" ").filter(function(cls) {
+                                return "" !== cls.trim();
+                            }), elm) {
                                 for (var label = ed.getLang("update", "Update"), rowsAr = elm.rows, rows = rowsAr.length, cols = 0, i = 0; i < rows; i++) rowsAr[i].cells.length > cols && (cols = rowsAr[i].cells.length);
                                 setValue("caption", 0 < elm.getElementsByTagName("caption").length), 
                                 rowCtrl.setDisabled(!0), colsCtrl.setDisabled(!0), 
                                 setValue("cellspacing", elm.cellSpacing || ""), 
                                 setValue("cellpadding", elm.cellPadding || "");
-                                var styles = ed.dom.parseStyle(ed.dom.getAttrib(elm, "style")), width = styles.width || elm.width || "", styles = styles.height || elm.height || "", width = (width = width.replace("px", ""), 
-                                styles = styles.replace("px", ""), setValue("width", width), 
-                                setValue("height", styles), ed.dom.getAttrib(elm, "class"));
-                                setValue("classes", width = (width = width.replace(/mce-[\w\-]+/g, "")).replace(/^\s+|\s+$/g, ""));
+                                var styles = ed.dom.parseStyle(ed.dom.getAttrib(elm, "style")), width = styles.width || elm.width || "", styles = styles.height || elm.height || "";
+                                width = width.replace("px", ""), styles = styles.replace("px", ""), 
+                                setValue("width", width), setValue("height", styles), 
+                                classes = (classes = ed.dom.getAttrib(elm, "class")).replace(/mce-[\w\-]+/g, "").replace(/\s+/g, " ").trim().split(" ").filter(function(cls) {
+                                    return "" !== cls.trim();
+                                });
                             }
-                            DOM.setHTML(this.id + "_insert", label);
+                            setValue("classes", classes), DOM.setHTML(this.id + "_insert", label);
                         },
                         buttons: [ {
                             title: ed.getLang("common.cancel", "Cancel"),
@@ -526,7 +531,8 @@
                 })), stylesList = (form.add(heightCtrl), cm.createStylesBox("table_row_classes", {
                     label: ed.getLang("table.classes", "Classes"),
                     onselect: function(v) {},
-                    name: "classes"
+                    name: "classes",
+                    styles: ed.getParam("table_classes_custom", [])
                 }));
                 form.add(stylesList), ed.addCommand("mceTableRowProps", function() {
                     ed.windowManager.open({
@@ -534,11 +540,13 @@
                         items: [ form ],
                         size: "mce-modal-landscape-small",
                         open: function() {
-                            var label = ed.getLang("insert", "Insert"), elm = ed.dom.getParent(ed.selection.getStart(), "tr"), rowtype = elm.parentNode.nodeName.toLowerCase(), height = "", height = (elm && (label = ed.getLang("update", "Update"), 
-                            height = elm.style.height || elm.height || ""), -1 !== height.indexOf("px") && (height = height.replace("px", "")), 
-                            heightCtrl.value(height), rowtypeCtrl.value(rowtype), 
-                            ed.dom.getAttrib(elm, "class"));
-                            height = (height = height.replace(/mce-[\w\-]+/g, "")).replace(/^\s+|\s+$/g, ""), 
+                            var label = ed.getLang("insert", "Insert"), elm = ed.dom.getParent(ed.selection.getStart(), "tr"), rowtype = elm.parentNode.nodeName.toLowerCase(), height = "";
+                            elm && (label = ed.getLang("update", "Update"), height = elm.style.height || elm.height || ""), 
+                            -1 !== height.indexOf("px") && (height = height.replace("px", "")), 
+                            heightCtrl.value(height), rowtypeCtrl.value(rowtype);
+                            height = (height = ed.dom.getAttrib(elm, "class")).replace(/mce-[\w\-]+/g, "").replace(/\s+/g, " ").trim().split(" ").filter(function(cls) {
+                                return "" !== cls.trim();
+                            });
                             stylesList.value(height), DOM.setHTML(this.id + "_insert", label);
                         },
                         buttons: [ {
@@ -586,7 +594,8 @@
                 })), stylesList = (form.add(heightCtrl), cm.createStylesBox("table_cell_classes", {
                     label: ed.getLang("table.classes", "Classes"),
                     onselect: function(v) {},
-                    name: "classes"
+                    name: "classes",
+                    styles: ed.getParam("table_classes_custom", [])
                 }));
                 form.add(stylesList), ed.addCommand("mceTableCellProps", function() {
                     ed.windowManager.open({
@@ -594,14 +603,15 @@
                         items: [ form ],
                         size: "mce-modal-landscape-small",
                         open: function() {
-                            var label = ed.getLang("insert", "Insert"), elm = ed.dom.getParent(ed.selection.getStart(), "td,th"), celltype = elm.nodeName.toLowerCase(), width = "", height = "", styles = (elm && (label = ed.getLang("update", "Update"), 
-                            width = elm.width || "", height = elm.height || "", 
-                            width = (styles = ed.dom.parseStyle(ed.dom.getAttrib(elm, "style"))).width || "", 
+                            var label = ed.getLang("insert", "Insert"), elm = ed.dom.getParent(ed.selection.getStart(), "td,th"), celltype = elm.nodeName.toLowerCase(), width = "", height = "";
+                            elm && (label = ed.getLang("update", "Update"), width = elm.width || "", 
+                            height = elm.height || "", width = (styles = ed.dom.parseStyle(ed.dom.getAttrib(elm, "style"))).width || "", 
                             height = styles.height || ""), width = width.replace("px", ""), 
                             height = height.replace("px", ""), widthCtrl.value(width), 
-                            heightCtrl.value(height), celltypeCtrl.value(celltype), 
-                            ed.dom.getAttrib(elm, "class"));
-                            styles = (styles = styles.replace(/mce-[\w\-]+/g, "")).replace(/^\s+|\s+$/g, ""), 
+                            heightCtrl.value(height), celltypeCtrl.value(celltype);
+                            var styles = (styles = ed.dom.getAttrib(elm, "class")).replace(/mce-[\w\-]+/g, "").replace(/\s+/g, " ").trim().split(" ").filter(function(cls) {
+                                return "" !== cls.trim();
+                            });
                             stylesList.value(styles), DOM.setHTML(this.id + "_insert", label);
                         },
                         buttons: [ {

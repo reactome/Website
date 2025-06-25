@@ -1,4 +1,4 @@
-/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* This file includes original and modified code from various versions of TinyMCE, relicensed under GPL v2+ per LGPL 2.1 §3 where applicable. Source: https://github.com/widgetfactory/tinymce-muon; Copyright (c) Tiny Technologies, Inc. All rights reserved.; Copyright (c) 1999–2015 Ephox Corp. All rights reserved.; Copyright (c) 2009       Moxiecode Systems AB. All rights reserved.; Copyright (c) 2009–2025  Ryan Demmer. All rights reserved.; For a detailed history of modifications, refer to the Git commit history.; Licensed under the GNU General Public License version 2 or later (GPL v2+): https://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     "use strict";
     !function(win) {
@@ -155,11 +155,11 @@
         tinymce.text = {}, tinymce.caret = {}, tinymce.clipboard = {}, tinymce.html = {}, 
         tinymce.ui = {}, tinymce.util = {}, tinymce.file = {}, tinymce.plugins = {};
     }(window);
-    var webkit, userAgent = (nav = navigator).userAgent;
+    var userAgent = (nav = navigator).userAgent;
     function matchMediaQuery(query) {
         return "matchMedia" in window && matchMedia(query).matches;
     }
-    var mouseEventRe, deprecated, isTouchEnabled = 1 < navigator.maxTouchPoints, opera = window.opera && window.opera.buildNumber, android = /Android/.test(userAgent), nav = !(webkit = /WebKit/.test(userAgent)) && !opera && /MSIE/gi.test(userAgent) && /Explorer/gi.test(nav.appName) && /MSIE (\w+)\./.exec(userAgent)[1] && !webkit, gecko = !webkit && !nav && /Gecko/.test(userAgent), mac = -1 != userAgent.indexOf("Mac"), isIOS = /(iPad|iPhone)/.test(userAgent) || (isIOS = /iPad/.test(userAgent), 
+    var func, isTouchEnabled = 1 < navigator.maxTouchPoints, opera = window.opera && window.opera.buildNumber, android = /Android/.test(userAgent), nav = !(webkit = /WebKit/.test(userAgent)) && !opera && /MSIE/gi.test(userAgent) && /Explorer/gi.test(nav.appName) && /MSIE (\w+)\./.exec(userAgent)[1] && !webkit, gecko = !webkit && !nav && /Gecko/.test(userAgent), mac = -1 != userAgent.indexOf("Mac"), isIOS = /(iPad|iPhone)/.test(userAgent) || (isIOS = /iPad/.test(userAgent), 
     hasMacLikeUserAgent = /Macintosh/.test(userAgent), isIOS) || isTouchEnabled && hasMacLikeUserAgent, hasMacLikeUserAgent = "FormData" in window && "FileReader" in window && "URL" in window && !!URL.createObjectURL, phone = matchMediaQuery("only screen and (max-device-width: 480px)") && (android || isIOS), tablet = matchMediaQuery("only screen and (min-width: 800px)") && (android || isIOS), windowsPhone = -1 != userAgent.indexOf("Windows Phone"), contentEditable = !isIOS || hasMacLikeUserAgent || 534 <= userAgent.match(/AppleWebKit\/(\d*)/)[1], count = (tinymce.util.Env = {
         opera: opera,
         webkit: webkit,
@@ -559,10 +559,6 @@
         }
         function moveCursorToEnd(e) {
             var rng = selection.getRng(), container = rng.startContainer, node = container.parentNode;
-            function moveToMarker() {
-                (rng = dom.createRng()).setStart(marker, 0), rng.setEnd(marker, 0), 
-                rng.collapse(), selection.setRng(rng);
-            }
             node && node != editor.dom.getRoot() && (node = dom.getParent(node, 'a,span[data-mce-item="font"]')) && (isLastChild(node) || function(node) {
                 return isBr(node) || node && 3 == node.nodeType && /^[ \t\r\n]*$/.test(node.nodeValue);
             }(node.nextSibling)) && 3 == container.nodeType && function(container, node) {
@@ -570,9 +566,12 @@
                 dom.isChildOf(container, node);
             }(container, node) && (container = container.data) && container.length && rng.startOffset == container.length && (marker = dom.create("span", {
                 "data-mce-type": "caret"
-            }, "\ufeff"), dom.isBlock(node.parentNode) && isLastChild(node) ? (node.parentNode.appendChild(marker), 
-            moveToMarker(), dom.remove(marker)) : ((node = isBr(node.nextSibling) && node.nextSibling == node.parentNode.lastChild ? node.nextSibling : node).insertAdjacentElement("afterend", marker), 
-            moveToMarker()), e.preventDefault(), editor.nodeChanged());
+            }, "\ufeff"), dom.isBlock(node.parentNode) && isLastChild(node) ? node.parentNode.appendChild(marker) : (node = isBr(node.nextSibling) && node.nextSibling == node.parentNode.lastChild ? node.nextSibling : node).insertAdjacentElement("afterend", marker), 
+            function() {
+                var rng = dom.createRng();
+                rng.setStartAfter(marker), rng.setEndAfter(marker), rng.collapse(), 
+                selection.setRng(rng);
+            }(), dom.remove(marker), e.preventDefault(), editor.nodeChanged());
         }
         function removeRuntimeStyle(node) {
             var style = node.attr("style");
@@ -626,7 +625,7 @@
             editor.nodeChanged());
         }), editor.onKeyDown.addToTop(function(editor, e) {
             dom.remove(marker), e.keyCode == VK.RIGHT && moveCursorToEnd(e);
-        }), editor.onMouseDown.add(function(editor, e) {
+        }), editor.onMouseUp.add(function(editor, e) {
             dom.remove(marker), moveCursorToEnd(e);
         }), tinymce.isWebKit && (function() {
             var dom = editor.dom, selection = editor.selection, MutationObserver = window.MutationObserver;
@@ -1043,149 +1042,6 @@
             data: uri[1]
         };
     }
-    function addEvent(target, name, callback, capture) {
-        target.addEventListener(name, callback, capture || !1);
-    }
-    function removeEvent(target, name, callback, capture) {
-        target.removeEventListener(name, callback, capture || !1);
-    }
-    function fix(originalEvent, data) {
-        var name, doc, event = data || {};
-        function returnFalse() {
-            return !1;
-        }
-        function returnTrue() {
-            return !0;
-        }
-        for (name in originalEvent) deprecated[name] || (event[name] = originalEvent[name]);
-        return event.target || (event.target = event.srcElement || document), originalEvent && mouseEventRe.test(originalEvent.type) && void 0 === originalEvent.pageX && void 0 !== originalEvent.clientX && (doc = (data = event.target.ownerDocument || document).documentElement, 
-        data = data.body, event.pageX = originalEvent.clientX + (doc && doc.scrollLeft || data && data.scrollLeft || 0) - (doc && doc.clientLeft || data && data.clientLeft || 0), 
-        event.pageY = originalEvent.clientY + (doc && doc.scrollTop || data && data.scrollTop || 0) - (doc && doc.clientTop || data && data.clientTop || 0)), 
-        event.preventDefault = function() {
-            event.isDefaultPrevented = returnTrue, originalEvent && originalEvent.preventDefault();
-        }, event.stopPropagation = function() {
-            event.isPropagationStopped = returnTrue, originalEvent && originalEvent.stopPropagation();
-        }, event.stopImmediatePropagation = function() {
-            event.isImmediatePropagationStopped = returnTrue, event.stopPropagation();
-        }, event.isDefaultPrevented || (event.isDefaultPrevented = returnFalse, 
-        event.isPropagationStopped = returnFalse, event.isImmediatePropagationStopped = returnFalse), 
-        event;
-    }
-    function EventUtils() {
-        var count, expando, hasFocusIn, hasMouseEnterLeave, mouseEnterLeave, self = this, events = {};
-        function executeHandlers(evt, id) {
-            var i, l, callback, callbackList = (id = events[id]) && id[evt.type];
-            if (callbackList) for (i = 0, l = callbackList.length; i < l; i++) if ((callback = callbackList[i]) && !1 === callback.func.call(callback.scope, evt) && evt.preventDefault(), 
-            evt.isImmediatePropagationStopped()) return;
-        }
-        expando = "mce-data-" + (+new Date()).toString(32), hasMouseEnterLeave = "onmouseenter" in document.documentElement, 
-        hasFocusIn = "onfocusin" in document.documentElement, count = 1, self.domLoaded = !(mouseEnterLeave = {
-            mouseenter: "mouseover",
-            mouseleave: "mouseout"
-        }), self.events = events, self.bind = function(target, names, callback, scope) {
-            var id, callbackList, i, name, fakeName, nativeHandler, capture, win = window;
-            function defaultNativeHandler(evt) {
-                executeHandlers(fix(evt || win.event), id);
-            }
-            if (target && 3 !== target.nodeType && 8 !== target.nodeType) {
-                for (target[expando] ? id = target[expando] : (id = count++, target[expando] = id, 
-                events[id] = {}), scope = scope || target, i = (names = names.split(" ")).length; i--; ) nativeHandler = defaultNativeHandler, 
-                fakeName = capture = !1, "DOMContentLoaded" === (name = names[i]) && (name = "ready"), 
-                self.domLoaded && "ready" === name && "complete" == target.readyState ? callback.call(scope, fix({
-                    type: name
-                })) : (hasMouseEnterLeave || (fakeName = mouseEnterLeave[name]) && (nativeHandler = function(evt) {
-                    var current = evt.currentTarget, related = evt.relatedTarget;
-                    if (related && current.contains) related = current.contains(related); else for (;related && related !== current; ) related = related.parentNode;
-                    related || ((evt = fix(evt || win.event)).type = "mouseout" === evt.type ? "mouseleave" : "mouseenter", 
-                    evt.target = current, executeHandlers(evt, id));
-                }), hasFocusIn || "focusin" !== name && "focusout" !== name || (capture = !0, 
-                fakeName = "focusin" === name ? "focus" : "blur", nativeHandler = function(evt) {
-                    (evt = fix(evt || win.event)).type = "focus" === evt.type ? "focusin" : "focusout", 
-                    executeHandlers(evt, id);
-                }), (callbackList = events[id][name]) ? "ready" === name && self.domLoaded ? callback({
-                    type: name
-                }) : callbackList.push({
-                    func: callback,
-                    scope: scope
-                }) : (events[id][name] = callbackList = [ {
-                    func: callback,
-                    scope: scope
-                } ], callbackList.fakeName = fakeName, callbackList.capture = capture, 
-                callbackList.nativeHandler = nativeHandler, "ready" === name ? function(win, callback, eventUtils) {
-                    var doc = win.document, event = {
-                        type: "ready"
-                    };
-                    function readyHandler() {
-                        eventUtils.domLoaded || (eventUtils.domLoaded = !0, callback(event));
-                    }
-                    eventUtils.domLoaded ? callback(event) : ("complete" === doc.readyState ? readyHandler() : addEvent(win, "DOMContentLoaded", readyHandler), 
-                    addEvent(win, "load", readyHandler));
-                }(target, nativeHandler, self) : addEvent(target, fakeName || name, nativeHandler, capture)));
-                return target = callbackList = 0, callback;
-            }
-        }, self.unbind = function(target, names, callback) {
-            var id, i, ci, name, eventMap, nativeHandler, fakeName, capture, callbackList;
-            if (target && 3 !== target.nodeType && 8 !== target.nodeType && (id = target[expando])) {
-                if (eventMap = events[id], names) {
-                    for (i = (names = names.split(" ")).length; i--; ) if (callbackList = eventMap[name = names[i]]) {
-                        if (callback) for (ci = callbackList.length; ci--; ) callbackList[ci].func === callback && (nativeHandler = callbackList.nativeHandler, 
-                        fakeName = callbackList.fakeName, capture = callbackList.capture, 
-                        (callbackList = callbackList.slice(0, ci).concat(callbackList.slice(ci + 1))).nativeHandler = nativeHandler, 
-                        callbackList.fakeName = fakeName, callbackList.capture = capture, 
-                        eventMap[name] = callbackList);
-                        callback && 0 !== callbackList.length || (delete eventMap[name], 
-                        removeEvent(target, callbackList.fakeName || name, callbackList.nativeHandler, callbackList.capture));
-                    }
-                } else {
-                    for (name in eventMap) removeEvent(target, (callbackList = eventMap[name]).fakeName || name, callbackList.nativeHandler, callbackList.capture);
-                    eventMap = {};
-                }
-                for (name in eventMap) return self;
-                delete events[id];
-                try {
-                    delete target[expando];
-                } catch (ex) {
-                    target[expando] = null;
-                }
-            }
-            return self;
-        }, self.fire = function(target, name, args) {
-            var id;
-            if (target && 3 !== target.nodeType && 8 !== target.nodeType) {
-                for ((args = fix(null, args)).type = name, args.target = target; (id = target[expando]) && executeHandlers(args, id), 
-                (target = target.parentNode || target.ownerDocument || target.defaultView || target.parentWindow) && !args.isPropagationStopped(); );
-                self.args = args;
-            }
-            return self;
-        }, self.clean = function(target) {
-            var i, children, unbind = self.unbind;
-            if (target && 3 !== target.nodeType && 8 !== target.nodeType && (target[expando] && unbind(target), 
-            target = target.getElementsByTagName ? target : target.document) && target.getElementsByTagName) for (unbind(target), 
-            i = (children = target.getElementsByTagName("*")).length; i--; ) (target = children[i])[expando] && unbind(target);
-            return self;
-        }, self.destroy = function() {
-            events = {};
-        }, self.cancel = function(e) {
-            return e && (e.preventDefault(), e.stopImmediatePropagation()), !1;
-        }, self.add = function(target, events, func, scope) {
-            if (!((target = "string" == typeof target ? document.getElementById(target) : target) && target instanceof Array)) return self.bind(target, (events = "init" === events ? "ready" : events) instanceof Array ? events.join(" ") : events, func, scope);
-            for (var i = target.length; i--; ) self.add(target[i], events, func, scope);
-        }, self.remove = function(target, events, func, scope) {
-            if (!target) return self;
-            if ((target = "string" == typeof target ? document.getElementById(target) : target) instanceof Array) {
-                for (var i = target.length; i--; ) self.remove(target[i], events, func, scope);
-                return self;
-            }
-            return self.unbind(target, events instanceof Array ? events.join(" ") : events, func);
-        }, self.clear = function(target) {
-            return "string" == typeof target && (target = document.getElementById(target)), 
-            self.clean(target);
-        }, self.preventDefault = function(e) {
-            e && e.preventDefault();
-        }, self.isDefaultPrevented = function(e) {
-            return e.isDefaultPrevented();
-        };
-    }
     tinymce.file.BlobCache = {
         create: function(o, blob, base64, filename) {
             return function(o) {
@@ -1469,7 +1325,7 @@
             })), styles;
         }
         tinymce.html.Schema = function(settings) {
-            var validStyles, invalidStyles, schemaItems, whiteSpaceElementsMap, selfClosingElementsMap, shortEndedElementsMap, boolAttrMap, validClasses, blockElementsMap, nonEmptyElementsMap, moveCaretBeforeOnEnterElementsMap, textBlockElementsMap, textInlineElementsMap, type, globalAttributes, phrasingContent, flowContent, html4PhrasingContent, eventAttributes, schema, elements = {}, children = {}, patternElements = [], customElementsMap = {}, specialElements = {};
+            var validStyles, invalidStyles, schemaItems, whiteSpaceElementsMap, selfClosingElementsMap, shortEndedElementsMap, boolAttrMap, validClasses, blockElementsMap, nonEmptyElementsMap, moveCaretBeforeOnEnterElementsMap, textBlockElementsMap, textInlineElementsMap, type, globalAttributes, phrasingContent, flowContent, html4PhrasingContent, microdataAttributes, schema, elements = {}, children = {}, patternElements = [], customElementsMap = {}, specialElements = {};
             function createLookupTable(option, default_value, extendWith) {
                 var value = settings[option];
                 return value ? value = makeMap(value, /[, ]/, makeMap(value.toUpperCase(), /[, ]/)) : (value = mapCache[option]) || (value = makeMap(default_value, " ", makeMap(default_value.toUpperCase(), " ")), 
@@ -1574,21 +1430,23 @@
                 for (i = patternElements.length; i--; ) if ((element = patternElements[i]).pattern.test(name)) return element;
             }
             type = (settings = settings || {}).schema, schema = {}, schemaItems = mapCache[type] || (globalAttributes = split("id accesskey class dir lang style tabindex title"), 
-            eventAttributes = split("onclick ondblclick onmousedown onmouseup onmouseover onmousemove onmouseout onkeypress onkeydown onkeyup"), 
-            "html4" != type && eventAttributes.push.apply(eventAttributes, split("onabort onblur oncancel oncanplay oncanplaythrough onchange onclose oncontextmenu oncuechange ondrag ondragend ondragenter ondragleave ondragover ondragstart ondrop ondurationchange onemptied onended onerror onfocus oninput oninvalid onload onloadeddata onloadedmetadata onloadstart onmouseenter onmouseleave onmousewheel onpause onplay onplaying onprogress onratechange onreset onscroll onseeked onseeking onseeking onselect onshow onstalled onsubmit onsuspend ontimeupdate onvolumechange onwaiting onwheel")), 
-            globalAttributes.push.apply(globalAttributes, eventAttributes), globalAttributes.push.apply(globalAttributes, split("itemscope itemtype itemid itemprop itemref")), 
-            globalAttributes.push.apply(globalAttributes, split("role")), eventAttributes = split("address blockquote div dl fieldset form h1 h2 h3 h4 h5 h6 hr menu ol p pre table ul"), 
+            microdataAttributes = split("itemprop itemscope itemtype itemid itemref"), 
+            globalAttributes.push.apply(globalAttributes, microdataAttributes), 
+            microdataAttributes = split("onclick ondblclick onmousedown onmouseup onmouseover onmousemove onmouseout onkeypress onkeydown onkeyup"), 
+            "html4" != type && microdataAttributes.push.apply(microdataAttributes, split("onabort onblur oncancel oncanplay oncanplaythrough onchange onclose oncontextmenu oncuechange ondrag ondragend ondragenter ondragleave ondragover ondragstart ondrop ondurationchange onemptied onended onerror onfocus oninput oninvalid onload onloadeddata onloadedmetadata onloadstart onmouseenter onmouseleave onmousewheel onpause onplay onplaying onprogress onratechange onreset onscroll onseeked onseeking onseeking onselect onshow onstalled onsubmit onsuspend ontimeupdate onvolumechange onwaiting onwheel")), 
+            globalAttributes.push.apply(globalAttributes, microdataAttributes), 
+            globalAttributes.push.apply(globalAttributes, split("role")), microdataAttributes = split("address blockquote div dl fieldset form h1 h2 h3 h4 h5 h6 hr menu ol p pre table ul"), 
             phrasingContent = split("a abbr b bdo br button cite code del dfn em embed i iframe img input ins kbd label map noscript object q s samp script select small span strong sub sup textarea u var link style #text #comment"), 
             "html4" != type && (globalAttributes.push.apply(globalAttributes, split("contenteditable contextmenu draggable dropzone hidden spellcheck translate")), 
-            eventAttributes.push.apply(eventAttributes, split("article aside details dialog figure header footer hgroup section nav")), 
+            microdataAttributes.push.apply(microdataAttributes, split("article aside details dialog figure header footer hgroup section nav")), 
             phrasingContent.push.apply(phrasingContent, split("audio canvas command datalist mark meter output picture progress time wbr video ruby bdi keygen"))), 
             "html5-strict" != type && (globalAttributes.push("xml:lang"), html4PhrasingContent = split("acronym applet basefont big font strike tt"), 
             phrasingContent.push.apply(phrasingContent, html4PhrasingContent), each(html4PhrasingContent, function(name) {
                 add(name, "", phrasingContent);
-            }), html4PhrasingContent = split("center dir isindex noframes"), eventAttributes.push.apply(eventAttributes, html4PhrasingContent), 
-            flowContent = [].concat(eventAttributes, phrasingContent), each(html4PhrasingContent, function(name) {
+            }), html4PhrasingContent = split("center dir isindex noframes"), microdataAttributes.push.apply(microdataAttributes, html4PhrasingContent), 
+            flowContent = [].concat(microdataAttributes, phrasingContent), each(html4PhrasingContent, function(name) {
                 add(name, "", flowContent);
-            })), flowContent = flowContent || [].concat(eventAttributes, phrasingContent), 
+            })), flowContent = flowContent || [].concat(microdataAttributes, phrasingContent), 
             add("html", "manifest", "head body"), add("head", "", "base command link meta noscript script style title"), 
             add("title hr noscript br"), add("base", "href target"), add("link", "href rel media hreflang type sizes"), 
             add("meta", "name http-equiv content charset"), add("style", "media type scoped"), 
@@ -2042,6 +1900,681 @@
                 }
             }
         }), tinymce.html.Node = Node;
+    }(tinymce);
+    const {
+        entries,
+        setPrototypeOf,
+        isFrozen,
+        getPrototypeOf,
+        getOwnPropertyDescriptor
+    } = Object;
+    let {
+        freeze,
+        seal,
+        create: create$1
+    } = Object, {
+        apply,
+        construct
+    } = "undefined" != typeof Reflect && Reflect;
+    freeze = freeze || function(x) {
+        return x;
+    }, seal = seal || function(x) {
+        return x;
+    }, apply = apply || function(fun, thisValue, args) {
+        return fun.apply(thisValue, args);
+    }, construct = construct || function(Func, args) {
+        return new Func(...args);
+    };
+    function typeErrorCreate() {
+        for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) args[_key2] = arguments[_key2];
+        return construct(func, args);
+    }
+    const arrayForEach = unapply(Array.prototype.forEach), arrayLastIndexOf = unapply(Array.prototype.lastIndexOf), arrayPop = unapply(Array.prototype.pop), arrayPush = unapply(Array.prototype.push), arraySplice = unapply(Array.prototype.splice), stringToLowerCase = unapply(String.prototype.toLowerCase), stringToString = unapply(String.prototype.toString), stringMatch = unapply(String.prototype.match), stringReplace = unapply(String.prototype.replace), stringIndexOf = unapply(String.prototype.indexOf), stringTrim = unapply(String.prototype.trim), objectHasOwnProperty = unapply(Object.prototype.hasOwnProperty), regExpTest = unapply(RegExp.prototype.test);
+    func = TypeError;
+    function unapply(func) {
+        return function(thisArg) {
+            thisArg instanceof RegExp && (thisArg.lastIndex = 0);
+            for (var _len = arguments.length, args = new Array(1 < _len ? _len - 1 : 0), _key = 1; _key < _len; _key++) args[_key - 1] = arguments[_key];
+            return apply(func, thisArg, args);
+        };
+    }
+    function addToSet(set, array, argument_2) {
+        var lcElement, transformCaseFunc = 2 < arguments.length && void 0 !== argument_2 ? argument_2 : stringToLowerCase;
+        setPrototypeOf && setPrototypeOf(set, null);
+        let l = array.length;
+        for (;l--; ) {
+            let element = array[l];
+            "string" == typeof element && (lcElement = transformCaseFunc(element)) !== element && (isFrozen(array) || (array[l] = lcElement), 
+            element = lcElement), set[element] = !0;
+        }
+        return set;
+    }
+    function clone(object) {
+        var property, value, newObject = create$1(null);
+        for ([ property, value ] of entries(object)) objectHasOwnProperty(object, property) && (Array.isArray(value) ? newObject[property] = function(array) {
+            for (let index = 0; index < array.length; index++) objectHasOwnProperty(array, index) || (array[index] = null);
+            return array;
+        }(value) : value && "object" == typeof value && value.constructor === Object ? newObject[property] = clone(value) : newObject[property] = value);
+        return newObject;
+    }
+    function lookupGetter(object, prop) {
+        for (;null !== object; ) {
+            var desc = getOwnPropertyDescriptor(object, prop);
+            if (desc) {
+                if (desc.get) return unapply(desc.get);
+                if ("function" == typeof desc.value) return unapply(desc.value);
+            }
+            object = getPrototypeOf(object);
+        }
+        return function() {
+            return null;
+        };
+    }
+    const html$1 = freeze([ "a", "abbr", "acronym", "address", "area", "article", "aside", "audio", "b", "bdi", "bdo", "big", "blink", "blockquote", "body", "br", "button", "canvas", "caption", "center", "cite", "code", "col", "colgroup", "content", "data", "datalist", "dd", "decorator", "del", "details", "dfn", "dialog", "dir", "div", "dl", "dt", "element", "em", "fieldset", "figcaption", "figure", "font", "footer", "form", "h1", "h2", "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "img", "input", "ins", "kbd", "label", "legend", "li", "main", "map", "mark", "marquee", "menu", "menuitem", "meter", "nav", "nobr", "ol", "optgroup", "option", "output", "p", "picture", "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "section", "select", "shadow", "small", "source", "spacer", "span", "strike", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "template", "textarea", "tfoot", "th", "thead", "time", "tr", "track", "tt", "u", "ul", "var", "video", "wbr" ]), svg$1 = freeze([ "svg", "a", "altglyph", "altglyphdef", "altglyphitem", "animatecolor", "animatemotion", "animatetransform", "circle", "clippath", "defs", "desc", "ellipse", "filter", "font", "g", "glyph", "glyphref", "hkern", "image", "line", "lineargradient", "marker", "mask", "metadata", "mpath", "path", "pattern", "polygon", "polyline", "radialgradient", "rect", "stop", "style", "switch", "symbol", "text", "textpath", "title", "tref", "tspan", "view", "vkern" ]), svgFilters = freeze([ "feBlend", "feColorMatrix", "feComponentTransfer", "feComposite", "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap", "feDistantLight", "feDropShadow", "feFlood", "feFuncA", "feFuncB", "feFuncG", "feFuncR", "feGaussianBlur", "feImage", "feMerge", "feMergeNode", "feMorphology", "feOffset", "fePointLight", "feSpecularLighting", "feSpotLight", "feTile", "feTurbulence" ]), svgDisallowed = freeze([ "animate", "color-profile", "cursor", "discard", "font-face", "font-face-format", "font-face-name", "font-face-src", "font-face-uri", "foreignobject", "hatch", "hatchpath", "mesh", "meshgradient", "meshpatch", "meshrow", "missing-glyph", "script", "set", "solidcolor", "unknown", "use" ]), mathMl$1 = freeze([ "math", "menclose", "merror", "mfenced", "mfrac", "mglyph", "mi", "mlabeledtr", "mmultiscripts", "mn", "mo", "mover", "mpadded", "mphantom", "mroot", "mrow", "ms", "mspace", "msqrt", "mstyle", "msub", "msup", "msubsup", "mtable", "mtd", "mtext", "mtr", "munder", "munderover", "mprescripts" ]), mathMlDisallowed = freeze([ "maction", "maligngroup", "malignmark", "mlongdiv", "mscarries", "mscarry", "msgroup", "mstack", "msline", "msrow", "semantics", "annotation", "annotation-xml", "mprescripts", "none" ]), text = freeze([ "#text" ]), html = freeze([ "accept", "action", "align", "alt", "autocapitalize", "autocomplete", "autopictureinpicture", "autoplay", "background", "bgcolor", "border", "capture", "cellpadding", "cellspacing", "checked", "cite", "class", "clear", "color", "cols", "colspan", "controls", "controlslist", "coords", "crossorigin", "datetime", "decoding", "default", "dir", "disabled", "disablepictureinpicture", "disableremoteplayback", "download", "draggable", "enctype", "enterkeyhint", "face", "for", "headers", "height", "hidden", "high", "href", "hreflang", "id", "inputmode", "integrity", "ismap", "kind", "label", "lang", "list", "loading", "loop", "low", "max", "maxlength", "media", "method", "min", "minlength", "multiple", "muted", "name", "nonce", "noshade", "novalidate", "nowrap", "open", "optimum", "pattern", "placeholder", "playsinline", "popover", "popovertarget", "popovertargetaction", "poster", "preload", "pubdate", "radiogroup", "readonly", "rel", "required", "rev", "reversed", "role", "rows", "rowspan", "spellcheck", "scope", "selected", "shape", "size", "sizes", "span", "srclang", "start", "src", "srcset", "step", "style", "summary", "tabindex", "title", "translate", "type", "usemap", "valign", "value", "width", "wrap", "xmlns", "slot" ]), svg = freeze([ "accent-height", "accumulate", "additive", "alignment-baseline", "amplitude", "ascent", "attributename", "attributetype", "azimuth", "basefrequency", "baseline-shift", "begin", "bias", "by", "class", "clip", "clippathunits", "clip-path", "clip-rule", "color", "color-interpolation", "color-interpolation-filters", "color-profile", "color-rendering", "cx", "cy", "d", "dx", "dy", "diffuseconstant", "direction", "display", "divisor", "dur", "edgemode", "elevation", "end", "exponent", "fill", "fill-opacity", "fill-rule", "filter", "filterunits", "flood-color", "flood-opacity", "font-family", "font-size", "font-size-adjust", "font-stretch", "font-style", "font-variant", "font-weight", "fx", "fy", "g1", "g2", "glyph-name", "glyphref", "gradientunits", "gradienttransform", "height", "href", "id", "image-rendering", "in", "in2", "intercept", "k", "k1", "k2", "k3", "k4", "kerning", "keypoints", "keysplines", "keytimes", "lang", "lengthadjust", "letter-spacing", "kernelmatrix", "kernelunitlength", "lighting-color", "local", "marker-end", "marker-mid", "marker-start", "markerheight", "markerunits", "markerwidth", "maskcontentunits", "maskunits", "max", "mask", "media", "method", "mode", "min", "name", "numoctaves", "offset", "operator", "opacity", "order", "orient", "orientation", "origin", "overflow", "paint-order", "path", "pathlength", "patterncontentunits", "patterntransform", "patternunits", "points", "preservealpha", "preserveaspectratio", "primitiveunits", "r", "rx", "ry", "radius", "refx", "refy", "repeatcount", "repeatdur", "restart", "result", "rotate", "scale", "seed", "shape-rendering", "slope", "specularconstant", "specularexponent", "spreadmethod", "startoffset", "stddeviation", "stitchtiles", "stop-color", "stop-opacity", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke", "stroke-width", "style", "surfacescale", "systemlanguage", "tabindex", "tablevalues", "targetx", "targety", "transform", "transform-origin", "text-anchor", "text-decoration", "text-rendering", "textlength", "type", "u1", "u2", "unicode", "values", "viewbox", "visibility", "version", "vert-adv-y", "vert-origin-x", "vert-origin-y", "width", "word-spacing", "wrap", "writing-mode", "xchannelselector", "ychannelselector", "x", "x1", "x2", "xmlns", "y", "y1", "y2", "z", "zoomandpan" ]), mathMl = freeze([ "accent", "accentunder", "align", "bevelled", "close", "columnsalign", "columnlines", "columnspan", "denomalign", "depth", "dir", "display", "displaystyle", "encoding", "fence", "frame", "height", "href", "id", "largeop", "length", "linethickness", "lspace", "lquote", "mathbackground", "mathcolor", "mathsize", "mathvariant", "maxsize", "minsize", "movablelimits", "notation", "numalign", "open", "rowalign", "rowlines", "rowspacing", "rowspan", "rspace", "rquote", "scriptlevel", "scriptminsize", "scriptsizemultiplier", "selection", "separator", "separators", "stretchy", "subscriptshift", "supscriptshift", "symmetric", "voffset", "width", "xmlns" ]), xml = freeze([ "xlink:href", "xml:id", "xlink:title", "xml:space", "xmlns:xlink" ]);
+    var phone = seal(/\{\{[\w\W]*|[\w\W]*\}\}/gm), tablet = seal(/<%[\w\W]*|[\w\W]*%>/gm), windowsPhone = seal(/\$\{[\w\W]*/gm), opera = seal(/^data-[\-\w.\u00B7-\uFFFF]+$/), webkit = seal(/^aria-[\-\w]+$/);
+    const IS_ALLOWED_URI = seal(/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i), DOCTYPE_NAME = (nav = seal(/^(?:\w+script|data):/i), 
+    gecko = seal(/[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u3000]/g), 
+    seal(/^html$/i));
+    var mac = seal(/^[a-z][.\w]*(-[.\w]+)+$/i), EXPRESSIONS = Object.freeze({
+        __proto__: null,
+        ARIA_ATTR: webkit,
+        ATTR_WHITESPACE: gecko,
+        CUSTOM_ELEMENT: mac,
+        DATA_ATTR: opera,
+        DOCTYPE_NAME: DOCTYPE_NAME,
+        ERB_EXPR: tablet,
+        IS_ALLOWED_URI: IS_ALLOWED_URI,
+        IS_SCRIPT_OR_DATA: nav,
+        MUSTACHE_EXPR: phone,
+        TMPLIT_EXPR: windowsPhone
+    });
+    function _createHooksMap() {
+        return {
+            afterSanitizeAttributes: [],
+            afterSanitizeElements: [],
+            afterSanitizeShadowDOM: [],
+            beforeSanitizeAttributes: [],
+            beforeSanitizeElements: [],
+            beforeSanitizeShadowDOM: [],
+            uponSanitizeAttribute: [],
+            uponSanitizeElement: [],
+            uponSanitizeShadowNode: []
+        };
+    }
+    const NODE_TYPE = {
+        element: 1,
+        attribute: 2,
+        text: 3,
+        cdataSection: 4,
+        entityReference: 5,
+        entityNode: 6,
+        progressingInstruction: 7,
+        comment: 8,
+        document: 9,
+        documentType: 10,
+        documentFragment: 11,
+        notation: 12
+    };
+    var mouseEventRe, deprecated, purify = function createDOMPurify(argument_0) {
+        argument_0 = 0 < arguments.length && void 0 !== argument_0 ? argument_0 : "undefined" == typeof window ? null : window;
+        const DOMPurify = root => createDOMPurify(root);
+        if (DOMPurify.version = "3.2.5", DOMPurify.removed = [], !argument_0 || !argument_0.document || argument_0.document.nodeType !== NODE_TYPE.document || !argument_0.Element) return DOMPurify.isSupported = !1, 
+        DOMPurify;
+        let document = argument_0.document;
+        const originalDocument = document, currentScript = originalDocument.currentScript, {
+            DocumentFragment,
+            HTMLTemplateElement,
+            Node,
+            Element,
+            NodeFilter,
+            NamedNodeMap = argument_0.NamedNodeMap || argument_0.MozNamedAttrMap,
+            HTMLFormElement,
+            DOMParser,
+            trustedTypes
+        } = argument_0, cloneNode = lookupGetter(argument_0 = Element.prototype, "cloneNode"), remove = lookupGetter(argument_0, "remove"), getNextSibling = lookupGetter(argument_0, "nextSibling"), getChildNodes = lookupGetter(argument_0, "childNodes"), getParentNode = lookupGetter(argument_0, "parentNode");
+        "function" == typeof HTMLTemplateElement && (argument_0 = document.createElement("template")).content && argument_0.content.ownerDocument && (document = argument_0.content.ownerDocument);
+        let trustedTypesPolicy, emptyHTML = "";
+        const {
+            implementation,
+            createNodeIterator,
+            createDocumentFragment,
+            getElementsByTagName
+        } = document, importNode = originalDocument.importNode;
+        let hooks = _createHooksMap();
+        DOMPurify.isSupported = "function" == typeof entries && "function" == typeof getParentNode && implementation && void 0 !== implementation.createHTMLDocument;
+        const {
+            MUSTACHE_EXPR,
+            ERB_EXPR,
+            TMPLIT_EXPR,
+            DATA_ATTR,
+            ARIA_ATTR,
+            IS_SCRIPT_OR_DATA,
+            ATTR_WHITESPACE,
+            CUSTOM_ELEMENT
+        } = EXPRESSIONS;
+        let IS_ALLOWED_URI$1 = EXPRESSIONS.IS_ALLOWED_URI, ALLOWED_TAGS = null;
+        const DEFAULT_ALLOWED_TAGS = addToSet({}, [ ...html$1, ...svg$1, ...svgFilters, ...mathMl$1, ...text ]);
+        let ALLOWED_ATTR = null;
+        const DEFAULT_ALLOWED_ATTR = addToSet({}, [ ...html, ...svg, ...mathMl, ...xml ]);
+        let CUSTOM_ELEMENT_HANDLING = Object.seal(create$1(null, {
+            tagNameCheck: {
+                writable: !0,
+                configurable: !1,
+                enumerable: !0,
+                value: null
+            },
+            attributeNameCheck: {
+                writable: !0,
+                configurable: !1,
+                enumerable: !0,
+                value: null
+            },
+            allowCustomizedBuiltInElements: {
+                writable: !0,
+                configurable: !1,
+                enumerable: !0,
+                value: !1
+            }
+        })), FORBID_TAGS = null, FORBID_ATTR = null, ALLOW_ARIA_ATTR = !0, ALLOW_DATA_ATTR = !0, ALLOW_UNKNOWN_PROTOCOLS = !1, ALLOW_SELF_CLOSE_IN_ATTR = !0, SAFE_FOR_TEMPLATES = !1, SAFE_FOR_XML = !0, WHOLE_DOCUMENT = !1, SET_CONFIG = !1, FORCE_BODY = !1, RETURN_DOM = !1, RETURN_DOM_FRAGMENT = !1, RETURN_TRUSTED_TYPE = !1, SANITIZE_DOM = !0, SANITIZE_NAMED_PROPS = !1, KEEP_CONTENT = !0, IN_PLACE = !1, USE_PROFILES = {}, FORBID_CONTENTS = null;
+        const DEFAULT_FORBID_CONTENTS = addToSet({}, [ "annotation-xml", "audio", "colgroup", "desc", "foreignobject", "head", "iframe", "math", "mi", "mn", "mo", "ms", "mtext", "noembed", "noframes", "noscript", "plaintext", "script", "style", "svg", "template", "thead", "title", "video", "xmp" ]);
+        let DATA_URI_TAGS = null;
+        const DEFAULT_DATA_URI_TAGS = addToSet({}, [ "audio", "video", "img", "source", "image", "track" ]);
+        let URI_SAFE_ATTRIBUTES = null;
+        const DEFAULT_URI_SAFE_ATTRIBUTES = addToSet({}, [ "alt", "class", "for", "id", "label", "name", "pattern", "placeholder", "role", "summary", "title", "value", "style", "xmlns" ]), MATHML_NAMESPACE = "http://www.w3.org/1998/Math/MathML", SVG_NAMESPACE = "http://www.w3.org/2000/svg", HTML_NAMESPACE = "http://www.w3.org/1999/xhtml";
+        let NAMESPACE = HTML_NAMESPACE, IS_EMPTY_INPUT, ALLOWED_NAMESPACES = null;
+        const DEFAULT_ALLOWED_NAMESPACES = addToSet({}, [ MATHML_NAMESPACE, SVG_NAMESPACE, HTML_NAMESPACE ], stringToString);
+        let MATHML_TEXT_INTEGRATION_POINTS = addToSet({}, [ "mi", "mo", "mn", "ms", "mtext" ]), HTML_INTEGRATION_POINTS = addToSet({}, [ "annotation-xml" ]);
+        const COMMON_SVG_AND_HTML_ELEMENTS = addToSet({}, [ "title", "style", "font", "a", "script" ]);
+        let PARSER_MEDIA_TYPE = null;
+        const SUPPORTED_PARSER_MEDIA_TYPES = [ "application/xhtml+xml", "text/html" ];
+        let transformCaseFunc = null, CONFIG = null;
+        function isRegexOrFunction(testValue) {
+            return testValue instanceof RegExp || testValue instanceof Function;
+        }
+        function _parseConfig(argument_0) {
+            argument_0 = 0 < arguments.length && void 0 !== argument_0 ? argument_0 : {};
+            if (!CONFIG || CONFIG !== argument_0) {
+                if (argument_0 = clone(argument_0 && "object" == typeof argument_0 ? argument_0 : {}), 
+                PARSER_MEDIA_TYPE = -1 === SUPPORTED_PARSER_MEDIA_TYPES.indexOf(argument_0.PARSER_MEDIA_TYPE) ? "text/html" : argument_0.PARSER_MEDIA_TYPE, 
+                transformCaseFunc = "application/xhtml+xml" === PARSER_MEDIA_TYPE ? stringToString : stringToLowerCase, 
+                ALLOWED_TAGS = objectHasOwnProperty(argument_0, "ALLOWED_TAGS") ? addToSet({}, argument_0.ALLOWED_TAGS, transformCaseFunc) : DEFAULT_ALLOWED_TAGS, 
+                ALLOWED_ATTR = objectHasOwnProperty(argument_0, "ALLOWED_ATTR") ? addToSet({}, argument_0.ALLOWED_ATTR, transformCaseFunc) : DEFAULT_ALLOWED_ATTR, 
+                ALLOWED_NAMESPACES = objectHasOwnProperty(argument_0, "ALLOWED_NAMESPACES") ? addToSet({}, argument_0.ALLOWED_NAMESPACES, stringToString) : DEFAULT_ALLOWED_NAMESPACES, 
+                URI_SAFE_ATTRIBUTES = objectHasOwnProperty(argument_0, "ADD_URI_SAFE_ATTR") ? addToSet(clone(DEFAULT_URI_SAFE_ATTRIBUTES), argument_0.ADD_URI_SAFE_ATTR, transformCaseFunc) : DEFAULT_URI_SAFE_ATTRIBUTES, 
+                DATA_URI_TAGS = objectHasOwnProperty(argument_0, "ADD_DATA_URI_TAGS") ? addToSet(clone(DEFAULT_DATA_URI_TAGS), argument_0.ADD_DATA_URI_TAGS, transformCaseFunc) : DEFAULT_DATA_URI_TAGS, 
+                FORBID_CONTENTS = objectHasOwnProperty(argument_0, "FORBID_CONTENTS") ? addToSet({}, argument_0.FORBID_CONTENTS, transformCaseFunc) : DEFAULT_FORBID_CONTENTS, 
+                FORBID_TAGS = objectHasOwnProperty(argument_0, "FORBID_TAGS") ? addToSet({}, argument_0.FORBID_TAGS, transformCaseFunc) : {}, 
+                FORBID_ATTR = objectHasOwnProperty(argument_0, "FORBID_ATTR") ? addToSet({}, argument_0.FORBID_ATTR, transformCaseFunc) : {}, 
+                USE_PROFILES = !!objectHasOwnProperty(argument_0, "USE_PROFILES") && argument_0.USE_PROFILES, 
+                ALLOW_ARIA_ATTR = !1 !== argument_0.ALLOW_ARIA_ATTR, ALLOW_DATA_ATTR = !1 !== argument_0.ALLOW_DATA_ATTR, 
+                ALLOW_UNKNOWN_PROTOCOLS = argument_0.ALLOW_UNKNOWN_PROTOCOLS || !1, 
+                ALLOW_SELF_CLOSE_IN_ATTR = !1 !== argument_0.ALLOW_SELF_CLOSE_IN_ATTR, 
+                SAFE_FOR_TEMPLATES = argument_0.SAFE_FOR_TEMPLATES || !1, SAFE_FOR_XML = !1 !== argument_0.SAFE_FOR_XML, 
+                WHOLE_DOCUMENT = argument_0.WHOLE_DOCUMENT || !1, RETURN_DOM = argument_0.RETURN_DOM || !1, 
+                RETURN_DOM_FRAGMENT = argument_0.RETURN_DOM_FRAGMENT || !1, RETURN_TRUSTED_TYPE = argument_0.RETURN_TRUSTED_TYPE || !1, 
+                FORCE_BODY = argument_0.FORCE_BODY || !1, SANITIZE_DOM = !1 !== argument_0.SANITIZE_DOM, 
+                SANITIZE_NAMED_PROPS = argument_0.SANITIZE_NAMED_PROPS || !1, KEEP_CONTENT = !1 !== argument_0.KEEP_CONTENT, 
+                IN_PLACE = argument_0.IN_PLACE || !1, IS_ALLOWED_URI$1 = argument_0.ALLOWED_URI_REGEXP || IS_ALLOWED_URI, 
+                NAMESPACE = argument_0.NAMESPACE || HTML_NAMESPACE, MATHML_TEXT_INTEGRATION_POINTS = argument_0.MATHML_TEXT_INTEGRATION_POINTS || MATHML_TEXT_INTEGRATION_POINTS, 
+                HTML_INTEGRATION_POINTS = argument_0.HTML_INTEGRATION_POINTS || HTML_INTEGRATION_POINTS, 
+                CUSTOM_ELEMENT_HANDLING = argument_0.CUSTOM_ELEMENT_HANDLING || {}, 
+                argument_0.CUSTOM_ELEMENT_HANDLING && isRegexOrFunction(argument_0.CUSTOM_ELEMENT_HANDLING.tagNameCheck) && (CUSTOM_ELEMENT_HANDLING.tagNameCheck = argument_0.CUSTOM_ELEMENT_HANDLING.tagNameCheck), 
+                argument_0.CUSTOM_ELEMENT_HANDLING && isRegexOrFunction(argument_0.CUSTOM_ELEMENT_HANDLING.attributeNameCheck) && (CUSTOM_ELEMENT_HANDLING.attributeNameCheck = argument_0.CUSTOM_ELEMENT_HANDLING.attributeNameCheck), 
+                argument_0.CUSTOM_ELEMENT_HANDLING && "boolean" == typeof argument_0.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements && (CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements = argument_0.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements), 
+                SAFE_FOR_TEMPLATES && (ALLOW_DATA_ATTR = !1), RETURN_DOM_FRAGMENT && (RETURN_DOM = !0), 
+                USE_PROFILES && (ALLOWED_TAGS = addToSet({}, text), ALLOWED_ATTR = [], 
+                !0 === USE_PROFILES.html && (addToSet(ALLOWED_TAGS, html$1), addToSet(ALLOWED_ATTR, html)), 
+                !0 === USE_PROFILES.svg && (addToSet(ALLOWED_TAGS, svg$1), addToSet(ALLOWED_ATTR, svg), 
+                addToSet(ALLOWED_ATTR, xml)), !0 === USE_PROFILES.svgFilters && (addToSet(ALLOWED_TAGS, svgFilters), 
+                addToSet(ALLOWED_ATTR, svg), addToSet(ALLOWED_ATTR, xml)), !0 === USE_PROFILES.mathMl) && (addToSet(ALLOWED_TAGS, mathMl$1), 
+                addToSet(ALLOWED_ATTR, mathMl), addToSet(ALLOWED_ATTR, xml)), argument_0.ADD_TAGS && addToSet(ALLOWED_TAGS = ALLOWED_TAGS === DEFAULT_ALLOWED_TAGS ? clone(ALLOWED_TAGS) : ALLOWED_TAGS, argument_0.ADD_TAGS, transformCaseFunc), 
+                argument_0.ADD_ATTR && addToSet(ALLOWED_ATTR = ALLOWED_ATTR === DEFAULT_ALLOWED_ATTR ? clone(ALLOWED_ATTR) : ALLOWED_ATTR, argument_0.ADD_ATTR, transformCaseFunc), 
+                argument_0.ADD_URI_SAFE_ATTR && addToSet(URI_SAFE_ATTRIBUTES, argument_0.ADD_URI_SAFE_ATTR, transformCaseFunc), 
+                argument_0.FORBID_CONTENTS && addToSet(FORBID_CONTENTS = FORBID_CONTENTS === DEFAULT_FORBID_CONTENTS ? clone(FORBID_CONTENTS) : FORBID_CONTENTS, argument_0.FORBID_CONTENTS, transformCaseFunc), 
+                KEEP_CONTENT && (ALLOWED_TAGS["#text"] = !0), WHOLE_DOCUMENT && addToSet(ALLOWED_TAGS, [ "html", "head", "body" ]), 
+                ALLOWED_TAGS.table && (addToSet(ALLOWED_TAGS, [ "tbody" ]), delete FORBID_TAGS.tbody), 
+                argument_0.TRUSTED_TYPES_POLICY) {
+                    if ("function" != typeof argument_0.TRUSTED_TYPES_POLICY.createHTML) throw typeErrorCreate('TRUSTED_TYPES_POLICY configuration option must provide a "createHTML" hook.');
+                    if ("function" != typeof argument_0.TRUSTED_TYPES_POLICY.createScriptURL) throw typeErrorCreate('TRUSTED_TYPES_POLICY configuration option must provide a "createScriptURL" hook.');
+                    trustedTypesPolicy = argument_0.TRUSTED_TYPES_POLICY, emptyHTML = trustedTypesPolicy.createHTML("");
+                } else null !== (trustedTypesPolicy = void 0 === trustedTypesPolicy ? function(trustedTypes, purifyHostElement) {
+                    if ("object" != typeof trustedTypes || "function" != typeof trustedTypes.createPolicy) return null;
+                    var suffix;
+                    purifyHostElement = "dompurify" + ((suffix = purifyHostElement && purifyHostElement.hasAttribute("data-tt-policy-suffix") ? purifyHostElement.getAttribute("data-tt-policy-suffix") : null) ? "#" + suffix : "");
+                    try {
+                        return trustedTypes.createPolicy(purifyHostElement, {
+                            createHTML(html) {
+                                return html;
+                            },
+                            createScriptURL(scriptUrl) {
+                                return scriptUrl;
+                            }
+                        });
+                    } catch (_) {
+                        return console.warn("TrustedTypes policy " + purifyHostElement + " could not be created."), 
+                        null;
+                    }
+                }(trustedTypes, currentScript) : trustedTypesPolicy) && "string" == typeof emptyHTML && (emptyHTML = trustedTypesPolicy.createHTML(""));
+                freeze && freeze(argument_0), CONFIG = argument_0;
+            }
+        }
+        function _removeAttribute(name, element) {
+            try {
+                arrayPush(DOMPurify.removed, {
+                    attribute: element.getAttributeNode(name),
+                    from: element
+                });
+            } catch (_) {
+                arrayPush(DOMPurify.removed, {
+                    attribute: null,
+                    from: element
+                });
+            }
+            if (element.removeAttribute(name), "is" === name) if (RETURN_DOM || RETURN_DOM_FRAGMENT) try {
+                _forceRemove(element);
+            } catch (_) {} else try {
+                element.setAttribute(name, "");
+            } catch (_) {}
+        }
+        function _initDocument(dirty) {
+            let doc = null, leadingWhitespace = null;
+            FORCE_BODY ? dirty = "<remove></remove>" + dirty : (matches = stringMatch(dirty, /^[\r\n\t ]+/), 
+            leadingWhitespace = matches && matches[0]), "application/xhtml+xml" === PARSER_MEDIA_TYPE && NAMESPACE === HTML_NAMESPACE && (dirty = '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>' + dirty + "</body></html>");
+            var matches = trustedTypesPolicy ? trustedTypesPolicy.createHTML(dirty) : dirty;
+            if (NAMESPACE === HTML_NAMESPACE) try {
+                doc = new DOMParser().parseFromString(matches, PARSER_MEDIA_TYPE);
+            } catch (_) {}
+            if (!doc || !doc.documentElement) {
+                doc = implementation.createDocument(NAMESPACE, "template", null);
+                try {
+                    doc.documentElement.innerHTML = IS_EMPTY_INPUT ? emptyHTML : matches;
+                } catch (_) {}
+            }
+            return matches = doc.body || doc.documentElement, dirty && leadingWhitespace && matches.insertBefore(document.createTextNode(leadingWhitespace), matches.childNodes[0] || null), 
+            NAMESPACE === HTML_NAMESPACE ? getElementsByTagName.call(doc, WHOLE_DOCUMENT ? "html" : "body")[0] : WHOLE_DOCUMENT ? doc.documentElement : matches;
+        }
+        function _createNodeIterator(root) {
+            return createNodeIterator.call(root.ownerDocument || root, root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_TEXT | NodeFilter.SHOW_PROCESSING_INSTRUCTION | NodeFilter.SHOW_CDATA_SECTION, null);
+        }
+        function _isClobbered(element) {
+            return element instanceof HTMLFormElement && ("string" != typeof element.nodeName || "string" != typeof element.textContent || "function" != typeof element.removeChild || !(element.attributes instanceof NamedNodeMap) || "function" != typeof element.removeAttribute || "function" != typeof element.setAttribute || "string" != typeof element.namespaceURI || "function" != typeof element.insertBefore || "function" != typeof element.hasChildNodes);
+        }
+        function _isNode(value) {
+            return "function" == typeof Node && value instanceof Node;
+        }
+        const formElement = document.createElement("form"), ALL_SVG_TAGS = addToSet({}, [ ...svg$1, ...svgFilters, ...svgDisallowed ]), ALL_MATHML_TAGS = addToSet({}, [ ...mathMl$1, ...mathMlDisallowed ]), _forceRemove = function(node) {
+            arrayPush(DOMPurify.removed, {
+                element: node
+            });
+            try {
+                getParentNode(node).removeChild(node);
+            } catch (_) {
+                remove(node);
+            }
+        };
+        function _executeHooks(hooks, currentNode, data) {
+            arrayForEach(hooks, hook => {
+                hook.call(DOMPurify, currentNode, data, CONFIG);
+            });
+        }
+        function _sanitizeElements(currentNode) {
+            let content = null;
+            if (_executeHooks(hooks.beforeSanitizeElements, currentNode, null), 
+            !_isClobbered(currentNode)) {
+                var tagName = transformCaseFunc(currentNode.nodeName);
+                if (_executeHooks(hooks.uponSanitizeElement, currentNode, {
+                    tagName: tagName,
+                    allowedTags: ALLOWED_TAGS
+                }), (!currentNode.hasChildNodes() || _isNode(currentNode.firstElementChild) || !regExpTest(/<[/\w!]/g, currentNode.innerHTML) || !regExpTest(/<[/\w!]/g, currentNode.textContent)) && !(currentNode.nodeType === NODE_TYPE.progressingInstruction || SAFE_FOR_XML && currentNode.nodeType === NODE_TYPE.comment && regExpTest(/<[/\w]/g, currentNode.data))) {
+                    if (ALLOWED_TAGS[tagName] && !FORBID_TAGS[tagName]) return currentNode instanceof Element && !function(element) {
+                        let parent = getParentNode(element);
+                        parent && parent.tagName || (parent = {
+                            namespaceURI: NAMESPACE,
+                            tagName: "template"
+                        });
+                        var tagName = stringToLowerCase(element.tagName), parentTagName = stringToLowerCase(parent.tagName);
+                        return ALLOWED_NAMESPACES[element.namespaceURI] && (element.namespaceURI === SVG_NAMESPACE ? parent.namespaceURI === HTML_NAMESPACE ? "svg" === tagName : parent.namespaceURI === MATHML_NAMESPACE ? "svg" === tagName && ("annotation-xml" === parentTagName || MATHML_TEXT_INTEGRATION_POINTS[parentTagName]) : Boolean(ALL_SVG_TAGS[tagName]) : element.namespaceURI === MATHML_NAMESPACE ? parent.namespaceURI === HTML_NAMESPACE ? "math" === tagName : parent.namespaceURI === SVG_NAMESPACE ? "math" === tagName && HTML_INTEGRATION_POINTS[parentTagName] : Boolean(ALL_MATHML_TAGS[tagName]) : element.namespaceURI === HTML_NAMESPACE ? !(parent.namespaceURI === SVG_NAMESPACE && !HTML_INTEGRATION_POINTS[parentTagName] || parent.namespaceURI === MATHML_NAMESPACE && !MATHML_TEXT_INTEGRATION_POINTS[parentTagName] || ALL_MATHML_TAGS[tagName]) && (COMMON_SVG_AND_HTML_ELEMENTS[tagName] || !ALL_SVG_TAGS[tagName]) : "application/xhtml+xml" === PARSER_MEDIA_TYPE && ALLOWED_NAMESPACES[element.namespaceURI]);
+                    }(currentNode) || ("noscript" === tagName || "noembed" === tagName || "noframes" === tagName) && regExpTest(/<\/no(script|embed|frames)/i, currentNode.innerHTML) ? _forceRemove(currentNode) : (SAFE_FOR_TEMPLATES && currentNode.nodeType === NODE_TYPE.text && (content = currentNode.textContent, 
+                    arrayForEach([ MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR ], expr => {
+                        content = stringReplace(content, expr, " ");
+                    }), currentNode.textContent !== content) && (arrayPush(DOMPurify.removed, {
+                        element: currentNode.cloneNode()
+                    }), currentNode.textContent = content), _executeHooks(hooks.afterSanitizeElements, currentNode, null));
+                    if (!FORBID_TAGS[tagName] && _isBasicCustomElement(tagName)) {
+                        if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, tagName)) return;
+                        if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(tagName)) return;
+                    }
+                    if (KEEP_CONTENT && !FORBID_CONTENTS[tagName]) {
+                        var parentNode = getParentNode(currentNode) || currentNode.parentNode, childNodes = getChildNodes(currentNode) || currentNode.childNodes;
+                        if (childNodes && parentNode) for (let i = childNodes.length - 1; 0 <= i; --i) {
+                            var childClone = cloneNode(childNodes[i], !0);
+                            childClone.__removalCount = (currentNode.__removalCount || 0) + 1, 
+                            parentNode.insertBefore(childClone, getNextSibling(currentNode));
+                        }
+                    }
+                }
+            }
+            _forceRemove(currentNode);
+        }
+        function _isValidAttribute(lcTag, lcName, value) {
+            if (SANITIZE_DOM && ("id" === lcName || "name" === lcName) && (value in document || value in formElement)) return !1;
+            if ((!ALLOW_DATA_ATTR || FORBID_ATTR[lcName] || !regExpTest(DATA_ATTR, lcName)) && (!ALLOW_ARIA_ATTR || !regExpTest(ARIA_ATTR, lcName))) if (!ALLOWED_ATTR[lcName] || FORBID_ATTR[lcName]) {
+                if (!(_isBasicCustomElement(lcTag) && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, lcTag) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(lcTag)) && (CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.attributeNameCheck, lcName) || CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.attributeNameCheck(lcName)) || "is" === lcName && CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, value) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(value)))) return !1;
+            } else if (!URI_SAFE_ATTRIBUTES[lcName] && !regExpTest(IS_ALLOWED_URI$1, stringReplace(value, ATTR_WHITESPACE, "")) && ("src" !== lcName && "xlink:href" !== lcName && "href" !== lcName || "script" === lcTag || 0 !== stringIndexOf(value, "data:") || !DATA_URI_TAGS[lcTag]) && (!ALLOW_UNKNOWN_PROTOCOLS || regExpTest(IS_SCRIPT_OR_DATA, stringReplace(value, ATTR_WHITESPACE, ""))) && value) return !1;
+            return !0;
+        }
+        function _sanitizeAttributes(currentNode) {
+            _executeHooks(hooks.beforeSanitizeAttributes, currentNode, null);
+            var attributes = currentNode.attributes;
+            if (attributes && !_isClobbered(currentNode)) {
+                var hookEvent = {
+                    attrName: "",
+                    attrValue: "",
+                    keepAttr: !0,
+                    allowedAttributes: ALLOWED_ATTR,
+                    forceKeepAttr: void 0
+                };
+                let l = attributes.length;
+                for (;l--; ) {
+                    var {
+                        name,
+                        namespaceURI,
+                        value: attrValue
+                    } = attributes[l], lcName = transformCaseFunc(name);
+                    let value = "value" === name ? attrValue : stringTrim(attrValue);
+                    if (hookEvent.attrName = lcName, hookEvent.attrValue = value, 
+                    hookEvent.keepAttr = !0, hookEvent.forceKeepAttr = void 0, _executeHooks(hooks.uponSanitizeAttribute, currentNode, hookEvent), 
+                    value = hookEvent.attrValue, !SANITIZE_NAMED_PROPS || "id" !== lcName && "name" !== lcName || (_removeAttribute(name, currentNode), 
+                    value = "user-content-" + value), SAFE_FOR_XML && regExpTest(/((--!?|])>)|<\/(style|title)/i, value)) _removeAttribute(name, currentNode); else if (!hookEvent.forceKeepAttr && (_removeAttribute(name, currentNode), 
+                    hookEvent.keepAttr)) if (!ALLOW_SELF_CLOSE_IN_ATTR && regExpTest(/\/>/i, value)) _removeAttribute(name, currentNode); else if (SAFE_FOR_TEMPLATES && arrayForEach([ MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR ], expr => {
+                        value = stringReplace(value, expr, " ");
+                    }), _isValidAttribute(attrValue = transformCaseFunc(currentNode.nodeName), lcName, value)) {
+                        if (trustedTypesPolicy && "object" == typeof trustedTypes && "function" == typeof trustedTypes.getAttributeType && !namespaceURI) switch (trustedTypes.getAttributeType(attrValue, lcName)) {
+                          case "TrustedHTML":
+                            value = trustedTypesPolicy.createHTML(value);
+                            break;
+
+                          case "TrustedScriptURL":
+                            value = trustedTypesPolicy.createScriptURL(value);
+                        }
+                        try {
+                            namespaceURI ? currentNode.setAttributeNS(namespaceURI, name, value) : currentNode.setAttribute(name, value), 
+                            _isClobbered(currentNode) ? _forceRemove(currentNode) : arrayPop(DOMPurify.removed);
+                        } catch (_) {}
+                    }
+                }
+                _executeHooks(hooks.afterSanitizeAttributes, currentNode, null);
+            }
+        }
+        const _isBasicCustomElement = function(tagName) {
+            return "annotation-xml" !== tagName && stringMatch(tagName, CUSTOM_ELEMENT);
+        };
+        return DOMPurify.sanitize = function(dirty) {
+            var currentNode, cfg = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : {};
+            let body = null, returnNode = null;
+            if ("string" != typeof (dirty = (IS_EMPTY_INPUT = !dirty) ? "\x3c!--\x3e" : dirty) && !_isNode(dirty)) {
+                if ("function" != typeof dirty.toString) throw typeErrorCreate("toString is not a function");
+                if ("string" != typeof (dirty = dirty.toString())) throw typeErrorCreate("dirty is not a string, aborting");
+            }
+            if (!DOMPurify.isSupported) return dirty;
+            if (SET_CONFIG || _parseConfig(cfg), DOMPurify.removed = [], IN_PLACE = "string" != typeof dirty && IN_PLACE) {
+                if (dirty.nodeName && (cfg = transformCaseFunc(dirty.nodeName), 
+                !ALLOWED_TAGS[cfg] || FORBID_TAGS[cfg])) throw typeErrorCreate("root node is forbidden and cannot be sanitized in-place");
+            } else if (dirty instanceof Node) (cfg = (body = _initDocument("\x3c!----\x3e")).ownerDocument.importNode(dirty, !0)).nodeType === NODE_TYPE.element && "BODY" === cfg.nodeName || "HTML" === cfg.nodeName ? body = cfg : body.appendChild(cfg); else {
+                if (!RETURN_DOM && !SAFE_FOR_TEMPLATES && !WHOLE_DOCUMENT && -1 === dirty.indexOf("<")) return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(dirty) : dirty;
+                if (!(body = _initDocument(dirty))) return RETURN_DOM ? null : RETURN_TRUSTED_TYPE ? emptyHTML : "";
+            }
+            body && FORCE_BODY && _forceRemove(body.firstChild);
+            for (var nodeIterator = _createNodeIterator(IN_PLACE ? dirty : body); currentNode = nodeIterator.nextNode(); ) _sanitizeElements(currentNode), 
+            _sanitizeAttributes(currentNode), currentNode.content instanceof DocumentFragment && function _sanitizeShadowDOM(fragment) {
+                var shadowNode, shadowIterator = _createNodeIterator(fragment);
+                for (_executeHooks(hooks.beforeSanitizeShadowDOM, fragment, null); shadowNode = shadowIterator.nextNode(); ) _executeHooks(hooks.uponSanitizeShadowNode, shadowNode, null), 
+                _sanitizeElements(shadowNode), _sanitizeAttributes(shadowNode), 
+                shadowNode.content instanceof DocumentFragment && _sanitizeShadowDOM(shadowNode.content);
+                _executeHooks(hooks.afterSanitizeShadowDOM, fragment, null);
+            }(currentNode.content);
+            if (IN_PLACE) return dirty;
+            if (RETURN_DOM) {
+                if (RETURN_DOM_FRAGMENT) for (returnNode = createDocumentFragment.call(body.ownerDocument); body.firstChild; ) returnNode.appendChild(body.firstChild); else returnNode = body;
+                return returnNode = ALLOWED_ATTR.shadowroot || ALLOWED_ATTR.shadowrootmode ? importNode.call(originalDocument, returnNode, !0) : returnNode;
+            }
+            let serializedHTML = WHOLE_DOCUMENT ? body.outerHTML : body.innerHTML;
+            return WHOLE_DOCUMENT && ALLOWED_TAGS["!doctype"] && body.ownerDocument && body.ownerDocument.doctype && body.ownerDocument.doctype.name && regExpTest(DOCTYPE_NAME, body.ownerDocument.doctype.name) && (serializedHTML = "<!DOCTYPE " + body.ownerDocument.doctype.name + ">\n" + serializedHTML), 
+            SAFE_FOR_TEMPLATES && arrayForEach([ MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR ], expr => {
+                serializedHTML = stringReplace(serializedHTML, expr, " ");
+            }), trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(serializedHTML) : serializedHTML;
+        }, DOMPurify.setConfig = function() {
+            _parseConfig(0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : {}), 
+            SET_CONFIG = !0;
+        }, DOMPurify.clearConfig = function() {
+            CONFIG = null, SET_CONFIG = !1;
+        }, DOMPurify.isValidAttribute = function(tag, attr, value) {
+            return CONFIG || _parseConfig({}), _isValidAttribute(tag = transformCaseFunc(tag), attr = transformCaseFunc(attr), value);
+        }, DOMPurify.addHook = function(entryPoint, hookFunction) {
+            "function" == typeof hookFunction && arrayPush(hooks[entryPoint], hookFunction);
+        }, DOMPurify.removeHook = function(entryPoint, hookFunction) {
+            return void 0 !== hookFunction ? -1 === (hookFunction = arrayLastIndexOf(hooks[entryPoint], hookFunction)) ? void 0 : arraySplice(hooks[entryPoint], hookFunction, 1)[0] : arrayPop(hooks[entryPoint]);
+        }, DOMPurify.removeHooks = function(entryPoint) {
+            hooks[entryPoint] = [];
+        }, DOMPurify.removeAllHooks = function() {
+            hooks = _createHooksMap();
+        }, DOMPurify;
+    }();
+    function addEvent(target, name, callback, capture) {
+        target.addEventListener(name, callback, capture || !1);
+    }
+    function removeEvent(target, name, callback, capture) {
+        target.removeEventListener(name, callback, capture || !1);
+    }
+    function fix(originalEvent, data) {
+        var name, doc, event = data || {};
+        function returnFalse() {
+            return !1;
+        }
+        function returnTrue() {
+            return !0;
+        }
+        for (name in originalEvent) deprecated[name] || (event[name] = originalEvent[name]);
+        return event.target || (event.target = event.srcElement || document), originalEvent && mouseEventRe.test(originalEvent.type) && void 0 === originalEvent.pageX && void 0 !== originalEvent.clientX && (doc = (data = event.target.ownerDocument || document).documentElement, 
+        data = data.body, event.pageX = originalEvent.clientX + (doc && doc.scrollLeft || data && data.scrollLeft || 0) - (doc && doc.clientLeft || data && data.clientLeft || 0), 
+        event.pageY = originalEvent.clientY + (doc && doc.scrollTop || data && data.scrollTop || 0) - (doc && doc.clientTop || data && data.clientTop || 0)), 
+        event.preventDefault = function() {
+            event.isDefaultPrevented = returnTrue, originalEvent && originalEvent.preventDefault();
+        }, event.stopPropagation = function() {
+            event.isPropagationStopped = returnTrue, originalEvent && originalEvent.stopPropagation();
+        }, event.stopImmediatePropagation = function() {
+            event.isImmediatePropagationStopped = returnTrue, event.stopPropagation();
+        }, event.isDefaultPrevented || (event.isDefaultPrevented = returnFalse, 
+        event.isPropagationStopped = returnFalse, event.isImmediatePropagationStopped = returnFalse), 
+        event;
+    }
+    function EventUtils() {
+        var count, expando, hasFocusIn, hasMouseEnterLeave, mouseEnterLeave, self = this, events = {};
+        function executeHandlers(evt, id) {
+            var i, l, callback, callbackList = (id = events[id]) && id[evt.type];
+            if (callbackList) for (i = 0, l = callbackList.length; i < l; i++) if ((callback = callbackList[i]) && !1 === callback.func.call(callback.scope, evt) && evt.preventDefault(), 
+            evt.isImmediatePropagationStopped()) return;
+        }
+        expando = "mce-data-" + (+new Date()).toString(32), hasMouseEnterLeave = "onmouseenter" in document.documentElement, 
+        hasFocusIn = "onfocusin" in document.documentElement, count = 1, self.domLoaded = !(mouseEnterLeave = {
+            mouseenter: "mouseover",
+            mouseleave: "mouseout"
+        }), self.events = events, self.bind = function(target, names, callback, scope) {
+            var id, callbackList, i, name, fakeName, nativeHandler, capture, win = window;
+            function defaultNativeHandler(evt) {
+                executeHandlers(fix(evt || win.event), id);
+            }
+            if (target && 3 !== target.nodeType && 8 !== target.nodeType) {
+                for (target[expando] ? id = target[expando] : (id = count++, target[expando] = id, 
+                events[id] = {}), scope = scope || target, i = (names = names.split(" ")).length; i--; ) nativeHandler = defaultNativeHandler, 
+                fakeName = capture = !1, "DOMContentLoaded" === (name = names[i]) && (name = "ready"), 
+                self.domLoaded && "ready" === name && "complete" == target.readyState ? callback.call(scope, fix({
+                    type: name
+                })) : (hasMouseEnterLeave || (fakeName = mouseEnterLeave[name]) && (nativeHandler = function(evt) {
+                    var current = evt.currentTarget, related = evt.relatedTarget;
+                    if (related && current.contains) related = current.contains(related); else for (;related && related !== current; ) related = related.parentNode;
+                    related || ((evt = fix(evt || win.event)).type = "mouseout" === evt.type ? "mouseleave" : "mouseenter", 
+                    evt.target = current, executeHandlers(evt, id));
+                }), hasFocusIn || "focusin" !== name && "focusout" !== name || (capture = !0, 
+                fakeName = "focusin" === name ? "focus" : "blur", nativeHandler = function(evt) {
+                    (evt = fix(evt || win.event)).type = "focus" === evt.type ? "focusin" : "focusout", 
+                    executeHandlers(evt, id);
+                }), (callbackList = events[id][name]) ? "ready" === name && self.domLoaded ? callback({
+                    type: name
+                }) : callbackList.push({
+                    func: callback,
+                    scope: scope
+                }) : (events[id][name] = callbackList = [ {
+                    func: callback,
+                    scope: scope
+                } ], callbackList.fakeName = fakeName, callbackList.capture = capture, 
+                callbackList.nativeHandler = nativeHandler, "ready" === name ? function(win, callback, eventUtils) {
+                    var doc = win.document, event = {
+                        type: "ready"
+                    };
+                    function readyHandler() {
+                        eventUtils.domLoaded || (eventUtils.domLoaded = !0, callback(event));
+                    }
+                    eventUtils.domLoaded ? callback(event) : ("complete" === doc.readyState ? readyHandler() : addEvent(win, "DOMContentLoaded", readyHandler), 
+                    addEvent(win, "load", readyHandler));
+                }(target, nativeHandler, self) : addEvent(target, fakeName || name, nativeHandler, capture)));
+                return target = callbackList = 0, callback;
+            }
+        }, self.unbind = function(target, names, callback) {
+            var id, i, ci, name, eventMap, nativeHandler, fakeName, capture, callbackList;
+            if (target && 3 !== target.nodeType && 8 !== target.nodeType && (id = target[expando])) {
+                if (eventMap = events[id], names) {
+                    for (i = (names = names.split(" ")).length; i--; ) if (callbackList = eventMap[name = names[i]]) {
+                        if (callback) for (ci = callbackList.length; ci--; ) callbackList[ci].func === callback && (nativeHandler = callbackList.nativeHandler, 
+                        fakeName = callbackList.fakeName, capture = callbackList.capture, 
+                        (callbackList = callbackList.slice(0, ci).concat(callbackList.slice(ci + 1))).nativeHandler = nativeHandler, 
+                        callbackList.fakeName = fakeName, callbackList.capture = capture, 
+                        eventMap[name] = callbackList);
+                        callback && 0 !== callbackList.length || (delete eventMap[name], 
+                        removeEvent(target, callbackList.fakeName || name, callbackList.nativeHandler, callbackList.capture));
+                    }
+                } else {
+                    for (name in eventMap) removeEvent(target, (callbackList = eventMap[name]).fakeName || name, callbackList.nativeHandler, callbackList.capture);
+                    eventMap = {};
+                }
+                for (name in eventMap) return self;
+                delete events[id];
+                try {
+                    delete target[expando];
+                } catch (ex) {
+                    target[expando] = null;
+                }
+            }
+            return self;
+        }, self.fire = function(target, name, args) {
+            var id;
+            if (target && 3 !== target.nodeType && 8 !== target.nodeType) {
+                for ((args = fix(null, args)).type = name, args.target = target; (id = target[expando]) && executeHandlers(args, id), 
+                (target = target.parentNode || target.ownerDocument || target.defaultView || target.parentWindow) && !args.isPropagationStopped(); );
+                self.args = args;
+            }
+            return self;
+        }, self.clean = function(target) {
+            var i, children, unbind = self.unbind;
+            if (target && 3 !== target.nodeType && 8 !== target.nodeType && (target[expando] && unbind(target), 
+            target = target.getElementsByTagName ? target : target.document) && target.getElementsByTagName) for (unbind(target), 
+            i = (children = target.getElementsByTagName("*")).length; i--; ) (target = children[i])[expando] && unbind(target);
+            return self;
+        }, self.destroy = function() {
+            events = {};
+        }, self.cancel = function(e) {
+            return e && (e.preventDefault(), e.stopImmediatePropagation()), !1;
+        }, self.add = function(target, events, func, scope) {
+            if (!((target = "string" == typeof target ? document.getElementById(target) : target) && target instanceof Array)) return self.bind(target, (events = "init" === events ? "ready" : events) instanceof Array ? events.join(" ") : events, func, scope);
+            for (var i = target.length; i--; ) self.add(target[i], events, func, scope);
+        }, self.remove = function(target, events, func, scope) {
+            if (!target) return self;
+            if ((target = "string" == typeof target ? document.getElementById(target) : target) instanceof Array) {
+                for (var i = target.length; i--; ) self.remove(target[i], events, func, scope);
+                return self;
+            }
+            return self.unbind(target, events instanceof Array ? events.join(" ") : events, func);
+        }, self.clear = function(target) {
+            return "string" == typeof target && (target = document.getElementById(target)), 
+            self.clean(target);
+        }, self.preventDefault = function(e) {
+            e && e.preventDefault();
+        }, self.isDefaultPrevented = function(e) {
+            return e.isDefaultPrevented();
+        };
+    }
+    !function(tinymce) {
+        var each = tinymce.each, isDomSafe = tinymce.util.URI.isDomSafe, filteredUrlAttrs = tinymce.makeMap("src,href,data,background,formaction,poster,xlink:href");
+        tinymce.html.Sanitizer = function(settings, schema) {
+            var special = schema.getSpecialElements(), uid = 0;
+            function processNode(node) {
+                if (1 === node.nodeType) {
+                    var tag = node.tagName.toLowerCase();
+                    if ("body" !== tag && !node.hasAttribute("data-mce-root") && !node.hasAttribute("data-mce-type")) if (node.hasAttribute("data-mce-bogus")) removeNode(node); else if (settings.validate) {
+                        var rule = schema.getElementRule(tag);
+                        if (rule) if (each(rule.attributesForced, function(attr) {
+                            node.setAttribute(attr.name, "{$uid}" === attr.value ? "mce_" + uid++ : attr.value);
+                        }), each(rule.attributesDefault, function(attr) {
+                            node.hasAttribute(attr.name) || node.setAttribute(attr.name, "{$uid}" === attr.value ? "mce_" + uid++ : attr.value);
+                        }), rule.attributesRequired && !rule.attributesRequired.some(function(attr) {
+                            return node.hasAttribute(attr.name);
+                        })) removeNode(node, !0); else if (rule.removeEmptyAttrs && 0 === node.attributes.length) removeNode(node, !0); else {
+                            if (rule.outputName && rule.outputName !== tag) {
+                                for (var newNode = document.createElement(rule.outputName); node.firstChild; ) newNode.appendChild(node.firstChild);
+                                node.parentNode.replaceChild(newNode, node), node = newNode;
+                            }
+                            !function(node) {
+                                for (var attrs = node.attributes, tag = node.tagName.toLowerCase(), i = attrs.length - 1; 0 <= i; i--) {
+                                    var name = attrs[i].name, lower = name.toLowerCase(), value = attrs[i].value;
+                                    /-/.test(lower) || (/^on[a-z]+/i.test(lower) ? settings.allow_event_attributes && schema.isValid(tag, name) || node.removeAttribute(name) : filteredUrlAttrs[lower] && !isDomSafe(value, tag, settings) || !1 === schema.isValid(tag, name) ? node.removeAttribute(name) : function(name) {
+                                        var boolAttrMap = schema.getBoolAttrs();
+                                        return boolAttrMap[name] || boolAttrMap[name.toLowerCase()];
+                                    }(name) && node.setAttribute(name, name));
+                                }
+                            }(node);
+                        } else removeNode(node);
+                    }
+                }
+            }
+            function removeNode(node, unwrap) {
+                var parent = node.parentNode;
+                if (parent) {
+                    if (special[node.tagName.toLowerCase()] && (unwrap = !1), unwrap = "all" != node.getAttribute("data-mce-bogus") || unwrap) {
+                        for (var frag = document.createDocumentFragment(); node.firstChild; ) frag.appendChild(node.firstChild);
+                        parent.insertBefore(frag, node);
+                    }
+                    parent.removeChild(node);
+                }
+            }
+            this.sanitize = function(body, mimeType) {
+                if (!1 !== settings.verify_html) {
+                    if (settings.purify_html) return html = body, (purifier = purify()).removeAllHooks(), 
+                    purifier.addHook("uponSanitizeElement", function(node, data) {
+                        processNode(node);
+                    }), purifier.addHook("uponSanitizeAttribute", function(node, data) {
+                        var attrName = data.attrName.toLowerCase(), tag = node.tagName.toLowerCase();
+                        /-/.test(attrName) || settings.allow_event_attributes && /^on[a-z]+/i.test(attrName) ? data.keepAttr = !0 : settings.allow_svg_data_urls && data.attrValue.startsWith("data:image/svg+xml") ? data.forceKeepAttr = !0 : schema.isValid(tag, attrName) || node.removeAttribute(data.attrName);
+                    }), purifier.sanitize(html, (config = {
+                        IN_PLACE: !0,
+                        RETURN_DOM: !0,
+                        FORCE_BODY: !0,
+                        ALLOW_UNKNOWN_PROTOCOLS: !!settings.allow_script_urls,
+                        ALLOWED_TAGS: [ "#comment", "#cdata-section", "body" ],
+                        ALLOWED_ATTR: []
+                    }, settings.allow_script_urls ? config.ALLOWED_URI_REGEXP = /.*/ : settings.allow_html_data_urls && (config.ALLOWED_URI_REGEXP = /^(?!(\w+script|mhtml):)/i), 
+                    attrNames = {}, each(schema.elements, function(element, name) {
+                        config.ALLOWED_TAGS.push(name), each(element.attributes, function(_, attrName) {
+                            attrNames[attrName] = !0;
+                        }), "script" !== name && "style" !== name || (config.FORCE_BODY = !0);
+                    }), each(attrNames, function(_, attrName) {
+                        config.ALLOWED_ATTR.push(attrName);
+                    }), config));
+                    for (var node, iterator = document.createNodeIterator(body, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_TEXT); node = iterator.nextNode(); ) 1 === node.nodeType && processNode(node);
+                }
+                var html, config, attrNames, purifier;
+                return body;
+            };
+        };
     }(tinymce), function(tinymce) {
         var Node = tinymce.html.Node, each = tinymce.each, explode = tinymce.explode, extend = tinymce.extend, makeMap = tinymce.makeMap;
         tinymce.html.DomParser = function(settings, schema) {
@@ -2312,12 +2845,10 @@
         var html = [], makeMap = tinymce.makeMap, Entities = tinymce.html.Entities, indent = (settings = settings || {}).indent, indentBefore = makeMap(settings.indent_before || ""), indentAfter = makeMap(settings.indent_after || ""), encode = Entities.getEncodeFunc(settings.entity_encoding || "raw", settings.entities), htmlOutput = "html" == settings.element_format;
         return {
             start: function(name, attrs, empty) {
-                var attr, value;
+                var i, l, attr, value;
                 if (indent && indentBefore[name] && 0 < html.length && 0 < (value = html[html.length - 1]).length && "\n" !== value && html.push("\n"), 
-                html.push("<", name), attrs) {
-                    for (var bool = [], i = 0, l = attrs.length; i < l; i++) (attr = attrs[i]).boolean ? "html5-strict" == settings.schema ? bool.push(" ", attr.name) : bool.push(" ", attr.name, '="', encode("" + attr.name, !0), '"') : html.push(" ", attr.name, '="', encode("" + attr.value, !0), '"');
-                    html = html.concat(bool);
-                }
+                html.push("<", name), attrs) for (i = 0, l = attrs.length; i < l; i++) (attr = attrs[i]).name === attr.value && (attr.boolean = !0), 
+                attr.boolean && "html5-strict" == settings.schema ? html.push(" ", attr.name) : html.push(" ", attr.name, '="', encode("" + attr.value, !0), '"');
                 !empty || htmlOutput || "html5-strict" == settings.schema ? html[html.length] = ">" : html[html.length] = " />", 
                 empty && indent && indentAfter[name] && 0 < html.length && 0 < (value = html[html.length - 1]).length && "\n" !== value && html.push("\n");
             },
@@ -2442,7 +2973,7 @@
                 return create(clientRect.left, clientRect.top, clientRect.width, clientRect.height);
             }
         };
-    }(tinymce), tinymce.dom = {}, phone = tinymce.dom, mouseEventRe = /^(?:mouse|contextmenu)|click/, 
+    }(tinymce), tinymce.dom = {}, android = tinymce.dom, mouseEventRe = /^(?:mouse|contextmenu)|click/, 
     deprecated = {
         keyLocation: 1,
         layerX: 1,
@@ -2453,7 +2984,7 @@
         keyIdentifier: 1,
         mozPressure: 1,
         path: 1
-    }, phone.EventUtils = EventUtils, phone.Event = new EventUtils(), phone.Event.bind(window, "ready", function() {}), 
+    }, android.EventUtils = EventUtils, android.Event = new EventUtils(), android.Event.bind(window, "ready", function() {}), 
     tinymce.dom.TreeWalker = function(startNode, rootNode) {
         var node = startNode;
         function findSibling(node, startName, siblingName, shallow) {
@@ -3354,9 +3885,11 @@
             return !1;
         }, tinymce.dom.RangeUtils.getCaretRangeFromPoint = function(x, y, doc) {
             var rng, point;
-            if (doc.caretPositionFromPoint) point = doc.caretPositionFromPoint(x, y), 
-            (rng = doc.createRange()).setStart(point.offsetNode, point.offset), 
-            rng.collapse(!0); else if (doc.caretRangeFromPoint) rng = doc.caretRangeFromPoint(x, y); else if (doc.body.createTextRange) {
+            if (doc.caretPositionFromPoint) {
+                if (!(point = doc.caretPositionFromPoint(x, y))) return null;
+                (rng = doc.createRange()).setStart(point.offsetNode, point.offset), 
+                rng.collapse(!0);
+            } else if (doc.caretRangeFromPoint) rng = doc.caretRangeFromPoint(x, y); else if (doc.body.createTextRange) {
                 rng = doc.body.createTextRange();
                 try {
                     rng.moveToPoint(x, y), rng.collapse(!0);
@@ -4509,6 +5042,15 @@
                 }), editor.dom.bind(editor.getBody(), "dragstart", function(e) {
                     draggingInternallyState = !0, e.altKey && (e.dataTransfer.effectAllowed = "copy", 
                     e.dataTransfer.dropEffect = "copy");
+                    var content = editor.selection.getContent({
+                        contextual: !0
+                    });
+                    content && (content = function(content) {
+                        return content = DOM.create("div", {}, content), each$4(DOM.select("[style]", content), function(elm) {
+                            var style = elm.getAttribute("style");
+                            style && elm.setAttribute("data-mce-style", style);
+                        }), content.innerHTML;
+                    }(content), e.dataTransfer.setData("x-tinymce/html", content));
                 }), editor.dom.bind(editor.getBody(), [ "dragover", "dragend" ], function(e) {
                     editor.settings.clipboard_paste_data_images && 0 == draggingInternallyState && (e.preventDefault(), 
                     setFocusedRange(editor, getCaretRangeFromEvent(editor, e))), 
@@ -8381,7 +8923,15 @@
         Event.add(window, "beforeunload", function(e) {
             tinymce.onBeforeUnload.dispatch(tinymce, e);
         }), tinymce.onAddEditor = new Dispatcher(tinymce), tinymce.onRemoveEditor = new Dispatcher(tinymce), 
-        tinymce.EditorManager = extend(tinymce, {
+        tinymce.on = function(name, handler) {
+            function wrapped(ed, arg) {
+                handler({
+                    editor: tinymce.activeEditor
+                });
+            }
+            "addeditor" == (name = name.toLowerCase()) && tinymce.onAddEditor.add(wrapped), 
+            "removeeditor" == name && tinymce.onRemoveEditor.add(wrapped);
+        }, tinymce.EditorManager = extend(tinymce, {
             editors: [],
             i18n: {},
             activeEditor: null,
@@ -8684,7 +9234,7 @@
                 if (tinymce.add(self), s.aria_label = s.aria_label || DOM.getAttrib(e, "aria-label", self.getLang("aria.rich_text_area")), 
                 s.theme && ("function" != typeof s.theme ? (s.theme = s.theme.replace(/-/, ""), 
                 o = ThemeManager.get(s.theme), self.theme = new o(), self.theme.init && self.theme.init(self, ThemeManager.urls[s.theme] || tinymce.documentBaseURL.replace(/\/$/, ""))) : self.theme = s.theme), 
-                each(explode(s.plugins.replace(/\-/g, "")), function initPlugin(p) {
+                Array.isArray(s.plugins) && (s.plugins = s.plugins.join(",")), each(explode(s.plugins.replace(/\-/g, "")), function initPlugin(p) {
                     var c = PluginManager.get(p), u = PluginManager.urls[p] || tinymce.documentBaseURL.replace(/\/$/, "");
                     c && -1 === tinymce.inArray(initializedPlugins, p) && (each(PluginManager.dependencies(p), function(dep) {
                         initPlugin(dep);
@@ -9072,10 +9622,57 @@
             }
         };
     }(tinymce), function(tinymce) {
-        var each = tinymce.each;
+        var each = tinymce.each, legacyEventMap = {
+            preinit: "onPreInit",
+            beforerenderui: "onBeforeRenderUI",
+            postrender: "onPostRender",
+            load: "onLoad",
+            init: "onInit",
+            remove: "onRemove",
+            activate: "onActivate",
+            deactivate: "onDeactivate",
+            show: "onShow",
+            hide: "onHide",
+            click: "onClick",
+            event: "onEvent",
+            mouseup: "onMouseUp",
+            mousedown: "onMouseDown",
+            dblclick: "onDblClick",
+            keydown: "onKeyDown",
+            keyup: "onKeyUp",
+            keypress: "onKeyPress",
+            contextmenu: "onContextMenu",
+            submit: "onSubmit",
+            reset: "onReset",
+            paste: "onPaste",
+            cut: "onCut",
+            copy: "onCopy",
+            preprocess: "onPreProcess",
+            postprocess: "onPostProcess",
+            beforesetcontent: "onBeforeSetContent",
+            beforegetcontent: "onBeforeGetContent",
+            setcontent: "onSetContent",
+            getcontent: "onGetContent",
+            loadcontent: "onLoadContent",
+            savecontent: "onSaveContent",
+            nodechange: "onNodeChange",
+            change: "onChange",
+            beforeexeccmd: "onBeforeExecCommand",
+            execcmd: "onExecCommand",
+            undo: "onUndo",
+            redo: "onRedo",
+            visualaid: "onVisualAid",
+            setprogressstate: "onSetProgressState",
+            setattrib: "onSetAttrib",
+            selectionchange: "onSelectionChange",
+            blur: "onBlur",
+            focus: "onFocus",
+            focusin: "onFocusIn",
+            focusout: "onFocusOut",
+            input: "onInput"
+        };
         tinymce.Editor.prototype.setupEvents = function() {
-            var self = this, settings = self.settings;
-            each([ "onPreInit", "onBeforeRenderUI", "onPostRender", "onLoad", "onInit", "onRemove", "onActivate", "onDeactivate", "onShow", "onHide", "onClick", "onEvent", "onMouseUp", "onMouseDown", "onDblClick", "onKeyDown", "onKeyUp", "onKeyPress", "onContextMenu", "onSubmit", "onReset", "onPaste", "onCut", "onCopy", "onPreProcess", "onPostProcess", "onBeforeSetContent", "onBeforeGetContent", "onSetContent", "onGetContent", "onLoadContent", "onSaveContent", "onNodeChange", "onChange", "onBeforeExecCommand", "onExecCommand", "onUndo", "onRedo", "onVisualAid", "onSetProgressState", "onSetAttrib", "onSelectionChange", "onBlur", "onFocus", "onFocusIn", "onFocusOut" ], function(name) {
+            var self = this, settings = self.settings, selectionEvents = (each([ "onPreInit", "onBeforeRenderUI", "onPostRender", "onLoad", "onInit", "onRemove", "onActivate", "onDeactivate", "onShow", "onHide", "onClick", "onEvent", "onMouseUp", "onMouseDown", "onDblClick", "onKeyDown", "onKeyUp", "onKeyPress", "onContextMenu", "onSubmit", "onReset", "onPaste", "onCut", "onCopy", "onPreProcess", "onPostProcess", "onBeforeSetContent", "onBeforeGetContent", "onSetContent", "onGetContent", "onLoadContent", "onSaveContent", "onNodeChange", "onChange", "onBeforeExecCommand", "onExecCommand", "onUndo", "onRedo", "onVisualAid", "onSetProgressState", "onSetAttrib", "onSelectionChange", "onBlur", "onFocus", "onFocusIn", "onFocusOut", "onInput" ], function(name) {
                 self[name] = new tinymce.util.Dispatcher(self);
             }), settings.cleanup_callback && (self.onBeforeSetContent.add(function(ed, o) {
                 o.content = ed.execCallback("cleanup_callback", "insert_to_editor", o.content, o);
@@ -9085,7 +9682,41 @@
             }), self.onPostProcess.add(function(ed, o) {
                 o.set && (o.content = ed.execCallback("cleanup_callback", "insert_to_editor", o.content, o)), 
                 o.get && (o.content = ed.execCallback("cleanup_callback", "get_from_editor", o.content, o));
-            }));
+            })), [ "onSetContent", "onBeforeSetContent", "onGetContent", "onBeforeGetContent" ]);
+            self.on = function(name, handler, prepend) {
+                name.split(" ");
+                for (var names, i = (names = name.toLowerCase().split(" ")).length; i--; ) {
+                    name = names[i];
+                    var evt = legacyEventMap[name] || name, wrapped = function(ed, arg) {
+                        ed = "object" == typeof arg && null !== arg ? tinymce.extend({
+                            editor: ed
+                        }, arg) : {
+                            editor: ed,
+                            data: arg
+                        }, handler(ed);
+                    };
+                    prepend ? self[evt].addToTop(wrapped) : self[evt].add(wrapped), 
+                    -1 !== tinymce.inArray(selectionEvents, evt) && self.selection && "object" == typeof self.selection[evt] && "function" == typeof self.selection[evt].add && (wrapped = function(sel, arg) {
+                        arg && !0 === arg.selection && (arg = "object" == typeof arg && null !== arg ? tinymce.extend({
+                            editor: self
+                        }, arg) : {
+                            editor: self,
+                            data: arg
+                        }, handler(arg));
+                    }, prepend ? self.selection[evt].add(wrapped) : self.selection[evt].addToTop(wrapped));
+                }
+            }, self.fire = function(name, arg) {
+                name = name.toLocaleLowerCase(), name = legacyEventMap[name] || name, 
+                arg = "object" == typeof arg && null !== arg ? tinymce.extend({
+                    editor: self
+                }, arg) : {
+                    editor: self,
+                    data: arg
+                }, self[name].dispatch(self, arg);
+            }, self.off = function(name, handler) {
+                name = name.toLocaleLowerCase(), name = legacyEventMap[name] || name, 
+                handler ? self[name].remove(handler) : self[name].removeAll();
+            };
         }, tinymce.Editor.prototype.bindNativeEvents = function() {
             var nativeToDispatcherMap, self = this, settings = self.settings, dom = self.dom;
             function eventHandler(evt, args) {
@@ -9114,7 +9745,8 @@
                 copy: "onCopy",
                 selectionchange: "onSelectionChange",
                 focusin: "onFocusIn",
-                focusout: "onFocusOut"
+                focusout: "onFocusOut",
+                input: "onInput"
             }, function(dispatcherName, nativeName) {
                 var root = settings.content_editable ? self.getBody() : self.getDoc();
                 switch (nativeName) {
@@ -9304,7 +9936,8 @@
                             selection.setRng(rng)));
                         }(dom.get("mce_marker")), body = editor.getBody(), tinymce.each(body.getElementsByTagName("*"), function(elm) {
                             elm.removeAttribute("data-mce-fragment");
-                        }), selection.onSetContent.dispatch(selection, args), editor.addVisual();
+                        }), args.selection = !0, selection.onSetContent.dispatch(selection, args), 
+                        editor.addVisual();
                     }
                 }(editor, (value = function(value) {
                     var details;
@@ -9530,15 +10163,18 @@
                     offset = isAfterLastNodeInContainer && 3 == container.nodeType ? container.nodeValue.length : 0), 
                     dom.getParent(container, dom.isBlock)), isAfterLastNodeInContainer = parentBlock ? dom.getParent(parentBlock.parentNode, dom.isBlock) : null, containerBlockName = isAfterLastNodeInContainer ? isAfterLastNodeInContainer.nodeName.toUpperCase() : "", value = value && value.ctrlKey;
                     return "LI" != containerBlockName || value || (parentBlock = isAfterLastNodeInContainer), 
-                    container && 3 == container.nodeType && offset >= container.nodeValue.length && !function() {
+                    container && 3 === container.nodeType && offset >= container.nodeValue.length && ((containerBlockName = dom.getParent(container, "a")) && (!(value = containerBlockName.nextSibling) || 3 === value.nodeType && /^\s*$/.test(value.nodeValue)) && (rng.setStartAfter(containerBlockName), 
+                    rng.setEndAfter(containerBlockName), container = containerBlockName.parentNode), 
+                    !function() {
                         for (var node, walker = new TreeWalker(container, parentBlock), nonEmptyElementsMap = editor.schema.getNonEmptyElements(); node = walker.next(); ) if (nonEmptyElementsMap[node.nodeName.toLowerCase()] || 0 < node.length) return 1;
-                    }() && (brElm = dom.create("br"), rng.insertNode(brElm), rng.setStartAfter(brElm), 
+                    }()) && (brElm = dom.create("br"), rng.insertNode(brElm), rng.setStartAfter(brElm), 
                     rng.setEndAfter(brElm), extraBr = !0), brElm = dom.create("br"), 
-                    rng.insertNode(brElm), containerBlockName = dom.create("span", {}, "&nbsp;"), 
-                    brElm.parentNode.insertBefore(containerBlockName, brElm), selection.scrollIntoView(containerBlockName), 
-                    dom.remove(containerBlockName), extraBr ? (rng.setStartBefore(brElm), 
-                    rng.setEndBefore(brElm)) : (rng.setStartAfter(brElm), rng.setEndAfter(brElm)), 
-                    selection.setRng(rng), editor.undoManager.add(), !0;
+                    rng.insertNode(brElm), isAfterLastNodeInContainer = dom.create("span", {}, "&nbsp;"), 
+                    brElm.parentNode.insertBefore(isAfterLastNodeInContainer, brElm), 
+                    selection.scrollIntoView(isAfterLastNodeInContainer), dom.remove(isAfterLastNodeInContainer), 
+                    extraBr ? (rng.setStartBefore(brElm), rng.setEndBefore(brElm)) : (rng.setStartAfter(brElm), 
+                    rng.setEndAfter(brElm)), selection.setRng(rng), editor.undoManager.add(), 
+                    !0;
                 }
             }), addCommands({
                 "JustifyLeft,JustifyCenter,JustifyRight,JustifyFull": function(command) {
@@ -9781,18 +10417,50 @@
             },
             createStylesBox: function(id, s, cc) {
                 var ed = this.editor;
+                function compileFilter(filter) {
+                    var filters;
+                    return Array.isArray(filter) ? (filters = filter.map(compileFilter), 
+                    function(value) {
+                        return filters.every(function(filterFunc) {
+                            return filterFunc(value);
+                        });
+                    }) : "string" == typeof filter && filter ? function(value) {
+                        return -1 !== value.indexOf(filter);
+                    } : "function" == typeof filter ? function(value) {
+                        return filter(value);
+                    } : filter instanceof RegExp ? function(value) {
+                        return filter.test(value);
+                    } : filter;
+                }
                 return s = tinymce.extend({
                     max_height: 384,
                     combobox: !0,
                     multiple: !0,
                     seperator: " ",
-                    menu_class: "mceStylesBoxMenu"
+                    menu_class: "mceStylesBoxMenu",
+                    allow_element_selector: !1
                 }, s || {}), (id = this.createListBox(id, s, cc)).onPostRender.add(function(c, n) {
                     var ctrl = c;
-                    Array.isArray(ed.settings.importcss_classes) && !ctrl.hasClasses && (each(ed.settings.importcss_classes, function(item) {
-                        var selector = /^(?:([a-z0-9\-_]+))?(\.[a-z0-9_\-\.]+)$/i.exec(item.selector || item);
-                        selector && !selector[1] && (selector = selector[2].substr(1).split("."), 
-                        each(selector, function(cls) {
+                    s.styles && "string" == typeof s.styles && (s.styles = s.styles.split(/[\s,]+/)), 
+                    Array.isArray(s.styles) && s.styles.length ? (each(s.styles, function(item) {
+                        var title, value;
+                        if ("string" == typeof item) title = value = item; else if ("object" == typeof item && null !== item) if (item.title && item.value) title = item.title, 
+                        value = item.value; else for (var key in item) if (item.hasOwnProperty(key)) {
+                            value = item[title = key];
+                            break;
+                        }
+                        title && value && ctrl.add(title, value, {
+                            style: function() {
+                                return PreviewCss.getCssText(ed, {
+                                    classes: value
+                                });
+                            }
+                        });
+                    }), ctrl.hasClasses = !0) : Array.isArray(ed.settings.importcss_classes) && !ctrl.hasClasses && (each(ed.settings.importcss_classes, function(item) {
+                        var element, selectorText = item.selectorText || item.selector || item;
+                        return !selectorText || !(!s.selector_filter || !compileFilter(s.selector_filter)(selectorText)) || !((selectorText = /^(?:([a-z0-9\-_]+))?(\.[a-z0-9_\-\.]+)$/i.exec(selectorText)) && (element = selectorText[1] || null, 
+                        selectorText = selectorText[2].substr(1), !element || s.allow_element_selector)) || (element = selectorText.split("."), 
+                        each(element, function(cls) {
                             ctrl.add(cls, cls, {
                                 style: function() {
                                     return item.style || PreviewCss.getCssText(ed, {
@@ -9800,7 +10468,7 @@
                                     });
                                 }
                             });
-                        }), PreviewCss.reset());
+                        }), void PreviewCss.reset());
                     }), Array.isArray(ed.settings.importcss_classes)) && (ctrl.hasClasses = !0);
                 }), id;
             },
@@ -11137,186 +11805,186 @@
         var TreeWalker = tinymce.dom.TreeWalker, RangeUtils = tinymce.dom.RangeUtils, NodeType = tinymce.dom.NodeType;
         tinymce.EnterKey = function(editor) {
             var dom = editor.dom, selection = editor.selection, settings = editor.settings, undoManager = editor.undoManager, schema = editor.schema, nonEmptyElementsMap = schema.getNonEmptyElements(), moveCaretBeforeOnEnterElementsMap = schema.getMoveCaretBeforeOnEnterElements(), isIE = tinymce.isIE && tinymce.isIE < 11;
-            editor.onNewBlock = new tinymce.util.Dispatcher(), editor.onKeyDown.add(function(ed, evt) {
-                13 == evt.keyCode && (function(evt) {
-                    var tmpRng, editableRoot, container, offset, parentBlock, documentMode, newBlock, fragment, containerBlock, parentBlockName, containerBlockName, isAfterLastNodeInContainer, shiftKey, newBlockName, containerBlockParentName, elm, node, rng = selection.getRng(!0);
-                    function canSplitBlock(node) {
-                        return node && dom.isBlock(node) && !/^(TD|TH|CAPTION|FORM)$/.test(node.nodeName) && !/^(fixed|absolute)/i.test(node.style.position) && "true" !== dom.getContentEditable(node) && !node.hasAttribute("data-mce-type");
-                    }
-                    function renderBlockOnIE(block) {
-                        var oldRng;
-                        dom.isBlock(block) && (oldRng = selection.getRng(), block.appendChild(dom.create("span", null, "\xa0")), 
-                        selection.select(block), block.lastChild.outerHTML = "", 
-                        selection.setRng(oldRng));
-                    }
-                    function moveToCaretPosition(root) {
-                        var walker, node, rng, tempElm, firstChild, lastNode = root;
-                        if (root) {
-                            if (isIE && parentBlock && parentBlock.firstChild && parentBlock.firstChild == parentBlock.lastChild && "BR" == parentBlock.firstChild.tagName && dom.remove(parentBlock.firstChild), 
-                            /^(LI|DT|DD)$/.test(root.nodeName) && (firstChild = function(node) {
-                                for (;node; ) {
-                                    if (1 == node.nodeType || 3 == node.nodeType && node.data && /[\r\n\s]/.test(node.data)) return node;
-                                    node = node.nextSibling;
+            function handleEnterKey(evt) {
+                var tmpRng, editableRoot, container, offset, parentBlock, documentMode, newBlock, fragment, containerBlock, parentBlockName, containerBlockName, isAfterLastNodeInContainer, shiftKey, newBlockName, containerBlockParentName, elm, node, rng = selection.getRng(!0);
+                function canSplitBlock(node) {
+                    return node && dom.isBlock(node) && !/^(TD|TH|CAPTION|FORM)$/.test(node.nodeName) && !/^(fixed|absolute)/i.test(node.style.position) && "true" !== dom.getContentEditable(node) && !node.hasAttribute("data-mce-type");
+                }
+                function renderBlockOnIE(block) {
+                    var oldRng;
+                    dom.isBlock(block) && (oldRng = selection.getRng(), block.appendChild(dom.create("span", null, "\xa0")), 
+                    selection.select(block), block.lastChild.outerHTML = "", selection.setRng(oldRng));
+                }
+                function moveToCaretPosition(root) {
+                    var walker, node, rng, tempElm, firstChild, lastNode = root;
+                    if (root) {
+                        if (isIE && parentBlock && parentBlock.firstChild && parentBlock.firstChild == parentBlock.lastChild && "BR" == parentBlock.firstChild.tagName && dom.remove(parentBlock.firstChild), 
+                        /^(LI|DT|DD)$/.test(root.nodeName) && (firstChild = function(node) {
+                            for (;node; ) {
+                                if (1 == node.nodeType || 3 == node.nodeType && node.data && /[\r\n\s]/.test(node.data)) return node;
+                                node = node.nextSibling;
+                            }
+                        }(root.firstChild)) && /^(UL|OL|DL)$/.test(firstChild.nodeName) && root.insertBefore(dom.doc.createTextNode("\xa0"), root.firstChild), 
+                        rng = dom.createRng(), isIE || root.normalize(), root.hasChildNodes()) {
+                            for (walker = new TreeWalker(root, root); node = walker.current(); ) {
+                                if (3 == node.nodeType) {
+                                    rng.setStart(node, 0), rng.setEnd(node, 0);
+                                    break;
                                 }
-                            }(root.firstChild)) && /^(UL|OL|DL)$/.test(firstChild.nodeName) && root.insertBefore(dom.doc.createTextNode("\xa0"), root.firstChild), 
-                            rng = dom.createRng(), isIE || root.normalize(), root.hasChildNodes()) {
-                                for (walker = new TreeWalker(root, root); node = walker.current(); ) {
-                                    if (3 == node.nodeType) {
-                                        rng.setStart(node, 0), rng.setEnd(node, 0);
-                                        break;
-                                    }
-                                    if (moveCaretBeforeOnEnterElementsMap[node.nodeName.toLowerCase()]) {
-                                        rng.setStartBefore(node), rng.setEndBefore(node);
-                                        break;
-                                    }
-                                    lastNode = node, node = walker.next();
+                                if (moveCaretBeforeOnEnterElementsMap[node.nodeName.toLowerCase()]) {
+                                    rng.setStartBefore(node), rng.setEndBefore(node);
+                                    break;
                                 }
-                                node || (rng.setStart(lastNode, 0), rng.setEnd(lastNode, 0));
-                            } else "BR" == root.nodeName ? root.nextSibling && dom.isBlock(root.nextSibling) ? ((!documentMode || documentMode < 9) && (tempElm = dom.create("br"), 
-                            root.parentNode.insertBefore(tempElm, root)), rng.setStartBefore(root), 
-                            rng.setEndBefore(root)) : (rng.setStartAfter(root), 
-                            rng.setEndAfter(root)) : (rng.setStart(root, 0), rng.setEnd(root, 0));
-                            selection.setRng(rng), dom.remove(tempElm), selection.scrollIntoView(root);
+                                lastNode = node, node = walker.next();
+                            }
+                            node || (rng.setStart(lastNode, 0), rng.setEnd(lastNode, 0));
+                        } else "BR" == root.nodeName ? root.nextSibling && dom.isBlock(root.nextSibling) ? ((!documentMode || documentMode < 9) && (tempElm = dom.create("br"), 
+                        root.parentNode.insertBefore(tempElm, root)), rng.setStartBefore(root), 
+                        rng.setEndBefore(root)) : (rng.setStartAfter(root), rng.setEndAfter(root)) : (rng.setStart(root, 0), 
+                        rng.setEnd(root, 0));
+                        selection.setRng(rng), dom.remove(tempElm), selection.scrollIntoView(root);
+                    }
+                }
+                function setForcedBlockAttrs(node) {
+                    var forcedRootBlockName = settings.forced_root_block;
+                    forcedRootBlockName && forcedRootBlockName.toLowerCase() === node.tagName.toLowerCase() && dom.setAttribs(node, settings.forced_root_block_attrs);
+                }
+                function emptyBlock(elm) {
+                    elm.innerHTML = isIE ? "" : '<br data-mce-bogus="1">';
+                }
+                function createNewBlock(name) {
+                    var block, clonedNode, caretNode, node = container, textInlineElements = schema.getTextInlineElements();
+                    if (name || "TABLE" == parentBlockName ? setForcedBlockAttrs(block = dom.create(name || newBlockName)) : block = settings.enterkey_keep_attributes ? parentBlock.cloneNode(!1) : dom.create(parentBlock.nodeName), 
+                    caretNode = block, !0 === settings.enterkey_keep_styles) for (;textInlineElements[node.nodeName] && "_mce_caret" != node.id && (clonedNode = node.cloneNode(!1), 
+                    dom.setAttrib(clonedNode, "id", ""), block.hasChildNodes() ? clonedNode.appendChild(block.firstChild) : caretNode = clonedNode, 
+                    block.appendChild(clonedNode)), (node = node.parentNode) && node != editableRoot; );
+                    return isIE || (caretNode.innerHTML = '<br data-mce-bogus="1">'), 
+                    block;
+                }
+                function isCaretAtStartOrEndOfBlock(start) {
+                    var walker, node, name;
+                    if (3 != container.nodeType || !(start ? 0 < offset : offset < container.nodeValue.length)) {
+                        if ((container.parentNode != parentBlock || !isAfterLastNodeInContainer || start) && (!start || 1 != container.nodeType || container != parentBlock.firstChild)) {
+                            if ("TABLE" === container.nodeName || container.previousSibling && "TABLE" == container.previousSibling.nodeName) return isAfterLastNodeInContainer && !start || !isAfterLastNodeInContainer && start;
+                            if (NodeType.isContentEditableFalse(container) || container.previousSibling && NodeType.isContentEditableFalse(container.previousSibling)) return isAfterLastNodeInContainer && !start || !isAfterLastNodeInContainer && start;
+                            for (walker = new TreeWalker(container, parentBlock), 
+                            3 == container.nodeType && (start && 0 === offset ? walker.prev() : start || offset != container.nodeValue.length || walker.next()); node = walker.current(); ) {
+                                if (1 === node.nodeType) {
+                                    if (!node.getAttribute("data-mce-bogus") && (name = node.nodeName.toLowerCase(), 
+                                    nonEmptyElementsMap[name]) && "br" !== name) return;
+                                } else if (3 === node.nodeType && !/^[ \t\r\n]*$/.test(node.nodeValue)) return;
+                                start ? walker.prev() : walker.next();
+                            }
                         }
+                        return 1;
                     }
-                    function setForcedBlockAttrs(node) {
-                        var forcedRootBlockName = settings.forced_root_block;
-                        forcedRootBlockName && forcedRootBlockName.toLowerCase() === node.tagName.toLowerCase() && dom.setAttribs(node, settings.forced_root_block_attrs);
-                    }
-                    function emptyBlock(elm) {
-                        elm.innerHTML = isIE ? "" : '<br data-mce-bogus="1">';
-                    }
-                    function createNewBlock(name) {
-                        var block, clonedNode, caretNode, node = container, textInlineElements = schema.getTextInlineElements();
-                        if (name || "TABLE" == parentBlockName ? setForcedBlockAttrs(block = dom.create(name || newBlockName)) : block = settings.enterkey_keep_attributes ? parentBlock.cloneNode(!1) : dom.create(parentBlock.nodeName), 
-                        caretNode = block, !0 === settings.enterkey_keep_styles) for (;textInlineElements[node.nodeName] && "_mce_caret" != node.id && (clonedNode = node.cloneNode(!1), 
-                        dom.setAttrib(clonedNode, "id", ""), block.hasChildNodes() ? clonedNode.appendChild(block.firstChild) : caretNode = clonedNode, 
-                        block.appendChild(clonedNode)), (node = node.parentNode) && node != editableRoot; );
-                        return isIE || (caretNode.innerHTML = '<br data-mce-bogus="1">'), 
-                        block;
-                    }
-                    function isCaretAtStartOrEndOfBlock(start) {
-                        var walker, node, name;
-                        if (3 != container.nodeType || !(start ? 0 < offset : offset < container.nodeValue.length)) {
-                            if ((container.parentNode != parentBlock || !isAfterLastNodeInContainer || start) && (!start || 1 != container.nodeType || container != parentBlock.firstChild)) {
-                                if ("TABLE" === container.nodeName || container.previousSibling && "TABLE" == container.previousSibling.nodeName) return isAfterLastNodeInContainer && !start || !isAfterLastNodeInContainer && start;
-                                if (NodeType.isContentEditableFalse(container) || container.previousSibling && NodeType.isContentEditableFalse(container.previousSibling)) return isAfterLastNodeInContainer && !start || !isAfterLastNodeInContainer && start;
-                                for (walker = new TreeWalker(container, parentBlock), 
-                                3 == container.nodeType && (start && 0 === offset ? walker.prev() : start || offset != container.nodeValue.length || walker.next()); node = walker.current(); ) {
-                                    if (1 === node.nodeType) {
-                                        if (!node.getAttribute("data-mce-bogus") && (name = node.nodeName.toLowerCase(), 
-                                        nonEmptyElementsMap[name]) && "br" !== name) return;
-                                    } else if (3 === node.nodeType && !/^[ \t\r\n]*$/.test(node.nodeValue)) return;
-                                    start ? walker.prev() : walker.next();
+                }
+                function insertBr() {
+                    editor.execCommand("InsertLineBreak", !1, evt);
+                }
+                function insertNewBlockAfter() {
+                    newBlock = /^(H[1-6]|PRE|FIGURE)$/.test(parentBlockName) && "HGROUP" != containerBlockName ? createNewBlock(newBlockName) : createNewBlock(), 
+                    settings.end_container_on_empty_block && canSplitBlock(containerBlock) && dom.isEmpty(parentBlock) ? newBlock = dom.split(containerBlock, parentBlock) : dom.insertAfter(newBlock, parentBlock), 
+                    moveToCaretPosition(newBlock);
+                }
+                if (rng = selection.getRng(!0), !evt.isDefaultPrevented()) if (rng.collapsed) {
+                    if (new RangeUtils(dom).normalize(rng), container = rng.startContainer, 
+                    offset = rng.startOffset, newBlockName = settings.forced_root_block || "p", 
+                    newBlockName = (newBlockName = !1 === settings.force_block_newlines ? "" : newBlockName) ? newBlockName.toUpperCase() : "", 
+                    documentMode = dom.doc.documentMode, shiftKey = evt.shiftKey, 
+                    1 == container.nodeType && container.hasChildNodes() && (isAfterLastNodeInContainer = offset > container.childNodes.length - 1, 
+                    container = container.childNodes[Math.min(offset, container.childNodes.length - 1)] || container, 
+                    offset = isAfterLastNodeInContainer && 3 == container.nodeType ? container.nodeValue.length : 0), 
+                    editableRoot = function(node) {
+                        for (var editableRoot, root = dom.getRoot(), parent = node; parent && parent !== root && "false" !== dom.getContentEditable(parent); ) "true" === dom.getContentEditable(parent) && (editableRoot = parent), 
+                        parent = parent.parentNode;
+                        return parent !== root ? editableRoot : root;
+                    }(container)) {
+                        if (undoManager.beforeChange(), (newBlockName && !shiftKey || !newBlockName && shiftKey) && (container = function(container, offset) {
+                            var newBlock, startNode, node, next, rootBlockName, blockName = newBlockName || "P", parentBlock = dom.getParent(container, dom.isBlock);
+                            if (!parentBlock || !canSplitBlock(parentBlock)) {
+                                if (rootBlockName = ((parentBlock = parentBlock || editableRoot) == editableRoot || function(node) {
+                                    return node && /^(TD|TH|CAPTION)$/.test(node.nodeName);
+                                }(parentBlock) ? parentBlock : parentBlock.parentNode).nodeName.toLowerCase(), 
+                                !parentBlock.hasChildNodes()) return setForcedBlockAttrs(newBlock = dom.create(blockName)), 
+                                parentBlock.appendChild(newBlock), rng.setStart(newBlock, 0), 
+                                rng.setEnd(newBlock, 0), newBlock;
+                                for (node = container; node && node.parentNode != parentBlock; ) node = node.parentNode;
+                                for (;node && !dom.isBlock(node); ) node = (startNode = node).previousSibling;
+                                if (startNode && schema.isValidChild(rootBlockName, blockName.toLowerCase())) {
+                                    for (setForcedBlockAttrs(newBlock = dom.create(blockName)), 
+                                    startNode.parentNode.insertBefore(newBlock, startNode), 
+                                    node = startNode; node && !dom.isBlock(node); ) next = node.nextSibling, 
+                                    newBlock.appendChild(node), node = next;
+                                    rng.setStart(container, offset), rng.setEnd(container, offset);
                                 }
                             }
-                            return 1;
+                            return container;
+                        }(container, offset)), parentBlock = dom.getParent(container, dom.isBlock), 
+                        containerBlock = parentBlock ? dom.getParent(parentBlock.parentNode, dom.isBlock) : null, 
+                        parentBlockName = parentBlock ? parentBlock.nodeName.toUpperCase() : "", 
+                        "LI" != (containerBlockName = containerBlock ? containerBlock.nodeName.toUpperCase() : "") || evt.ctrlKey || (parentBlock = containerBlock, 
+                        parentBlockName = containerBlockName), /^(LI|DT|DD)$/.test(parentBlockName)) {
+                            if (!newBlockName && shiftKey) return void insertBr();
+                            if (dom.isEmpty(parentBlock)) return void (containerBlock != editor.getBody() && (containerBlockParentName = containerBlock.parentNode.nodeName, 
+                            /^(OL|UL|LI)$/.test(containerBlockParentName) && (newBlockName = "LI"), 
+                            newBlock = newBlockName ? createNewBlock(newBlockName) : dom.create("BR"), 
+                            isFirstOrLastLi(!0) && isFirstOrLastLi() ? "LI" == containerBlockParentName ? dom.insertAfter(newBlock, getContainerBlock()) : dom.replace(newBlock, containerBlock) : isFirstOrLastLi(!0) ? "LI" == containerBlockParentName ? (dom.insertAfter(newBlock, getContainerBlock()), 
+                            newBlock.appendChild(dom.doc.createTextNode(" ")), newBlock.appendChild(containerBlock)) : containerBlock.parentNode.insertBefore(newBlock, containerBlock) : isFirstOrLastLi() ? (dom.insertAfter(newBlock, getContainerBlock()), 
+                            renderBlockOnIE(newBlock)) : (containerBlock = getContainerBlock(), 
+                            (tmpRng = rng.cloneRange()).setStartAfter(parentBlock), 
+                            tmpRng.setEndAfter(containerBlock), fragment = tmpRng.extractContents(), 
+                            "LI" == newBlockName && "LI" == fragment.firstChild.nodeName ? (newBlock = fragment.firstChild, 
+                            dom.insertAfter(fragment, containerBlock)) : (dom.insertAfter(fragment, containerBlock), 
+                            dom.insertAfter(newBlock, containerBlock))), dom.remove(parentBlock), 
+                            moveToCaretPosition(newBlock), undoManager.add()));
                         }
-                    }
-                    function insertBr() {
-                        editor.execCommand("InsertLineBreak", !1, evt);
-                    }
-                    function insertNewBlockAfter() {
-                        newBlock = /^(H[1-6]|PRE|FIGURE)$/.test(parentBlockName) && "HGROUP" != containerBlockName ? createNewBlock(newBlockName) : createNewBlock(), 
-                        settings.end_container_on_empty_block && canSplitBlock(containerBlock) && dom.isEmpty(parentBlock) ? newBlock = dom.split(containerBlock, parentBlock) : dom.insertAfter(newBlock, parentBlock), 
-                        moveToCaretPosition(newBlock);
-                    }
-                    if (rng = selection.getRng(!0), !evt.isDefaultPrevented()) if (rng.collapsed) {
-                        if (new RangeUtils(dom).normalize(rng), container = rng.startContainer, 
-                        offset = rng.startOffset, newBlockName = settings.forced_root_block || "p", 
-                        newBlockName = (newBlockName = !1 === settings.force_block_newlines ? "" : newBlockName) ? newBlockName.toUpperCase() : "", 
-                        documentMode = dom.doc.documentMode, shiftKey = evt.shiftKey, 
-                        1 == container.nodeType && container.hasChildNodes() && (isAfterLastNodeInContainer = offset > container.childNodes.length - 1, 
-                        container = container.childNodes[Math.min(offset, container.childNodes.length - 1)] || container, 
-                        offset = isAfterLastNodeInContainer && 3 == container.nodeType ? container.nodeValue.length : 0), 
-                        editableRoot = function(node) {
-                            for (var editableRoot, root = dom.getRoot(), parent = node; parent && parent !== root && "false" !== dom.getContentEditable(parent); ) "true" === dom.getContentEditable(parent) && (editableRoot = parent), 
-                            parent = parent.parentNode;
-                            return parent !== root ? editableRoot : root;
-                        }(container)) {
-                            if (undoManager.beforeChange(), (newBlockName && !shiftKey || !newBlockName && shiftKey) && (container = function(container, offset) {
-                                var newBlock, startNode, node, next, rootBlockName, blockName = newBlockName || "P", parentBlock = dom.getParent(container, dom.isBlock);
-                                if (!parentBlock || !canSplitBlock(parentBlock)) {
-                                    if (rootBlockName = ((parentBlock = parentBlock || editableRoot) == editableRoot || function(node) {
-                                        return node && /^(TD|TH|CAPTION)$/.test(node.nodeName);
-                                    }(parentBlock) ? parentBlock : parentBlock.parentNode).nodeName.toLowerCase(), 
-                                    !parentBlock.hasChildNodes()) return setForcedBlockAttrs(newBlock = dom.create(blockName)), 
-                                    parentBlock.appendChild(newBlock), rng.setStart(newBlock, 0), 
-                                    rng.setEnd(newBlock, 0), newBlock;
-                                    for (node = container; node && node.parentNode != parentBlock; ) node = node.parentNode;
-                                    for (;node && !dom.isBlock(node); ) node = (startNode = node).previousSibling;
-                                    if (startNode && schema.isValidChild(rootBlockName, blockName.toLowerCase())) {
-                                        for (setForcedBlockAttrs(newBlock = dom.create(blockName)), 
-                                        startNode.parentNode.insertBefore(newBlock, startNode), 
-                                        node = startNode; node && !dom.isBlock(node); ) next = node.nextSibling, 
-                                        newBlock.appendChild(node), node = next;
-                                        rng.setStart(container, offset), rng.setEnd(container, offset);
-                                    }
+                        if ("PRE" == parentBlockName && !1 !== settings.br_in_pre) {
+                            if (!shiftKey) return void insertBr();
+                        } else if (!newBlockName && !shiftKey && "LI" != parentBlockName || newBlockName && shiftKey) return void insertBr();
+                        newBlockName && parentBlock === editor.getBody() || (newBlockName = newBlockName || "P", 
+                        (containerBlockParentName = (containerBlockParentName = parentBlock) && 3 === containerBlockParentName.nodeType ? containerBlockParentName.parentNode : containerBlockParentName) && 1 === containerBlockParentName.nodeType && containerBlockParentName.hasAttribute("data-mce-caret") ? (newBlock = (containerBlockParentName = parentBlock) && containerBlockParentName.hasAttribute("data-mce-caret") ? ((node = elm = (elm = (elm = containerBlockParentName).getElementsByTagName("br"))[elm.length - 1]) && 1 === node.nodeType && node.hasAttribute("data-mce-bogus") && elm.parentNode.removeChild(elm), 
+                        containerBlockParentName.removeAttribute("data-mce-caret"), 
+                        containerBlockParentName.removeAttribute("data-mce-bogus"), 
+                        containerBlockParentName.removeAttribute("style"), containerBlockParentName.removeAttribute("_moz_abspos"), 
+                        containerBlockParentName) : null, dom.isEmpty(parentBlock) && emptyBlock(parentBlock), 
+                        moveToCaretPosition(newBlock)) : isCaretAtStartOrEndOfBlock() ? insertNewBlockAfter() : isCaretAtStartOrEndOfBlock(!0) ? (renderBlockOnIE(newBlock = parentBlock.parentNode.insertBefore(createNewBlock(), parentBlock)), 
+                        moveToCaretPosition(newBlock)) : ((tmpRng = rng.cloneRange()).setEndAfter(parentBlock), 
+                        function(node) {
+                            for (;3 === node.nodeType && (node.nodeValue = node.nodeValue.replace(/^[\r\n]+/, "")), 
+                            node = node.firstChild; );
+                        }(fragment = tmpRng.extractContents()), newBlock = fragment.firstChild, 
+                        dom.insertAfter(fragment, parentBlock), function() {
+                            var i, node = newBlock, firstChilds = [];
+                            if (node) {
+                                for (;node = node.firstChild; ) {
+                                    if (dom.isBlock(node)) return;
+                                    1 != node.nodeType || nonEmptyElementsMap[node.nodeName.toLowerCase()] || firstChilds.push(node);
                                 }
-                                return container;
-                            }(container, offset)), parentBlock = dom.getParent(container, dom.isBlock), 
-                            containerBlock = parentBlock ? dom.getParent(parentBlock.parentNode, dom.isBlock) : null, 
-                            parentBlockName = parentBlock ? parentBlock.nodeName.toUpperCase() : "", 
-                            "LI" != (containerBlockName = containerBlock ? containerBlock.nodeName.toUpperCase() : "") || evt.ctrlKey || (parentBlock = containerBlock, 
-                            parentBlockName = containerBlockName), /^(LI|DT|DD)$/.test(parentBlockName)) {
-                                if (!newBlockName && shiftKey) return insertBr();
-                                if (dom.isEmpty(parentBlock)) return containerBlock != editor.getBody() && (containerBlockParentName = containerBlock.parentNode.nodeName, 
-                                /^(OL|UL|LI)$/.test(containerBlockParentName) && (newBlockName = "LI"), 
-                                newBlock = newBlockName ? createNewBlock(newBlockName) : dom.create("BR"), 
-                                isFirstOrLastLi(!0) && isFirstOrLastLi() ? "LI" == containerBlockParentName ? dom.insertAfter(newBlock, getContainerBlock()) : dom.replace(newBlock, containerBlock) : isFirstOrLastLi(!0) ? "LI" == containerBlockParentName ? (dom.insertAfter(newBlock, getContainerBlock()), 
-                                newBlock.appendChild(dom.doc.createTextNode(" ")), 
-                                newBlock.appendChild(containerBlock)) : containerBlock.parentNode.insertBefore(newBlock, containerBlock) : isFirstOrLastLi() ? (dom.insertAfter(newBlock, getContainerBlock()), 
-                                renderBlockOnIE(newBlock)) : (containerBlock = getContainerBlock(), 
-                                (tmpRng = rng.cloneRange()).setStartAfter(parentBlock), 
-                                tmpRng.setEndAfter(containerBlock), fragment = tmpRng.extractContents(), 
-                                "LI" == newBlockName && "LI" == fragment.firstChild.nodeName ? (newBlock = fragment.firstChild, 
-                                dom.insertAfter(fragment, containerBlock)) : (dom.insertAfter(fragment, containerBlock), 
-                                dom.insertAfter(newBlock, containerBlock))), dom.remove(parentBlock), 
-                                moveToCaretPosition(newBlock), undoManager.add());
+                                for (i = firstChilds.length; i--; ) (!(node = firstChilds[i]).hasChildNodes() || node.firstChild == node.lastChild && "" === node.firstChild.nodeValue || "A" == node.nodeName && " " === (node.innerText || node.textContent)) && dom.remove(node);
                             }
-                            if ("PRE" == parentBlockName && !1 !== settings.br_in_pre) {
-                                if (!shiftKey) return insertBr();
-                            } else if (!newBlockName && !shiftKey && "LI" != parentBlockName || newBlockName && shiftKey) return insertBr();
-                            newBlockName && parentBlock === editor.getBody() || (newBlockName = newBlockName || "P", 
-                            (containerBlockParentName = (containerBlockParentName = parentBlock) && 3 === containerBlockParentName.nodeType ? containerBlockParentName.parentNode : containerBlockParentName) && 1 === containerBlockParentName.nodeType && containerBlockParentName.hasAttribute("data-mce-caret") ? (newBlock = (containerBlockParentName = parentBlock) && containerBlockParentName.hasAttribute("data-mce-caret") ? ((node = elm = (elm = (elm = containerBlockParentName).getElementsByTagName("br"))[elm.length - 1]) && 1 === node.nodeType && node.hasAttribute("data-mce-bogus") && elm.parentNode.removeChild(elm), 
-                            containerBlockParentName.removeAttribute("data-mce-caret"), 
-                            containerBlockParentName.removeAttribute("data-mce-bogus"), 
-                            containerBlockParentName.removeAttribute("style"), containerBlockParentName.removeAttribute("_moz_abspos"), 
-                            containerBlockParentName) : null, dom.isEmpty(parentBlock) && emptyBlock(parentBlock), 
-                            moveToCaretPosition(newBlock)) : isCaretAtStartOrEndOfBlock() ? insertNewBlockAfter() : isCaretAtStartOrEndOfBlock(!0) ? (renderBlockOnIE(newBlock = parentBlock.parentNode.insertBefore(createNewBlock(), parentBlock)), 
-                            moveToCaretPosition(newBlock)) : ((tmpRng = rng.cloneRange()).setEndAfter(parentBlock), 
-                            function(node) {
-                                for (;3 === node.nodeType && (node.nodeValue = node.nodeValue.replace(/^[\r\n]+/, "")), 
-                                node = node.firstChild; );
-                            }(fragment = tmpRng.extractContents()), newBlock = fragment.firstChild, 
-                            dom.insertAfter(fragment, parentBlock), function() {
-                                var i, node = newBlock, firstChilds = [];
-                                if (node) {
-                                    for (;node = node.firstChild; ) {
-                                        if (dom.isBlock(node)) return;
-                                        1 != node.nodeType || nonEmptyElementsMap[node.nodeName.toLowerCase()] || firstChilds.push(node);
-                                    }
-                                    for (i = firstChilds.length; i--; ) (!(node = firstChilds[i]).hasChildNodes() || node.firstChild == node.lastChild && "" === node.firstChild.nodeValue || "A" == node.nodeName && " " === (node.innerText || node.textContent)) && dom.remove(node);
-                                }
-                            }(), shiftKey = parentBlock, isIE || (shiftKey.normalize(), 
-                            (node = shiftKey.lastChild) && !/^(left|right)$/gi.test(dom.getStyle(node, "float", !0))) || dom.add(shiftKey, "br"), 
-                            dom.isEmpty(parentBlock) && emptyBlock(parentBlock), 
-                            !newBlock || dom.isEmpty(newBlock) ? (dom.remove(newBlock), 
-                            insertNewBlockAfter()) : moveToCaretPosition(newBlock), 
-                            newBlock.normalize()), dom.setAttrib(newBlock, "id", ""), 
-                            editor.onNewBlock.dispatch(editor, newBlock), undoManager.add());
-                        }
-                    } else editor.execCommand("Delete");
-                    function isFirstOrLastLi(first) {
-                        for (var node = containerBlock[first ? "firstChild" : "lastChild"]; node && 1 != node.nodeType; ) node = node[first ? "nextSibling" : "previousSibling"];
-                        return node === parentBlock;
+                        }(), shiftKey = parentBlock, isIE || (shiftKey.normalize(), 
+                        (node = shiftKey.lastChild) && !/^(left|right)$/gi.test(dom.getStyle(node, "float", !0))) || dom.add(shiftKey, "br"), 
+                        dom.isEmpty(parentBlock) && emptyBlock(parentBlock), !newBlock || dom.isEmpty(newBlock) ? (dom.remove(newBlock), 
+                        insertNewBlockAfter()) : moveToCaretPosition(newBlock), 
+                        newBlock.normalize()), dom.setAttrib(newBlock, "id", ""), 
+                        editor.onNewBlock.dispatch(editor, newBlock), undoManager.add());
                     }
-                    function getContainerBlock() {
-                        var containerBlockParent = containerBlock.parentNode;
-                        return /^(LI|DT|DD)$/.test(containerBlockParent.nodeName) ? containerBlockParent : containerBlock;
-                    }
-                }(evt), evt.preventDefault());
-            });
+                } else editor.execCommand("Delete");
+                function isFirstOrLastLi(first) {
+                    for (var node = containerBlock[first ? "firstChild" : "lastChild"]; node && 1 != node.nodeType; ) node = node[first ? "nextSibling" : "previousSibling"];
+                    return node === parentBlock;
+                }
+                function getContainerBlock() {
+                    var containerBlockParent = containerBlock.parentNode;
+                    return /^(LI|DT|DD)$/.test(containerBlockParent.nodeName) ? containerBlockParent : containerBlock;
+                }
+            }
+            return editor.onNewBlock = new tinymce.util.Dispatcher(), editor.onKeyDown.add(function(ed, evt) {
+                13 == evt.keyCode && (handleEnterKey(evt), evt.preventDefault());
+            }), {
+                handleEnterKey: handleEnterKey
+            };
         };
     }(tinymce), function(tinymce) {
         function bindFakeDragEvents(editor) {
@@ -12077,11 +12745,11 @@
             function processPhp(content) {
                 return ed.settings.code_allow_php ? (content = content.replace(/\="([^"]+?)"/g, function(a, b) {
                     return '="' + b.replace(/<\?(php)?(.+?)\?>/gi, function(x, y, z) {
-                        return "[php:start]" + ed.dom.encode(z) + "[php:end]";
+                        return "__php_start__" + ed.dom.encode(z) + "__php_end__";
                     }) + '"';
                 }), (content = (content = /<textarea/.test(content) ? content.replace(/<textarea([^>]*)>([\s\S]*?)<\/textarea>/gi, function(a, b, c) {
                     return "<textarea" + b + ">" + c.replace(/<\?(php)?(.+?)\?>/gi, function(x, y, z) {
-                        return "[php:start]" + ed.dom.encode(z) + "[php:end]";
+                        return "__php_start__" + ed.dom.encode(z) + "__php_end__";
                     }) + "</textarea>";
                 }) : content).replace(/<([^>]+)<\?(php)?(.+?)\?>([^>]*?)>/gi, function(a, b, c, d, e) {
                     return " " !== b.charAt(b.length) && (b += " "), "<" + b + 'data-mce-php="' + d + '" ' + e + ">";
@@ -12324,7 +12992,7 @@
                 ed.settings.code_allow_style || (o.content = o.content.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, "")), 
                 o.content = processPhp(o.content));
             }), ed.onPostProcess.add(function(ed, o) {
-                o.get && (/(data-mce-php|\[php:start\])/.test(o.content) && (o.content = o.content.replace(/({source})?\[php:\s?start\](.*?)\[php:\s?end\]/g, function(match, pre, code) {
+                o.get && (/(data-mce-php|__php_start__)/.test(o.content) && (o.content = o.content.replace(/({source})?__php_start__(.*?)__php_end__/g, function(match, pre, code) {
                     return (pre || "") + "<?php" + ed.dom.decode(code) + "?>";
                 }), o.content = o.content.replace(/<textarea([^>]*)>([\s\S]*?)<\/textarea>/gi, function(a, b, c) {
                     return "<textarea" + b + ">" + (/&lt;\?php/.test(c) ? ed.dom.decode(c) : c) + "</textarea>";

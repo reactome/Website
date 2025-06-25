@@ -162,7 +162,7 @@ abstract class WFUtility
         return self::stripExtension($path);
     }
 
-    public static function cleanPath($path, $ds = DIRECTORY_SEPARATOR, $prefix = '')
+    public static function cleanPath($path, $ds = '/', $prefix = '')
     {
         $path = trim(rawurldecode($path));
 
@@ -173,7 +173,7 @@ abstract class WFUtility
             }
         }
 
-        // clean path, removing double slashes, replacing back/forward slashes with DIRECTORY_SEPARATOR
+        /// Normalize slashes to forward slashes
         $path = preg_replace('#[/\\\\]+#', $ds, $path);
 
         // return path with prefix if any
@@ -208,9 +208,9 @@ abstract class WFUtility
      *
      * @return string path with trailing DIRECTORY_SEPARATOR
      */
-    public static function fixPath($path, $ds = DIRECTORY_SEPARATOR)
+    public static function fixPath($path)
     {
-        return self::cleanPath($path . $ds);
+        return self::cleanPath($path . '/');
     }
 
     private static function checkCharValue($string)
@@ -223,7 +223,7 @@ abstract class WFUtility
         // permitted characters below 127, eg: () Although reserved characters (sub-delims https://www.rfc-editor.org/rfc/rfc3986#section-2), probably OK in file paths
         $permitted = array(40, 41);
 
-        if (preg_match('#([^\w\.\-\/\\\\\s ])#i', $string, $matches)) {
+        if (preg_match('#([^\w\.\:\-\/\\\\\s ])#i', $string, $matches)) {
             foreach ($matches as $match) {
                 $ord = ord($match);
 
@@ -257,7 +257,7 @@ abstract class WFUtility
      *
      * @return string $a DIRECTORY_SEPARATOR $b
      */
-    public static function makePath($a, $b, $ds = DIRECTORY_SEPARATOR)
+    public static function makePath($a, $b, $ds = '/')
     {
         return self::cleanPath($a . $ds . $b, $ds);
     }

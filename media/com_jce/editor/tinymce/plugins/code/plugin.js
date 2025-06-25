@@ -1,4 +1,4 @@
-/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, Node = tinymce.html.Node, VK = tinymce.VK, DomParser = tinymce.html.DomParser, Serializer = tinymce.html.Serializer, SaxParser = tinymce.html.SaxParser;
     function createTextNode(value, raw) {
@@ -37,11 +37,11 @@
         function processPhp(content) {
             return ed.settings.code_allow_php ? (content = content.replace(/\="([^"]+?)"/g, function(a, b) {
                 return '="' + (b = b.replace(/<\?(php)?(.+?)\?>/gi, function(x, y, z) {
-                    return "[php:start]" + ed.dom.encode(z) + "[php:end]";
+                    return "__php_start__" + ed.dom.encode(z) + "__php_end__";
                 })) + '"';
             }), (content = (content = /<textarea/.test(content) ? content.replace(/<textarea([^>]*)>([\s\S]*?)<\/textarea>/gi, function(a, b, c) {
                 return "<textarea" + b + ">" + (c = c.replace(/<\?(php)?(.+?)\?>/gi, function(x, y, z) {
-                    return "[php:start]" + ed.dom.encode(z) + "[php:end]";
+                    return "__php_start__" + ed.dom.encode(z) + "__php_end__";
                 })) + "</textarea>";
             }) : content).replace(/<([^>]+)<\?(php)?(.+?)\?>([^>]*?)>/gi, function(a, b, c, d, e) {
                 return " " !== b.charAt(b.length) && (b += " "), "<" + b + 'data-mce-php="' + d + '" ' + e + ">";
@@ -285,7 +285,7 @@
             ed.settings.code_allow_style || (o.content = o.content.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, "")), 
             o.content = processPhp(o.content));
         }), ed.onPostProcess.add(function(ed, o) {
-            o.get && (/(data-mce-php|\[php:start\])/.test(o.content) && (o.content = o.content.replace(/({source})?\[php:\s?start\](.*?)\[php:\s?end\]/g, function(match, pre, code) {
+            o.get && (/(data-mce-php|__php_start__)/.test(o.content) && (o.content = o.content.replace(/({source})?__php_start__(.*?)__php_end__/g, function(match, pre, code) {
                 return (pre || "") + "<?php" + ed.dom.decode(code) + "?>";
             }), o.content = o.content.replace(/<textarea([^>]*)>([\s\S]*?)<\/textarea>/gi, function(a, b, c) {
                 return "<textarea" + b + ">" + (c = /&lt;\?php/.test(c) ? ed.dom.decode(c) : c) + "</textarea>";

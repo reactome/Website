@@ -1,4 +1,4 @@
-/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, Event = tinymce.dom.Event, extend = tinymce.extend;
     function isMediaObject(node) {
@@ -96,7 +96,8 @@
             }), form.add(descriptionCtrl), stylesListCtrl = cm.createStylesBox("image_class", {
                 label: ed.getLang("image.class", "Classes"),
                 onselect: function() {},
-                name: "classes"
+                name: "classes",
+                styles: params.custom_classes || []
             }), form.add(stylesListCtrl), ed.addCommand("mceImage", function() {
                 var node = ed.selection.getNode();
                 "IMG" == node.nodeName && isMediaObject(node) || ed.windowManager.open({
@@ -104,10 +105,12 @@
                     items: [ form ],
                     size: "mce-modal-landscape-small",
                     open: function() {
-                        var label = ed.getLang("insert", "Insert"), node = ed.selection.getNode(), src = "", alt = "";
+                        var label = ed.getLang("insert", "Insert"), node = ed.selection.getNode(), src = "", alt = "", classes = params.attributes.classes || "";
                         isImage(node) && ((src = ed.dom.getAttrib(node, "src")) && (label = ed.getLang("update", "Update")), 
-                        alt = ed.dom.getAttrib(node, "alt"), node = ed.dom.getAttrib(node, "class"), 
-                        stylesListCtrl.value(node)), urlCtrl.value(src), descriptionCtrl.value(alt), 
+                        alt = ed.dom.getAttrib(node, "alt"), classes = ed.dom.getAttrib(node, "class")), 
+                        classes = classes.replace(/mce-[\w\-]+/g, "").replace(/\s+/g, " ").trim().split(" ").filter(function(cls) {
+                            return "" !== cls.trim();
+                        }), urlCtrl.value(src), descriptionCtrl.value(alt), stylesListCtrl.value(classes), 
                         window.setTimeout(function() {
                             urlCtrl.focus();
                         }, 10), DOM.setHTML(this.id + "_insert", label);

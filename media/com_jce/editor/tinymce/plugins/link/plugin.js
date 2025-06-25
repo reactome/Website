@@ -1,4 +1,4 @@
-/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     function isAnchor(elm) {
         return elm && "a" === elm.nodeName.toLowerCase();
@@ -64,7 +64,7 @@
                 plugin_url: url
             });
         }), ed.addShortcut("meta+k", "link.desc", "mceLink"), ed.onPreInit.add(function() {
-            var form, args, params = ed.getParam("link", {}), params = extend({
+            var form, args, stylesListCtrl, params = ed.getParam("link", {}), params = extend({
                 attributes: {}
             }, params), isMobile = window.matchMedia("(max-width: 600px)").matches;
             !0 !== params.basic_dialog && !isMobile || (isMobile = ed.controlManager, 
@@ -118,21 +118,29 @@
                 _top: ed.getLang("link.target_top", "Open in top window")
             }, each(args, function(name, value) {
                 targetCtrl.add(name, value);
-            }), form.add(targetCtrl)), ed.addCommand("mceLink", function() {
+            }), form.add(targetCtrl)), !1 !== params.classes_ctrl && (stylesListCtrl = isMobile.createStylesBox("link_class", {
+                label: ed.getLang("link.class", "Classes"),
+                onselect: function() {},
+                name: "classes",
+                styles: params.custom_classes || []
+            }), form.add(stylesListCtrl)), ed.addCommand("mceLink", function() {
                 ed.windowManager.open({
                     title: ed.getLang("link.desc", "Link"),
                     items: [ form ],
                     size: "mce-modal-landscape-small",
                     open: function() {
-                        var label = ed.getLang("insert", "Insert"), node = ed.selection.getNode(), src = "", title = "", target = params.attributes.target || "", state = isOnlyTextSelected(ed), anchorNode = ed.dom.getParent(node, "a[href]"), start = (anchorNode && (ed.selection.select(anchorNode), 
-                        (src = ed.dom.getAttrib(anchorNode, "href")) && (label = ed.getLang("update", "Update")), 
+                        var label = ed.getLang("insert", "Insert"), node = ed.selection.getNode(), src = "", title = "", target = params.attributes.target || "", state = isOnlyTextSelected(ed), anchorNode = ed.dom.getParent(node, "a[href]"), classes = params.attributes.classes || "", start = (classes.trim().split(" ").filter(function(cls) {
+                            return "" !== cls.trim();
+                        }), anchorNode && (ed.selection.select(anchorNode), (src = ed.dom.getAttrib(anchorNode, "href")) && (label = ed.getLang("update", "Update")), 
                         tinymce.isIE && (start = ed.selection.getStart()) === ed.selection.getEnd() && "A" === start.nodeName && (anchorNode = start), 
                         hasFileSpan(anchorNode) && (state = !0), title = ed.dom.getAttrib(anchorNode, "title"), 
-                        target = ed.dom.getAttrib(anchorNode, "target")), getAnchorText(ed.selection, isAnchor(node) ? node : null) || "");
+                        target = ed.dom.getAttrib(anchorNode, "target"), classes = (classes = ed.dom.getAttrib(node, "class")).replace(/mce-[\w\-]+/g, "").replace(/\s+/g, " ").trim().split(" ").filter(function(cls) {
+                            return "" !== cls.trim();
+                        })), getAnchorText(ed.selection, isAnchor(node) ? node : null) || "");
                         node && node.hasAttribute("data-mce-item") && (state = !1), 
                         urlCtrl.value(src), textCtrl.value(start), textCtrl.setDisabled(!state), 
                         titleCtrl && titleCtrl.value(title), targetCtrl && targetCtrl.value(target), 
-                        window.setTimeout(function() {
+                        stylesListCtrl && stylesListCtrl.value(classes), window.setTimeout(function() {
                             urlCtrl.focus();
                         }, 10), DOM.setHTML(this.id + "_insert", label);
                     },

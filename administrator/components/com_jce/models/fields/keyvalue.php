@@ -91,17 +91,67 @@ class JFormFieldKeyValue extends FormField
         }
 
         $subForm = new Form($this->name, array('control' => $this->formControl));
-        $children = $this->element->children();
 
-        $subForm->load($children);
-        $subForm->setFields($children);
+        $children = (array) $this->element->children();
+
+        // if field has defined children
+        if (count($children)) {        
+            $children = $this->element->children();
+
+            $subForm->load($children, true);
+            $subForm->setFields($children);
+        } else {
+            $label  = $this->element['label'];
+
+            $xml    = '<form><fields name="' . $this->name . '">';
+
+            $keyName = 'name';
+            $keyLabel = 'WF_LABEL_NAME';
+
+            if (isset($this->element['keyName'])) {
+                $keyName = $this->element['keyName'];
+            }
+
+            if (isset($this->element['keyLabel'])) {
+                $keyLabel = htmlspecialchars($this->element['keyLabel'], ENT_QUOTES, 'UTF-8');
+            }
+
+            $xml .= '<field name="' . $keyName . '" type="text" label="' . $keyLabel . '" description="" />';
+
+            $valueName = 'value';
+            $valueLabel = 'WF_LABEL_VALUE';
+
+            if (isset($this->element['valueName'])) {
+                $valueName = $this->element['valueName'];
+            }
+
+            if (isset($this->element['valueLabel'])) {
+                $valueLabel = htmlspecialchars($this->element['valueLabel'], ENT_QUOTES, 'UTF-8');
+            }
+
+            $xml .= '<field name="' . $valueName . '" type="text" label="' . $valueLabel . '" description="" />';
+
+            if ($this->element['boolean']) {
+                $xml .= '<field name="boolean" type="checkbox" class="wf-keyvalue-boolean" label="' . Text::_('WF_LABEL_BOOLEAN') . '" description="" />';
+            }
+
+            $xml .= '</fields></form>';
+        
+            $subForm->load($xml);
+        }
 
         $fields = $subForm->getFieldset();
 
         // And finaly build a main container
         $str = array();
 
-        $str[] = '<div class="form-field-repeatable">';
+        $sortable = '';
+
+        if (isset($this->element['sortable'])) {
+            $sortable = ' data-sortable="' . $this->element['sortable'] . '"';
+        }
+
+        $str[] = '<div class="form-field-repeatable"' . $sortable . '>';
 
         foreach ($values as $value) {
             $str[] = '<div class="form-field-repeatable-item wf-keyvalue">';

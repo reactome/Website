@@ -1,4 +1,4 @@
-/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 WFAggregator.add("dailymotion", {
     params: {
         width: 480,
@@ -18,6 +18,12 @@ WFAggregator.add("dailymotion", {
             var v = parseInt(this.value, 10);
             v && ($("#width").val(v), $("#height").val(Math.round(16 * v / 9)));
         });
+        var attributes = this.params.attributes || {}, x = 0;
+        $.each(attributes, function(key, value) {
+            var $repeatable = $(".media_option.dailymotion .uk-repeatable"), $repeatable = (0 < x && ($repeatable.eq(0).clone(!0).appendTo($repeatable.parent()), 
+            $repeatable = $(".media_option.dailymotion .uk-repeatable")), $repeatable.eq(x).find("input, select"));
+            $repeatable.eq(0).val(key), $repeatable.eq(1).val(value), x++;
+        });
     },
     getTitle: function() {
         return this.title || this.name;
@@ -28,17 +34,22 @@ WFAggregator.add("dailymotion", {
     isSupported: function(v) {
         return !!v && !!/dai\.?ly(motion)?(\.com)?/.test(v) && "dailymotion";
     },
-    getValues: function(src) {
-        var self = this, data = {}, args = {}, id = "", m = (-1 !== src.indexOf("=") && $.extend(args, Wf.String.query(src)), 
+    getValues: function(data) {
+        var self = this, args = {}, id = "", src = data.src, m = (-1 !== src.indexOf("=") && $.extend(args, Wf.String.query(src)), 
         $("input[id], select[id]", "#dailymotion_options").each(function() {
-            var k = $(this).attr("id"), v = $(this).val(), k = k.substr(k.indexOf("_") + 1);
-            $(this).is(":checkbox") && (v = $(this).is(":checked") ? 1 : 0), -1 === k.indexOf("player_size") && self.props[k] !== v && "" !== v && (args[k] = v);
+            var k = $(this).attr("id"), v = $(this).val();
+            if (!k) return !0;
+            k = k.substr(k.indexOf("_") + 1), $(this).is(":checkbox") && (v = $(this).is(":checked") ? 1 : 0), 
+            -1 === k.indexOf("player_size") && self.props[k] !== v && "" !== v && (args[k] = v);
         }), src.match(/dai\.?ly(motion\.com)?\/(embed)?\/?(swf|video)?\/?([a-z0-9]+)_?/)), m = (src = "https://www.dailymotion.com/embed/video/" + (id = m ? m.pop() : id), 
         $.param(args));
         return m && (src = src + (/\?/.test(src) ? "&" : "?") + m), data.src = src, 
         $.extend(data, {
             frameborder: 0,
             allowfullscreen: "allowfullscreen"
+        }), $(".uk-repeatable", "#dailymotion_attributes").each(function() {
+            var elements = $("input, select", this), key = $(elements).eq(0).val(), elements = $(elements).eq(1).val();
+            key && (data["dailymotion_" + key] = elements);
         }), data;
     },
     setValues: function(data) {

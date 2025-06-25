@@ -1,4 +1,4 @@
-/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function(tinymce, tinyMCEPopup, $) {
     function trimSize(size) {
         return (size = size.replace(/([0-9\.]+)(px|%|in|cm|mm|em|ex|pt|pc)/i, "$1$2")) ? size.replace(/px$/, "") : "";
@@ -51,9 +51,11 @@
     var isHTML4 = "html4" === tinyMCEPopup.editor.settings.schema, isHTML5 = "html5-strict" === tinyMCEPopup.editor.settings.schema, TableDialog = {
         settings: {},
         init: function() {
-            var layout = tinyMCEPopup.getWindowArg("layout", "table");
+            var ed = tinyMCEPopup.editor, layout = tinyMCEPopup.getWindowArg("layout", "table");
             if (this.settings.file_browser || $("input.browser").removeClass("browser"), 
-            Wf.init(), "merge" == layout) return this.initMerge();
+            Wf.init({
+                classes: ed.getParam("table_classes_custom", [])
+            }), "merge" == layout) return this.initMerge();
             switch (isHTML5 && $("#axis, #abbr, #scope, #summary, #char, #charoff, #tframe, #nowrap, #rules, #cellpadding, #cellspacing").each(function() {
                 $(this).add('label[for="' + this.id + '"]').hide();
             }), layout) {

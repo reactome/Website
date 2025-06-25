@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension version="3.4" type="plugin" group="jce" method="upgrade">
     <name>WF_TABLE_TITLE</name>
-    <version>2.9.84</version>
-    <creationDate>24-03-2025</creationDate>
+    <version>2.9.88</version>
+    <creationDate>19-06-2025</creationDate>
     <author>Ryan Demmer</author>
     <authorEmail>info@joomlacontenteditor.net</authorEmail>
     <authorUrl>https://www.joomlacontenteditor.net/</authorUrl>
@@ -28,11 +28,17 @@
                     <option value="right">WF_TABLE_ALIGN_RIGHT</option>
                 </field>
                 <field name="classes" type="text" size="50" default="" label="WF_LABEL_CLASSES" description="WF_LABEL_CLASSES_DESC" />
-                <field name="pad_empty_cells" type="list" default="1" label="WF_TABLE_PAD_EMPTY_CELLS" description="WF_TABLE_PAD_EMPTY_CELLS_DESC">
-                    <option value="1">JYES</option>
-                    <option value="0">JNO</option>
-                </field>
+
             </fieldset>
+
+            <field name="pad_empty_cells" type="list" default="1" label="WF_TABLE_PAD_EMPTY_CELLS" description="WF_TABLE_PAD_EMPTY_CELLS_DESC">
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
+
+            <field name="custom_classes" type="repeatable" default="" label="WF_LABEL_CUSTOM_CLASSES" description="WF_LABEL_CUSTOM_CLASSES_DESC">
+                <field type="text" size="50" hiddenLabel="true" />
+            </field>
 
             <field name="basic_dialog" type="yesno" default="0" label="WF_PARAM_BASIC_DIALOG" description="WF_PARAM_BASIC_DIALOG_DESC" class="btn-group btn-group-yesno">
                 <option value="1">JYES</option>

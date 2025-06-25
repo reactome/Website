@@ -1,10 +1,10 @@
-/* jce - 2.9.84 | 2025-03-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function($, tinyMCEPopup) {
     var anchorElm, currNode, emailRex = /(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})/;
     var LinkDialog = {
         settings: {},
         init: function() {
-            var data, x, self = this, ed = tinyMCEPopup.editor, se = ed.selection, api = ed.plugins.link, state = (tinyMCEPopup.restoreSelection(), 
+            var data, x, $repeatable, self = this, ed = tinyMCEPopup.editor, se = ed.selection, api = ed.plugins.link, params = ed.getParam("link", {}), params = (tinyMCEPopup.restoreSelection(), 
             $("button#insert").on("click", function(e) {
                 self.insert(), e.preventDefault();
             }), this.settings.file_browser || $("#href").removeClass("browser"), 
@@ -61,12 +61,14 @@
             }), $(window).on("keydown", function(e) {
                 13 === e.keyCode && $("#search-input").is(":focus") && (self._search(), 
                 e.preventDefault(), e.stopPropagation());
-            }), WFPopups.setup(), Wf.init(), $("#text").on("change", function() {
+            }), WFPopups.setup(), Wf.init({
+                classes: params.custom_classes || []
+            }), $("#text").on("change", function() {
                 $(this).data("text", this.value);
             }).data("text", ""), api.isOnlyTextSelected(ed));
             currNode = se.getNode(), anchorElm = ed.dom.getParent(currNode, "a[href]"), 
             api.isAnchor(anchorElm) ? (se.select(anchorElm), tinymce.isIE && (start = se.getStart()) === se.getEnd() && "A" === start.nodeName && (anchorElm = start), 
-            api.hasFileSpan(anchorElm) && (state = !0), $(".uk-button-text", "#insert").text(tinyMCEPopup.getLang("update", "Update", !0)), 
+            api.hasFileSpan(anchorElm) && (params = !0), $(".uk-button-text", "#insert").text(tinyMCEPopup.getLang("update", "Update", !0)), 
             start = ed.convertURL(ed.dom.getAttrib(anchorElm, "href")), $("#href").val(start), 
             $.each([ "title", "id", "style", "dir", "lang", "tabindex", "accesskey", "charset", "hreflang", "target" ], function(i, k) {
                 $("#" + k).val(ed.dom.getAttrib(anchorElm, k));
@@ -84,21 +86,22 @@
                     "_" !== name.charAt(0) && -1 === name.indexOf("-mce-") && (attribs[name] = value);
                 }
                 return attribs;
-            }(anchorElm), $.each(start, function(key, val) {
+            }(anchorElm), $repeatable = $(".uk-repeatable", "#custom_attributes"), 
+            $.each(start, function(key, val) {
                 if ("data-mouseover" === key || "data-mouseout" === key || 0 === key.indexOf("on")) return !0;
                 if (document.getElementById(key) || "class" == key) return !0;
                 try {
                     val = decodeURIComponent(val);
                 } catch (e) {}
-                var repeatable = $(".uk-repeatable").eq(0), repeatable = (0 < x && $(repeatable).clone(!0).appendTo($(repeatable).parent()), 
-                $(".uk-repeatable").eq(x).find("input, select"));
-                $(repeatable).eq(0).val(key), $(repeatable).eq(1).val(val), x++;
+                0 < x && $repeatable.clone(!0).appendTo($repeatable.parent());
+                var elements = $repeatable.eq(x).find("input, select");
+                $(elements).eq(0).val(key), $(elements).eq(1).val(val), x++;
             })) : Wf.setDefaults(this.settings.defaults);
             var start = api.getAnchorText(se, api.isAnchor(anchorElm) ? anchorElm : null) || "";
-            currNode && currNode.hasAttribute("data-mce-item") && (state = !1, ed.selection.select(currNode)), 
-            function(state, txt) {
+            currNode && currNode.hasAttribute("data-mce-item") && (params = !1, 
+            ed.selection.select(currNode)), function(state, txt) {
                 (state ? $("#text").val(txt).attr("disabled", !1) : $("#text").val("").attr("disabled", !0)).trigger("change");
-            }(state, start), $.each(this.settings.attributes, function(k, v) {
+            }(params, start), $.each(this.settings.attributes, function(k, v) {
                 0 === parseInt(v, 10) && $("#attributes-" + k).hide();
             }), "html5" == ed.settings.schema && ed.settings.validate && $("#rev").parent().parent().hide(), 
             $("select").datalist().trigger("datalist:update"), $(".uk-datalist").trigger("datalist:update"), 
@@ -146,7 +149,7 @@
                 var v = $("#" + k).val(), v = tinymce.trim(v);
                 "href" == k && (v = Wf.String.buildURI(v)), "class" == k && (v = $("#classes").val() || "", 
                 v = $.trim(v)), args[k] = v;
-            }), $(".uk-repeatable").each(function() {
+            }), $(".uk-repeatable", "#custom_attributes").each(function() {
                 var elements = $("input, select", this), key = $(elements).eq(0).val(), elements = $(elements).eq(1).val();
                 key && (args[key] = elements);
             }), ed.settings.allow_unsafe_link_target || (args.rel = (rel = args.rel, 
