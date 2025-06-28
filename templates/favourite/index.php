@@ -77,6 +77,8 @@ $favcolumns = 6;
     <!-- Custom: rglyph fonts -->
     <link rel="stylesheet" href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template;?>/rglyph/rglyph.css" />
 
+    <!-- Custom: IcoMoon fonts -->
+    <link rel="stylesheet" href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template;?>/icomoon/style.css" />      
  
     <!-- custom: icon for phone app -->
     <link rel="apple-touch-icon" sizes="128x128" href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template;?>/images/logo/icon.png">
