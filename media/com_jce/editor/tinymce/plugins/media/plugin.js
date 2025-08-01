@@ -1,4 +1,4 @@
-/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.89 | 2025-07-16 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, extend = tinymce.extend, Node = tinymce.html.Node, VK = tinymce.VK, Serializer = tinymce.html.Serializer, DomParser = tinymce.html.DomParser, SaxParser = tinymce.html.SaxParser, DOM = tinymce.DOM;
     function indexOf(array, item) {
@@ -233,7 +233,7 @@
         return !editor.settings["media_" + tag + "_allow_local"] || isLocalUrl(editor, url);
     }
     function isSupportedMedia(editor, url, type) {
-        var ext = (url = stripQuery(url)).split(".").pop().toLowerCase(), audioExts = [ "mp3", "ogg", "webm", "wav", "m4a", "aiff" ], videoExts = [ "mp4", "ogv", "ogg", "webm", "mov", "qt", "mpg", "mpeg", "divx" ];
+        var ext = (url = stripQuery(url = url || "")).split(".").pop().toLowerCase(), audioExts = [ "mp3", "ogg", "webm", "wav", "m4a", "aiff" ], videoExts = [ "mp4", "ogv", "ogg", "webm", "mov", "qt", "mpg", "mpeg", "divx" ];
         if ((type = (type || "").toLowerCase()).startsWith("audio/")) {
             if (-1 === indexOf(audioExts, ext)) return !1;
             if (isValidElement(editor, "audio") && isSupportedUrl(editor, "audio", url)) return "audio";
@@ -300,7 +300,7 @@
     }
     function stripQuery(value) {
         var match;
-        return !!value && ((match = value.match(/^(.*?\.[a-z0-9]{2,10})(?:[?#&].*|$)/i)) ? match[1] : value);
+        return value && ((match = value.match(/^(.*?\.[a-z0-9]{2,10})(?:[?#&].*|$)/i)) ? match[1] : value);
     }
     for (var y, ext, lookup = {}, mimes = {}, items = "video/divx,divx,application/pdf,pdf,application/x-shockwave-flash,swf swfl,audio/mpeg,mpga mpega mp2 mp3,audio/ogg,ogg spx oga,audio/x-wav,wav,video/mpeg,mpeg mpg mpe,video/mp4,mp4 m4v,video/ogg,ogg ogv,video/webm,webm,video/quicktime,qt mov,video/x-flv,flv,video/3gpp,3gp,video/x-matroska,mkv".split(/,/), i = 0; i < items.length; i += 2) for (ext = items[i + 1].split(/ /), 
     y = 0; y < ext.length; y++) mimes[ext[y]] = items[i];

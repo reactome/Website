@@ -1,4 +1,4 @@
-/* jce - 2.9.88 | 2025-06-19 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.89 | 2025-07-16 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, Node = tinymce.html.Node, VK = tinymce.VK, DomParser = tinymce.html.DomParser, Serializer = tinymce.html.Serializer, SaxParser = tinymce.html.SaxParser;
     function createTextNode(value, raw) {
@@ -58,7 +58,7 @@
         function processXML(content) {
             return content.replace(/<([a-z0-9\-_\:\.]+)(?:[^>]*?)\/?>((?:[\s\S]*?)<\/\1>)?/gi, function(match, tag) {
                 var html;
-                return ("svg" !== tag || !1 !== ed.settings.code_allow_svg_in_xml) && ("math" !== tag || !1 !== ed.settings.code_allow_mathml_in_xml) && isXmlElement(tag) ? (!1 !== ed.settings.code_validate_xml && (tag = match, 
+                return ("svg" !== (tag = tag.toLowerCase()) || !1 !== ed.settings.code_allow_svg_in_xml) && ("math" !== tag || !1 !== ed.settings.code_allow_mathml_in_xml) && isXmlElement(tag) ? (!1 !== ed.settings.code_validate_xml && (tag = match, 
                 html = [], new SaxParser({
                     start: function(name, attrs, empty) {
                         if (isValid(name)) {

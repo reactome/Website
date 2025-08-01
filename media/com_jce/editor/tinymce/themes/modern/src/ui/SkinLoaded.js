@@ -1,0 +1,15 @@
+/* jce - 2.9.89 | 2025-07-16 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+import Events from "../api/Events";
+
+var fireSkinLoaded = function(editor) {
+    function done() {
+        editor._skinLoaded = !0, Events.fireSkinLoaded(editor);
+    }
+    return function() {
+        editor.initialized ? done() : editor.on("init", done);
+    };
+};
+
+export default {
+    fireSkinLoaded: fireSkinLoaded
+};

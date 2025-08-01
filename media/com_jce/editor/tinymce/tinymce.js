@@ -155,11 +155,11 @@
         tinymce.text = {}, tinymce.caret = {}, tinymce.clipboard = {}, tinymce.html = {}, 
         tinymce.ui = {}, tinymce.util = {}, tinymce.file = {}, tinymce.plugins = {};
     }(window);
-    var userAgent = (nav = navigator).userAgent;
+    var webkit, userAgent = (nav = navigator).userAgent;
     function matchMediaQuery(query) {
         return "matchMedia" in window && matchMedia(query).matches;
     }
-    var func, isTouchEnabled = 1 < navigator.maxTouchPoints, opera = window.opera && window.opera.buildNumber, android = /Android/.test(userAgent), nav = !(webkit = /WebKit/.test(userAgent)) && !opera && /MSIE/gi.test(userAgent) && /Explorer/gi.test(nav.appName) && /MSIE (\w+)\./.exec(userAgent)[1] && !webkit, gecko = !webkit && !nav && /Gecko/.test(userAgent), mac = -1 != userAgent.indexOf("Mac"), isIOS = /(iPad|iPhone)/.test(userAgent) || (isIOS = /iPad/.test(userAgent), 
+    var mouseEventRe, deprecated, isTouchEnabled = 1 < navigator.maxTouchPoints, opera = window.opera && window.opera.buildNumber, android = /Android/.test(userAgent), nav = !(webkit = /WebKit/.test(userAgent)) && !opera && /MSIE/gi.test(userAgent) && /Explorer/gi.test(nav.appName) && /MSIE (\w+)\./.exec(userAgent)[1] && !webkit, gecko = !webkit && !nav && /Gecko/.test(userAgent), mac = -1 != userAgent.indexOf("Mac"), isIOS = /(iPad|iPhone)/.test(userAgent) || (isIOS = /iPad/.test(userAgent), 
     hasMacLikeUserAgent = /Macintosh/.test(userAgent), isIOS) || isTouchEnabled && hasMacLikeUserAgent, hasMacLikeUserAgent = "FormData" in window && "FileReader" in window && "URL" in window && !!URL.createObjectURL, phone = matchMediaQuery("only screen and (max-device-width: 480px)") && (android || isIOS), tablet = matchMediaQuery("only screen and (min-width: 800px)") && (android || isIOS), windowsPhone = -1 != userAgent.indexOf("Windows Phone"), contentEditable = !isIOS || hasMacLikeUserAgent || 534 <= userAgent.match(/AppleWebKit\/(\d*)/)[1], count = (tinymce.util.Env = {
         opera: opera,
         webkit: webkit,
@@ -608,7 +608,8 @@
         function isSelectionAcrossElements() {
             return !selection.isCollapsed() && dom.getParent(selection.getStart(), dom.isBlock) != dom.getParent(selection.getEnd(), dom.isBlock);
         }
-        editor.onKeyUp.add(normalize), editor.onMouseUp.add(normalize), editor.onKeyDown.add(function(editor, e) {
+        editor.onKeyUp.addToTop(normalize), editor.onMouseUp.addToTop(normalize), 
+        editor.onKeyDown.add(function(editor, e) {
             var container, offset, root, parent;
             if (!isDefaultPrevented(e) && e.keyCode == VK.BACKSPACE && (container = (e = selection.getRng()).startContainer, 
             offset = e.startOffset, root = dom.getRoot(), parent = container, e.collapsed) && 0 === offset) {
@@ -841,23 +842,25 @@
         }), disableBackspaceIntoATable(), selectControlElements());
     }, function(tinymce) {
         var previewElm, each = tinymce.each, extend = tinymce.extend, rgba = {}, luma = {};
+        function getRGBA(val) {
+            var r, b, g, a, values, match;
+            return rgba[val] || (g = b = r = 0, -(a = 1) !== val.indexOf("#") ? (3 === (val = val.substr(1)).length && (val += val), 
+            r = parseInt(val.substring(0, 2), 16), g = parseInt(val.substring(2, 4), 16), 
+            b = parseInt(val.substring(4, 6), 16), 6 < val.length && (a = +((a = parseInt(val.substring(6, 8), 16)) / 255).toFixed(2))) : (val = val.replace(/\s/g, ""), 
+            (values = (match = /^(?:rgb|rgba)\(([^\)]*)\)$/.exec(val)) ? match[1].split(",").map(function(x) {
+                return parseFloat(x);
+            }) : values) && (r = values[0], g = values[1], b = values[2], 4 === values.length) && (a = values[3] || 1)), 
+            rgba[val] = {
+                r: r,
+                g: g,
+                b: b,
+                a: a
+            }), rgba[val];
+        }
         function getLuminance(val) {
             var RsRGB, GsRGB, col;
-            return luma[val] || (RsRGB = (col = function(val) {
-                var r, b, g, a, values, match;
-                return rgba[val] || (g = b = r = 0, -(a = 1) !== val.indexOf("#") ? (3 === (val = val.substr(1)).length && (val += val), 
-                r = parseInt(val.substring(0, 2), 16), g = parseInt(val.substring(2, 4), 16), 
-                b = parseInt(val.substring(4, 6), 16), 6 < val.length && (a = +((a = parseInt(val.substring(6, 8), 16)) / 255).toFixed(2))) : (val = val.replace(/\s/g, ""), 
-                (values = (match = /^(?:rgb|rgba)\(([^\)]*)\)$/.exec(val)) ? match[1].split(",").map(function(x) {
-                    return parseFloat(x);
-                }) : values) && (r = values[0], g = values[1], b = values[2], 4 === values.length) && (a = values[3] || 1)), 
-                rgba[val] = {
-                    r: r,
-                    g: g,
-                    b: b,
-                    a: a
-                }), rgba[val];
-            }(val)).r / 255, GsRGB = col.g / 255, col = col.b / 255, RsRGB = RsRGB <= .03928 ? RsRGB / 12.92 : Math.pow((.055 + RsRGB) / 1.055, 2.4), 
+            return luma[val] || (RsRGB = (col = getRGBA(val)).r / 255, GsRGB = col.g / 255, 
+            col = col.b / 255, RsRGB = RsRGB <= .03928 ? RsRGB / 12.92 : Math.pow((.055 + RsRGB) / 1.055, 2.4), 
             GsRGB = GsRGB <= .03928 ? GsRGB / 12.92 : Math.pow((.055 + GsRGB) / 1.055, 2.4), 
             col = col <= .03928 ? col / 12.92 : Math.pow((.055 + col) / 1.055, 2.4), 
             luma[val] = .2126 * RsRGB + .7152 * GsRGB + .0722 * col), luma[val];
@@ -865,6 +868,17 @@
         function isReadable(color1, color2) {
             return color1 = getLuminance(color1), color2 = getLuminance(color2), 
             2 <= (Math.max(color1, color2) + .05) / (Math.min(color1, color2) + .05);
+        }
+        function hslToRgb(h, s, l) {
+            function hue2rgb(p, q, t) {
+                return t < 0 && (t += 1), 1 < t && --t, t < 1 / 6 ? p + 6 * (q - p) * t : t < .5 ? q : t < 2 / 3 ? p + (q - p) * (2 / 3 - t) * 6 : p;
+            }
+            var r, g, b;
+            return h /= 360, 0 === s ? r = g = b = l : (r = hue2rgb(s = 2 * l - (l = l < .5 ? l * (1 + s) : l + s - l * s), l, h + 1 / 3), 
+            g = hue2rgb(s, l, h), b = hue2rgb(s, l, h - 1 / 3)), [ Math.round(255 * r), Math.round(255 * g), Math.round(255 * b) ];
+        }
+        function getContrastRatio(c1, c2) {
+            return c1 = getLuminance(c1), c2 = getLuminance(c2), (Math.max(c1, c2) + .05) / (Math.min(c1, c2) + .05);
         }
         function resetElm() {
             previewElm && previewElm.parentNode && (previewElm.parentNode.removeChild(previewElm), 
@@ -896,8 +910,34 @@
                 }), previewElm.setAttribute("data-mce-type", "temp");
                 for (var bodybg = dom.getStyle(ed.getBody(), "background-color", !0), elmbg = dom.getStyle(previewElm, "background-color", !0), styles = previewStyles.split(" "), css = "", i = 0, len = styles.length; i < len; i++) {
                     var key = styles[i], value = dom.getStyle(previewElm, key, !0);
-                    previewCss[key] || (value = ("color" != key || isReadable(value, elmbg = /transparent|rgba\s*\([^)]+,\s*0\)/.test(elmbg) ? "rgb(255, 255, 255)" : elmbg) ? value : value && isReadable(value, bodybg) ? bodybg : "inherit") || "inherit", 
-                    "font-size" == key && 0 === parseInt(value, 10) && (value = "inherit"), 
+                    previewCss[key] || (value = ("color" != key || isReadable(value, elmbg = /transparent|rgba\s*\([^)]+,\s*0\)/.test(elmbg) ? "rgb(255, 255, 255)" : elmbg) ? value : value && isReadable(value, bodybg) ? bodybg : function(fgColor, bgColor, targetContrast, iterations) {
+                        if (null == iterations && (iterations = 20), getContrastRatio(fgColor, bgColor) >= targetContrast) return fgColor;
+                        for (var r = (col = getRGBA(fgColor)).r, g = col.g, col = col.b, lighten = getLuminance(fgColor) > getLuminance(bgColor), h = (fgColor = function(r, g, b) {
+                            r /= 255, g /= 255, b /= 255;
+                            var max = Math.max(r, g, b), l = (max + (min = Math.min(r, g, b))) / 2, d = max - min, h = 0, min = 0;
+                            if (0 != d) {
+                                switch (max) {
+                                  case r:
+                                    h = (g - b) / d + (g < b ? 6 : 0);
+                                    break;
+
+                                  case g:
+                                    h = (b - r) / d + 2;
+                                    break;
+
+                                  case b:
+                                    h = (r - g) / d + 4;
+                                }
+                                h *= 60, min = d / (1 - Math.abs(2 * l - 1));
+                            }
+                            return [ h, min, l ];
+                        }(r, g, col))[0], s = fgColor[1], origL = fgColor[2], low = 0, high = 1, bestL = origL, i = 0; i < iterations; i++) {
+                            var mid = (low + high) / 2, testL = lighten ? origL + mid * (1 - origL) : origL - mid * origL, rgb = hslToRgb(h, s, testL);
+                            getContrastRatio("#" + ("0" + rgb[0].toString(16)).slice(-2) + ("0" + rgb[1].toString(16)).slice(-2) + ("0" + rgb[2].toString(16)).slice(-2), bgColor) >= targetContrast ? (bestL = testL, 
+                            high = mid) : low = mid;
+                        }
+                        return "#" + ("0" + (r = hslToRgb(h, s, bestL))[0].toString(16)).slice(-2) + ("0" + r[1].toString(16)).slice(-2) + ("0" + r[2].toString(16)).slice(-2);
+                    }(value, elmbg, 2)) || "inherit", "font-size" == key && 0 === parseInt(value, 10) && (value = "inherit"), 
                     css += key + ":" + (previewCss[key] = value) + ";");
                 }
                 return reset && resetElm(), css;
@@ -1026,6 +1066,23 @@
             },
             noop: function() {}
         };
+    }(tinymce), function(tinymce) {
+        var extendingChars = new RegExp("[\u0300-\u036f\u0483-\u0487\u0488-\u0489\u0591-\u05bd\u05bf\u05c1-\u05c2\u05c4-\u05c5\u05c7\u0610-\u061a\u064b-\u065f\u0670\u06d6-\u06dc\u06df-\u06e4\u06e7-\u06e8\u06ea-\u06ed\u0711\u0730-\u074a\u07a6-\u07b0\u07eb-\u07f3\u0816-\u0819\u081b-\u0823\u0825-\u0827\u0829-\u082d\u0859-\u085b\u08e3-\u0902\u093a\u093c\u0941-\u0948\u094d\u0951-\u0957\u0962-\u0963\u0981\u09bc\u09be\u09c1-\u09c4\u09cd\u09d7\u09e2-\u09e3\u0a01-\u0a02\u0a3c\u0a41-\u0a42\u0a47-\u0a48\u0a4b-\u0a4d\u0a51\u0a70-\u0a71\u0a75\u0a81-\u0a82\u0abc\u0ac1-\u0ac5\u0ac7-\u0ac8\u0acd\u0ae2-\u0ae3\u0b01\u0b3c\u0b3e\u0b3f\u0b41-\u0b44\u0b4d\u0b56\u0b57\u0b62-\u0b63\u0b82\u0bbe\u0bc0\u0bcd\u0bd7\u0c00\u0c3e-\u0c40\u0c46-\u0c48\u0c4a-\u0c4d\u0c55-\u0c56\u0c62-\u0c63\u0c81\u0cbc\u0cbf\u0cc2\u0cc6\u0ccc-\u0ccd\u0cd5-\u0cd6\u0ce2-\u0ce3\u0d01\u0d3e\u0d41-\u0d44\u0d4d\u0d57\u0d62-\u0d63\u0dca\u0dcf\u0dd2-\u0dd4\u0dd6\u0ddf\u0e31\u0e34-\u0e3a\u0e47-\u0e4e\u0eb1\u0eb4-\u0eb9\u0ebb-\u0ebc\u0ec8-\u0ecd\u0f18-\u0f19\u0f35\u0f37\u0f39\u0f71-\u0f7e\u0f80-\u0f84\u0f86-\u0f87\u0f8d-\u0f97\u0f99-\u0fbc\u0fc6\u102d-\u1030\u1032-\u1037\u1039-\u103a\u103d-\u103e\u1058-\u1059\u105e-\u1060\u1071-\u1074\u1082\u1085-\u1086\u108d\u109d\u135d-\u135f\u1712-\u1714\u1732-\u1734\u1752-\u1753\u1772-\u1773\u17b4-\u17b5\u17b7-\u17bd\u17c6\u17c9-\u17d3\u17dd\u180b-\u180d\u18a9\u1920-\u1922\u1927-\u1928\u1932\u1939-\u193b\u1a17-\u1a18\u1a1b\u1a56\u1a58-\u1a5e\u1a60\u1a62\u1a65-\u1a6c\u1a73-\u1a7c\u1a7f\u1ab0-\u1abd\u1abe\u1b00-\u1b03\u1b34\u1b36-\u1b3a\u1b3c\u1b42\u1b6b-\u1b73\u1b80-\u1b81\u1ba2-\u1ba5\u1ba8-\u1ba9\u1bab-\u1bad\u1be6\u1be8-\u1be9\u1bed\u1bef-\u1bf1\u1c2c-\u1c33\u1c36-\u1c37\u1cd0-\u1cd2\u1cd4-\u1ce0\u1ce2-\u1ce8\u1ced\u1cf4\u1cf8-\u1cf9\u1dc0-\u1df5\u1dfc-\u1dff\u200c-\u200d\u20d0-\u20dc\u20dd-\u20e0\u20e1\u20e2-\u20e4\u20e5-\u20f0\u2cef-\u2cf1\u2d7f\u2de0-\u2dff\u302a-\u302d\u302e-\u302f\u3099-\u309a\ua66f\ua670-\ua672\ua674-\ua67d\ua69e-\ua69f\ua6f0-\ua6f1\ua802\ua806\ua80b\ua825-\ua826\ua8c4\ua8e0-\ua8f1\ua926-\ua92d\ua947-\ua951\ua980-\ua982\ua9b3\ua9b6-\ua9b9\ua9bc\ua9e5\uaa29-\uaa2e\uaa31-\uaa32\uaa35-\uaa36\uaa43\uaa4c\uaa7c\uaab0\uaab2-\uaab4\uaab7-\uaab8\uaabe-\uaabf\uaac1\uaaec-\uaaed\uaaf6\uabe5\uabe8\uabed\ufb1e\ufe00-\ufe0f\ufe20-\ufe2f\uff9e-\uff9f]");
+        tinymce.text.ExtendingChar = {
+            isExtendingChar: function(ch) {
+                return "string" == typeof ch && 768 <= ch.charCodeAt(0) && extendingChars.test(ch);
+            }
+        };
+    }(tinymce), function(tinymce) {
+        tinymce.text.Zwsp = {
+            isZwsp: function(chr) {
+                return "\ufeff" === chr;
+            },
+            ZWSP: "\ufeff",
+            trim: function(text) {
+                return text.replace(new RegExp("\ufeff", "g"), "");
+            }
+        };
     }(tinymce), tinymce.util.Arr), contentEditable = tinymce.util.Fun, Uuid = tinymce.util.Uuid, cache = [], constant = contentEditable.constant;
     function get(id) {
         return findFirst(function(cachedBlobInfo) {
@@ -1040,6 +1097,149 @@
         return uri = decodeURIComponent(uri).split(","), {
             type: type = (matches = /data:([^;]+)/.exec(uri[0])) ? matches[1] : type,
             data: uri[1]
+        };
+    }
+    function addEvent(target, name, callback, capture) {
+        target.addEventListener(name, callback, capture || !1);
+    }
+    function removeEvent(target, name, callback, capture) {
+        target.removeEventListener(name, callback, capture || !1);
+    }
+    function fix(originalEvent, data) {
+        var name, doc, event = data || {};
+        function returnFalse() {
+            return !1;
+        }
+        function returnTrue() {
+            return !0;
+        }
+        for (name in originalEvent) deprecated[name] || (event[name] = originalEvent[name]);
+        return event.target || (event.target = event.srcElement || document), originalEvent && mouseEventRe.test(originalEvent.type) && void 0 === originalEvent.pageX && void 0 !== originalEvent.clientX && (doc = (data = event.target.ownerDocument || document).documentElement, 
+        data = data.body, event.pageX = originalEvent.clientX + (doc && doc.scrollLeft || data && data.scrollLeft || 0) - (doc && doc.clientLeft || data && data.clientLeft || 0), 
+        event.pageY = originalEvent.clientY + (doc && doc.scrollTop || data && data.scrollTop || 0) - (doc && doc.clientTop || data && data.clientTop || 0)), 
+        event.preventDefault = function() {
+            event.isDefaultPrevented = returnTrue, originalEvent && originalEvent.preventDefault();
+        }, event.stopPropagation = function() {
+            event.isPropagationStopped = returnTrue, originalEvent && originalEvent.stopPropagation();
+        }, event.stopImmediatePropagation = function() {
+            event.isImmediatePropagationStopped = returnTrue, event.stopPropagation();
+        }, event.isDefaultPrevented || (event.isDefaultPrevented = returnFalse, 
+        event.isPropagationStopped = returnFalse, event.isImmediatePropagationStopped = returnFalse), 
+        event;
+    }
+    function EventUtils() {
+        var count, expando, hasFocusIn, hasMouseEnterLeave, mouseEnterLeave, self = this, events = {};
+        function executeHandlers(evt, id) {
+            var i, l, callback, callbackList = (id = events[id]) && id[evt.type];
+            if (callbackList) for (i = 0, l = callbackList.length; i < l; i++) if ((callback = callbackList[i]) && !1 === callback.func.call(callback.scope, evt) && evt.preventDefault(), 
+            evt.isImmediatePropagationStopped()) return;
+        }
+        expando = "mce-data-" + (+new Date()).toString(32), hasMouseEnterLeave = "onmouseenter" in document.documentElement, 
+        hasFocusIn = "onfocusin" in document.documentElement, count = 1, self.domLoaded = !(mouseEnterLeave = {
+            mouseenter: "mouseover",
+            mouseleave: "mouseout"
+        }), self.events = events, self.bind = function(target, names, callback, scope) {
+            var id, callbackList, i, name, fakeName, nativeHandler, capture, win = window;
+            function defaultNativeHandler(evt) {
+                executeHandlers(fix(evt || win.event), id);
+            }
+            if (target && 3 !== target.nodeType && 8 !== target.nodeType) {
+                for (target[expando] ? id = target[expando] : (id = count++, target[expando] = id, 
+                events[id] = {}), scope = scope || target, i = (names = names.split(" ")).length; i--; ) nativeHandler = defaultNativeHandler, 
+                fakeName = capture = !1, "DOMContentLoaded" === (name = names[i]) && (name = "ready"), 
+                self.domLoaded && "ready" === name && "complete" == target.readyState ? callback.call(scope, fix({
+                    type: name
+                })) : (hasMouseEnterLeave || (fakeName = mouseEnterLeave[name]) && (nativeHandler = function(evt) {
+                    var current = evt.currentTarget, related = evt.relatedTarget;
+                    if (related && current.contains) related = current.contains(related); else for (;related && related !== current; ) related = related.parentNode;
+                    related || ((evt = fix(evt || win.event)).type = "mouseout" === evt.type ? "mouseleave" : "mouseenter", 
+                    evt.target = current, executeHandlers(evt, id));
+                }), hasFocusIn || "focusin" !== name && "focusout" !== name || (capture = !0, 
+                fakeName = "focusin" === name ? "focus" : "blur", nativeHandler = function(evt) {
+                    (evt = fix(evt || win.event)).type = "focus" === evt.type ? "focusin" : "focusout", 
+                    executeHandlers(evt, id);
+                }), (callbackList = events[id][name]) ? "ready" === name && self.domLoaded ? callback({
+                    type: name
+                }) : callbackList.push({
+                    func: callback,
+                    scope: scope
+                }) : (events[id][name] = callbackList = [ {
+                    func: callback,
+                    scope: scope
+                } ], callbackList.fakeName = fakeName, callbackList.capture = capture, 
+                callbackList.nativeHandler = nativeHandler, "ready" === name ? function(win, callback, eventUtils) {
+                    var doc = win.document, event = {
+                        type: "ready"
+                    };
+                    function readyHandler() {
+                        eventUtils.domLoaded || (eventUtils.domLoaded = !0, callback(event));
+                    }
+                    eventUtils.domLoaded ? callback(event) : ("complete" === doc.readyState ? readyHandler() : addEvent(win, "DOMContentLoaded", readyHandler), 
+                    addEvent(win, "load", readyHandler));
+                }(target, nativeHandler, self) : addEvent(target, fakeName || name, nativeHandler, capture)));
+                return target = callbackList = 0, callback;
+            }
+        }, self.unbind = function(target, names, callback) {
+            var id, i, ci, name, eventMap, nativeHandler, fakeName, capture, callbackList;
+            if (target && 3 !== target.nodeType && 8 !== target.nodeType && (id = target[expando])) {
+                if (eventMap = events[id], names) {
+                    for (i = (names = names.split(" ")).length; i--; ) if (callbackList = eventMap[name = names[i]]) {
+                        if (callback) for (ci = callbackList.length; ci--; ) callbackList[ci].func === callback && (nativeHandler = callbackList.nativeHandler, 
+                        fakeName = callbackList.fakeName, capture = callbackList.capture, 
+                        (callbackList = callbackList.slice(0, ci).concat(callbackList.slice(ci + 1))).nativeHandler = nativeHandler, 
+                        callbackList.fakeName = fakeName, callbackList.capture = capture, 
+                        eventMap[name] = callbackList);
+                        callback && 0 !== callbackList.length || (delete eventMap[name], 
+                        removeEvent(target, callbackList.fakeName || name, callbackList.nativeHandler, callbackList.capture));
+                    }
+                } else {
+                    for (name in eventMap) removeEvent(target, (callbackList = eventMap[name]).fakeName || name, callbackList.nativeHandler, callbackList.capture);
+                    eventMap = {};
+                }
+                for (name in eventMap) return self;
+                delete events[id];
+                try {
+                    delete target[expando];
+                } catch (ex) {
+                    target[expando] = null;
+                }
+            }
+            return self;
+        }, self.fire = function(target, name, args) {
+            var id;
+            if (target && 3 !== target.nodeType && 8 !== target.nodeType) {
+                for ((args = fix(null, args)).type = name, args.target = target; (id = target[expando]) && executeHandlers(args, id), 
+                (target = target.parentNode || target.ownerDocument || target.defaultView || target.parentWindow) && !args.isPropagationStopped(); );
+                self.args = args;
+            }
+            return self;
+        }, self.clean = function(target) {
+            var i, children, unbind = self.unbind;
+            if (target && 3 !== target.nodeType && 8 !== target.nodeType && (target[expando] && unbind(target), 
+            target = target.getElementsByTagName ? target : target.document) && target.getElementsByTagName) for (unbind(target), 
+            i = (children = target.getElementsByTagName("*")).length; i--; ) (target = children[i])[expando] && unbind(target);
+            return self;
+        }, self.destroy = function() {
+            events = {};
+        }, self.cancel = function(e) {
+            return e && (e.preventDefault(), e.stopImmediatePropagation()), !1;
+        }, self.add = function(target, events, func, scope) {
+            if (!((target = "string" == typeof target ? document.getElementById(target) : target) && target instanceof Array)) return self.bind(target, (events = "init" === events ? "ready" : events) instanceof Array ? events.join(" ") : events, func, scope);
+            for (var i = target.length; i--; ) self.add(target[i], events, func, scope);
+        }, self.remove = function(target, events, func, scope) {
+            if (!target) return self;
+            if ((target = "string" == typeof target ? document.getElementById(target) : target) instanceof Array) {
+                for (var i = target.length; i--; ) self.remove(target[i], events, func, scope);
+                return self;
+            }
+            return self.unbind(target, events instanceof Array ? events.join(" ") : events, func);
+        }, self.clear = function(target) {
+            return "string" == typeof target && (target = document.getElementById(target)), 
+            self.clean(target);
+        }, self.preventDefault = function(e) {
+            e && e.preventDefault();
+        }, self.isDefaultPrevented = function(e) {
+            return e.isDefaultPrevented();
         };
     }
     tinymce.file.BlobCache = {
@@ -1449,8 +1649,9 @@
             })), flowContent = flowContent || [].concat(microdataAttributes, phrasingContent), 
             add("html", "manifest", "head body"), add("head", "", "base command link meta noscript script style title"), 
             add("title hr noscript br"), add("base", "href target"), add("link", "href rel media hreflang type sizes"), 
-            add("meta", "name http-equiv content charset"), add("style", "media type scoped"), 
-            add("script", "src async defer type charset"), add("body", "onafterprint onbeforeprint onbeforeunload onblur onerror onfocus onhashchange onload onmessage onoffline ononline onpagehide onpageshow onpopstate onresize onscroll onstorage onunload", flowContent), 
+            add("meta", "name http-equiv content charset"), add("style", "media type scoped", "#text #cdata-section"), 
+            add("script", "src async defer type charset", "#text #cdata-section"), 
+            add("body", "onafterprint onbeforeprint onbeforeunload onblur onerror onfocus onhashchange onload onmessage onoffline ononline onpagehide onpageshow onpopstate onresize onscroll onstorage onunload", flowContent), 
             add("address dt dd div caption", "", flowContent), add("h1 h2 h3 h4 h5 h6 pre p abbr code var samp kbd sub sup i b u bdo span legend em strong small s cite dfn", "", phrasingContent), 
             add("blockquote", "cite", flowContent), add("ol", "reversed start type", "li"), 
             add("ul", "", "li"), add("li", "value", flowContent), add("dl", "", "dt dd"), 
@@ -1501,10 +1702,10 @@
             addAttrs("tfoot", "align char charoff valign"), addAttrs("tbody", "align char charoff valign"), 
             addAttrs("area", "nohref"), addAttrs("body", "background bgcolor text link vlink alink"), 
             addAttrs("form", "onreset")), "html4" != type && (addAttrs("input button select textarea", "autofocus"), 
-            addAttrs("input textarea", "placeholder"), addAttrs("a", "download"), 
-            addAttrs("link script img", "crossorigin"), addAttrs("iframe", "sandbox seamless allowfullscreen allow referrerpolicy loading"), 
-            addAttrs("img", "loading decoding"), addAttrs("link", "as disabled imagesizes imagesrcset title"), 
-            addAttrs("form", "oncontextmenu onformchange onforminput oninput oninvalid"), 
+            addAttrs("input textarea", "placeholder"), addAttrs("a", "download referrerpolicy"), 
+            addAttrs("link script img", "crossorigin"), addAttrs("iframe", "sandbox seamless allowfullscreen allow loading"), 
+            addAttrs("a img iframe", "referrerpolicy"), addAttrs("img", "loading decoding elementtiming fetchpriority"), 
+            addAttrs("link", "as disabled imagesizes imagesrcset title"), addAttrs("form", "oncontextmenu onformchange onforminput oninput oninvalid"), 
             addAttrs("video audio", "onabort oncanplay oncanplaythrough ondurationchange onemptied onended onerror onloadeddata onloadedmetadata onloadstart onpause onplay onplaying onprogress onratechange onreadystatechange onseeked onseeking onstalled onsuspend ontimeupdate onvolumechange onwaiting")), 
             each(split("a form meter progress dfn"), function(name) {
                 schema[name] && delete schema[name].children[name];
@@ -1900,681 +2101,6 @@
                 }
             }
         }), tinymce.html.Node = Node;
-    }(tinymce);
-    const {
-        entries,
-        setPrototypeOf,
-        isFrozen,
-        getPrototypeOf,
-        getOwnPropertyDescriptor
-    } = Object;
-    let {
-        freeze,
-        seal,
-        create: create$1
-    } = Object, {
-        apply,
-        construct
-    } = "undefined" != typeof Reflect && Reflect;
-    freeze = freeze || function(x) {
-        return x;
-    }, seal = seal || function(x) {
-        return x;
-    }, apply = apply || function(fun, thisValue, args) {
-        return fun.apply(thisValue, args);
-    }, construct = construct || function(Func, args) {
-        return new Func(...args);
-    };
-    function typeErrorCreate() {
-        for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) args[_key2] = arguments[_key2];
-        return construct(func, args);
-    }
-    const arrayForEach = unapply(Array.prototype.forEach), arrayLastIndexOf = unapply(Array.prototype.lastIndexOf), arrayPop = unapply(Array.prototype.pop), arrayPush = unapply(Array.prototype.push), arraySplice = unapply(Array.prototype.splice), stringToLowerCase = unapply(String.prototype.toLowerCase), stringToString = unapply(String.prototype.toString), stringMatch = unapply(String.prototype.match), stringReplace = unapply(String.prototype.replace), stringIndexOf = unapply(String.prototype.indexOf), stringTrim = unapply(String.prototype.trim), objectHasOwnProperty = unapply(Object.prototype.hasOwnProperty), regExpTest = unapply(RegExp.prototype.test);
-    func = TypeError;
-    function unapply(func) {
-        return function(thisArg) {
-            thisArg instanceof RegExp && (thisArg.lastIndex = 0);
-            for (var _len = arguments.length, args = new Array(1 < _len ? _len - 1 : 0), _key = 1; _key < _len; _key++) args[_key - 1] = arguments[_key];
-            return apply(func, thisArg, args);
-        };
-    }
-    function addToSet(set, array, argument_2) {
-        var lcElement, transformCaseFunc = 2 < arguments.length && void 0 !== argument_2 ? argument_2 : stringToLowerCase;
-        setPrototypeOf && setPrototypeOf(set, null);
-        let l = array.length;
-        for (;l--; ) {
-            let element = array[l];
-            "string" == typeof element && (lcElement = transformCaseFunc(element)) !== element && (isFrozen(array) || (array[l] = lcElement), 
-            element = lcElement), set[element] = !0;
-        }
-        return set;
-    }
-    function clone(object) {
-        var property, value, newObject = create$1(null);
-        for ([ property, value ] of entries(object)) objectHasOwnProperty(object, property) && (Array.isArray(value) ? newObject[property] = function(array) {
-            for (let index = 0; index < array.length; index++) objectHasOwnProperty(array, index) || (array[index] = null);
-            return array;
-        }(value) : value && "object" == typeof value && value.constructor === Object ? newObject[property] = clone(value) : newObject[property] = value);
-        return newObject;
-    }
-    function lookupGetter(object, prop) {
-        for (;null !== object; ) {
-            var desc = getOwnPropertyDescriptor(object, prop);
-            if (desc) {
-                if (desc.get) return unapply(desc.get);
-                if ("function" == typeof desc.value) return unapply(desc.value);
-            }
-            object = getPrototypeOf(object);
-        }
-        return function() {
-            return null;
-        };
-    }
-    const html$1 = freeze([ "a", "abbr", "acronym", "address", "area", "article", "aside", "audio", "b", "bdi", "bdo", "big", "blink", "blockquote", "body", "br", "button", "canvas", "caption", "center", "cite", "code", "col", "colgroup", "content", "data", "datalist", "dd", "decorator", "del", "details", "dfn", "dialog", "dir", "div", "dl", "dt", "element", "em", "fieldset", "figcaption", "figure", "font", "footer", "form", "h1", "h2", "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "img", "input", "ins", "kbd", "label", "legend", "li", "main", "map", "mark", "marquee", "menu", "menuitem", "meter", "nav", "nobr", "ol", "optgroup", "option", "output", "p", "picture", "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "section", "select", "shadow", "small", "source", "spacer", "span", "strike", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "template", "textarea", "tfoot", "th", "thead", "time", "tr", "track", "tt", "u", "ul", "var", "video", "wbr" ]), svg$1 = freeze([ "svg", "a", "altglyph", "altglyphdef", "altglyphitem", "animatecolor", "animatemotion", "animatetransform", "circle", "clippath", "defs", "desc", "ellipse", "filter", "font", "g", "glyph", "glyphref", "hkern", "image", "line", "lineargradient", "marker", "mask", "metadata", "mpath", "path", "pattern", "polygon", "polyline", "radialgradient", "rect", "stop", "style", "switch", "symbol", "text", "textpath", "title", "tref", "tspan", "view", "vkern" ]), svgFilters = freeze([ "feBlend", "feColorMatrix", "feComponentTransfer", "feComposite", "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap", "feDistantLight", "feDropShadow", "feFlood", "feFuncA", "feFuncB", "feFuncG", "feFuncR", "feGaussianBlur", "feImage", "feMerge", "feMergeNode", "feMorphology", "feOffset", "fePointLight", "feSpecularLighting", "feSpotLight", "feTile", "feTurbulence" ]), svgDisallowed = freeze([ "animate", "color-profile", "cursor", "discard", "font-face", "font-face-format", "font-face-name", "font-face-src", "font-face-uri", "foreignobject", "hatch", "hatchpath", "mesh", "meshgradient", "meshpatch", "meshrow", "missing-glyph", "script", "set", "solidcolor", "unknown", "use" ]), mathMl$1 = freeze([ "math", "menclose", "merror", "mfenced", "mfrac", "mglyph", "mi", "mlabeledtr", "mmultiscripts", "mn", "mo", "mover", "mpadded", "mphantom", "mroot", "mrow", "ms", "mspace", "msqrt", "mstyle", "msub", "msup", "msubsup", "mtable", "mtd", "mtext", "mtr", "munder", "munderover", "mprescripts" ]), mathMlDisallowed = freeze([ "maction", "maligngroup", "malignmark", "mlongdiv", "mscarries", "mscarry", "msgroup", "mstack", "msline", "msrow", "semantics", "annotation", "annotation-xml", "mprescripts", "none" ]), text = freeze([ "#text" ]), html = freeze([ "accept", "action", "align", "alt", "autocapitalize", "autocomplete", "autopictureinpicture", "autoplay", "background", "bgcolor", "border", "capture", "cellpadding", "cellspacing", "checked", "cite", "class", "clear", "color", "cols", "colspan", "controls", "controlslist", "coords", "crossorigin", "datetime", "decoding", "default", "dir", "disabled", "disablepictureinpicture", "disableremoteplayback", "download", "draggable", "enctype", "enterkeyhint", "face", "for", "headers", "height", "hidden", "high", "href", "hreflang", "id", "inputmode", "integrity", "ismap", "kind", "label", "lang", "list", "loading", "loop", "low", "max", "maxlength", "media", "method", "min", "minlength", "multiple", "muted", "name", "nonce", "noshade", "novalidate", "nowrap", "open", "optimum", "pattern", "placeholder", "playsinline", "popover", "popovertarget", "popovertargetaction", "poster", "preload", "pubdate", "radiogroup", "readonly", "rel", "required", "rev", "reversed", "role", "rows", "rowspan", "spellcheck", "scope", "selected", "shape", "size", "sizes", "span", "srclang", "start", "src", "srcset", "step", "style", "summary", "tabindex", "title", "translate", "type", "usemap", "valign", "value", "width", "wrap", "xmlns", "slot" ]), svg = freeze([ "accent-height", "accumulate", "additive", "alignment-baseline", "amplitude", "ascent", "attributename", "attributetype", "azimuth", "basefrequency", "baseline-shift", "begin", "bias", "by", "class", "clip", "clippathunits", "clip-path", "clip-rule", "color", "color-interpolation", "color-interpolation-filters", "color-profile", "color-rendering", "cx", "cy", "d", "dx", "dy", "diffuseconstant", "direction", "display", "divisor", "dur", "edgemode", "elevation", "end", "exponent", "fill", "fill-opacity", "fill-rule", "filter", "filterunits", "flood-color", "flood-opacity", "font-family", "font-size", "font-size-adjust", "font-stretch", "font-style", "font-variant", "font-weight", "fx", "fy", "g1", "g2", "glyph-name", "glyphref", "gradientunits", "gradienttransform", "height", "href", "id", "image-rendering", "in", "in2", "intercept", "k", "k1", "k2", "k3", "k4", "kerning", "keypoints", "keysplines", "keytimes", "lang", "lengthadjust", "letter-spacing", "kernelmatrix", "kernelunitlength", "lighting-color", "local", "marker-end", "marker-mid", "marker-start", "markerheight", "markerunits", "markerwidth", "maskcontentunits", "maskunits", "max", "mask", "media", "method", "mode", "min", "name", "numoctaves", "offset", "operator", "opacity", "order", "orient", "orientation", "origin", "overflow", "paint-order", "path", "pathlength", "patterncontentunits", "patterntransform", "patternunits", "points", "preservealpha", "preserveaspectratio", "primitiveunits", "r", "rx", "ry", "radius", "refx", "refy", "repeatcount", "repeatdur", "restart", "result", "rotate", "scale", "seed", "shape-rendering", "slope", "specularconstant", "specularexponent", "spreadmethod", "startoffset", "stddeviation", "stitchtiles", "stop-color", "stop-opacity", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke", "stroke-width", "style", "surfacescale", "systemlanguage", "tabindex", "tablevalues", "targetx", "targety", "transform", "transform-origin", "text-anchor", "text-decoration", "text-rendering", "textlength", "type", "u1", "u2", "unicode", "values", "viewbox", "visibility", "version", "vert-adv-y", "vert-origin-x", "vert-origin-y", "width", "word-spacing", "wrap", "writing-mode", "xchannelselector", "ychannelselector", "x", "x1", "x2", "xmlns", "y", "y1", "y2", "z", "zoomandpan" ]), mathMl = freeze([ "accent", "accentunder", "align", "bevelled", "close", "columnsalign", "columnlines", "columnspan", "denomalign", "depth", "dir", "display", "displaystyle", "encoding", "fence", "frame", "height", "href", "id", "largeop", "length", "linethickness", "lspace", "lquote", "mathbackground", "mathcolor", "mathsize", "mathvariant", "maxsize", "minsize", "movablelimits", "notation", "numalign", "open", "rowalign", "rowlines", "rowspacing", "rowspan", "rspace", "rquote", "scriptlevel", "scriptminsize", "scriptsizemultiplier", "selection", "separator", "separators", "stretchy", "subscriptshift", "supscriptshift", "symmetric", "voffset", "width", "xmlns" ]), xml = freeze([ "xlink:href", "xml:id", "xlink:title", "xml:space", "xmlns:xlink" ]);
-    var phone = seal(/\{\{[\w\W]*|[\w\W]*\}\}/gm), tablet = seal(/<%[\w\W]*|[\w\W]*%>/gm), windowsPhone = seal(/\$\{[\w\W]*/gm), opera = seal(/^data-[\-\w.\u00B7-\uFFFF]+$/), webkit = seal(/^aria-[\-\w]+$/);
-    const IS_ALLOWED_URI = seal(/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i), DOCTYPE_NAME = (nav = seal(/^(?:\w+script|data):/i), 
-    gecko = seal(/[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u3000]/g), 
-    seal(/^html$/i));
-    var mac = seal(/^[a-z][.\w]*(-[.\w]+)+$/i), EXPRESSIONS = Object.freeze({
-        __proto__: null,
-        ARIA_ATTR: webkit,
-        ATTR_WHITESPACE: gecko,
-        CUSTOM_ELEMENT: mac,
-        DATA_ATTR: opera,
-        DOCTYPE_NAME: DOCTYPE_NAME,
-        ERB_EXPR: tablet,
-        IS_ALLOWED_URI: IS_ALLOWED_URI,
-        IS_SCRIPT_OR_DATA: nav,
-        MUSTACHE_EXPR: phone,
-        TMPLIT_EXPR: windowsPhone
-    });
-    function _createHooksMap() {
-        return {
-            afterSanitizeAttributes: [],
-            afterSanitizeElements: [],
-            afterSanitizeShadowDOM: [],
-            beforeSanitizeAttributes: [],
-            beforeSanitizeElements: [],
-            beforeSanitizeShadowDOM: [],
-            uponSanitizeAttribute: [],
-            uponSanitizeElement: [],
-            uponSanitizeShadowNode: []
-        };
-    }
-    const NODE_TYPE = {
-        element: 1,
-        attribute: 2,
-        text: 3,
-        cdataSection: 4,
-        entityReference: 5,
-        entityNode: 6,
-        progressingInstruction: 7,
-        comment: 8,
-        document: 9,
-        documentType: 10,
-        documentFragment: 11,
-        notation: 12
-    };
-    var mouseEventRe, deprecated, purify = function createDOMPurify(argument_0) {
-        argument_0 = 0 < arguments.length && void 0 !== argument_0 ? argument_0 : "undefined" == typeof window ? null : window;
-        const DOMPurify = root => createDOMPurify(root);
-        if (DOMPurify.version = "3.2.5", DOMPurify.removed = [], !argument_0 || !argument_0.document || argument_0.document.nodeType !== NODE_TYPE.document || !argument_0.Element) return DOMPurify.isSupported = !1, 
-        DOMPurify;
-        let document = argument_0.document;
-        const originalDocument = document, currentScript = originalDocument.currentScript, {
-            DocumentFragment,
-            HTMLTemplateElement,
-            Node,
-            Element,
-            NodeFilter,
-            NamedNodeMap = argument_0.NamedNodeMap || argument_0.MozNamedAttrMap,
-            HTMLFormElement,
-            DOMParser,
-            trustedTypes
-        } = argument_0, cloneNode = lookupGetter(argument_0 = Element.prototype, "cloneNode"), remove = lookupGetter(argument_0, "remove"), getNextSibling = lookupGetter(argument_0, "nextSibling"), getChildNodes = lookupGetter(argument_0, "childNodes"), getParentNode = lookupGetter(argument_0, "parentNode");
-        "function" == typeof HTMLTemplateElement && (argument_0 = document.createElement("template")).content && argument_0.content.ownerDocument && (document = argument_0.content.ownerDocument);
-        let trustedTypesPolicy, emptyHTML = "";
-        const {
-            implementation,
-            createNodeIterator,
-            createDocumentFragment,
-            getElementsByTagName
-        } = document, importNode = originalDocument.importNode;
-        let hooks = _createHooksMap();
-        DOMPurify.isSupported = "function" == typeof entries && "function" == typeof getParentNode && implementation && void 0 !== implementation.createHTMLDocument;
-        const {
-            MUSTACHE_EXPR,
-            ERB_EXPR,
-            TMPLIT_EXPR,
-            DATA_ATTR,
-            ARIA_ATTR,
-            IS_SCRIPT_OR_DATA,
-            ATTR_WHITESPACE,
-            CUSTOM_ELEMENT
-        } = EXPRESSIONS;
-        let IS_ALLOWED_URI$1 = EXPRESSIONS.IS_ALLOWED_URI, ALLOWED_TAGS = null;
-        const DEFAULT_ALLOWED_TAGS = addToSet({}, [ ...html$1, ...svg$1, ...svgFilters, ...mathMl$1, ...text ]);
-        let ALLOWED_ATTR = null;
-        const DEFAULT_ALLOWED_ATTR = addToSet({}, [ ...html, ...svg, ...mathMl, ...xml ]);
-        let CUSTOM_ELEMENT_HANDLING = Object.seal(create$1(null, {
-            tagNameCheck: {
-                writable: !0,
-                configurable: !1,
-                enumerable: !0,
-                value: null
-            },
-            attributeNameCheck: {
-                writable: !0,
-                configurable: !1,
-                enumerable: !0,
-                value: null
-            },
-            allowCustomizedBuiltInElements: {
-                writable: !0,
-                configurable: !1,
-                enumerable: !0,
-                value: !1
-            }
-        })), FORBID_TAGS = null, FORBID_ATTR = null, ALLOW_ARIA_ATTR = !0, ALLOW_DATA_ATTR = !0, ALLOW_UNKNOWN_PROTOCOLS = !1, ALLOW_SELF_CLOSE_IN_ATTR = !0, SAFE_FOR_TEMPLATES = !1, SAFE_FOR_XML = !0, WHOLE_DOCUMENT = !1, SET_CONFIG = !1, FORCE_BODY = !1, RETURN_DOM = !1, RETURN_DOM_FRAGMENT = !1, RETURN_TRUSTED_TYPE = !1, SANITIZE_DOM = !0, SANITIZE_NAMED_PROPS = !1, KEEP_CONTENT = !0, IN_PLACE = !1, USE_PROFILES = {}, FORBID_CONTENTS = null;
-        const DEFAULT_FORBID_CONTENTS = addToSet({}, [ "annotation-xml", "audio", "colgroup", "desc", "foreignobject", "head", "iframe", "math", "mi", "mn", "mo", "ms", "mtext", "noembed", "noframes", "noscript", "plaintext", "script", "style", "svg", "template", "thead", "title", "video", "xmp" ]);
-        let DATA_URI_TAGS = null;
-        const DEFAULT_DATA_URI_TAGS = addToSet({}, [ "audio", "video", "img", "source", "image", "track" ]);
-        let URI_SAFE_ATTRIBUTES = null;
-        const DEFAULT_URI_SAFE_ATTRIBUTES = addToSet({}, [ "alt", "class", "for", "id", "label", "name", "pattern", "placeholder", "role", "summary", "title", "value", "style", "xmlns" ]), MATHML_NAMESPACE = "http://www.w3.org/1998/Math/MathML", SVG_NAMESPACE = "http://www.w3.org/2000/svg", HTML_NAMESPACE = "http://www.w3.org/1999/xhtml";
-        let NAMESPACE = HTML_NAMESPACE, IS_EMPTY_INPUT, ALLOWED_NAMESPACES = null;
-        const DEFAULT_ALLOWED_NAMESPACES = addToSet({}, [ MATHML_NAMESPACE, SVG_NAMESPACE, HTML_NAMESPACE ], stringToString);
-        let MATHML_TEXT_INTEGRATION_POINTS = addToSet({}, [ "mi", "mo", "mn", "ms", "mtext" ]), HTML_INTEGRATION_POINTS = addToSet({}, [ "annotation-xml" ]);
-        const COMMON_SVG_AND_HTML_ELEMENTS = addToSet({}, [ "title", "style", "font", "a", "script" ]);
-        let PARSER_MEDIA_TYPE = null;
-        const SUPPORTED_PARSER_MEDIA_TYPES = [ "application/xhtml+xml", "text/html" ];
-        let transformCaseFunc = null, CONFIG = null;
-        function isRegexOrFunction(testValue) {
-            return testValue instanceof RegExp || testValue instanceof Function;
-        }
-        function _parseConfig(argument_0) {
-            argument_0 = 0 < arguments.length && void 0 !== argument_0 ? argument_0 : {};
-            if (!CONFIG || CONFIG !== argument_0) {
-                if (argument_0 = clone(argument_0 && "object" == typeof argument_0 ? argument_0 : {}), 
-                PARSER_MEDIA_TYPE = -1 === SUPPORTED_PARSER_MEDIA_TYPES.indexOf(argument_0.PARSER_MEDIA_TYPE) ? "text/html" : argument_0.PARSER_MEDIA_TYPE, 
-                transformCaseFunc = "application/xhtml+xml" === PARSER_MEDIA_TYPE ? stringToString : stringToLowerCase, 
-                ALLOWED_TAGS = objectHasOwnProperty(argument_0, "ALLOWED_TAGS") ? addToSet({}, argument_0.ALLOWED_TAGS, transformCaseFunc) : DEFAULT_ALLOWED_TAGS, 
-                ALLOWED_ATTR = objectHasOwnProperty(argument_0, "ALLOWED_ATTR") ? addToSet({}, argument_0.ALLOWED_ATTR, transformCaseFunc) : DEFAULT_ALLOWED_ATTR, 
-                ALLOWED_NAMESPACES = objectHasOwnProperty(argument_0, "ALLOWED_NAMESPACES") ? addToSet({}, argument_0.ALLOWED_NAMESPACES, stringToString) : DEFAULT_ALLOWED_NAMESPACES, 
-                URI_SAFE_ATTRIBUTES = objectHasOwnProperty(argument_0, "ADD_URI_SAFE_ATTR") ? addToSet(clone(DEFAULT_URI_SAFE_ATTRIBUTES), argument_0.ADD_URI_SAFE_ATTR, transformCaseFunc) : DEFAULT_URI_SAFE_ATTRIBUTES, 
-                DATA_URI_TAGS = objectHasOwnProperty(argument_0, "ADD_DATA_URI_TAGS") ? addToSet(clone(DEFAULT_DATA_URI_TAGS), argument_0.ADD_DATA_URI_TAGS, transformCaseFunc) : DEFAULT_DATA_URI_TAGS, 
-                FORBID_CONTENTS = objectHasOwnProperty(argument_0, "FORBID_CONTENTS") ? addToSet({}, argument_0.FORBID_CONTENTS, transformCaseFunc) : DEFAULT_FORBID_CONTENTS, 
-                FORBID_TAGS = objectHasOwnProperty(argument_0, "FORBID_TAGS") ? addToSet({}, argument_0.FORBID_TAGS, transformCaseFunc) : {}, 
-                FORBID_ATTR = objectHasOwnProperty(argument_0, "FORBID_ATTR") ? addToSet({}, argument_0.FORBID_ATTR, transformCaseFunc) : {}, 
-                USE_PROFILES = !!objectHasOwnProperty(argument_0, "USE_PROFILES") && argument_0.USE_PROFILES, 
-                ALLOW_ARIA_ATTR = !1 !== argument_0.ALLOW_ARIA_ATTR, ALLOW_DATA_ATTR = !1 !== argument_0.ALLOW_DATA_ATTR, 
-                ALLOW_UNKNOWN_PROTOCOLS = argument_0.ALLOW_UNKNOWN_PROTOCOLS || !1, 
-                ALLOW_SELF_CLOSE_IN_ATTR = !1 !== argument_0.ALLOW_SELF_CLOSE_IN_ATTR, 
-                SAFE_FOR_TEMPLATES = argument_0.SAFE_FOR_TEMPLATES || !1, SAFE_FOR_XML = !1 !== argument_0.SAFE_FOR_XML, 
-                WHOLE_DOCUMENT = argument_0.WHOLE_DOCUMENT || !1, RETURN_DOM = argument_0.RETURN_DOM || !1, 
-                RETURN_DOM_FRAGMENT = argument_0.RETURN_DOM_FRAGMENT || !1, RETURN_TRUSTED_TYPE = argument_0.RETURN_TRUSTED_TYPE || !1, 
-                FORCE_BODY = argument_0.FORCE_BODY || !1, SANITIZE_DOM = !1 !== argument_0.SANITIZE_DOM, 
-                SANITIZE_NAMED_PROPS = argument_0.SANITIZE_NAMED_PROPS || !1, KEEP_CONTENT = !1 !== argument_0.KEEP_CONTENT, 
-                IN_PLACE = argument_0.IN_PLACE || !1, IS_ALLOWED_URI$1 = argument_0.ALLOWED_URI_REGEXP || IS_ALLOWED_URI, 
-                NAMESPACE = argument_0.NAMESPACE || HTML_NAMESPACE, MATHML_TEXT_INTEGRATION_POINTS = argument_0.MATHML_TEXT_INTEGRATION_POINTS || MATHML_TEXT_INTEGRATION_POINTS, 
-                HTML_INTEGRATION_POINTS = argument_0.HTML_INTEGRATION_POINTS || HTML_INTEGRATION_POINTS, 
-                CUSTOM_ELEMENT_HANDLING = argument_0.CUSTOM_ELEMENT_HANDLING || {}, 
-                argument_0.CUSTOM_ELEMENT_HANDLING && isRegexOrFunction(argument_0.CUSTOM_ELEMENT_HANDLING.tagNameCheck) && (CUSTOM_ELEMENT_HANDLING.tagNameCheck = argument_0.CUSTOM_ELEMENT_HANDLING.tagNameCheck), 
-                argument_0.CUSTOM_ELEMENT_HANDLING && isRegexOrFunction(argument_0.CUSTOM_ELEMENT_HANDLING.attributeNameCheck) && (CUSTOM_ELEMENT_HANDLING.attributeNameCheck = argument_0.CUSTOM_ELEMENT_HANDLING.attributeNameCheck), 
-                argument_0.CUSTOM_ELEMENT_HANDLING && "boolean" == typeof argument_0.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements && (CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements = argument_0.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements), 
-                SAFE_FOR_TEMPLATES && (ALLOW_DATA_ATTR = !1), RETURN_DOM_FRAGMENT && (RETURN_DOM = !0), 
-                USE_PROFILES && (ALLOWED_TAGS = addToSet({}, text), ALLOWED_ATTR = [], 
-                !0 === USE_PROFILES.html && (addToSet(ALLOWED_TAGS, html$1), addToSet(ALLOWED_ATTR, html)), 
-                !0 === USE_PROFILES.svg && (addToSet(ALLOWED_TAGS, svg$1), addToSet(ALLOWED_ATTR, svg), 
-                addToSet(ALLOWED_ATTR, xml)), !0 === USE_PROFILES.svgFilters && (addToSet(ALLOWED_TAGS, svgFilters), 
-                addToSet(ALLOWED_ATTR, svg), addToSet(ALLOWED_ATTR, xml)), !0 === USE_PROFILES.mathMl) && (addToSet(ALLOWED_TAGS, mathMl$1), 
-                addToSet(ALLOWED_ATTR, mathMl), addToSet(ALLOWED_ATTR, xml)), argument_0.ADD_TAGS && addToSet(ALLOWED_TAGS = ALLOWED_TAGS === DEFAULT_ALLOWED_TAGS ? clone(ALLOWED_TAGS) : ALLOWED_TAGS, argument_0.ADD_TAGS, transformCaseFunc), 
-                argument_0.ADD_ATTR && addToSet(ALLOWED_ATTR = ALLOWED_ATTR === DEFAULT_ALLOWED_ATTR ? clone(ALLOWED_ATTR) : ALLOWED_ATTR, argument_0.ADD_ATTR, transformCaseFunc), 
-                argument_0.ADD_URI_SAFE_ATTR && addToSet(URI_SAFE_ATTRIBUTES, argument_0.ADD_URI_SAFE_ATTR, transformCaseFunc), 
-                argument_0.FORBID_CONTENTS && addToSet(FORBID_CONTENTS = FORBID_CONTENTS === DEFAULT_FORBID_CONTENTS ? clone(FORBID_CONTENTS) : FORBID_CONTENTS, argument_0.FORBID_CONTENTS, transformCaseFunc), 
-                KEEP_CONTENT && (ALLOWED_TAGS["#text"] = !0), WHOLE_DOCUMENT && addToSet(ALLOWED_TAGS, [ "html", "head", "body" ]), 
-                ALLOWED_TAGS.table && (addToSet(ALLOWED_TAGS, [ "tbody" ]), delete FORBID_TAGS.tbody), 
-                argument_0.TRUSTED_TYPES_POLICY) {
-                    if ("function" != typeof argument_0.TRUSTED_TYPES_POLICY.createHTML) throw typeErrorCreate('TRUSTED_TYPES_POLICY configuration option must provide a "createHTML" hook.');
-                    if ("function" != typeof argument_0.TRUSTED_TYPES_POLICY.createScriptURL) throw typeErrorCreate('TRUSTED_TYPES_POLICY configuration option must provide a "createScriptURL" hook.');
-                    trustedTypesPolicy = argument_0.TRUSTED_TYPES_POLICY, emptyHTML = trustedTypesPolicy.createHTML("");
-                } else null !== (trustedTypesPolicy = void 0 === trustedTypesPolicy ? function(trustedTypes, purifyHostElement) {
-                    if ("object" != typeof trustedTypes || "function" != typeof trustedTypes.createPolicy) return null;
-                    var suffix;
-                    purifyHostElement = "dompurify" + ((suffix = purifyHostElement && purifyHostElement.hasAttribute("data-tt-policy-suffix") ? purifyHostElement.getAttribute("data-tt-policy-suffix") : null) ? "#" + suffix : "");
-                    try {
-                        return trustedTypes.createPolicy(purifyHostElement, {
-                            createHTML(html) {
-                                return html;
-                            },
-                            createScriptURL(scriptUrl) {
-                                return scriptUrl;
-                            }
-                        });
-                    } catch (_) {
-                        return console.warn("TrustedTypes policy " + purifyHostElement + " could not be created."), 
-                        null;
-                    }
-                }(trustedTypes, currentScript) : trustedTypesPolicy) && "string" == typeof emptyHTML && (emptyHTML = trustedTypesPolicy.createHTML(""));
-                freeze && freeze(argument_0), CONFIG = argument_0;
-            }
-        }
-        function _removeAttribute(name, element) {
-            try {
-                arrayPush(DOMPurify.removed, {
-                    attribute: element.getAttributeNode(name),
-                    from: element
-                });
-            } catch (_) {
-                arrayPush(DOMPurify.removed, {
-                    attribute: null,
-                    from: element
-                });
-            }
-            if (element.removeAttribute(name), "is" === name) if (RETURN_DOM || RETURN_DOM_FRAGMENT) try {
-                _forceRemove(element);
-            } catch (_) {} else try {
-                element.setAttribute(name, "");
-            } catch (_) {}
-        }
-        function _initDocument(dirty) {
-            let doc = null, leadingWhitespace = null;
-            FORCE_BODY ? dirty = "<remove></remove>" + dirty : (matches = stringMatch(dirty, /^[\r\n\t ]+/), 
-            leadingWhitespace = matches && matches[0]), "application/xhtml+xml" === PARSER_MEDIA_TYPE && NAMESPACE === HTML_NAMESPACE && (dirty = '<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>' + dirty + "</body></html>");
-            var matches = trustedTypesPolicy ? trustedTypesPolicy.createHTML(dirty) : dirty;
-            if (NAMESPACE === HTML_NAMESPACE) try {
-                doc = new DOMParser().parseFromString(matches, PARSER_MEDIA_TYPE);
-            } catch (_) {}
-            if (!doc || !doc.documentElement) {
-                doc = implementation.createDocument(NAMESPACE, "template", null);
-                try {
-                    doc.documentElement.innerHTML = IS_EMPTY_INPUT ? emptyHTML : matches;
-                } catch (_) {}
-            }
-            return matches = doc.body || doc.documentElement, dirty && leadingWhitespace && matches.insertBefore(document.createTextNode(leadingWhitespace), matches.childNodes[0] || null), 
-            NAMESPACE === HTML_NAMESPACE ? getElementsByTagName.call(doc, WHOLE_DOCUMENT ? "html" : "body")[0] : WHOLE_DOCUMENT ? doc.documentElement : matches;
-        }
-        function _createNodeIterator(root) {
-            return createNodeIterator.call(root.ownerDocument || root, root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_TEXT | NodeFilter.SHOW_PROCESSING_INSTRUCTION | NodeFilter.SHOW_CDATA_SECTION, null);
-        }
-        function _isClobbered(element) {
-            return element instanceof HTMLFormElement && ("string" != typeof element.nodeName || "string" != typeof element.textContent || "function" != typeof element.removeChild || !(element.attributes instanceof NamedNodeMap) || "function" != typeof element.removeAttribute || "function" != typeof element.setAttribute || "string" != typeof element.namespaceURI || "function" != typeof element.insertBefore || "function" != typeof element.hasChildNodes);
-        }
-        function _isNode(value) {
-            return "function" == typeof Node && value instanceof Node;
-        }
-        const formElement = document.createElement("form"), ALL_SVG_TAGS = addToSet({}, [ ...svg$1, ...svgFilters, ...svgDisallowed ]), ALL_MATHML_TAGS = addToSet({}, [ ...mathMl$1, ...mathMlDisallowed ]), _forceRemove = function(node) {
-            arrayPush(DOMPurify.removed, {
-                element: node
-            });
-            try {
-                getParentNode(node).removeChild(node);
-            } catch (_) {
-                remove(node);
-            }
-        };
-        function _executeHooks(hooks, currentNode, data) {
-            arrayForEach(hooks, hook => {
-                hook.call(DOMPurify, currentNode, data, CONFIG);
-            });
-        }
-        function _sanitizeElements(currentNode) {
-            let content = null;
-            if (_executeHooks(hooks.beforeSanitizeElements, currentNode, null), 
-            !_isClobbered(currentNode)) {
-                var tagName = transformCaseFunc(currentNode.nodeName);
-                if (_executeHooks(hooks.uponSanitizeElement, currentNode, {
-                    tagName: tagName,
-                    allowedTags: ALLOWED_TAGS
-                }), (!currentNode.hasChildNodes() || _isNode(currentNode.firstElementChild) || !regExpTest(/<[/\w!]/g, currentNode.innerHTML) || !regExpTest(/<[/\w!]/g, currentNode.textContent)) && !(currentNode.nodeType === NODE_TYPE.progressingInstruction || SAFE_FOR_XML && currentNode.nodeType === NODE_TYPE.comment && regExpTest(/<[/\w]/g, currentNode.data))) {
-                    if (ALLOWED_TAGS[tagName] && !FORBID_TAGS[tagName]) return currentNode instanceof Element && !function(element) {
-                        let parent = getParentNode(element);
-                        parent && parent.tagName || (parent = {
-                            namespaceURI: NAMESPACE,
-                            tagName: "template"
-                        });
-                        var tagName = stringToLowerCase(element.tagName), parentTagName = stringToLowerCase(parent.tagName);
-                        return ALLOWED_NAMESPACES[element.namespaceURI] && (element.namespaceURI === SVG_NAMESPACE ? parent.namespaceURI === HTML_NAMESPACE ? "svg" === tagName : parent.namespaceURI === MATHML_NAMESPACE ? "svg" === tagName && ("annotation-xml" === parentTagName || MATHML_TEXT_INTEGRATION_POINTS[parentTagName]) : Boolean(ALL_SVG_TAGS[tagName]) : element.namespaceURI === MATHML_NAMESPACE ? parent.namespaceURI === HTML_NAMESPACE ? "math" === tagName : parent.namespaceURI === SVG_NAMESPACE ? "math" === tagName && HTML_INTEGRATION_POINTS[parentTagName] : Boolean(ALL_MATHML_TAGS[tagName]) : element.namespaceURI === HTML_NAMESPACE ? !(parent.namespaceURI === SVG_NAMESPACE && !HTML_INTEGRATION_POINTS[parentTagName] || parent.namespaceURI === MATHML_NAMESPACE && !MATHML_TEXT_INTEGRATION_POINTS[parentTagName] || ALL_MATHML_TAGS[tagName]) && (COMMON_SVG_AND_HTML_ELEMENTS[tagName] || !ALL_SVG_TAGS[tagName]) : "application/xhtml+xml" === PARSER_MEDIA_TYPE && ALLOWED_NAMESPACES[element.namespaceURI]);
-                    }(currentNode) || ("noscript" === tagName || "noembed" === tagName || "noframes" === tagName) && regExpTest(/<\/no(script|embed|frames)/i, currentNode.innerHTML) ? _forceRemove(currentNode) : (SAFE_FOR_TEMPLATES && currentNode.nodeType === NODE_TYPE.text && (content = currentNode.textContent, 
-                    arrayForEach([ MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR ], expr => {
-                        content = stringReplace(content, expr, " ");
-                    }), currentNode.textContent !== content) && (arrayPush(DOMPurify.removed, {
-                        element: currentNode.cloneNode()
-                    }), currentNode.textContent = content), _executeHooks(hooks.afterSanitizeElements, currentNode, null));
-                    if (!FORBID_TAGS[tagName] && _isBasicCustomElement(tagName)) {
-                        if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, tagName)) return;
-                        if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(tagName)) return;
-                    }
-                    if (KEEP_CONTENT && !FORBID_CONTENTS[tagName]) {
-                        var parentNode = getParentNode(currentNode) || currentNode.parentNode, childNodes = getChildNodes(currentNode) || currentNode.childNodes;
-                        if (childNodes && parentNode) for (let i = childNodes.length - 1; 0 <= i; --i) {
-                            var childClone = cloneNode(childNodes[i], !0);
-                            childClone.__removalCount = (currentNode.__removalCount || 0) + 1, 
-                            parentNode.insertBefore(childClone, getNextSibling(currentNode));
-                        }
-                    }
-                }
-            }
-            _forceRemove(currentNode);
-        }
-        function _isValidAttribute(lcTag, lcName, value) {
-            if (SANITIZE_DOM && ("id" === lcName || "name" === lcName) && (value in document || value in formElement)) return !1;
-            if ((!ALLOW_DATA_ATTR || FORBID_ATTR[lcName] || !regExpTest(DATA_ATTR, lcName)) && (!ALLOW_ARIA_ATTR || !regExpTest(ARIA_ATTR, lcName))) if (!ALLOWED_ATTR[lcName] || FORBID_ATTR[lcName]) {
-                if (!(_isBasicCustomElement(lcTag) && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, lcTag) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(lcTag)) && (CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.attributeNameCheck, lcName) || CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.attributeNameCheck(lcName)) || "is" === lcName && CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, value) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(value)))) return !1;
-            } else if (!URI_SAFE_ATTRIBUTES[lcName] && !regExpTest(IS_ALLOWED_URI$1, stringReplace(value, ATTR_WHITESPACE, "")) && ("src" !== lcName && "xlink:href" !== lcName && "href" !== lcName || "script" === lcTag || 0 !== stringIndexOf(value, "data:") || !DATA_URI_TAGS[lcTag]) && (!ALLOW_UNKNOWN_PROTOCOLS || regExpTest(IS_SCRIPT_OR_DATA, stringReplace(value, ATTR_WHITESPACE, ""))) && value) return !1;
-            return !0;
-        }
-        function _sanitizeAttributes(currentNode) {
-            _executeHooks(hooks.beforeSanitizeAttributes, currentNode, null);
-            var attributes = currentNode.attributes;
-            if (attributes && !_isClobbered(currentNode)) {
-                var hookEvent = {
-                    attrName: "",
-                    attrValue: "",
-                    keepAttr: !0,
-                    allowedAttributes: ALLOWED_ATTR,
-                    forceKeepAttr: void 0
-                };
-                let l = attributes.length;
-                for (;l--; ) {
-                    var {
-                        name,
-                        namespaceURI,
-                        value: attrValue
-                    } = attributes[l], lcName = transformCaseFunc(name);
-                    let value = "value" === name ? attrValue : stringTrim(attrValue);
-                    if (hookEvent.attrName = lcName, hookEvent.attrValue = value, 
-                    hookEvent.keepAttr = !0, hookEvent.forceKeepAttr = void 0, _executeHooks(hooks.uponSanitizeAttribute, currentNode, hookEvent), 
-                    value = hookEvent.attrValue, !SANITIZE_NAMED_PROPS || "id" !== lcName && "name" !== lcName || (_removeAttribute(name, currentNode), 
-                    value = "user-content-" + value), SAFE_FOR_XML && regExpTest(/((--!?|])>)|<\/(style|title)/i, value)) _removeAttribute(name, currentNode); else if (!hookEvent.forceKeepAttr && (_removeAttribute(name, currentNode), 
-                    hookEvent.keepAttr)) if (!ALLOW_SELF_CLOSE_IN_ATTR && regExpTest(/\/>/i, value)) _removeAttribute(name, currentNode); else if (SAFE_FOR_TEMPLATES && arrayForEach([ MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR ], expr => {
-                        value = stringReplace(value, expr, " ");
-                    }), _isValidAttribute(attrValue = transformCaseFunc(currentNode.nodeName), lcName, value)) {
-                        if (trustedTypesPolicy && "object" == typeof trustedTypes && "function" == typeof trustedTypes.getAttributeType && !namespaceURI) switch (trustedTypes.getAttributeType(attrValue, lcName)) {
-                          case "TrustedHTML":
-                            value = trustedTypesPolicy.createHTML(value);
-                            break;
-
-                          case "TrustedScriptURL":
-                            value = trustedTypesPolicy.createScriptURL(value);
-                        }
-                        try {
-                            namespaceURI ? currentNode.setAttributeNS(namespaceURI, name, value) : currentNode.setAttribute(name, value), 
-                            _isClobbered(currentNode) ? _forceRemove(currentNode) : arrayPop(DOMPurify.removed);
-                        } catch (_) {}
-                    }
-                }
-                _executeHooks(hooks.afterSanitizeAttributes, currentNode, null);
-            }
-        }
-        const _isBasicCustomElement = function(tagName) {
-            return "annotation-xml" !== tagName && stringMatch(tagName, CUSTOM_ELEMENT);
-        };
-        return DOMPurify.sanitize = function(dirty) {
-            var currentNode, cfg = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : {};
-            let body = null, returnNode = null;
-            if ("string" != typeof (dirty = (IS_EMPTY_INPUT = !dirty) ? "\x3c!--\x3e" : dirty) && !_isNode(dirty)) {
-                if ("function" != typeof dirty.toString) throw typeErrorCreate("toString is not a function");
-                if ("string" != typeof (dirty = dirty.toString())) throw typeErrorCreate("dirty is not a string, aborting");
-            }
-            if (!DOMPurify.isSupported) return dirty;
-            if (SET_CONFIG || _parseConfig(cfg), DOMPurify.removed = [], IN_PLACE = "string" != typeof dirty && IN_PLACE) {
-                if (dirty.nodeName && (cfg = transformCaseFunc(dirty.nodeName), 
-                !ALLOWED_TAGS[cfg] || FORBID_TAGS[cfg])) throw typeErrorCreate("root node is forbidden and cannot be sanitized in-place");
-            } else if (dirty instanceof Node) (cfg = (body = _initDocument("\x3c!----\x3e")).ownerDocument.importNode(dirty, !0)).nodeType === NODE_TYPE.element && "BODY" === cfg.nodeName || "HTML" === cfg.nodeName ? body = cfg : body.appendChild(cfg); else {
-                if (!RETURN_DOM && !SAFE_FOR_TEMPLATES && !WHOLE_DOCUMENT && -1 === dirty.indexOf("<")) return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(dirty) : dirty;
-                if (!(body = _initDocument(dirty))) return RETURN_DOM ? null : RETURN_TRUSTED_TYPE ? emptyHTML : "";
-            }
-            body && FORCE_BODY && _forceRemove(body.firstChild);
-            for (var nodeIterator = _createNodeIterator(IN_PLACE ? dirty : body); currentNode = nodeIterator.nextNode(); ) _sanitizeElements(currentNode), 
-            _sanitizeAttributes(currentNode), currentNode.content instanceof DocumentFragment && function _sanitizeShadowDOM(fragment) {
-                var shadowNode, shadowIterator = _createNodeIterator(fragment);
-                for (_executeHooks(hooks.beforeSanitizeShadowDOM, fragment, null); shadowNode = shadowIterator.nextNode(); ) _executeHooks(hooks.uponSanitizeShadowNode, shadowNode, null), 
-                _sanitizeElements(shadowNode), _sanitizeAttributes(shadowNode), 
-                shadowNode.content instanceof DocumentFragment && _sanitizeShadowDOM(shadowNode.content);
-                _executeHooks(hooks.afterSanitizeShadowDOM, fragment, null);
-            }(currentNode.content);
-            if (IN_PLACE) return dirty;
-            if (RETURN_DOM) {
-                if (RETURN_DOM_FRAGMENT) for (returnNode = createDocumentFragment.call(body.ownerDocument); body.firstChild; ) returnNode.appendChild(body.firstChild); else returnNode = body;
-                return returnNode = ALLOWED_ATTR.shadowroot || ALLOWED_ATTR.shadowrootmode ? importNode.call(originalDocument, returnNode, !0) : returnNode;
-            }
-            let serializedHTML = WHOLE_DOCUMENT ? body.outerHTML : body.innerHTML;
-            return WHOLE_DOCUMENT && ALLOWED_TAGS["!doctype"] && body.ownerDocument && body.ownerDocument.doctype && body.ownerDocument.doctype.name && regExpTest(DOCTYPE_NAME, body.ownerDocument.doctype.name) && (serializedHTML = "<!DOCTYPE " + body.ownerDocument.doctype.name + ">\n" + serializedHTML), 
-            SAFE_FOR_TEMPLATES && arrayForEach([ MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR ], expr => {
-                serializedHTML = stringReplace(serializedHTML, expr, " ");
-            }), trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(serializedHTML) : serializedHTML;
-        }, DOMPurify.setConfig = function() {
-            _parseConfig(0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : {}), 
-            SET_CONFIG = !0;
-        }, DOMPurify.clearConfig = function() {
-            CONFIG = null, SET_CONFIG = !1;
-        }, DOMPurify.isValidAttribute = function(tag, attr, value) {
-            return CONFIG || _parseConfig({}), _isValidAttribute(tag = transformCaseFunc(tag), attr = transformCaseFunc(attr), value);
-        }, DOMPurify.addHook = function(entryPoint, hookFunction) {
-            "function" == typeof hookFunction && arrayPush(hooks[entryPoint], hookFunction);
-        }, DOMPurify.removeHook = function(entryPoint, hookFunction) {
-            return void 0 !== hookFunction ? -1 === (hookFunction = arrayLastIndexOf(hooks[entryPoint], hookFunction)) ? void 0 : arraySplice(hooks[entryPoint], hookFunction, 1)[0] : arrayPop(hooks[entryPoint]);
-        }, DOMPurify.removeHooks = function(entryPoint) {
-            hooks[entryPoint] = [];
-        }, DOMPurify.removeAllHooks = function() {
-            hooks = _createHooksMap();
-        }, DOMPurify;
-    }();
-    function addEvent(target, name, callback, capture) {
-        target.addEventListener(name, callback, capture || !1);
-    }
-    function removeEvent(target, name, callback, capture) {
-        target.removeEventListener(name, callback, capture || !1);
-    }
-    function fix(originalEvent, data) {
-        var name, doc, event = data || {};
-        function returnFalse() {
-            return !1;
-        }
-        function returnTrue() {
-            return !0;
-        }
-        for (name in originalEvent) deprecated[name] || (event[name] = originalEvent[name]);
-        return event.target || (event.target = event.srcElement || document), originalEvent && mouseEventRe.test(originalEvent.type) && void 0 === originalEvent.pageX && void 0 !== originalEvent.clientX && (doc = (data = event.target.ownerDocument || document).documentElement, 
-        data = data.body, event.pageX = originalEvent.clientX + (doc && doc.scrollLeft || data && data.scrollLeft || 0) - (doc && doc.clientLeft || data && data.clientLeft || 0), 
-        event.pageY = originalEvent.clientY + (doc && doc.scrollTop || data && data.scrollTop || 0) - (doc && doc.clientTop || data && data.clientTop || 0)), 
-        event.preventDefault = function() {
-            event.isDefaultPrevented = returnTrue, originalEvent && originalEvent.preventDefault();
-        }, event.stopPropagation = function() {
-            event.isPropagationStopped = returnTrue, originalEvent && originalEvent.stopPropagation();
-        }, event.stopImmediatePropagation = function() {
-            event.isImmediatePropagationStopped = returnTrue, event.stopPropagation();
-        }, event.isDefaultPrevented || (event.isDefaultPrevented = returnFalse, 
-        event.isPropagationStopped = returnFalse, event.isImmediatePropagationStopped = returnFalse), 
-        event;
-    }
-    function EventUtils() {
-        var count, expando, hasFocusIn, hasMouseEnterLeave, mouseEnterLeave, self = this, events = {};
-        function executeHandlers(evt, id) {
-            var i, l, callback, callbackList = (id = events[id]) && id[evt.type];
-            if (callbackList) for (i = 0, l = callbackList.length; i < l; i++) if ((callback = callbackList[i]) && !1 === callback.func.call(callback.scope, evt) && evt.preventDefault(), 
-            evt.isImmediatePropagationStopped()) return;
-        }
-        expando = "mce-data-" + (+new Date()).toString(32), hasMouseEnterLeave = "onmouseenter" in document.documentElement, 
-        hasFocusIn = "onfocusin" in document.documentElement, count = 1, self.domLoaded = !(mouseEnterLeave = {
-            mouseenter: "mouseover",
-            mouseleave: "mouseout"
-        }), self.events = events, self.bind = function(target, names, callback, scope) {
-            var id, callbackList, i, name, fakeName, nativeHandler, capture, win = window;
-            function defaultNativeHandler(evt) {
-                executeHandlers(fix(evt || win.event), id);
-            }
-            if (target && 3 !== target.nodeType && 8 !== target.nodeType) {
-                for (target[expando] ? id = target[expando] : (id = count++, target[expando] = id, 
-                events[id] = {}), scope = scope || target, i = (names = names.split(" ")).length; i--; ) nativeHandler = defaultNativeHandler, 
-                fakeName = capture = !1, "DOMContentLoaded" === (name = names[i]) && (name = "ready"), 
-                self.domLoaded && "ready" === name && "complete" == target.readyState ? callback.call(scope, fix({
-                    type: name
-                })) : (hasMouseEnterLeave || (fakeName = mouseEnterLeave[name]) && (nativeHandler = function(evt) {
-                    var current = evt.currentTarget, related = evt.relatedTarget;
-                    if (related && current.contains) related = current.contains(related); else for (;related && related !== current; ) related = related.parentNode;
-                    related || ((evt = fix(evt || win.event)).type = "mouseout" === evt.type ? "mouseleave" : "mouseenter", 
-                    evt.target = current, executeHandlers(evt, id));
-                }), hasFocusIn || "focusin" !== name && "focusout" !== name || (capture = !0, 
-                fakeName = "focusin" === name ? "focus" : "blur", nativeHandler = function(evt) {
-                    (evt = fix(evt || win.event)).type = "focus" === evt.type ? "focusin" : "focusout", 
-                    executeHandlers(evt, id);
-                }), (callbackList = events[id][name]) ? "ready" === name && self.domLoaded ? callback({
-                    type: name
-                }) : callbackList.push({
-                    func: callback,
-                    scope: scope
-                }) : (events[id][name] = callbackList = [ {
-                    func: callback,
-                    scope: scope
-                } ], callbackList.fakeName = fakeName, callbackList.capture = capture, 
-                callbackList.nativeHandler = nativeHandler, "ready" === name ? function(win, callback, eventUtils) {
-                    var doc = win.document, event = {
-                        type: "ready"
-                    };
-                    function readyHandler() {
-                        eventUtils.domLoaded || (eventUtils.domLoaded = !0, callback(event));
-                    }
-                    eventUtils.domLoaded ? callback(event) : ("complete" === doc.readyState ? readyHandler() : addEvent(win, "DOMContentLoaded", readyHandler), 
-                    addEvent(win, "load", readyHandler));
-                }(target, nativeHandler, self) : addEvent(target, fakeName || name, nativeHandler, capture)));
-                return target = callbackList = 0, callback;
-            }
-        }, self.unbind = function(target, names, callback) {
-            var id, i, ci, name, eventMap, nativeHandler, fakeName, capture, callbackList;
-            if (target && 3 !== target.nodeType && 8 !== target.nodeType && (id = target[expando])) {
-                if (eventMap = events[id], names) {
-                    for (i = (names = names.split(" ")).length; i--; ) if (callbackList = eventMap[name = names[i]]) {
-                        if (callback) for (ci = callbackList.length; ci--; ) callbackList[ci].func === callback && (nativeHandler = callbackList.nativeHandler, 
-                        fakeName = callbackList.fakeName, capture = callbackList.capture, 
-                        (callbackList = callbackList.slice(0, ci).concat(callbackList.slice(ci + 1))).nativeHandler = nativeHandler, 
-                        callbackList.fakeName = fakeName, callbackList.capture = capture, 
-                        eventMap[name] = callbackList);
-                        callback && 0 !== callbackList.length || (delete eventMap[name], 
-                        removeEvent(target, callbackList.fakeName || name, callbackList.nativeHandler, callbackList.capture));
-                    }
-                } else {
-                    for (name in eventMap) removeEvent(target, (callbackList = eventMap[name]).fakeName || name, callbackList.nativeHandler, callbackList.capture);
-                    eventMap = {};
-                }
-                for (name in eventMap) return self;
-                delete events[id];
-                try {
-                    delete target[expando];
-                } catch (ex) {
-                    target[expando] = null;
-                }
-            }
-            return self;
-        }, self.fire = function(target, name, args) {
-            var id;
-            if (target && 3 !== target.nodeType && 8 !== target.nodeType) {
-                for ((args = fix(null, args)).type = name, args.target = target; (id = target[expando]) && executeHandlers(args, id), 
-                (target = target.parentNode || target.ownerDocument || target.defaultView || target.parentWindow) && !args.isPropagationStopped(); );
-                self.args = args;
-            }
-            return self;
-        }, self.clean = function(target) {
-            var i, children, unbind = self.unbind;
-            if (target && 3 !== target.nodeType && 8 !== target.nodeType && (target[expando] && unbind(target), 
-            target = target.getElementsByTagName ? target : target.document) && target.getElementsByTagName) for (unbind(target), 
-            i = (children = target.getElementsByTagName("*")).length; i--; ) (target = children[i])[expando] && unbind(target);
-            return self;
-        }, self.destroy = function() {
-            events = {};
-        }, self.cancel = function(e) {
-            return e && (e.preventDefault(), e.stopImmediatePropagation()), !1;
-        }, self.add = function(target, events, func, scope) {
-            if (!((target = "string" == typeof target ? document.getElementById(target) : target) && target instanceof Array)) return self.bind(target, (events = "init" === events ? "ready" : events) instanceof Array ? events.join(" ") : events, func, scope);
-            for (var i = target.length; i--; ) self.add(target[i], events, func, scope);
-        }, self.remove = function(target, events, func, scope) {
-            if (!target) return self;
-            if ((target = "string" == typeof target ? document.getElementById(target) : target) instanceof Array) {
-                for (var i = target.length; i--; ) self.remove(target[i], events, func, scope);
-                return self;
-            }
-            return self.unbind(target, events instanceof Array ? events.join(" ") : events, func);
-        }, self.clear = function(target) {
-            return "string" == typeof target && (target = document.getElementById(target)), 
-            self.clean(target);
-        }, self.preventDefault = function(e) {
-            e && e.preventDefault();
-        }, self.isDefaultPrevented = function(e) {
-            return e.isDefaultPrevented();
-        };
-    }
-    !function(tinymce) {
-        var each = tinymce.each, isDomSafe = tinymce.util.URI.isDomSafe, filteredUrlAttrs = tinymce.makeMap("src,href,data,background,formaction,poster,xlink:href");
-        tinymce.html.Sanitizer = function(settings, schema) {
-            var special = schema.getSpecialElements(), uid = 0;
-            function processNode(node) {
-                if (1 === node.nodeType) {
-                    var tag = node.tagName.toLowerCase();
-                    if ("body" !== tag && !node.hasAttribute("data-mce-root") && !node.hasAttribute("data-mce-type")) if (node.hasAttribute("data-mce-bogus")) removeNode(node); else if (settings.validate) {
-                        var rule = schema.getElementRule(tag);
-                        if (rule) if (each(rule.attributesForced, function(attr) {
-                            node.setAttribute(attr.name, "{$uid}" === attr.value ? "mce_" + uid++ : attr.value);
-                        }), each(rule.attributesDefault, function(attr) {
-                            node.hasAttribute(attr.name) || node.setAttribute(attr.name, "{$uid}" === attr.value ? "mce_" + uid++ : attr.value);
-                        }), rule.attributesRequired && !rule.attributesRequired.some(function(attr) {
-                            return node.hasAttribute(attr.name);
-                        })) removeNode(node, !0); else if (rule.removeEmptyAttrs && 0 === node.attributes.length) removeNode(node, !0); else {
-                            if (rule.outputName && rule.outputName !== tag) {
-                                for (var newNode = document.createElement(rule.outputName); node.firstChild; ) newNode.appendChild(node.firstChild);
-                                node.parentNode.replaceChild(newNode, node), node = newNode;
-                            }
-                            !function(node) {
-                                for (var attrs = node.attributes, tag = node.tagName.toLowerCase(), i = attrs.length - 1; 0 <= i; i--) {
-                                    var name = attrs[i].name, lower = name.toLowerCase(), value = attrs[i].value;
-                                    /-/.test(lower) || (/^on[a-z]+/i.test(lower) ? settings.allow_event_attributes && schema.isValid(tag, name) || node.removeAttribute(name) : filteredUrlAttrs[lower] && !isDomSafe(value, tag, settings) || !1 === schema.isValid(tag, name) ? node.removeAttribute(name) : function(name) {
-                                        var boolAttrMap = schema.getBoolAttrs();
-                                        return boolAttrMap[name] || boolAttrMap[name.toLowerCase()];
-                                    }(name) && node.setAttribute(name, name));
-                                }
-                            }(node);
-                        } else removeNode(node);
-                    }
-                }
-            }
-            function removeNode(node, unwrap) {
-                var parent = node.parentNode;
-                if (parent) {
-                    if (special[node.tagName.toLowerCase()] && (unwrap = !1), unwrap = "all" != node.getAttribute("data-mce-bogus") || unwrap) {
-                        for (var frag = document.createDocumentFragment(); node.firstChild; ) frag.appendChild(node.firstChild);
-                        parent.insertBefore(frag, node);
-                    }
-                    parent.removeChild(node);
-                }
-            }
-            this.sanitize = function(body, mimeType) {
-                if (!1 !== settings.verify_html) {
-                    if (settings.purify_html) return html = body, (purifier = purify()).removeAllHooks(), 
-                    purifier.addHook("uponSanitizeElement", function(node, data) {
-                        processNode(node);
-                    }), purifier.addHook("uponSanitizeAttribute", function(node, data) {
-                        var attrName = data.attrName.toLowerCase(), tag = node.tagName.toLowerCase();
-                        /-/.test(attrName) || settings.allow_event_attributes && /^on[a-z]+/i.test(attrName) ? data.keepAttr = !0 : settings.allow_svg_data_urls && data.attrValue.startsWith("data:image/svg+xml") ? data.forceKeepAttr = !0 : schema.isValid(tag, attrName) || node.removeAttribute(data.attrName);
-                    }), purifier.sanitize(html, (config = {
-                        IN_PLACE: !0,
-                        RETURN_DOM: !0,
-                        FORCE_BODY: !0,
-                        ALLOW_UNKNOWN_PROTOCOLS: !!settings.allow_script_urls,
-                        ALLOWED_TAGS: [ "#comment", "#cdata-section", "body" ],
-                        ALLOWED_ATTR: []
-                    }, settings.allow_script_urls ? config.ALLOWED_URI_REGEXP = /.*/ : settings.allow_html_data_urls && (config.ALLOWED_URI_REGEXP = /^(?!(\w+script|mhtml):)/i), 
-                    attrNames = {}, each(schema.elements, function(element, name) {
-                        config.ALLOWED_TAGS.push(name), each(element.attributes, function(_, attrName) {
-                            attrNames[attrName] = !0;
-                        }), "script" !== name && "style" !== name || (config.FORCE_BODY = !0);
-                    }), each(attrNames, function(_, attrName) {
-                        config.ALLOWED_ATTR.push(attrName);
-                    }), config));
-                    for (var node, iterator = document.createNodeIterator(body, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_TEXT); node = iterator.nextNode(); ) 1 === node.nodeType && processNode(node);
-                }
-                var html, config, attrNames, purifier;
-                return body;
-            };
-        };
     }(tinymce), function(tinymce) {
         var Node = tinymce.html.Node, each = tinymce.each, explode = tinymce.explode, extend = tinymce.extend, makeMap = tinymce.makeMap;
         tinymce.html.DomParser = function(settings, schema) {
@@ -2973,7 +2499,7 @@
                 return create(clientRect.left, clientRect.top, clientRect.width, clientRect.height);
             }
         };
-    }(tinymce), tinymce.dom = {}, android = tinymce.dom, mouseEventRe = /^(?:mouse|contextmenu)|click/, 
+    }(tinymce), tinymce.dom = {}, phone = tinymce.dom, mouseEventRe = /^(?:mouse|contextmenu)|click/, 
     deprecated = {
         keyLocation: 1,
         layerX: 1,
@@ -2984,7 +2510,7 @@
         keyIdentifier: 1,
         mozPressure: 1,
         path: 1
-    }, android.EventUtils = EventUtils, android.Event = new EventUtils(), android.Event.bind(window, "ready", function() {}), 
+    }, phone.EventUtils = EventUtils, phone.Event = new EventUtils(), phone.Event.bind(window, "ready", function() {}), 
     tinymce.dom.TreeWalker = function(startNode, rootNode) {
         var node = startNode;
         function findSibling(node, startName, siblingName, shallow) {
@@ -3675,6 +3201,51 @@
             process_html: 0
         });
     }(tinymce), function(tinymce) {
+        function getTemporaryNodeSelector(tempAttrs) {
+            return (0 === tempAttrs.length ? "" : tempAttrs.map(function(attr) {
+                return "[" + attr + "]";
+            }).join(",") + ",") + '[data-mce-bogus="all"]';
+        }
+        function createCommentWalker(body) {
+            return document.createTreeWalker(body, NodeFilter.SHOW_COMMENT, null, !1);
+        }
+        function hasComments(body) {
+            return null !== createCommentWalker(body).nextNode();
+        }
+        function hasTemporaryNodes(body, tempAttrs) {
+            return null !== body.querySelector(getTemporaryNodeSelector(tempAttrs));
+        }
+        function trimTemporaryNodes(body, tempAttrs) {
+            tinymce.each(function(body, tempAttrs) {
+                return body.querySelectorAll(getTemporaryNodeSelector(tempAttrs));
+            }(body, tempAttrs), function(elm) {
+                "all" === elm.getAttribute("data-mce-bogus") ? elm && elm.parentNode && elm.parentNode.removeChild(elm) : tinymce.each(tempAttrs, function(attr) {
+                    elm.hasAttribute(attr) && elm.removeAttribute(attr);
+                });
+            });
+        }
+        function removeCommentsContainingZwsp(body) {
+            for (var walker = createCommentWalker(body), nextNode = walker.nextNode(); null !== nextNode; ) {
+                var comment = walker.currentNode, nextNode = walker.nextNode();
+                "string" == typeof comment.nodeValue && -1 !== comment.nodeValue.indexOf("\ufeff") && comment && comment.parentNode && comment.parentNode.removeChild(comment);
+            }
+        }
+        function deepClone(body) {
+            return body.cloneNode(!0);
+        }
+        tinymce.dom.TrimBody = {
+            trim: function(body, tempAttrs) {
+                var trimmed = body;
+                return hasComments(body) ? (removeCommentsContainingZwsp(trimmed = deepClone(body)), 
+                hasTemporaryNodes(trimmed, tempAttrs) && trimTemporaryNodes(trimmed, tempAttrs)) : hasTemporaryNodes(body, tempAttrs) && trimTemporaryNodes(trimmed = deepClone(body), tempAttrs), 
+                trimmed;
+            },
+            hasComments: hasComments,
+            hasTemporaryNodes: hasTemporaryNodes,
+            trimTemporaryNodes: trimTemporaryNodes,
+            removeCommentsContainingZwsp: removeCommentsContainingZwsp
+        };
+    }(tinymce), function(tinymce) {
         function isNodeType(type) {
             return function(node) {
                 return !!node && node.nodeType == type;
@@ -3757,11 +3328,279 @@
             }
         };
     }(tinymce), function(tinymce) {
-        var each = tinymce.each, TreeWalker = tinymce.dom.TreeWalker;
+        function getAbsolutePosition(elm) {
+            var clientRect = elm.getBoundingClientRect(), docElem = (elm = elm.ownerDocument).documentElement, elm = elm.defaultView;
+            return {
+                top: clientRect.top + elm.pageYOffset - docElem.clientTop,
+                left: clientRect.left + elm.pageXOffset - docElem.clientLeft
+            };
+        }
+        tinymce.dom.MousePosition = {
+            calc: function(editor, event) {
+                return bodyPosition = function(editor) {
+                    return editor.inline ? getAbsolutePosition(editor.getBody()) : {
+                        left: 0,
+                        top: 0
+                    };
+                }(editor), scrollPosition = function(editor) {
+                    var body = editor.getBody();
+                    return editor.inline ? {
+                        left: body.scrollLeft,
+                        top: body.scrollTop
+                    } : {
+                        left: 0,
+                        top: 0
+                    };
+                }(editor), {
+                    pageX: (editor = function(editor, event) {
+                        var iframePosition;
+                        return event.target.ownerDocument !== editor.getDoc() ? (iframePosition = getAbsolutePosition(editor.getContentAreaContainer()), 
+                        editor = function(editor) {
+                            var body = editor.getBody(), docElm = editor.getDoc().documentElement, inlineScroll = {
+                                left: body.scrollLeft,
+                                top: body.scrollTop
+                            }, body = {
+                                left: body.scrollLeft || docElm.scrollLeft,
+                                top: body.scrollTop || docElm.scrollTop
+                            };
+                            return editor.inline ? inlineScroll : body;
+                        }(editor), {
+                            left: event.pageX - iframePosition.left + editor.left,
+                            top: event.pageY - iframePosition.top + editor.top
+                        }) : {
+                            left: event.pageX,
+                            top: event.pageY
+                        };
+                    }(editor, event)).left - bodyPosition.left + scrollPosition.left,
+                    pageY: editor.top - bodyPosition.top + scrollPosition.top
+                };
+                var bodyPosition, scrollPosition;
+            }
+        };
+    }(tinymce), function(tinymce) {
+        var NodeType = tinymce.dom.NodeType, DOMUtils = tinymce.DOM, Fun = tinymce.util.Fun, Arr = tinymce.util.Arr, isText = NodeType.isText, isBogus = NodeType.isBogus, nodeIndex = DOMUtils.nodeIndex;
+        function getChildNodes(node) {
+            return node ? Arr.reduce(node.childNodes, function(result, node) {
+                return isBogus(node) && "BR" != node.nodeName ? result = result.concat(getChildNodes(node)) : result.push(node), 
+                result;
+            }, []) : [];
+        }
+        function equal(targetValue) {
+            return function(value) {
+                return targetValue === value;
+            };
+        }
+        function createPathItem(node) {
+            return (isText(node) ? "text()" : node.nodeName.toLowerCase()) + "[" + function(node) {
+                var nodes = getChildNodes(function normalizedParent(node) {
+                    return node = node.parentNode, isBogus(node) ? normalizedParent(node) : node;
+                }(node)), index = Arr.findIndex(nodes, equal(node), node), nodes = nodes.slice(0, index + 1), index = Arr.reduce(nodes, function(result, node, i) {
+                    return isText(node) && isText(nodes[i - 1]) && result++, result;
+                }, 0);
+                return nodes = Arr.filter(nodes, NodeType.matchNodeNames(node.nodeName)), 
+                Arr.findIndex(nodes, equal(node), node) - index;
+            }(node) + "]";
+        }
+        tinymce.caret.CaretBookmark = {
+            create: function(rootNode, caretPosition) {
+                var outputOffset, childNodes, path = [], container = caretPosition.container(), caretPosition = caretPosition.offset();
+                return isText(container) ? outputOffset = function(textNode, offset) {
+                    for (;(textNode = textNode.previousSibling) && isText(textNode); ) offset += textNode.data.length;
+                    return offset;
+                }(container, caretPosition) : (caretPosition >= (childNodes = container.childNodes).length ? (outputOffset = "after", 
+                caretPosition = childNodes.length - 1) : outputOffset = "before", 
+                container = childNodes[caretPosition]), path.push(createPathItem(container)), 
+                childNodes = function(rootNode, node) {
+                    var parents = [];
+                    for (node = node.parentNode; node != rootNode; node = node.parentNode) parents.push(node);
+                    return parents;
+                }(rootNode, container), childNodes = Arr.filter(childNodes, Fun.negate(NodeType.isBogus)), 
+                (path = path.concat(Arr.map(childNodes, createPathItem))).reverse().join("/") + "," + outputOffset;
+            },
+            resolve: function(rootNode, path) {
+                var parts;
+                {
+                    if (path && (path = (parts = path.split(","))[0].split("/"), 
+                    parts = 1 < parts.length ? parts[1] : "before", path = Arr.reduce(path, function(result, value) {
+                        return (value = /([\w\-\(\)]+)\[([0-9]+)\]/.exec(value)) ? ("text()" === value[1] && (value[1] = "#text"), 
+                        name = value[1], value = parseInt(value[2], 10), nodes = getChildNodes(result), 
+                        nodes = Arr.filter(nodes, function(node, index) {
+                            return !isText(node) || !isText(nodes[index - 1]);
+                        }), (nodes = Arr.filter(nodes, NodeType.matchNodeNames(name)))[value]) : null;
+                        var name, nodes;
+                    }, rootNode))) {
+                        if (isText(path)) {
+                            for (var container = path, offset = parseInt(parts, 10), dataLen, node = container, targetOffset = 0; isText(node); ) {
+                                if (dataLen = node.data.length, targetOffset <= offset && offset <= targetOffset + dataLen) {
+                                    container = node, offset -= targetOffset;
+                                    break;
+                                }
+                                if (!isText(node.nextSibling)) {
+                                    container = node, offset = dataLen;
+                                    break;
+                                }
+                                targetOffset += dataLen, node = node.nextSibling;
+                            }
+                            return offset > container.data.length && (offset = container.data.length), 
+                            new tinymce.caret.CaretPosition(container, offset);
+                        }
+                        return parts = "after" === parts ? nodeIndex(path) + 1 : nodeIndex(path), 
+                        new tinymce.caret.CaretPosition(path.parentNode, parts);
+                    }
+                    return null;
+                }
+            }
+        };
+    }(tinymce), function(tinymce) {
+        var NodeType = tinymce.dom.NodeType, Zwsp = tinymce.text.Zwsp, isElement = NodeType.isElement, isText = NodeType.isText;
+        function isCaretContainerBlock(node) {
+            return isText(node) && (node = node.parentNode), isElement(node) && node.hasAttribute("data-mce-caret");
+        }
+        function isCaretContainerInline(node) {
+            return isText(node) && Zwsp.isZwsp(node.data);
+        }
+        function isCaretContainer(node) {
+            return isCaretContainerBlock(node) || isCaretContainerInline(node);
+        }
+        function startsWithCaretContainer(node) {
+            return isText(node) && node.data[0] == Zwsp.ZWSP;
+        }
+        function endsWithCaretContainer(node) {
+            return isText(node) && node.data[node.data.length - 1] == Zwsp.ZWSP;
+        }
+        tinymce.caret.CaretContainer = {
+            isCaretContainer: isCaretContainer,
+            isCaretContainerBlock: isCaretContainerBlock,
+            isCaretContainerInline: isCaretContainerInline,
+            showCaretContainerBlock: function(caretContainer) {
+                var elm;
+                return caretContainer && caretContainer.hasAttribute("data-mce-caret") ? (elm = (elm = (elm = caretContainer).getElementsByTagName("br"))[elm.length - 1], 
+                NodeType.isBogus(elm) && elm.parentNode.removeChild(elm), caretContainer.removeAttribute("data-mce-caret"), 
+                caretContainer.removeAttribute("data-mce-bogus"), caretContainer.removeAttribute("style"), 
+                caretContainer.removeAttribute("_moz_abspos"), caretContainer) : null;
+            },
+            insertInline: function(node, before) {
+                var sibling, textNode = node.ownerDocument.createTextNode(Zwsp.ZWSP), parentNode = node.parentNode;
+                if (before) {
+                    if (sibling = node.previousSibling, isText(sibling)) {
+                        if (isCaretContainer(sibling)) return sibling;
+                        if (endsWithCaretContainer(sibling)) return sibling.splitText(sibling.data.length - 1);
+                    }
+                    parentNode.insertBefore(textNode, node);
+                } else {
+                    if (sibling = node.nextSibling, isText(sibling)) {
+                        if (isCaretContainer(sibling)) return sibling;
+                        if (startsWithCaretContainer(sibling)) return sibling.splitText(1), 
+                        sibling;
+                    }
+                    node.nextSibling ? parentNode.insertBefore(textNode, node.nextSibling) : parentNode.appendChild(textNode);
+                }
+                return textNode;
+            },
+            insertBlock: function(blockName, node, before) {
+                var br;
+                return (blockName = node.ownerDocument.createElement(blockName)).setAttribute("data-mce-caret", before ? "before" : "after"), 
+                blockName.setAttribute("data-mce-bogus", "all"), blockName.appendChild(((br = document.createElement("br")).setAttribute("data-mce-bogus", "1"), 
+                br)), br = node.parentNode, before ? br.insertBefore(blockName, node) : node.nextSibling ? br.insertBefore(blockName, node.nextSibling) : br.appendChild(blockName), 
+                blockName;
+            },
+            hasContent: function(node) {
+                return node.firstChild !== node.lastChild || !NodeType.isBr(node.firstChild);
+            },
+            startsWithCaretContainer: startsWithCaretContainer,
+            endsWithCaretContainer: endsWithCaretContainer
+        };
+    }(tinymce), function(tinymce) {
+        var NodeType = tinymce.dom.NodeType, CaretContainer = tinymce.caret.CaretContainer, Arr = tinymce.util.Arr, isContentEditableTrue = NodeType.isContentEditableTrue, isContentEditableFalse = NodeType.isContentEditableFalse, isBr = NodeType.isBr, isText = NodeType.isText, isInvalidTextElement = NodeType.matchNodeNames("script style textarea"), isAtomicInline = NodeType.matchNodeNames("img input textarea hr iframe video audio object"), isTable = NodeType.matchNodeNames("table"), isCaretContainer = CaretContainer.isCaretContainer;
+        function isCaretCandidate(node) {
+            return !isCaretContainer(node) && (isText(node) ? !isInvalidTextElement(node.parentNode) : isAtomicInline(node) || isBr(node) || isTable(node) || isContentEditableFalse(node));
+        }
+        function isInEditable(node, rootNode) {
+            for (node = node.parentNode; node && node != rootNode; node = node.parentNode) {
+                if (isContentEditableFalse(node)) return !1;
+                if (isContentEditableTrue(node)) return !0;
+            }
+            return !0;
+        }
+        tinymce.caret.CaretCandidate = {
+            isCaretCandidate: isCaretCandidate,
+            isInEditable: isInEditable,
+            isAtomic: function(node) {
+                return isAtomicInline(node) || function(node) {
+                    return !!isContentEditableFalse(node) && !0 !== Arr.reduce(node.getElementsByTagName("*"), function(result, elm) {
+                        return result || isContentEditableTrue(elm);
+                    }, !1);
+                }(node);
+            },
+            isEditableCaretCandidate: function(node, rootNode) {
+                return isCaretCandidate(node) && isInEditable(node, rootNode);
+            }
+        };
+    }(tinymce), function(tinymce) {
+        function setNodeValue(node, text) {
+            0 === text.length ? removeNode(node) : node.nodeValue = text;
+        }
+        function trimCount(text) {
+            var trimmedText = Zwsp.trim(text);
+            return {
+                count: text.length - trimmedText.length,
+                text: trimmedText
+            };
+        }
+        function remove(caretContainerNode) {
+            isElement(caretContainerNode) && CaretContainer.isCaretContainer(caretContainerNode) && (CaretContainer.hasContent(caretContainerNode) ? caretContainerNode.removeAttribute("data-mce-caret") : removeNode(caretContainerNode)), 
+            isText(caretContainerNode) && setNodeValue(caretContainerNode, Zwsp.trim(function(node) {
+                try {
+                    return node.nodeValue;
+                } catch (ex) {
+                    return "";
+                }
+            }(caretContainerNode)));
+        }
+        var NodeType = tinymce.dom.NodeType, Zwsp = tinymce.text.Zwsp, CaretContainer = tinymce.caret.CaretContainer, CaretPosition = tinymce.caret.CaretPosition, Arr = tinymce.util.Arr, isElement = NodeType.isElement, isText = NodeType.isText, removeNode = function(node) {
+            var parentNode = node.parentNode;
+            parentNode && parentNode.removeChild(node);
+        }, removeUnchanged = function(caretContainer, pos) {
+            return remove(caretContainer), pos;
+        };
+        tinymce.caret.CaretContainerRemove = {
+            removeAndReposition: function(container, pos) {
+                return (CaretPosition.isTextPosition(pos) ? function(caretContainer, pos) {
+                    return (pos.container() === caretContainer ? function(caretContainer, pos) {
+                        var before = trimCount(caretContainer.data.substr(0, pos.offset())), after = trimCount(caretContainer.data.substr(pos.offset()));
+                        return 0 < (after = before.text + after.text).length ? (setNodeValue(caretContainer, after), 
+                        new CaretPosition(caretContainer, pos.offset() - before.count)) : pos;
+                    } : removeUnchanged)(caretContainer, pos);
+                } : function(caretContainer, pos) {
+                    return (pos.container() === caretContainer.parentNode ? function(caretContainer, pos) {
+                        var parentNode = pos.container(), newPosition = Arr.indexOf(parentNode.childNodes, caretContainer).map(function(index) {
+                            return index < pos.offset() ? new CaretPosition(parentNode, pos.offset() - 1) : pos;
+                        }).getOr(pos);
+                        return remove(caretContainer), newPosition;
+                    } : removeUnchanged)(caretContainer, pos);
+                })(container, pos);
+            },
+            remove: remove
+        };
+    }(tinymce), function(tinymce) {
+        var each = tinymce.each, TreeWalker = tinymce.dom.TreeWalker, NodeType = tinymce.dom.NodeType, CaretContainer = tinymce.caret.CaretContainer, Arr = tinymce.util.Arr, isContentEditableTrue = NodeType.isContentEditableTrue, isContentEditableFalse = NodeType.isContentEditableFalse, isCaretContainer = CaretContainer.isCaretContainer;
+        function hasCeProperty(node) {
+            return isContentEditableTrue(node) || isContentEditableFalse(node);
+        }
+        function findParent(node, rootNode, predicate) {
+            for (;node && node !== rootNode; ) {
+                if (predicate(node)) return node;
+                node = node.parentNode;
+            }
+            return null;
+        }
+        function isFormatterCaret(node) {
+            return "_mce_caret" === node.id;
+        }
         tinymce.dom.RangeUtils = function(dom) {
             this.walk = function(rng, callback) {
                 var ancestor, node, parent, siblings, container, childNodes, startContainer = rng.startContainer, startOffset = rng.startOffset, endContainer = rng.endContainer, endOffset = rng.endOffset;
-                if (0 < (rng = dom.select("td.mceSelected,th.mceSelected,div.mceSelected")).length) each(rng, function(node) {
+                if (0 < (rng = dom.select("td[data-mce-selected],th[data-mce-selected]")).length) each(rng, function(node) {
                     callback([ node ]);
                 }); else {
                     if (1 == startContainer.nodeType && startContainer.hasChildNodes() && (startContainer = startContainer.childNodes[startOffset]), 
@@ -3819,7 +3658,7 @@
                     endOffset: rng
                 };
             }, this.normalize = function(rng) {
-                var normalized, collapsed;
+                var collapsed, normalized = !1;
                 function normalizeEndPoint(start) {
                     var container, offset, walker, node, nonEmptyElementsMap, directionLeft, isAfterNode, body = dom.getRoot();
                     function hasBrBeforeAfter(node, left) {
@@ -3831,7 +3670,11 @@
                         left && "BR" == startNode.nodeName && isAfterNode && dom.isEmpty(parentBlockContainer)) container = startNode.parentNode, 
                         offset = dom.nodeIndex(startNode), normalized = !0; else {
                             for (walker = new TreeWalker(startNode, parentBlockContainer); node = walker[left ? "prev" : "next"](); ) {
-                                if ("false" === dom.getContentEditableParent(node)) return;
+                                if ("false" === dom.getContentEditableParent(node) || function(node, rootNode) {
+                                    return isCaretContainer(node) && !1 === function(node, rootNode) {
+                                        return null !== findParent(node, rootNode, isFormatterCaret);
+                                    }(node, rootNode);
+                                }(node, dom.getRoot())) return;
                                 if (3 === node.nodeType && 0 < node.nodeValue.length) return container = node, 
                                 offset = left ? node.nodeValue.length : 0, normalized = !0;
                                 if (dom.isBlock(node) || nonEmptyElementsMap[node.nodeName.toLowerCase()]) return;
@@ -3844,34 +3687,55 @@
                     if (container = rng[(start ? "start" : "end") + "Container"], 
                     offset = rng[(start ? "start" : "end") + "Offset"], isAfterNode = 1 == container.nodeType && offset === container.childNodes.length, 
                     nonEmptyElementsMap = dom.schema.getNonEmptyElements(), directionLeft = start, 
-                    1 == container.nodeType && offset > container.childNodes.length - 1 && (directionLeft = !1), 
-                    9 === container.nodeType && (container = dom.getRoot(), offset = 0), 
-                    container === body) {
-                        if (directionLeft && (node = container.childNodes[0 < offset ? offset - 1 : 0]) && (nonEmptyElementsMap[node.nodeName] || "TABLE" == node.nodeName)) return;
-                        if (container.hasChildNodes() && (offset = Math.min(!directionLeft && 0 < offset ? offset - 1 : offset, container.childNodes.length - 1), 
-                        container = container.childNodes[offset], offset = 0, container.hasChildNodes()) && !/TABLE/.test(container.nodeName)) {
-                            walker = new TreeWalker(node = container, body);
-                            do {
-                                if (3 === node.nodeType && 0 < node.nodeValue.length) {
-                                    offset = directionLeft ? 0 : node.nodeValue.length, 
-                                    container = node, normalized = !0;
-                                    break;
+                    !isCaretContainer(container)) {
+                        if (1 == container.nodeType && offset > container.childNodes.length - 1 && (directionLeft = !1), 
+                        9 === container.nodeType && (container = dom.getRoot(), 
+                        offset = 0), container === body) {
+                            if (directionLeft && (node = container.childNodes[0 < offset ? offset - 1 : 0])) {
+                                if (isCaretContainer(node)) return;
+                                if (nonEmptyElementsMap[node.nodeName] || "TABLE" == node.nodeName) return;
+                            }
+                            if (container.hasChildNodes()) {
+                                if (offset = Math.min(!directionLeft && 0 < offset ? offset - 1 : offset, container.childNodes.length - 1), 
+                                container = container.childNodes[offset], offset = 0, 
+                                !collapsed && container === body.lastChild && "TABLE" === container.nodeName) return;
+                                if (function(node) {
+                                    for (;node && node != body; ) {
+                                        if (isContentEditableFalse(node)) return 1;
+                                        node = node.parentNode;
+                                    }
+                                }(container) || isCaretContainer(container)) return;
+                                if (container.hasChildNodes() && !/TABLE/.test(container.nodeName)) {
+                                    walker = new TreeWalker(node = container, body);
+                                    do {
+                                        if (isContentEditableFalse(node) || isCaretContainer(node)) {
+                                            normalized = !1;
+                                            break;
+                                        }
+                                        if (3 === node.nodeType && 0 < node.nodeValue.length) {
+                                            offset = directionLeft ? 0 : node.nodeValue.length, 
+                                            container = node, normalized = !0;
+                                            break;
+                                        }
+                                        if (nonEmptyElementsMap[node.nodeName.toLowerCase()] && !function(node) {
+                                            return node && /^(TD|TH|CAPTION)$/.test(node.nodeName);
+                                        }(node)) {
+                                            offset = dom.nodeIndex(node), container = node.parentNode, 
+                                            "IMG" != node.nodeName || directionLeft || offset++, 
+                                            normalized = !0;
+                                            break;
+                                        }
+                                    } while (node = directionLeft ? walker.next() : walker.prev());
                                 }
-                                if (nonEmptyElementsMap[node.nodeName.toLowerCase()]) {
-                                    offset = dom.nodeIndex(node), container = node.parentNode, 
-                                    "IMG" != node.nodeName || directionLeft || offset++, 
-                                    normalized = !0;
-                                    break;
-                                }
-                            } while (node = directionLeft ? walker.next() : walker.prev());
+                            }
                         }
+                        collapsed && (3 === container.nodeType && 0 === offset && findTextNodeRelative(!0), 
+                        1 !== container.nodeType || !(node = (node = container.childNodes[offset]) || container.childNodes[offset - 1]) || "BR" !== node.nodeName || function(node) {
+                            return node.previousSibling && "A" == node.previousSibling.nodeName;
+                        }(node) || hasBrBeforeAfter(node) || hasBrBeforeAfter(node, !0) || findTextNodeRelative(!0, node)), 
+                        directionLeft && !collapsed && 3 === container.nodeType && offset === container.nodeValue.length && findTextNodeRelative(!1), 
+                        normalized && rng["set" + (start ? "Start" : "End")](container, offset);
                     }
-                    collapsed && (3 === container.nodeType && 0 === offset && findTextNodeRelative(!0), 
-                    1 !== container.nodeType || !(node = (node = container.childNodes[offset]) || container.childNodes[offset - 1]) || "BR" !== node.nodeName || function(node) {
-                        return node.previousSibling && "A" == node.previousSibling.nodeName;
-                    }(node) || hasBrBeforeAfter(node) || hasBrBeforeAfter(node, !0) || findTextNodeRelative(!0, node)), 
-                    directionLeft && !collapsed && 3 === container.nodeType && offset === container.nodeValue.length && findTextNodeRelative(!1), 
-                    normalized && rng["set" + (start ? "Start" : "End")](container, offset);
                 }
                 return collapsed = rng.collapsed, normalizeEndPoint(!0), collapsed || normalizeEndPoint(), 
                 normalized && collapsed && rng.collapse(!0), normalized;
@@ -3883,19 +3747,34 @@
                 if (rng1.isEqual && rng2.isEqual && rng2.isEqual(rng1)) return !0;
             }
             return !1;
-        }, tinymce.dom.RangeUtils.getCaretRangeFromPoint = function(x, y, doc) {
+        }, tinymce.dom.RangeUtils.getCaretRangeFromPoint = function(clientX, clientY, doc) {
             var rng, point;
-            if (doc.caretPositionFromPoint) {
-                if (!(point = doc.caretPositionFromPoint(x, y))) return null;
-                (rng = doc.createRange()).setStart(point.offsetNode, point.offset), 
-                rng.collapse(!0);
-            } else if (doc.caretRangeFromPoint) rng = doc.caretRangeFromPoint(x, y); else if (doc.body.createTextRange) {
+            if (doc.caretPositionFromPoint) point = doc.caretPositionFromPoint(clientX, clientY), 
+            (rng = doc.createRange()).setStart(point.offsetNode, point.offset), 
+            rng.collapse(!0); else if (doc.caretRangeFromPoint) rng = doc.caretRangeFromPoint(clientX, clientY); else if (doc.body.createTextRange) {
                 rng = doc.body.createTextRange();
                 try {
-                    rng.moveToPoint(x, y), rng.collapse(!0);
+                    rng.moveToPoint(clientX, clientY), rng.collapse(!0);
                 } catch (ex) {
-                    rng.collapse(y < doc.body.clientHeight);
+                    rng = function(clientX, clientY, doc) {
+                        var element = doc.elementFromPoint(clientX, clientY), rng = doc.body.createTextRange();
+                        if (element && "HTML" != element.tagName || (element = doc.body), 
+                        rng.moveToElementText(element), 0 < (doc = (doc = Arr.toArray(rng.getClientRects())).sort(function(a, b) {
+                            return (a = Math.abs(Math.max(a.top - clientY, a.bottom - clientY))) - Math.abs(Math.max(b.top - clientY, b.bottom - clientY));
+                        })).length) {
+                            clientY = (doc[0].bottom + doc[0].top) / 2;
+                            try {
+                                return rng.moveToPoint(clientX, clientY), rng.collapse(!0), 
+                                rng;
+                            } catch (ex) {}
+                        }
+                        return null;
+                    }(clientX, clientY, doc);
                 }
+                return function(rng, rootNode) {
+                    var parentElement = rng && rng.parentElement ? rng.parentElement() : null;
+                    return isContentEditableFalse(findParent(parentElement, rootNode, hasCeProperty)) ? null : rng;
+                }(rng, doc.body);
             }
             return rng;
         }, tinymce.dom.RangeUtils.getSelectedNode = function(range) {
@@ -3906,116 +3785,392 @@
             container = container.childNodes[offset]), container;
         };
     }(tinymce), function(tinymce) {
-        function getAbsolutePosition(elm) {
-            var clientRect = elm.getBoundingClientRect(), docElem = (elm = elm.ownerDocument).documentElement, elm = elm.defaultView;
+        var NodeType = tinymce.dom.NodeType, DOMUtils = tinymce.DOM, CaretCandidate = tinymce.caret.CaretCandidate, RangeUtils = tinymce.dom.RangeUtils, ClientRect = tinymce.geom.ClientRect, ExtendingChar = tinymce.text.ExtendingChar, Fun = tinymce.util.Fun, isElement = NodeType.isElement, CaretCandidate = CaretCandidate.isCaretCandidate, isBlock = NodeType.matchStyleValues("display", "block table"), isFloated = NodeType.matchStyleValues("float", "left right"), isValidElementCaretCandidate = Fun.and(isElement, CaretCandidate, Fun.negate(isFloated)), isNotPre = Fun.negate(NodeType.matchStyleValues("white-space", "pre pre-line pre-wrap")), isText = NodeType.isText, isBr = NodeType.isBr, nodeIndex = DOMUtils.nodeIndex, resolveIndex = RangeUtils.getNode;
+        function createRange(doc) {
+            return "createRange" in doc ? doc.createRange() : DOMUtils.DOM.createRng();
+        }
+        function isWhiteSpace(chr) {
+            return chr && /[\r\n\t ]/.test(chr);
+        }
+        function isHiddenWhiteSpaceRange(range) {
+            var container = range.startContainer, offset = range.startOffset;
+            return isWhiteSpace(range.toString()) && isNotPre(container.parentNode) && (isWhiteSpace((range = container.data)[offset - 1]) || isWhiteSpace(range[offset + 1]));
+        }
+        function CaretPosition(container, offset, clientRects) {
+            function getClientRects() {
+                return clientRects = clientRects || function(caretPosition) {
+                    var node, clientRects = [];
+                    function getBoundingClientRect(item) {
+                        var rng, doc, parentNode, clientRects = 0 < (clientRects = item.getClientRects()).length ? ClientRect.clone(clientRects[0]) : ClientRect.clone(item.getBoundingClientRect());
+                        return isBr(item) && 0 === clientRects.left ? (rng = createRange(doc = item.ownerDocument), 
+                        doc = doc.createTextNode("\xa0"), (parentNode = item.parentNode).insertBefore(doc, item), 
+                        rng.setStart(doc, 0), rng.setEnd(doc, 1), item = ClientRect.clone(rng.getBoundingClientRect()), 
+                        parentNode.removeChild(doc), item) : clientRects;
+                    }
+                    function collapseAndInflateWidth(clientRect, toStart) {
+                        return (clientRect = ClientRect.collapse(clientRect, toStart)).width = 1, 
+                        clientRect.right = clientRect.left + 1, clientRect;
+                    }
+                    function addUniqueAndValidRect(clientRect) {
+                        0 === clientRect.height || 0 < clientRects.length && ClientRect.isEqual(clientRect, clientRects[clientRects.length - 1]) || clientRects.push(clientRect);
+                    }
+                    function addCharacterOffset(container, offset) {
+                        var range = createRange(container.ownerDocument);
+                        if (offset < container.data.length) {
+                            if (ExtendingChar.isExtendingChar(container.data[offset])) return;
+                            if (ExtendingChar.isExtendingChar(container.data[offset - 1]) && (range.setStart(container, offset), 
+                            range.setEnd(container, offset + 1), !isHiddenWhiteSpaceRange(range))) return addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(range), !1));
+                        }
+                        0 < offset && (range.setStart(container, offset - 1), range.setEnd(container, offset), 
+                        isHiddenWhiteSpaceRange(range) || addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(range), !1))), 
+                        offset < container.data.length && (range.setStart(container, offset), 
+                        range.setEnd(container, offset + 1), isHiddenWhiteSpaceRange(range) || addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(range), !0)));
+                    }
+                    if (isText(caretPosition.container())) addCharacterOffset(caretPosition.container(), caretPosition.offset()); else if (isElement(caretPosition.container())) if (caretPosition.isAtEnd()) node = resolveIndex(caretPosition.container(), caretPosition.offset()), 
+                    isText(node) && addCharacterOffset(node, node.data.length), 
+                    isValidElementCaretCandidate(node) && !isBr(node) && addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(node), !1)); else {
+                        if (node = resolveIndex(caretPosition.container(), caretPosition.offset()), 
+                        isText(node) && addCharacterOffset(node, 0), isValidElementCaretCandidate(node) && caretPosition.isAtEnd()) return addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(node), !1)), 
+                        clientRects;
+                        caretPosition = resolveIndex(caretPosition.container(), caretPosition.offset() - 1), 
+                        !isValidElementCaretCandidate(caretPosition) || isBr(caretPosition) || !isBlock(caretPosition) && !isBlock(node) && isValidElementCaretCandidate(node) || addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(caretPosition), !1)), 
+                        isValidElementCaretCandidate(node) && addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(node), !0));
+                    }
+                    return clientRects;
+                }(new CaretPosition(container, offset));
+            }
             return {
-                top: clientRect.top + elm.pageYOffset - docElem.clientTop,
-                left: clientRect.left + elm.pageXOffset - docElem.clientLeft
+                container: Fun.constant(container),
+                offset: Fun.constant(offset),
+                toRange: function() {
+                    var range = createRange(container.ownerDocument);
+                    return range.setStart(container, offset), range.setEnd(container, offset), 
+                    range;
+                },
+                getClientRects: getClientRects,
+                isVisible: function() {
+                    return 0 < getClientRects().length;
+                },
+                isAtStart: function() {
+                    return isText(container), 0 === offset;
+                },
+                isAtEnd: function() {
+                    return isText(container) ? offset >= container.data.length : offset >= container.childNodes.length;
+                },
+                isEqual: function(caretPosition) {
+                    return caretPosition && container === caretPosition.container() && offset === caretPosition.offset();
+                },
+                getNode: function(before) {
+                    return resolveIndex(container, before ? offset - 1 : offset);
+                }
             };
         }
-        tinymce.dom.MousePosition = {
-            calc: function(editor, event) {
-                return bodyPosition = function(editor) {
-                    return editor.inline ? getAbsolutePosition(editor.getBody()) : {
-                        left: 0,
-                        top: 0
-                    };
-                }(editor), scrollPosition = function(editor) {
-                    var body = editor.getBody();
-                    return editor.inline ? {
-                        left: body.scrollLeft,
-                        top: body.scrollTop
-                    } : {
-                        left: 0,
-                        top: 0
-                    };
-                }(editor), {
-                    pageX: (editor = function(editor, event) {
-                        var iframePosition;
-                        return event.target.ownerDocument !== editor.getDoc() ? (iframePosition = getAbsolutePosition(editor.getContentAreaContainer()), 
-                        editor = function(editor) {
-                            var body = editor.getBody(), docElm = editor.getDoc().documentElement, inlineScroll = {
-                                left: body.scrollLeft,
-                                top: body.scrollTop
-                            }, body = {
-                                left: body.scrollLeft || docElm.scrollLeft,
-                                top: body.scrollTop || docElm.scrollTop
-                            };
-                            return editor.inline ? inlineScroll : body;
-                        }(editor), {
-                            left: event.pageX - iframePosition.left + editor.left,
-                            top: event.pageY - iframePosition.top + editor.top
-                        }) : {
-                            left: event.pageX,
-                            top: event.pageY
-                        };
-                    }(editor, event)).left - bodyPosition.left + scrollPosition.left,
-                    pageY: editor.top - bodyPosition.top + scrollPosition.top
-                };
-                var bodyPosition, scrollPosition;
+        CaretPosition.fromRangeStart = function(range) {
+            return new CaretPosition(range.startContainer, range.startOffset);
+        }, CaretPosition.fromRangeEnd = function(range) {
+            return new CaretPosition(range.endContainer, range.endOffset);
+        }, CaretPosition.after = function(node) {
+            return new CaretPosition(node.parentNode, nodeIndex(node) + 1);
+        }, CaretPosition.before = function(node) {
+            return new CaretPosition(node.parentNode, nodeIndex(node));
+        }, tinymce.caret.CaretPosition = CaretPosition;
+    }(tinymce), function(tinymce) {
+        var NodeType = tinymce.dom.NodeType, TreeWalker = tinymce.dom.TreeWalker, CaretContainer = tinymce.caret.CaretContainer, CaretCandidate = tinymce.caret.CaretCandidate, Fun = tinymce.util.Fun, isContentEditableTrue = NodeType.isContentEditableTrue, isContentEditableFalse = NodeType.isContentEditableFalse, isBlockLike = NodeType.matchStyleValues("display", "block table table-cell table-caption"), isCaretContainer = CaretContainer.isCaretContainer, isCaretContainerBlock = CaretContainer.isCaretContainerBlock, curry = Fun.curry, isElement = NodeType.isElement, isCaretCandidate = CaretCandidate.isCaretCandidate;
+        function skipCaretContainers(walk, shallow) {
+            for (var node; node = walk(shallow); ) if (!isCaretContainerBlock(node)) return node;
+            return null;
+        }
+        function getEditingHost(node, rootNode) {
+            for (node = node.parentNode; node && node != rootNode; node = node.parentNode) if (isContentEditableTrue(node)) return node;
+            return rootNode;
+        }
+        function getParentBlock(node, rootNode) {
+            for (;node && node != rootNode; ) {
+                if (isBlockLike(node)) return node;
+                node = node.parentNode;
+            }
+            return null;
+        }
+        function beforeAfter(before, node) {
+            var range = node.ownerDocument.createRange();
+            return before ? (range.setStartBefore(node), range.setEndBefore(node)) : (range.setStartAfter(node), 
+            range.setEndAfter(node)), range;
+        }
+        function lean(left, rootNode, node) {
+            for (var sibling, siblingName = left ? "previousSibling" : "nextSibling"; node && node != rootNode; ) {
+                if (sibling = node[siblingName], isCaretContainer(sibling) && (sibling = sibling[siblingName]), 
+                isContentEditableFalse(sibling)) {
+                    if (function(rootNode, node2) {
+                        return getParentBlock(sibling, rootNode) == getParentBlock(node2, rootNode);
+                    }(rootNode, node)) return sibling;
+                    break;
+                }
+                if (isCaretCandidate(sibling)) break;
+                node = node.parentNode;
+            }
+            return null;
+        }
+        var before = curry(beforeAfter, !0), after = curry(beforeAfter, !1);
+        function isNextToContentEditableFalse(relativeOffset, caretPosition) {
+            return isContentEditableFalse(function(relativeOffset, caretPosition) {
+                var container;
+                return caretPosition && (container = caretPosition.container(), 
+                caretPosition = caretPosition.offset(), isElement(container)) ? container.childNodes[caretPosition + relativeOffset] : null;
+            }(relativeOffset, caretPosition));
+        }
+        tinymce.caret.CaretUtils = {
+            isForwards: function(direction) {
+                return 0 < direction;
+            },
+            isBackwards: function(direction) {
+                return direction < 0;
+            },
+            findNode: function(node, direction, predicateFn, rootNode, shallow) {
+                var walker = new TreeWalker(node, rootNode);
+                if (direction < 0) {
+                    if ((isContentEditableFalse(node) || isCaretContainerBlock(node)) && predicateFn(node = skipCaretContainers(walker.prev, !0))) return node;
+                    for (;node = skipCaretContainers(walker.prev, shallow); ) if (predicateFn(node)) return node;
+                }
+                if (0 < direction) {
+                    if ((isContentEditableFalse(node) || isCaretContainerBlock(node)) && predicateFn(node = skipCaretContainers(walker.next, !0))) return node;
+                    for (;node = skipCaretContainers(walker.next, shallow); ) if (predicateFn(node)) return node;
+                }
+                return null;
+            },
+            getEditingHost: getEditingHost,
+            getParentBlock: getParentBlock,
+            isInSameBlock: function(caretPosition1, caretPosition2, rootNode) {
+                return getParentBlock(caretPosition1.container(), rootNode) == getParentBlock(caretPosition2.container(), rootNode);
+            },
+            isInSameEditingHost: function(caretPosition1, caretPosition2, rootNode) {
+                return getEditingHost(caretPosition1.container(), rootNode) == getEditingHost(caretPosition2.container(), rootNode);
+            },
+            isBeforeContentEditableFalse: curry(isNextToContentEditableFalse, 0),
+            isAfterContentEditableFalse: curry(isNextToContentEditableFalse, -1),
+            normalizeRange: function(direction, rootNode, range) {
+                var node, location, leanLeft = curry(lean, !0, rootNode), rootNode = curry(lean, !1, rootNode), container = range.startContainer, offset = range.startOffset;
+                if (CaretContainer.isCaretContainerBlock(container)) {
+                    if ("before" == (location = (container = isElement(container) ? container : container.parentNode).getAttribute("data-mce-caret")) && (node = container.nextSibling, 
+                    isContentEditableFalse(node))) return before(node);
+                    if ("after" == location && (node = container.previousSibling, 
+                    isContentEditableFalse(node))) return after(node);
+                }
+                if (range.collapsed && NodeType.isText(container)) {
+                    if (isCaretContainer(container)) {
+                        if (1 === direction) {
+                            if (node = rootNode(container)) return before(node);
+                            if (node = leanLeft(container)) return after(node);
+                        }
+                        if (-1 === direction) {
+                            if (node = leanLeft(container)) return after(node);
+                            if (node = rootNode(container)) return before(node);
+                        }
+                        return range;
+                    }
+                    if (CaretContainer.endsWithCaretContainer(container) && offset >= container.data.length - 1) return 1 === direction && (node = rootNode(container)) ? before(node) : range;
+                    if (CaretContainer.startsWithCaretContainer(container) && offset <= 1) return -1 === direction && (node = leanLeft(container)) ? after(node) : range;
+                    if (offset === container.data.length) return (node = rootNode(container)) ? before(node) : range;
+                    if (0 === offset) return (node = leanLeft(container)) ? after(node) : range;
+                }
+                return range;
             }
         };
     }(tinymce), function(tinymce) {
-        function getTemporaryNodeSelector(tempAttrs) {
-            return (0 === tempAttrs.length ? "" : tempAttrs.map(function(attr) {
-                return "[" + attr + "]";
-            }).join(",") + ",") + '[data-mce-bogus="all"]';
+        var NodeType = tinymce.dom.NodeType, CaretPosition = tinymce.caret.CaretPosition, CaretUtils = tinymce.caret.CaretUtils, CaretCandidate = tinymce.caret.CaretCandidate, Arr = tinymce.util.Arr, Fun = tinymce.util.Fun, isContentEditableFalse = NodeType.isContentEditableFalse, isText = NodeType.isText, isElement = NodeType.isElement, isBr = NodeType.isBr, isForwards = CaretUtils.isForwards, isBackwards = CaretUtils.isBackwards, isCaretCandidate = CaretCandidate.isCaretCandidate, isAtomic = CaretCandidate.isAtomic, isEditableCaretCandidate = CaretCandidate.isEditableCaretCandidate;
+        function nodeAtIndex(container, offset) {
+            return container.hasChildNodes() && offset < container.childNodes.length ? container.childNodes[offset] : null;
         }
-        function createCommentWalker(body) {
-            return document.createTreeWalker(body, NodeFilter.SHOW_COMMENT, null, !1);
+        function getCaretCandidatePosition(direction, node) {
+            if (isForwards(direction)) {
+                if (isCaretCandidate(node.previousSibling) && !isText(node.previousSibling)) return CaretPosition.before(node);
+                if (isText(node)) return CaretPosition(node, 0);
+            }
+            if (isBackwards(direction)) {
+                if (isCaretCandidate(node.nextSibling) && !isText(node.nextSibling)) return CaretPosition.after(node);
+                if (isText(node)) return CaretPosition(node, node.data.length);
+            }
+            return !isBackwards(direction) || isBr(node) ? CaretPosition.before(node) : CaretPosition.after(node);
         }
-        function hasComments(body) {
-            return null !== createCommentWalker(body).nextNode();
+        function findCaretPosition(direction, startCaretPosition, rootNode) {
+            var container, node, nextNode, innerNode, offset;
+            if (!isElement(rootNode) || !startCaretPosition) return null;
+            if (container = startCaretPosition.container(), offset = startCaretPosition.offset(), 
+            isText(container)) {
+                if (isBackwards(direction) && 0 < offset) return CaretPosition(container, --offset);
+                if (isForwards(direction) && offset < container.length) return CaretPosition(container, ++offset);
+                node = container;
+            } else {
+                if (isBackwards(direction) && 0 < offset && (nextNode = nodeAtIndex(container, offset - 1), 
+                isCaretCandidate(nextNode))) return !isAtomic(nextNode) && (innerNode = CaretUtils.findNode(nextNode, direction, isEditableCaretCandidate, nextNode)) ? isText(innerNode) ? CaretPosition(innerNode, innerNode.data.length) : CaretPosition.after(innerNode) : isText(nextNode) ? CaretPosition(nextNode, nextNode.data.length) : CaretPosition.before(nextNode);
+                if (isForwards(direction) && offset < container.childNodes.length && (nextNode = nodeAtIndex(container, offset), 
+                isCaretCandidate(nextNode))) return function(node, rootNode) {
+                    var next;
+                    return NodeType.isBr(node) && (next = findCaretPosition(1, CaretPosition.after(node), rootNode)) && !CaretUtils.isInSameBlock(CaretPosition.before(node), CaretPosition.before(next), rootNode);
+                }(nextNode, rootNode) ? findCaretPosition(direction, CaretPosition.after(nextNode), rootNode) : !isAtomic(nextNode) && (innerNode = CaretUtils.findNode(nextNode, direction, isEditableCaretCandidate, nextNode)) ? isText(innerNode) ? CaretPosition(innerNode, 0) : CaretPosition.before(innerNode) : isText(nextNode) ? CaretPosition(nextNode, 0) : CaretPosition.after(nextNode);
+                node = startCaretPosition.getNode();
+            }
+            return (isForwards(direction) && startCaretPosition.isAtEnd() || isBackwards(direction) && startCaretPosition.isAtStart()) && (node = CaretUtils.findNode(node, direction, Fun.constant(!0), rootNode, !0), 
+            isEditableCaretCandidate(node)) ? getCaretCandidatePosition(direction, node) : (nextNode = CaretUtils.findNode(node, direction, isEditableCaretCandidate, rootNode), 
+            !(offset = Arr.last(Arr.filter(function(node, rootNode) {
+                for (var parents = []; node && node != rootNode; ) parents.push(node), 
+                node = node.parentNode;
+                return parents;
+            }(container, rootNode), isContentEditableFalse))) || nextNode && offset.contains(nextNode) ? nextNode ? getCaretCandidatePosition(direction, nextNode) : null : isForwards(direction) ? CaretPosition.after(offset) : CaretPosition.before(offset));
         }
-        function hasTemporaryNodes(body, tempAttrs) {
-            return null !== body.querySelector(getTemporaryNodeSelector(tempAttrs));
+        tinymce.caret.CaretWalker = function(rootNode) {
+            return {
+                next: function(caretPosition) {
+                    return findCaretPosition(1, caretPosition, rootNode);
+                },
+                prev: function(caretPosition) {
+                    return findCaretPosition(-1, caretPosition, rootNode);
+                }
+            };
+        };
+    }(tinymce), function(tinymce) {
+        var NodeType = tinymce.dom.NodeType, DOM = tinymce.DOM, ClientRect = tinymce.geom.ClientRect, CaretContainer = tinymce.caret.CaretContainer, CaretContainerRemove = tinymce.caret.CaretContainerRemove, isContentEditableFalse = NodeType.isContentEditableFalse;
+        tinymce.caret.FakeCaret = function(rootNode, isBlock) {
+            var cursorInterval, $lastVisualCaret, caretContainerNode;
+            function hide() {
+                for (var node, sibling, data, contentEditableFalseNodes = DOM.select("*[contentEditable=false]", rootNode), i = 0; i < contentEditableFalseNodes.length; i++) sibling = (node = contentEditableFalseNodes[i]).previousSibling, 
+                CaretContainer.endsWithCaretContainer(sibling) && (1 == (data = sibling.data).length ? sibling.parentNode.removeChild(sibling) : sibling.deleteData(data.length - 1, 1)), 
+                sibling = node.nextSibling, CaretContainer.startsWithCaretContainer(sibling) && (1 == (data = sibling.data).length ? sibling.parentNode.removeChild(sibling) : sibling.deleteData(0, 1));
+                caretContainerNode && (CaretContainerRemove.remove(caretContainerNode), 
+                caretContainerNode = null), $lastVisualCaret && ($lastVisualCaret.remove(), 
+                $lastVisualCaret = null), clearInterval(cursorInterval);
+            }
+            return {
+                show: function(before, node) {
+                    var clientRect;
+                    return hide(), isBlock(node) ? (caretContainerNode = CaretContainer.insertBlock("p", node, before), 
+                    clientRect = function(node, before) {
+                        var scrollX, clientRect = ClientRect.collapse(node.getBoundingClientRect(), before), docElm = "BODY" == rootNode.tagName ? (docElm = rootNode.ownerDocument.documentElement, 
+                        scrollX = rootNode.scrollLeft || docElm.scrollLeft, rootNode.scrollTop || docElm.scrollTop) : (docElm = rootNode.getBoundingClientRect(), 
+                        scrollX = rootNode.scrollLeft - docElm.left, rootNode.scrollTop - docElm.top);
+                        return clientRect.left += scrollX, clientRect.right += scrollX, 
+                        clientRect.top += docElm, clientRect.bottom += docElm, clientRect.width = 1, 
+                        0 < (scrollX = node.offsetWidth - node.clientWidth) && (before && (scrollX *= -1), 
+                        clientRect.left += scrollX, clientRect.right += scrollX), 
+                        clientRect;
+                    }(node, before), DOM.setStyle(caretContainerNode, "top", clientRect.top), 
+                    $lastVisualCaret = DOM.add(rootNode, "div", {
+                        class: "mce-visual-caret",
+                        "data-mce-bogus": "all",
+                        style: clientRect
+                    }), before && DOM.addClass($lastVisualCaret, "mce-visual-caret-before"), 
+                    cursorInterval = setInterval(function() {
+                        var caret = DOM.select("div.mce-visual-caret", rootNode)[0];
+                        DOM.toggleClass(caret, "mce-visual-caret-hidden");
+                    }, 500), (clientRect = node.ownerDocument.createRange()).setStart(caretContainerNode, 0), 
+                    clientRect.setEnd(caretContainerNode, 0)) : (caretContainerNode = CaretContainer.insertInline(node, before), 
+                    clientRect = node.ownerDocument.createRange(), isContentEditableFalse(caretContainerNode.nextSibling) ? (clientRect.setStart(caretContainerNode, 0), 
+                    clientRect.setEnd(caretContainerNode, 0)) : (clientRect.setStart(caretContainerNode, 1), 
+                    clientRect.setEnd(caretContainerNode, 1))), clientRect;
+                },
+                hide: hide,
+                getCss: function() {
+                    return ".mce-visual-caret {position: absolute;background-color: black;background-color: currentcolor;}.mce-visual-caret-hidden {display: none;}*[data-mce-caret] {position: absolute;left: -1000px;right: auto;top: 0;margin: 0;padding: 0;}";
+                },
+                destroy: function() {
+                    clearInterval(cursorInterval);
+                }
+            };
+        };
+    }(tinymce), function(tinymce) {
+        var NodeType = tinymce.dom.NodeType, Fun = tinymce.util.Fun, Arr = tinymce.util.Arr, Dimensions = tinymce.dom.Dimensions, ClientRect = tinymce.geom.ClientRect, CaretUtils = tinymce.caret.CaretUtils, CaretCandidate = tinymce.caret.CaretCandidate, isContentEditableFalse = NodeType.isContentEditableFalse, findNode = CaretUtils.findNode, curry = Fun.curry;
+        function distanceToRectLeft(clientRect, clientX) {
+            return Math.abs(clientRect.left - clientX);
         }
-        function trimTemporaryNodes(body, tempAttrs) {
-            tinymce.each(function(body, tempAttrs) {
-                return body.querySelectorAll(getTemporaryNodeSelector(tempAttrs));
-            }(body, tempAttrs), function(elm) {
-                "all" === elm.getAttribute("data-mce-bogus") ? elm && elm.parentNode && elm.parentNode.removeChild(elm) : tinymce.each(tempAttrs, function(attr) {
-                    elm.hasAttribute(attr) && elm.removeAttribute(attr);
-                });
+        function distanceToRectRight(clientRect, clientX) {
+            return Math.abs(clientRect.right - clientX);
+        }
+        function findClosestClientRect(clientRects, clientX) {
+            function isInside(clientX, clientRect) {
+                return clientX >= clientRect.left && clientX <= clientRect.right;
+            }
+            return Arr.reduce(clientRects, function(oldClientRect, clientRect) {
+                var oldDistance = Math.min(distanceToRectLeft(oldClientRect, clientX), distanceToRectRight(oldClientRect, clientX)), newDistance = Math.min(distanceToRectLeft(clientRect, clientX), distanceToRectRight(clientRect, clientX));
+                return isInside(clientX, clientRect) || !isInside(clientX, oldClientRect) && (newDistance == oldDistance && isContentEditableFalse(clientRect.node) || newDistance < oldDistance) ? clientRect : oldClientRect;
             });
         }
-        function removeCommentsContainingZwsp(body) {
-            for (var walker = createCommentWalker(body), nextNode = walker.nextNode(); null !== nextNode; ) {
-                var comment = walker.currentNode, nextNode = walker.nextNode();
-                "string" == typeof comment.nodeValue && -1 !== comment.nodeValue.indexOf("\ufeff") && comment && comment.parentNode && comment.parentNode.removeChild(comment);
+        function walkUntil(direction, rootNode, predicateFn, node) {
+            for (;node = findNode(node, direction, CaretCandidate.isEditableCaretCandidate, rootNode); ) if (predicateFn(node)) return;
+        }
+        function findLineNodeRects(rootNode, targetNodeRect) {
+            var clientRects = [];
+            function collect(checkPosFn, node) {
+                return node = Arr.filter(Dimensions.getClientRects(node), function(clientRect) {
+                    return !checkPosFn(clientRect, targetNodeRect);
+                }), clientRects = clientRects.concat(node), 0 === node.length;
             }
+            return clientRects.push(targetNodeRect), walkUntil(-1, rootNode, curry(collect, ClientRect.isAbove), targetNodeRect.node), 
+            walkUntil(1, rootNode, curry(collect, ClientRect.isBelow), targetNodeRect.node), 
+            clientRects;
         }
-        function deepClone(body) {
-            return body.cloneNode(!0);
-        }
-        tinymce.dom.TrimBody = {
-            trim: function(body, tempAttrs) {
-                var trimmed = body;
-                return hasComments(body) ? (removeCommentsContainingZwsp(trimmed = deepClone(body)), 
-                hasTemporaryNodes(trimmed, tempAttrs) && trimTemporaryNodes(trimmed, tempAttrs)) : hasTemporaryNodes(body, tempAttrs) && trimTemporaryNodes(trimmed = deepClone(body), tempAttrs), 
-                trimmed;
-            },
-            hasComments: hasComments,
-            hasTemporaryNodes: hasTemporaryNodes,
-            trimTemporaryNodes: trimTemporaryNodes,
-            removeCommentsContainingZwsp: removeCommentsContainingZwsp
+        tinymce.caret.LineUtils = {
+            findClosestClientRect: findClosestClientRect,
+            findLineNodeRects: findLineNodeRects,
+            closestCaret: function(rootNode, clientX, clientY) {
+                var contentEditableFalseNodeRects = Dimensions.getClientRects(function(rootNode) {
+                    return Arr.filter(Arr.toArray(rootNode.getElementsByTagName("*")), isContentEditableFalse);
+                }(rootNode));
+                return (contentEditableFalseNodeRects = (contentEditableFalseNodeRects = findClosestClientRect(Arr.filter(contentEditableFalseNodeRects, function(clientRect) {
+                    return clientY >= clientRect.top && clientY <= clientRect.bottom;
+                }), clientX)) && findClosestClientRect(findLineNodeRects(rootNode, contentEditableFalseNodeRects), clientX)) && isContentEditableFalse(contentEditableFalseNodeRects.node) ? function(clientRect, clientX) {
+                    return {
+                        node: clientRect.node,
+                        before: distanceToRectLeft(clientRect, clientX) < distanceToRectRight(clientRect, clientX)
+                    };
+                }(contentEditableFalseNodeRects, clientX) : null;
+            }
         };
     }(tinymce), function(tinymce) {
-        var extendingChars = new RegExp("[\u0300-\u036f\u0483-\u0487\u0488-\u0489\u0591-\u05bd\u05bf\u05c1-\u05c2\u05c4-\u05c5\u05c7\u0610-\u061a\u064b-\u065f\u0670\u06d6-\u06dc\u06df-\u06e4\u06e7-\u06e8\u06ea-\u06ed\u0711\u0730-\u074a\u07a6-\u07b0\u07eb-\u07f3\u0816-\u0819\u081b-\u0823\u0825-\u0827\u0829-\u082d\u0859-\u085b\u08e3-\u0902\u093a\u093c\u0941-\u0948\u094d\u0951-\u0957\u0962-\u0963\u0981\u09bc\u09be\u09c1-\u09c4\u09cd\u09d7\u09e2-\u09e3\u0a01-\u0a02\u0a3c\u0a41-\u0a42\u0a47-\u0a48\u0a4b-\u0a4d\u0a51\u0a70-\u0a71\u0a75\u0a81-\u0a82\u0abc\u0ac1-\u0ac5\u0ac7-\u0ac8\u0acd\u0ae2-\u0ae3\u0b01\u0b3c\u0b3e\u0b3f\u0b41-\u0b44\u0b4d\u0b56\u0b57\u0b62-\u0b63\u0b82\u0bbe\u0bc0\u0bcd\u0bd7\u0c00\u0c3e-\u0c40\u0c46-\u0c48\u0c4a-\u0c4d\u0c55-\u0c56\u0c62-\u0c63\u0c81\u0cbc\u0cbf\u0cc2\u0cc6\u0ccc-\u0ccd\u0cd5-\u0cd6\u0ce2-\u0ce3\u0d01\u0d3e\u0d41-\u0d44\u0d4d\u0d57\u0d62-\u0d63\u0dca\u0dcf\u0dd2-\u0dd4\u0dd6\u0ddf\u0e31\u0e34-\u0e3a\u0e47-\u0e4e\u0eb1\u0eb4-\u0eb9\u0ebb-\u0ebc\u0ec8-\u0ecd\u0f18-\u0f19\u0f35\u0f37\u0f39\u0f71-\u0f7e\u0f80-\u0f84\u0f86-\u0f87\u0f8d-\u0f97\u0f99-\u0fbc\u0fc6\u102d-\u1030\u1032-\u1037\u1039-\u103a\u103d-\u103e\u1058-\u1059\u105e-\u1060\u1071-\u1074\u1082\u1085-\u1086\u108d\u109d\u135d-\u135f\u1712-\u1714\u1732-\u1734\u1752-\u1753\u1772-\u1773\u17b4-\u17b5\u17b7-\u17bd\u17c6\u17c9-\u17d3\u17dd\u180b-\u180d\u18a9\u1920-\u1922\u1927-\u1928\u1932\u1939-\u193b\u1a17-\u1a18\u1a1b\u1a56\u1a58-\u1a5e\u1a60\u1a62\u1a65-\u1a6c\u1a73-\u1a7c\u1a7f\u1ab0-\u1abd\u1abe\u1b00-\u1b03\u1b34\u1b36-\u1b3a\u1b3c\u1b42\u1b6b-\u1b73\u1b80-\u1b81\u1ba2-\u1ba5\u1ba8-\u1ba9\u1bab-\u1bad\u1be6\u1be8-\u1be9\u1bed\u1bef-\u1bf1\u1c2c-\u1c33\u1c36-\u1c37\u1cd0-\u1cd2\u1cd4-\u1ce0\u1ce2-\u1ce8\u1ced\u1cf4\u1cf8-\u1cf9\u1dc0-\u1df5\u1dfc-\u1dff\u200c-\u200d\u20d0-\u20dc\u20dd-\u20e0\u20e1\u20e2-\u20e4\u20e5-\u20f0\u2cef-\u2cf1\u2d7f\u2de0-\u2dff\u302a-\u302d\u302e-\u302f\u3099-\u309a\ua66f\ua670-\ua672\ua674-\ua67d\ua69e-\ua69f\ua6f0-\ua6f1\ua802\ua806\ua80b\ua825-\ua826\ua8c4\ua8e0-\ua8f1\ua926-\ua92d\ua947-\ua951\ua980-\ua982\ua9b3\ua9b6-\ua9b9\ua9bc\ua9e5\uaa29-\uaa2e\uaa31-\uaa32\uaa35-\uaa36\uaa43\uaa4c\uaa7c\uaab0\uaab2-\uaab4\uaab7-\uaab8\uaabe-\uaabf\uaac1\uaaec-\uaaed\uaaf6\uabe5\uabe8\uabed\ufb1e\ufe00-\ufe0f\ufe20-\ufe2f\uff9e-\uff9f]");
-        tinymce.text.ExtendingChar = {
-            isExtendingChar: function(ch) {
-                return "string" == typeof ch && 768 <= ch.charCodeAt(0) && extendingChars.test(ch);
+        var Fun = tinymce.util.Fun, Arr = tinymce.util.Arr, Dimensions = tinymce.dom.Dimensions, ClientRect = tinymce.geom.ClientRect, CaretUtils = tinymce.caret.CaretUtils, CaretCandidate = tinymce.caret.CaretCandidate, CaretWalker = tinymce.caret.CaretWalker, CaretPosition = tinymce.caret.CaretPosition;
+        function walkUntil(direction, isAboveFn, isBeflowFn, rootNode, predicateFn, caretPosition) {
+            var targetClientRect, line = 0, result = [];
+            function add(node) {
+                var i, clientRect, clientRects = Dimensions.getClientRects(node);
+                for (-1 == direction && (clientRects = clientRects.reverse()), i = 0; i < clientRects.length; i++) if (clientRect = clientRects[i], 
+                !isBeflowFn(clientRect, targetClientRect)) {
+                    if (0 < result.length && isAboveFn(clientRect, Arr.last(result)) && line++, 
+                    clientRect.line = line, predicateFn(clientRect)) return !0;
+                    result.push(clientRect);
+                }
             }
-        };
-    }(tinymce), function(tinymce) {
-        tinymce.text.Zwsp = {
-            isZwsp: function(chr) {
-                return "\ufeff" === chr;
+            return (targetClientRect = Arr.last(caretPosition.getClientRects())) && (add(caretPosition = caretPosition.getNode()), 
+            function(direction, rootNode, predicateFn, node) {
+                for (;node = CaretUtils.findNode(node, direction, CaretCandidate.isEditableCaretCandidate, rootNode); ) if (predicateFn(node)) return;
+            }(direction, rootNode, add, caretPosition)), result;
+        }
+        var upUntil = (Fun = Fun.curry)(walkUntil, -1, ClientRect.isAbove, ClientRect.isBelow), downUntil = Fun(walkUntil, 1, ClientRect.isBelow, ClientRect.isAbove);
+        tinymce.caret.LineWalker = {
+            upUntil: upUntil,
+            downUntil: downUntil,
+            positionsUntil: function(direction, rootNode, predicateFn, node) {
+                var walkFn, isBelowFn, isAboveFn, caretPosition, clientRect, targetClientRect, rootNode = new CaretWalker(rootNode), result = [], line = 0;
+                function getClientRect(caretPosition) {
+                    return Arr.last(caretPosition.getClientRects());
+                }
+                targetClientRect = getClientRect(caretPosition = 1 == direction ? (walkFn = rootNode.next, 
+                isBelowFn = ClientRect.isBelow, isAboveFn = ClientRect.isAbove, 
+                CaretPosition.after(node)) : (walkFn = rootNode.prev, isBelowFn = ClientRect.isAbove, 
+                isAboveFn = ClientRect.isBelow, CaretPosition.before(node)));
+                do {
+                    if (caretPosition.isVisible() && !isAboveFn(clientRect = getClientRect(caretPosition), targetClientRect)) {
+                        if (0 < result.length && isBelowFn(clientRect, Arr.last(result)) && line++, 
+                        (clientRect = ClientRect.clone(clientRect)).position = caretPosition, 
+                        clientRect.line = line, predicateFn(clientRect)) return result;
+                        result.push(clientRect);
+                    }
+                } while (caretPosition = walkFn(caretPosition));
+                return result;
             },
-            ZWSP: "\ufeff",
-            trim: function(text) {
-                return text.replace(new RegExp("\ufeff", "g"), "");
-            }
+            isAboveLine: Fun(function(lineNumber, clientRect) {
+                return clientRect.line > lineNumber;
+            }),
+            isLine: Fun(function(lineNumber, clientRect) {
+                return clientRect.line === lineNumber;
+            })
         };
     }(tinymce), tinymce.TextPattern = function(editor) {
         var self = this, isPatternsDirty = !0;
@@ -5040,12 +5195,12 @@
                         });
                     })));
                 }), editor.dom.bind(editor.getBody(), "dragstart", function(e) {
-                    draggingInternallyState = !0, e.altKey && (e.dataTransfer.effectAllowed = "copy", 
-                    e.dataTransfer.dropEffect = "copy");
-                    var content = editor.selection.getContent({
+                    var content;
+                    e.isDefaultPrevented() || e.dataTransfer && (draggingInternallyState = !0, 
+                    e.altKey && (e.dataTransfer.effectAllowed = "copy", e.dataTransfer.dropEffect = "copy"), 
+                    content = editor.selection.getContent({
                         contextual: !0
-                    });
-                    content && (content = function(content) {
+                    })) && (content = function(content) {
                         return content = DOM.create("div", {}, content), each$4(DOM.select("[style]", content), function(elm) {
                             var style = elm.getAttribute("style");
                             style && elm.setAttribute("data-mce-style", style);
@@ -5059,596 +5214,6 @@
             }(editor), setup$1(editor, pasteBin);
         });
     }, function(tinymce) {
-        var NodeType = tinymce.dom.NodeType, DOMUtils = tinymce.DOM, Fun = tinymce.util.Fun, Arr = tinymce.util.Arr, isText = NodeType.isText, isBogus = NodeType.isBogus, nodeIndex = DOMUtils.nodeIndex;
-        function getChildNodes(node) {
-            return node ? Arr.reduce(node.childNodes, function(result, node) {
-                return isBogus(node) && "BR" != node.nodeName ? result = result.concat(getChildNodes(node)) : result.push(node), 
-                result;
-            }, []) : [];
-        }
-        function equal(targetValue) {
-            return function(value) {
-                return targetValue === value;
-            };
-        }
-        function createPathItem(node) {
-            return (isText(node) ? "text()" : node.nodeName.toLowerCase()) + "[" + function(node) {
-                var nodes = getChildNodes(function normalizedParent(node) {
-                    return node = node.parentNode, isBogus(node) ? normalizedParent(node) : node;
-                }(node)), index = Arr.findIndex(nodes, equal(node), node), nodes = nodes.slice(0, index + 1), index = Arr.reduce(nodes, function(result, node, i) {
-                    return isText(node) && isText(nodes[i - 1]) && result++, result;
-                }, 0);
-                return nodes = Arr.filter(nodes, NodeType.matchNodeNames(node.nodeName)), 
-                Arr.findIndex(nodes, equal(node), node) - index;
-            }(node) + "]";
-        }
-        tinymce.caret.CaretBookmark = {
-            create: function(rootNode, caretPosition) {
-                var outputOffset, childNodes, path = [], container = caretPosition.container(), caretPosition = caretPosition.offset();
-                return isText(container) ? outputOffset = function(textNode, offset) {
-                    for (;(textNode = textNode.previousSibling) && isText(textNode); ) offset += textNode.data.length;
-                    return offset;
-                }(container, caretPosition) : (caretPosition >= (childNodes = container.childNodes).length ? (outputOffset = "after", 
-                caretPosition = childNodes.length - 1) : outputOffset = "before", 
-                container = childNodes[caretPosition]), path.push(createPathItem(container)), 
-                childNodes = function(rootNode, node) {
-                    var parents = [];
-                    for (node = node.parentNode; node != rootNode; node = node.parentNode) parents.push(node);
-                    return parents;
-                }(rootNode, container), childNodes = Arr.filter(childNodes, Fun.negate(NodeType.isBogus)), 
-                (path = path.concat(Arr.map(childNodes, createPathItem))).reverse().join("/") + "," + outputOffset;
-            },
-            resolve: function(rootNode, path) {
-                var parts;
-                {
-                    if (path && (path = (parts = path.split(","))[0].split("/"), 
-                    parts = 1 < parts.length ? parts[1] : "before", path = Arr.reduce(path, function(result, value) {
-                        return (value = /([\w\-\(\)]+)\[([0-9]+)\]/.exec(value)) ? ("text()" === value[1] && (value[1] = "#text"), 
-                        name = value[1], value = parseInt(value[2], 10), nodes = getChildNodes(result), 
-                        nodes = Arr.filter(nodes, function(node, index) {
-                            return !isText(node) || !isText(nodes[index - 1]);
-                        }), (nodes = Arr.filter(nodes, NodeType.matchNodeNames(name)))[value]) : null;
-                        var name, nodes;
-                    }, rootNode))) {
-                        if (isText(path)) {
-                            for (var container = path, offset = parseInt(parts, 10), dataLen, node = container, targetOffset = 0; isText(node); ) {
-                                if (dataLen = node.data.length, targetOffset <= offset && offset <= targetOffset + dataLen) {
-                                    container = node, offset -= targetOffset;
-                                    break;
-                                }
-                                if (!isText(node.nextSibling)) {
-                                    container = node, offset = dataLen;
-                                    break;
-                                }
-                                targetOffset += dataLen, node = node.nextSibling;
-                            }
-                            return offset > container.data.length && (offset = container.data.length), 
-                            new tinymce.caret.CaretPosition(container, offset);
-                        }
-                        return parts = "after" === parts ? nodeIndex(path) + 1 : nodeIndex(path), 
-                        new tinymce.caret.CaretPosition(path.parentNode, parts);
-                    }
-                    return null;
-                }
-            }
-        };
-    }(tinymce), function(tinymce) {
-        var NodeType = tinymce.dom.NodeType, Zwsp = tinymce.text.Zwsp, isElement = NodeType.isElement, isText = NodeType.isText;
-        function isCaretContainerBlock(node) {
-            return isText(node) && (node = node.parentNode), isElement(node) && node.hasAttribute("data-mce-caret");
-        }
-        function isCaretContainerInline(node) {
-            return isText(node) && Zwsp.isZwsp(node.data);
-        }
-        function isCaretContainer(node) {
-            return isCaretContainerBlock(node) || isCaretContainerInline(node);
-        }
-        function startsWithCaretContainer(node) {
-            return isText(node) && node.data[0] == Zwsp.ZWSP;
-        }
-        function endsWithCaretContainer(node) {
-            return isText(node) && node.data[node.data.length - 1] == Zwsp.ZWSP;
-        }
-        tinymce.caret.CaretContainer = {
-            isCaretContainer: isCaretContainer,
-            isCaretContainerBlock: isCaretContainerBlock,
-            isCaretContainerInline: isCaretContainerInline,
-            showCaretContainerBlock: function(caretContainer) {
-                var elm;
-                return caretContainer && caretContainer.hasAttribute("data-mce-caret") ? (elm = (elm = (elm = caretContainer).getElementsByTagName("br"))[elm.length - 1], 
-                NodeType.isBogus(elm) && elm.parentNode.removeChild(elm), caretContainer.removeAttribute("data-mce-caret"), 
-                caretContainer.removeAttribute("data-mce-bogus"), caretContainer.removeAttribute("style"), 
-                caretContainer.removeAttribute("_moz_abspos"), caretContainer) : null;
-            },
-            insertInline: function(node, before) {
-                var sibling, textNode = node.ownerDocument.createTextNode(Zwsp.ZWSP), parentNode = node.parentNode;
-                if (before) {
-                    if (sibling = node.previousSibling, isText(sibling)) {
-                        if (isCaretContainer(sibling)) return sibling;
-                        if (endsWithCaretContainer(sibling)) return sibling.splitText(sibling.data.length - 1);
-                    }
-                    parentNode.insertBefore(textNode, node);
-                } else {
-                    if (sibling = node.nextSibling, isText(sibling)) {
-                        if (isCaretContainer(sibling)) return sibling;
-                        if (startsWithCaretContainer(sibling)) return sibling.splitText(1), 
-                        sibling;
-                    }
-                    node.nextSibling ? parentNode.insertBefore(textNode, node.nextSibling) : parentNode.appendChild(textNode);
-                }
-                return textNode;
-            },
-            insertBlock: function(blockName, node, before) {
-                var br;
-                return (blockName = node.ownerDocument.createElement(blockName)).setAttribute("data-mce-caret", before ? "before" : "after"), 
-                blockName.setAttribute("data-mce-bogus", "all"), blockName.appendChild(((br = document.createElement("br")).setAttribute("data-mce-bogus", "1"), 
-                br)), br = node.parentNode, before ? br.insertBefore(blockName, node) : node.nextSibling ? br.insertBefore(blockName, node.nextSibling) : br.appendChild(blockName), 
-                blockName;
-            },
-            hasContent: function(node) {
-                return node.firstChild !== node.lastChild || !NodeType.isBr(node.firstChild);
-            },
-            startsWithCaretContainer: startsWithCaretContainer,
-            endsWithCaretContainer: endsWithCaretContainer
-        };
-    }(tinymce), function(tinymce) {
-        var NodeType = tinymce.dom.NodeType, CaretContainer = tinymce.caret.CaretContainer, Arr = tinymce.util.Arr, isContentEditableTrue = NodeType.isContentEditableTrue, isContentEditableFalse = NodeType.isContentEditableFalse, isBr = NodeType.isBr, isText = NodeType.isText, isInvalidTextElement = NodeType.matchNodeNames("script style textarea"), isAtomicInline = NodeType.matchNodeNames("img input textarea hr iframe video audio object"), isTable = NodeType.matchNodeNames("table"), isCaretContainer = CaretContainer.isCaretContainer;
-        function isCaretCandidate(node) {
-            return !isCaretContainer(node) && (isText(node) ? !isInvalidTextElement(node.parentNode) : isAtomicInline(node) || isBr(node) || isTable(node) || isContentEditableFalse(node));
-        }
-        function isInEditable(node, rootNode) {
-            for (node = node.parentNode; node && node != rootNode; node = node.parentNode) {
-                if (isContentEditableFalse(node)) return !1;
-                if (isContentEditableTrue(node)) return !0;
-            }
-            return !0;
-        }
-        tinymce.caret.CaretCandidate = {
-            isCaretCandidate: isCaretCandidate,
-            isInEditable: isInEditable,
-            isAtomic: function(node) {
-                return isAtomicInline(node) || function(node) {
-                    return !!isContentEditableFalse(node) && !0 !== Arr.reduce(node.getElementsByTagName("*"), function(result, elm) {
-                        return result || isContentEditableTrue(elm);
-                    }, !1);
-                }(node);
-            },
-            isEditableCaretCandidate: function(node, rootNode) {
-                return isCaretCandidate(node) && isInEditable(node, rootNode);
-            }
-        };
-    }(tinymce), function(tinymce) {
-        function setNodeValue(node, text) {
-            0 === text.length ? removeNode(node) : node.nodeValue = text;
-        }
-        function trimCount(text) {
-            var trimmedText = Zwsp.trim(text);
-            return {
-                count: text.length - trimmedText.length,
-                text: trimmedText
-            };
-        }
-        function remove(caretContainerNode) {
-            isElement(caretContainerNode) && CaretContainer.isCaretContainer(caretContainerNode) && (CaretContainer.hasContent(caretContainerNode) ? caretContainerNode.removeAttribute("data-mce-caret") : removeNode(caretContainerNode)), 
-            isText(caretContainerNode) && setNodeValue(caretContainerNode, Zwsp.trim(function(node) {
-                try {
-                    return node.nodeValue;
-                } catch (ex) {
-                    return "";
-                }
-            }(caretContainerNode)));
-        }
-        var NodeType = tinymce.dom.NodeType, Zwsp = tinymce.text.Zwsp, CaretContainer = tinymce.caret.CaretContainer, CaretPosition = tinymce.caret.CaretPosition, Arr = tinymce.util.Arr, isElement = NodeType.isElement, isText = NodeType.isText, removeNode = function(node) {
-            var parentNode = node.parentNode;
-            parentNode && parentNode.removeChild(node);
-        }, removeUnchanged = function(caretContainer, pos) {
-            return remove(caretContainer), pos;
-        };
-        tinymce.caret.CaretContainerRemove = {
-            removeAndReposition: function(container, pos) {
-                return (CaretPosition.isTextPosition(pos) ? function(caretContainer, pos) {
-                    return (pos.container() === caretContainer ? function(caretContainer, pos) {
-                        var before = trimCount(caretContainer.data.substr(0, pos.offset())), after = trimCount(caretContainer.data.substr(pos.offset()));
-                        return 0 < (after = before.text + after.text).length ? (setNodeValue(caretContainer, after), 
-                        new CaretPosition(caretContainer, pos.offset() - before.count)) : pos;
-                    } : removeUnchanged)(caretContainer, pos);
-                } : function(caretContainer, pos) {
-                    return (pos.container() === caretContainer.parentNode ? function(caretContainer, pos) {
-                        var parentNode = pos.container(), newPosition = Arr.indexOf(parentNode.childNodes, caretContainer).map(function(index) {
-                            return index < pos.offset() ? new CaretPosition(parentNode, pos.offset() - 1) : pos;
-                        }).getOr(pos);
-                        return remove(caretContainer), newPosition;
-                    } : removeUnchanged)(caretContainer, pos);
-                })(container, pos);
-            },
-            remove: remove
-        };
-    }(tinymce), function(tinymce) {
-        var NodeType = tinymce.dom.NodeType, DOMUtils = tinymce.DOM, CaretCandidate = tinymce.caret.CaretCandidate, RangeUtils = tinymce.dom.RangeUtils, ClientRect = tinymce.geom.ClientRect, ExtendingChar = tinymce.text.ExtendingChar, Fun = tinymce.util.Fun, isElement = NodeType.isElement, CaretCandidate = CaretCandidate.isCaretCandidate, isBlock = NodeType.matchStyleValues("display", "block table"), isFloated = NodeType.matchStyleValues("float", "left right"), isValidElementCaretCandidate = Fun.and(isElement, CaretCandidate, Fun.negate(isFloated)), isNotPre = Fun.negate(NodeType.matchStyleValues("white-space", "pre pre-line pre-wrap")), isText = NodeType.isText, isBr = NodeType.isBr, nodeIndex = DOMUtils.nodeIndex, resolveIndex = RangeUtils.getNode;
-        function createRange(doc) {
-            return "createRange" in doc ? doc.createRange() : DOMUtils.createRng();
-        }
-        function isWhiteSpace(chr) {
-            return chr && /[\r\n\t ]/.test(chr);
-        }
-        function isHiddenWhiteSpaceRange(range) {
-            var container = range.startContainer, offset = range.startOffset;
-            return isWhiteSpace(range.toString()) && isNotPre(container.parentNode) && (isWhiteSpace((range = container.data)[offset - 1]) || isWhiteSpace(range[offset + 1]));
-        }
-        function CaretPosition(container, offset, clientRects) {
-            function getClientRects() {
-                return clientRects = clientRects || function(caretPosition) {
-                    var node, clientRects = [];
-                    function getBoundingClientRect(item) {
-                        var clientRects = item.getClientRects();
-                        return 0 < clientRects.length ? ClientRect.clone(clientRects[0]) : ClientRect.clone(item.getBoundingClientRect());
-                    }
-                    function collapseAndInflateWidth(clientRect, toStart) {
-                        return (clientRect = ClientRect.collapse(clientRect, toStart)).width = 1, 
-                        clientRect.right = clientRect.left + 1, clientRect;
-                    }
-                    function addUniqueAndValidRect(clientRect) {
-                        0 === clientRect.height || 0 < clientRects.length && ClientRect.isEqual(clientRect, clientRects[clientRects.length - 1]) || clientRects.push(clientRect);
-                    }
-                    function addCharacterOffset(container, offset) {
-                        var range = createRange(container.ownerDocument);
-                        if (offset < container.data.length) {
-                            if (ExtendingChar.isExtendingChar(container.data[offset])) return;
-                            if (ExtendingChar.isExtendingChar(container.data[offset - 1]) && (range.setStart(container, offset), 
-                            range.setEnd(container, offset + 1), !isHiddenWhiteSpaceRange(range))) return addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(range), !1));
-                        }
-                        0 < offset && (range.setStart(container, offset - 1), range.setEnd(container, offset), 
-                        isHiddenWhiteSpaceRange(range) || addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(range), !1))), 
-                        offset < container.data.length && (range.setStart(container, offset), 
-                        range.setEnd(container, offset + 1), isHiddenWhiteSpaceRange(range) || addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(range), !0)));
-                    }
-                    if (isText(caretPosition.container())) addCharacterOffset(caretPosition.container(), caretPosition.offset()); else if (isElement(caretPosition.container())) if (caretPosition.isAtEnd()) node = resolveIndex(caretPosition.container(), caretPosition.offset()), 
-                    isText(node) && addCharacterOffset(node, node.data.length), 
-                    isValidElementCaretCandidate(node) && !isBr(node) && addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(node), !1)); else {
-                        if (node = resolveIndex(caretPosition.container(), caretPosition.offset()), 
-                        isText(node) && addCharacterOffset(node, 0), isValidElementCaretCandidate(node) && caretPosition.isAtEnd()) return addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(node), !1)), 
-                        clientRects;
-                        caretPosition = resolveIndex(caretPosition.container(), caretPosition.offset() - 1), 
-                        !isValidElementCaretCandidate(caretPosition) || isBr(caretPosition) || !isBlock(caretPosition) && !isBlock(node) && isValidElementCaretCandidate(node) || addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(caretPosition), !1)), 
-                        isValidElementCaretCandidate(node) && addUniqueAndValidRect(collapseAndInflateWidth(getBoundingClientRect(node), !0));
-                    }
-                    return clientRects;
-                }(new CaretPosition(container, offset));
-            }
-            return {
-                container: Fun.constant(container),
-                offset: Fun.constant(offset),
-                toRange: function() {
-                    var range = createRange(container.ownerDocument);
-                    return range.setStart(container, offset), range.setEnd(container, offset), 
-                    range;
-                },
-                getClientRects: getClientRects,
-                isVisible: function() {
-                    return 0 < getClientRects().length;
-                },
-                isAtStart: function() {
-                    return isText(container), 0 === offset;
-                },
-                isAtEnd: function() {
-                    return isText(container) ? offset >= container.data.length : offset >= container.childNodes.length;
-                },
-                isEqual: function(caretPosition) {
-                    return caretPosition && container === caretPosition.container() && offset === caretPosition.offset();
-                },
-                getNode: function(before) {
-                    return resolveIndex(container, before ? offset - 1 : offset);
-                }
-            };
-        }
-        CaretPosition.fromRangeStart = function(range) {
-            return new CaretPosition(range.startContainer, range.startOffset);
-        }, CaretPosition.fromRangeEnd = function(range) {
-            return new CaretPosition(range.endContainer, range.endOffset);
-        }, CaretPosition.after = function(node) {
-            return new CaretPosition(node.parentNode, nodeIndex(node) + 1);
-        }, CaretPosition.before = function(node) {
-            return new CaretPosition(node.parentNode, nodeIndex(node));
-        }, tinymce.caret.CaretPosition = CaretPosition;
-    }(tinymce), function(tinymce) {
-        var NodeType = tinymce.dom.NodeType, TreeWalker = tinymce.dom.TreeWalker, CaretContainer = tinymce.caret.CaretContainer, CaretCandidate = tinymce.caret.CaretCandidate, Fun = tinymce.util.Fun, isContentEditableTrue = NodeType.isContentEditableTrue, isContentEditableFalse = NodeType.isContentEditableFalse, isBlockLike = NodeType.matchStyleValues("display", "block table table-cell table-caption"), isCaretContainer = CaretContainer.isCaretContainer, isCaretContainerBlock = CaretContainer.isCaretContainerBlock, curry = Fun.curry, isElement = NodeType.isElement, isCaretCandidate = CaretCandidate.isCaretCandidate;
-        function skipCaretContainers(walk, shallow) {
-            for (var node; node = walk(shallow); ) if (!isCaretContainerBlock(node)) return node;
-            return null;
-        }
-        function getEditingHost(node, rootNode) {
-            for (node = node.parentNode; node && node != rootNode; node = node.parentNode) if (isContentEditableTrue(node)) return node;
-            return rootNode;
-        }
-        function getParentBlock(node, rootNode) {
-            for (;node && node != rootNode; ) {
-                if (isBlockLike(node)) return node;
-                node = node.parentNode;
-            }
-            return null;
-        }
-        function beforeAfter(before, node) {
-            var range = node.ownerDocument.createRange();
-            return before ? (range.setStartBefore(node), range.setEndBefore(node)) : (range.setStartAfter(node), 
-            range.setEndAfter(node)), range;
-        }
-        function lean(left, rootNode, node) {
-            for (var sibling, siblingName = left ? "previousSibling" : "nextSibling"; node && node != rootNode; ) {
-                if (sibling = node[siblingName], isCaretContainer(sibling) && (sibling = sibling[siblingName]), 
-                isContentEditableFalse(sibling)) {
-                    if (function(rootNode, node2) {
-                        return getParentBlock(sibling, rootNode) == getParentBlock(node2, rootNode);
-                    }(rootNode, node)) return sibling;
-                    break;
-                }
-                if (isCaretCandidate(sibling)) break;
-                node = node.parentNode;
-            }
-            return null;
-        }
-        var before = curry(beforeAfter, !0), after = curry(beforeAfter, !1);
-        function isNextToContentEditableFalse(relativeOffset, caretPosition) {
-            return isContentEditableFalse(function(relativeOffset, caretPosition) {
-                var container;
-                return caretPosition && (container = caretPosition.container(), 
-                caretPosition = caretPosition.offset(), isElement(container)) ? container.childNodes[caretPosition + relativeOffset] : null;
-            }(relativeOffset, caretPosition));
-        }
-        tinymce.caret.CaretUtils = {
-            isForwards: function(direction) {
-                return 0 < direction;
-            },
-            isBackwards: function(direction) {
-                return direction < 0;
-            },
-            findNode: function(node, direction, predicateFn, rootNode, shallow) {
-                var walker = new TreeWalker(node, rootNode);
-                if (direction < 0) {
-                    if ((isContentEditableFalse(node) || isCaretContainerBlock(node)) && predicateFn(node = skipCaretContainers(walker.prev, !0))) return node;
-                    for (;node = skipCaretContainers(walker.prev, shallow); ) if (predicateFn(node)) return node;
-                }
-                if (0 < direction) {
-                    if ((isContentEditableFalse(node) || isCaretContainerBlock(node)) && predicateFn(node = skipCaretContainers(walker.next, !0))) return node;
-                    for (;node = skipCaretContainers(walker.next, shallow); ) if (predicateFn(node)) return node;
-                }
-                return null;
-            },
-            getEditingHost: getEditingHost,
-            getParentBlock: getParentBlock,
-            isInSameBlock: function(caretPosition1, caretPosition2, rootNode) {
-                return getParentBlock(caretPosition1.container(), rootNode) == getParentBlock(caretPosition2.container(), rootNode);
-            },
-            isInSameEditingHost: function(caretPosition1, caretPosition2, rootNode) {
-                return getEditingHost(caretPosition1.container(), rootNode) == getEditingHost(caretPosition2.container(), rootNode);
-            },
-            isBeforeContentEditableFalse: curry(isNextToContentEditableFalse, 0),
-            isAfterContentEditableFalse: curry(isNextToContentEditableFalse, -1),
-            normalizeRange: function(direction, rootNode, range) {
-                var node, location, leanLeft = curry(lean, !0, rootNode), rootNode = curry(lean, !1, rootNode), container = range.startContainer, offset = range.startOffset;
-                if (CaretContainer.isCaretContainerBlock(container)) {
-                    if ("before" == (location = (container = isElement(container) ? container : container.parentNode).getAttribute("data-mce-caret")) && (node = container.nextSibling, 
-                    isContentEditableFalse(node))) return before(node);
-                    if ("after" == location && (node = container.previousSibling, 
-                    isContentEditableFalse(node))) return after(node);
-                }
-                if (range.collapsed && NodeType.isText(container)) {
-                    if (isCaretContainer(container)) {
-                        if (1 === direction) {
-                            if (node = rootNode(container)) return before(node);
-                            if (node = leanLeft(container)) return after(node);
-                        }
-                        if (-1 === direction) {
-                            if (node = leanLeft(container)) return after(node);
-                            if (node = rootNode(container)) return before(node);
-                        }
-                        return range;
-                    }
-                    if (CaretContainer.endsWithCaretContainer(container) && offset >= container.data.length - 1) return 1 === direction && (node = rootNode(container)) ? before(node) : range;
-                    if (CaretContainer.startsWithCaretContainer(container) && offset <= 1) return -1 === direction && (node = leanLeft(container)) ? after(node) : range;
-                    if (offset === container.data.length) return (node = rootNode(container)) ? before(node) : range;
-                    if (0 === offset) return (node = leanLeft(container)) ? after(node) : range;
-                }
-                return range;
-            }
-        };
-    }(tinymce), function(tinymce) {
-        var NodeType = tinymce.dom.NodeType, CaretPosition = tinymce.caret.CaretPosition, CaretUtils = tinymce.caret.CaretUtils, CaretCandidate = tinymce.caret.CaretCandidate, Arr = tinymce.util.Arr, Fun = tinymce.util.Fun, isContentEditableFalse = NodeType.isContentEditableFalse, isText = NodeType.isText, isElement = NodeType.isElement, isBr = NodeType.isBr, isForwards = CaretUtils.isForwards, isBackwards = CaretUtils.isBackwards, isCaretCandidate = CaretCandidate.isCaretCandidate, isAtomic = CaretCandidate.isAtomic, isEditableCaretCandidate = CaretCandidate.isEditableCaretCandidate;
-        function nodeAtIndex(container, offset) {
-            return container.hasChildNodes() && offset < container.childNodes.length ? container.childNodes[offset] : null;
-        }
-        function getCaretCandidatePosition(direction, node) {
-            if (isForwards(direction)) {
-                if (isCaretCandidate(node.previousSibling) && !isText(node.previousSibling)) return CaretPosition.before(node);
-                if (isText(node)) return CaretPosition(node, 0);
-            }
-            if (isBackwards(direction)) {
-                if (isCaretCandidate(node.nextSibling) && !isText(node.nextSibling)) return CaretPosition.after(node);
-                if (isText(node)) return CaretPosition(node, node.data.length);
-            }
-            return !isBackwards(direction) || isBr(node) ? CaretPosition.before(node) : CaretPosition.after(node);
-        }
-        function findCaretPosition(direction, startCaretPosition, rootNode) {
-            var container, node, nextNode, innerNode, offset;
-            if (!isElement(rootNode) || !startCaretPosition) return null;
-            if (container = startCaretPosition.container(), offset = startCaretPosition.offset(), 
-            isText(container)) {
-                if (isBackwards(direction) && 0 < offset) return CaretPosition(container, --offset);
-                if (isForwards(direction) && offset < container.length) return CaretPosition(container, ++offset);
-                node = container;
-            } else {
-                if (isBackwards(direction) && 0 < offset && (nextNode = nodeAtIndex(container, offset - 1), 
-                isCaretCandidate(nextNode))) return !isAtomic(nextNode) && (innerNode = CaretUtils.findNode(nextNode, direction, isEditableCaretCandidate, nextNode)) ? isText(innerNode) ? CaretPosition(innerNode, innerNode.data.length) : CaretPosition.after(innerNode) : isText(nextNode) ? CaretPosition(nextNode, nextNode.data.length) : CaretPosition.before(nextNode);
-                if (isForwards(direction) && offset < container.childNodes.length && (nextNode = nodeAtIndex(container, offset), 
-                isCaretCandidate(nextNode))) return function(node, rootNode) {
-                    var next;
-                    return NodeType.isBr(node) && (next = findCaretPosition(1, CaretPosition.after(node), rootNode)) && !CaretUtils.isInSameBlock(CaretPosition.before(node), CaretPosition.before(next), rootNode);
-                }(nextNode, rootNode) ? findCaretPosition(direction, CaretPosition.after(nextNode), rootNode) : !isAtomic(nextNode) && (innerNode = CaretUtils.findNode(nextNode, direction, isEditableCaretCandidate, nextNode)) ? isText(innerNode) ? CaretPosition(innerNode, 0) : CaretPosition.before(innerNode) : isText(nextNode) ? CaretPosition(nextNode, 0) : CaretPosition.after(nextNode);
-                node = startCaretPosition.getNode();
-            }
-            return (isForwards(direction) && startCaretPosition.isAtEnd() || isBackwards(direction) && startCaretPosition.isAtStart()) && (node = CaretUtils.findNode(node, direction, Fun.constant(!0), rootNode, !0), 
-            isEditableCaretCandidate(node)) ? getCaretCandidatePosition(direction, node) : (nextNode = CaretUtils.findNode(node, direction, isEditableCaretCandidate, rootNode), 
-            !(offset = Arr.last(Arr.filter(function(node, rootNode) {
-                for (var parents = []; node && node != rootNode; ) parents.push(node), 
-                node = node.parentNode;
-                return parents;
-            }(container, rootNode), isContentEditableFalse))) || nextNode && offset.contains(nextNode) ? nextNode ? getCaretCandidatePosition(direction, nextNode) : null : isForwards(direction) ? CaretPosition.after(offset) : CaretPosition.before(offset));
-        }
-        tinymce.caret.CaretWalker = function(rootNode) {
-            return {
-                next: function(caretPosition) {
-                    return findCaretPosition(1, caretPosition, rootNode);
-                },
-                prev: function(caretPosition) {
-                    return findCaretPosition(-1, caretPosition, rootNode);
-                }
-            };
-        };
-    }(tinymce), function(tinymce) {
-        var NodeType = tinymce.dom.NodeType, DOM = tinymce.DOM, ClientRect = tinymce.geom.ClientRect, CaretContainer = tinymce.caret.CaretContainer, CaretContainerRemove = tinymce.caret.CaretContainerRemove, isContentEditableFalse = NodeType.isContentEditableFalse;
-        tinymce.caret.FakeCaret = function(rootNode, isBlock) {
-            var cursorInterval, $lastVisualCaret, caretContainerNode;
-            function hide() {
-                for (var node, sibling, data, contentEditableFalseNodes = DOM.select("*[contentEditable=false]", rootNode), i = 0; i < contentEditableFalseNodes.length; i++) sibling = (node = contentEditableFalseNodes[i]).previousSibling, 
-                CaretContainer.endsWithCaretContainer(sibling) && (1 == (data = sibling.data).length ? sibling.parentNode.removeChild(sibling) : sibling.deleteData(data.length - 1, 1)), 
-                sibling = node.nextSibling, CaretContainer.startsWithCaretContainer(sibling) && (1 == (data = sibling.data).length ? sibling.parentNode.removeChild(sibling) : sibling.deleteData(0, 1));
-                caretContainerNode && (CaretContainerRemove.remove(caretContainerNode), 
-                caretContainerNode = null), $lastVisualCaret && (DOM.remove($lastVisualCaret), 
-                $lastVisualCaret = null), clearInterval(cursorInterval);
-            }
-            return {
-                show: function(before, node) {
-                    var clientRect;
-                    return hide(), isBlock(node) ? (caretContainerNode = CaretContainer.insertBlock("p", node, before), 
-                    clientRect = function(node, before) {
-                        var scrollX, clientRect = ClientRect.collapse(node.getBoundingClientRect(), before), docElm = "BODY" == rootNode.tagName ? (docElm = rootNode.ownerDocument.documentElement, 
-                        scrollX = rootNode.scrollLeft || docElm.scrollLeft, rootNode.scrollTop || docElm.scrollTop) : (docElm = rootNode.getBoundingClientRect(), 
-                        scrollX = rootNode.scrollLeft - docElm.left, rootNode.scrollTop - docElm.top);
-                        return clientRect.left += scrollX, clientRect.right += scrollX, 
-                        clientRect.top += docElm, clientRect.bottom += docElm, clientRect.width = 1, 
-                        0 < (scrollX = node.offsetWidth - node.clientWidth) && (before && (scrollX *= -1), 
-                        clientRect.left += scrollX, clientRect.right += scrollX), 
-                        clientRect;
-                    }(node, before), DOM.setStyle(caretContainerNode, "top", clientRect.top), 
-                    $lastVisualCaret = DOM.add(rootNode, "div", {
-                        class: "mce-visual-caret",
-                        "data-mce-bogus": "all",
-                        style: clientRect
-                    }), before && DOM.addClass($lastVisualCaret, "mce-visual-caret-before"), 
-                    cursorInterval = setInterval(function() {
-                        var caret = DOM.select("div.mce-visual-caret", rootNode)[0];
-                        rootNode.ownerDocument.activeElement === rootNode ? DOM.toggleClass(caret, "mce-visual-caret-hidden") : DOM.addClass(caret, "mce-visual-caret-hidden");
-                    }, 500), (clientRect = node.ownerDocument.createRange()).setStart(caretContainerNode, 0), 
-                    clientRect.setEnd(caretContainerNode, 0)) : (caretContainerNode = CaretContainer.insertInline(node, before), 
-                    clientRect = node.ownerDocument.createRange(), isContentEditableFalse(caretContainerNode.nextSibling) ? (clientRect.setStart(caretContainerNode, 0), 
-                    clientRect.setEnd(caretContainerNode, 0)) : (clientRect.setStart(caretContainerNode, 1), 
-                    clientRect.setEnd(caretContainerNode, 1))), clientRect;
-                },
-                hide: hide,
-                getCss: function() {
-                    return ".mce-visual-caret {position: absolute;background-color: black;background-color: currentcolor;}.mce-visual-caret-hidden {display: none;}*[data-mce-caret] {position: absolute;left: -1000px;right: auto;top: 0;margin: 0;padding: 0;}";
-                },
-                destroy: function() {
-                    clearInterval(cursorInterval);
-                }
-            };
-        };
-    }(tinymce), function(tinymce) {
-        var NodeType = tinymce.dom.NodeType, Fun = tinymce.util.Fun, Arr = tinymce.util.Arr, Dimensions = tinymce.dom.Dimensions, ClientRect = tinymce.geom.ClientRect, CaretUtils = tinymce.caret.CaretUtils, CaretCandidate = tinymce.caret.CaretCandidate, isContentEditableFalse = NodeType.isContentEditableFalse, findNode = CaretUtils.findNode, curry = Fun.curry;
-        function distanceToRectLeft(clientRect, clientX) {
-            return Math.abs(clientRect.left - clientX);
-        }
-        function distanceToRectRight(clientRect, clientX) {
-            return Math.abs(clientRect.right - clientX);
-        }
-        function findClosestClientRect(clientRects, clientX) {
-            function isInside(clientX, clientRect) {
-                return clientX >= clientRect.left && clientX <= clientRect.right;
-            }
-            return Arr.reduce(clientRects, function(oldClientRect, clientRect) {
-                var oldDistance = Math.min(distanceToRectLeft(oldClientRect, clientX), distanceToRectRight(oldClientRect, clientX)), newDistance = Math.min(distanceToRectLeft(clientRect, clientX), distanceToRectRight(clientRect, clientX));
-                return isInside(clientX, clientRect) || !isInside(clientX, oldClientRect) && (newDistance == oldDistance && isContentEditableFalse(clientRect.node) || newDistance < oldDistance) ? clientRect : oldClientRect;
-            });
-        }
-        function walkUntil(direction, rootNode, predicateFn, node) {
-            for (;node = findNode(node, direction, CaretCandidate.isEditableCaretCandidate, rootNode); ) if (predicateFn(node)) return;
-        }
-        function findLineNodeRects(rootNode, targetNodeRect) {
-            var clientRects = [];
-            function collect(checkPosFn, node) {
-                return node = Arr.filter(Dimensions.getClientRects(node), function(clientRect) {
-                    return !checkPosFn(clientRect, targetNodeRect);
-                }), clientRects = clientRects.concat(node), 0 === node.length;
-            }
-            return clientRects.push(targetNodeRect), walkUntil(-1, rootNode, curry(collect, ClientRect.isAbove), targetNodeRect.node), 
-            walkUntil(1, rootNode, curry(collect, ClientRect.isBelow), targetNodeRect.node), 
-            clientRects;
-        }
-        tinymce.caret.LineUtils = {
-            findClosestClientRect: findClosestClientRect,
-            findLineNodeRects: findLineNodeRects,
-            closestCaret: function(rootNode, clientX, clientY) {
-                var contentEditableFalseNodeRects = Dimensions.getClientRects(function(rootNode) {
-                    return Arr.filter(Arr.toArray(rootNode.getElementsByTagName("*")), isContentEditableFalse);
-                }(rootNode));
-                return (contentEditableFalseNodeRects = (contentEditableFalseNodeRects = findClosestClientRect(Arr.filter(contentEditableFalseNodeRects, function(clientRect) {
-                    return clientY >= clientRect.top && clientY <= clientRect.bottom;
-                }), clientX)) && findClosestClientRect(findLineNodeRects(rootNode, contentEditableFalseNodeRects), clientX)) && isContentEditableFalse(contentEditableFalseNodeRects.node) ? function(clientRect, clientX) {
-                    return {
-                        node: clientRect.node,
-                        before: distanceToRectLeft(clientRect, clientX) < distanceToRectRight(clientRect, clientX)
-                    };
-                }(contentEditableFalseNodeRects, clientX) : null;
-            }
-        };
-    }(tinymce), function(tinymce) {
-        var Fun = tinymce.util.Fun, Arr = tinymce.util.Arr, Dimensions = tinymce.dom.Dimensions, ClientRect = tinymce.geom.ClientRect, CaretUtils = tinymce.caret.CaretUtils, CaretCandidate = tinymce.caret.CaretCandidate, CaretWalker = tinymce.caret.CaretWalker, CaretPosition = tinymce.caret.CaretPosition;
-        function walkUntil(direction, isAboveFn, isBeflowFn, rootNode, predicateFn, caretPosition) {
-            var targetClientRect, line = 0, result = [];
-            function add(node) {
-                var i, clientRect, clientRects = Dimensions.getClientRects(node);
-                for (-1 == direction && (clientRects = clientRects.reverse()), i = 0; i < clientRects.length; i++) if (clientRect = clientRects[i], 
-                !isBeflowFn(clientRect, targetClientRect)) {
-                    if (0 < result.length && isAboveFn(clientRect, Arr.last(result)) && line++, 
-                    clientRect.line = line, predicateFn(clientRect)) return !0;
-                    result.push(clientRect);
-                }
-            }
-            return (targetClientRect = Arr.last(caretPosition.getClientRects())) && (add(caretPosition = caretPosition.getNode()), 
-            function(direction, rootNode, predicateFn, node) {
-                for (;node = CaretUtils.findNode(node, direction, CaretCandidate.isEditableCaretCandidate, rootNode); ) if (predicateFn(node)) return;
-            }(direction, rootNode, add, caretPosition)), result;
-        }
-        var upUntil = (Fun = Fun.curry)(walkUntil, -1, ClientRect.isAbove, ClientRect.isBelow), downUntil = Fun(walkUntil, 1, ClientRect.isBelow, ClientRect.isAbove);
-        tinymce.caret.LineWalker = {
-            upUntil: upUntil,
-            downUntil: downUntil,
-            positionsUntil: function(direction, rootNode, predicateFn, node) {
-                var walkFn, isBelowFn, isAboveFn, caretPosition, clientRect, targetClientRect, rootNode = new CaretWalker(rootNode), result = [], line = 0;
-                function getClientRect(caretPosition) {
-                    return Arr.last(caretPosition.getClientRects());
-                }
-                targetClientRect = getClientRect(caretPosition = 1 == direction ? (walkFn = rootNode.next, 
-                isBelowFn = ClientRect.isBelow, isAboveFn = ClientRect.isAbove, 
-                CaretPosition.after(node)) : (walkFn = rootNode.prev, isBelowFn = ClientRect.isAbove, 
-                isAboveFn = ClientRect.isBelow, CaretPosition.before(node)));
-                do {
-                    if (caretPosition.isVisible() && !isAboveFn(clientRect = getClientRect(caretPosition), targetClientRect)) {
-                        if (0 < result.length && isBelowFn(clientRect, Arr.last(result)) && line++, 
-                        (clientRect = ClientRect.clone(clientRect)).position = caretPosition, 
-                        clientRect.line = line, predicateFn(clientRect)) return result;
-                        result.push(clientRect);
-                    }
-                } while (caretPosition = walkFn(caretPosition));
-                return result;
-            },
-            isAboveLine: Fun(function(lineNumber, clientRect) {
-                return clientRect.line > lineNumber;
-            }),
-            isLine: Fun(function(lineNumber, clientRect) {
-                return clientRect.line === lineNumber;
-            })
-        };
-    }(tinymce), function(tinymce) {
         function funescape(_, escaped, escapedWhitespace) {
             var high = "0x" + escaped - 65536;
             return high != high || escapedWhitespace ? escaped : high < 0 ? String.fromCharCode(65536 + high) : String.fromCharCode(high >> 10 | 55296, 1023 & high | 56320);
@@ -6657,10 +6222,7 @@
             };
         };
     }(tinymce), function(tinymce) {
-        var is = tinymce.is, isIE = tinymce.isIE, each = tinymce.each, extend = tinymce.extend, TreeWalker = tinymce.dom.TreeWalker, BookmarkManager = tinymce.dom.BookmarkManager, ControlSelection = tinymce.dom.ControlSelection;
-        function isRestricted(element) {
-            return element && !Object.getPrototypeOf(element);
-        }
+        var each = tinymce.each, extend = tinymce.extend, TreeWalker = tinymce.dom.TreeWalker, BookmarkManager = tinymce.dom.BookmarkManager, ControlSelection = tinymce.dom.ControlSelection, RangeUtils = tinymce.dom.RangeUtils, CaretPosition = tinymce.caret.CaretPosition, Zwsp = tinymce.text.Zwsp, ScrollIntoView = tinymce.dom.ScrollIntoView, Env = tinymce.util.Env;
         tinymce.dom.Selection = function(dom, win, serializer, editor) {
             var self = this;
             self.dom = dom, self.win = win, self.serializer = serializer, self.editor = editor, 
@@ -6678,14 +6240,15 @@
             }), tinymce.addUnload(self.destroy, self);
         }, tinymce.dom.Selection.prototype = {
             setCursorLocation: function(node, offset) {
-                var r = this.dom.createRng();
-                r.setStart(node, offset), r.setEnd(node, offset), this.setRng(r), 
-                this.collapse(!1);
+                var rng = this.dom.createRng();
+                node ? (rng.setStart(node, offset), rng.setEnd(node, offset), this.setRng(rng), 
+                this.collapse(!1)) : (this._moveEndPoint(rng, this.editor.getBody(), !0), 
+                this.setRng(rng));
             },
             getContextualFragment: function(rng, frag) {
                 var ed = this.editor, dom = this.dom, node = rng.commonAncestorContainer;
                 if (node === ed.getBody()) return frag;
-                var nodes, tableCells = dom.select("td.mceSelected, th.mceSelected", node);
+                var nodes, tableCells = dom.select("td[data-mce-selected], th[data-mce-selected], td.mceSelected, th.mceSelected", node);
                 if (tableCells.length) {
                     var row, table = dom.getParent(node, "table");
                     if (table) return table = dom.clone(table), row = dom.create("tr"), 
@@ -6702,25 +6265,28 @@
                     (elm = dom.clone(elm)).appendChild(frag), nodes.appendChild(elm);
                 }), nodes) : frag;
             },
-            getContent: function(s) {
-                var wa, r = this.getRng(), e = this.dom.create("body"), se = this.getSel(), wb = wa = "";
-                return (s = s || {}).get = !0, s.format = s.format || "html", s.forced_root_block = "", 
-                this.onBeforeGetContent.dispatch(this, s), "text" == s.format ? this.isCollapsed() ? "" : r.text || (se.toString ? se.toString() : "") : (r.cloneContents ? (se = r.cloneContents()) && (s.contextual && (se = this.getContextualFragment(r, se)), 
-                e.appendChild(se)) : is(r.item) || is(r.htmlText) ? (e.innerHTML = "<br>" + (r.item ? r.item(0).outerHTML : r.htmlText), 
-                e.removeChild(e.firstChild)) : e.innerHTML = r.toString(), /^\s/.test(e.innerHTML) && (wb = " "), 
-                /\s+$/.test(e.innerHTML) && (wa = " "), s.getInner = !0, s.content = this.isCollapsed() ? "" : wb + this.serializer.serialize(e, s) + wa, 
-                this.onGetContent.dispatch(this, s), s.content);
+            getContent: function(args) {
+                var whiteSpaceAfter, rng = this.getRng(), tmpElm = this.dom.create("body"), se = this.getSel(), whiteSpaceBefore = whiteSpaceAfter = "";
+                return (args = args || {}).get = !0, args.format = args.format || "html", 
+                args.selection = !0, this.onBeforeGetContent.dispatch(this, args), 
+                "text" === args.format ? this.isCollapsed() ? "" : Zwsp.trim(rng.text || (se.toString ? se.toString() : "")) : (rng.cloneContents ? (se = rng.cloneContents()) && (args.contextual && (se = this.getContextualFragment(rng, se)), 
+                tmpElm.appendChild(se)) : void 0 !== rng.item || void 0 !== rng.htmlText ? (tmpElm.innerHTML = "<br>" + (rng.item ? rng.item(0).outerHTML : rng.htmlText), 
+                tmpElm.removeChild(tmpElm.firstChild)) : tmpElm.innerHTML = rng.toString(), 
+                /^\s/.test(tmpElm.innerHTML) && (whiteSpaceBefore = " "), /\s+$/.test(tmpElm.innerHTML) && (whiteSpaceAfter = " "), 
+                args.getInner = !0, args.content = this.isCollapsed() ? "" : whiteSpaceBefore + this.serializer.serialize(tmpElm, args) + whiteSpaceAfter, 
+                this.onGetContent.dispatch(this, args), args.content);
             },
             setContent: function(content, args) {
-                var caretNode, rng = this.getRng(), doc = this.win.document;
+                var frag, temp, rng = this.getRng(), doc = this.win.document;
                 if ((args = args || {
                     format: "html"
-                }).set = !0, args.content = content, args.no_events || this.onBeforeSetContent.dispatch(this, args), 
+                }).set = !0, args.selection = !0, args.content = content, args.no_events || this.onBeforeSetContent.dispatch(this, args), 
                 content = args.content, rng.insertNode) {
                     content += '<span id="__caret">_</span>', rng.startContainer == doc && rng.endContainer == doc || (rng.deleteContents(), 
-                    0 === doc.body.childNodes.length) ? doc.body.innerHTML = content : rng.insertNode(rng.createContextualFragment(content)), 
-                    caretNode = this.dom.get("__caret"), (rng = doc.createRange()).setStartBefore(caretNode), 
-                    rng.setEndBefore(caretNode), this.setRng(rng), this.dom.remove("__caret");
+                    0 === doc.body.childNodes.length) ? doc.body.innerHTML = content : rng.createContextualFragment ? rng.insertNode(rng.createContextualFragment(content)) : (frag = doc.createDocumentFragment(), 
+                    temp = doc.createElement("div"), frag.appendChild(temp), temp.outerHTML = content, 
+                    rng.insertNode(frag)), temp = this.dom.get("__caret"), (rng = doc.createRange()).setStartBefore(temp), 
+                    rng.setEndBefore(temp), this.setRng(rng), this.dom.remove("__caret");
                     try {
                         this.setRng(rng);
                     } catch (ex) {}
@@ -6756,36 +6322,29 @@
             },
             select: function(node, content) {
                 var dom = this.dom, rng = dom.createRng();
-                function setPoint(node, start) {
-                    var walker = new TreeWalker(node, node);
-                    do {
-                        if (3 == node.nodeType && 0 !== tinymce.trim(node.nodeValue).length) return start ? rng.setStart(node, 0) : rng.setEnd(node, node.nodeValue.length);
-                        if ("BR" == node.nodeName) return start ? rng.setStartBefore(node) : rng.setEndBefore(node);
-                    } while (node = start ? walker.next() : walker.prev());
-                }
-                if (node) {
+                if (this.lastFocusBookmark = null, node) {
                     if (!content && this.controlSelection.controlSelect(node)) return;
                     dom = dom.nodeIndex(node), rng.setStart(node.parentNode, dom), 
-                    rng.setEnd(node.parentNode, dom + 1), content && (setPoint(node, 1), 
-                    setPoint(node)), this.setRng(rng);
+                    rng.setEnd(node.parentNode, dom + 1), content && (this._moveEndPoint(rng, node, !0), 
+                    this._moveEndPoint(rng, node)), this.setRng(rng);
                 }
                 return node;
             },
             isCollapsed: function() {
-                var r = this.getRng(), s = this.getSel();
-                return !(!r || r.item) && (r.compareEndPoints ? 0 === r.compareEndPoints("StartToEnd", r) : !s || r.collapsed);
+                var rng = this.getRng(), sel = this.getSel();
+                return !(!rng || rng.item) && (rng.compareEndPoints ? 0 === rng.compareEndPoints("StartToEnd", rng) : !sel || rng.collapsed);
             },
-            collapse: function(to_start) {
+            collapse: function(toStart) {
                 var node, rng = this.getRng();
                 rng.item && (node = rng.item(0), (rng = this.win.document.body.createTextRange()).moveToElementText(node)), 
-                rng.collapse(!!to_start), this.setRng(rng);
+                rng.collapse(!!toStart), this.setRng(rng);
             },
             getSel: function() {
-                var w = this.win;
-                return w.getSelection ? w.getSelection() : w.document.selection;
+                var win = this.win;
+                return win.getSelection ? win.getSelection() : win.document.selection;
             },
             getRng: function(w3c) {
-                var selection, rng, elm, doc, ieRng;
+                var selection, rng, doc, element;
                 function tryCompareBoundaryPoints(how, sourceRange, destinationRange) {
                     try {
                         return sourceRange.compareBoundaryPoints(how, destinationRange);
@@ -6798,53 +6357,44 @@
                 if (!w3c && this.lastFocusBookmark) (w3c = this.lastFocusBookmark).startContainer ? ((rng = doc.createRange()).setStart(w3c.startContainer, w3c.startOffset), 
                 rng.setEnd(w3c.endContainer, w3c.endOffset)) : rng = w3c; else {
                     try {
-                        (selection = this.getSel()) && !isRestricted(selection.anchorNode) && (rng = 0 < selection.rangeCount ? selection.getRangeAt(0) : (selection.createRange ? selection : doc).createRange());
+                        !(selection = this.getSel()) || (element = selection.anchorNode) && !Object.getPrototypeOf(element) || (rng = 0 < selection.rangeCount ? selection.getRangeAt(0) : (selection.createRange ? selection : doc).createRange());
                     } catch (ex) {}
                     if (this.onGetSelectionRange.dispatch(this, w3c = {
                         range: rng
                     }), w3c.range !== rng) return w3c.range;
-                    if (isIE && rng && rng.setStart && doc.selection) {
-                        try {
-                            ieRng = doc.selection.createRange();
-                        } catch (ex) {}
-                        ieRng && ieRng.item && (elm = ieRng.item(0), (rng = doc.createRange()).setStartBefore(elm), 
-                        rng.setEndAfter(elm));
-                    }
-                    (rng = (rng = rng && isRestricted(rng.startContainer) ? null : rng) || (doc.createRange ? doc.createRange() : doc.body.createTextRange())).setStart && 9 === rng.startContainer.nodeType && rng.collapsed && (elm = this.dom.getRoot(), 
-                    rng.setStart(elm, 0), rng.setEnd(elm, 0)), this.selectedRange && this.explicitRange && (0 === tryCompareBoundaryPoints(rng.START_TO_START, rng, this.selectedRange) && 0 === tryCompareBoundaryPoints(rng.END_TO_END, rng, this.selectedRange) ? rng = this.explicitRange : (this.selectedRange = null, 
+                    (rng = rng || (doc.createRange ? doc.createRange() : doc.body.createTextRange())).setStart && 9 === rng.startContainer.nodeType && rng.collapsed && (element = this.dom.getRoot(), 
+                    rng.setStart(element, 0), rng.setEnd(element, 0)), this.selectedRange && this.explicitRange && (0 === tryCompareBoundaryPoints(rng.START_TO_START, rng, this.selectedRange) && 0 === tryCompareBoundaryPoints(rng.END_TO_END, rng, this.selectedRange) ? rng = this.explicitRange : (this.selectedRange = null, 
                     this.explicitRange = null));
                 }
                 return rng;
             },
             setRng: function(rng, forward) {
-                var doc = this.win.document;
                 if (rng) if (rng.select) {
                     this.explicitRange = null;
                     try {
                         rng.select();
                     } catch (ex) {}
                 } else {
-                    var sel = this.getSel(), evt = {
+                    var evt, sel = this.getSel();
+                    if (this.onSetSelectionRange.dispatch(this, evt = {
                         range: rng
-                    };
-                    if (this.onSetSelectionRange.dispatch(this, evt), rng = evt.range, 
-                    sel) {
+                    }), rng = evt.range, sel) {
                         this.explicitRange = rng;
                         try {
-                            sel.removeAllRanges(), doc.contains(rng.startContainer) && sel.addRange(rng);
+                            sel.removeAllRanges(), sel.addRange(rng);
                         } catch (ex) {}
                         !1 === forward && sel.extend && (sel.collapse(rng.endContainer, rng.endOffset), 
                         sel.extend(rng.startContainer, rng.startOffset)), this.selectedRange = 0 < sel.rangeCount ? sel.getRangeAt(0) : null;
                     }
-                    rng.collapsed || rng.startContainer !== rng.endContainer || !sel.setBaseAndExtent || tinymce.isIE || rng.endOffset - rng.startOffset < 2 && rng.startContainer.hasChildNodes() && (evt = rng.startContainer.childNodes[rng.startOffset]) && "IMG" === evt.tagName && (sel.setBaseAndExtent(rng.startContainer, rng.startOffset, rng.endContainer, rng.endOffset), 
+                    !rng.collapsed && rng.startContainer === rng.endContainer && sel.setBaseAndExtent && rng.endOffset - rng.startOffset < 2 && rng.startContainer.hasChildNodes() && (evt = rng.startContainer.childNodes[rng.startOffset]) && "IMG" === evt.tagName && (sel.setBaseAndExtent(rng.startContainer, rng.startOffset, rng.endContainer, rng.endOffset), 
                     sel.anchorNode === rng.startContainer && sel.focusNode === rng.endContainer || sel.setBaseAndExtent(evt, 0, evt, 1)), 
                     this.onAfterSetSelectionRange.dispatch(this, {
                         range: rng
                     });
                 }
             },
-            setNode: function(n) {
-                return this.setContent(this.dom.getOuterHTML(n)), n;
+            setNode: function(elm) {
+                return this.setContent(this.dom.getOuterHTML(elm)), elm;
             },
             getNode: function() {
                 var elm, startContainer, endContainer, startOffset, endOffset, rng = this.getRng(), root = this.dom.getRoot();
@@ -6859,70 +6409,24 @@
                 endContainer = 0 === endOffset ? skipEmptyTextNodes(endContainer.previousSibling, !1) : endContainer.parentNode, 
                 startContainer) && startContainer === endContainer ? startContainer : elm && 3 == elm.nodeType ? elm.parentNode : elm) : rng.item ? rng.item(0) : rng.parentElement()) : root;
             },
-            getSelectedBlocks: function(st, en) {
-                var dom = this.dom, bl = [], st = dom.getParent(st || this.getStart(), dom.isBlock), eb = dom.getParent(en || this.getEnd(), dom.isBlock);
-                if (st && bl.push(st), st && eb && st != eb) for (var n, walker = new TreeWalker(st, dom.getRoot()); (n = walker.next()) && n != eb; ) dom.isBlock(n) && bl.push(n);
-                return eb && st != eb && bl.push(eb), bl;
-            },
-            getSelectedNodes: function(start, end) {
-                var nodes = [], rng = this.getRng(), start = start || rng.startContainer, endNode = end || rng.endContainer;
-                if (start && nodes.push(start), start && endNode && start != endNode) for (var node, walker = new TreeWalker(start, this.dom.getRoot()); (node = walker.next()) && node != endNode; ) node.parentNode === this.dom.getRoot() && nodes.push(node);
-                return endNode && start != endNode && nodes.push(endNode), nodes;
+            getSelectedBlocks: function(startElm, endElm) {
+                var dom = this.dom, selectedBlocks = [], root = dom.getRoot();
+                if (startElm = dom.getParent(startElm || this.getStart(), dom.isBlock), 
+                endElm = dom.getParent(endElm || this.getEnd(), dom.isBlock), startElm && startElm != root && selectedBlocks.push(startElm), 
+                startElm && endElm && startElm != endElm) for (var node, walker = new TreeWalker(startElm, root); (node = walker.next()) && node != endElm; ) dom.isBlock(node) && selectedBlocks.push(node);
+                return endElm && startElm != endElm && endElm != root && selectedBlocks.push(endElm), 
+                selectedBlocks;
             },
             isForward: function() {
                 var anchorRange, dom = this.dom, sel = this.getSel();
-                return !sel || null == sel.anchorNode || null == sel.focusNode || ((anchorRange = dom.createRng()).setStart(sel.anchorNode, sel.anchorOffset), 
+                return !(sel && sel.anchorNode && sel.focusNode) || ((anchorRange = dom.createRng()).setStart(sel.anchorNode, sel.anchorOffset), 
                 anchorRange.collapse(!0), (dom = dom.createRng()).setStart(sel.focusNode, sel.focusOffset), 
                 dom.collapse(!0), anchorRange.compareBoundaryPoints(anchorRange.START_TO_START, dom) <= 0);
             },
             normalize: function() {
-                var rng, normalized, collapsed, self = this;
-                function normalizeEndPoint(start) {
-                    var container, offset, walker, node, nonEmptyElementsMap, dom = self.dom, body = dom.getRoot();
-                    function hasBrBeforeAfter(node, left) {
-                        for (var walker = new TreeWalker(node, dom.getParent(node.parentNode, dom.isBlock) || body); node = walker[left ? "prev" : "next"](); ) if ("BR" === node.nodeName) return 1;
-                    }
-                    function findTextNodeRelative(left, startNode) {
-                        for (var lastInlineElement, walker = new TreeWalker(startNode = startNode || container, dom.getParent(startNode.parentNode, dom.isBlock) || body); node = walker[left ? "prev" : "next"](); ) {
-                            if (3 === node.nodeType && 0 < node.nodeValue.length) return container = node, 
-                            offset = left ? node.nodeValue.length : 0, normalized = !0;
-                            if (dom.isBlock(node) || nonEmptyElementsMap[node.nodeName.toLowerCase()]) return;
-                            lastInlineElement = node;
-                        }
-                        collapsed && lastInlineElement && (container = lastInlineElement, 
-                        normalized = !0, offset = 0);
-                    }
-                    if (container = rng[(start ? "start" : "end") + "Container"], 
-                    offset = rng[(start ? "start" : "end") + "Offset"], nonEmptyElementsMap = dom.schema.getNonEmptyElements(), 
-                    9 === container.nodeType && (container = dom.getRoot(), offset = 0), 
-                    container === body) {
-                        if (start && (node = container.childNodes[0 < offset ? offset - 1 : 0]) && (nonEmptyElementsMap[node.nodeName] || "TABLE" == node.nodeName)) return;
-                        if (container.hasChildNodes() && (container = container.childNodes[Math.min(!start && 0 < offset ? offset - 1 : offset, container.childNodes.length - 1)], 
-                        offset = 0, container.hasChildNodes()) && !/TABLE/.test(container.nodeName)) {
-                            walker = new TreeWalker(node = container, body);
-                            do {
-                                if (3 === node.nodeType && 0 < node.nodeValue.length) {
-                                    offset = start ? 0 : node.nodeValue.length, 
-                                    container = node, normalized = !0;
-                                    break;
-                                }
-                                if (nonEmptyElementsMap[node.nodeName.toLowerCase()]) {
-                                    offset = dom.nodeIndex(node), container = node.parentNode, 
-                                    "IMG" != node.nodeName || start || offset++, 
-                                    normalized = !0;
-                                    break;
-                                }
-                            } while (node = start ? walker.next() : walker.prev());
-                        }
-                    }
-                    collapsed && (3 === container.nodeType && 0 === offset && findTextNodeRelative(!0), 
-                    1 !== container.nodeType || !(node = container.childNodes[offset]) || "BR" !== node.nodeName || hasBrBeforeAfter(node) || hasBrBeforeAfter(node, !0) || findTextNodeRelative(!0, container.childNodes[offset])), 
-                    start && !collapsed && 3 === container.nodeType && offset === container.nodeValue.length && findTextNodeRelative(!1), 
-                    normalized && rng["set" + (start ? "Start" : "End")](container, offset);
-                }
-                tinymce.isIE || (rng = self.getRng(), collapsed = rng.collapsed, 
-                normalizeEndPoint(!0), collapsed || normalizeEndPoint(), normalized && (collapsed && rng.collapse(!0), 
-                self.setRng(rng, self.isForward())));
+                var rng = this.getRng();
+                return Env.range && new RangeUtils(this.dom).normalize(rng) && this.setRng(rng, this.isForward()), 
+                rng;
             },
             selectorChanged: function(selector, callback) {
                 var currentSelectors, self = this;
@@ -6964,13 +6468,25 @@
                 return scrollContainer;
             },
             scrollIntoView: function(elm, alignToTop) {
-                tinymce.dom.ScrollIntoView(this.editor, elm, alignToTop);
+                ScrollIntoView(this.editor, elm, alignToTop);
             },
             placeCaretAt: function(clientX, clientY) {
-                this.setRng(tinymce.dom.RangeUtils.getCaretRangeFromPoint(clientX, clientY, this.editor.getDoc()));
+                this.setRng(RangeUtils.getCaretRangeFromPoint(clientX, clientY, this.editor.getDoc()));
             },
-            destroy: function(manual) {
-                this.win = null, manual || tinymce.removeUnload(this.destroy);
+            _moveEndPoint: function(rng, node, start) {
+                var root = node, walker = new TreeWalker(node, root), nonEmptyElementsMap = this.dom.schema.getNonEmptyElements();
+                do {
+                    if (3 == node.nodeType && 0 !== tinymce.trim(node.nodeValue).length) return void (start ? rng.setStart(node, 0) : rng.setEnd(node, node.nodeValue.length));
+                    if (nonEmptyElementsMap[node.nodeName] && !/^(TD|TH)$/.test(node.nodeName)) return void (start ? rng.setStartBefore(node) : "BR" == node.nodeName ? rng.setEndBefore(node) : rng.setEndAfter(node));
+                } while (node = start ? walker.next() : walker.prev());
+                "BODY" == root.nodeName && (start ? rng.setStart(root, 0) : rng.setEnd(root, root.childNodes.length));
+            },
+            getBoundingClientRect: function() {
+                var rng = this.getRng();
+                return rng.collapsed ? CaretPosition.fromRangeStart(rng).getClientRects()[0] : rng.getBoundingClientRect();
+            },
+            destroy: function() {
+                this.win = null, this.controlSelection.destroy();
             },
             _fixIESelection: function() {
                 var started, startRng, htmlElm, dom = this.dom, doc = dom.doc, body = doc.body;
@@ -9093,7 +8609,7 @@
             }), this.nodeChanged = function(args) {
                 var node, root, parents, selection = editor.selection;
                 editor.initialized && selection && !editor.settings.disable_nodechange && !editor.readonly && (root = editor.getBody(), 
-                1 === (node = (node = selection.getStart(!0) || root).ownerDocument == editor.getDoc() && editor.dom.isChildOf(node, root) ? node : root).nodeType && !node.getAttribute("data-mce-bogus") || (node = node.parentNode), 
+                (node = selection.getStart(!0) || root).ownerDocument == editor.getDoc() && editor.dom.isChildOf(node, root) || (node = root), 
                 parents = [], editor.dom.getParent(node, function(node) {
                     if (node === root) return !0;
                     parents.push(node);
@@ -9669,10 +9185,11 @@
             focus: "onFocus",
             focusin: "onFocusIn",
             focusout: "onFocusOut",
-            input: "onInput"
+            input: "onInput",
+            compositionstart: "onCompositionStart"
         };
         tinymce.Editor.prototype.setupEvents = function() {
-            var self = this, settings = self.settings, selectionEvents = (each([ "onPreInit", "onBeforeRenderUI", "onPostRender", "onLoad", "onInit", "onRemove", "onActivate", "onDeactivate", "onShow", "onHide", "onClick", "onEvent", "onMouseUp", "onMouseDown", "onDblClick", "onKeyDown", "onKeyUp", "onKeyPress", "onContextMenu", "onSubmit", "onReset", "onPaste", "onCut", "onCopy", "onPreProcess", "onPostProcess", "onBeforeSetContent", "onBeforeGetContent", "onSetContent", "onGetContent", "onLoadContent", "onSaveContent", "onNodeChange", "onChange", "onBeforeExecCommand", "onExecCommand", "onUndo", "onRedo", "onVisualAid", "onSetProgressState", "onSetAttrib", "onSelectionChange", "onBlur", "onFocus", "onFocusIn", "onFocusOut", "onInput" ], function(name) {
+            var self = this, settings = self.settings, selectionEvents = (each([ "onPreInit", "onBeforeRenderUI", "onPostRender", "onLoad", "onInit", "onRemove", "onActivate", "onDeactivate", "onShow", "onHide", "onClick", "onEvent", "onMouseUp", "onMouseDown", "onDblClick", "onKeyDown", "onKeyUp", "onKeyPress", "onContextMenu", "onSubmit", "onReset", "onPaste", "onCut", "onCopy", "onPreProcess", "onPostProcess", "onBeforeSetContent", "onBeforeGetContent", "onSetContent", "onGetContent", "onLoadContent", "onSaveContent", "onNodeChange", "onChange", "onBeforeExecCommand", "onExecCommand", "onUndo", "onRedo", "onVisualAid", "onSetProgressState", "onSetAttrib", "onSelectionChange", "onBlur", "onFocus", "onFocusIn", "onFocusOut", "onInput", "onCompositionStart" ], function(name) {
                 self[name] = new tinymce.util.Dispatcher(self);
             }), settings.cleanup_callback && (self.onBeforeSetContent.add(function(ed, o) {
                 o.content = ed.execCallback("cleanup_callback", "insert_to_editor", o.content, o);
@@ -11802,11 +11319,11 @@
             ed.selection.onSetContent.add(convert);
         }));
     }), function(tinymce) {
-        var TreeWalker = tinymce.dom.TreeWalker, RangeUtils = tinymce.dom.RangeUtils, NodeType = tinymce.dom.NodeType;
+        var TreeWalker = tinymce.dom.TreeWalker, RangeUtils = tinymce.dom.RangeUtils, NodeType = tinymce.dom.NodeType, CaretContainer = tinymce.caret.CaretContainer;
         tinymce.EnterKey = function(editor) {
-            var dom = editor.dom, selection = editor.selection, settings = editor.settings, undoManager = editor.undoManager, schema = editor.schema, nonEmptyElementsMap = schema.getNonEmptyElements(), moveCaretBeforeOnEnterElementsMap = schema.getMoveCaretBeforeOnEnterElements(), isIE = tinymce.isIE && tinymce.isIE < 11;
+            var dom = editor.dom, selection = editor.selection, settings = editor.settings, undoManager = editor.undoManager, schema = editor.schema, nonEmptyElementsMap = schema.getNonEmptyElements(), moveCaretBeforeOnEnterElementsMap = schema.getMoveCaretBeforeOnEnterElements();
             function handleEnterKey(evt) {
-                var tmpRng, editableRoot, container, offset, parentBlock, documentMode, newBlock, fragment, containerBlock, parentBlockName, containerBlockName, isAfterLastNodeInContainer, shiftKey, newBlockName, containerBlockParentName, elm, node, rng = selection.getRng(!0);
+                var tmpRng, editableRoot, container, offset, parentBlock, newBlock, containerBlock, parentBlockName, containerBlockName, newBlockName, isAfterLastNodeInContainer, containerBlockParentName, shiftKey, rng = selection.getRng(!0);
                 function canSplitBlock(node) {
                     return node && dom.isBlock(node) && !/^(TD|TH|CAPTION|FORM)$/.test(node.nodeName) && !/^(fixed|absolute)/i.test(node.style.position) && "true" !== dom.getContentEditable(node) && !node.hasAttribute("data-mce-type");
                 }
@@ -11816,16 +11333,15 @@
                     selection.select(block), block.lastChild.outerHTML = "", selection.setRng(oldRng));
                 }
                 function moveToCaretPosition(root) {
-                    var walker, node, rng, tempElm, firstChild, lastNode = root;
+                    var walker, node, rng, firstChild, lastNode = root;
                     if (root) {
-                        if (isIE && parentBlock && parentBlock.firstChild && parentBlock.firstChild == parentBlock.lastChild && "BR" == parentBlock.firstChild.tagName && dom.remove(parentBlock.firstChild), 
-                        /^(LI|DT|DD)$/.test(root.nodeName) && (firstChild = function(node) {
+                        if (/^(LI|DT|DD)$/.test(root.nodeName) && (firstChild = function(node) {
                             for (;node; ) {
                                 if (1 == node.nodeType || 3 == node.nodeType && node.data && /[\r\n\s]/.test(node.data)) return node;
                                 node = node.nextSibling;
                             }
                         }(root.firstChild)) && /^(UL|OL|DL)$/.test(firstChild.nodeName) && root.insertBefore(dom.doc.createTextNode("\xa0"), root.firstChild), 
-                        rng = dom.createRng(), isIE || root.normalize(), root.hasChildNodes()) {
+                        rng = dom.createRng(), root.normalize(), root.hasChildNodes()) {
                             for (walker = new TreeWalker(root, root); node = walker.current(); ) {
                                 if (3 == node.nodeType) {
                                     rng.setStart(node, 0), rng.setEnd(node, 0);
@@ -11838,11 +11354,10 @@
                                 lastNode = node, node = walker.next();
                             }
                             node || (rng.setStart(lastNode, 0), rng.setEnd(lastNode, 0));
-                        } else "BR" == root.nodeName ? root.nextSibling && dom.isBlock(root.nextSibling) ? ((!documentMode || documentMode < 9) && (tempElm = dom.create("br"), 
-                        root.parentNode.insertBefore(tempElm, root)), rng.setStartBefore(root), 
+                        } else "BR" == root.nodeName ? root.nextSibling && dom.isBlock(root.nextSibling) ? (rng.setStartBefore(root), 
                         rng.setEndBefore(root)) : (rng.setStartAfter(root), rng.setEndAfter(root)) : (rng.setStart(root, 0), 
                         rng.setEnd(root, 0));
-                        selection.setRng(rng), dom.remove(tempElm), selection.scrollIntoView(root);
+                        selection.setRng(rng), dom.remove(void 0), selection.scrollIntoView(root);
                     }
                 }
                 function setForcedBlockAttrs(node) {
@@ -11850,16 +11365,16 @@
                     forcedRootBlockName && forcedRootBlockName.toLowerCase() === node.tagName.toLowerCase() && dom.setAttribs(node, settings.forced_root_block_attrs);
                 }
                 function emptyBlock(elm) {
-                    elm.innerHTML = isIE ? "" : '<br data-mce-bogus="1">';
+                    elm.innerHTML = '<br data-mce-bogus="1">';
                 }
                 function createNewBlock(name) {
                     var block, clonedNode, caretNode, node = container, textInlineElements = schema.getTextInlineElements();
                     if (name || "TABLE" == parentBlockName ? setForcedBlockAttrs(block = dom.create(name || newBlockName)) : block = settings.enterkey_keep_attributes ? parentBlock.cloneNode(!1) : dom.create(parentBlock.nodeName), 
                     caretNode = block, !0 === settings.enterkey_keep_styles) for (;textInlineElements[node.nodeName] && "_mce_caret" != node.id && (clonedNode = node.cloneNode(!1), 
                     dom.setAttrib(clonedNode, "id", ""), block.hasChildNodes() ? clonedNode.appendChild(block.firstChild) : caretNode = clonedNode, 
-                    block.appendChild(clonedNode)), (node = node.parentNode) && node != editableRoot; );
-                    return isIE || (caretNode.innerHTML = '<br data-mce-bogus="1">'), 
-                    block;
+                    block.appendChild(clonedNode)), (node = node.parentNode) && node != editableRoot; ); else dom.setAttrib(block, "style", null), 
+                    dom.setAttrib(block, "class", null);
+                    return caretNode.innerHTML = '<br data-mce-bogus="1">', block;
                 }
                 function isCaretAtStartOrEndOfBlock(start) {
                     var walker, node, name;
@@ -11891,8 +11406,7 @@
                     if (new RangeUtils(dom).normalize(rng), container = rng.startContainer, 
                     offset = rng.startOffset, newBlockName = settings.forced_root_block || "p", 
                     newBlockName = (newBlockName = !1 === settings.force_block_newlines ? "" : newBlockName) ? newBlockName.toUpperCase() : "", 
-                    documentMode = dom.doc.documentMode, shiftKey = evt.shiftKey, 
-                    1 == container.nodeType && container.hasChildNodes() && (isAfterLastNodeInContainer = offset > container.childNodes.length - 1, 
+                    shiftKey = evt.shiftKey, 1 == container.nodeType && container.hasChildNodes() && (isAfterLastNodeInContainer = offset > container.childNodes.length - 1, 
                     container = container.childNodes[Math.min(offset, container.childNodes.length - 1)] || container, 
                     offset = isAfterLastNodeInContainer && 3 == container.nodeType ? container.nodeValue.length : 0), 
                     editableRoot = function(node) {
@@ -11942,33 +11456,34 @@
                         if ("PRE" == parentBlockName && !1 !== settings.br_in_pre) {
                             if (!shiftKey) return void insertBr();
                         } else if (!newBlockName && !shiftKey && "LI" != parentBlockName || newBlockName && shiftKey) return void insertBr();
-                        newBlockName && parentBlock === editor.getBody() || (newBlockName = newBlockName || "P", 
-                        (containerBlockParentName = (containerBlockParentName = parentBlock) && 3 === containerBlockParentName.nodeType ? containerBlockParentName.parentNode : containerBlockParentName) && 1 === containerBlockParentName.nodeType && containerBlockParentName.hasAttribute("data-mce-caret") ? (newBlock = (containerBlockParentName = parentBlock) && containerBlockParentName.hasAttribute("data-mce-caret") ? ((node = elm = (elm = (elm = containerBlockParentName).getElementsByTagName("br"))[elm.length - 1]) && 1 === node.nodeType && node.hasAttribute("data-mce-bogus") && elm.parentNode.removeChild(elm), 
-                        containerBlockParentName.removeAttribute("data-mce-caret"), 
-                        containerBlockParentName.removeAttribute("data-mce-bogus"), 
-                        containerBlockParentName.removeAttribute("style"), containerBlockParentName.removeAttribute("_moz_abspos"), 
-                        containerBlockParentName) : null, dom.isEmpty(parentBlock) && emptyBlock(parentBlock), 
-                        moveToCaretPosition(newBlock)) : isCaretAtStartOrEndOfBlock() ? insertNewBlockAfter() : isCaretAtStartOrEndOfBlock(!0) ? (renderBlockOnIE(newBlock = parentBlock.parentNode.insertBefore(createNewBlock(), parentBlock)), 
-                        moveToCaretPosition(newBlock)) : ((tmpRng = rng.cloneRange()).setEndAfter(parentBlock), 
-                        function(node) {
-                            for (;3 === node.nodeType && (node.nodeValue = node.nodeValue.replace(/^[\r\n]+/, "")), 
-                            node = node.firstChild; );
-                        }(fragment = tmpRng.extractContents()), newBlock = fragment.firstChild, 
-                        dom.insertAfter(fragment, parentBlock), function() {
-                            var i, node = newBlock, firstChilds = [];
-                            if (node) {
-                                for (;node = node.firstChild; ) {
-                                    if (dom.isBlock(node)) return;
-                                    1 != node.nodeType || nonEmptyElementsMap[node.nodeName.toLowerCase()] || firstChilds.push(node);
-                                }
-                                for (i = firstChilds.length; i--; ) (!(node = firstChilds[i]).hasChildNodes() || node.firstChild == node.lastChild && "" === node.firstChild.nodeValue || "A" == node.nodeName && " " === (node.innerText || node.textContent)) && dom.remove(node);
+                        if (!newBlockName || parentBlock !== editor.getBody()) {
+                            if (newBlockName = newBlockName || "P", CaretContainer.isCaretContainerBlock(parentBlock)) newBlock = CaretContainer.showCaretContainerBlock(parentBlock), 
+                            dom.isEmpty(parentBlock) && emptyBlock(parentBlock), 
+                            moveToCaretPosition(newBlock); else if (isCaretAtStartOrEndOfBlock()) insertNewBlockAfter(); else if (isCaretAtStartOrEndOfBlock(!0)) renderBlockOnIE(newBlock = parentBlock.parentNode.insertBefore(createNewBlock(), parentBlock)), 
+                            moveToCaretPosition(newBlock); else {
+                                (tmpRng = rng.cloneRange()).setEndAfter(parentBlock);
+                                for (var fragment, node = fragment = tmpRng.extractContents(); 3 === node.nodeType && (node.nodeValue = node.nodeValue.replace(/^[\r\n]+/, "")), 
+                                node = node.firstChild; );
+                                newBlock = fragment.firstChild, dom.insertAfter(fragment, parentBlock), 
+                                function() {
+                                    var i, node = newBlock, firstChilds = [];
+                                    if (node) {
+                                        for (;node = node.firstChild; ) {
+                                            if (dom.isBlock(node)) return;
+                                            1 != node.nodeType || nonEmptyElementsMap[node.nodeName.toLowerCase()] || firstChilds.push(node);
+                                        }
+                                        for (i = firstChilds.length; i--; ) (!(node = firstChilds[i]).hasChildNodes() || node.firstChild == node.lastChild && "" === node.firstChild.nodeValue || "A" == node.nodeName && " " === (node.innerText || node.textContent)) && dom.remove(node);
+                                    }
+                                }(), (containerBlockParentName = parentBlock).normalize(), 
+                                (shiftKey = containerBlockParentName.lastChild) && !/^(left|right)$/gi.test(dom.getStyle(shiftKey, "float", !0)) || dom.add(containerBlockParentName, "br"), 
+                                dom.isEmpty(parentBlock) && emptyBlock(parentBlock), 
+                                !newBlock || dom.isEmpty(newBlock) ? (dom.remove(newBlock), 
+                                insertNewBlockAfter()) : moveToCaretPosition(newBlock), 
+                                newBlock.normalize();
                             }
-                        }(), shiftKey = parentBlock, isIE || (shiftKey.normalize(), 
-                        (node = shiftKey.lastChild) && !/^(left|right)$/gi.test(dom.getStyle(node, "float", !0))) || dom.add(shiftKey, "br"), 
-                        dom.isEmpty(parentBlock) && emptyBlock(parentBlock), !newBlock || dom.isEmpty(newBlock) ? (dom.remove(newBlock), 
-                        insertNewBlockAfter()) : moveToCaretPosition(newBlock), 
-                        newBlock.normalize()), dom.setAttrib(newBlock, "id", ""), 
-                        editor.onNewBlock.dispatch(editor, newBlock), undoManager.add());
+                            dom.setAttrib(newBlock, "id", ""), editor.onNewBlock.dispatch(editor, newBlock), 
+                            undoManager.typing = !1, undoManager.add();
+                        }
                     }
                 } else editor.execCommand("Delete");
                 function isFirstOrLastLi(first) {
@@ -12095,7 +11610,7 @@
             }
         };
     }(tinymce), function(tinymce) {
-        var CaretWalker = tinymce.caret.CaretWalker, CaretPosition = tinymce.caret.CaretPosition, CaretContainer = tinymce.caret.CaretContainer, CaretUtils = tinymce.caret.CaretUtils, CaretContainerRemove = tinymce.caret.CaretContainerRemove, FakeCaret = tinymce.caret.FakeCaret, LineWalker = tinymce.caret.LineWalker, LineUtils = tinymce.caret.LineUtils, NodeType = tinymce.dom.NodeType, RangeUtils = tinymce.dom.RangeUtils, VK = tinymce.VK, Fun = tinymce.util.Fun, Arr = tinymce.util.Arr, Dispatcher = tinymce.util.Dispatcher, DragDropOverrides = tinymce.DragDropOverrides, curry = Fun.curry, isContentEditableTrue = NodeType.isContentEditableTrue, isContentEditableFalse = NodeType.isContentEditableFalse, isElement = NodeType.isElement, isAfterContentEditableFalse = CaretUtils.isAfterContentEditableFalse, isBeforeContentEditableFalse = CaretUtils.isBeforeContentEditableFalse, getSelectedNode = RangeUtils.getSelectedNode;
+        var CaretWalker = tinymce.caret.CaretWalker, CaretPosition = tinymce.caret.CaretPosition, CaretContainer = tinymce.caret.CaretContainer, CaretUtils = tinymce.caret.CaretUtils, CaretContainerRemove = tinymce.caret.CaretContainerRemove, FakeCaret = tinymce.caret.FakeCaret, LineWalker = tinymce.caret.LineWalker, LineUtils = tinymce.caret.LineUtils, ClientRect = tinymce.geom.ClientRect, NodeType = tinymce.dom.NodeType, RangeUtils = tinymce.dom.RangeUtils, VK = tinymce.VK, Fun = tinymce.util.Fun, Arr = tinymce.util.Arr, Dispatcher = tinymce.util.Dispatcher, DragDropOverrides = tinymce.DragDropOverrides, curry = Fun.curry, isContentEditableTrue = NodeType.isContentEditableTrue, isContentEditableFalse = NodeType.isContentEditableFalse, isElement = NodeType.isElement, isAfterContentEditableFalse = CaretUtils.isAfterContentEditableFalse, isBeforeContentEditableFalse = CaretUtils.isBeforeContentEditableFalse, getSelectedNode = RangeUtils.getSelectedNode;
         function getVisualCaretPosition(walkFn, caretPosition) {
             for (;caretPosition = walkFn(caretPosition); ) if (caretPosition.isVisible()) return caretPosition;
             return caretPosition;
@@ -12106,6 +11621,8 @@
             }, time);
         }
         tinymce.SelectionOverrides = function(editor) {
+            editor.onShowCaret = new Dispatcher(), editor.onBeforeObjectSelected = new Dispatcher(), 
+            editor.onObjectSelected = new Dispatcher(), editor.onContentEditableSelect = new Dispatcher();
             var selectedContentEditableNode, right, left, deleteForward, backspace, up, down, rootNode = editor.getBody(), caretWalker = new CaretWalker(rootNode), getNextVisualCaretPosition = curry(getVisualCaretPosition, caretWalker.next), getPrevVisualCaretPosition = curry(getVisualCaretPosition, caretWalker.prev), fakeCaret = new FakeCaret(editor.getBody(), isBlock), realSelectionId = "sel-" + editor.dom.uniqueId();
             function getRealSelectionElement() {
                 var container = editor.dom.get(realSelectionId);
@@ -12227,7 +11744,7 @@
                 if (range.collapsed) {
                     if (!isRangeInCaretContainer(range)) {
                         if (caretPosition = getNormalizedRangeEndPoint(1, range), 
-                        isContentEditableFalse(caretPosition.getNode())) return showCaret(1, caretPosition.getNode(), !1);
+                        isContentEditableFalse(caretPosition.getNode())) return showCaret(1, caretPosition.getNode(), !caretPosition.isAtEnd());
                         if (isContentEditableFalse(caretPosition.getNode(!0))) return showCaret(1, caretPosition.getNode(!0), !1);
                     }
                     return null;
@@ -12240,11 +11757,12 @@
                 editor.onObjectSelected.dispatch(editor, caretPosition = {
                     node: node,
                     target: endOffset
-                }), 0 != !caretPosition.isDefaultPrevented) ? ((startOffset = dom.get(realSelectionId)) || (startOffset = dom.create("div", {
+                }), 0 != !caretPosition.isDefaultPrevented) ? (endOffset = caretPosition.target, 
+                (startOffset = dom.get(realSelectionId)) || (startOffset = dom.create("div", {
                     "data-mce-bogus": "all",
                     class: "mce-offscreen-selection",
                     id: realSelectionId
-                }), dom.add(editor.getBody(), startOffset)), range = dom.createRng(), 
+                }), dom.add(editor.getBody(), startOffset)), range = editor.dom.createRng(), 
                 startOffset.innerHTML = "", startOffset.appendChild(document.createTextNode("\xa0")), 
                 startOffset.appendChild(endOffset), startOffset.appendChild(document.createTextNode("\xa0")), 
                 range.setStart(startOffset.firstChild, 1), range.setEnd(startOffset.lastChild, 0), 
@@ -12279,9 +11797,24 @@
                 caretNode.firstChild) && (caretNode = CaretPosition.before(caretNode.firstChild), 
                 targetNode = targetNode.next(caretNode)) && !isBeforeContentEditableFalse(targetNode) && !isAfterContentEditableFalse(targetNode);
             }
-            return editor.onShowCaret = new Dispatcher(), editor.onBeforeObjectSelected = new Dispatcher(), 
-            editor.onObjectSelected = new Dispatcher(), editor.onContentEditableSelect = new Dispatcher(), 
-            right = curry(moveH, 1, getNextVisualCaretPosition, isBeforeContentEditableFalse), 
+            function handleBlockContainer(e) {
+                var blockCaretContainer = editor.dom.select("*[data-mce-caret]")[0];
+                blockCaretContainer && ("compositionstart" == e.type ? (e.preventDefault(), 
+                e.stopPropagation(), showBlockCaretContainer(blockCaretContainer)) : CaretContainer.hasContent(blockCaretContainer) && showBlockCaretContainer(blockCaretContainer));
+            }
+            function handleEmptyBackspaceDelete(e) {
+                var prevent, br, ceRoot;
+                switch (e.keyCode) {
+                  case VK.DELETE:
+                  case VK.BACKSPACE:
+                    ceRoot = getContentEditableRoot(editor.selection.getNode()), 
+                    prevent = void (isContentEditableTrue(ceRoot) && isBlock(ceRoot) && editor.dom.isEmpty(ceRoot) && (br = editor.dom.create("br", {
+                        "data-mce-bogus": "1"
+                    }), editor.dom.empty(ceRoot), editor.dom.add(ceRoot, br), editor.selection.setRng(CaretPosition.before(br).toRange())));
+                }
+                prevent && e.preventDefault();
+            }
+            return right = curry(moveH, 1, getNextVisualCaretPosition, isBeforeContentEditableFalse), 
             left = curry(moveH, -1, getPrevVisualCaretPosition, isAfterContentEditableFalse), 
             deleteForward = curry(backspaceDelete, 1, isBeforeContentEditableFalse, isAfterContentEditableFalse), 
             backspace = curry(backspaceDelete, -1, isAfterContentEditableFalse, isBeforeContentEditableFalse), 
@@ -12305,15 +11838,17 @@
                     moved = !0;
                 }), editor.dom.bind(editor.getBody(), "touchend", function(e) {
                     var contentEditableRoot = getContentEditableRoot(e.target);
-                    contentEditableRoot && (isContentEditableFalse(contentEditableRoot) && !moved && (e.preventDefault(), 
-                    setContentEditableSelection(selectNode(contentEditableRoot))), 
+                    isContentEditableFalse(contentEditableRoot) && !moved && (e.preventDefault(), 
+                    setContentEditableSelection(selectNode(contentEditableRoot)), 
                     editor.onContentEditableSelect.dispatch(editor, e));
                 });
             }(editor), editor.onMouseDown.add(function(editor, e) {
-                var contentEditableRoot = getContentEditableRoot(e.target);
-                contentEditableRoot ? (isContentEditableFalse(contentEditableRoot) ? (e.preventDefault(), 
-                setContentEditableSelection(selectNode(contentEditableRoot))) : editor.selection.isCollapsed() || editor.selection.placeCaretAt(e.clientX, e.clientY), 
-                editor.onContentEditableSelect.dispatch(editor, e)) : (removeContentEditableSelection(), 
+                var clientX, clientY, contentEditableRoot = getContentEditableRoot(e.target);
+                contentEditableRoot ? isContentEditableFalse(contentEditableRoot) ? (e.preventDefault(), 
+                setContentEditableSelection(selectNode(contentEditableRoot)), editor.onContentEditableSelect.dispatch(editor, e)) : (clientX = e.clientX, 
+                clientY = e.clientY, !(contentEditableRoot = editor.selection.getRng()).collapsed && Arr.reduce(contentEditableRoot.getClientRects(), function(state, rect) {
+                    return state || ClientRect.containsXY(rect, clientX, clientY);
+                }, !1) || editor.selection.placeCaretAt(e.clientX, e.clientY)) : (removeContentEditableSelection(), 
                 hideFakeCaret(), (contentEditableRoot = LineUtils.closestCaret(rootNode, e.clientX, e.clientY)) && !hasBetterMouseTarget(e.target, contentEditableRoot.node) && (e.preventDefault(), 
                 editor.getBody().focus(), setRange(showCaret(1, contentEditableRoot.node, contentEditableRoot.before))));
             }), editor.onKeyDown.add(function(editor, e) {
@@ -12347,25 +11882,11 @@
                         return !(112 <= e.keyCode && e.keyCode <= 123);
                     }(e) && e.preventDefault();
                 }
-            }), editor.dom.bind(editor.getBody(), "keyup compositionstart", function(e) {
-                (function(e) {
-                    var blockCaretContainer = editor.dom.select("*[data-mce-caret]")[0];
-                    blockCaretContainer && ("compositionstart" == e.type ? (e.preventDefault(), 
-                    e.stopPropagation(), showBlockCaretContainer(blockCaretContainer)) : CaretContainer.hasContent(blockCaretContainer) && showBlockCaretContainer(blockCaretContainer));
-                })(e), function(e) {
-                    var prevent, br, ceRoot;
-                    switch (e.keyCode) {
-                      case VK.DELETE:
-                      case VK.BACKSPACE:
-                        ceRoot = getContentEditableRoot(editor.selection.getNode()), 
-                        prevent = void (isContentEditableTrue(ceRoot) && isBlock(ceRoot) && editor.dom.isEmpty(ceRoot) && (br = editor.dom.create("br", {
-                            "data-mce-bogus": "1"
-                        }), editor.dom.empty(ceRoot), editor.dom.add(ceRoot, br), 
-                        editor.selection.setRng(CaretPosition.before(br).toRange())));
-                    }
-                    prevent && e.preventDefault();
-                }(e);
-            }, !0), editor.onCut.add(function() {
+            }), editor.onCompositionStart.addToTop(function(editor, e) {
+                handleBlockContainer(e), handleEmptyBackspaceDelete(e);
+            }), editor.onKeyUp.addToTop(function(editor, e) {
+                handleBlockContainer(e), handleEmptyBackspaceDelete(e);
+            }), editor.onCut.add(function() {
                 var node = editor.selection.getNode();
                 isContentEditableFalse(node) && setEditorTimeout(editor, function() {
                     setRange(renderRangeCaret(deleteContentEditableNode(node)));
@@ -12378,23 +11899,23 @@
                 var rng = setContentEditableSelection(e.range);
                 rng && (e.range = rng);
             }), editor.selection.onAfterSetSelectionRange.add(function(sel, e) {
-                isRangeInCaretContainer(e = e.range) || hideFakeCaret(), e.startContainer.parentNode == rootNode || (e = e.startContainer.parentNode, 
-                editor.dom.hasClass(e, "mce-offscreen-selection")) || removeContentEditableSelection();
+                isRangeInCaretContainer(e = e.range) || hideFakeCaret(), e = e.startContainer.parentNode, 
+                editor.dom.hasClass(e, "mce-offscreen-selection") || removeContentEditableSelection();
             }), editor.dom.bind(editor.getBody(), "focus", function() {
                 setEditorTimeout(editor, function() {
                     editor.selection.setRng(renderRangeCaret(editor.selection.getRng()));
                 }, 0);
             }), editor.onCopy.add(function(editor, e) {
                 var realSelectionElement, clipboardData = e.clipboardData;
-                !e.isDefaultPrevented() && clipboardData && (realSelectionElement = getRealSelectionElement()) && (e.preventDefault(), 
-                clipboardData.clearData(), clipboardData.setData("text/html", realSelectionElement.outerHTML), 
+                !e.isDefaultPrevented() && e.clipboardData && (realSelectionElement = getRealSelectionElement()) && (e.preventDefault(), 
+                clipboardData.clearData(), e = realSelectionElement.outerHTML || "", 
+                clipboardData.setData("text/html", e), clipboardData.setData("x-tinymce/html", e), 
                 clipboardData.setData("text/plain", realSelectionElement.outerText));
             }), DragDropOverrides.init(editor), {
                 showBlockCaretContainer: showBlockCaretContainer,
                 hideFakeCaret: hideFakeCaret,
                 destroy: function() {
-                    var $realSelectionContainer, dom = editor.dom;
-                    fakeCaret.destroy(), selectedContentEditableNode = null, ($realSelectionContainer = dom.get(realSelectionId)) && dom.remove($realSelectionContainer);
+                    fakeCaret.destroy(), selectedContentEditableNode = null;
                 }
             };
         };
@@ -12766,7 +12287,7 @@
             function processXML(content) {
                 return content.replace(/<([a-z0-9\-_\:\.]+)(?:[^>]*?)\/?>((?:[\s\S]*?)<\/\1>)?/gi, function(match, tag) {
                     var html;
-                    return "svg" === tag && !1 === ed.settings.code_allow_svg_in_xml || "math" === tag && !1 === ed.settings.code_allow_mathml_in_xml || !isXmlElement(tag) ? match : (!1 !== ed.settings.code_validate_xml && (tag = match, 
+                    return "svg" === (tag = tag.toLowerCase()) && !1 === ed.settings.code_allow_svg_in_xml || "math" === tag && !1 === ed.settings.code_allow_mathml_in_xml || !isXmlElement(tag) ? match : (!1 !== ed.settings.code_validate_xml && (tag = match, 
                     html = [], new SaxParser({
                         start: function(name, attrs, empty) {
                             if (isValid(name)) {
