@@ -8,7 +8,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('JPATH_PLATFORM') or die;
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
@@ -202,8 +202,10 @@ class WFLinkExtension extends WFExtension
     {
         $match = null;
 
+        $version = new Joomla\CMS\Version();
+
         $app = CMSApplication::getInstance('site');
-        $tag = defined('JPATH_PLATFORM') ? 'component_id' : 'componentid';
+        $tag = $version->isCompatible('4.0') ? 'component_id' : 'componentid';
 
         $component = ComponentHelper::getComponent($component);
         $menu = $app->getMenu('site');

@@ -8,12 +8,12 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
- defined('JPATH_PLATFORM') or die;
+ \defined('_JEXEC') or die;
 
  use Joomla\CMS\Client\ClientHelper;
  use Joomla\CMS\Factory;
  use Joomla\CMS\Filesystem\File;
- use Joomla\CMS\Filesystem\Folder;
+ use Joomla\Filesystem\Folder;
  use Joomla\CMS\Language\Text;
  use Joomla\CMS\Uri\Uri;
  

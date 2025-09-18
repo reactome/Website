@@ -7,12 +7,12 @@
  * @copyright   Copyright (c) 2009-2024 Ryan Demmer. All rights reserved
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
-defined('JPATH_PLATFORM') or die('RESTRICTED');
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
 use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
@@ -198,7 +198,14 @@ class pkg_jceInstallerScript
     }
 
     public function preflight($route, $installer)
-    {
+    {        
+        // ensure the behaviour:compat6 plugin is enabled
+        if (version_compare(JVERSION, '6', 'ge')) {
+            if (!PluginHelper::isEnabled('behaviour', 'compat6')) {
+                throw new RuntimeException('The Behaviour - Backward Compatibility 6 plugin must be enabled to install and use this version of JCE');
+            }
+        }
+        
         // skip on uninstall etc.
         if ($route == 'remove' || $route == 'uninstall') {
             return true;
@@ -340,7 +347,7 @@ class pkg_jceInstallerScript
             $plugin = PluginHelper::getPlugin($folder, $element);
 
             if ($plugin) {
-                $inst = new Installer();
+                $inst = Installer::getInstance();
 
                 // try uninstall
                 if (!$inst->uninstall('plugin', $plugin->id)) {

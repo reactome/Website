@@ -1,4 +1,4 @@
-/* jce - 2.9.89 | 2025-07-16 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.93 | 2025-09-11 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each;
     tinymce.PluginManager.add("effects", function(ed, url) {
@@ -45,8 +45,6 @@
                     mouseover && (node.attr("onmouseover", "this.src='" + mouseover + "';"), 
                     mouseout = cleanEventAttribute(mouseout))) && node.attr("onmouseout", "this.src='" + mouseout + "';");
                 }
-            }), ed.selection.onSetContent.add(function() {
-                bindMouseoverEvent(ed);
             }), ed.onSetContent.add(function() {
                 bindMouseoverEvent(ed);
             }), ed.onUpdateMedia.add(function(ed, o) {

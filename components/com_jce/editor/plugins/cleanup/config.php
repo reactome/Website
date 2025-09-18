@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('JPATH_PLATFORM') or die;
+\defined('_JEXEC') or die;
 
 class WFCleanupPluginConfig
 {
@@ -36,6 +36,9 @@ class WFCleanupPluginConfig
 
         // get verify html (default is true)
         $settings['verify_html'] = $wf->getParam('editor.verify_html', 1, 1, 'boolean', false);
+        
+        // get sanitize html (default is true)
+        $settings['sanitize_html'] = $wf->getParam('editor.sanitize_html', 1, 1, 'boolean', false);
 
         $settings['pad_empty_tags'] = $wf->getParam('editor.pad_empty_tags', 1, 1, 'boolean');
 
@@ -104,11 +107,6 @@ class WFCleanupPluginConfig
         $settings['invalid_attribute_values'] = $wf->getParam('editor.invalid_attribute_values', '', '', 'string', true);
 
         $allow_script = $wf->getParam('editor.allow_javascript', 0, 0, 'boolean');
-
-        // if scripts are allowed, then allow script urls
-        if ($allow_script) {
-            $settings['allow_script_urls'] = true;
-        }
 
         // if scripts are allowed, then allow event attributes
         if ($allow_script || (bool) $wf->getParam('editor.allow_event_attributes')) {

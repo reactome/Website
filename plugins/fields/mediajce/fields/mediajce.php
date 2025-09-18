@@ -8,7 +8,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('JPATH_PLATFORM') or die;
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Plugin\PluginHelper;
@@ -108,29 +108,38 @@ class JFormFieldMediaJce extends MediaField
             return $data;
         }
 
+        $data['class'] .= ' input-medium wf-media-input';
+
+        // not enabled for media field
+        if (!WfBrowserHelper::isMediaFieldEnabled()) {
+            $data['readonly'] = true;
+            $data['link'] = '';
+            return $data;
+        }
+
+        $converted = (bool) $this->element['converted'];
+
         $config = array(
             'element' => $this->id,
             'mediatype' => strtolower($this->mediatype),
-            'converted' => false,
+            'converted' => $converted,
             'mediafolder' => isset($this->element['media_folder']) ? (string) $this->element['media_folder'] : '',
         );
 
-        $options = WfBrowserHelper::getMediaFieldOptions($config);
-
-        $this->link = $options['url'];
-
-        $data['class'] .= ' input-medium wf-media-input';
-
-        // not a valid file browser link
-        if (!$this->link) {
-            $data['readonly'] = true;
-            return $data;
-        }
+        // get individual field link
+        $this->link = WfBrowserHelper::getMediaFieldUrl($config);
 
         $extraData = array(
             'link'  => $this->link,
             'class' => $data['class'] .= ' wf-media-input-active',
         );
+
+        if ($converted) {
+            $extraData['class'] .= ' wf-media-input-converted';;
+        }
+
+        // get global field options
+        $options = WfBrowserHelper::getMediaFieldOptions();
 
         if ($options['upload'] == 1) {
             $extraData['class'] .= ' wf-media-input-upload';

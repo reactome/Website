@@ -1,4 +1,4 @@
-/* jce - 2.9.89 | 2025-07-16 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.93 | 2025-09-11 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var DOM = tinymce.DOM, Delay = tinymce.util.Delay;
     tinymce.PluginManager.add("wordcount", function(ed, url) {
@@ -37,9 +37,8 @@
             DOM.removeClass(target_id, "mceWordCountLimit"), DOM.setAttrib(target_id, "title", ed.getLang("wordcount.selection", "Words Selected:")), 
             DOM.setHTML(target_id, rng.toString())));
         }, update_rate);
-        ed.onKeyUp.add(countAll), ed.onSetContent.add(countAll), ed.onUndo.add(countAll), 
-        ed.onRedo.add(countAll), ed.onPreInit.add(function() {
-            ed.selection.onSetContent.add(countAll);
+        ed.onPreInit.add(function() {
+            ed.on("keyup setcontent undo redo", countAll);
         }), ed.onSelectionChange.add(update_rate), ed.onInit.add(countAll);
     });
 }();

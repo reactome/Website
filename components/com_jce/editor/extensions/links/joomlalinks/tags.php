@@ -8,7 +8,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('JPATH_PLATFORM') or die;
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\RouteHelper;
@@ -75,7 +75,7 @@ class JoomlalinksTags extends CMSObject
                     $language = $tag->language;
                 }
 
-                $id = $router->getRoute($tag->slug, 'com_tags.tag', '', $language);
+                $id = $router->getRoute($tag->slug ?? $tag->id, 'com_tags.tag', '', $language);
                 $id = $this->route($id);
 
                 $items[] = array(

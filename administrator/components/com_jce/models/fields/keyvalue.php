@@ -8,7 +8,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('JPATH_PLATFORM') or die;
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Form\FormField;
@@ -62,19 +62,31 @@ class JFormFieldKeyValue extends FormField
 
             $values = json_decode($value, true);
 
-            if (empty($values) && strpos($value, ':') !== false && strpos($value, '{') === false) {
+            // not valid json
+            if (empty($values) || json_last_error() !== JSON_ERROR_NONE) {
                 $values = array();
 
-                foreach (explode(',', $value) as $item) {
-                    $pair = explode(':', $item);
+                // If the value is a string with key-value pairs, convert it to an array
+                if (strpos($value, ':') !== false && strpos($value, '{') === false) {
+                    foreach (explode(',', $value) as $item) {
+                        $pair = explode(':', $item);
 
-                    array_walk($pair, function (&$val) {
-                        $val = trim($val, chr(0x22) . chr(0x27) . chr(0x38));
-                    });
+                        array_walk($pair, function (&$val) {
+                            $val = trim($val, chr(0x22) . chr(0x27) . chr(0x38));
+                        });
 
-                    $values[] = array(
-                        'name' => $pair[0],
-                        'value' => $pair[1],
+                        $values[] = array(
+                            'name' => $pair[0],
+                            'value' => $pair[1],
+                        );
+                    }
+                } else {
+                    // where the value is a string with no key-value pairs, use only the "name" key
+                    $values = array(
+                        array(
+                            'name' => $value,
+                            'value' => '',
+                        ),
                     );
                 }
             }
@@ -95,15 +107,15 @@ class JFormFieldKeyValue extends FormField
         $children = (array) $this->element->children();
 
         // if field has defined children
-        if (count($children)) {        
+        if (count($children)) {
             $children = $this->element->children();
 
             $subForm->load($children, true);
             $subForm->setFields($children);
         } else {
-            $label  = $this->element['label'];
+            $label = $this->element['label'];
 
-            $xml    = '<form><fields name="' . $this->name . '">';
+            $xml = '<form><fields name="' . $this->name . '">';
 
             $keyName = 'name';
             $keyLabel = 'WF_LABEL_NAME';
@@ -136,7 +148,7 @@ class JFormFieldKeyValue extends FormField
             }
 
             $xml .= '</fields></form>';
-        
+
             $subForm->load($xml);
         }
 
@@ -153,6 +165,9 @@ class JFormFieldKeyValue extends FormField
 
         $str[] = '<div class="form-field-repeatable"' . $sortable . '>';
 
+        // the default field names for the key-value pairs
+        $fieldItem = array('name', 'value');
+
         foreach ($values as $value) {
             $str[] = '<div class="form-field-repeatable-item wf-keyvalue">';
             $str[] = '  <div class="form-field-repeatable-item-group well p-4 card">';
@@ -161,12 +176,21 @@ class JFormFieldKeyValue extends FormField
 
             foreach ($fields as $field) {
                 $tmpField = clone $field;
-                
+
                 $tmpField->element['multiple'] = true;
 
                 $name = (string) $tmpField->element['name'];
 
                 $val = is_array($value) && isset($value[$name]) ? $value[$name] : '';
+
+                // if the original value is a string and does not match the field name, use the default field item name
+                if (!isset($value[$name]) && is_string($this->value)) {
+                    $key = $fieldItem[$n] ?? '';
+
+                    if ($key) {
+                        $val = $value[$key] ?? '';
+                    }
+                }
 
                 // escape value
                 $tmpField->value = htmlspecialchars_decode($val);

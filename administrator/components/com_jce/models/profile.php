@@ -8,10 +8,10 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('JPATH_PLATFORM') or die;
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
+use Joomla\Filesystem\File;
 use Joomla\CMS\Filter\InputFilter;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Form\FormHelper;
@@ -21,6 +21,7 @@ use Joomla\CMS\Session\Session;
 use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
+use Joomla\Event\DispatcherAwareInterface;
 
 require JPATH_SITE . '/components/com_jce/editor/libraries/classes/editor.php';
 
@@ -51,6 +52,15 @@ class JceModelProfile extends AdminModel
      * @since  1.6
      */
     protected $text_prefix = 'COM_JCE';
+
+    public function __construct($config = array())
+    {
+        if ($this instanceof DispatcherAwareInterface) {
+            $this->setDispatcher(Factory::getApplication()->getDispatcher());
+        }
+
+        parent::__construct($config);
+    }
 
     /**
      * Returns a Table object, always creating it.
@@ -176,6 +186,10 @@ class JceModelProfile extends AdminModel
 
     public function getForm($data = array(), $loadData = true)
     {        
+        if ($this instanceof DispatcherAwareInterface) {
+            $this->setDispatcher(Factory::getApplication()->getDispatcher());
+        }
+        
         FormHelper::addFieldPath('JPATH_ADMINISTRATOR/components/com_jce/models/fields');
 
         // Get the setup form.

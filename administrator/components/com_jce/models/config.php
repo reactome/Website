@@ -8,11 +8,12 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('JPATH_PLATFORM') or die;
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\FormModel;
 use Joomla\CMS\Table\Table;
+use Joomla\Event\DispatcherAwareInterface;
 
 class JceModelConfig extends FormModel
 {
@@ -44,6 +45,10 @@ class JceModelConfig extends FormModel
      */
     public function getForm($data = array(), $loadData = true)
     {
+        if ($this instanceof DispatcherAwareInterface) {
+            $this->setDispatcher(Factory::getApplication()->getDispatcher());
+        }
+        
         // Get the form.
         $form = $this->loadForm('com_jce.config', 'config', array('control' => 'jform', 'load_data' => $loadData));
 

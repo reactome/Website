@@ -1,4 +1,4 @@
-/* jce - 2.9.89 | 2025-07-16 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.93 | 2025-09-11 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     function isAnchor(elm) {
         return elm && "a" === elm.nodeName.toLowerCase();
@@ -181,7 +181,7 @@
             return "link" !== n ? null : !1 === (n = ed.getParam("link", {})).quicklink || !0 === n.basic_dialog ? cm.createButton("link", {
                 title: "link.desc",
                 cmd: "mceLink"
-            }) : (html = '<div class="mceToolbarRow">   <div class="mceToolbarItem mceFlexAuto">       <input type="text" id="' + ed.id + '_link_input" aria-label="' + ed.getLang("dlg.url", "URL") + '" />   </div>   <div class="mceToolbarItem">       <button type="button" id="' + ed.id + '_link_submit" class="mceButton mceButtonLink" title="' + ed.getLang("advanced.link_desc", "Insert Link") + '" aria-label="' + ed.getLang("link.insert", "Insert Link") + '">           <span class="mceIcon mce_link"></span>       </button>   </div>   <div class="mceToolbarItem">       <button type="button" id="' + ed.id + '_link_unlink" class="mceButton mceButtonUnlink" disabled="disabled" title="' + ed.getLang("advanced.unlink_desc", "Remove Link") + '" aria-label="' + ed.getLang("advanced.unlink_desc", "Remove Link") + '">           <span class="mceIcon mce_unlink"></span>       </button>   </div></div>', 
+            }) : (html = '<div class="mceToolbarRow">   <div class="mceToolbarItem">       <input type="text" id="' + ed.id + '_link_input" aria-label="' + ed.getLang("dlg.url", "URL") + '" />       <button type="button" id="' + ed.id + '_link_submit" class="mceButton mceButtonLink" title="' + ed.getLang("advanced.link_desc", "Insert Link") + '" aria-label="' + ed.getLang("link.insert", "Insert Link") + '">           <span class="mceIcon mce_link"></span>       </button>       <button type="button" id="' + ed.id + '_link_unlink" class="mceButton mceButtonUnlink" disabled="disabled" title="' + ed.getLang("advanced.unlink_desc", "Remove Link") + '" aria-label="' + ed.getLang("advanced.unlink_desc", "Remove Link") + '">           <span class="mceIcon mce_unlink"></span>       </button>   </div></div>', 
             (n = cm.createSplitButton("link", {
                 title: "link.desc",
                 cmd: "mceLink",
