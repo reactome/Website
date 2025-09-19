@@ -86,20 +86,19 @@ $favcolumns = 6;
   <!-- PARAMETERS -->
   <?php require("admin/params.php"); ?>
 
-   <?php /* disable Google Analytics tracking code 03/02/23
+
    <!-- GOOGLE ANALYTICS TRACKING CODE -->
   <?php if($analytics_code) { echo '<script>'.$analytics_code.'</script>';}?>
 
   <!-- Custom: Global Site Tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $app->get('ga_tracking_code') ?>">   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $app->get('ga4_tracking_code') ?>">   </script>
   <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments)};
       gtag('js', new Date());
-      gtag('config', '<?php echo $app->get('ga_tracking_code') ?>');
       gtag('config', '<?php echo $app->get('ga4_tracking_code') ?>');
   </script>
-  */ ?>  
+
 
   <!-- FAVTH SCRIPTS -->
   <script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/js/favth-scripts.js"></script>
