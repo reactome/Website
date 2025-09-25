@@ -1,8 +1,11 @@
-/* jce - 2.9.93 | 2025-09-11 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.94 | 2025-09-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var each = tinymce.each, Node = tinymce.html.Node;
     var tags = [ "a", "abbr", "acronym", "address", "applet", "area", "article", "aside", "audio", "b", "base", "basefont", "bdi", "bdo", "bgsound", "big", "blink", "blockquote", "body", "br", "button", "canvas", "caption", "center", "cite", "code", "col", "colgroup", "command", "content", "data", "datalist", "dd", "del", "details", "dfn", "dialog", "dir", "div", "dl", "dt", "element", "em", "embed", "fieldset", "figcaption", "figure", "font", "footer", "form", "frame", "frameset", "h1", "h2", "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "image", "img", "input", "ins", "isindex", "kbd", "keygen", "label", "legend", "li", "link", "listing", "main", "map", "mark", "marquee", "menu", "menuitem", "meta", "meter", "multicol", "nav", "nobr", "noembed", "noframes", "noscript", "object", "ol", "optgroup", "option", "output", "p", "param", "picture", "plaintext", "pre", "progress", "q", "rp", "rt", "rtc", "ruby", "s", "samp", "script", "section", "select", "shadow", "slot", "small", "source", "spacer", "span", "strike", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "template", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track", "tt", "u", "ul", "var", "video", "wbr", "xmp" ], fontIconRe = /<([a-z0-9]+)([^>]+)class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)"([^>]*)><\/\1>/gi, paddedRx = /<(p|h1|h2|h3|h4|h5|h6|pre|div|address|caption)\b([^>]+)>(&nbsp;|\u00a0)<\/\1>/gi;
     tinymce.PluginManager.add("cleanup", function(ed, url) {
+        function paddEmptyTags(content) {
+            return content = (content = (content = content.replace(fontIconRe, '<$1$2class="$3$4$5-$6$7"$8 data-mce-empty="1">&nbsp;</$1>')).replace(/<(a|i|span)\b([^>]+)><\/\1>/gi, '<$1$2 data-mce-empty="1">&nbsp;</$1>')).replace(/<li><\/li>/, '<li data-mce-empty="1">&nbsp;</li>');
+        }
         function convertFromGeshi(h) {
             return h = h.replace(/<pre xml:lang="([^"]+)"([^>]*)>(.*?)<\/pre>/g, function(a, b, c, d) {
                 var attr = "";
@@ -98,9 +101,7 @@
             o.content = o.content.replace(new RegExp("<([^>]+)(" + ed.replace(/,/g, "|") + ')="([^"]+)"([^>]*)>', "gi"), function() {
                 var args = arguments;
                 return "<" + args[1] + (args[args.length - 3] || "") + ">";
-            })), o.content = o.content.replace(fontIconRe, '<$1$2class="$3$4$5-$6$7"$8 data-mce-empty="1">&nbsp;</$1>'), 
-            o.content = o.content.replace(/<(a|i|span)\b([^>]+)><\/\1>/gi, '<$1$2 data-mce-empty="1">&nbsp;</$1>'), 
-            o.content = o.content.replace(/<li><\/li>/, '<li data-mce-empty="1">&nbsp;</li>');
+            })), o.content = paddEmptyTags(o.content);
         }), ed.onPostProcess.add(function(ed, o) {
             o.set && (o.content = convertFromGeshi(o.content)), o.get && (o.content = o.content.replace(/<pre([^>]+)data-geshi-lang="([^"]+)"([^>]*)>(.*?)<\/pre>/g, function(a, b, c, d, e) {
                 return '<pre xml:lang="' + c + '"' + (b + d).replace(/data-geshi-/gi, "").replace(/\s+/g, " ").replace(/\s$/, "") + ">" + e + "</pre>";
@@ -133,6 +134,6 @@
         }), ed.addButton("cleanup", {
             title: "advanced.cleanup_desc",
             cmd: "mceCleanup"
-        });
+        }), this.paddEmptyTags = paddEmptyTags;
     });
 }();

@@ -13,7 +13,7 @@
 use Joomla\CMS\Uri\Uri;
 
 // Some shortcuts to make life easier
-define('WF_VERSION', '2.9.93');
+define('WF_VERSION', '2.9.94');
 
 // JCE Administration Component
 define('WF_ADMINISTRATOR', JPATH_ADMINISTRATOR . '/components/com_jce');

@@ -1,4 +1,4 @@
-/* jce - 2.9.93 | 2025-09-11 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
+/* jce - 2.9.94 | 2025-09-24 | https://www.joomlacontenteditor.net | Source: https://github.com/widgetfactory/jce | Copyright (C) 2006 - 2025 Ryan Demmer. All rights reserved | GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html */
 !function() {
     var Entities = tinymce.html.Entities, each = tinymce.each, extend = tinymce.extend, DomParser = tinymce.html.DomParser, HtmlSerializer = tinymce.html.Serializer, Dispatcher = tinymce.util.Dispatcher, DOM = tinymce.DOM;
     tinymce.PluginManager.add("core", function(ed, url) {
@@ -86,17 +86,17 @@
                 }));
             }), ed.onWfEditorSave.add(function(ed, o) {
                 o.content = function(ed, content) {
-                    var parser, args = {
+                    var args, parser, settings;
+                    return ed.settings.validate ? (args = {
                         no_events: !0,
-                        format: "raw"
-                    }, settings = {};
-                    return extend(settings, ed.settings), args.content = content, 
-                    ed.settings.validate && (args.format = "html", args.load = !0, 
+                        format: "html",
+                        get: !0,
+                        load: !0
+                    }, extend(settings = {}, ed.settings), args.content = content, 
                     ed.onBeforeGetContent.dispatch(ed, args), settings.verify_html = !1, 
                     settings.forced_root_block = !1, settings.validate = !0, parser = new DomParser(settings, ed.schema), 
                     settings = new HtmlSerializer(settings, ed.schema), args.content = settings.serialize(parser.parse(args.content), args), 
-                    args.get = !0, ed.onPostProcess.dispatch(ed, args), content = args.content), 
-                    content;
+                    ed.onPostProcess.dispatch(ed, args), args.content) : content;
                 }(ed, o.content);
             }), (pb = DOM.get("sp-inline-popover")) && DOM.isChildOf(ed.getElement(), pb) && ed.onGetContent.addToTop(function(ed, o) {
                 var args;
