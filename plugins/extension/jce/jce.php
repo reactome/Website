@@ -7,11 +7,11 @@
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Table\Table;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
 
 /**
  * JCE extension plugin.
@@ -181,41 +181,6 @@ class PlgExtensionJce extends CMSPlugin
             $plugin->path = $installer->getPath('extension_root');
 
             JcePluginsHelper::postInstall('uninstall', $plugin, $installer);
-        }
-    }
-
-    public function onExtensionAfterSave($context, $table, $result)
-    {
-        if ($context !== 'com_config.component') {
-            return;
-        }
-
-        if ($table->element !== 'com_jce') {
-            return;
-        }
-
-        $params = json_decode($table->params, true);
-
-        if ($params && !empty($params['updates_key'])) {
-            $updatesite = Table::getInstance('Updatesite');
-
-            // sanitize key
-            $key = preg_replace("/[^a-zA-Z0-9]/", "", $params['updates_key']);
-
-            $db = Factory::getDBO();
-
-            $query = $db->getQuery(true);
-            $query->select($db->qn('update_site_id'))->from('#__update_sites_extensions')->where($db->qn('extension_id') . '=' . (int) $table->package_id);
-            $db->setQuery($query);
-            $update_site_id = $db->loadResult();
-
-            if ($update_site_id) {
-                if ($updatesite->load($update_site_id)) {
-                    $updatesite->bind(array('extra_query' => 'key=' . $key));
-                    $updatesite->check();
-                    $updatesite->store();
-                }
-            }
         }
     }
 }

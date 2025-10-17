@@ -12,8 +12,8 @@
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Path;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Session\Session;
@@ -39,8 +39,8 @@ class WFFileBrowser extends CMSObject
     /* @var array */
     public $dir = array();
 
-    /* @var string */
-    public $filesystem = 'joomla';
+    /* @var WFFileSystem */
+    public $filesystem = null;
 
     /* @var string */
     public $filetypes = 'jpg,jpeg,png,gif,webp';
@@ -205,25 +205,7 @@ class WFFileBrowser extends CMSObject
 
     public function getFileSystem()
     {
-        static $instances = array();
-
-        $fs = $this->get('filesystem', 'joomla');
-
-        $wf = WFEditorPlugin::getInstance();
-
-        $config = array(
-            'upload_conflict'   => $wf->getParam('editor.upload_conflict', 'overwrite'),
-            'upload_suffix'     => $wf->getParam('editor.upload_suffix', '_copy'),
-            'filetypes'         => $this->listFileTypes(),
-        );
-
-        $signature = md5($fs . serialize($config));
-
-        if (!isset($instances[$signature])) {
-            $instances[$signature] = WFFileSystem::getInstance($fs, $config);
-        }
-
-        return $instances[$signature];
+        return $this->filesystem; // filesystem is now passed in from the "manager" class
     }
 
     private function getViewable()
@@ -358,56 +340,150 @@ class WFFileBrowser extends CMSObject
     }
 
     /**
-     * Extract a path value from the complex path.
+     * Determine whether a path is in complex "id:relative" form.
      *
-     * @param string $path     The path value to process. The path is updated with the id removed
+     * A complex path begins with a 32-character hexadecimal MD5 prefix,
+     * followed by a colon, and an optional relative path.
      *
-     * @return string $path    Simple path value
+     * @param   string  $path  The path string to test.
+     *
+     * @return  bool  True if the path has a valid MD5 prefix, false otherwise.
+     */
+    private function isComplexPath($path)
+    {
+        // Fast fail: no colon at all
+        $pos = strpos($path, ':');
+
+        // No colon found, so not a complex path
+        if ($pos === false) {
+            return false;
+        }
+
+        // Ignore protocols like "http://", "ftp://", "file://"
+        if (strpos($path, '://') !== false) {
+            return false;
+        }
+
+        // Candidate prefix before the colon
+        $candidate = substr($path, 0, $pos);
+
+        // Must be exactly 32 hex characters (MD5 hex)
+        if (strlen($candidate) !== 32 || !ctype_xdigit($candidate)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Split a complex path "id:relative" into prefix and relative components.
+     *
+     * Returns true if split occurred, false otherwise. When false, $id will be empty
+     * and $relative will contain the original $path value.
+     *
+     * Examples:
+     *   abcdef...1234:images/foo.jpg → $id="abcdef...1234", $relative="images/foo.jpg"
+     *   abcdef...1234:               → $id="abcdef...1234", $relative=""
+     *   images/foo.jpg               → no split (false)
+     *
+     * @param   string  $path       The full path to parse.
+     * @param   string  &$id        Output parameter for the 32-character prefix.
+     * @param   string  &$relative  Output parameter for the relative path.
+     *
+     * @return  bool  True if the path was successfully split, false otherwise.
+     */
+    private function splitComplexPath($path, &$id, &$relative)
+    {
+        $id         = '';
+        $relative   = $path;
+
+        if (!$this->isComplexPath($path)) {
+            // Not a complex path, so return false
+            return false;
+        }
+
+        $pos = strpos($path, ':');
+
+        // Candidate prefix before the colon
+        $candidate = substr($path, 0, $pos);
+
+        $id = strtolower($candidate);
+        $relative = substr($path, $pos + 1);
+
+        return true;
+    }
+
+    /**
+     * Extract the simple relative path from a possibly complex "id:relative" value.
+     * Returns the portion after the colon, or the original path if not complex.
+     *
+     * @param   string  $path  The path value to process.
+     *
+     * @return  string  The extracted relative path, or the original value.
      */
     private function extractPath($path)
     {
-        if (strpos($path, ':') !== false) {
-            list($id, $path) = explode(':', $path);
+        if ($this->splitComplexPath($path, $id, $relative)) {
+            return $relative;
         }
 
         return $path;
     }
 
     /**
-     * Parse a path value to get the path id.
+     * Parse a path value to extract its prefix.
      *
-     * @param string $path     The path value to parse. The updated path is updated with the id removed
+     * Updates the input $path by reference to remove the prefix,
+     * leaving only the relative portion (or empty string for root).
      *
-     * @return string $id A Path Id
+     * @param   string  &$path  The path value to modify.
+     *
+     * @return  string  The extracted prefix, or an empty string if not complex.
      */
     private function parsePath(&$path)
     {
         $id = '';
 
-        if (strpos($path, ':') !== false) {
-            list($id, $path) = explode(':', $path);
+        if ($this->splitComplexPath($path, $id, $relative)) {
+            $path = $relative;
+            return $id;
         }
 
-        return $id;
+        return '';
     }
 
     /**
-     * Get a path id prefix from a path value
+     * Get the prefix from a complex path without modifying it.
      *
-     * @param [string] $path
-     * @return string prefix
+     * @param   string  $path  The path value to parse.
+     *
+     * @return  string  The prefix if complex, or an empty string otherwise.
      */
     private function getPathPrefix($path)
     {
-        $prefix = "";
-
-        if (strpos($path, ':') !== false) {
-            list($prefix, $path) = explode(':', $path);
+        if ($this->splitComplexPath($path, $id, $relative)) {
+            return $id;
         }
 
-        return $prefix;
+        return '';
     }
 
+    /**
+     * Resolve a path into its absolute filesystem location.
+     *
+     * If the path is in "id:relative" form, it resolves the prefix to its
+     * corresponding directory store root and appends the relative portion.
+     * If the path is simple, it is returned unchanged.
+     *
+     * Examples:
+     *   abcdef...1234:foo/bar → images/foo/bar
+     *   abcdef...1234:        → images
+     *   foo/bar               → foo/bar (no change)
+     *
+     * @param   string  $path  The path to resolve.
+     *
+     * @return  string  The resolved absolute path or the input if simple.
+     */
     public function resolvePath($path)
     {
         if (empty($path)) {
@@ -415,7 +491,7 @@ class WFFileBrowser extends CMSObject
         }
 
         // check for complex path
-        if (strpos($path, ':') === false) {
+        if ($this->isComplexPath($path) === false) {
             // no prefix so return the path as is
             return $path;
         }
@@ -437,7 +513,7 @@ class WFFileBrowser extends CMSObject
     public function getDefaultPath()
     {
         $store = $this->getDirectoryStore();
-        $values = array_shift(array_values($store));
+        $values = reset($store); // get the first element
 
         return $values['prefix'] . ':';
     }
@@ -1696,24 +1772,6 @@ class WFFileBrowser extends CMSObject
         }
 
         return array();
-    }
-
-    /**
-     * Get a file icon based on extension.
-     *
-     * @return string Path to file icon
-     *
-     * @param string $ext File extension
-     */
-    public function getFileIcon($ext)
-    {
-        if (File::exists(WF_EDITOR_LIBRARIES . '/img/icons/' . $ext . '.gif')) {
-            return $this->image('libraries.icons/' . $ext . '.gif');
-        } elseif (File::exists($this->getPluginPath() . '/img/icons/' . $ext . '.gif')) {
-            return $this->image('plugins.icons/' . $ext . '.gif');
-        } else {
-            return $this->image('libraries.icons/def.gif');
-        }
     }
 
     private function validateUploadedFile($file)

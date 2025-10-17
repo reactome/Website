@@ -5367,6 +5367,18 @@
             content = v.constructor == RegExp ? content.replace(v, "") : content.replace(v[0], v[1]);
         }), content;
     }
+    function innerText(html) {
+        var schema = new Schema$1(), domParser = new DomParser$2({}, schema), text = "", shortEndedElements = schema.getShortEndedElements(), ignoreElements = tinymce.makeMap("script noscript style textarea video audio iframe object", " "), blockElements = schema.getBlockElements();
+        return html = filter(html, [ /<!\[[^\]]+\]>/g ]), function walk(node) {
+            var name = node.name, currentNode = node;
+            if ("br" === name) text += "\n"; else if (shortEndedElements[name] && (text += " "), 
+            ignoreElements[name]) text += " "; else {
+                if (3 == node.type && (text += node.value), !node.shortEnded && (node = node.firstChild)) for (;walk(node), 
+                node = node.next; );
+                blockElements[name] && currentNode.next && (text += "\n", "p" == name) && (text += "\n");
+            }
+        }(domParser.parse(html)), text;
+    }
     function trimHtml(html) {
         return filter(function(html) {
             if (-1 !== (startPos = html.indexOf("\x3c!--StartFragment--\x3e"))) {
@@ -5949,18 +5961,7 @@
         content && !text && (content = trimHtml(content), text = editor.dom.encode(content)), 
         editor.selection.setContent(text, {
             no_events: !0
-        })) : (text = !1 === internal && isPlainText(content), (pasteAsPlainText = !(content.length && !text) || pasteAsPlainText) ? pasteText(editor, content = hasContentType(clipboardContent, "text/plain") && text ? clipboardContent["text/plain"] : function(html) {
-            var schema = new Schema$1(), domParser = new DomParser$2({}, schema), text = "", shortEndedElements = schema.getShortEndedElements(), ignoreElements = tinymce.makeMap("script noscript style textarea video audio iframe object", " "), blockElements = schema.getBlockElements();
-            return html = filter(html, [ /<!\[[^\]]+\]>/g ]), function walk(node) {
-                var name = node.name, currentNode = node;
-                if ("br" === name) text += "\n"; else if (shortEndedElements[name] && (text += " "), 
-                ignoreElements[name]) text += " "; else {
-                    if (3 == node.type && (text += node.value), !node.shortEnded && (node = node.firstChild)) for (;walk(node), 
-                    node = node.next; );
-                    blockElements[name] && currentNode.next && (text += "\n", "p" == name) && (text += "\n");
-                }
-            }(domParser.parse(html)), text;
-        }(content)) : pasteHtml(editor, content, internal, pasteAsPlainText));
+        })) : (text = !1 === internal && isPlainText(content), (pasteAsPlainText = !(content.length && !text) || pasteAsPlainText) ? pasteText(editor, content = hasContentType(clipboardContent, "text/plain") && text ? clipboardContent["text/plain"] : innerText(content)) : pasteHtml(editor, content, internal, pasteAsPlainText));
     }
     function isBrokenAndroidClipboardEvent(e) {
         return e = e.clipboardData, -1 !== navigator.userAgent.indexOf("Android") && e && e.items && 0 === e.items.length;
@@ -6006,7 +6007,8 @@
                 return "drop" != e.type && new Date().getTime() - keyboardPasteTimeStamp - clipboardDelay < 1e3;
             }
             var content, internal = hasContentType(clipboardContent, "x-tinymce/html"), pasteAsPlainText = keyboardPastePlainTextState;
-            keyboardPastePlainTextState = !1, e.isDefaultPrevented() || isBrokenAndroidClipboardEvent(e) || (isKeyBoardPaste() || e.preventDefault(), 
+            !(keyboardPastePlainTextState = !1) !== editor.settings.paste_plain_text || internal || (pasteAsPlainText = !0), 
+            e.isDefaultPrevented() || isBrokenAndroidClipboardEvent(e) || (isKeyBoardPaste() || e.preventDefault(), 
             !isIE || isKeyBoardPaste() && !e.ieFake || hasContentType(clipboardContent, "text/html") || (pasteBin.create(), 
             editor.dom.bind(editor.dom.get("mcepastebin"), "paste", function(e) {
                 e.stopPropagation();
@@ -6030,7 +6032,8 @@
             isKeyboardPasteEvent(e) && !e.isDefaultPrevented() && pasteBin.remove();
         }
         editor.addCommand("mceInsertClipboardContent", function(u, data) {
-            data.text && pasteText(editor, data.text), data.content && pasteHtml(editor, data.content, data.internal || !1);
+            return data.text ? (pasteText(editor, data.text), !0) : editor.settings.paste_plain_text && !data.internal ? (data.text || (data.text = innerText(data.content || "")), 
+            pasteText(editor, data.text), !0) : void (data.content && pasteHtml(editor, data.content, data.internal || !1));
         }), editor.onPaste.add(function(editor, e) {
             if (e.isDefaultPrevented() || isBrokenAndroidClipboardEvent(e) && !hasData()) return pasteBin.remove(), 
             !1;
@@ -6175,18 +6178,19 @@
                     e.isDefaultPrevented() || (internal = hasContentType(dropContent = getDataTransferItems(e.dataTransfer), "x-tinymce/html") || draggingInternallyState, 
                     (hasHtmlOrText(dropContent) && !function(content) {
                         return (content = content["text/plain"]) && 0 === content.indexOf("file://");
-                    }(dropContent) || !pasteImageData(e, rng)) && rng && !1 !== editor.settings.paste_filter_drop && (content = dropContent["x-tinymce/html"] || dropContent["text/html"] || dropContent["text/plain"]) && (e.preventDefault(), 
+                    }(dropContent) || !pasteImageData(e, rng)) && rng && !1 !== editor.settings.paste_filter_drop && (content = dropContent["x-tinymce/html"] || dropContent["text/html"] || dropContent["text/plain"], 
+                    content = editor.settings.paste_plain_text && dropContent["text/plain"] || content) && (e.preventDefault(), 
                     Delay.setEditorTimeout(editor, function() {
                         editor.undoManager.add(), internal && (editor.execCommand("Delete", !1, null, {
                             skip_undo: !0
                         }), editor.selection.getRng().deleteContents()), setFocusedRange(editor, rng), 
                         content = trimHtml(content);
                         var data = {};
-                        dropContent["text/html"] ? (content = function(content) {
+                        !dropContent["text/html"] || editor.settings.paste_plain_text ? data.text = content : (content = function(content) {
                             return content = DOM.create("div", {}, content), each$4(DOM.select("[style]", content), function(elm) {
                                 elm.setAttribute("style", elm.getAttribute("data-mce-style") || "");
                             }), content.innerHTML;
-                        }(content), data.content = content, data.internal = internal || draggingInternallyState) : data.text = content, 
+                        }(content), data.content = content, data.internal = internal || draggingInternallyState), 
                         editor.execCommand("mceInsertClipboardContent", !1, data, {
                             skip_undo: !0
                         });
@@ -13007,10 +13011,9 @@
                             get: !0,
                             load: !0
                         }, extend(settings = {}, ed.settings), args.content = content, 
-                        ed.onBeforeGetContent.dispatch(ed, args), settings.verify_html = !1, 
-                        settings.forced_root_block = !1, settings.validate = !0, 
-                        parser = new DomParser(settings, ed.schema), settings = new HtmlSerializer(settings, ed.schema), 
-                        args.content = settings.serialize(parser.parse(args.content), args), 
+                        ed.onBeforeGetContent.dispatch(ed, args), settings.forced_root_block = !1, 
+                        settings.validate = !0, parser = new DomParser(settings, ed.schema), 
+                        settings = new HtmlSerializer(settings, ed.schema), args.content = settings.serialize(parser.parse(args.content), args), 
                         ed.onPostProcess.dispatch(ed, args), args.content) : content;
                     }(ed, o.content);
                 }), (pb = DOM.get("sp-inline-popover")) && DOM.isChildOf(ed.getElement(), pb) && ed.onGetContent.addToTop(function(ed, o) {
