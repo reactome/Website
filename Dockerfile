@@ -1,27 +1,18 @@
-FROM php:5.6-apache
-
-# Debian stretch is EOL — use archive repositories
-RUN sed -i \
-    -e 's|deb.debian.org|archive.debian.org|g' \
-    -e 's|security.debian.org|archive.debian.org|g' \
-    /etc/apt/sources.list \
- && sed -i '/stretch-updates/d' /etc/apt/sources.list \
- && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until
+# Reactome Website – PHP 7.4 + Apache
+FROM php:7.4-apache
 
 # Enable Apache modules
 RUN a2enmod rewrite headers
 
-# Set Apache DocumentRoot to Reactome Website directory
-RUN sed -i \
-    's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/Website|g' \
-    /etc/apache2/sites-available/000-default.conf \
- && sed -i \
-    's|<Directory /var/www/>|<Directory /var/www/html/Website/>|g' \
-    /etc/apache2/apache2.conf
+# Fix old Debian repositories for Bullseye
+RUN sed -i -e 's|deb.debian.org|archive.debian.org|g' \
+           -e 's|security.debian.org|archive.debian.org|g' \
+           /etc/apt/sources.list \
+ && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until \
+ && sed -i '/bullseye-security/d' /etc/apt/sources.list
 
-
-# Install dependencies + PHP extensions (allow unauthenticated: required for EOL Debian)
-RUN apt-get update && apt-get install -y --allow-unauthenticated \
+# Install system dependencies and PHP extensions
+RUN apt-get update && apt-get install -y \
     default-mysql-client \
     libzip-dev \
     libpng-dev \
@@ -30,31 +21,31 @@ RUN apt-get update && apt-get install -y --allow-unauthenticated \
     libonig-dev \
     libxml2-dev \
     unzip \
- && docker-php-ext-configure gd \
-        --with-freetype \
-        --with-jpeg \
+ && docker-php-ext-configure gd --with-freetype --with-jpeg \
  && docker-php-ext-install \
-        mysqli \
-        pdo \
-        pdo_mysql \
-        zip \
-        gd \
-        mbstring \
-        xml \
-        simplexml \
+    mysqli \
+    pdo \
+    pdo_mysql \
+    zip \
+    gd \
+    mbstring \
+    xml \
+    simplexml \
  && rm -rf /var/lib/apt/lists/*
 
-# Apache FQDN warning fix
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+# Set Apache DocumentRoot to /var/www/html/Website
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/Website|g' /etc/apache2/sites-available/000-default.conf \
+ && sed -i 's|<Directory /var/www/>|<Directory /var/www/html/Website/>|g' /etc/apache2/apache2.conf
 
-# Copy site
-COPY . /var/www/html
+# Copy website code
+COPY ./Website /var/www/html/Website
 
-# Remove unsupported php_flag / php_value directives
-RUN sed -i '/^php_flag/d;/^php_value/d' /var/www/html/Website/.htaccess
+# Set permissions (optional, in case Reactome needs write access)
+RUN chown -R www-data:www-data /var/www/html/Website
+RUN chmod -R 755 /var/www/html/Website
 
-# Permissions
-RUN chown -R www-data:www-data /var/www/html
-
-WORKDIR /var/www/html/Website
+# Expose Apache port
 EXPOSE 80
+
+# Start Apache in foreground
+CMD ["apache2-foreground"]
