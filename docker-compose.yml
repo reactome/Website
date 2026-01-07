@@ -1,0 +1,24 @@
+services:
+  apache:
+    build: .
+    container_name: reactome-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./Website:/var/www/html/Website
+      - ./apache/000-default.conf:/etc/apache2/sites-available/000-default.conf
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: reactome-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: website
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./Website/database/joomla_website_public.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  db_data:
