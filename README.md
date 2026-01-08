@@ -188,9 +188,10 @@ and comment out the following line
 
 ## Starting up the local environment
 
-1. docker compose build --no-cache
-2. docker compose up
-
+```console
+compose build --no-cache
+docker compose up
+```
 ## Testing the Website
 
 Each software bundle starts using a different port, e.g XAMPP uses port 80 and MAMP uses port 8888 by default
