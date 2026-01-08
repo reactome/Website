@@ -36,19 +36,20 @@ RUN apt-get update && apt-get install -y \
 # Copy website code
 COPY ./Website /var/www/html/Website
 
-# Set permissions (optional, in case Reactome needs write access)
-RUN chown -R www-data:www-data /var/www/html/Website
-RUN chmod -R 755 /var/www/html/Website
+# Permissions for Joomla
+RUN chown -R www-data:www-data /var/www/html/Website \
+ && chmod -R 755 /var/www/html/Website
 
-# Set Apache DocumentRoot to /var/www/html/Website
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/Website|g' /etc/apache2/sites-available/000-default.conf \
- && sed -i '/<Directory \/var\/www\/html\/Website>/,/<\/Directory>/c\<Directory /var/www/html/Website>\n AllowOverride All\n </Directory>' /etc/apache2/sites-available/000-default.conf
+# Set Apache DocumentRoot
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/Website|g' \
+    /etc/apache2/sites-available/000-default.conf \
+ && sed -i '/<Directory \/var\/www\/html>/,/<\/Directory>/c\
+<Directory /var/www/html/Website>\n\
+    AllowOverride All\n\
+    Require all granted\n\
+</Directory>' \
+    /etc/apache2/sites-available/000-default.conf
 
-# Copy Joomla htaccess
-#RUN cp /var/www/html/Website/htaccess.txt /var/www/html/Website/.htaccess
-
-# Expose Apache port
 EXPOSE 80
 
-# Start Apache in foreground
 CMD ["apache2-foreground"]
