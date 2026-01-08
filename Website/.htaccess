@@ -37,7 +37,7 @@ RewriteRule ^(.*)$ - [F]
 #After trying to enable HTTPS by default in the entire site using JOOMLA! interface
 #it failed, so the following two lines do that
 RewriteCond %{HTTPS} off
-RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,NC,L] #TODO RECOMMENT
+#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,NC,L] #Note this was commented for dockerization
 
 #Remove the www. from the URL - Only in PROD
 #RewriteCond %{HTTP_HOST} ^www.reactome.org
@@ -183,4 +183,4 @@ RewriteRule .* index.php [L]
 
 # Enable PHP Logs - uncomment the following to DEBUG php.
 # Comment once the issue is addressed.
-php_flag display_errors on #TODO: Recomment
+#php_flag display_errors on
