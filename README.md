@@ -4,49 +4,27 @@
 
 ## Introduction
 We’ve launched our new website fully responsive and based in Joomla CMS! The new website has been designed to provide the ultimate user-friendly experience with improved navigation and functionality throughout.
-In this repository, we're going to describe how to install and configure this website to be included in a container or in your local environment.
+In this repository, we're going to describe how to install and configure this website in your local environment with docker.
 
 <img width="521" alt="responsive_reactome" src="https://user-images.githubusercontent.com/6883670/35038860-051fcdfa-fb74-11e7-99ee-9ce5114b5989.png" style="align: center;">
 
 ## Pre-requirements
 
-#### Server
-  1. Apache HTTP Server 2.4.10 (https://httpd.apache.org/)
-  2. MySQL 5.5.55
-  3. PHP 5.6.30
-
-Please visit this [page](https://downloads.joomla.org/technical-requirements) in order to get a full detailed requirements
-
 #### Local Environments
   Any software bundle
-  1. [MAMP](https://www.mamp.info/en/) for macOS
-  2. [LAMP](https://bitnami.com/stack/lamp/installer) for Linux or
-  3. [XAMPP](https://www.apachefriends.org/index.html) for Cross-Platform
+  1. Docker 28.1.1
 
 * Instructions will be given on Unix-based OS
 
 ## Getting started
 
-1. Locate the htdocs folder or the DocumentRoot already configured in your HTTP Server.
-2. Clone this repository and navigate to Website folder
+1. Clone this repository and navigate to Website folder
 
 ```console
 git clone https://github.com/reactome/Website.git
 ```
 :warning: For security and privacy issues our Joomla Website Database and Joomla configuration.php are not available for public use. Please use the given configuration.php provided below and a clean database could be found in database/joomla_website_public.sql. Do not use this database in a production/public environment.
 
-## MySQL Database
-
-#### Creating database
-
-```console
-mysql -u <user> -p<password> -e "CREATE DATABASE website DEFAULT CHARACTER SET utf8;"
-```
-
-#### Importing database
-
-```console
-mysql -u <user> -p<password> website < database/joomla_website_public.sql
 ```
 
 ## Setting up configuration.php
@@ -208,11 +186,10 @@ and comment out the following line
 # RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,NC,L]
 ```
 
-## Starting up the services
+## Starting up the local environment
 
-MAMP - https://www.mamp.info/en/#controlcenter
-
-XAMPP - https://www.apachefriends.org/faq_linux.html
+1. docker compose build --no-cache
+2. docker compose up
 
 ## Testing the Website
 
@@ -235,43 +212,4 @@ Also, front-end editing is available in the [Staff area](http://localhost/Websit
 ```console
 user:     unknown162
 password: @Dock3r999
-```
-
-## Troubleshooting
-
-1. I went through all the steps, but my website doesn't work and it only shows ```Error```
-![Website doesn't work](https://user-images.githubusercontent.com/6883670/35103014-90900326-fc5c-11e7-91cc-649397d69aca.png)
-
-**Reason**: Joomla can't access the database
-
-**Potential Solution**:
-  - Check MySQL user and password
-  - Check if the database has been created
-  - Check if the tables are there and their prefix is rlp_
-  - Double check those values in the configuration.php
-  ```console
-    public $user = 'root';
-    public $password = 'root';
-    public $db = 'website';
-    public $dbprefix = 'rlp_';
-  ```
-
-2. Enable PHP debug
-```console
-vi <XAMPP_HOME>/htdocs/Website/.htaccess
-Locate and uncomment the following line #php_flag display_errors on
-Restart apache
-```
-Now, the website will print more descriptive error. Then, Google the error and fix it.
-Comment the php_flag once the error is addressed.
-
-3. SimpleXML is disabled in PHP7 -> sudo apt-get install php7.0-xml
-
-4. Apache Modules
-```console
- sudo a2enmod rewrite
- sudo a2enmod headers
- sudo a2enmod include
- sudo a2enmod proxy
- sudo a2enmod proxy_http
 ```
