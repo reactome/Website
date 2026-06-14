@@ -26,12 +26,6 @@ class JceControllerProfiles extends AdminController
      */
     public function import()
     {
-        // sec hot patch: profile import auth gate
-        $user = Factory::getUser();
-        if ($user->guest || !$user->authorise('core.manage', 'com_jce')) {
-            throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
-        }
-
         // Check for request forgeries
         Session::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 

@@ -43,12 +43,6 @@ class JceControllerPlugin extends BaseController
     {
         // check for session token
         Session::checkToken('request') or jexit(Text::_('JINVALID_TOKEN'));
-
-        // sec hot patch: block guest browser RPC
-        $user = Factory::getUser();
-        if ($user->guest && $this->input->getCmd('plugin') === 'browser') {
-            throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
-        }
         
         $wf = WFApplication::getInstance();
 
